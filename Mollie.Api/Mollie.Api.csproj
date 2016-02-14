@@ -47,8 +47,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Client\MollieApi.cs" />
+    <Compile Include="Client\MollieApiException.cs" />
     <Compile Include="Client\MollieHttpClient.cs" />
     <Compile Include="Extensions\JsonConvertExtensions.cs" />
+    <Compile Include="Models\MollieErrorMessage.cs" />
     <Compile Include="Models\Issuer\IssuerResponse.cs" />
     <Compile Include="Models\List\ListResponseLinks.cs" />
     <Compile Include="Models\Payment\Locale.cs" />

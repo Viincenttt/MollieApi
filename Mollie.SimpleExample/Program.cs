@@ -15,9 +15,6 @@ namespace Mollie.SimpleExample {
             Console.ReadKey();
 
             GetPaymentList(mollieApi);
-
-            Console.WriteLine("Press any key to retrieve a list of payments");
-            Console.ReadKey();
         }
 
         static void CreatePayment(MollieApi mollieApi) {

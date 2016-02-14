@@ -53,7 +53,9 @@ namespace Mollie.Api.Client {
         /// </summary>
         private async Task<string> FireGetRequest(Uri uri) {
             HttpClient httpClient = this.CreateHttpClient();
-            return await httpClient.GetStringAsync(uri);
+            HttpResponseMessage response = await httpClient.GetAsync(uri);
+
+            return await this.HandleHttpResponseMessage(response);
         }
 
         /// <summary>
@@ -63,9 +65,7 @@ namespace Mollie.Api.Client {
             HttpClient httpClient = this.CreateHttpClient();
             HttpResponseMessage response = await httpClient.PostAsync(uri, new StringContent(postData));
 
-            response.EnsureSuccessStatusCode();
-
-            return await response.Content.ReadAsStringAsync();
+            return await this.HandleHttpResponseMessage(response);
         }
 
         /// <summary>
@@ -75,9 +75,17 @@ namespace Mollie.Api.Client {
             HttpClient httpClient = this.CreateHttpClient();
             HttpResponseMessage response = await httpClient.DeleteAsync(uri);
 
-            response.EnsureSuccessStatusCode();
+            return await this.HandleHttpResponseMessage(response);
+        }
 
-            return await response.Content.ReadAsStringAsync();
+        private async Task<string> HandleHttpResponseMessage(HttpResponseMessage response) {
+            string responseContent = await response.Content.ReadAsStringAsync();
+            
+            if (!response.IsSuccessStatusCode) {
+                  throw new MollieApiException(responseContent);
+            }
+
+            return responseContent;
         }
 
         /// <summary>

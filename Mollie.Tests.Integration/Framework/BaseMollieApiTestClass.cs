@@ -6,7 +6,7 @@ namespace Mollie.Tests.Integration.Framework {
     public abstract class BaseMollieApiTestClass {
         protected readonly string DefaultRedirectUrl = "http://mysite.com";
         protected readonly string DefaultWebhookUrl = "http://mysite.com/webhook";
-        protected readonly string ApiTestKey = "{Your API key}";
+        protected readonly string ApiTestKey = ""; // Insert you API key here
 
         protected MollieApi _mollieClient;
 
@@ -17,6 +17,10 @@ namespace Mollie.Tests.Integration.Framework {
         }
 
         private void EnsureTestApiKey() {
+            if (String.IsNullOrEmpty(this.ApiTestKey)) {
+                throw new ArgumentException("Please enter you API key on the BaseMollieApiTestClass class");
+            }
+
             if (!this.ApiTestKey.StartsWith("test")) {
                 throw new ArgumentException("You should not run these tests on your live key!");
             }

@@ -103,6 +103,7 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(paymentRequest.RedirectUrl, result.Links.RedirectUrl);
         }
 
+        [Test]
         public void CanCreatePaymentAndRetrieveIt() {
             // If: we create a new payment request
             PaymentRequest paymentRequest = new PaymentRequest() {
