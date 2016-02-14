@@ -27,7 +27,7 @@ namespace Mollie.Tests.Integration.Api {
             ListResponse<PaymentResponse> response = this._mollieClient.GetPaymentList(0, numberOfPayments).Result;
 
             // Then
-            Assert.IsTrue(response.Count <= numberOfPayments);
+            Assert.IsTrue(response.Data.Count <= numberOfPayments);
         }
 
         [Test]
@@ -56,7 +56,7 @@ namespace Mollie.Tests.Integration.Api {
                 Amount = 100,
                 Description = "Description",
                 RedirectUrl = this.DefaultRedirectUrl,
-                Locale = "nl",
+                Locale = Locale.NL,
                 Metadata = "Our metadata",
                 Method = PaymentMethod.BankTransfer,
                 WebhookUrl = this.DefaultWebhookUrl

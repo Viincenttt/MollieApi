@@ -82,6 +82,7 @@ namespace Mollie.Api.Models.Payment.Response {
         /// <summary>
         /// The consumer's locale, either forced on creation by specifying the locale parameter, or detected by us during checkout.
         /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
         public Locale Locale { get; set; }
 
         /// <summary>
@@ -101,7 +102,6 @@ namespace Mollie.Api.Models.Payment.Response {
 
         /// <summary>
         /// A detail object with payment method specific values is available for certain payment methods.
-        /// TODO: create payment specific payment detail classes
         /// </summary>
         public PaymentResponseDetails ResponseDetails { get; set; }
     }
