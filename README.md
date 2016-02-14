@@ -27,13 +27,14 @@ PaymentResponse result = this._mollieClient.GetPayment(paymentResponse.Id).Resul
 ```
 
 #### Retrieving a list off payments
-Mollie allows you to set offset and count properties so you can paginate your payment list. The maximum number of payments you can request in a single roundtrip is 250. 
+Mollie allows you to set offset and count properties so you can paginate the list. The offset and count parameters are optional. The maximum number of payments you can request in a single roundtrip is 250. 
 ```c#
 ListResponse<PaymentResponse> response = this._mollieClient.GetPaymentList(offset, count).Result;
 ```
 
 ### Payment methods
 #### Retrieving a list of all payment methods
+Mollie allows you to set offset and count properties so you can paginate the list. The offset and count parameters are optional.
 ```c#
 ListResponse<PaymentMethodResponse> paymentMethodList = this._mollieClient.GetPaymentMethodList(offset, count).Result;
 foreach (PaymentMethodResponse paymentMethod in paymentMethodList.Data) {
@@ -71,6 +72,7 @@ RefundResponse refundResponse = this._mollieClient.GetRefund(payment.Id, refundR
 ```
 
 #### Retrieve refund list
+Mollie allows you to set offset and count properties so you can paginate the list. The offset and count parameters are optional.
 ```c#
 ListResponse<RefundResponse> refundList = this._mollieClient.GetRefundList(payment.Id, offset, count).Result;
 ```
