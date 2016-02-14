@@ -7,7 +7,7 @@ using Mollie.Api.Models.Payment.Response;
 namespace Mollie.SimpleExample {
     class Program {
         static void Main(string[] args) {
-            MollieApi mollieApi = new MollieApi("test_gwiqLFcMzjBSzKZuxAADm6taxtAUgF");
+            MollieApi mollieApi = new MollieApi("{Your API key}");
 
             CreatePayment(mollieApi);
 

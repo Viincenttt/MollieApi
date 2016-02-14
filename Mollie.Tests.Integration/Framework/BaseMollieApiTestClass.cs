@@ -6,7 +6,7 @@ namespace Mollie.Tests.Integration.Framework {
     public abstract class BaseMollieApiTestClass {
         protected readonly string DefaultRedirectUrl = "http://mysite.com";
         protected readonly string DefaultWebhookUrl = "http://mysite.com/webhook";
-        protected readonly string ApiTestKey = "test_gwiqLFcMzjBSzKZuxAADm6taxtAUgF";
+        protected readonly string ApiTestKey = "{Your API key}";
 
         protected MollieApi _mollieClient;
 
