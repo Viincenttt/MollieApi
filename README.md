@@ -15,7 +15,7 @@ Install-Package Mollie.Api
 ### Creating a MollieApi object
 The MollieApi object allows you to send and receive requests to the Mollie REST webservice. 
 ```c#
-MollieApi mollieApi = new MollieApi("test_gwiqLFcMzjBSzKZuxAADm6taxtAUgF");
+MollieApi mollieApi = new MollieApi("{your_api_key}");
 ```
 ### Payments
 #### Creating a payment
