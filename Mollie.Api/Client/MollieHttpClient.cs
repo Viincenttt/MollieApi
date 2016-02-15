@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Specialized;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -79,13 +80,25 @@ namespace Mollie.Api.Client {
         }
 
         private async Task<string> HandleHttpResponseMessage(HttpResponseMessage response) {
-            string responseContent = await response.Content.ReadAsStringAsync();
-            
-            if (!response.IsSuccessStatusCode) {
-                  throw new MollieApiException(responseContent);
+            if (response.IsSuccessStatusCode) {
+                string responseContent = await response.Content.ReadAsStringAsync();
+                return responseContent;
             }
-
-            return responseContent;
+            else {
+                switch (response.StatusCode) {
+                    case HttpStatusCode.BadRequest:
+                    case HttpStatusCode.Unauthorized:
+                    case HttpStatusCode.Forbidden:
+                    case HttpStatusCode.NotFound:
+                    case HttpStatusCode.MethodNotAllowed:
+                    case HttpStatusCode.UnsupportedMediaType:
+                    case (HttpStatusCode)422: // Unprocessable entity
+                        string responseContent = await response.Content.ReadAsStringAsync();
+                        throw new MollieApiException(responseContent);
+                    default:
+                        throw new HttpRequestException($"Unknow http exception occured with status code: {(int)response.StatusCode}.");
+                }
+            }
         }
 
         /// <summary>
