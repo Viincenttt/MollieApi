@@ -1,8 +1,8 @@
 # MollieApi
 
-This project allows you to easily add the Mollie payment provider to your application. Mollie has excellent [documentation](https://www.mollie.com/nl/docs/overzicht) which I highly recommend you read before using this library. 
+This project allows you to easily add the Mollie payment provider to your application. Mollie has excellent [documentation](https://www.mollie.com/nl/docs/overzicht) which I highly recommend you read before using this library. Please keep in mind that this is a 3rd party library and I am in no way associated with Mollie. 
 
-Keep in mind that I am in no way associated with Mollie. 
+All of the mollie API calls can be performed asynchronously. 
 
 ## Getting started
 
