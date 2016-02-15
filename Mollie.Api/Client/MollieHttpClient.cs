@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Specialized;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using System.Web;
 using Mollie.Api.Extensions;
-using Mollie.Api.Models.List;
 using Newtonsoft.Json;
 
 namespace Mollie.Api.Client {
@@ -21,19 +18,10 @@ namespace Mollie.Api.Client {
         }
         public async Task<T> Get<T>(string relativeUri) {
             Uri absoluteUri = this.GetAbsoluteUri(relativeUri);
-            return await this.Get<T>(absoluteUri);
-        }
-
-        public async Task<T> Get<T>(Uri absoluteUri) {
             string jsonData = await this.FireGetRequest(absoluteUri);
             T result = JsonConvert.DeserializeObject<T>(jsonData, this.GetDefaultJsonSerializerSettings());
 
             return result;
-        }
-
-        public async Task<ListResponse<T>> GetList<T>(string relativeUri, int? offset, int? count) {
-            Uri listUri = this.CreateListRequestUri(relativeUri, offset, count);
-            return await this.Get<ListResponse<T>>(listUri);
         }
 
         public async Task<T> Post<T>(string relativeUri, object data = null) {
@@ -111,24 +99,6 @@ namespace Mollie.Api.Client {
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             return httpClient;
-        }
-
-        /// <summary>
-        /// Creates a uri to retrieve a list. Automatically adds the offset and count parameters to the query string
-        /// </summary>
-        public Uri CreateListRequestUri(string relativeUri, int? offset, int? count) {
-            Uri listUri = this.GetAbsoluteUri(relativeUri);
-            UriBuilder uriBuilder = new UriBuilder(listUri);
-            NameValueCollection queryString = HttpUtility.ParseQueryString(listUri.Query);
-            if (offset.HasValue) {
-                queryString["offset"] = offset.Value.ToString();
-            }
-            if (count.HasValue) {
-                queryString["count"] = count.Value.ToString();
-            }
-
-            uriBuilder.Query = queryString.ToString();
-            return new Uri(uriBuilder.ToString());
         }
 
         private Uri GetAbsoluteUri(string relativeUri) {

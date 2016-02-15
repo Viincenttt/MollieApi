@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.Threading.Tasks;
+using System.Web;
 using Mollie.Api.Models.Issuer;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Payment;
@@ -22,7 +24,8 @@ namespace Mollie.Api.Client {
         }
 
         public async Task<ListResponse<PaymentResponse>> GetPaymentList(int? offset = null, int? count = null) {
-            return await this._httpClient.GetList<PaymentResponse>("payments", offset, count);
+            string paymentListUri = this.GetRelativeListUri("payments", offset, count);
+            return await this._httpClient.Get<ListResponse<PaymentResponse>>(paymentListUri);
         }
 
         public async Task<PaymentResponse> GetPayment(string paymentId) {
@@ -30,7 +33,8 @@ namespace Mollie.Api.Client {
         }
 
         public async Task<ListResponse<PaymentMethodResponse>> GetPaymentMethodList(int? offset = null, int? count = null) {
-            return await this._httpClient.GetList<PaymentMethodResponse>("methods", offset, count);
+            string paymentMethodListUri = this.GetRelativeListUri("methods", offset, count);
+            return await this._httpClient.Get<ListResponse<PaymentMethodResponse>>(paymentMethodListUri);
         }
 
         public async Task<PaymentMethodResponse> GetPaymentMethod(PaymentMethod paymentMethod) {
@@ -38,7 +42,8 @@ namespace Mollie.Api.Client {
         }
 
         public async Task<ListResponse<IssuerResponse>> GetIssuerList(int? offset = null, int? count = null) {
-            return await this._httpClient.GetList<IssuerResponse>("issuers", offset, count);
+            string issuerListUri = this.GetRelativeListUri("issuers", offset, count);
+            return await this._httpClient.Get<ListResponse<IssuerResponse>>(issuerListUri);
         }
 
         public async Task<IssuerResponse> GetIssuer(string issuerId) {
@@ -50,7 +55,8 @@ namespace Mollie.Api.Client {
         }
 
         public async Task<ListResponse<RefundResponse>> GetRefundList(string paymentId, int? offset = null, int? count = null) {
-            return await this._httpClient.GetList<RefundResponse>($"payments/{paymentId}/refunds", offset, count);
+            string refundListUri = this.GetRelativeListUri($"payments/{paymentId}/refunds", offset, count);
+            return await this._httpClient.Get<ListResponse<RefundResponse>>(refundListUri);
         }
 
         public async Task<RefundResponse> GetRefund(string paymentId, string refundId) {
@@ -68,6 +74,23 @@ namespace Mollie.Api.Client {
             if (apiKey == null || (!apiKey.StartsWith("test_") && !apiKey.StartsWith("live_"))) {
                 throw new ArgumentException("Invalid API key detected! Api keys must start with \"test_\" or \"live_\".");
             }
+        }
+
+        private string GetRelativeListUri(string relativeUri, int? offset, int? count) {
+            NameValueCollection queryStringParameters = HttpUtility.ParseQueryString(string.Empty);
+            if (offset.HasValue) {
+                queryStringParameters["offset"] = offset.Value.ToString();
+            }
+            if (count.HasValue) {
+                queryStringParameters["count"] = count.Value.ToString();
+            }
+
+            var queryString = queryStringParameters.ToString();
+            if (!string.IsNullOrEmpty(queryString)) {
+                relativeUri = relativeUri + "?" + queryString;
+            }
+
+            return relativeUri;
         }
     }
 }
