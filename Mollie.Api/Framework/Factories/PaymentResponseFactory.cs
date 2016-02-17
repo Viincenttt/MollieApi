@@ -4,7 +4,7 @@ using Mollie.Api.Models.Payment.Response.Specific;
 
 namespace Mollie.Api.Framework.Factories {
     public class PaymentResponseFactory {
-        public PaymentResponse Create(PaymentMethod paymentMethod) {
+        public PaymentResponse Create(PaymentMethod? paymentMethod) {
             switch (paymentMethod) {
                 case PaymentMethod.BankTransfer:
                     return new BankTransferPaymentResponse();

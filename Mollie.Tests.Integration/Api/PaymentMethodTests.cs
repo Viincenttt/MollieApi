@@ -18,10 +18,8 @@ namespace Mollie.Tests.Integration.Api {
             // Then: Make sure the list of payment methods is the same as our PaymentMethod enum
             Assert.AreEqual(paymentMethodEnumValues.Length - 1, paymentMethodList.TotalCount);
             foreach (PaymentMethod paymentMethodEnum in paymentMethodEnumValues) {
-                if (paymentMethodEnum != PaymentMethod.Unknown) {
-                    PaymentMethodResponse paymentResponse = paymentMethodList.Data.FirstOrDefault(x => x.Id == paymentMethodEnum.ToString().ToLower());
-                    Assert.IsNotNull(paymentResponse);
-                }
+                PaymentMethodResponse paymentResponse = paymentMethodList.Data.FirstOrDefault(x => x.Id == paymentMethodEnum.ToString().ToLower());
+                Assert.IsNotNull(paymentResponse);
             }
         }
 

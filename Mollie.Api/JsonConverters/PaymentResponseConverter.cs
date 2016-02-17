@@ -14,12 +14,12 @@ namespace Mollie.Api.JsonConverters {
         }
 
         protected override PaymentResponse Create(Type objectType, JObject jObject) {
-            PaymentMethod paymentMethod = this.GetPaymentMethod(jObject);
+            PaymentMethod? paymentMethod = this.GetPaymentMethod(jObject);
             
             return this._paymentResponseFactory.Create(paymentMethod);
         }
 
-        private PaymentMethod GetPaymentMethod(JObject jObject) {
+        private PaymentMethod? GetPaymentMethod(JObject jObject) {
             if (this.FieldExists("method", jObject)) {
                 string paymentMethodValue = (string) jObject["method"];
                 if (!string.IsNullOrEmpty(paymentMethodValue)) {
@@ -27,7 +27,7 @@ namespace Mollie.Api.JsonConverters {
                 }
             }
 
-            return PaymentMethod.Unknown;
+            return null;
         }
     }
 }
