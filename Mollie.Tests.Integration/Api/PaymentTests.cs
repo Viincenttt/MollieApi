@@ -3,6 +3,7 @@ using Mollie.Api.Models.List;
 using Mollie.Api.Models.Payment;
 using Mollie.Api.Models.Payment.Request;
 using Mollie.Api.Models.Payment.Response;
+using Mollie.Api.Models.Payment.Response.Specific;
 using Mollie.Tests.Integration.Framework;
 using NUnit.Framework;
 
@@ -75,17 +76,17 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(paymentRequest.WebhookUrl, result.Links.WebhookUrl);
         }
 
-        [TestCase(typeof(IDealPaymentRequest), PaymentMethod.Ideal)]
-        [TestCase(typeof(CreditCardPaymentRequest), PaymentMethod.CreditCard)]
-        [TestCase(typeof(PaymentRequest), PaymentMethod.MisterCash)]
-        [TestCase(typeof(PaymentRequest), PaymentMethod.Sofort)]
-        [TestCase(typeof(BankTransferPaymentRequest), PaymentMethod.BankTransfer)]
-        [TestCase(typeof(PaymentRequest), PaymentMethod.DirectDebit)]
-        [TestCase(typeof(PaymentRequest), PaymentMethod.Belfius)]
-        [TestCase(typeof(PayPalPaymentRequest), PaymentMethod.PayPal)]
-        [TestCase(typeof(PaymentRequest), PaymentMethod.Bitcoin)]
-        [TestCase(typeof(PaymentRequest), PaymentMethod.PodiumCadeaukaart)]
-        public void CanCreateSpecificPaymentType(Type paymentType, PaymentMethod paymentMethod ) {
+        [TestCase(typeof(IdealPaymentRequest), PaymentMethod.Ideal, typeof(IdealPaymentResponse))]
+        [TestCase(typeof(CreditCardPaymentRequest), PaymentMethod.CreditCard, typeof(CreditCardPaymentResponse))]
+        [TestCase(typeof(PaymentRequest), PaymentMethod.MisterCash, typeof(MisterCashPaymentResponse))]
+        [TestCase(typeof(PaymentRequest), PaymentMethod.Sofort, typeof(SofortPaymentResponse))]
+        [TestCase(typeof(BankTransferPaymentRequest), PaymentMethod.BankTransfer, typeof(BankTransferPaymentResponse))]
+        [TestCase(typeof(PaymentRequest), PaymentMethod.DirectDebit, typeof(PaymentResponse))]
+        [TestCase(typeof(PaymentRequest), PaymentMethod.Belfius, typeof(PaymentResponse))]
+        [TestCase(typeof(PayPalPaymentRequest), PaymentMethod.PayPal, typeof(PayPalPaymentResponse))]
+        [TestCase(typeof(PaymentRequest), PaymentMethod.Bitcoin, typeof(BitcoinPaymentResponse))]
+        [TestCase(typeof(PaymentRequest), PaymentMethod.PodiumCadeaukaart, typeof(PodiumCadeauKaartPaymentResponse))]
+        public void CanCreateSpecificPaymentType(Type paymentType, PaymentMethod paymentMethod, Type expectedResponseType) {
             // If: we create a specific payment type with some bank transfer specific values
             PaymentRequest paymentRequest = (PaymentRequest) Activator.CreateInstance(paymentType);
             paymentRequest.Amount = 100;
@@ -98,6 +99,7 @@ namespace Mollie.Tests.Integration.Api {
 
             // Then: Make sure all requested parameters match the response parameter values
             Assert.IsNotNull(result);
+            Assert.AreEqual(expectedResponseType, result.GetType());
             Assert.AreEqual(paymentRequest.Amount, result.Amount);
             Assert.AreEqual(paymentRequest.Description, result.Description);
             Assert.AreEqual(paymentRequest.RedirectUrl, result.Links.RedirectUrl);

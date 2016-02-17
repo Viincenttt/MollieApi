@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Mollie.Api.Extensions;
+using Mollie.Api.Framework.Factories;
+using Mollie.Api.JsonConverters;
 using Newtonsoft.Json;
 
 namespace Mollie.Api.Client {
@@ -112,6 +115,14 @@ namespace Mollie.Api.Client {
         /// <returns></returns>
         private Uri GetBaseAddress() => new Uri(ApiEndPoint + "/" + ApiVersion + "/");
 
-        private JsonSerializerSettings GetDefaultJsonSerializerSettings() => new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
+        private JsonSerializerSettings GetDefaultJsonSerializerSettings() {
+            return new JsonSerializerSettings {
+                NullValueHandling = NullValueHandling.Ignore,
+                Converters = new List<JsonConverter>() {
+                    new PaymentResponseConverter(new PaymentResponseFactory())                                 
+                }
+            };
+        } 
+            
     }
 }

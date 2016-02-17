@@ -53,11 +53,19 @@
     <Compile Include="Client\MollieApiException.cs" />
     <Compile Include="Client\MollieHttpClient.cs" />
     <Compile Include="Extensions\JsonConvertExtensions.cs" />
+    <Compile Include="Framework\Factories\PaymentResponseFactory.cs" />
+    <Compile Include="JsonConverters\JsonCreationConverter.cs" />
+    <Compile Include="JsonConverters\PaymentResponseConverter.cs" />
     <Compile Include="Models\MollieErrorMessage.cs" />
     <Compile Include="Models\Issuer\IssuerResponse.cs" />
     <Compile Include="Models\List\ListResponseLinks.cs" />
     <Compile Include="Models\Payment\Locale.cs" />
     <Compile Include="Models\Payment\PaymentMode.cs" />
+    <Compile Include="Models\Payment\Response\Specific\BankTransferPaymentResponse.cs" />
+    <Compile Include="Models\Payment\Response\Specific\BitcoinPaymentResponse.cs" />
+    <Compile Include="Models\Payment\Response\Specific\CreditCardPaymentResponse.cs" />
+    <Compile Include="Models\Payment\Response\Specific\IdealPaymentResponse.cs" />
+    <Compile Include="Models\Payment\Response\Specific\MisterCashPaymentResponse.cs" />
     <Compile Include="Models\Payment\Response\PaymentResponseLinks.cs" />
     <Compile Include="Models\List\ListResponse.cs" />
     <Compile Include="Models\Payment\PaymentMethod.cs" />
@@ -65,7 +73,6 @@
     <Compile Include="Models\Payment\Request\CreditCardPaymentRequest.cs" />
     <Compile Include="Models\Payment\Request\IDealPaymentRequest.cs" />
     <Compile Include="Models\Payment\Request\PaymentRequest.cs" />
-    <Compile Include="Models\Payment\Response\PaymentResponseDetails.cs" />
     <Compile Include="Models\PaymentMethod\PaymentMethodResponse.cs" />
     <Compile Include="Models\PaymentMethod\PaymentMethodResponseAmount.cs" />
     <Compile Include="Models\PaymentMethod\PaymentMethodResponseImage.cs" />
@@ -73,12 +80,17 @@
     <Compile Include="Models\Payment\PaymentStatus.cs" />
     <Compile Include="Models\Payment\Request\PayPalPaymentRequest.cs" />
     <Compile Include="Models\Payment\Request\SepaDirectDebitRequest.cs" />
+    <Compile Include="Models\Payment\Response\Specific\PayPalPaymentResponse.cs" />
+    <Compile Include="Models\Payment\Response\Specific\PaySafeCardPaymentResponse.cs" />
+    <Compile Include="Models\Payment\Response\Specific\PodiumCadeauKaartPaymentResponse.cs" />
+    <Compile Include="Models\Payment\Response\Specific\SofortPaymentResponse.cs" />
     <Compile Include="Models\Refund\RefundResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

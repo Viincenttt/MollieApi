@@ -99,10 +99,5 @@ namespace Mollie.Api.Models.Payment.Response {
         /// An object with several URLs important to the payment process.
         /// </summary>
         public PaymentResponseLinks Links { get; set; }
-
-        /// <summary>
-        /// A detail object with payment method specific values is available for certain payment methods.
-        /// </summary>
-        public PaymentResponseDetails ResponseDetails { get; set; }
     }
 }

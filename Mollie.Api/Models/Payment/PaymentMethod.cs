@@ -5,6 +5,7 @@ using Newtonsoft.Json.Converters;
 namespace Mollie.Api.Models.Payment {
     [JsonConverter(typeof(StringEnumConverter))]
     public enum PaymentMethod {
+        Unknown,
         [EnumMember(Value = "ideal")]
         Ideal,
         [EnumMember(Value = "creditcard")]
