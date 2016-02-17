@@ -12,5 +12,9 @@
         /// The maximum payment amount in EUROs allowed when using this payment method.
         /// </summary>
         public decimal Maximum { get; set; }
+
+        public override string ToString() {
+            return $"Minimum: {this.Minimum} - Maximum: {this.Maximum}";
+        }
     }
 }

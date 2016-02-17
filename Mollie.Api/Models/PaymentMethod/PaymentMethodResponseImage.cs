@@ -12,5 +12,9 @@
         /// The URL for a payment method icon of 80x80 pixels.
         /// </summary>
         public string Bigger { get; set; }
+
+        public override string ToString() {
+            return this.Normal;
+        }
     }
 }

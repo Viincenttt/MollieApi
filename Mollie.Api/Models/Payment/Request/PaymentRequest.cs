@@ -44,5 +44,9 @@ namespace Mollie.Api.Models.Payment.Request {
         /// browser language will be used instead (which is usually more accurate). Possible values are: de, en, es, fr, be, be-fr, nl
         /// </summary>
         public Locale Locale { get; set; }
+
+        public override string ToString() {
+            return $"Method: {this.Method} - Amount: {this.Amount}";
+        }
     }
 }

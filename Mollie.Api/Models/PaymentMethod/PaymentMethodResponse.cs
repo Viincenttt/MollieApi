@@ -19,5 +19,9 @@
         /// URLs of images representing the payment method.
         /// </summary>
         public PaymentMethodResponseImage Image { get; set; }
+
+        public override string ToString() {
+            return this.Description;
+        }
     }
 }

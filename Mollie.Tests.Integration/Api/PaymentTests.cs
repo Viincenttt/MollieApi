@@ -86,7 +86,8 @@ namespace Mollie.Tests.Integration.Api {
         [TestCase(typeof(PayPalPaymentRequest), PaymentMethod.PayPal, typeof(PayPalPaymentResponse))]
         [TestCase(typeof(PaymentRequest), PaymentMethod.Bitcoin, typeof(BitcoinPaymentResponse))]
         [TestCase(typeof(PaymentRequest), PaymentMethod.PodiumCadeaukaart, typeof(PodiumCadeauKaartPaymentResponse))]
-        public void CanCreateSpecificPaymentType(Type paymentType, PaymentMethod paymentMethod, Type expectedResponseType) {
+        [TestCase(typeof(PaymentRequest), null, typeof(PaymentResponse))]
+        public void CanCreateSpecificPaymentType(Type paymentType, PaymentMethod? paymentMethod, Type expectedResponseType) {
             // If: we create a specific payment type with some bank transfer specific values
             PaymentRequest paymentRequest = (PaymentRequest) Activator.CreateInstance(paymentType);
             paymentRequest.Amount = 100;

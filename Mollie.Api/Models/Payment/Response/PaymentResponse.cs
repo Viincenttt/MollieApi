@@ -99,5 +99,9 @@ namespace Mollie.Api.Models.Payment.Response {
         /// An object with several URLs important to the payment process.
         /// </summary>
         public PaymentResponseLinks Links { get; set; }
+
+        public override string ToString() {
+            return $"Id: {this.Id } - Status: {this.Status} - Method: {this.Method} - Amount: {this.Amount}";
+        }
     }
 }
