@@ -34,6 +34,10 @@ PaymentResponse paymentResponse = mollieApi.CreatePayment(paymentRequest).Result
 PaymentResponse result = this._mollieClient.GetPayment(paymentResponse.Id).Result;
 ```
 
+Keep in mind that some payment methods have specific payment detail values. For example: PayPal payments have a PayPal and customer reference id. In order to use these fields you have to cast the PaymentResponse to the PayPalPaymentResponse and access the Detail property. 
+
+Take a look at the [Mollie payment response documentation](https://www.mollie.com/nl/docs/reference/payments/get) for a full list of payment methods that have extra detail fields.
+
 #### Retrieving a list off payments
 Mollie allows you to set offset and count properties so you can paginate the list. The offset and count parameters are optional. The maximum number of payments you can request in a single roundtrip is 250. 
 ```c#
