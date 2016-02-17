@@ -29,6 +29,15 @@ PaymentRequest paymentRequest = new PaymentRequest() {
 PaymentResponse paymentResponse = mollieApi.CreatePayment(paymentRequest).Result;
 ```
 
+If you want to create a payment with a specific paymentmethod, there are seperate classes that allow you to set paymentmethod specific parameters. For example, a bank transfer payment allows you to set the billing e-mail and due date. Have a look at the [Mollie create payment documentation](https://www.mollie.com/nl/docs/reference/payments/create) for more information. 
+
+The full list of payment specific request classes is:
+- BankTransferPaymentRequest
+- CreditCardPaymentRequest
+- IDealPaymentRequest
+- PayPalPaymentRequest
+- SepaDirectDebitRequest
+
 #### Retrieving a payment by id
 ```c#
 PaymentResponse result = this._mollieClient.GetPayment(paymentResponse.Id).Result;
