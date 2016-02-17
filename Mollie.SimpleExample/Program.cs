@@ -10,22 +10,13 @@ namespace Mollie.SimpleExample {
         static void Main(string[] args) {
             MollieApi mollieApi = new MollieApi("{API key}");
 
-            Console.WriteLine("Press any key to create a new payment");
-            Console.ReadKey();
-
+            OutputAndWait("Press any key to create a new payment");
             OutputNewPayment(mollieApi);
-
-            Console.WriteLine("Press any key to retrieve a list of payments");
-            Console.ReadKey();
-
+            OutputAndWait("Press any key to retrieve a list of payments");
             OutputPaymentList(mollieApi);
-
-            Console.WriteLine("Press any key to retrieve a list of payment methods");
-            Console.ReadKey();
-
+            OutputAndWait("Press any key to retrieve a list of payment methods");
             OutputPaymentMethods(mollieApi);
-
-            Console.Read();
+            OutputAndWait("Example completed");
         }
 
         static void OutputNewPayment(MollieApi mollieApi) {
@@ -38,6 +29,7 @@ namespace Mollie.SimpleExample {
 
             PaymentResponse paymentResponse = mollieApi.CreatePayment(paymentRequest).Result;
             Console.WriteLine("Payment created");
+            Console.WriteLine("");
             Console.WriteLine($"Payment can be paid on the following URL: {paymentResponse.Links.PaymentUrl}");
         }
 
@@ -55,6 +47,11 @@ namespace Mollie.SimpleExample {
             foreach (PaymentMethodResponse paymentMethodResponse in paymentMethodList.Data) {
                 Console.WriteLine($"Payment method description: { paymentMethodResponse.Description }");
             }
+        }
+
+        static void OutputAndWait(string output) {
+            Console.WriteLine(output);
+            Console.ReadKey();
         }
     }
 }
