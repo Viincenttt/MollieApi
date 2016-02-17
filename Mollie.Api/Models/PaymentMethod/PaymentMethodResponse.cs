@@ -13,7 +13,7 @@
         /// <summary>
         /// The minimum and maximum allowed payment amount will differ between payment methods.
         /// </summary>
-        public PaymentMethodResponseAmount ResponseAmount { get; set; }
+        public PaymentMethodResponseAmount Amount { get; set; }
 
         /// <summary>
         /// URLs of images representing the payment method.
