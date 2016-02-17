@@ -38,6 +38,17 @@ Keep in mind that some payment methods have specific payment detail values. For 
 
 Take a look at the [Mollie payment response documentation](https://www.mollie.com/nl/docs/reference/payments/get) for a full list of payment methods that have extra detail fields.
 
+The full list of payment specific response classes is:
+- BankTransferPaymentResponse
+- BitcoinPaymentResponse
+- CreditCardPaymentResponse
+- IdealPaymentResponse
+- MisterCashPaymentResponse
+- PayPalPaymentResponse
+- PaySafeCardPaymentResponse
+- PodiumCadeauKaartPaymentResponse
+- SofortPaymentResponse
+
 #### Retrieving a list off payments
 Mollie allows you to set offset and count properties so you can paginate the list. The offset and count parameters are optional. The maximum number of payments you can request in a single roundtrip is 250. 
 ```c#
