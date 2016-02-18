@@ -15,10 +15,13 @@ namespace Mollie.Api.Client {
         public const string ApiVersion = "v1";
 
         private readonly string _apiKey;
+        private readonly HttpClient _httpClient;
 
         public MollieHttpClient(string apiKey) {
             this._apiKey = apiKey;
+            this._httpClient = this.CreateHttpClient();
         }
+
         public async Task<T> Get<T>(string relativeUri) {
             Uri absoluteUri = this.GetAbsoluteUri(relativeUri);
             string jsonData = await this.FireGetRequest(absoluteUri);
@@ -44,8 +47,7 @@ namespace Mollie.Api.Client {
         /// Sends a GET request to the Mollie API and returns the response as a string
         /// </summary>
         private async Task<string> FireGetRequest(Uri uri) {
-            HttpClient httpClient = this.CreateHttpClient();
-            HttpResponseMessage response = await httpClient.GetAsync(uri);
+            HttpResponseMessage response = await this._httpClient.GetAsync(uri);
 
             return await this.HandleHttpResponseMessage(response);
         }
@@ -54,8 +56,7 @@ namespace Mollie.Api.Client {
         /// Sends a POST request to the Mollie API and returns the response as a string
         /// </summary>
         private async Task<string> FirePostRequest(Uri uri, string postData) {
-            HttpClient httpClient = this.CreateHttpClient();
-            HttpResponseMessage response = await httpClient.PostAsync(uri, new StringContent(postData));
+            HttpResponseMessage response = await this._httpClient.PostAsync(uri, new StringContent(postData));
 
             return await this.HandleHttpResponseMessage(response);
         }
@@ -64,8 +65,7 @@ namespace Mollie.Api.Client {
         /// Sends a DELETE request to the mollie API and returns the response as a string
         /// </summary>
         private async Task<string> FireDeleteRequest(Uri uri) {
-            HttpClient httpClient = this.CreateHttpClient();
-            HttpResponseMessage response = await httpClient.DeleteAsync(uri);
+            HttpResponseMessage response = await this._httpClient.DeleteAsync(uri);
 
             return await this.HandleHttpResponseMessage(response);
         }
