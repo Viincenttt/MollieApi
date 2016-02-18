@@ -18,7 +18,7 @@ namespace Mollie.Tests.Integration.Framework {
 
         private void EnsureTestApiKey() {
             if (String.IsNullOrEmpty(this.ApiTestKey)) {
-                throw new ArgumentException("Please enter you API key on the BaseMollieApiTestClass class");
+                throw new ArgumentException("Please enter you API key in the BaseMollieApiTestClass class");
             }
 
             if (!this.ApiTestKey.StartsWith("test")) {
