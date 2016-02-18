@@ -71,7 +71,7 @@ namespace Mollie.Api.Client {
             return await this.Get<RefundResponse>($"payments/{paymentId}/refunds/{refundId}");
         }
 
-        private async Task CancelRefund(string paymentId, string refundId) {
+        public async Task CancelRefund(string paymentId, string refundId) {
             await this.Delete($"payments/{paymentId}/refunds/{refundId}");
         }
 
