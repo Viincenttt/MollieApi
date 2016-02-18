@@ -12,10 +12,10 @@ The easiest way to install the Mollie Api library is to use the [Nuget Package](
 Install-Package Mollie.Api
 ```
 
-### Creating a MollieApi object
-The MollieApi object allows you to send and receive requests to the Mollie REST webservice. 
+### Creating a MollieClient object
+The MollieClient object allows you to send and receive requests to the Mollie REST webservice. 
 ```c#
-MollieApi mollieApi = new MollieApi("{your_api_key}");
+MollieClient mollieClient = new MollieClient("{your_api_key}");
 ```
 ### Payments
 #### Creating a payment
@@ -26,7 +26,7 @@ PaymentRequest paymentRequest = new PaymentRequest() {
     RedirectUrl = "http://google.com"
 };
 
-PaymentResponse paymentResponse = mollieApi.CreatePayment(paymentRequest).Result;
+PaymentResponse paymentResponse = mollieClient.CreatePayment(paymentRequest).Result;
 ```
 
 If you want to create a payment with a specific paymentmethod, there are seperate classes that allow you to set paymentmethod specific parameters. For example, a bank transfer payment allows you to set the billing e-mail and due date. Have a look at the [Mollie create payment documentation](https://www.mollie.com/nl/docs/reference/payments/create) for more information. 
