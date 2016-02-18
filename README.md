@@ -29,6 +29,15 @@ PaymentRequest paymentRequest = new PaymentRequest() {
 PaymentResponse paymentResponse = mollieApi.CreatePayment(paymentRequest).Result;
 ```
 
+If you want to create a payment with a specific paymentmethod, there are seperate classes that allow you to set paymentmethod specific parameters. For example, a bank transfer payment allows you to set the billing e-mail and due date. Have a look at the [Mollie create payment documentation](https://www.mollie.com/nl/docs/reference/payments/create) for more information. 
+
+The full list of payment specific request classes is:
+- BankTransferPaymentRequest
+- CreditCardPaymentRequest
+- IDealPaymentRequest
+- PayPalPaymentRequest
+- SepaDirectDebitRequest
+
 #### Retrieving a payment by id
 ```c#
 PaymentResponse result = this._mollieClient.GetPayment(paymentResponse.Id).Result;
@@ -37,6 +46,17 @@ PaymentResponse result = this._mollieClient.GetPayment(paymentResponse.Id).Resul
 Keep in mind that some payment methods have specific payment detail values. For example: PayPal payments have a PayPal and customer reference id. In order to use these fields you have to cast the PaymentResponse to the PayPalPaymentResponse and access the Detail property. 
 
 Take a look at the [Mollie payment response documentation](https://www.mollie.com/nl/docs/reference/payments/get) for a full list of payment methods that have extra detail fields.
+
+The full list of payment specific response classes is:
+- BankTransferPaymentResponse
+- BitcoinPaymentResponse
+- CreditCardPaymentResponse
+- IdealPaymentResponse
+- MisterCashPaymentResponse
+- PayPalPaymentResponse
+- PaySafeCardPaymentResponse
+- PodiumCadeauKaartPaymentResponse
+- SofortPaymentResponse
 
 #### Retrieving a list off payments
 Mollie allows you to set offset and count properties so you can paginate the list. The offset and count parameters are optional. The maximum number of payments you can request in a single roundtrip is 250. 
