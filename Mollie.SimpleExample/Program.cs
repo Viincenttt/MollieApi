@@ -8,18 +8,18 @@ using Mollie.Api.Models.PaymentMethod;
 namespace Mollie.SimpleExample {
     class Program {
         static void Main(string[] args) {
-            MollieApi mollieApi = new MollieApi("{API key}");
+            MollieClient mollieClient = new MollieClient("{API key}");
 
             OutputAndWait("Press any key to create a new payment");
-            OutputNewPayment(mollieApi);
+            OutputNewPayment(mollieClient);
             OutputAndWait("Press any key to retrieve a list of payments");
-            OutputPaymentList(mollieApi);
+            OutputPaymentList(mollieClient);
             OutputAndWait("Press any key to retrieve a list of payment methods");
-            OutputPaymentMethods(mollieApi);
+            OutputPaymentMethods(mollieClient);
             OutputAndWait("Example completed");
         }
 
-        static void OutputNewPayment(MollieApi mollieApi) {
+        static void OutputNewPayment(MollieClient mollieClient) {
             Console.WriteLine("Creating a payment");
             PaymentRequest paymentRequest = new PaymentRequest() {
                 Amount = 100,
@@ -27,23 +27,23 @@ namespace Mollie.SimpleExample {
                 RedirectUrl = "http://google.com"
             };
 
-            PaymentResponse paymentResponse = mollieApi.CreatePayment(paymentRequest).Result;
+            PaymentResponse paymentResponse = mollieClient.CreatePayment(paymentRequest).Result;
             Console.WriteLine("Payment created");
             Console.WriteLine("");
             Console.WriteLine($"Payment can be paid on the following URL: {paymentResponse.Links.PaymentUrl}");
         }
 
-        static void OutputPaymentList(MollieApi mollieApi) {
+        static void OutputPaymentList(MollieClient mollieClient) {
             Console.WriteLine("Outputting the first 2 payments");
-            ListResponse<PaymentResponse> paymentList = mollieApi.GetPaymentList(0, 2).Result;
+            ListResponse<PaymentResponse> paymentList = mollieClient.GetPaymentList(0, 2).Result;
             foreach (PaymentResponse paymentResponse in paymentList.Data) {
                 Console.WriteLine($"Payment Id: { paymentResponse.Id } - Payment method: { paymentResponse.Method }");
             }
         }
 
-        static void OutputPaymentMethods(MollieApi mollieApi) {
+        static void OutputPaymentMethods(MollieClient mollieClient) {
             Console.WriteLine("Ouputting all payment methods");
-            ListResponse<PaymentMethodResponse> paymentMethodList = mollieApi.GetPaymentMethodList(0, 100).Result;
+            ListResponse<PaymentMethodResponse> paymentMethodList = mollieClient.GetPaymentMethodList(0, 100).Result;
             foreach (PaymentMethodResponse paymentMethodResponse in paymentMethodList.Data) {
                 Console.WriteLine($"Payment method description: { paymentMethodResponse.Description }");
             }

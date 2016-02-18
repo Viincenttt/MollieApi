@@ -8,12 +8,12 @@ namespace Mollie.Tests.Integration.Framework {
         protected readonly string DefaultWebhookUrl = "http://mysite.com/webhook";
         protected readonly string ApiTestKey = ""; // Insert you API key here
 
-        protected MollieApi _mollieClient;
+        protected MollieClient _mollieClient;
 
         [OneTimeSetUp]
         public void InitClass() {
             this.EnsureTestApiKey();
-            this._mollieClient = new MollieApi(this.ApiTestKey);
+            this._mollieClient = new MollieClient(this.ApiTestKey);
         }
 
         private void EnsureTestApiKey() {
