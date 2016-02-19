@@ -2,8 +2,6 @@
 
 This project allows you to easily add the [Mollie payment provider](https://www.mollie.com) to your application. Mollie has excellent [documentation](https://www.mollie.com/nl/docs/overzicht) which I highly recommend you read before using this library. Please keep in mind that this is a 3rd party library and I am in no way associated with Mollie. 
 
-All of the mollie API calls can be performed asynchronously. 
-
 ## Getting started
 
 ### Installing the library
@@ -11,6 +9,9 @@ The easiest way to install the Mollie Api library is to use the [Nuget Package](
 ```
 Install-Package Mollie.Api
 ```
+
+### Example projects
+Two example projects are included. A simple console application and a web application that allows you to view, create, pay and refund payments. 
 
 ### Creating a MollieClient object
 The MollieClient object allows you to send and receive requests to the Mollie REST webservice. 
