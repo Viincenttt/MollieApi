@@ -8,7 +8,7 @@ using Mollie.Api.Models.PaymentMethod;
 namespace Mollie.SimpleExample {
     class Program {
         static void Main(string[] args) {
-            MollieClient mollieClient = new MollieClient("{API key}");
+            MollieClient mollieClient = new MollieClient("test_ykDGaYHm2y2crCz8VCsjuCDyUg46VN");
 
             OutputAndWait("Press any key to create a new payment");
             OutputNewPayment(mollieClient);

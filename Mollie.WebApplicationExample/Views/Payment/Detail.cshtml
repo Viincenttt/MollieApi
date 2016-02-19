@@ -1,0 +1,68 @@
+﻿@using Mollie.Api.Models.Payment
+@using Mollie.Api.Models.Payment.Response
+@model PaymentResponse
+
+@{
+    ViewBag.Title = "Detail";
+}
+
+<h2>Detail</h2>
+
+<div class="form-horizontal">
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Id</label>
+        <div class="controls">
+            <p class="form-control-static">@Model.Id</p>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Status</label>
+        <div class="controls">
+            <p class="form-control-static">@Model.Status</p>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Amount</label>
+        <div class="controls">
+            <p class="form-control-static">@Model.Amount</p>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Method</label>
+        <div class="controls">
+            <p class="form-control-static">@Model.Method</p>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Description</label>
+        <div class="controls">
+            <p class="form-control-static">@Model.Description</p>
+        </div>
+    </div>
+
+    @if (Model.Status == PaymentStatus.Refunded) {
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Amount refunded</label>
+            <div class="controls">
+                <p class="form-control-static">@Model.AmountRefunded</p>
+            </div>
+        </div>
+    }
+
+    @if (Model.Status == PaymentStatus.Open) {
+         using (Html.BeginForm("Pay", "Payment", new { id = Model.Id }, FormMethod.Post)) {
+             <input type="submit" class="btn btn-primary btn-lg" value="Pay now"/>
+         }
+    }
+
+    @if (Model.Status == PaymentStatus.Paid || Model.Status == PaymentStatus.PaidOut) {
+        using (Html.BeginForm("Refund", "Refund", new { paymentId = Model.Id }, FormMethod.Post)) {
+            <input type="submit" class="btn btn-primary btn-lg" value="Refund" />
+        }
+    }
+</div>
+

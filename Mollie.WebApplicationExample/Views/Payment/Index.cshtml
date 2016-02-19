@@ -1,0 +1,44 @@
+﻿@using Mollie.Api.Models.Payment
+@using Mollie.Api.Models.Payment.Response
+@model IEnumerable<PaymentResponse>
+
+@{
+    ViewBag.Title = "Last 50 payments";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@Html.ActionLink("Create new payment", "Create", null, new { @class = "btn btn-primary" })
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Date created</th>
+        <th>Amount</th>
+        <th>Status</th>
+        <th>Method</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+        @foreach (PaymentResponse payment in Model) {
+            <tr>
+                <td>@payment.Id</td>
+                <td>@payment.CreatedDatetime</td>
+                <td>@payment.Amount</td>
+                <td>@payment.Status</td>
+                <td>@payment.Method</td>
+                <td>
+                    @Html.ActionLink("Details", "Detail", new { id = payment.Id }, new { @class = "btn btn-primary btn-sm" })
+                    @if (payment.Status == PaymentStatus.Open) {
+                        using (Html.BeginForm("Pay", "Payment", new { id = payment.Id }, FormMethod.Post)) {
+                            <input type="submit" class="btn btn-default btn-sm" value="Pay" />
+                        }
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
