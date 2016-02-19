@@ -27,7 +27,7 @@ PaymentRequest paymentRequest = new PaymentRequest() {
     RedirectUrl = "http://google.com"
 };
 
-PaymentResponse paymentResponse = mollieClient.CreatePayment(paymentRequest).Result;
+PaymentResponse paymentResponse = mollieClient.CreatePaymentAsync(paymentRequest).Result;
 ```
 
 If you want to create a payment with a specific paymentmethod, there are seperate classes that allow you to set paymentmethod specific parameters. For example, a bank transfer payment allows you to set the billing e-mail and due date. Have a look at the [Mollie create payment documentation](https://www.mollie.com/nl/docs/reference/payments/create) for more information. 
@@ -41,7 +41,7 @@ The full list of payment specific request classes is:
 
 #### Retrieving a payment by id
 ```c#
-PaymentResponse result = this._mollieClient.GetPayment(paymentResponse.Id).Result;
+PaymentResponse result = this._mollieClient.GetPaymentAsync(paymentResponse.Id).Result;
 ```
 
 Keep in mind that some payment methods have specific payment detail values. For example: PayPal payments have a PayPal and customer reference id. In order to use these fields you have to cast the PaymentResponse to the PayPalPaymentResponse and access the Detail property. 
@@ -62,27 +62,27 @@ The full list of payment specific response classes is:
 #### Retrieving a list off payments
 Mollie allows you to set offset and count properties so you can paginate the list. The offset and count parameters are optional. The maximum number of payments you can request in a single roundtrip is 250. 
 ```c#
-ListResponse<PaymentResponse> response = this._mollieClient.GetPaymentList(offset, count).Result;
+ListResponse<PaymentResponse> response = this._mollieClient.GetPaymentListAsync(offset, count).Result;
 ```
 
 ### Payment methods
 #### Retrieving a list of all payment methods
 Mollie allows you to set offset and count properties so you can paginate the list. The offset and count parameters are optional.
 ```c#
-ListResponse<PaymentMethodResponse> paymentMethodList = this._mollieClient.GetPaymentMethodList(offset, count).Result;
+ListResponse<PaymentMethodResponse> paymentMethodList = this._mollieClient.GetPaymentMethodListAsync(offset, count).Result;
 foreach (PaymentMethodResponse paymentMethod in paymentMethodList.Data) {
   // Your code here
 }
 ```
 #### Retrieving a single payment method
 ```c#
-PaymentMethodResponse paymentMethodResponse = this._mollieClient.GetPaymentMethod(paymentMethod).Result;
+PaymentMethodResponse paymentMethodResponse = this._mollieClient.GetPaymentMethodAsync(paymentMethod).Result;
 ```
 
 ### Issuer methods
 #### Retrieve issuer list
 ```c#
-ListResponse<IssuerResponse> issuerList = this._mollieClient.GetIssuerList().Result;
+ListResponse<IssuerResponse> issuerList = this._mollieClient.GetIssuerListAsync().Result;
 foreach (IssuerResponse issuer in issuerList.Data) {
     // Your code here
 }
@@ -90,7 +90,7 @@ foreach (IssuerResponse issuer in issuerList.Data) {
 
 #### Retrieve a single issuer by id
 ```c#
-this._mollieClient.GetIssuer(issuerId).Result;
+this._mollieClient.GetIssuerAsync(issuerId).Result;
 ```
 
 ### Refund methods
