@@ -13,7 +13,7 @@ namespace Mollie.Tests.Integration.Api {
         [Test]
         public void CanRetrievePaymentList() {
             // When: Retrieve payment list with default settings
-            ListResponse<PaymentResponse> response = this._mollieClient.GetPaymentList().Result;
+            ListResponse<PaymentResponse> response = this._mollieClient.GetPaymentListAsync().Result;
 
             // Then
             Assert.IsNotNull(response);
@@ -25,7 +25,7 @@ namespace Mollie.Tests.Integration.Api {
             int numberOfPayments = 5;
 
             // When: Retrieve 5 payments
-            ListResponse<PaymentResponse> response = this._mollieClient.GetPaymentList(0, numberOfPayments).Result;
+            ListResponse<PaymentResponse> response = this._mollieClient.GetPaymentListAsync(0, numberOfPayments).Result;
 
             // Then
             Assert.IsTrue(response.Data.Count <= numberOfPayments);
@@ -41,7 +41,7 @@ namespace Mollie.Tests.Integration.Api {
             };
 
             // When: We send the payment request to Mollie
-            PaymentResponse result = this._mollieClient.CreatePayment(paymentRequest).Result;
+            PaymentResponse result = this._mollieClient.CreatePaymentAsync(paymentRequest).Result;
 
             // Then: Make sure we get a valid response
             Assert.IsNotNull(result);
@@ -64,7 +64,7 @@ namespace Mollie.Tests.Integration.Api {
             };
 
             // When: We send the payment request to Mollie
-            PaymentResponse result = this._mollieClient.CreatePayment(paymentRequest).Result;
+            PaymentResponse result = this._mollieClient.CreatePaymentAsync(paymentRequest).Result;
 
             // Then: Make sure all requested parameters match the response parameter values
             Assert.IsNotNull(result);
@@ -96,7 +96,7 @@ namespace Mollie.Tests.Integration.Api {
             paymentRequest.Method = paymentMethod;
 
             // When: We send the payment request to Mollie
-            PaymentResponse result = this._mollieClient.CreatePayment(paymentRequest).Result;
+            PaymentResponse result = this._mollieClient.CreatePaymentAsync(paymentRequest).Result;
 
             // Then: Make sure all requested parameters match the response parameter values
             Assert.IsNotNull(result);
@@ -116,8 +116,8 @@ namespace Mollie.Tests.Integration.Api {
             };
 
             // When: We send the payment request to Mollie and attempt to retrieve it
-            PaymentResponse paymentResponse = this._mollieClient.CreatePayment(paymentRequest).Result;
-            PaymentResponse result = this._mollieClient.GetPayment(paymentResponse.Id).Result;
+            PaymentResponse paymentResponse = this._mollieClient.CreatePaymentAsync(paymentRequest).Result;
+            PaymentResponse result = this._mollieClient.GetPaymentAsync(paymentResponse.Id).Result;
 
             Assert.IsNotNull(result);
             Assert.AreEqual(paymentResponse.Id, result.Id);

@@ -20,7 +20,7 @@ namespace Mollie.Tests.Integration.Api {
             Debugger.Break(); 
 
             // When: We attempt to refund this payment
-            RefundResponse refundResponse = this._mollieClient.CreateRefund(payment.Id, 100).Result;
+            RefundResponse refundResponse = this._mollieClient.CreateRefundAsync(payment.Id, 100).Result;
 
             // Then
             Assert.IsNotNull(refundResponse);
@@ -34,10 +34,10 @@ namespace Mollie.Tests.Integration.Api {
             // We can only test this if you make the payment using the payment.Links.PaymentUrl property. 
             // If you don't do this, this test will fail because we can only refund payments that have been paid
             Debugger.Break();
-            RefundResponse refundResponse = this._mollieClient.CreateRefund(payment.Id, 100).Result;
+            RefundResponse refundResponse = this._mollieClient.CreateRefundAsync(payment.Id, 100).Result;
 
             // When: We attempt to retrieve this refund
-            RefundResponse result = this._mollieClient.GetRefund(payment.Id, refundResponse.Id).Result;
+            RefundResponse result = this._mollieClient.GetRefundAsync(payment.Id, refundResponse.Id).Result;
 
             // Then
             Assert.IsNotNull(result);
@@ -52,7 +52,7 @@ namespace Mollie.Tests.Integration.Api {
             PaymentResponse payment = this.CreatePayment();
 
             // When: Retrieve refund list for this payment
-            ListResponse<RefundResponse> refundList = this._mollieClient.GetRefundList(payment.Id).Result;
+            ListResponse<RefundResponse> refundList = this._mollieClient.GetRefundListAsync(payment.Id).Result;
 
             // Then
             Assert.IsNotNull(refundList);
@@ -64,7 +64,7 @@ namespace Mollie.Tests.Integration.Api {
             paymentRequest.Description = "Description";
             paymentRequest.RedirectUrl = this.DefaultRedirectUrl;
 
-            return this._mollieClient.CreatePayment(paymentRequest).Result;
+            return this._mollieClient.CreatePaymentAsync(paymentRequest).Result;
         }
     }
 }

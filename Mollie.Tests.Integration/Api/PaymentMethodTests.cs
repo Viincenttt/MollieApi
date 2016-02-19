@@ -12,7 +12,7 @@ namespace Mollie.Tests.Integration.Api {
         [Test]
         public void ListPaymentMethodsReturnsAllKnownPaymentMethods() {
             // If: We request all payment methods from the api
-            ListResponse<PaymentMethodResponse> paymentMethodList = this._mollieClient.GetPaymentMethodList(0, 100).Result;
+            ListResponse<PaymentMethodResponse> paymentMethodList = this._mollieClient.GetPaymentMethodListAsync(0, 100).Result;
             Array paymentMethodEnumValues = Enum.GetValues(typeof(PaymentMethod));
 
             // Then: Make sure the list of payment methods is the same as our PaymentMethod enum
@@ -36,7 +36,7 @@ namespace Mollie.Tests.Integration.Api {
         [TestCase(PaymentMethod.PaySafeCard)]
         public void CanRetrievePaymentMethod(PaymentMethod paymentMethod) {
             // If: We request a payment method from the api
-            PaymentMethodResponse paymentMethodResponse = this._mollieClient.GetPaymentMethod(paymentMethod).Result;
+            PaymentMethodResponse paymentMethodResponse = this._mollieClient.GetPaymentMethodAsync(paymentMethod).Result;
 
             // Then: Id should be equal to our enum
             Assert.IsNotNull(paymentMethodResponse);

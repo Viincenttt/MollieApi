@@ -27,7 +27,7 @@ namespace Mollie.SimpleExample {
                 RedirectUrl = "http://google.com"
             };
 
-            PaymentResponse paymentResponse = mollieClient.CreatePayment(paymentRequest).Result;
+            PaymentResponse paymentResponse = mollieClient.CreatePaymentAsync(paymentRequest).Result;
             Console.WriteLine("Payment created");
             Console.WriteLine("");
             Console.WriteLine($"Payment can be paid on the following URL: {paymentResponse.Links.PaymentUrl}");
@@ -35,7 +35,7 @@ namespace Mollie.SimpleExample {
 
         static void OutputPaymentList(MollieClient mollieClient) {
             Console.WriteLine("Outputting the first 2 payments");
-            ListResponse<PaymentResponse> paymentList = mollieClient.GetPaymentList(0, 2).Result;
+            ListResponse<PaymentResponse> paymentList = mollieClient.GetPaymentListAsync(0, 2).Result;
             foreach (PaymentResponse paymentResponse in paymentList.Data) {
                 Console.WriteLine($"Payment Id: { paymentResponse.Id } - Payment method: { paymentResponse.Method }");
             }
@@ -43,7 +43,7 @@ namespace Mollie.SimpleExample {
 
         static void OutputPaymentMethods(MollieClient mollieClient) {
             Console.WriteLine("Ouputting all payment methods");
-            ListResponse<PaymentMethodResponse> paymentMethodList = mollieClient.GetPaymentMethodList(0, 100).Result;
+            ListResponse<PaymentMethodResponse> paymentMethodList = mollieClient.GetPaymentMethodListAsync(0, 100).Result;
             foreach (PaymentMethodResponse paymentMethodResponse in paymentMethodList.Data) {
                 Console.WriteLine($"Payment method description: { paymentMethodResponse.Description }");
             }

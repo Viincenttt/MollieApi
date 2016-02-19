@@ -18,19 +18,19 @@ namespace Mollie.WebApplicationExample.Controllers {
 
         [HttpGet]
         public async Task<ActionResult> Index() {
-            ListResponse<PaymentResponse> paymentList = await this._mollieClient.GetPaymentList(0, NumberOfPaymentsToList);
+            ListResponse<PaymentResponse> paymentList = await this._mollieClient.GetPaymentListAsync(0, NumberOfPaymentsToList);
             return View(paymentList.Data);
         }
 
         [HttpGet]
         public async Task<ActionResult> Detail(string id) {
-            PaymentResponse payment = await this._mollieClient.GetPayment(id);
+            PaymentResponse payment = await this._mollieClient.GetPaymentAsync(id);
             return View(payment);
         }
 
         [HttpPost]
         public async Task<ActionResult> Pay(string id) {
-            PaymentResponse payment = await this._mollieClient.GetPayment(id);
+            PaymentResponse payment = await this._mollieClient.GetPaymentAsync(id);
 
             return this.Redirect(payment.Links.PaymentUrl);
         }
@@ -48,7 +48,7 @@ namespace Mollie.WebApplicationExample.Controllers {
                 paymentRequest.Amount = paymentRequestModel.Amount;
                 paymentRequest.Description = paymentRequestModel.Description;
                 paymentRequest.RedirectUrl = paymentRequestModel.RedirectUrl;
-                await this._mollieClient.CreatePayment(paymentRequest);
+                await this._mollieClient.CreatePaymentAsync(paymentRequest);
 
                 return this.RedirectToAction("Index");
             }

@@ -31,56 +31,56 @@ namespace Mollie.Api.Client {
             this._restClient = this.CreateRestClient();
         }
 
-        public async Task<PaymentResponse> CreatePayment(PaymentRequest paymentRequest) {
-            return await this.Post<PaymentResponse>("payments", paymentRequest);
+        public async Task<PaymentResponse> CreatePaymentAsync(PaymentRequest paymentRequest) {
+            return await this.PostAsync<PaymentResponse>("payments", paymentRequest);
         }
 
-        public async Task<ListResponse<PaymentResponse>> GetPaymentList(int? offset = null, int? count = null) {
-            return await this.GetList<ListResponse<PaymentResponse>>("payments", offset, count);
+        public async Task<ListResponse<PaymentResponse>> GetPaymentListAsync(int? offset = null, int? count = null) {
+            return await this.GetListAsync<ListResponse<PaymentResponse>>("payments", offset, count);
         }
 
-        public async Task<PaymentResponse> GetPayment(string paymentId) {
-            return await this.Get<PaymentResponse>($"payments/{paymentId}");
+        public async Task<PaymentResponse> GetPaymentAsync(string paymentId) {
+            return await this.GetAsync<PaymentResponse>($"payments/{paymentId}");
         }
 
-        public async Task<ListResponse<PaymentMethodResponse>> GetPaymentMethodList(int? offset = null, int? count = null) {
-            return await this.GetList<ListResponse<PaymentMethodResponse>>("methods", offset, count);
+        public async Task<ListResponse<PaymentMethodResponse>> GetPaymentMethodListAsync(int? offset = null, int? count = null) {
+            return await this.GetListAsync<ListResponse<PaymentMethodResponse>>("methods", offset, count);
         }
 
-        public async Task<PaymentMethodResponse> GetPaymentMethod(PaymentMethod paymentMethod) {
-            return await this.Get<PaymentMethodResponse>($"methods/{paymentMethod.ToString().ToLower()}");
+        public async Task<PaymentMethodResponse> GetPaymentMethodAsync(PaymentMethod paymentMethod) {
+            return await this.GetAsync<PaymentMethodResponse>($"methods/{paymentMethod.ToString().ToLower()}");
         }
 
-        public async Task<ListResponse<IssuerResponse>> GetIssuerList(int? offset = null, int? count = null) {
-            return await this.GetList<ListResponse<IssuerResponse>>("issuers", offset, count);
+        public async Task<ListResponse<IssuerResponse>> GetIssuerListAsync(int? offset = null, int? count = null) {
+            return await this.GetListAsync<ListResponse<IssuerResponse>>("issuers", offset, count);
         }
 
-        public async Task<IssuerResponse> GetIssuer(string issuerId) {
-            return await this.Get<IssuerResponse>($"issuers/{issuerId}");
+        public async Task<IssuerResponse> GetIssuerAsync(string issuerId) {
+            return await this.GetAsync<IssuerResponse>($"issuers/{issuerId}");
         }
 
-        public async Task<RefundResponse> CreateRefund(string paymentId, decimal? amount = null) {
-            return await this.Post<RefundResponse>($"payments/{paymentId}/refunds", new { amount = amount });
+        public async Task<RefundResponse> CreateRefundAsync(string paymentId, decimal? amount = null) {
+            return await this.PostAsync<RefundResponse>($"payments/{paymentId}/refunds", new { amount = amount });
         }
 
-        public async Task<ListResponse<RefundResponse>> GetRefundList(string paymentId, int? offset = null, int? count = null) {
-            return await this.GetList<ListResponse<RefundResponse>>($"payments/{paymentId}/refunds", offset, count);
+        public async Task<ListResponse<RefundResponse>> GetRefundListAsync(string paymentId, int? offset = null, int? count = null) {
+            return await this.GetListAsync<ListResponse<RefundResponse>>($"payments/{paymentId}/refunds", offset, count);
         }
 
-        public async Task<RefundResponse> GetRefund(string paymentId, string refundId) {
-            return await this.Get<RefundResponse>($"payments/{paymentId}/refunds/{refundId}");
+        public async Task<RefundResponse> GetRefundAsync(string paymentId, string refundId) {
+            return await this.GetAsync<RefundResponse>($"payments/{paymentId}/refunds/{refundId}");
         }
 
-        public async Task CancelRefund(string paymentId, string refundId) {
-            await this.Delete($"payments/{paymentId}/refunds/{refundId}");
+        public async Task CancelRefundAsync(string paymentId, string refundId) {
+            await this.DeleteAsync($"payments/{paymentId}/refunds/{refundId}");
         }
 
-        private async Task<T> Get<T>(string relativeUri) {
+        private async Task<T> GetAsync<T>(string relativeUri) {
             RestRequest request = new RestRequest(relativeUri, Method.GET);
-            return await this.ExecuteRequest<T>(request);
+            return await this.ExecuteRequestAsync<T>(request);
         }
 
-        private async Task<T> GetList<T>(string relativeUri, int? offset, int? count) {
+        private async Task<T> GetListAsync<T>(string relativeUri, int? offset, int? count) {
             RestRequest request = new RestRequest(relativeUri, Method.GET);
             if (offset.HasValue) {
                 request.AddParameter("offset", offset);
@@ -89,22 +89,22 @@ namespace Mollie.Api.Client {
                 request.AddParameter("count", count);
             }
 
-            return await this.ExecuteRequest<T>(request);
+            return await this.ExecuteRequestAsync<T>(request);
         }
 
-        private async Task<T> Post<T>(string relativeUri, object data) {
+        private async Task<T> PostAsync<T>(string relativeUri, object data) {
             RestRequest request = new RestRequest(relativeUri, Method.POST);
             request.AddParameter(String.Empty, JsonConvertExtensions.SerializeObjectCamelCase(data), ParameterType.RequestBody);
 
-            return await this.ExecuteRequest<T>(request);
+            return await this.ExecuteRequestAsync<T>(request);
         }
 
-        private async Task Delete(string relativeUri) {
+        private async Task DeleteAsync(string relativeUri) {
             RestRequest request = new RestRequest(relativeUri, Method.DELETE);
-            await this.ExecuteRequest<object>(request);
+            await this.ExecuteRequestAsync<object>(request);
         }
 
-        private async Task<T> ExecuteRequest<T>(IRestRequest request) {
+        private async Task<T> ExecuteRequestAsync<T>(IRestRequest request) {
             IRestResponse response = await this._restClient.ExecuteTaskAsync(request);
             return this.ProcessHttpResponseMessage<T>(response);
         }

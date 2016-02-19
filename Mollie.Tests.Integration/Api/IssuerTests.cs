@@ -9,7 +9,7 @@ namespace Mollie.Tests.Integration.Api {
         [Test]
         public void CanRetrieveIssuerList() {
             // When: Retrieve payment list with default settings
-            ListResponse<IssuerResponse> issuerList = this._mollieClient.GetIssuerList().Result;
+            ListResponse<IssuerResponse> issuerList = this._mollieClient.GetIssuerListAsync().Result;
 
             // Then
             Assert.IsNotNull(issuerList);

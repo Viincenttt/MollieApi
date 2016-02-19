@@ -18,7 +18,7 @@ namespace Mollie.Tests.Integration.Api {
             };
             
             // Then: Send the payment request to the Mollie Api, this should throw a mollie api exception
-            AggregateException aggregateException = Assert.Throws<AggregateException>(() => this._mollieClient.CreatePayment(paymentRequest).Wait());
+            AggregateException aggregateException = Assert.Throws<AggregateException>(() => this._mollieClient.CreatePaymentAsync(paymentRequest).Wait());
             MollieApiException mollieApiException = aggregateException.InnerExceptions.FirstOrDefault(x => x.GetType() == typeof(MollieApiException)) as MollieApiException;
             Assert.IsNotNull(mollieApiException);
             Assert.IsNotNull(mollieApiException.Error);

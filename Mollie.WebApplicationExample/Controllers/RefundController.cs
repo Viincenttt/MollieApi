@@ -13,7 +13,7 @@ namespace Mollie.WebApplicationExample.Controllers {
 
         [HttpPost]
         public async Task<ActionResult> Refund(string paymentId) {
-            await this._mollieClient.CreateRefund(paymentId);
+            await this._mollieClient.CreateRefundAsync(paymentId);
 
             return this.RedirectToAction("Detail", "Payment", new { id = paymentId });
         }
