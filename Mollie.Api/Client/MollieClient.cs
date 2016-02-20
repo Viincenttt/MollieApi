@@ -26,6 +26,10 @@ namespace Mollie.Api.Client {
         private readonly JsonSerializerSettings _defaultJsonSerializerSettings;
 
         public MollieClient(string apiKey) {
+            if (string.IsNullOrEmpty(apiKey)) {
+                throw new ArgumentException("Mollie API key cannot be empty");
+            }
+
             this._apiKey = apiKey;
             this._defaultJsonSerializerSettings = this.CreateDefaultJsonSerializerSettings();
             this._restClient = this.CreateRestClient();
