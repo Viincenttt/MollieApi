@@ -44,7 +44,7 @@ The full list of payment specific request classes is:
 PaymentResponse result = this._mollieClient.GetPaymentAsync(paymentResponse.Id).Result;
 ```
 
-Keep in mind that some payment methods have specific payment detail values. For example: PayPal payments have a PayPal and customer reference id. In order to use these fields you have to cast the PaymentResponse to the PayPalPaymentResponse and access the Detail property. 
+Keep in mind that some payment methods have specific payment detail values. For example: PayPal payments have reference and customer reference properties. In order to access these properties you have to cast the PaymentResponse to the PayPalPaymentResponse and access the Detail property. 
 
 Take a look at the [Mollie payment response documentation](https://www.mollie.com/nl/docs/reference/payments/get) for a full list of payment methods that have extra detail fields.
 
