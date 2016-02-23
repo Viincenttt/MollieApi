@@ -5,7 +5,7 @@ This project allows you to easily add the [Mollie payment provider](https://www.
 ## Getting started
 
 ### Installing the library
-The easiest way to install the Mollie Api library is to use the [Nuget Package](https://www.nuget.org/packages/Mollie.Api/1.0.0).
+The easiest way to install the Mollie Api library is to use the [Nuget Package](https://www.nuget.org/packages/Mollie.Api).
 ```
 Install-Package Mollie.Api
 ```
