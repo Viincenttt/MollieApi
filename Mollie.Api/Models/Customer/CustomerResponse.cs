@@ -2,15 +2,9 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Mollie.Api.Models.Customer
-{
-    public class CustomerResponse
-    {
+namespace Mollie.Api.Models.Customer {
+    public class CustomerResponse {
         /// <summary>
         /// The customer's unique identifier, for example cst_4pmbK7CqtT. 
         /// Store this identifier for later recurring payments.
@@ -38,7 +32,7 @@ namespace Mollie.Api.Models.Customer
         /// Use this if you want Mollie to store additional info.
         /// </summary>
         public string Metadata { get; set; }
-        
+
         /// <summary>
         /// DateTime when user was created.
         /// </summary>

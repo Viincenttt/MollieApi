@@ -81,28 +81,23 @@ namespace Mollie.Api.Client {
             await this.DeleteAsync($"payments/{paymentId}/refunds/{refundId}");
         }
 
-        public async Task<CustomerResponse> CreateCustomer(string name, string email, Locale locale = Locale.NL)
-        {
-            return await this.PostAsync<CustomerResponse>($"customers", new { name = name, email = email, locale = locale });
+        public async Task<CustomerResponse> CreateCustomerAsync(CustomerRequest request) {
+            return await this.PostAsync<CustomerResponse>($"customers", request);
         }
 
-        public async Task<CustomerResponse> GetCustomer(string customerId)
-        {
+        public async Task<CustomerResponse> GetCustomerAsync(string customerId) {
             return await this.GetAsync<CustomerResponse>($"customers/{customerId}");
         }
 
-        public async Task<ListResponse<CustomerResponse>> GetCustomerListAsync(int? offset = null, int? count = null)
-        {
+        public async Task<ListResponse<CustomerResponse>> GetCustomerListAsync(int? offset = null, int? count = null) {
             return await this.GetListAsync<ListResponse<CustomerResponse>>("customers", offset, count);
         }
 
-        public async Task<MandateResponse> GetMandate(string customerId, string mandateId)
-        {
+        public async Task<MandateResponse> GetMandateAsync(string customerId, string mandateId) {
             return await this.GetAsync<MandateResponse>($"customers/{customerId}/mandates/{mandateId}");
         }
 
-        public async Task<ListResponse<MandateResponse>> GetCustomerMandates(string customerId, int? offset = null, int? count = null)
-        {
+        public async Task<ListResponse<MandateResponse>> GetCustomerMandateListAsync(string customerId, int? offset = null, int? count = null) {
             return await this.GetListAsync<ListResponse<MandateResponse>>($"customers/{customerId}/mandates", offset, count);
         }
 

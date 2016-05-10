@@ -190,6 +190,7 @@
     <Content Include="Views\Customer\Detail.cshtml" />
     <Content Include="Views\Customer\Index.cshtml" />
     <Content Include="Views\Mandate\Index.cshtml" />
+    <Content Include="Views\Mandate\Detail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
