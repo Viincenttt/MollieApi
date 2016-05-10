@@ -98,7 +98,7 @@ namespace Mollie.Api.Client {
 
         public async Task<MandateResponse> GetMandate(string customerId, string mandateId)
         {
-            return await this.GetAsync<MandateResponse>($"customer/{customerId}/mandates/{mandateId}");
+            return await this.GetAsync<MandateResponse>($"customers/{customerId}/mandates/{mandateId}");
         }
 
         public async Task<ListResponse<MandateResponse>> GetCustomerMandates(string customerId, int? offset = null, int? count = null)
