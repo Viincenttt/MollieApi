@@ -60,6 +60,7 @@
     <Compile Include="Framework\Factories\PaymentResponseFactory.cs" />
     <Compile Include="JsonConverters\JsonCreationConverter.cs" />
     <Compile Include="JsonConverters\PaymentResponseConverter.cs" />
+    <Compile Include="Models\Customer\CustomerResponse.cs" />
     <Compile Include="Models\MollieErrorMessage.cs" />
     <Compile Include="Models\Issuer\IssuerResponse.cs" />
     <Compile Include="Models\List\ListResponseLinks.cs" />
