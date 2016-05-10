@@ -6,6 +6,7 @@
         Paid,
         PaidOut,
         Refunded,
-        Expired
+        Expired,
+        Failed
     }
 }
