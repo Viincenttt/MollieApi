@@ -15,6 +15,7 @@
         <th>
             @Html.DisplayNameFor(model => model.CreatedDatetime)
         </th>
+        <th></th>
     </tr>
 
     @foreach (var item in Model)
@@ -28,6 +29,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedDatetime)
+            </td>
+            <td>
+                @Html.ActionLink("Details", "Detail", new { customerId = ViewContext.RouteData.Values["id"], mandateId = item.Id })
             </td>
         </tr>
     }
