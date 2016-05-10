@@ -15,6 +15,8 @@ using Mollie.Api.Models.PaymentMethod;
 using Mollie.Api.Models.Refund;
 using Newtonsoft.Json;
 using RestSharp;
+using Mollie.Api.Models.Customer;
+using Mollie.Api.Models.Mandate;
 
 namespace Mollie.Api.Client {
     public class MollieClient {
@@ -77,6 +79,26 @@ namespace Mollie.Api.Client {
 
         public async Task CancelRefundAsync(string paymentId, string refundId) {
             await this.DeleteAsync($"payments/{paymentId}/refunds/{refundId}");
+        }
+
+        public async Task<CustomerResponse> CreateCustomerAsync(CustomerRequest request) {
+            return await this.PostAsync<CustomerResponse>($"customers", request);
+        }
+
+        public async Task<CustomerResponse> GetCustomerAsync(string customerId) {
+            return await this.GetAsync<CustomerResponse>($"customers/{customerId}");
+        }
+
+        public async Task<ListResponse<CustomerResponse>> GetCustomerListAsync(int? offset = null, int? count = null) {
+            return await this.GetListAsync<ListResponse<CustomerResponse>>("customers", offset, count);
+        }
+
+        public async Task<MandateResponse> GetMandateAsync(string customerId, string mandateId) {
+            return await this.GetAsync<MandateResponse>($"customers/{customerId}/mandates/{mandateId}");
+        }
+
+        public async Task<ListResponse<MandateResponse>> GetCustomerMandateListAsync(string customerId, int? offset = null, int? count = null) {
+            return await this.GetListAsync<ListResponse<MandateResponse>>($"customers/{customerId}/mandates", offset, count);
         }
 
         private async Task<T> GetAsync<T>(string relativeUri) {
