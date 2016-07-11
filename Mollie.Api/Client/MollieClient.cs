@@ -17,6 +17,7 @@ using Newtonsoft.Json;
 using RestSharp;
 using Mollie.Api.Models.Customer;
 using Mollie.Api.Models.Mandate;
+using Mollie.Api.Models.Subscription;
 
 namespace Mollie.Api.Client {
     public class MollieClient {
@@ -99,6 +100,22 @@ namespace Mollie.Api.Client {
 
         public async Task<ListResponse<MandateResponse>> GetCustomerMandateListAsync(string customerId, int? offset = null, int? count = null) {
             return await this.GetListAsync<ListResponse<MandateResponse>>($"customers/{customerId}/mandates", offset, count);
+        }
+
+        public async Task<ListResponse<SubscriptionResponse>> GetSubscriptionListAsync(string customerId, int? offset = null, int? count = null) {
+            return await this.GetListAsync<ListResponse<SubscriptionResponse>>($"customers/{customerId}/subscriptions", offset, count);
+        }
+
+        public async Task<SubscriptionResponse> GetSubscriptionAsync(string customerId, string subscriptionId) {
+            return await this.GetAsync<SubscriptionResponse>($"customers/{customerId}/subscriptions/{subscriptionId}");
+        }
+
+        public async Task<SubscriptionResponse> CreateSubscriptionAsync(string customerId, SubscriptionRequest request) {
+            return await this.PostAsync<SubscriptionResponse>($"customers/{customerId}/subscriptions", request);
+        }
+
+        public async Task CancelSubscriptionAsync(string customerId, string subscriptionId) {
+            await this.DeleteAsync($"customers/{customerId}/subscriptions/{subscriptionId}");
         }
 
         private async Task<T> GetAsync<T>(string relativeUri) {
