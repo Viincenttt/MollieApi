@@ -64,6 +64,7 @@
     <Compile Include="Models\Customer\CustomerResponse.cs" />
     <Compile Include="Models\Mandate\MandateResponse.cs" />
     <Compile Include="Models\Mandate\MandateStatus.cs" />
+    <Compile Include="Models\Mode.cs" />
     <Compile Include="Models\MollieErrorMessage.cs" />
     <Compile Include="Models\Issuer\IssuerResponse.cs" />
     <Compile Include="Models\List\ListResponseLinks.cs" />
@@ -96,6 +97,10 @@
     <Compile Include="Models\Payment\Response\Specific\RecurringSubscriptionResponse.cs" />
     <Compile Include="Models\Payment\Response\Specific\SofortPaymentResponse.cs" />
     <Compile Include="Models\Refund\RefundResponse.cs" />
+    <Compile Include="Models\Subscription\SubscriptionRequest.cs" />
+    <Compile Include="Models\Subscription\SubscriptionResponse.cs" />
+    <Compile Include="Models\Subscription\SubscriptionResponseLinks.cs" />
+    <Compile Include="Models\Subscription\SubscriptionStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

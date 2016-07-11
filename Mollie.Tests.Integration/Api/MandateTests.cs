@@ -31,7 +31,7 @@ namespace Mollie.Tests.Integration.Api {
                 // If: Number of customers requested is 5
                 int numberOfMandates = 5;
 
-                // When: Retrieve 5 customers
+                // When: Retrieve 5 mandates
                 ListResponse<MandateResponse> response = this._mollieClient.GetCustomerMandateListAsync(customers.Data.First().Id, 0, numberOfMandates).Result;
 
                 // Then
