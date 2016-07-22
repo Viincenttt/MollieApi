@@ -143,12 +143,15 @@
     <Compile Include="Controllers\MandateController.cs" />
     <Compile Include="Controllers\PaymentController.cs" />
     <Compile Include="Controllers\RefundController.cs" />
+    <Compile Include="Controllers\SubscriptionController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\AppSettings.cs" />
     <Compile Include="Models\CustomerRequestModel.cs" />
     <Compile Include="Models\PaymentRequestModel.cs" />
+    <Compile Include="Models\SubscriptionListViewModel.cs" />
+    <Compile Include="Models\SubscriptionRequestModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -172,7 +175,9 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -191,6 +196,8 @@
     <Content Include="Views\Customer\Index.cshtml" />
     <Content Include="Views\Mandate\Index.cshtml" />
     <Content Include="Views\Mandate\Detail.cshtml" />
+    <Content Include="Views\Subscription\Index.cshtml" />
+    <Content Include="Views\Subscription\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

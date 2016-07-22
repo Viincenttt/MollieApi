@@ -1,0 +1,44 @@
+﻿@using Mollie.Api.Models.Subscription
+@model Mollie.WebApplicationExample.Models.SubscriptionListViewModel
+
+@{
+    ViewBag.Title = "Subscriptions";
+}
+
+<h2>Subscriptions</h2>
+
+@Html.ActionLink("Create new subscription", "Create", new { customerId = Model.CustomerId }, new { @class = "btn btn-primary" })
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Description</th>
+        <th>Amount</th>
+        <th>Status</th>
+        <th>Created on</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (SubscriptionResponse subscriptionResponse in Model.Subscriptions) {
+        <tr>
+            <td>@subscriptionResponse.Id</td>
+            <td>@subscriptionResponse.Description</td>
+            <td>@subscriptionResponse.Amount</td>
+            <td>@subscriptionResponse.Status</td>
+            <td>@subscriptionResponse.CreatedDatetime</td>
+            <td>
+            <td>
+                @if (subscriptionResponse.Status == SubscriptionStatus.Active) {
+                    using (Html.BeginForm("Cancel", "Subscription", new { customerId = Model.CustomerId, subscriptionId = subscriptionResponse.Id }, FormMethod.Post)) {
+                        <input type="submit" class="btn btn-default btn-sm" value="Cancel" />
+                    }
+                }
+            </td>
+
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

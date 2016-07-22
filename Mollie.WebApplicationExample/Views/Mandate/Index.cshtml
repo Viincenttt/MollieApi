@@ -1,6 +1,10 @@
 ﻿@model IEnumerable<Mollie.Api.Models.Mandate.MandateResponse>
 
-<h2>Index</h2>
+@{
+    ViewBag.Title = "Mandates";
+}
+
+<h2>Mandates</h2>
 <p>
     @Html.ActionLink("Create New", "Create", new { customerId = ViewContext.RouteData.Values["id"] })
 </p>

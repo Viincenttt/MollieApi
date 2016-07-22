@@ -48,7 +48,8 @@
         </td>
         <td>
             @Html.ActionLink("Details", "Detail", new { id = item.Id }) |
-            @Html.ActionLink("Mandaten", "Index", new { controller = "Mandate", id = item.Id }) 
+            @Html.ActionLink("Mandates", "Index", new { controller = "Mandate", customerId = item.Id }) 
+            @Html.ActionLink("Subscriptions", "Index", new { controller = "Subscription", customerId = item.Id }) 
         </td>
     </tr>
 }

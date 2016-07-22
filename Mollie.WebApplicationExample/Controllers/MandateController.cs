@@ -3,47 +3,36 @@ using Mollie.Api.Models.List;
 using Mollie.Api.Models.Mandate;
 using Mollie.Api.Models.Payment.Request;
 using Mollie.WebApplicationExample.Infrastructure;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 
-namespace Mollie.WebApplicationExample.Controllers
-{
-    public class MandateController : Controller
-    {
+namespace Mollie.WebApplicationExample.Controllers {
+    public class MandateController : Controller {
         private const int NumberOfPaymentsToList = 50;
         private readonly MollieClient _mollieClient;
 
-        public MandateController()
-        {
+        public MandateController() {
             this._mollieClient = new MollieClient(AppSettings.MollieApiKey);
         }
 
         [HttpGet]
-        public async Task<ActionResult> Index(string id)
-        {
-            ViewBag.CustomerId = id;
+        public async Task<ActionResult> Index(string customerId) {
+            ViewBag.CustomerId = customerId;
 
-            ListResponse<MandateResponse> mandateList = await this._mollieClient.GetCustomerMandateListAsync(id, 0, NumberOfPaymentsToList);
+            ListResponse<MandateResponse> mandateList = await this._mollieClient.GetCustomerMandateListAsync(customerId);
             return View(mandateList.Data);
         }
 
         [HttpGet]
-        public async Task<ActionResult> Detail(string customerId, string mandateId)
-        {
+        public async Task<ActionResult> Detail(string customerId, string mandateId) {
             MandateResponse mandate = await this._mollieClient.GetMandateAsync(customerId, mandateId);
             return View(mandate);
         }
 
         [HttpGet]
-        public async Task<ActionResult> Create(string customerId)
-        {
+        public async Task<ActionResult> Create(string customerId) {
             // You need at least 1 payment to make a new mandate
-            var result = await this._mollieClient.CreatePaymentAsync(new RecurringSubscriptionRequest
-            {
+            var result = await this._mollieClient.CreatePaymentAsync(new RecurringSubscriptionRequest {
                 Amount = 0.01M,
                 CustomerId = customerId,
                 Description = "First payment",
