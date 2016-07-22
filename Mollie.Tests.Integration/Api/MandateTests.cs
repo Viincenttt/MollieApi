@@ -15,7 +15,7 @@ namespace Mollie.Tests.Integration.Api {
 
             if (customers.TotalCount > 0) {
                 // When: Retrieve mandate list with default settings
-                ListResponse<MandateResponse> response = this._mollieClient.GetCustomerMandateListAsync(customers.Data.First().Id).Result;
+                ListResponse<MandateResponse> response = this._mollieClient.GetMandateListAsync(customers.Data.First().Id).Result;
 
                 // Then
                 Assert.IsNotNull(response);
@@ -32,7 +32,7 @@ namespace Mollie.Tests.Integration.Api {
                 int numberOfMandates = 5;
 
                 // When: Retrieve 5 mandates
-                ListResponse<MandateResponse> response = this._mollieClient.GetCustomerMandateListAsync(customers.Data.First().Id, 0, numberOfMandates).Result;
+                ListResponse<MandateResponse> response = this._mollieClient.GetMandateListAsync(customers.Data.First().Id, 0, numberOfMandates).Result;
 
                 // Then
                 Assert.IsTrue(response.Data.Count <= numberOfMandates);

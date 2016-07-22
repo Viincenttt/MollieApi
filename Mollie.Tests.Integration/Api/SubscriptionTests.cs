@@ -82,7 +82,7 @@ namespace Mollie.Tests.Integration.Api {
             ListResponse<CustomerResponse> customers = this._mollieClient.GetCustomerListAsync().Result;
             
             foreach (CustomerResponse customer in customers.Data) {
-                ListResponse<MandateResponse> mandates = this._mollieClient.GetCustomerMandateListAsync(customer.Id).Result;
+                ListResponse<MandateResponse> mandates = this._mollieClient.GetMandateListAsync(customer.Id).Result;
                 if (mandates.Data.Any(x => x.Status == MandateStatus.Valid)) {
                     return customer.Id;
                 }

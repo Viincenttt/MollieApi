@@ -19,7 +19,7 @@ namespace Mollie.WebApplicationExample.Controllers {
         public async Task<ActionResult> Index(string customerId) {
             ViewBag.CustomerId = customerId;
 
-            ListResponse<MandateResponse> mandateList = await this._mollieClient.GetCustomerMandateListAsync(customerId);
+            ListResponse<MandateResponse> mandateList = await this._mollieClient.GetMandateListAsync(customerId);
             return View(mandateList.Data);
         }
 
