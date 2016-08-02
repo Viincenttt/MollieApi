@@ -98,7 +98,15 @@ this._mollieClient.GetIssuerAsync(issuerId).Result;
 ### Refund methods
 #### Create a new refund
 ```c#
-RefundResponse refundResponse = this._mollieClient.CreateRefund(payment.Id, amount).Result;
+RefundResponse refundResponse = this._mollieClient.CreateRefund(payment.Id).Result;
+```
+
+#### Create a partial refund
+```c#
+RefundRequest refundRequest = new RefundRequest() {
+    Amount = 50
+};
+RefundResponse refundResponse = this._mollieClient.CreateRefund(payment.Id, refundRequest).Result;
 ```
 
 #### Retrieve a refund by payment and refund id
