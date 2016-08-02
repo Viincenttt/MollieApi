@@ -66,8 +66,12 @@ namespace Mollie.Api.Client {
             return await this.GetAsync<IssuerResponse>($"issuers/{issuerId}");
         }
 
-        public async Task<RefundResponse> CreateRefundAsync(string paymentId, decimal? amount = null) {
-            return await this.PostAsync<RefundResponse>($"payments/{paymentId}/refunds", new { amount = amount });
+        public async Task<RefundResponse> CreateRefundAsync(string paymentId) {
+            return await this.CreateRefundAsync(paymentId, null);
+        }
+
+        public async Task<RefundResponse> CreateRefundAsync(string paymentId, RefundRequest refundRequest) {
+            return await this.PostAsync<RefundResponse>($"payments/{paymentId}/refunds", refundRequest);
         }
 
         public async Task<ListResponse<RefundResponse>> GetRefundListAsync(string paymentId, int? offset = null, int? count = null) {

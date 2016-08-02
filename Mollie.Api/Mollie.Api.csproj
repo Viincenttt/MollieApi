@@ -95,7 +95,9 @@
     <Compile Include="Models\Payment\Response\Specific\PaySafeCardPaymentResponse.cs" />
     <Compile Include="Models\Payment\Response\Specific\PodiumCadeauKaartPaymentResponse.cs" />
     <Compile Include="Models\Payment\Response\Specific\SofortPaymentResponse.cs" />
+    <Compile Include="Models\Refund\RefundRequest.cs" />
     <Compile Include="Models\Refund\RefundResponse.cs" />
+    <Compile Include="Models\Refund\RefundStatus.cs" />
     <Compile Include="Models\Subscription\SubscriptionRequest.cs" />
     <Compile Include="Models\Subscription\SubscriptionResponse.cs" />
     <Compile Include="Models\Subscription\SubscriptionResponseLinks.cs" />
