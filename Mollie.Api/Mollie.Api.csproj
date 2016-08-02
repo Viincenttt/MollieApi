@@ -72,6 +72,7 @@
     <Compile Include="Models\Payment\PaymentMode.cs" />
     <Compile Include="Models\Payment\RecurringType.cs" />
     <Compile Include="Models\Payment\Response\Specific\BankTransferPaymentResponse.cs" />
+    <Compile Include="Models\Payment\Response\Specific\BelfiusPaymentResponse.cs" />
     <Compile Include="Models\Payment\Response\Specific\BitcoinPaymentResponse.cs" />
     <Compile Include="Models\Payment\Response\Specific\CreditCardPaymentResponse.cs" />
     <Compile Include="Models\Payment\Response\Specific\IdealPaymentResponse.cs" />

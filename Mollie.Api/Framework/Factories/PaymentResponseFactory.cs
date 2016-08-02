@@ -24,6 +24,8 @@ namespace Mollie.Api.Framework.Factories {
                     return new PodiumCadeauKaartPaymentResponse();
                 case PaymentMethod.Sofort:
                     return new SofortPaymentResponse();
+                case PaymentMethod.Belfius:
+                    return new BelfiusPaymentResponse();
                 default:
                     return new PaymentResponse();
             }
