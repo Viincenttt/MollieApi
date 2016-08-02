@@ -21,8 +21,8 @@ namespace Mollie.Tests.Integration.Api {
             AggregateException aggregateException = Assert.Throws<AggregateException>(() => this._mollieClient.CreatePaymentAsync(paymentRequest).Wait());
             MollieApiException mollieApiException = aggregateException.InnerExceptions.FirstOrDefault(x => x.GetType() == typeof(MollieApiException)) as MollieApiException;
             Assert.IsNotNull(mollieApiException);
-            Assert.IsNotNull(mollieApiException.Error);
-            Assert.True(!String.IsNullOrEmpty(mollieApiException.Error.Message));
+            Assert.IsNotNull(mollieApiException.Details);
+            Assert.True(!String.IsNullOrEmpty(mollieApiException.Details.Message));
         }
     }
 }

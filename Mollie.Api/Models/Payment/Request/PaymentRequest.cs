@@ -43,7 +43,18 @@ namespace Mollie.Api.Models.Payment.Request {
         /// Optional - Allow you to preset the language to be used in the payment screens shown to the consumer. When this parameter is not provided, the 
         /// browser language will be used instead (which is usually more accurate). Possible values are: de, en, es, fr, be, be-fr, nl
         /// </summary>
-        public Locale Locale { get; set; }
+        public Locale? Locale { get; set; }
+
+        /// <summary>
+        /// Id of target customer.
+        /// </summary>
+        public string CustomerId { get; set; }
+
+        /// <summary>
+        /// Recurring type required by Mollie. First for first payment. Recurring after first successful payment.
+        /// </summary>
+        /// 
+        public RecurringType? RecurringType { get; set; }
 
         public override string ToString() {
             return $"Method: {this.Method} - Amount: {this.Amount}";

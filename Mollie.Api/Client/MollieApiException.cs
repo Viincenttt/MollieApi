@@ -4,18 +4,27 @@ using Newtonsoft.Json;
 
 namespace Mollie.Api.Client {
     public class MollieApiException : ApplicationException {
-        private const string ExceptionMessage =
-            "An error has occured while performing an action on the Mollie Api. Please view the Error property for more information about the exception.";
+        public MollieErrorMessage Details { get; set; }
 
-        public MollieErrorMessage Error { get; set; }
+        public MollieApiException(string json) : base(CreateExceptionMessage(ParseErrorJsonResponse(json))) {
+            this.Details = ParseErrorJsonResponse(json);
+        }
 
-        public MollieApiException(string json) : base(ExceptionMessage) {
+        private static string CreateExceptionMessage(MollieErrorMessage error) {
+            if (!String.IsNullOrEmpty(error.Field)) {
+                return $"Error occured in field: {error.Field} - {error.Message}";
+            }
+
+            return error.Message;
+        }
+
+        private static MollieErrorMessage ParseErrorJsonResponse(string json) {
             dynamic jsonObject = JsonConvert.DeserializeObject<dynamic>(json);
 
-            this.Error = new MollieErrorMessage() {
-                Type = jsonObject.error.type,
+            return new MollieErrorMessage() {
                 Message = jsonObject.error.message,
-                Field = jsonObject.error.field
+                Field = jsonObject.error.field,
+                Type = jsonObject.error.type,
             };
         }
     }

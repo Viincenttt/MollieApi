@@ -8,7 +8,6 @@ using System.Web.Mvc;
 
 namespace Mollie.WebApplicationExample.Controllers {
     public class MandateController : Controller {
-        private const int NumberOfPaymentsToList = 50;
         private readonly MollieClient _mollieClient;
 
         public MandateController() {
@@ -20,29 +19,29 @@ namespace Mollie.WebApplicationExample.Controllers {
             ViewBag.CustomerId = customerId;
 
             ListResponse<MandateResponse> mandateList = await this._mollieClient.GetMandateListAsync(customerId);
-            return View(mandateList.Data);
+            return this.View(mandateList.Data);
         }
 
         [HttpGet]
         public async Task<ActionResult> Detail(string customerId, string mandateId) {
             MandateResponse mandate = await this._mollieClient.GetMandateAsync(customerId, mandateId);
-            return View(mandate);
+            return this.View(mandate);
         }
 
         [HttpGet]
         public async Task<ActionResult> Create(string customerId) {
             // You need at least 1 payment to make a new mandate
-            var result = await this._mollieClient.CreatePaymentAsync(new RecurringSubscriptionRequest {
-                Amount = 0.01M,
-                CustomerId = customerId,
+            var result = await this._mollieClient.CreatePaymentAsync(new PaymentRequest() {
+                Amount = 1,
                 Description = "First payment",
                 Locale = Api.Models.Payment.Locale.NL,
+                CustomerId = customerId,
                 RecurringType = Api.Models.Payment.RecurringType.First,
                 RedirectUrl = @"http://www.google.nl"
             });
 
 
-            return Redirect(result.Links.PaymentUrl);
+            return this.Redirect(result.Links.PaymentUrl);
         }
     }
 }

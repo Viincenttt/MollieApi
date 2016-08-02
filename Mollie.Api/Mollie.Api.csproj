@@ -71,7 +71,6 @@
     <Compile Include="Models\Payment\Locale.cs" />
     <Compile Include="Models\Payment\PaymentMode.cs" />
     <Compile Include="Models\Payment\RecurringType.cs" />
-    <Compile Include="Models\Payment\Request\RecurringSubscriptionRequest.cs" />
     <Compile Include="Models\Payment\Response\Specific\BankTransferPaymentResponse.cs" />
     <Compile Include="Models\Payment\Response\Specific\BitcoinPaymentResponse.cs" />
     <Compile Include="Models\Payment\Response\Specific\CreditCardPaymentResponse.cs" />
@@ -94,7 +93,6 @@
     <Compile Include="Models\Payment\Response\Specific\PayPalPaymentResponse.cs" />
     <Compile Include="Models\Payment\Response\Specific\PaySafeCardPaymentResponse.cs" />
     <Compile Include="Models\Payment\Response\Specific\PodiumCadeauKaartPaymentResponse.cs" />
-    <Compile Include="Models\Payment\Response\Specific\RecurringSubscriptionResponse.cs" />
     <Compile Include="Models\Payment\Response\Specific\SofortPaymentResponse.cs" />
     <Compile Include="Models\Refund\RefundResponse.cs" />
     <Compile Include="Models\Subscription\SubscriptionRequest.cs" />

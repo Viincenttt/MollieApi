@@ -96,6 +96,16 @@ namespace Mollie.Api.Models.Payment.Response {
         public string SettlementId { get; set; }
 
         /// <summary>
+        /// The customerid of this payment
+        /// </summary>
+        public string CustomerId { get; set; }
+
+        /// <summary>
+        /// The recurringtype of this payment
+        /// </summary>
+        public RecurringType? RecurringType { get; set; }
+
+        /// <summary>
         /// An object with several URLs important to the payment process.
         /// </summary>
         public PaymentResponseLinks Links { get; set; }

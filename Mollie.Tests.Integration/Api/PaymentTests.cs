@@ -8,6 +8,11 @@ using Mollie.Tests.Integration.Framework;
 using NUnit.Framework;
 
 namespace Mollie.Tests.Integration.Api {
+    using System.Linq;
+
+    using Mollie.Api.Models.Customer;
+    using Mollie.Api.Models.Mandate;
+
     [TestFixture]
     public class PaymentTests : BaseMollieApiTestClass {
         [Test]
@@ -112,18 +117,50 @@ namespace Mollie.Tests.Integration.Api {
             PaymentRequest paymentRequest = new PaymentRequest() {
                 Amount = 100,
                 Description = "Description",
-                RedirectUrl = this.DefaultRedirectUrl
+                RedirectUrl = this.DefaultRedirectUrl,
+                Locale = Locale.DE
             };
 
             // When: We send the payment request to Mollie and attempt to retrieve it
             PaymentResponse paymentResponse = this._mollieClient.CreatePaymentAsync(paymentRequest).Result;
             PaymentResponse result = this._mollieClient.GetPaymentAsync(paymentResponse.Id).Result;
 
+            // Then
             Assert.IsNotNull(result);
             Assert.AreEqual(paymentResponse.Id, result.Id);
             Assert.AreEqual(paymentResponse.Amount, result.Amount);
             Assert.AreEqual(paymentResponse.Description, result.Description);
             Assert.AreEqual(paymentResponse.Links.RedirectUrl, result.Links.RedirectUrl);
+        }
+
+        [Test]
+        public void CanCreateRecurringPaymentAndRetrieveIt() {
+            // If: we create a new recurring payment
+            string customerId = this.GetFirstCustomerIdWithValidMandate();
+            PaymentRequest paymentRequest = new PaymentRequest() {
+                Amount = 100,
+                Description = "Description",
+                RedirectUrl = this.DefaultRedirectUrl,
+                RecurringType = RecurringType.First,
+                CustomerId = customerId
+            };
+
+            // When: We send the payment request to Mollie and attempt to retrieve it
+            PaymentResponse paymentResponse = this._mollieClient.CreatePaymentAsync(paymentRequest).Result;
+            PaymentResponse result = this._mollieClient.GetPaymentAsync(paymentResponse.Id).Result;
+
+            // Then: Make sure the recurringtype parameter is entered
+            Assert.AreEqual(RecurringType.First, result.RecurringType);
+        }
+
+        public string GetFirstCustomerIdWithValidMandate() {
+            ListResponse<CustomerResponse> customers = this._mollieClient.GetCustomerListAsync().Result;
+
+            if (!customers.Data.Any()) {
+                Assert.Inconclusive("No customers found. Unable to test recurring payment tests");
+            }
+
+            return customers.Data.First().Id;
         }
     }
 }

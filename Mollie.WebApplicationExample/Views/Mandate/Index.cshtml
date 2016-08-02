@@ -6,7 +6,7 @@
 
 <h2>Mandates</h2>
 <p>
-    @Html.ActionLink("Create New", "Create", new { customerId = ViewContext.RouteData.Values["id"] })
+    @Html.ActionLink("Create New", "Create", new { customerId = ViewBag.CustomerId })
 </p>
 <table class="table">
     <tr>
@@ -35,7 +35,7 @@
                 @Html.DisplayFor(modelItem => item.CreatedDatetime)
             </td>
             <td>
-                @Html.ActionLink("Details", "Detail", new { customerId = ViewContext.RouteData.Values["id"], mandateId = item.Id })
+                @Html.ActionLink("Details", "Detail", new { customerId = ViewBag.CustomerId, mandateId = item.Id })
             </td>
         </tr>
     }

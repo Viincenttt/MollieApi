@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Mollie.Api.Models.Customer;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Mandate;
-using Mollie.Api.Models.Payment;
 using Mollie.Api.Models.Subscription;
 using Mollie.Tests.Integration.Framework;
 using NUnit.Framework;
