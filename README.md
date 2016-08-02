@@ -15,6 +15,13 @@ Install-Package Mollie.Api
 ### Example projects
 Two example projects are included. A simple console application and a web application that allows you to view, create, pay and refund payments. In order to use these projects you have to set your Mollie API key in the Program.cs/web.config file. 
 
+### Supported API's
+This library currently supports the following API's:
+- Payments API
+- Customers API
+- Mandates API
+- Subscriptions API
+
 ### Creating a MollieClient object
 The MollieClient object allows you to send and receive requests to the Mollie REST webservice. 
 ```c#
