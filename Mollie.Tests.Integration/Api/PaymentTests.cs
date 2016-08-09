@@ -153,6 +153,24 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(RecurringType.First, result.RecurringType);
         }
 
+        [Test]
+        public void CanCreatePaymentWithMetaData() {
+            // If: We create a payment with meta data
+            string json = "{\"order_id\":\"4.40\"}";
+            PaymentRequest paymentRequest = new PaymentRequest() {
+                Amount = 100,
+                Description = "Description",
+                RedirectUrl = this.DefaultRedirectUrl,
+                Metadata = json
+            };
+
+            // When: We send the payment request to Mollie
+            PaymentResponse result = this._mollieClient.CreatePaymentAsync(paymentRequest).Result;
+
+            // Then: Make sure we get the same json result as metadata
+            Assert.AreEqual(json, result.Metadata);
+        }
+
         public string GetFirstCustomerIdWithValidMandate() {
             ListResponse<CustomerResponse> customers = this._mollieClient.GetCustomerListAsync().Result;
 

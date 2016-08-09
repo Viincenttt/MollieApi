@@ -2,6 +2,8 @@
 using Newtonsoft.Json.Converters;
 
 namespace Mollie.Api.Models.Payment.Request {
+    using JsonConverters;
+
     public class PaymentRequest {
         /// <summary>
         /// Required - The amount in EURO that you want to charge, e.g. 100.00 if you would want to charge € 100,00.
@@ -31,6 +33,7 @@ namespace Mollie.Api.Models.Payment.Request {
         /// screen and will be sent directly to the chosen payment method. The parameter enables you to fully integrate the payment method selection into 
         /// your website, however note Mollie's country based conversion optimization is lost.
         /// </summary>
+        [JsonConverter(typeof(RawJsonConverter))]
         public string Metadata { get; set; }
 
         /// <summary>

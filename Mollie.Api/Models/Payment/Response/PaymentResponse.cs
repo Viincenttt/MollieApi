@@ -3,6 +3,10 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 namespace Mollie.Api.Models.Payment.Response {
+    using JsonConverters;
+
+    using Newtonsoft.Json.Linq;
+
     public class PaymentResponse {
         /// <summary>
         /// The identifier uniquely referring to this payment. Mollie assigns this identifier randomly at payment creation time. For example tr_7UhSN1zuXS. 
@@ -77,6 +81,7 @@ namespace Mollie.Api.Models.Payment.Response {
         /// <summary>
         /// The optional metadata you provided upon payment creation. Metadata can be used to link an order to a payment.
         /// </summary>
+        [JsonConverter(typeof(RawJsonConverter))]
         public string Metadata { get; set; }
 
         /// <summary>
