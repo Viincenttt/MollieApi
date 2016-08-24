@@ -2,6 +2,8 @@
 
 This project allows you to easily add the [Mollie payment provider](https://www.mollie.com) to your application. Mollie has excellent [documentation](https://www.mollie.com/nl/docs/overzicht) which I highly recommend you read before using this library. Please keep in mind that this is a 3rd party library and I am in no way associated with Mollie. 
 
+If you have encounter any issues while using this library or have any feature requests, feel free to open an issue on GitHub. 
+
 ## Getting started
 
 ### Installing the library
@@ -11,7 +13,14 @@ Install-Package Mollie.Api
 ```
 
 ### Example projects
-Two example projects are included. A simple console application and a web application that allows you to view, create, pay and refund payments. 
+Two example projects are included. A simple console application and a web application that allows you to view, create, pay and refund payments. In order to use these projects you have to set your Mollie API key in the Program.cs/web.config file. 
+
+### Supported API's
+This library currently supports the following API's:
+- Payments API
+- Customers API
+- Mandates API
+- Subscriptions API
 
 ### Creating a MollieClient object
 The MollieClient object allows you to send and receive requests to the Mollie REST webservice. 
@@ -58,6 +67,7 @@ The full list of payment specific response classes is:
 - PaySafeCardPaymentResponse
 - PodiumCadeauKaartPaymentResponse
 - SofortPaymentResponse
+- BelfiusPaymentResponse
 
 #### Retrieving a list off payments
 Mollie allows you to set offset and count properties so you can paginate the list. The offset and count parameters are optional. The maximum number of payments you can request in a single roundtrip is 250. 
@@ -96,7 +106,15 @@ this._mollieClient.GetIssuerAsync(issuerId).Result;
 ### Refund methods
 #### Create a new refund
 ```c#
-RefundResponse refundResponse = this._mollieClient.CreateRefund(payment.Id, amount).Result;
+RefundResponse refundResponse = this._mollieClient.CreateRefund(payment.Id).Result;
+```
+
+#### Create a partial refund
+```c#
+RefundRequest refundRequest = new RefundRequest() {
+    Amount = 50
+};
+RefundResponse refundResponse = this._mollieClient.CreateRefund(payment.Id, refundRequest).Result;
 ```
 
 #### Retrieve a refund by payment and refund id

@@ -68,6 +68,7 @@
     <Compile Include="Framework\Factories\PaymentResponseFactory.cs" />
     <Compile Include="JsonConverters\JsonCreationConverter.cs" />
     <Compile Include="JsonConverters\PaymentResponseConverter.cs" />
+    <Compile Include="JsonConverters\RawJsonConverter.cs" />
     <Compile Include="Models\Customer\CustomerRequest.cs" />
     <Compile Include="Models\Customer\CustomerResponse.cs" />
     <Compile Include="Models\Mandate\MandateResponse.cs" />
