@@ -38,86 +38,86 @@ namespace Mollie.Api.Client {
             this._restClient = this.CreateRestClient();
         }
 
-        public virtual async Task<PaymentResponse> CreatePaymentAsync(PaymentRequest paymentRequest) {
+        public async Task<PaymentResponse> CreatePaymentAsync(PaymentRequest paymentRequest) {
             return await this.PostAsync<PaymentResponse>("payments", paymentRequest);
         }
 
-        public virtual async Task<ListResponse<PaymentResponse>> GetPaymentListAsync(int? offset = null, int? count = null) {
+        public async Task<ListResponse<PaymentResponse>> GetPaymentListAsync(int? offset = null, int? count = null) {
             return await this.GetListAsync<ListResponse<PaymentResponse>>("payments", offset, count);
         }
 
-        public virtual async Task<PaymentResponse> GetPaymentAsync(string paymentId) {
+        public async Task<PaymentResponse> GetPaymentAsync(string paymentId) {
             return await this.GetAsync<PaymentResponse>($"payments/{paymentId}");
         }
 
-        public virtual async Task<ListResponse<PaymentMethodResponse>> GetPaymentMethodListAsync(int? offset = null, int? count = null) {
+        public async Task<ListResponse<PaymentMethodResponse>> GetPaymentMethodListAsync(int? offset = null, int? count = null) {
             return await this.GetListAsync<ListResponse<PaymentMethodResponse>>("methods", offset, count);
         }
 
-        public virtual async Task<PaymentMethodResponse> GetPaymentMethodAsync(PaymentMethod paymentMethod) {
+        public async Task<PaymentMethodResponse> GetPaymentMethodAsync(PaymentMethod paymentMethod) {
             return await this.GetAsync<PaymentMethodResponse>($"methods/{paymentMethod.ToString().ToLower()}");
         }
 
-        public virtual async Task<ListResponse<IssuerResponse>> GetIssuerListAsync(int? offset = null, int? count = null) {
+        public async Task<ListResponse<IssuerResponse>> GetIssuerListAsync(int? offset = null, int? count = null) {
             return await this.GetListAsync<ListResponse<IssuerResponse>>("issuers", offset, count);
         }
 
-        public virtual async Task<IssuerResponse> GetIssuerAsync(string issuerId) {
+        public async Task<IssuerResponse> GetIssuerAsync(string issuerId) {
             return await this.GetAsync<IssuerResponse>($"issuers/{issuerId}");
         }
-        public virtual async Task<RefundResponse> CreateRefundAsync(string paymentId) {
+        public async Task<RefundResponse> CreateRefundAsync(string paymentId) {
             return await this.CreateRefundAsync(paymentId, new RefundRequest());
         }
-
-        public virtual async Task<RefundResponse> CreateRefundAsync(string paymentId, RefundRequest refundRequest) {
+        
+        public async Task<RefundResponse> CreateRefundAsync(string paymentId, RefundRequest refundRequest) {
             return await this.PostAsync<RefundResponse>($"payments/{paymentId}/refunds", refundRequest);
         }
 
-        public virtual async Task<ListResponse<RefundResponse>> GetRefundListAsync(string paymentId, int? offset = null, int? count = null) {
+        public async Task<ListResponse<RefundResponse>> GetRefundListAsync(string paymentId, int? offset = null, int? count = null) {
             return await this.GetListAsync<ListResponse<RefundResponse>>($"payments/{paymentId}/refunds", offset, count);
         }
 
-        public virtual async Task<RefundResponse> GetRefundAsync(string paymentId, string refundId) {
+        public async Task<RefundResponse> GetRefundAsync(string paymentId, string refundId) {
             return await this.GetAsync<RefundResponse>($"payments/{paymentId}/refunds/{refundId}");
         }
 
-        public virtual async Task CancelRefundAsync(string paymentId, string refundId) {
+        public async Task CancelRefundAsync(string paymentId, string refundId) {
             await this.DeleteAsync($"payments/{paymentId}/refunds/{refundId}");
         }
 
-        public virtual async Task<CustomerResponse> CreateCustomerAsync(CustomerRequest request) {
+        public async Task<CustomerResponse> CreateCustomerAsync(CustomerRequest request) {
             return await this.PostAsync<CustomerResponse>($"customers", request);
         }
 
-        public virtual async Task<CustomerResponse> GetCustomerAsync(string customerId) {
+        public async Task<CustomerResponse> GetCustomerAsync(string customerId) {
             return await this.GetAsync<CustomerResponse>($"customers/{customerId}");
         }
 
-        public virtual async Task<ListResponse<CustomerResponse>> GetCustomerListAsync(int? offset = null, int? count = null) {
+        public async Task<ListResponse<CustomerResponse>> GetCustomerListAsync(int? offset = null, int? count = null) {
             return await this.GetListAsync<ListResponse<CustomerResponse>>("customers", offset, count);
         }
 
-        public virtual async Task<MandateResponse> GetMandateAsync(string customerId, string mandateId) {
+        public async Task<MandateResponse> GetMandateAsync(string customerId, string mandateId) {
             return await this.GetAsync<MandateResponse>($"customers/{customerId}/mandates/{mandateId}");
         }
 
-        public virtual async Task<ListResponse<MandateResponse>> GetMandateListAsync(string customerId, int? offset = null, int? count = null) {
+        public async Task<ListResponse<MandateResponse>> GetMandateListAsync(string customerId, int? offset = null, int? count = null) {
             return await this.GetListAsync<ListResponse<MandateResponse>>($"customers/{customerId}/mandates", offset, count);
         }
 
-        public virtual async Task<ListResponse<SubscriptionResponse>> GetSubscriptionListAsync(string customerId, int? offset = null, int? count = null) {
+        public async Task<ListResponse<SubscriptionResponse>> GetSubscriptionListAsync(string customerId, int? offset = null, int? count = null) {
             return await this.GetListAsync<ListResponse<SubscriptionResponse>>($"customers/{customerId}/subscriptions", offset, count);
         }
 
-        public virtual async Task<SubscriptionResponse> GetSubscriptionAsync(string customerId, string subscriptionId) {
+        public async Task<SubscriptionResponse> GetSubscriptionAsync(string customerId, string subscriptionId) {
             return await this.GetAsync<SubscriptionResponse>($"customers/{customerId}/subscriptions/{subscriptionId}");
         }
 
-        public virtual async Task<SubscriptionResponse> CreateSubscriptionAsync(string customerId, SubscriptionRequest request) {
+        public async Task<SubscriptionResponse> CreateSubscriptionAsync(string customerId, SubscriptionRequest request) {
             return await this.PostAsync<SubscriptionResponse>($"customers/{customerId}/subscriptions", request);
         }
 
-        public virtual async Task CancelSubscriptionAsync(string customerId, string subscriptionId) {
+        public async Task CancelSubscriptionAsync(string customerId, string subscriptionId) {
             await this.DeleteAsync($"customers/{customerId}/subscriptions/{subscriptionId}");
         }
 
@@ -126,7 +126,7 @@ namespace Mollie.Api.Client {
             return await this.ExecuteRequestAsync<T>(request);
         }
 
-        protected virtual async Task<T> GetListAsync<T>(string relativeUri, int? offset, int? count) {
+        private async Task<T> GetListAsync<T>(string relativeUri, int? offset, int? count) {
             RestRequest request = new RestRequest(relativeUri, Method.GET);
             if (offset.HasValue) {
                 request.AddParameter("offset", offset);
@@ -138,24 +138,24 @@ namespace Mollie.Api.Client {
             return await this.ExecuteRequestAsync<T>(request);
         }
 
-        protected virtual async Task<T> PostAsync<T>(string relativeUri, object data) {
+        private async Task<T> PostAsync<T>(string relativeUri, object data) {
             RestRequest request = new RestRequest(relativeUri, Method.POST);
             request.AddParameter(String.Empty, JsonConvertExtensions.SerializeObjectCamelCase(data), ParameterType.RequestBody);
 
             return await this.ExecuteRequestAsync<T>(request);
         }
 
-        protected virtual async Task DeleteAsync(string relativeUri) {
+        private async Task DeleteAsync(string relativeUri) {
             RestRequest request = new RestRequest(relativeUri, Method.DELETE);
             await this.ExecuteRequestAsync<object>(request);
         }
 
-        protected virtual async Task<T> ExecuteRequestAsync<T>(IRestRequest request) {
+        private async Task<T> ExecuteRequestAsync<T>(IRestRequest request) {
             IRestResponse response = await this._restClient.ExecuteTaskAsync(request);
             return this.ProcessHttpResponseMessage<T>(response);
         }
 
-        protected virtual T ProcessHttpResponseMessage<T>(IRestResponse response) {
+        private T ProcessHttpResponseMessage<T>(IRestResponse response) {
             if (response.IsSuccessful()) {
                 return JsonConvert.DeserializeObject<T>(response.Content, this._defaultJsonSerializerSettings);
             }
@@ -178,7 +178,7 @@ namespace Mollie.Api.Client {
         /// <summary>
         /// Creates a new rest client for the Mollie API
         /// </summary>
-        protected virtual RestClient CreateRestClient() {
+        private RestClient CreateRestClient() {
             RestClient restClient = new RestClient();
             restClient.BaseUrl = this.GetBaseAddress();
             restClient.AddDefaultHeader("Content-Type", "application/json");
@@ -191,13 +191,13 @@ namespace Mollie.Api.Client {
         /// Returns the base address of the Mollie API
         /// </summary>
         /// <returns></returns>
-        protected virtual Uri GetBaseAddress() => new Uri(ApiEndPoint + "/" + ApiVersion + "/");
+        private Uri GetBaseAddress() => new Uri(ApiEndPoint + "/" + ApiVersion + "/");
 
         /// <summary>
         /// Creates the default Json serial settings for the JSON.NET parsing.
         /// </summary>
         /// <returns></returns>
-        protected virtual JsonSerializerSettings CreateDefaultJsonSerializerSettings() {
+        private JsonSerializerSettings CreateDefaultJsonSerializerSettings() {
             return new JsonSerializerSettings {
                 NullValueHandling = NullValueHandling.Ignore,
                 Converters = new List<JsonConverter>() {

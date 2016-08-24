@@ -5,7 +5,7 @@ using Mollie.WebApplicationExample.Infrastructure;
 
 namespace Mollie.WebApplicationExample.Controllers {
     public class RefundController : Controller {
-        private readonly MollieClient _mollieClient;
+        private readonly IRefundClient _mollieClient;
 
         public RefundController() {
             this._mollieClient = new MollieClient(AppSettings.MollieApiKey);

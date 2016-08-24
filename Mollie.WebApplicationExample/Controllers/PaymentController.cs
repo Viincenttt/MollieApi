@@ -10,7 +10,7 @@ using Mollie.WebApplicationExample.Models;
 namespace Mollie.WebApplicationExample.Controllers {
     public class PaymentController : Controller {
         private const int NumberOfPaymentsToList = 50;
-        private readonly MollieClient _mollieClient;
+        private readonly IPaymentClient _mollieClient;
 
         public PaymentController() {
             this._mollieClient = new MollieClient(AppSettings.MollieApiKey);
