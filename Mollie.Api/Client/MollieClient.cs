@@ -20,7 +20,7 @@ using Mollie.Api.Models.Mandate;
 using Mollie.Api.Models.Subscription;
 
 namespace Mollie.Api.Client {
-    public class MollieClient {
+    public class MollieClient : IMollieClient {
         public const string ApiEndPoint = "https://api.mollie.nl";
         public const string ApiVersion = "v1";
 
