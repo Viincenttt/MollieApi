@@ -8,7 +8,7 @@ using Mollie.WebApplicationExample.Models;
 
 namespace Mollie.WebApplicationExample.Controllers {
     public class SubscriptionController : Controller {
-        private readonly MollieClient _mollieClient;
+        private readonly ISubscriptionClient _mollieClient;
 
         public SubscriptionController() {
             this._mollieClient = new MollieClient(AppSettings.MollieApiKey);

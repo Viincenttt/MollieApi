@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 namespace Mollie.WebApplicationExample.Controllers {
     public class MandateController : Controller {
-        private readonly MollieClient _mollieClient;
+        private readonly IMollieClient _mollieClient;
 
         public MandateController() {
             this._mollieClient = new MollieClient(AppSettings.MollieApiKey);

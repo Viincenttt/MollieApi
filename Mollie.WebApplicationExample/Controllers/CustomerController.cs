@@ -15,7 +15,7 @@ using System.Web.Mvc;
 namespace Mollie.WebApplicationExample.Controllers {
     public class CustomerController : Controller {
         private const int NumberOfPaymentsToList = 50;
-        private readonly MollieClient _mollieClient;
+        private readonly ICustomerClient _mollieClient;
 
         public CustomerController() {
             this._mollieClient = new MollieClient(AppSettings.MollieApiKey);

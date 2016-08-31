@@ -20,7 +20,7 @@ using Mollie.Api.Models.Mandate;
 using Mollie.Api.Models.Subscription;
 
 namespace Mollie.Api.Client {
-    public class MollieClient {
+    public class MollieClient : IMollieClient {
         public const string ApiEndPoint = "https://api.mollie.nl";
         public const string ApiVersion = "v1";
 
@@ -68,7 +68,7 @@ namespace Mollie.Api.Client {
         public async Task<RefundResponse> CreateRefundAsync(string paymentId) {
             return await this.CreateRefundAsync(paymentId, new RefundRequest());
         }
-
+        
         public async Task<RefundResponse> CreateRefundAsync(string paymentId, RefundRequest refundRequest) {
             return await this.PostAsync<RefundResponse>($"payments/{paymentId}/refunds", refundRequest);
         }
