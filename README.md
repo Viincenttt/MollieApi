@@ -68,6 +68,7 @@ The full list of payment specific response classes is:
 - PodiumCadeauKaartPaymentResponse
 - SofortPaymentResponse
 - BelfiusPaymentResponse
+- SepaDirectDebitResponse
 
 #### Retrieving a list off payments
 Mollie allows you to set offset and count properties so you can paginate the list. The offset and count parameters are optional. The maximum number of payments you can request in a single roundtrip is 250. 
