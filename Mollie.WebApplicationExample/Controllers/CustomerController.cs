@@ -1,15 +1,9 @@
 ﻿using Mollie.Api.Client;
 using Mollie.Api.Models.Customer;
 using Mollie.Api.Models.List;
-using Mollie.Api.Models.Payment.Request;
-using Mollie.Api.Models.Payment.Response;
 using Mollie.WebApplicationExample.Infrastructure;
 using Mollie.WebApplicationExample.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 
 namespace Mollie.WebApplicationExample.Controllers {

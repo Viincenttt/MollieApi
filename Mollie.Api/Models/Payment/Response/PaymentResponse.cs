@@ -85,8 +85,7 @@ namespace Mollie.Api.Models.Payment.Response {
         /// <summary>
         /// The consumer's locale, either forced on creation by specifying the locale parameter, or detected by us during checkout.
         /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
-        public Locale Locale { get; set; }
+        public string Locale { get; set; }
 
         /// <summary>
         /// The identifier referring to the profile this payment was created on. For example, pfl_QkEhN94Ba.

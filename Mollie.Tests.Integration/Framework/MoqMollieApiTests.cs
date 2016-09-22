@@ -14,7 +14,7 @@ namespace Mollie.Tests.Integration.Framework {
     public class MoqMollieApiTests : BaseMollieApiTestClass {
         [TestCase]
         public async Task MoqMollieClient() {
-            var mollieClientMock = new Mock<IMollieClient>(ApiTestKey);
+            var mollieClientMock = new Mock<IMollieClient>();
             var paymentResponse = new PaymentResponse { Id = "dummy_payment", Links = new PaymentResponseLinks() { PaymentUrl = "http://localhost/mollietest" } };
             var customerResponse = new CustomerResponse { Id = "dummy_customer" };
 

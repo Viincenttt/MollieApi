@@ -16,6 +16,6 @@ namespace Mollie.WebApplicationExample.Models
         [EmailAddress]
         public string Email { get; set; }
 
-        public Locale Locale { get; set; }
+        public string Locale { get; set; }
     }
 }
