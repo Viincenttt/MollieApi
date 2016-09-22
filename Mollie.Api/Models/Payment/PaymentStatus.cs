@@ -7,6 +7,7 @@
         PaidOut,
         Refunded,
         Expired,
-        Failed
+        Failed,
+        Charged_Back
     }
 }
