@@ -39,91 +39,91 @@ namespace Mollie.Api.Client {
         }
 
         public async Task<PaymentResponse> CreatePaymentAsync(PaymentRequest paymentRequest) {
-            return await this.PostAsync<PaymentResponse>("payments", paymentRequest);
+            return await this.PostAsync<PaymentResponse>("payments", paymentRequest).ConfigureAwait(false);
         }
 
         public async Task<ListResponse<PaymentResponse>> GetPaymentListAsync(int? offset = null, int? count = null) {
-            return await this.GetListAsync<ListResponse<PaymentResponse>>("payments", offset, count);
+            return await this.GetListAsync<ListResponse<PaymentResponse>>("payments", offset, count).ConfigureAwait(false);
         }
 
         public async Task<PaymentResponse> GetPaymentAsync(string paymentId) {
-            return await this.GetAsync<PaymentResponse>($"payments/{paymentId}");
+            return await this.GetAsync<PaymentResponse>($"payments/{paymentId}").ConfigureAwait(false);
         }
 
         public async Task<ListResponse<PaymentMethodResponse>> GetPaymentMethodListAsync(int? offset = null, int? count = null) {
-            return await this.GetListAsync<ListResponse<PaymentMethodResponse>>("methods", offset, count);
+            return await this.GetListAsync<ListResponse<PaymentMethodResponse>>("methods", offset, count).ConfigureAwait(false);
         }
 
         public async Task<PaymentMethodResponse> GetPaymentMethodAsync(PaymentMethod paymentMethod) {
-            return await this.GetAsync<PaymentMethodResponse>($"methods/{paymentMethod.ToString().ToLower()}");
+            return await this.GetAsync<PaymentMethodResponse>($"methods/{paymentMethod.ToString().ToLower()}").ConfigureAwait(false);
         }
 
         public async Task<ListResponse<IssuerResponse>> GetIssuerListAsync(int? offset = null, int? count = null) {
-            return await this.GetListAsync<ListResponse<IssuerResponse>>("issuers", offset, count);
+            return await this.GetListAsync<ListResponse<IssuerResponse>>("issuers", offset, count).ConfigureAwait(false);
         }
 
         public async Task<IssuerResponse> GetIssuerAsync(string issuerId) {
-            return await this.GetAsync<IssuerResponse>($"issuers/{issuerId}");
+            return await this.GetAsync<IssuerResponse>($"issuers/{issuerId}").ConfigureAwait(false);
         }
         public async Task<RefundResponse> CreateRefundAsync(string paymentId) {
-            return await this.CreateRefundAsync(paymentId, new RefundRequest());
+            return await this.CreateRefundAsync(paymentId, new RefundRequest()).ConfigureAwait(false);
         }
         
         public async Task<RefundResponse> CreateRefundAsync(string paymentId, RefundRequest refundRequest) {
-            return await this.PostAsync<RefundResponse>($"payments/{paymentId}/refunds", refundRequest);
+            return await this.PostAsync<RefundResponse>($"payments/{paymentId}/refunds", refundRequest).ConfigureAwait(false);
         }
 
         public async Task<ListResponse<RefundResponse>> GetRefundListAsync(string paymentId, int? offset = null, int? count = null) {
-            return await this.GetListAsync<ListResponse<RefundResponse>>($"payments/{paymentId}/refunds", offset, count);
+            return await this.GetListAsync<ListResponse<RefundResponse>>($"payments/{paymentId}/refunds", offset, count).ConfigureAwait(false);
         }
 
         public async Task<RefundResponse> GetRefundAsync(string paymentId, string refundId) {
-            return await this.GetAsync<RefundResponse>($"payments/{paymentId}/refunds/{refundId}");
+            return await this.GetAsync<RefundResponse>($"payments/{paymentId}/refunds/{refundId}").ConfigureAwait(false);
         }
 
         public async Task CancelRefundAsync(string paymentId, string refundId) {
-            await this.DeleteAsync($"payments/{paymentId}/refunds/{refundId}");
+            await this.DeleteAsync($"payments/{paymentId}/refunds/{refundId}").ConfigureAwait(false);
         }
 
         public async Task<CustomerResponse> CreateCustomerAsync(CustomerRequest request) {
-            return await this.PostAsync<CustomerResponse>($"customers", request);
+            return await this.PostAsync<CustomerResponse>($"customers", request).ConfigureAwait(false);
         }
 
         public async Task<CustomerResponse> GetCustomerAsync(string customerId) {
-            return await this.GetAsync<CustomerResponse>($"customers/{customerId}");
+            return await this.GetAsync<CustomerResponse>($"customers/{customerId}").ConfigureAwait(false);
         }
 
         public async Task<ListResponse<CustomerResponse>> GetCustomerListAsync(int? offset = null, int? count = null) {
-            return await this.GetListAsync<ListResponse<CustomerResponse>>("customers", offset, count);
+            return await this.GetListAsync<ListResponse<CustomerResponse>>("customers", offset, count).ConfigureAwait(false);
         }
 
         public async Task<MandateResponse> GetMandateAsync(string customerId, string mandateId) {
-            return await this.GetAsync<MandateResponse>($"customers/{customerId}/mandates/{mandateId}");
+            return await this.GetAsync<MandateResponse>($"customers/{customerId}/mandates/{mandateId}").ConfigureAwait(false);
         }
 
         public async Task<ListResponse<MandateResponse>> GetMandateListAsync(string customerId, int? offset = null, int? count = null) {
-            return await this.GetListAsync<ListResponse<MandateResponse>>($"customers/{customerId}/mandates", offset, count);
+            return await this.GetListAsync<ListResponse<MandateResponse>>($"customers/{customerId}/mandates", offset, count).ConfigureAwait(false);
         }
 
         public async Task<ListResponse<SubscriptionResponse>> GetSubscriptionListAsync(string customerId, int? offset = null, int? count = null) {
-            return await this.GetListAsync<ListResponse<SubscriptionResponse>>($"customers/{customerId}/subscriptions", offset, count);
+            return await this.GetListAsync<ListResponse<SubscriptionResponse>>($"customers/{customerId}/subscriptions", offset, count).ConfigureAwait(false);
         }
 
         public async Task<SubscriptionResponse> GetSubscriptionAsync(string customerId, string subscriptionId) {
-            return await this.GetAsync<SubscriptionResponse>($"customers/{customerId}/subscriptions/{subscriptionId}");
+            return await this.GetAsync<SubscriptionResponse>($"customers/{customerId}/subscriptions/{subscriptionId}").ConfigureAwait(false);
         }
 
         public async Task<SubscriptionResponse> CreateSubscriptionAsync(string customerId, SubscriptionRequest request) {
-            return await this.PostAsync<SubscriptionResponse>($"customers/{customerId}/subscriptions", request);
+            return await this.PostAsync<SubscriptionResponse>($"customers/{customerId}/subscriptions", request).ConfigureAwait(false);
         }
 
         public async Task CancelSubscriptionAsync(string customerId, string subscriptionId) {
-            await this.DeleteAsync($"customers/{customerId}/subscriptions/{subscriptionId}");
+            await this.DeleteAsync($"customers/{customerId}/subscriptions/{subscriptionId}").ConfigureAwait(false);
         }
 
         private async Task<T> GetAsync<T>(string relativeUri) {
             RestRequest request = new RestRequest(relativeUri, Method.GET);
-            return await this.ExecuteRequestAsync<T>(request);
+            return await this.ExecuteRequestAsync<T>(request).ConfigureAwait(false);
         }
 
         private async Task<T> GetListAsync<T>(string relativeUri, int? offset, int? count) {
@@ -135,23 +135,23 @@ namespace Mollie.Api.Client {
                 request.AddParameter("count", count);
             }
 
-            return await this.ExecuteRequestAsync<T>(request);
+            return await this.ExecuteRequestAsync<T>(request).ConfigureAwait(false);
         }
 
         private async Task<T> PostAsync<T>(string relativeUri, object data) {
             RestRequest request = new RestRequest(relativeUri, Method.POST);
             request.AddParameter(String.Empty, JsonConvertExtensions.SerializeObjectCamelCase(data), ParameterType.RequestBody);
 
-            return await this.ExecuteRequestAsync<T>(request);
+            return await this.ExecuteRequestAsync<T>(request).ConfigureAwait(false);
         }
 
         private async Task DeleteAsync(string relativeUri) {
             RestRequest request = new RestRequest(relativeUri, Method.DELETE);
-            await this.ExecuteRequestAsync<object>(request);
+            await this.ExecuteRequestAsync<object>(request).ConfigureAwait(false);
         }
 
         private async Task<T> ExecuteRequestAsync<T>(IRestRequest request) {
-            IRestResponse response = await this._restClient.ExecuteTaskAsync(request);
+            IRestResponse response = await this._restClient.ExecuteTaskAsync(request).ConfigureAwait(false);
             return this.ProcessHttpResponseMessage<T>(response);
         }
 
