@@ -136,7 +136,7 @@ namespace Mollie.Tests.Integration.Api {
         [Test]
         public void CanCreateRecurringPaymentAndRetrieveIt() {
             // If: we create a new recurring payment
-            string customerId = this.GetFirstCustomerIdWithValidMandate();
+            string customerId = this.GetFirstValidMandate().CustomerId;
             PaymentRequest paymentRequest = new PaymentRequest() {
                 Amount = 100,
                 Description = "Description",
@@ -171,14 +171,42 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(json, result.Metadata);
         }
 
-        public string GetFirstCustomerIdWithValidMandate() {
-            ListResponse<CustomerResponse> customers = this._mollieClient.GetCustomerListAsync().Result;
+        [Test]
+        public void CanCreatePaymentWithMandate() {
+            // If: We create a payment with a mandate id
+            MandateResponse validMandate = this.GetFirstValidMandate();
+            PaymentRequest paymentRequest = new PaymentRequest() {
+                Amount = 100,
+                Description = "Description",
+                RedirectUrl = this.DefaultRedirectUrl,
+                RecurringType = RecurringType.Recurring,
+                CustomerId = validMandate.CustomerId,
+                MandateId = validMandate.Id
+            };
 
+            // When: We send the payment request to Mollie
+            PaymentResponse result = this._mollieClient.CreatePaymentAsync(paymentRequest).Result;
+
+            // Then: Make sure we get the mandate id back in the details
+            Assert.AreEqual(validMandate.Id, result.MandateId);
+        }
+
+        private MandateResponse GetFirstValidMandate() {
+            ListResponse<CustomerResponse> customers = this._mollieClient.GetCustomerListAsync().Result;
             if (!customers.Data.Any()) {
                 Assert.Inconclusive("No customers found. Unable to test recurring payment tests");
             }
 
-            return customers.Data.First().Id;
+            foreach (CustomerResponse customer in customers.Data) {
+                ListResponse<MandateResponse> customerMandates = this._mollieClient.GetMandateListAsync(customer.Id).Result;
+                MandateResponse firstValidMandate = customerMandates.Data.FirstOrDefault(x => x.Status == MandateStatus.Valid);
+                if (firstValidMandate != null) {
+                    return firstValidMandate;
+                }
+            }
+
+            Assert.Inconclusive("No mandates found. Unable to test recurring payments");
+            return null;
         }
     }
 }

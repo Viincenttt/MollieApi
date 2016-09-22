@@ -59,6 +59,11 @@ namespace Mollie.Api.Models.Payment.Request {
         /// 
         public RecurringType? RecurringType { get; set; }
 
+        /// <summary>
+        /// Optional – When creating recurring payments, a specific mandate ID may be supplied to indicate which of the consumer's accounts should be credited.
+        /// </summary>
+        public string MandateId { get; set; }
+
         public override string ToString() {
             return $"Method: {this.Method} - Amount: {this.Amount}";
         }

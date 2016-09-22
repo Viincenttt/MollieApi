@@ -5,8 +5,6 @@ using Newtonsoft.Json.Converters;
 namespace Mollie.Api.Models.Payment.Response {
     using JsonConverters;
 
-    using Newtonsoft.Json.Linq;
-
     public class PaymentResponse {
         /// <summary>
         /// The identifier uniquely referring to this payment. Mollie assigns this identifier randomly at payment creation time. For example tr_7UhSN1zuXS. 
@@ -115,8 +113,13 @@ namespace Mollie.Api.Models.Payment.Response {
         /// </summary>
         public PaymentResponseLinks Links { get; set; }
 
+        /// <summary>
+        /// Only available for recurring payments – If the payment is a recurring payment, this field will hold the ID of the mandate used to authorize the recurring payment.
+        /// </summary>
+        public string MandateId { get; set; }
+
         public override string ToString() {
-            return $"Id: {this.Id } - Status: {this.Status} - Method: {this.Method} - Amount: {this.Amount}";
+            return $"Id: {this.Id} - Status: {this.Status} - Method: {this.Method} - Amount: {this.Amount}";
         }
     }
 }
