@@ -71,6 +71,7 @@
     <Compile Include="JsonConverters\RawJsonConverter.cs" />
     <Compile Include="Models\Customer\CustomerRequest.cs" />
     <Compile Include="Models\Customer\CustomerResponse.cs" />
+    <Compile Include="Models\Mandate\MandateRequest.cs" />
     <Compile Include="Models\Mandate\MandateResponse.cs" />
     <Compile Include="Models\Mandate\MandateStatus.cs" />
     <Compile Include="Models\Mode.cs" />

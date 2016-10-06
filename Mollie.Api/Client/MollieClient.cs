@@ -97,6 +97,11 @@ namespace Mollie.Api.Client {
             return await this.GetListAsync<ListResponse<CustomerResponse>>("customers", offset, count).ConfigureAwait(false);
         }
 
+        public async Task<MandateResponse> CreateMandateAsync(string customerId, MandateRequest request)
+        {
+            return await this.PostAsync<MandateResponse>($"customers/{customerId}/mandates", request).ConfigureAwait(false);
+        }
+
         public async Task<MandateResponse> GetMandateAsync(string customerId, string mandateId) {
             return await this.GetAsync<MandateResponse>($"customers/{customerId}/mandates/{mandateId}").ConfigureAwait(false);
         }

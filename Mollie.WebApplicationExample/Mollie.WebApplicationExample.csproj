@@ -149,6 +149,7 @@
     </Compile>
     <Compile Include="Infrastructure\AppSettings.cs" />
     <Compile Include="Models\CustomerRequestModel.cs" />
+    <Compile Include="Models\MandateRequestModel.cs" />
     <Compile Include="Models\PaymentRequestModel.cs" />
     <Compile Include="Models\SubscriptionListViewModel.cs" />
     <Compile Include="Models\SubscriptionRequestModel.cs" />
@@ -198,6 +199,7 @@
     <Content Include="Views\Mandate\Detail.cshtml" />
     <Content Include="Views\Subscription\Index.cshtml" />
     <Content Include="Views\Subscription\Create.cshtml" />
+    <Content Include="Views\Mandate\CreateManual.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
