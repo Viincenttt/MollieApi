@@ -12,6 +12,8 @@ namespace Mollie.Api.Models.Mandate
         [EnumMember(Value = "valid")]
         Valid,
         [EnumMember(Value = "invalid")]
-        Invalid
+        Invalid,
+        [EnumMember(Value = "pending")]
+        Pending
     }
 }
