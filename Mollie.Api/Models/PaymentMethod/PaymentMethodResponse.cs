@@ -1,9 +1,13 @@
-﻿namespace Mollie.Api.Models.PaymentMethod {
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+
+namespace Mollie.Api.Models.PaymentMethod {
     public class PaymentMethodResponse {
         /// <summary>
         /// The unique identifier of the payment method. When used during payment creation, the payment method selection screen will be skipped.
         /// </summary>
-        public string Id { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public Payment.PaymentMethod Id { get; set; }
 
         /// <summary>
         /// The full name of the payment method.

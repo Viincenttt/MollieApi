@@ -18,7 +18,7 @@ namespace Mollie.Tests.Integration.Api {
             // Then: Make sure the list of payment methods is the same as our PaymentMethod enum
             Assert.AreEqual(paymentMethodEnumValues.Length, paymentMethodList.TotalCount);
             foreach (PaymentMethod paymentMethodEnum in paymentMethodEnumValues) {
-                PaymentMethodResponse paymentResponse = paymentMethodList.Data.FirstOrDefault(x => x.Id == paymentMethodEnum.ToString().ToLower());
+                PaymentMethodResponse paymentResponse = paymentMethodList.Data.FirstOrDefault(x => x.Id == paymentMethodEnum);
                 Assert.IsNotNull(paymentResponse);
             }
         }
@@ -34,13 +34,14 @@ namespace Mollie.Tests.Integration.Api {
         [TestCase(PaymentMethod.PodiumCadeaukaart)]
         [TestCase(PaymentMethod.PayPal)]
         [TestCase(PaymentMethod.PaySafeCard)]
+        [TestCase(PaymentMethod.Kbc)]
         public void CanRetrievePaymentMethod(PaymentMethod paymentMethod) {
             // If: We request a payment method from the api
             PaymentMethodResponse paymentMethodResponse = this._mollieClient.GetPaymentMethodAsync(paymentMethod).Result;
 
             // Then: Id should be equal to our enum
             Assert.IsNotNull(paymentMethodResponse);
-            Assert.AreEqual(paymentMethod.ToString().ToLower(), paymentMethodResponse.Id);
+            Assert.AreEqual(paymentMethod, paymentMethodResponse.Id);
         }
     }
 }
