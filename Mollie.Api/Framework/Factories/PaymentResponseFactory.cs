@@ -28,6 +28,8 @@ namespace Mollie.Api.Framework.Factories {
                     return new BelfiusPaymentResponse();
                 case PaymentMethod.DirectDebit:
                     return new SepaDirectDebitResponse();
+                case PaymentMethod.Kbc:
+                    return new KbcPaymentResponse();
                 default:
                     return new PaymentResponse();
             }

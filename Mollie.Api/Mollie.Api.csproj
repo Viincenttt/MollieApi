@@ -80,11 +80,14 @@
     <Compile Include="Models\Payment\Locale.cs" />
     <Compile Include="Models\Payment\PaymentMode.cs" />
     <Compile Include="Models\Payment\RecurringType.cs" />
+    <Compile Include="Models\Payment\Request\KbcIssuer.cs" />
+    <Compile Include="Models\Payment\Request\KbcPaymentRequest.cs" />
     <Compile Include="Models\Payment\Response\Specific\BankTransferPaymentResponse.cs" />
     <Compile Include="Models\Payment\Response\Specific\BelfiusPaymentResponse.cs" />
     <Compile Include="Models\Payment\Response\Specific\BitcoinPaymentResponse.cs" />
     <Compile Include="Models\Payment\Response\Specific\CreditCardPaymentResponse.cs" />
     <Compile Include="Models\Payment\Response\Specific\IdealPaymentResponse.cs" />
+    <Compile Include="Models\Payment\Response\Specific\KbcPaymentResponse.cs" />
     <Compile Include="Models\Payment\Response\Specific\MisterCashPaymentResponse.cs" />
     <Compile Include="Models\Payment\Response\PaymentResponseLinks.cs" />
     <Compile Include="Models\List\ListResponse.cs" />
