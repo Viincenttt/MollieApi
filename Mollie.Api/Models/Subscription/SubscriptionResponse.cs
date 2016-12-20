@@ -52,6 +52,11 @@ namespace Mollie.Api.Models.Subscription {
         public string Interval { get; set; }
 
         /// <summary>
+        /// The start date of the subscription in yyyy-mm-dd format.
+        /// </summary>
+        public DateTime StartDate { get; set; }
+
+        /// <summary>
         /// A description unique per customer. This will be included in the payment description along with the charge date in Y-m-d format.
         /// </summary>
         public string Description { get; set; }

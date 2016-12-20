@@ -26,7 +26,7 @@ namespace Mollie.Api.Client {
 
         private readonly string _apiKey;
         private readonly RestClient _restClient;
-        private readonly JsonSerializerSettings _defaultJsonSerializerSettings;
+        private readonly JsonSerializerSettings _defaultJsonDeserializerSettings;
 
         public MollieClient(string apiKey) {
             if (string.IsNullOrEmpty(apiKey)) {
@@ -34,7 +34,7 @@ namespace Mollie.Api.Client {
             }
 
             this._apiKey = apiKey;
-            this._defaultJsonSerializerSettings = this.CreateDefaultJsonSerializerSettings();
+            this._defaultJsonDeserializerSettings = this.CreateDefaultJsonDeserializerSettings();
             this._restClient = this.CreateRestClient();
         }
 
@@ -157,7 +157,7 @@ namespace Mollie.Api.Client {
 
         private T ProcessHttpResponseMessage<T>(IRestResponse response) {
             if (response.IsSuccessful()) {
-                return JsonConvert.DeserializeObject<T>(response.Content, this._defaultJsonSerializerSettings);
+                return JsonConvert.DeserializeObject<T>(response.Content, this._defaultJsonDeserializerSettings);
             }
             else {
                 switch (response.StatusCode) {
@@ -197,8 +197,9 @@ namespace Mollie.Api.Client {
         /// Creates the default Json serial settings for the JSON.NET parsing.
         /// </summary>
         /// <returns></returns>
-        private JsonSerializerSettings CreateDefaultJsonSerializerSettings() {
+        private JsonSerializerSettings CreateDefaultJsonDeserializerSettings() {
             return new JsonSerializerSettings {
+                DateFormatString = "MM-dd-yyyy",
                 NullValueHandling = NullValueHandling.Ignore,
                 Converters = new List<JsonConverter>() {
                     // Add a special converter for payment responses, because we need to create specific classes based on the payment method

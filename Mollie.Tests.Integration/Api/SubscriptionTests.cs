@@ -46,6 +46,7 @@ namespace Mollie.Tests.Integration.Api {
             subscriptionRequest.Interval = "1 month";
             subscriptionRequest.Description = $"Subscription {DateTime.Now}"; // Subscriptions must have a unique name
             subscriptionRequest.WebhookUrl = "http://www.google.nl";
+            subscriptionRequest.StartDate = DateTime.Now.AddDays(1);
 
             // When
             SubscriptionResponse subscriptionResponse = this._mollieClient.CreateSubscriptionAsync(customerId, subscriptionRequest).Result;
@@ -56,6 +57,7 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(subscriptionRequest.Interval, subscriptionResponse.Interval);
             Assert.AreEqual(subscriptionRequest.Description, subscriptionResponse.Description);
             Assert.AreEqual(subscriptionRequest.WebhookUrl, subscriptionResponse.Links.WebhookUrl);
+            Assert.AreEqual(subscriptionRequest.StartDate.Value.Date, subscriptionResponse.StartDate);
         }
 
         [Test]
