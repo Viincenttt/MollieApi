@@ -1,0 +1,41 @@
+﻿@model Mollie.WebApplicationExample.Models.MandateRequestModel
+
+@{
+    ViewBag.Title = "Create Mandate";
+}
+
+<h2>Create Mandate</h2>
+
+@Html.ValidationSummary()
+
+@using (Html.BeginForm("CreateManual", "Mandate", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.HiddenFor(x => x.CustomerId)
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label" for="ConsumerName">ConsumerName</label>
+        @Html.TextBoxFor(x => x.ConsumerName, new { placeholder = "ConsumerName", @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label" for="ConsumerAccount">ConsumerAccount</label>
+        @Html.TextBoxFor(x => x.ConsumerAccount, new { placeholder = "ConsumerAccount", @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label" for="ConsumerBic">ConsumerBic</label>
+        @Html.TextBoxFor(x => x.ConsumerBic, new { placeholder = "ConsumerBic", @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label" for="SignatureDate">SignatureDate</label>
+        @Html.TextBoxFor(x => x.SignatureDate, new { placeholder = "SignatureDate", @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label" for="MandateReference">MandateReference</label>
+        @Html.TextBoxFor(x => x.MandateReference, new { placeholder = "MandateReference", @class = "form-control" })
+    </div>
+
+    <input type="submit" value="Save" class="btn btn-primary" />
+}
