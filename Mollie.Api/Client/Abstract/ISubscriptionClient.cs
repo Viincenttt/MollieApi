@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Mollie.Api.Client {
+namespace Mollie.Api.Client.Abstract {
     using Models.Subscription;
     using Models.List;
     public interface ISubscriptionClient {

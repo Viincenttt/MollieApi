@@ -18,25 +18,31 @@ Two example projects are included. A simple console application and a web applic
 ### Supported API's
 This library currently supports the following API's:
 - Payments API
+- PaymentMethod
 - Customers API
 - Mandates API
 - Subscriptions API
+- Issuer API
+- Refund API
 
-### Creating a MollieClient object
-The MollieClient object allows you to send and receive requests to the Mollie REST webservice. 
+### Creating a API client object
+Every API has it's own API client class. These are: PaymentClient, PaymentMethodClient, CustomerClient, MandateClient, SubscriptionClient, IssuerClient and RefundClient classes. 
+
+These classes allow you to send and receive requests to the Mollie REST webservice. To create a API client class, you simple instantiate a new object for the API you require. For example, if you want to create new payments, you can use the PaymentClient class. 
 ```c#
-MollieClient mollieClient = new MollieClient("{your_api_key}");
+PaymentClient paymentClient = new PaymentClient("{your_api_key}");
 ```
 ### Payments
 #### Creating a payment
 ```c#
+PaymentClient paymentClient = new PaymentClient("{your_api_key}");
 PaymentRequest paymentRequest = new PaymentRequest() {
     Amount = 100,
     Description = "Test payment of the example project",
     RedirectUrl = "http://google.com"
 };
 
-PaymentResponse paymentResponse = mollieClient.CreatePaymentAsync(paymentRequest).Result;
+PaymentResponse paymentResponse = paymentClient.CreatePaymentAsync(paymentRequest).Result;
 ```
 
 If you want to create a payment with a specific paymentmethod, there are seperate classes that allow you to set paymentmethod specific parameters. For example, a bank transfer payment allows you to set the billing e-mail and due date. Have a look at the [Mollie create payment documentation](https://www.mollie.com/nl/docs/reference/payments/create) for more information. 
@@ -47,10 +53,12 @@ The full list of payment specific request classes is:
 - IDealPaymentRequest
 - PayPalPaymentRequest
 - SepaDirectDebitRequest
+- KbcPaymentRequest
 
 #### Retrieving a payment by id
 ```c#
-PaymentResponse result = this._mollieClient.GetPaymentAsync(paymentResponse.Id).Result;
+PaymentClient paymentClient = new PaymentClient("{your_api_key}");
+PaymentResponse result = paymentClient.GetPaymentAsync(paymentResponse.Id).Result;
 ```
 
 Keep in mind that some payment methods have specific payment detail values. For example: PayPal payments have reference and customer reference properties. In order to access these properties you have to cast the PaymentResponse to the PayPalPaymentResponse and access the Detail property. 
@@ -59,41 +67,46 @@ Take a look at the [Mollie payment response documentation](https://www.mollie.co
 
 The full list of payment specific response classes is:
 - BankTransferPaymentResponse
+- BelfiusPaymentResponse
 - BitcoinPaymentResponse
 - CreditCardPaymentResponse
 - IdealPaymentResponse
+- KbcPaymentResponse
 - MisterCashPaymentResponse
 - PayPalPaymentResponse
 - PaySafeCardPaymentResponse
 - PodiumCadeauKaartPaymentResponse
-- SofortPaymentResponse
-- BelfiusPaymentResponse
 - SepaDirectDebitResponse
+- SofortPaymentResponse
 
 #### Retrieving a list off payments
 Mollie allows you to set offset and count properties so you can paginate the list. The offset and count parameters are optional. The maximum number of payments you can request in a single roundtrip is 250. 
 ```c#
-ListResponse<PaymentResponse> response = this._mollieClient.GetPaymentListAsync(offset, count).Result;
+PaymentClient paymentClient = new PaymentClient("{your_api_key}");
+ListResponse<PaymentResponse> response = paymentClient.GetPaymentListAsync(offset, count).Result;
 ```
 
 ### Payment methods
 #### Retrieving a list of all payment methods
 Mollie allows you to set offset and count properties so you can paginate the list. The offset and count parameters are optional.
 ```c#
-ListResponse<PaymentMethodResponse> paymentMethodList = this._mollieClient.GetPaymentMethodListAsync(offset, count).Result;
+PaymentMethodClient _paymentMethodClient = new PaymentMethodClient("{your_api_key}");
+ListResponse<PaymentMethodResponse> paymentMethodList = paymentMethodClient.GetPaymentMethodListAsync(offset, count).Result;
 foreach (PaymentMethodResponse paymentMethod in paymentMethodList.Data) {
   // Your code here
 }
 ```
 #### Retrieving a single payment method
 ```c#
-PaymentMethodResponse paymentMethodResponse = this._mollieClient.GetPaymentMethodAsync(paymentMethod).Result;
+PaymentMethodClient _paymentMethodClient = new PaymentMethodClient("{your_api_key}");
+PaymentMethodResponse paymentMethodResponse = paymentMethodClient.GetPaymentMethodAsync(paymentMethod).Result;
 ```
 
 ### Issuer methods
 #### Retrieve issuer list
 ```c#
-ListResponse<IssuerResponse> issuerList = this._mollieClient.GetIssuerListAsync().Result;
+IssuerClient issuerClient = new IssuerClient("{your_api_key}");
+ListResponse<IssuerResponse> issuerList = this.issuerClient.GetIssuerListAsync().Result;
 foreach (IssuerResponse issuer in issuerList.Data) {
     // Your code here
 }
@@ -101,35 +114,41 @@ foreach (IssuerResponse issuer in issuerList.Data) {
 
 #### Retrieve a single issuer by id
 ```c#
-this._mollieClient.GetIssuerAsync(issuerId).Result;
+IssuerClient issuerClient = new IssuerClient("{your_api_key}");
+issuerClient.GetIssuerAsync(issuerId).Result;
 ```
 
 ### Refund methods
 #### Create a new refund
 ```c#
-RefundResponse refundResponse = this._mollieClient.CreateRefund(payment.Id).Result;
+RefundClient refundClient = new RefundClient("{your_api_key}");
+RefundResponse refundResponse = refundClient.CreateRefund(payment.Id).Result;
 ```
 
 #### Create a partial refund
 ```c#
+RefundClient refundClient = new RefundClient("{your_api_key}");
 RefundRequest refundRequest = new RefundRequest() {
     Amount = 50
 };
-RefundResponse refundResponse = this._mollieClient.CreateRefund(payment.Id, refundRequest).Result;
+RefundResponse refundResponse = this.refundClient.CreateRefund(payment.Id, refundRequest).Result;
 ```
 
 #### Retrieve a refund by payment and refund id
 ```c#
-RefundResponse refundResponse = this._mollieClient.GetRefund(payment.Id, refundResponse.Id).Result;
+RefundClient refundClient = new RefundClient("{your_api_key}");
+RefundResponse refundResponse = refundClient.GetRefund(payment.Id, refundResponse.Id).Result;
 ```
 
 #### Retrieve refund list
 Mollie allows you to set offset and count properties so you can paginate the list. The offset and count parameters are optional.
 ```c#
-ListResponse<RefundResponse> refundList = this._mollieClient.GetRefundList(payment.Id, offset, count).Result;
+RefundClient refundClient = new RefundClient("{your_api_key}");
+ListResponse<RefundResponse> refundList = refundClient.GetRefundList(payment.Id, offset, count).Result;
 ```
 
 #### Cancel a refund
 ```c#
-this._mollieClient.CancelRefund(paymentId, refundId);
+RefundClient refundClient = new RefundClient("{your_api_key}");
+refundClient.CancelRefund(paymentId, refundId);
 ```

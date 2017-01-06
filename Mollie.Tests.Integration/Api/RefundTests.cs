@@ -20,7 +20,7 @@ namespace Mollie.Tests.Integration.Api {
             Debugger.Break(); 
 
             // When: We attempt to refund this payment
-            RefundResponse refundResponse = this._mollieClient.CreateRefundAsync(payment.Id).Result;
+            RefundResponse refundResponse = this._refundClient.CreateRefundAsync(payment.Id).Result;
 
             // Then
             Assert.IsNotNull(refundResponse);
@@ -40,7 +40,7 @@ namespace Mollie.Tests.Integration.Api {
             RefundRequest refundRequest = new RefundRequest() {
                 Amount = 50
             };
-            RefundResponse refundResponse = this._mollieClient.CreateRefundAsync(payment.Id, refundRequest).Result;
+            RefundResponse refundResponse = this._refundClient.CreateRefundAsync(payment.Id, refundRequest).Result;
 
             // Then
             Assert.AreEqual(50, refundResponse.Payment.AmountRefunded);
@@ -55,10 +55,10 @@ namespace Mollie.Tests.Integration.Api {
             // We can only test this if you make the payment using the payment.Links.PaymentUrl property. 
             // If you don't do this, this test will fail because we can only refund payments that have been paid
             Debugger.Break();
-            RefundResponse refundResponse = this._mollieClient.CreateRefundAsync(payment.Id).Result;
+            RefundResponse refundResponse = this._refundClient.CreateRefundAsync(payment.Id).Result;
 
             // When: We attempt to retrieve this refund
-            RefundResponse result = this._mollieClient.GetRefundAsync(payment.Id, refundResponse.Id).Result;
+            RefundResponse result = this._refundClient.GetRefundAsync(payment.Id, refundResponse.Id).Result;
 
             // Then
             Assert.IsNotNull(result);
@@ -73,7 +73,7 @@ namespace Mollie.Tests.Integration.Api {
             PaymentResponse payment = this.CreatePayment();
 
             // When: Retrieve refund list for this payment
-            ListResponse<RefundResponse> refundList = this._mollieClient.GetRefundListAsync(payment.Id).Result;
+            ListResponse<RefundResponse> refundList = this._refundClient.GetRefundListAsync(payment.Id).Result;
 
             // Then
             Assert.IsNotNull(refundList);
@@ -85,7 +85,7 @@ namespace Mollie.Tests.Integration.Api {
             paymentRequest.Description = "Description";
             paymentRequest.RedirectUrl = this.DefaultRedirectUrl;
 
-            return this._mollieClient.CreatePaymentAsync(paymentRequest).Result;
+            return this._paymentClient.CreatePaymentAsync(paymentRequest).Result;
         }
     }
 }

@@ -18,7 +18,7 @@ namespace Mollie.Tests.Integration.Api {
         [Test]
         public void CanRetrievePaymentList() {
             // When: Retrieve payment list with default settings
-            ListResponse<PaymentResponse> response = this._mollieClient.GetPaymentListAsync().Result;
+            ListResponse<PaymentResponse> response = this._paymentClient.GetPaymentListAsync().Result;
 
             // Then
             Assert.IsNotNull(response);
@@ -30,7 +30,7 @@ namespace Mollie.Tests.Integration.Api {
             int numberOfPayments = 5;
 
             // When: Retrieve 5 payments
-            ListResponse<PaymentResponse> response = this._mollieClient.GetPaymentListAsync(0, numberOfPayments).Result;
+            ListResponse<PaymentResponse> response = this._paymentClient.GetPaymentListAsync(0, numberOfPayments).Result;
 
             // Then
             Assert.IsTrue(response.Data.Count <= numberOfPayments);
@@ -46,7 +46,7 @@ namespace Mollie.Tests.Integration.Api {
             };
 
             // When: We send the payment request to Mollie
-            PaymentResponse result = this._mollieClient.CreatePaymentAsync(paymentRequest).Result;
+            PaymentResponse result = this._paymentClient.CreatePaymentAsync(paymentRequest).Result;
 
             // Then: Make sure we get a valid response
             Assert.IsNotNull(result);
@@ -69,7 +69,7 @@ namespace Mollie.Tests.Integration.Api {
             };
 
             // When: We send the payment request to Mollie
-            PaymentResponse result = this._mollieClient.CreatePaymentAsync(paymentRequest).Result;
+            PaymentResponse result = this._paymentClient.CreatePaymentAsync(paymentRequest).Result;
 
             // Then: Make sure all requested parameters match the response parameter values
             Assert.IsNotNull(result);
@@ -102,7 +102,7 @@ namespace Mollie.Tests.Integration.Api {
             paymentRequest.Method = paymentMethod;
 
             // When: We send the payment request to Mollie
-            PaymentResponse result = this._mollieClient.CreatePaymentAsync(paymentRequest).Result;
+            PaymentResponse result = this._paymentClient.CreatePaymentAsync(paymentRequest).Result;
 
             // Then: Make sure all requested parameters match the response parameter values
             Assert.IsNotNull(result);
@@ -123,8 +123,8 @@ namespace Mollie.Tests.Integration.Api {
             };
 
             // When: We send the payment request to Mollie and attempt to retrieve it
-            PaymentResponse paymentResponse = this._mollieClient.CreatePaymentAsync(paymentRequest).Result;
-            PaymentResponse result = this._mollieClient.GetPaymentAsync(paymentResponse.Id).Result;
+            PaymentResponse paymentResponse = this._paymentClient.CreatePaymentAsync(paymentRequest).Result;
+            PaymentResponse result = this._paymentClient.GetPaymentAsync(paymentResponse.Id).Result;
 
             // Then
             Assert.IsNotNull(result);
@@ -147,8 +147,8 @@ namespace Mollie.Tests.Integration.Api {
             };
 
             // When: We send the payment request to Mollie and attempt to retrieve it
-            PaymentResponse paymentResponse = this._mollieClient.CreatePaymentAsync(paymentRequest).Result;
-            PaymentResponse result = this._mollieClient.GetPaymentAsync(paymentResponse.Id).Result;
+            PaymentResponse paymentResponse = this._paymentClient.CreatePaymentAsync(paymentRequest).Result;
+            PaymentResponse result = this._paymentClient.GetPaymentAsync(paymentResponse.Id).Result;
 
             // Then: Make sure the recurringtype parameter is entered
             Assert.AreEqual(RecurringType.First, result.RecurringType);
@@ -166,7 +166,7 @@ namespace Mollie.Tests.Integration.Api {
             };
 
             // When: We send the payment request to Mollie
-            PaymentResponse result = this._mollieClient.CreatePaymentAsync(paymentRequest).Result;
+            PaymentResponse result = this._paymentClient.CreatePaymentAsync(paymentRequest).Result;
 
             // Then: Make sure we get the same json result as metadata
             Assert.AreEqual(json, result.Metadata);
@@ -186,20 +186,20 @@ namespace Mollie.Tests.Integration.Api {
             };
 
             // When: We send the payment request to Mollie
-            PaymentResponse result = this._mollieClient.CreatePaymentAsync(paymentRequest).Result;
+            PaymentResponse result = this._paymentClient.CreatePaymentAsync(paymentRequest).Result;
 
             // Then: Make sure we get the mandate id back in the details
             Assert.AreEqual(validMandate.Id, result.MandateId);
         }
 
         private MandateResponse GetFirstValidMandate() {
-            ListResponse<CustomerResponse> customers = this._mollieClient.GetCustomerListAsync().Result;
+            ListResponse<CustomerResponse> customers = this._customerClient.GetCustomerListAsync().Result;
             if (!customers.Data.Any()) {
                 Assert.Inconclusive("No customers found. Unable to test recurring payment tests");
             }
 
             foreach (CustomerResponse customer in customers.Data) {
-                ListResponse<MandateResponse> customerMandates = this._mollieClient.GetMandateListAsync(customer.Id).Result;
+                ListResponse<MandateResponse> customerMandates = this._mandateClient.GetMandateListAsync(customer.Id).Result;
                 MandateResponse firstValidMandate = customerMandates.Data.FirstOrDefault(x => x.Status == MandateStatus.Valid);
                 if (firstValidMandate != null) {
                     return firstValidMandate;

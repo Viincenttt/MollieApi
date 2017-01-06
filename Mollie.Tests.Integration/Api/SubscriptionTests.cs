@@ -17,7 +17,7 @@ namespace Mollie.Tests.Integration.Api {
             string customerId = this.GetFirstCustomerWithValidMandate();
 
             // When: Retrieve subscription list with default settings
-            ListResponse<SubscriptionResponse> response = this._mollieClient.GetSubscriptionListAsync(customerId).Result;
+            ListResponse<SubscriptionResponse> response = this._subscriptionClient.GetSubscriptionListAsync(customerId).Result;
 
             // Then
             Assert.IsNotNull(response);
@@ -30,7 +30,7 @@ namespace Mollie.Tests.Integration.Api {
             int numberOfSubscriptions = 5;
 
             // When: Retrieve 5 subscriptions
-            ListResponse<SubscriptionResponse> response = this._mollieClient.GetSubscriptionListAsync(customerId, 0, numberOfSubscriptions).Result;
+            ListResponse<SubscriptionResponse> response = this._subscriptionClient.GetSubscriptionListAsync(customerId, 0, numberOfSubscriptions).Result;
 
             // Then
             Assert.IsTrue(response.Data.Count <= numberOfSubscriptions);
@@ -49,7 +49,7 @@ namespace Mollie.Tests.Integration.Api {
             subscriptionRequest.StartDate = DateTime.Now.AddDays(1);
 
             // When
-            SubscriptionResponse subscriptionResponse = this._mollieClient.CreateSubscriptionAsync(customerId, subscriptionRequest).Result;
+            SubscriptionResponse subscriptionResponse = this._subscriptionClient.CreateSubscriptionAsync(customerId, subscriptionRequest).Result;
 
             // Then
             Assert.AreEqual(subscriptionRequest.Amount, subscriptionResponse.Amount);
@@ -64,13 +64,13 @@ namespace Mollie.Tests.Integration.Api {
         public async Task CanCancelSubscription() {
             // Given
             string customerId = this.GetFirstCustomerWithValidMandate();
-            ListResponse<SubscriptionResponse> subscriptions = this._mollieClient.GetSubscriptionListAsync(customerId).Result;
+            ListResponse<SubscriptionResponse> subscriptions = this._subscriptionClient.GetSubscriptionListAsync(customerId).Result;
 
             // When
             if (subscriptions.TotalCount > 0) {
                 string subscriptionId = subscriptions.Data.First().Id;
-                await this._mollieClient.CancelSubscriptionAsync(customerId, subscriptionId);
-                SubscriptionResponse cancelledSubscription = this._mollieClient.GetSubscriptionAsync(customerId, subscriptionId).Result;
+                await this._subscriptionClient.CancelSubscriptionAsync(customerId, subscriptionId);
+                SubscriptionResponse cancelledSubscription = this._subscriptionClient.GetSubscriptionAsync(customerId, subscriptionId).Result;
 
                 Assert.AreEqual(cancelledSubscription.Status, SubscriptionStatus.Cancelled);
             }
@@ -80,10 +80,10 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         public string GetFirstCustomerWithValidMandate() {
-            ListResponse<CustomerResponse> customers = this._mollieClient.GetCustomerListAsync().Result;
+            ListResponse<CustomerResponse> customers = this._customerClient.GetCustomerListAsync().Result;
             
             foreach (CustomerResponse customer in customers.Data) {
-                ListResponse<MandateResponse> mandates = this._mollieClient.GetMandateListAsync(customer.Id).Result;
+                ListResponse<MandateResponse> mandates = this._mandateClient.GetMandateListAsync(customer.Id).Result;
                 if (mandates.Data.Any(x => x.Status == MandateStatus.Valid)) {
                     return customer.Id;
                 }

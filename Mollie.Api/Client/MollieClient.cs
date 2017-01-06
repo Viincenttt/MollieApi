@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
-using Mollie.Api.Extensions;
-using Mollie.Api.Framework.Factories;
-using Mollie.Api.JsonConverters;
+using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models.Issuer;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Payment;
@@ -13,199 +8,139 @@ using Mollie.Api.Models.Payment.Request;
 using Mollie.Api.Models.Payment.Response;
 using Mollie.Api.Models.PaymentMethod;
 using Mollie.Api.Models.Refund;
-using Newtonsoft.Json;
-using RestSharp;
 using Mollie.Api.Models.Customer;
 using Mollie.Api.Models.Mandate;
 using Mollie.Api.Models.Subscription;
 
 namespace Mollie.Api.Client {
+    /*
+    [Obsolete("This class is deprecated, please use the new API specific clients, such as PaymentClient, CustomerClient etc")]
     public class MollieClient : IMollieClient {
-        public const string ApiEndPoint = "https://api.mollie.nl";
-        public const string ApiVersion = "v1";
-
-        private readonly string _apiKey;
-        private readonly RestClient _restClient;
-        private readonly JsonSerializerSettings _defaultJsonDeserializerSettings;
+        private readonly IPaymentClient _paymentClient;
+        private readonly IPaymentMethodClient _paymentMethodClient;
+        private readonly IRefundClient _refundClient;
+        private readonly IIssuerClient _issuerClient;
+        private readonly ISubscriptionClient _subscriptionClient;
+        private readonly IMandateClient _mandateClient;
+        private readonly ICustomerClient _customerClient;
 
         public MollieClient(string apiKey) {
             if (string.IsNullOrEmpty(apiKey)) {
                 throw new ArgumentException("Mollie API key cannot be empty");
             }
 
-            this._apiKey = apiKey;
-            this._defaultJsonDeserializerSettings = this.CreateDefaultJsonDeserializerSettings();
-            this._restClient = this.CreateRestClient();
+            this._paymentClient = new PaymentClient(apiKey);
+            this._paymentMethodClient = new PaymentMethodClient(apiKey);
+            this._refundClient = new RefundClient(apiKey);
+            this._issuerClient = new IssuerClient(apiKey);
+            this._subscriptionClient = new SubscriptionClient(apiKey);
+            this._mandateClient = new MandateClient(apiKey);
+            this._customerClient = new CustomerClient(apiKey);
         }
 
+        [Obsolete("This method is deprecated, please use PaymentClient class")]
         public async Task<PaymentResponse> CreatePaymentAsync(PaymentRequest paymentRequest) {
-            return await this.PostAsync<PaymentResponse>("payments", paymentRequest).ConfigureAwait(false);
+            return await this._paymentClient.CreatePaymentAsync(paymentRequest);
         }
 
+        [Obsolete("This method is deprecated, please use PaymentClient class")]
         public async Task<ListResponse<PaymentResponse>> GetPaymentListAsync(int? offset = null, int? count = null) {
-            return await this.GetListAsync<ListResponse<PaymentResponse>>("payments", offset, count).ConfigureAwait(false);
+            return await this._paymentClient.GetPaymentListAsync(offset, count);
         }
 
+        [Obsolete("This method is deprecated, please use PaymentClient class")]
         public async Task<PaymentResponse> GetPaymentAsync(string paymentId) {
-            return await this.GetAsync<PaymentResponse>($"payments/{paymentId}").ConfigureAwait(false);
+            return await this._paymentClient.GetPaymentAsync(paymentId);
         }
 
+        [Obsolete("This method is deprecated, please use PaymentMethodClient class")]
         public async Task<ListResponse<PaymentMethodResponse>> GetPaymentMethodListAsync(int? offset = null, int? count = null) {
-            return await this.GetListAsync<ListResponse<PaymentMethodResponse>>("methods", offset, count).ConfigureAwait(false);
+            return await this._paymentMethodClient.GetPaymentMethodListAsync(offset, count);
         }
 
+        [Obsolete("This method is deprecated, please use PaymentMethodClient class")]
         public async Task<PaymentMethodResponse> GetPaymentMethodAsync(PaymentMethod paymentMethod) {
-            return await this.GetAsync<PaymentMethodResponse>($"methods/{paymentMethod.ToString().ToLower()}").ConfigureAwait(false);
+            return await this._paymentMethodClient.GetPaymentMethodAsync(paymentMethod);
         }
 
+        [Obsolete("This method is deprecated, please use IssuerClient class")]
         public async Task<ListResponse<IssuerResponse>> GetIssuerListAsync(int? offset = null, int? count = null) {
-            return await this.GetListAsync<ListResponse<IssuerResponse>>("issuers", offset, count).ConfigureAwait(false);
+            return await this._issuerClient.GetIssuerListAsync(offset, count);
         }
 
+        [Obsolete("This method is deprecated, please use IssuerClient class")]
         public async Task<IssuerResponse> GetIssuerAsync(string issuerId) {
-            return await this.GetAsync<IssuerResponse>($"issuers/{issuerId}").ConfigureAwait(false);
+            return await this._issuerClient.GetIssuerAsync(issuerId);
         }
+
+        [Obsolete("This method is deprecated, please use RefundClient class")]
         public async Task<RefundResponse> CreateRefundAsync(string paymentId) {
-            return await this.CreateRefundAsync(paymentId, new RefundRequest()).ConfigureAwait(false);
+            return await this._refundClient.CreateRefundAsync(paymentId);
         }
-        
+
+        [Obsolete("This method is deprecated, please use RefundClient class")]
         public async Task<RefundResponse> CreateRefundAsync(string paymentId, RefundRequest refundRequest) {
-            return await this.PostAsync<RefundResponse>($"payments/{paymentId}/refunds", refundRequest).ConfigureAwait(false);
+            return await this._refundClient.CreateRefundAsync(paymentId, refundRequest);
         }
 
+        [Obsolete("This method is deprecated, please use RefundClient class")]
         public async Task<ListResponse<RefundResponse>> GetRefundListAsync(string paymentId, int? offset = null, int? count = null) {
-            return await this.GetListAsync<ListResponse<RefundResponse>>($"payments/{paymentId}/refunds", offset, count).ConfigureAwait(false);
+            return await this._refundClient.GetRefundListAsync(paymentId, offset, count);
         }
 
+        [Obsolete("This method is deprecated, please use RefundClient class")]
         public async Task<RefundResponse> GetRefundAsync(string paymentId, string refundId) {
-            return await this.GetAsync<RefundResponse>($"payments/{paymentId}/refunds/{refundId}").ConfigureAwait(false);
+            return await this._refundClient.GetRefundAsync(paymentId, refundId);
         }
 
+        [Obsolete("This method is deprecated, please use RefundClient class")]
         public async Task CancelRefundAsync(string paymentId, string refundId) {
-            await this.DeleteAsync($"payments/{paymentId}/refunds/{refundId}").ConfigureAwait(false);
+            await this._refundClient.CancelRefundAsync(paymentId, refundId);
         }
 
+        [Obsolete("This method is deprecated, please use CustomerClient class")]
         public async Task<CustomerResponse> CreateCustomerAsync(CustomerRequest request) {
-            return await this.PostAsync<CustomerResponse>($"customers", request).ConfigureAwait(false);
+            return await this._customerClient.CreateCustomerAsync(request);
         }
 
+        [Obsolete("This method is deprecated, please use CustomerClient class")]
         public async Task<CustomerResponse> GetCustomerAsync(string customerId) {
-            return await this.GetAsync<CustomerResponse>($"customers/{customerId}").ConfigureAwait(false);
+            return await this._customerClient.GetCustomerAsync(customerId);
         }
 
+        [Obsolete("This method is deprecated, please use CustomerClient class")]
         public async Task<ListResponse<CustomerResponse>> GetCustomerListAsync(int? offset = null, int? count = null) {
-            return await this.GetListAsync<ListResponse<CustomerResponse>>("customers", offset, count).ConfigureAwait(false);
+            return await this._customerClient.GetCustomerListAsync(offset, count);
         }
 
+        [Obsolete("This method is deprecated, please use MandateClient class")]
         public async Task<MandateResponse> GetMandateAsync(string customerId, string mandateId) {
-            return await this.GetAsync<MandateResponse>($"customers/{customerId}/mandates/{mandateId}").ConfigureAwait(false);
+            return await this._mandateClient.GetMandateAsync(customerId, mandateId);
         }
 
+        [Obsolete("This method is deprecated, please use MandateClient class")]
         public async Task<ListResponse<MandateResponse>> GetMandateListAsync(string customerId, int? offset = null, int? count = null) {
-            return await this.GetListAsync<ListResponse<MandateResponse>>($"customers/{customerId}/mandates", offset, count).ConfigureAwait(false);
+            return await this._mandateClient.GetMandateListAsync(customerId, offset, count);
         }
 
+        [Obsolete("This method is deprecated, please use SubscriptionClient class")]
         public async Task<ListResponse<SubscriptionResponse>> GetSubscriptionListAsync(string customerId, int? offset = null, int? count = null) {
-            return await this.GetListAsync<ListResponse<SubscriptionResponse>>($"customers/{customerId}/subscriptions", offset, count).ConfigureAwait(false);
+            return await this._subscriptionClient.GetSubscriptionListAsync(customerId, offset, count);
         }
 
+        [Obsolete("This method is deprecated, please use SubscriptionClient class")]
         public async Task<SubscriptionResponse> GetSubscriptionAsync(string customerId, string subscriptionId) {
-            return await this.GetAsync<SubscriptionResponse>($"customers/{customerId}/subscriptions/{subscriptionId}").ConfigureAwait(false);
+            return await this._subscriptionClient.GetSubscriptionAsync(customerId, subscriptionId);
         }
 
+        [Obsolete("This method is deprecated, please use SubscriptionClient class")]
         public async Task<SubscriptionResponse> CreateSubscriptionAsync(string customerId, SubscriptionRequest request) {
-            return await this.PostAsync<SubscriptionResponse>($"customers/{customerId}/subscriptions", request).ConfigureAwait(false);
+            return await this._subscriptionClient.CreateSubscriptionAsync(customerId, request);
         }
 
+        [Obsolete("This method is deprecated, please use SubscriptionClient class")]
         public async Task CancelSubscriptionAsync(string customerId, string subscriptionId) {
-            await this.DeleteAsync($"customers/{customerId}/subscriptions/{subscriptionId}").ConfigureAwait(false);
+            await this._subscriptionClient.CancelSubscriptionAsync(customerId, subscriptionId);
         }
-
-        private async Task<T> GetAsync<T>(string relativeUri) {
-            RestRequest request = new RestRequest(relativeUri, Method.GET);
-            return await this.ExecuteRequestAsync<T>(request).ConfigureAwait(false);
-        }
-
-        private async Task<T> GetListAsync<T>(string relativeUri, int? offset, int? count) {
-            RestRequest request = new RestRequest(relativeUri, Method.GET);
-            if (offset.HasValue) {
-                request.AddParameter("offset", offset);
-            }
-            if (count.HasValue) {
-                request.AddParameter("count", count);
-            }
-
-            return await this.ExecuteRequestAsync<T>(request).ConfigureAwait(false);
-        }
-
-        private async Task<T> PostAsync<T>(string relativeUri, object data) {
-            RestRequest request = new RestRequest(relativeUri, Method.POST);
-            request.AddParameter(String.Empty, JsonConvertExtensions.SerializeObjectCamelCase(data), ParameterType.RequestBody);
-
-            return await this.ExecuteRequestAsync<T>(request).ConfigureAwait(false);
-        }
-
-        private async Task DeleteAsync(string relativeUri) {
-            RestRequest request = new RestRequest(relativeUri, Method.DELETE);
-            await this.ExecuteRequestAsync<object>(request).ConfigureAwait(false);
-        }
-
-        private async Task<T> ExecuteRequestAsync<T>(IRestRequest request) {
-            IRestResponse response = await this._restClient.ExecuteTaskAsync(request).ConfigureAwait(false);
-            return this.ProcessHttpResponseMessage<T>(response);
-        }
-
-        private T ProcessHttpResponseMessage<T>(IRestResponse response) {
-            if (response.IsSuccessful()) {
-                return JsonConvert.DeserializeObject<T>(response.Content, this._defaultJsonDeserializerSettings);
-            }
-            else {
-                switch (response.StatusCode) {
-                    case HttpStatusCode.BadRequest:
-                    case HttpStatusCode.Unauthorized:
-                    case HttpStatusCode.Forbidden:
-                    case HttpStatusCode.NotFound:
-                    case HttpStatusCode.MethodNotAllowed:
-                    case HttpStatusCode.UnsupportedMediaType:
-                    case (HttpStatusCode)422: // Unprocessable entity
-                        throw new MollieApiException(response.Content);
-                    default:
-                        throw new HttpRequestException($"Unknown http exception occured with status code: {(int)response.StatusCode}.");
-                }
-            }
-        }
-
-        /// <summary>
-        /// Creates a new rest client for the Mollie API
-        /// </summary>
-        private RestClient CreateRestClient() {
-            RestClient restClient = new RestClient();
-            restClient.BaseUrl = this.GetBaseAddress();
-            restClient.AddDefaultHeader("Content-Type", "application/json");
-            restClient.AddDefaultParameter("Authorization", $"Bearer {this._apiKey}", ParameterType.HttpHeader);
-
-            return restClient;
-        }
-
-        /// <summary>
-        /// Returns the base address of the Mollie API
-        /// </summary>
-        /// <returns></returns>
-        private Uri GetBaseAddress() => new Uri(ApiEndPoint + "/" + ApiVersion + "/");
-
-        /// <summary>
-        /// Creates the default Json serial settings for the JSON.NET parsing.
-        /// </summary>
-        /// <returns></returns>
-        private JsonSerializerSettings CreateDefaultJsonDeserializerSettings() {
-            return new JsonSerializerSettings {
-                DateFormatString = "MM-dd-yyyy",
-                NullValueHandling = NullValueHandling.Ignore,
-                Converters = new List<JsonConverter>() {
-                    // Add a special converter for payment responses, because we need to create specific classes based on the payment method
-                    new PaymentResponseConverter(new PaymentResponseFactory())
-                }
-            };
-        }
-    }
+    }*/
 }

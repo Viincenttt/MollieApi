@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Mollie.Api.Client.Abstract;
 
 namespace Mollie.Tests.Integration.Framework {
     public class MoqMollieApiTests : BaseMollieApiTestClass {

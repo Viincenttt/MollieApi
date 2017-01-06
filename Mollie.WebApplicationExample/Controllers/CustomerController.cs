@@ -5,25 +5,26 @@ using Mollie.WebApplicationExample.Infrastructure;
 using Mollie.WebApplicationExample.Models;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Mollie.Api.Client.Abstract;
 
 namespace Mollie.WebApplicationExample.Controllers {
     public class CustomerController : Controller {
         private const int NumberOfPaymentsToList = 50;
-        private readonly ICustomerClient _mollieClient;
+        private readonly ICustomerClient _customerClient;
 
         public CustomerController() {
-            this._mollieClient = new MollieClient(AppSettings.MollieApiKey);
+            this._customerClient = new CustomerClient(AppSettings.MollieApiKey);
         }
 
         [HttpGet]
         public async Task<ActionResult> Index() {
-            ListResponse<CustomerResponse> paymentList = await this._mollieClient.GetCustomerListAsync(0, NumberOfPaymentsToList);
+            ListResponse<CustomerResponse> paymentList = await this._customerClient.GetCustomerListAsync(0, NumberOfPaymentsToList);
             return View(paymentList.Data);
         }
 
         [HttpGet]
         public async Task<ActionResult> Detail(string id) {
-            CustomerResponse payment = await this._mollieClient.GetCustomerAsync(id);
+            CustomerResponse payment = await this._customerClient.GetCustomerAsync(id);
             return View(payment);
         }
 
@@ -41,7 +42,7 @@ namespace Mollie.WebApplicationExample.Controllers {
                     Email = customerRequestModel.Email,
                     Locale = customerRequestModel.Locale
                 };
-                await this._mollieClient.CreateCustomerAsync(customerRequest);
+                await this._customerClient.CreateCustomerAsync(customerRequest);
 
                 return this.RedirectToAction("Index");
             }

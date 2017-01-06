@@ -53,16 +53,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Client\ICustomerClient.cs" />
-    <Compile Include="Client\IIssuerClient.cs" />
-    <Compile Include="Client\IMandateClient.cs" />
-    <Compile Include="Client\IMollieClient.cs" />
-    <Compile Include="Client\IPaymentClient.cs" />
-    <Compile Include="Client\IPaymentMethodClient.cs" />
-    <Compile Include="Client\IRefundClient.cs" />
-    <Compile Include="Client\ISubscriptionClient.cs" />
+    <Compile Include="Client\BaseMollieClient.cs" />
+    <Compile Include="Client\CustomerClient.cs" />
+    <Compile Include="Client\Abstract\ICustomerClient.cs" />
+    <Compile Include="Client\Abstract\IIssuerClient.cs" />
+    <Compile Include="Client\Abstract\IMandateClient.cs" />
+    <Compile Include="Client\Abstract\IMollieClient.cs" />
+    <Compile Include="Client\Abstract\IPaymentClient.cs" />
+    <Compile Include="Client\Abstract\IPaymentMethodClient.cs" />
+    <Compile Include="Client\Abstract\IRefundClient.cs" />
+    <Compile Include="Client\IssuerClient.cs" />
+    <Compile Include="Client\Abstract\ISubscriptionClient.cs" />
+    <Compile Include="Client\MandateClient.cs" />
     <Compile Include="Client\MollieClient.cs" />
     <Compile Include="Client\MollieApiException.cs" />
+    <Compile Include="Client\PaymentClient.cs" />
+    <Compile Include="Client\PaymentMethodClient.cs" />
+    <Compile Include="Client\RefundClient.cs" />
+    <Compile Include="Client\SubscriptionClient.cs" />
     <Compile Include="Extensions\JsonConvertExtensions.cs" />
     <Compile Include="Extensions\RestSharpExtensionMethods.cs" />
     <Compile Include="Framework\Factories\PaymentResponseFactory.cs" />

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
-namespace Mollie.Api.Client {
+namespace Mollie.Api.Client.Abstract {
     using Models.Refund;
     using Models.List;
     public interface IRefundClient {

@@ -10,7 +10,7 @@ namespace Mollie.Tests.Integration.Api {
         [Test]
         public void CanRetrieveCustomerList() {
             // When: Retrieve customer list with default settings
-            ListResponse<CustomerResponse> response = this._mollieClient.GetCustomerListAsync().Result;
+            ListResponse<CustomerResponse> response = this._customerClient.GetCustomerListAsync().Result;
 
             // Then
             Assert.IsNotNull(response);
@@ -22,7 +22,7 @@ namespace Mollie.Tests.Integration.Api {
             int numberOfCustomers = 5;
 
             // When: Retrieve 5 customers
-            ListResponse<CustomerResponse> response = this._mollieClient.GetCustomerListAsync(0, numberOfCustomers).Result;
+            ListResponse<CustomerResponse> response = this._customerClient.GetCustomerListAsync(0, numberOfCustomers).Result;
 
             // Then
             Assert.IsTrue(response.Data.Count <= numberOfCustomers);
@@ -39,7 +39,7 @@ namespace Mollie.Tests.Integration.Api {
             };
 
             // When: We send the customer request to Mollie
-            CustomerResponse result = this._mollieClient.CreateCustomerAsync(customerRequest).Result;
+            CustomerResponse result = this._customerClient.CreateCustomerAsync(customerRequest).Result;
 
             // then: Make sure the requested parameters match the response parameter values
             Assert.IsNotNull(result);
