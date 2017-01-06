@@ -38,5 +38,25 @@ namespace Mollie.Tests.Integration.Api {
                 Assert.IsTrue(response.Data.Count <= numberOfMandates);
             }
         }
+
+        [Test]
+        public void CanCreateMandate() {
+            // We can only test this if there are customers
+            ListResponse<CustomerResponse> customers = this._customerClient.GetCustomerListAsync().Result;
+            if (customers.TotalCount > 0) {
+                // If: We create a new mandate request
+                MandateRequest mandateRequest = new MandateRequest() {
+                    ConsumerAccount = "NL26ABNA0516682814",
+                    ConsumerName = "John Doe"
+                };
+
+                // When: We send the mandate request
+                MandateResponse mandateResponse = this._mandateClient.CreateMandateAsync(customers.Data.First().Id, mandateRequest).Result;
+
+                // Then: Make sure we created a new mandate
+                Assert.AreEqual(mandateRequest.ConsumerAccount, mandateResponse.Details.ConsumerAccount);
+                Assert.AreEqual(mandateRequest.ConsumerName, mandateResponse.Details.ConsumerName);
+            }
+        }
     }
 }
