@@ -13,7 +13,7 @@ using Mollie.Api.Models.Mandate;
 using Mollie.Api.Models.Subscription;
 
 namespace Mollie.Api.Client {
-    /*
+    
     [Obsolete("This class is deprecated, please use the new API specific clients, such as PaymentClient, CustomerClient etc")]
     public class MollieClient : IMollieClient {
         private readonly IPaymentClient _paymentClient;
@@ -123,6 +123,11 @@ namespace Mollie.Api.Client {
             return await this._mandateClient.GetMandateListAsync(customerId, offset, count);
         }
 
+        [Obsolete("This method is deprecated, please use MandateClient class")]
+        public async Task<MandateResponse> CreateMandateAsync(string customerId, MandateRequest request) {
+            return await this._mandateClient.CreateMandateAsync(customerId, request);
+        }
+
         [Obsolete("This method is deprecated, please use SubscriptionClient class")]
         public async Task<ListResponse<SubscriptionResponse>> GetSubscriptionListAsync(string customerId, int? offset = null, int? count = null) {
             return await this._subscriptionClient.GetSubscriptionListAsync(customerId, offset, count);
@@ -142,5 +147,5 @@ namespace Mollie.Api.Client {
         public async Task CancelSubscriptionAsync(string customerId, string subscriptionId) {
             await this._subscriptionClient.CancelSubscriptionAsync(customerId, subscriptionId);
         }
-    }*/
+    }
 }
