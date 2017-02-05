@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 using RestSharp;
 
 namespace Mollie.Api.Client {
-    public class BaseMollieClient {
+    public abstract class BaseMollieClient {
         public const string ApiEndPoint = "https://api.mollie.nl";
         public const string ApiVersion = "v1";
 

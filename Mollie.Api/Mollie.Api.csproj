@@ -91,6 +91,7 @@
     <Compile Include="Models\Payment\RecurringType.cs" />
     <Compile Include="Models\Payment\Request\KbcIssuer.cs" />
     <Compile Include="Models\Payment\Request\KbcPaymentRequest.cs" />
+    <Compile Include="Models\Payment\Response\QrCode.cs" />
     <Compile Include="Models\Payment\Response\Specific\BankTransferPaymentResponse.cs" />
     <Compile Include="Models\Payment\Response\Specific\BelfiusPaymentResponse.cs" />
     <Compile Include="Models\Payment\Response\Specific\BitcoinPaymentResponse.cs" />

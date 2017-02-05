@@ -4,6 +4,9 @@
     }
     
     public class PodiumCadeauKaartPaymentResponseDetails {
+        /// <summary>
+        /// The last four digits of the card number.
+        /// </summary>
         public string CardNumber { get; set; }
     }
 }
