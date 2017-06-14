@@ -53,6 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Client\Abstract\IProfileClient.cs" />
     <Compile Include="Client\BaseMollieClient.cs" />
     <Compile Include="Client\CustomerClient.cs" />
     <Compile Include="Client\Abstract\ICustomerClient.cs" />
@@ -69,6 +70,7 @@
     <Compile Include="Client\MollieApiException.cs" />
     <Compile Include="Client\PaymentClient.cs" />
     <Compile Include="Client\PaymentMethodClient.cs" />
+    <Compile Include="Client\ProfileClient.cs" />
     <Compile Include="Client\RefundClient.cs" />
     <Compile Include="Client\SubscriptionClient.cs" />
     <Compile Include="Extensions\JsonConvertExtensions.cs" />
@@ -118,6 +120,12 @@
     <Compile Include="Models\Payment\Response\Specific\PodiumCadeauKaartPaymentResponse.cs" />
     <Compile Include="Models\Payment\Response\Specific\SepaDirectDebitResponse.cs" />
     <Compile Include="Models\Payment\Response\Specific\SofortPaymentResponse.cs" />
+    <Compile Include="Models\Profile\CategoryCode.cs" />
+    <Compile Include="Models\Profile\ProfileStatus.cs" />
+    <Compile Include="Models\Profile\Request\ProfileRequest.cs" />
+    <Compile Include="Models\Profile\Response\ApiKey.cs" />
+    <Compile Include="Models\Profile\Response\ProfileResponse.cs" />
+    <Compile Include="Models\Profile\ReviewStatus.cs" />
     <Compile Include="Models\Refund\RefundRequest.cs" />
     <Compile Include="Models\Refund\RefundResponse.cs" />
     <Compile Include="Models\Refund\RefundStatus.cs" />
