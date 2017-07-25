@@ -11,7 +11,6 @@ using Newtonsoft.Json;
 namespace Mollie.Api.Client {
     using System.Net.Http.Headers;
     using System.Text;
-    using System.Web;
 
     public abstract class BaseMollieClient {
         public const string ApiEndPoint = "https://api.mollie.nl";
