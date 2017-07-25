@@ -8,6 +8,8 @@ namespace Mollie.Tests.Integration.Framework {
         protected readonly string DefaultRedirectUrl = "http://mysite.com";
         protected readonly string DefaultWebhookUrl = "http://mysite.com/webhook";
 
+        protected readonly string ApiTestKey = ""; // Insert you API key here
+
         protected IPaymentClient _paymentClient;
         protected IPaymentMethodClient _paymentMethodClient;
         protected IRefundClient _refundClient;
