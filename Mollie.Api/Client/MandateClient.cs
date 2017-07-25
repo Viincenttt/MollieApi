@@ -20,7 +20,7 @@ namespace Mollie.Api.Client {
         }
 
         public async Task RevokeMandate(string customerId, string mandateId) {
-            await this.DeleteAsync($"customers/{customerId}/mandates{mandateId}").ConfigureAwait(false);
+            await this.DeleteAsync($"customers/{customerId}/mandates/{mandateId}").ConfigureAwait(false);
         }
     }
 }
