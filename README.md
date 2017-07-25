@@ -15,6 +15,9 @@ Install-Package Mollie.Api
 ### Example projects
 An example web application project that allows you to view, create, pay and refund payments is included. In order to use this project you have to set your Mollie API key in the web.config file. 
 
+### Supported frameworks
+The library was recently converted from a .NET framework class library to a .NET standard 1.2 class library. This means that the library can now be used in .NET framework and .NET core applications. 
+
 ### Supported API's
 This library currently supports the following API's:
 - Payments API
