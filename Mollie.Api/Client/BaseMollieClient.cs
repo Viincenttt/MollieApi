@@ -7,64 +7,65 @@ using Mollie.Api.Extensions;
 using Mollie.Api.Framework.Factories;
 using Mollie.Api.JsonConverters;
 using Newtonsoft.Json;
-using RestSharp;
 
 namespace Mollie.Api.Client {
+    using System.Net.Http.Headers;
+    using System.Text;
+    using System.Web;
+
     public abstract class BaseMollieClient {
         public const string ApiEndPoint = "https://api.mollie.nl";
         public const string ApiVersion = "v1";
 
         private readonly string _apiKey;
-        private readonly RestClient _restClient;
+        private readonly HttpClient _httpClient;
         private readonly JsonSerializerSettings _defaultJsonDeserializerSettings;
 
-        public BaseMollieClient(string apiKey) {
+        protected BaseMollieClient(string apiKey) {
             if (string.IsNullOrEmpty(apiKey)) {
                 throw new ArgumentException("Mollie API key cannot be empty");
             }
 
             this._apiKey = apiKey;
             this._defaultJsonDeserializerSettings = this.CreateDefaultJsonDeserializerSettings();
-            this._restClient = this.CreateRestClient();
+            this._httpClient = this.CreateHttpClient();
         }
 
         protected async Task<T> GetAsync<T>(string relativeUri) {
-            RestRequest request = new RestRequest(relativeUri, Method.GET);
-            return await this.ExecuteRequestAsync<T>(request).ConfigureAwait(false);
+            HttpResponseMessage response = await this._httpClient.GetAsync(relativeUri).ConfigureAwait(false);
+            return await this.ProcessHttpResponseMessage<T>(response).ConfigureAwait(false);
         }
 
         protected async Task<T> GetListAsync<T>(string relativeUri, int? offset, int? count) {
-            RestRequest request = new RestRequest(relativeUri, Method.GET);
+            string queryString = String.Empty;
             if (offset.HasValue) {
-                request.AddParameter("offset", offset);
+                queryString += $"?offset={offset.Value}";
             }
             if (count.HasValue) {
-                request.AddParameter("count", count);
+                string separator = String.IsNullOrEmpty(queryString) ? "?" : "&";
+                queryString += $"{separator}count={count.Value}";
             }
-
-            return await this.ExecuteRequestAsync<T>(request).ConfigureAwait(false);
+            HttpResponseMessage response = await this._httpClient.GetAsync(relativeUri + queryString).ConfigureAwait(false);
+            return await this.ProcessHttpResponseMessage<T>(response).ConfigureAwait(false);
         }
 
         protected async Task<T> PostAsync<T>(string relativeUri, object data) {
-            RestRequest request = new RestRequest(relativeUri, Method.POST);
-            request.AddParameter(String.Empty, JsonConvertExtensions.SerializeObjectCamelCase(data), ParameterType.RequestBody);
+            string jsonData = JsonConvertExtensions.SerializeObjectCamelCase(data);
+            HttpResponseMessage response = await this._httpClient.PostAsync(relativeUri, new StringContent(jsonData, Encoding.UTF8, "application/json")).ConfigureAwait(false);
 
-            return await this.ExecuteRequestAsync<T>(request).ConfigureAwait(false);
+            return await this.ProcessHttpResponseMessage<T>(response).ConfigureAwait(false);
         }
 
         protected async Task DeleteAsync(string relativeUri) {
-            RestRequest request = new RestRequest(relativeUri, Method.DELETE);
-            await this.ExecuteRequestAsync<object>(request).ConfigureAwait(false);
+            HttpResponseMessage response = await this._httpClient.DeleteAsync(relativeUri).ConfigureAwait(false);
+            await this.ProcessHttpResponseMessage<object>(response).ConfigureAwait(false);
         }
 
-        private async Task<T> ExecuteRequestAsync<T>(IRestRequest request) {
-            IRestResponse response = await this._restClient.ExecuteTaskAsync(request).ConfigureAwait(false);
-            return this.ProcessHttpResponseMessage<T>(response);
-        }
+        private async Task<T> ProcessHttpResponseMessage<T>(HttpResponseMessage response) {
+            string resultContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
-        private T ProcessHttpResponseMessage<T>(IRestResponse response) {
-            if (response.IsSuccessful()) {
-                return JsonConvert.DeserializeObject<T>(response.Content, this._defaultJsonDeserializerSettings);
+            if (response.IsSuccessStatusCode) {
+                return JsonConvert.DeserializeObject<T>(resultContent, this._defaultJsonDeserializerSettings);
             }
             else {
                 switch (response.StatusCode) {
@@ -75,7 +76,7 @@ namespace Mollie.Api.Client {
                     case HttpStatusCode.MethodNotAllowed:
                     case HttpStatusCode.UnsupportedMediaType:
                     case (HttpStatusCode)422: // Unprocessable entity
-                        throw new MollieApiException(response.Content);
+                        throw new MollieApiException(resultContent);
                     default:
                         throw new HttpRequestException($"Unknown http exception occured with status code: {(int)response.StatusCode}.");
                 }
@@ -85,13 +86,14 @@ namespace Mollie.Api.Client {
         /// <summary>
         /// Creates a new rest client for the Mollie API
         /// </summary>
-        private RestClient CreateRestClient() {
-            RestClient restClient = new RestClient();
-            restClient.BaseUrl = this.GetBaseAddress();
-            restClient.AddDefaultHeader("Content-Type", "application/json");
-            restClient.AddDefaultParameter("Authorization", $"Bearer {this._apiKey}", ParameterType.HttpHeader);
+        private HttpClient CreateHttpClient() {
+            HttpClient httpClient = new HttpClient();
+            httpClient.BaseAddress = this.GetBaseAddress();
+            httpClient.DefaultRequestHeaders.Accept.Clear();
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this._apiKey);
 
-            return restClient;
+            return httpClient;
         }
 
         /// <summary>
