@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
+using System.Collections.Generic;
 
 namespace Mollie.Api.Models.Customer {
     public class CustomerResponse {
@@ -37,5 +38,10 @@ namespace Mollie.Api.Models.Customer {
         /// DateTime when user was created.
         /// </summary>
         public DateTime? CreatedDatetime { get; set; }
+
+        /// <summary>
+        /// Payment methods that the customer recently used for payments.
+        /// </summary>
+        public IEnumerable<Payment.PaymentMethod> RecentlyUsedMethods { get; set; }
     }
 }
