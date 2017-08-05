@@ -1,13 +1,8 @@
-﻿using Mollie.Api.Client;
-using Mollie.Api.Models.Customer;
+﻿using Mollie.Api.Models.Customer;
 using Mollie.Api.Models.Payment.Request;
 using Mollie.Api.Models.Payment.Response;
 using Moq;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 

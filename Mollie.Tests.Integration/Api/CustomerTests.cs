@@ -1,4 +1,5 @@
-﻿using Mollie.Api.Models.Customer;
+﻿using System.Threading.Tasks;
+using Mollie.Api.Models.Customer;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Payment;
 using Mollie.Tests.Integration.Framework;
@@ -8,28 +9,28 @@ namespace Mollie.Tests.Integration.Api {
     [TestFixture]
     public class CustomerTests : BaseMollieApiTestClass {
         [Test]
-        public void CanRetrieveCustomerList() {
+        public async Task CanRetrieveCustomerList() {
             // When: Retrieve customer list with default settings
-            ListResponse<CustomerResponse> response = this._customerClient.GetCustomerListAsync().Result;
+            ListResponse<CustomerResponse> response = await this._customerClient.GetCustomerListAsync();
 
             // Then
             Assert.IsNotNull(response);
         }
 
         [Test]
-        public void ListCustomersNeverReturnsMoreCustomersThenTheNumberOfRequestedCustomers() {
+        public async Task ListCustomersNeverReturnsMoreCustomersThenTheNumberOfRequestedCustomers() {
             // If: Number of customers requested is 5
             int numberOfCustomers = 5;
 
             // When: Retrieve 5 customers
-            ListResponse<CustomerResponse> response = this._customerClient.GetCustomerListAsync(0, numberOfCustomers).Result;
+            ListResponse<CustomerResponse> response = await this._customerClient.GetCustomerListAsync(0, numberOfCustomers);
 
             // Then
             Assert.IsTrue(response.Data.Count <= numberOfCustomers);
         }
 
         [Test]
-        public void CanCreateNewCustomer() {
+        public async Task CanCreateNewCustomer() {
             // If: We create a customer request with only the required parameters
             CustomerRequest customerRequest = new CustomerRequest() {
                 Email = "test@test.com",
@@ -39,7 +40,7 @@ namespace Mollie.Tests.Integration.Api {
             };
 
             // When: We send the customer request to Mollie
-            CustomerResponse result = this._customerClient.CreateCustomerAsync(customerRequest).Result;
+            CustomerResponse result = await this._customerClient.CreateCustomerAsync(customerRequest);
 
             // then: Make sure the requested parameters match the response parameter values
             Assert.IsNotNull(result);

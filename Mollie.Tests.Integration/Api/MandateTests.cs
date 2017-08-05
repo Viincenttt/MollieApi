@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Mollie.Api.Models.Customer;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Mandate;
@@ -9,13 +10,13 @@ namespace Mollie.Tests.Integration.Api {
     [TestFixture]
     public class MandateTests : BaseMollieApiTestClass {
         [Test]
-        public void CanRetrieveMandateList() {
+        public async Task CanRetrieveMandateList() {
             // We can only test this if there are customers
-            ListResponse<CustomerResponse> customers = this._customerClient.GetCustomerListAsync().Result;
+            ListResponse<CustomerResponse> customers = await this._customerClient.GetCustomerListAsync();
 
             if (customers.TotalCount > 0) {
                 // When: Retrieve mandate list with default settings
-                ListResponse<MandateResponse> response = this._mandateClient.GetMandateListAsync(customers.Data.First().Id).Result;
+                ListResponse<MandateResponse> response = await this._mandateClient.GetMandateListAsync(customers.Data.First().Id);
 
                 // Then
                 Assert.IsNotNull(response);
@@ -23,16 +24,16 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [Test]
-        public void ListMandatesNeverReturnsMoreCustomersThenTheNumberOfRequestedMandates() {
+        public async Task ListMandatesNeverReturnsMoreCustomersThenTheNumberOfRequestedMandates() {
             // We can only test this if there are customers
-            ListResponse<CustomerResponse> customers = this._customerClient.GetCustomerListAsync().Result;
+            ListResponse<CustomerResponse> customers = await this._customerClient.GetCustomerListAsync();
 
             if (customers.TotalCount > 0) {
                 // If: Number of customers requested is 5
                 int numberOfMandates = 5;
 
                 // When: Retrieve 5 mandates
-                ListResponse<MandateResponse> response = this._mandateClient.GetMandateListAsync(customers.Data.First().Id, 0, numberOfMandates).Result;
+                ListResponse<MandateResponse> response = await this._mandateClient.GetMandateListAsync(customers.Data.First().Id, 0, numberOfMandates);
 
                 // Then
                 Assert.IsTrue(response.Data.Count <= numberOfMandates);
@@ -40,9 +41,9 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [Test]
-        public void CanCreateMandate() {
+        public async Task CanCreateMandate() {
             // We can only test this if there are customers
-            ListResponse<CustomerResponse> customers = this._customerClient.GetCustomerListAsync().Result;
+            ListResponse<CustomerResponse> customers = await this._customerClient.GetCustomerListAsync();
             if (customers.TotalCount > 0) {
                 // If: We create a new mandate request
                 MandateRequest mandateRequest = new MandateRequest() {
@@ -51,7 +52,7 @@ namespace Mollie.Tests.Integration.Api {
                 };
 
                 // When: We send the mandate request
-                MandateResponse mandateResponse = this._mandateClient.CreateMandateAsync(customers.Data.First().Id, mandateRequest).Result;
+                MandateResponse mandateResponse = await this._mandateClient.CreateMandateAsync(customers.Data.First().Id, mandateRequest);
 
                 // Then: Make sure we created a new mandate
                 Assert.AreEqual(mandateRequest.ConsumerAccount, mandateResponse.Details.ConsumerAccount);
