@@ -117,6 +117,11 @@ namespace Mollie.Api.Models.Payment.Response {
         /// </summary>
         public string MandateId { get; set; }
 
+        /// <summary>
+        /// Only available for recurring payments – When implementing the Subscriptions API, any recurring charges resulting from the subscription will hold the ID of the subscription that triggered the payment.
+        /// </summary>
+        public string SubscriptionId { get; set; }
+
         public override string ToString() {
             return $"Id: {this.Id} - Status: {this.Status} - Method: {this.Method} - Amount: {this.Amount}";
         }
