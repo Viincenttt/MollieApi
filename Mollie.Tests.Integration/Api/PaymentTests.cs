@@ -173,6 +173,31 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [Test]
+        public async Task CanCreatePaymentWithCustomMetaDataClass() {
+            // If: We create a payment with meta data
+            CustomMetadataClass metadataRequest = new CustomMetadataClass() {
+                OrderId = 1,
+                Description = "Custom description"
+            };
+
+            PaymentRequest paymentRequest = new PaymentRequest() {
+                Amount = 100,
+                Description = "Description",
+                RedirectUrl = this.DefaultRedirectUrl,
+            };
+            paymentRequest.SetMetadata(metadataRequest);
+
+            // When: We send the payment request to Mollie
+            PaymentResponse result = await this._paymentClient.CreatePaymentAsync(paymentRequest);
+            CustomMetadataClass metadataResponse = result.GetMetadata<CustomMetadataClass>();
+
+            // Then: Make sure we get the same json result as metadata
+            Assert.IsNotNull(metadataResponse);
+            Assert.AreEqual(metadataRequest.OrderId, metadataResponse.OrderId);
+            Assert.AreEqual(metadataRequest.Description, metadataResponse.Description);
+        }
+
+        [Test]
         public async Task CanCreatePaymentWithMandate() {
             // If: We create a payment with a mandate id
             MandateResponse validMandate = await this.GetFirstValidMandate();
@@ -209,5 +234,10 @@ namespace Mollie.Tests.Integration.Api {
             Assert.Inconclusive("No mandates found. Unable to test recurring payments");
             return null;
         }
+    }
+
+    public class CustomMetadataClass {
+        public int OrderId { get; set; }
+        public string Description { get; set; }
     }
 }

@@ -29,12 +29,15 @@ namespace Mollie.Api.Models.Payment.Request {
         public PaymentMethod? Method { get; set; }
 
         /// <summary>
-        /// Optional - Normally, a payment method selection screen is shown. However, when using this parameter, your customer will skip the selection 
-        /// screen and will be sent directly to the chosen payment method. The parameter enables you to fully integrate the payment method selection into 
-        /// your website, however note Mollie's country based conversion optimization is lost.
+        /// Optional – Provide any data you like in JSON notation, and we will save the data alongside the payment. Whenever you fetch the payment with our 
+        /// API, we'll also include the metadata. You can use up to 1kB of JSON.
         /// </summary>
         [JsonConverter(typeof(RawJsonConverter))]
         public string Metadata { get; set; }
+
+        public void SetMetadata(object metadataObj, JsonSerializerSettings jsonSerializerSettings = null) {
+            this.Metadata = JsonConvert.SerializeObject(metadataObj, jsonSerializerSettings);
+        }
 
         /// <summary>
         /// Optional - Provide any data you like in JSON notation, and we will save the data alongside the payment. Whenever you fetch the payment with our

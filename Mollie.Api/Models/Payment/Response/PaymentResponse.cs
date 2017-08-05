@@ -82,6 +82,10 @@ namespace Mollie.Api.Models.Payment.Response {
         [JsonConverter(typeof(RawJsonConverter))]
         public string Metadata { get; set; }
 
+        public T GetMetadata<T>(JsonSerializerSettings jsonSerializerSettings = null) {
+            return JsonConvert.DeserializeObject<T>(this.Metadata, jsonSerializerSettings);
+        }
+
         /// <summary>
         /// The consumer's locale, either forced on creation by specifying the locale parameter, or detected by us during checkout.
         /// </summary>

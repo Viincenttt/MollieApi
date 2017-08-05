@@ -37,22 +37,20 @@ namespace Mollie.Tests.Integration.Api {
             // If: We create a customer request with only the required parameters
             string name = "Smit";
             string email = "johnsmit@mollie.com";
-            string metadata = "{\"test\":\"test\"";
 
             // When: We send the customer request to Mollie
-            CustomerResponse result = await this.CreateCustomer(name, email, metadata);
+            CustomerResponse result = await this.CreateCustomer(name, email);
 
             // Then: Make sure the requested parameters match the response parameter values
             Assert.IsNotNull(result);
             Assert.AreEqual(name, result.Name);
             Assert.AreEqual(email, result.Email);
-            Assert.AreEqual(metadata, result.Metadata);
         }
 
         [Test]
         public async Task CanRetrieveRecentPaymentMethods() {
             // If: We create a new customer and create several payment for the customer
-            CustomerResponse newCustomer = await this.CreateCustomer("Smit", "johnsmit@mollie.com", null);
+            CustomerResponse newCustomer = await this.CreateCustomer("Smit", "johnsmit@mollie.com");
             await this.CreatePayment(newCustomer.Id, PaymentMethod.BankTransfer);
             await this.CreatePayment(newCustomer.Id, PaymentMethod.Ideal);
             await this.CreatePayment(newCustomer.Id, PaymentMethod.CreditCard);
@@ -79,12 +77,11 @@ namespace Mollie.Tests.Integration.Api {
             return await this._paymentClient.CreatePaymentAsync(paymentRequest);
         }
 
-        private async Task<CustomerResponse> CreateCustomer(string name, string email, string metadata) {
+        private async Task<CustomerResponse> CreateCustomer(string name, string email) {
             CustomerRequest customerRequest = new CustomerRequest() {
                 Email = email,
                 Name = name,
-                Locale = Locale.NL,
-                Metadata = metadata//"{\"test\":\"test\""
+                Locale = Locale.NL
             };
 
             return await this._customerClient.CreateCustomerAsync(customerRequest);
