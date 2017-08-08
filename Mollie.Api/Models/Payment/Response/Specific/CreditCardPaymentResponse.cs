@@ -30,6 +30,7 @@ namespace Mollie.Api.Models.Payment.Response {
         /// <summary>
         /// The card's label. Note that not all labels can be acquired through Mollie.
         /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
         public CreditCardLabel? CardLabel { get; set; }
 
         /// <summary>
