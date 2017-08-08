@@ -79,6 +79,6 @@ namespace Mollie.Api.Models.Payment.Response {
         Maestro,
         Mastercard,
         Unionpay,
-        Via
+        Visa
     }
 }
