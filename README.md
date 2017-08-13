@@ -82,6 +82,32 @@ The full list of payment specific response classes is:
 - SepaDirectDebitResponse
 - SofortPaymentResponse
 
+#### Setting metadata
+Mollie allows you to send any metadata you like in JSON notation and will save the data alongside the payment. When you fetch the payment with the API, Mollie will include the metadata. The library allows you to set the metadata JSON string manually, by setting the Metadata property of the PaymentRequest class, but the recommended way of setting/getting the metadata is to use the SetMetadata/Getmetadata methods. 
+
+For example: 
+```c#
+// Custom metadata class that contains the data you want to include in the metadata class. 
+CustomMetadataClass metadataRequest = new CustomMetadataClass() {
+    OrderId = 1,
+    Description = "Custom description"
+};
+
+// Create a new payment
+PaymentRequest paymentRequest = new PaymentRequest() {
+    Amount = 100,
+    Description = "Description",
+    RedirectUrl = this.DefaultRedirectUrl,
+};
+
+// Set the metadata
+paymentRequest.SetMetadata(metadataRequest);
+
+// When we retrieve the payment response, we can convert our metadata back to our custom class
+PaymentResponse result = await this._paymentClient.CreatePaymentAsync(paymentRequest);
+CustomMetadataClass metadataResponse = result.GetMetadata<CustomMetadataClass>();
+```
+
 #### Retrieving a list off payments
 Mollie allows you to set offset and count properties so you can paginate the list. The offset and count parameters are optional. The maximum number of payments you can request in a single roundtrip is 250. 
 ```c#
