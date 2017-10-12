@@ -18,5 +18,9 @@ namespace Mollie.Api.Client {
         public async Task<MandateResponse> CreateMandateAsync(string customerId, MandateRequest request) {
             return await this.PostAsync<MandateResponse>($"customers/{customerId}/mandates", request).ConfigureAwait(false);
         }
+
+        public async Task RevokeMandate(string customerId, string mandateId) {
+            await this.DeleteAsync($"customers/{customerId}/mandates/{mandateId}").ConfigureAwait(false);
+        }
     }
 }

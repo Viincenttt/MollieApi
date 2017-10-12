@@ -4,6 +4,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Mollie.Api.JsonConverters {
+    using System.Reflection;
+
     /// <summary>Base Generic JSON Converter that can help quickly define converters for specific types by automatically
     /// generating the CanConvert, ReadJson, and WriteJson methods, requiring the implementer only to define a strongly typed Create method.</summary>
     public abstract class JsonCreationConverter<T> : JsonConverter {
@@ -19,7 +21,7 @@ namespace Mollie.Api.JsonConverters {
             // FrameWork 4.5
             // return typeof(T).GetTypeInfo().IsAssignableFrom(objectType.GetTypeInfo());
             // Otherwise
-            return typeof(T).IsAssignableFrom(objectType);
+            return typeof(T).GetTypeInfo().IsAssignableFrom(objectType.GetTypeInfo());
         }
 
         /// <summary>Parses the json to the specified type.</summary>

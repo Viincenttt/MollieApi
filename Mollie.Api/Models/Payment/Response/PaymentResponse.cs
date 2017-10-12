@@ -82,6 +82,10 @@ namespace Mollie.Api.Models.Payment.Response {
         [JsonConverter(typeof(RawJsonConverter))]
         public string Metadata { get; set; }
 
+        public T GetMetadata<T>(JsonSerializerSettings jsonSerializerSettings = null) {
+            return JsonConvert.DeserializeObject<T>(this.Metadata, jsonSerializerSettings);
+        }
+
         /// <summary>
         /// The consumer's locale, either forced on creation by specifying the locale parameter, or detected by us during checkout.
         /// </summary>
@@ -116,6 +120,11 @@ namespace Mollie.Api.Models.Payment.Response {
         /// Only available for recurring payments – If the payment is a recurring payment, this field will hold the ID of the mandate used to authorize the recurring payment.
         /// </summary>
         public string MandateId { get; set; }
+
+        /// <summary>
+        /// Only available for recurring payments – When implementing the Subscriptions API, any recurring charges resulting from the subscription will hold the ID of the subscription that triggered the payment.
+        /// </summary>
+        public string SubscriptionId { get; set; }
 
         public override string ToString() {
             return $"Id: {this.Id} - Status: {this.Status} - Method: {this.Method} - Amount: {this.Amount}";

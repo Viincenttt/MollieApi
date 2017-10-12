@@ -64,5 +64,10 @@
         /// Only available for batch transactions – The original file reference that you've specified in your batch.
         /// </summary>
         public string FileReference { get; set; }
+
+        /// <summary>
+        /// Estimated date the payment is debited from the consumer's bank account, in YYYY-MM-DD format.
+        /// </summary>
+        public string DueDate { get; set; }
     }
 }
