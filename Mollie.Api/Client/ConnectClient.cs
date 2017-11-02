@@ -16,7 +16,6 @@ namespace Mollie.Api.Client
 {
 	public class ConnectClient : IConnectClient
 	{
-		private const string BaseUrl = "https://www.mollie.com/oauth2/";
 		private readonly HttpClient _httpClient;
 		private readonly string _clientId;
 
@@ -46,13 +45,13 @@ namespace Mollie.Api.Client
 			if (!string.IsNullOrWhiteSpace(redirectUri))
 				parameters.Add("redirect_uri", redirectUri);
 
-			return BaseUrl + "authorize?" + string.Join("&", parameters.Select(p => string.Format($"{WebUtility.UrlEncode(p.Key)}={WebUtility.UrlEncode(p.Value)}")));
+			return "https://www.mollie.com/oauth2/authorize?" + string.Join("&", parameters.Select(p => string.Format($"{WebUtility.UrlEncode(p.Key)}={WebUtility.UrlEncode(p.Value)}")));
 		}
 
 		public async Task<TokenResponse> GetAccessTokenAsync(TokenRequest request)
 		{
 			var jsonData = JsonConvertExtensions.SerializeObjectSnakeCase(request);
-			var response = await this._httpClient.PostAsync(BaseUrl + "tokens", new StringContent(jsonData, Encoding.UTF8, "application/json")).ConfigureAwait(false);
+			var response = await this._httpClient.PostAsync("https://api.mollie.nl/oauth2/tokens", new StringContent(jsonData, Encoding.UTF8, "application/json")).ConfigureAwait(false);
 			var resultContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 			return JsonConvert.DeserializeObject<TokenResponse>(resultContent, new JsonSerializerSettings() { ContractResolver = new SnakeCasePropertyNamesContractResolver() });
 		}
