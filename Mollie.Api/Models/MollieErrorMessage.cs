@@ -5,7 +5,7 @@
         public string Field { get; set; }
 
         public override string ToString() {
-            return this.Message;
+            return Message;
         }
     }
 }
