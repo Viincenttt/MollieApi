@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Mollie.Api.ContractResolvers;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
 namespace Mollie.Api.Extensions {
@@ -11,5 +12,16 @@ namespace Mollie.Api.Extensions {
                     NullValueHandling = NullValueHandling.Ignore
                 });
         }
-    }
+
+	    public static string SerializeObjectSnakeCase(object value)
+	    {
+		    return JsonConvert.SerializeObject(value,
+			    new JsonSerializerSettings
+			    {
+				    DateFormatString = "yyyy-MM-dd",
+				    ContractResolver = new SnakeCasePropertyNamesContractResolver(),
+				    NullValueHandling = NullValueHandling.Ignore
+			    });
+	    }
+	}
 }
