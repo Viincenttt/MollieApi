@@ -66,8 +66,10 @@ namespace Mollie.Api.Client {
             if (response.IsSuccessStatusCode) {
                 return JsonConvert.DeserializeObject<T>(resultContent, this._defaultJsonDeserializerSettings);
             }
-            else {
-                switch (response.StatusCode) {
+            else
+            {
+                switch (response.StatusCode)
+                {
                     case HttpStatusCode.BadRequest:
                     case HttpStatusCode.Unauthorized:
                     case HttpStatusCode.Forbidden:
@@ -105,8 +107,10 @@ namespace Mollie.Api.Client {
         /// Creates the default Json serial settings for the JSON.NET parsing.
         /// </summary>
         /// <returns></returns>
-        private JsonSerializerSettings CreateDefaultJsonDeserializerSettings() {
-            return new JsonSerializerSettings {
+        private JsonSerializerSettings CreateDefaultJsonDeserializerSettings()
+        {
+            return new JsonSerializerSettings
+            {
                 DateFormatString = "MM-dd-yyyy",
                 NullValueHandling = NullValueHandling.Ignore,
                 Converters = new List<JsonConverter>() {
