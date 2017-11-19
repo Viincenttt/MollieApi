@@ -12,8 +12,7 @@ using Newtonsoft.Json;
 
 namespace Mollie.Api.Client {
     public abstract class BaseMollieClient {
-        public const string ApiEndPoint = "https://api.mollie.nl";
-        public const string ApiVersion = "v1";
+        public const string ApiEndPoint = "https://api.mollie.nl/v1/";
 
         private readonly string _apiKey;
         private readonly JsonSerializerSettings _defaultJsonDeserializerSettings;
@@ -87,20 +86,12 @@ namespace Mollie.Api.Client {
         /// </summary>
         private HttpClient CreateHttpClient() {
             var httpClient = new HttpClient();
-            httpClient.BaseAddress = GetBaseAddress();
+            httpClient.BaseAddress = new Uri(ApiEndPoint);
             httpClient.DefaultRequestHeaders.Accept.Clear();
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _apiKey);
 
             return httpClient;
-        }
-
-        /// <summary>
-        ///     Returns the base address of the Mollie API
-        /// </summary>
-        /// <returns></returns>
-        private Uri GetBaseAddress() {
-            return new Uri(ApiEndPoint + "/" + ApiVersion + "/");
         }
 
         /// <summary>
