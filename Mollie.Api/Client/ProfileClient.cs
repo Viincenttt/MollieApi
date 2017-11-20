@@ -7,9 +7,9 @@ using Mollie.Api.Models.Profile.Response;
 
 namespace Mollie.Api.Client
 {
-    public class ProfileClient : BaseMollieClient, IProfileClient
+    public class ProfileClient : OauthBaseMollieClient, IProfileClient
     {
-        public ProfileClient(string apiKey) : base(apiKey) { }
+        public ProfileClient(string oauthAccessToken) : base(oauthAccessToken) { }
 
         public async Task<ProfileResponse> CreateProfileAsync(ProfileRequest request)
         {
