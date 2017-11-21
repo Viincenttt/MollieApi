@@ -15,6 +15,16 @@ namespace Mollie.Api.Client.Abstract
 		/// <returns></returns>
 		Task<InvoiceResponse> GetInvoiceAsync(string invoiceId, bool includeLines = false, bool includeSettlements = false);
 
-		Task<ListResponse<InvoiceResponse>> GetInvoiceListAsync(int? offset = null, int? count = null);
+		/// <summary>
+		/// Retrieve all invoices on the account. Optionally filter on year or invoice number.
+		/// </summary>
+		/// <param name="reference">Optional – Use this parameter to filter for an invoice with a specific invoice number / reference. An example reference would be 2016.10000.</param>
+		/// <param name="year">Optional – Use this parameter to filter for invoices from a specific year (e.g. 2016).</param>
+		/// <param name="offset">Optional – The number of objects to skip.</param>
+		/// <param name="count">Optional – The number of objects to return (with a maximum of 250).</param>
+		/// <param name="includeLines">Include invoice details such as which products were invoiced.</param>
+		/// <param name="includeSettlements">Include settlements for which the invoice was created, if applicable.</param>
+		/// <returns>List of Invoices</returns>
+		Task<ListResponse<InvoiceResponse>> GetInvoiceListAsync(string reference = null, int? year = null, int? offset = null, int? count = null, bool includeLines = false, bool includeSettlements = false);
 	}
 }

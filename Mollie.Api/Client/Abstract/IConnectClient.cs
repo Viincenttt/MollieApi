@@ -13,7 +13,7 @@ namespace Mollie.Api.Client.Abstract
 		/// <param name="scopes">A space separated list of permissions your app requires. Refer to OAuth: Permissions for more information about the available scopes.</param>
 		/// <param name="redirectUri">The URL the merchant is sent back to once the request has been authorized. If given, it must match the URL you set when registering your app.</param>
 		/// <param name="forceApprovalPrompt">This parameter can be set to force, to force showing the consent screen to the merchant, even when it is not necessary</param>
-		/// <returns></returns>
+		/// <returns>The url to the mollie consent screen.</returns>
 		string GetAuthorizationUrl(string state, List<string> scopes, string redirectUri = null, bool forceApprovalPrompt = false);
 
 		/// <summary>
@@ -21,7 +21,7 @@ namespace Mollie.Api.Client.Abstract
 		/// Or Refresh the accestoken
 		/// </summary>
 		/// <param name="request"></param>
-		/// <returns></returns>
+		/// <returns>An token object.</returns>
 		Task<TokenResponse> GetAccessTokenAsync(TokenRequest request);
 	}
 }
