@@ -15,6 +15,7 @@ namespace Mollie.Api.Client.Abstract
 		/// <returns></returns>
 		Task<InvoiceResponse> GetInvoiceAsync(string invoiceId, bool includeLines = false, bool includeSettlements = false);
 
+
 		Task<ListResponse<InvoiceResponse>> GetInvoiceListAsync(int? offset = null, int? count = null);
 	}
 }
