@@ -6,7 +6,7 @@ namespace Mollie.Api.Client.Abstract
 {
 	public interface IPermissionsClient
 	{
-		Task<PermissionResponse> GetPermissionAsync(string id);
+		Task<PermissionResponse> GetPermissionAsync(string permissionId);
 
 		Task<ListResponse<PermissionResponse>> GetPermissionListAsync(int? offset = null, int? count = null);
 	}

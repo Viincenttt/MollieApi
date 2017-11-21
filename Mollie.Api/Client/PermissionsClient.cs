@@ -9,9 +9,9 @@ namespace Mollie.Api.Client
 	{
 		public PermissionsClient(string oauthAccessToken) : base(oauthAccessToken) { }
 
-		public async Task<PermissionResponse> GetPermissionAsync(string id)
+		public async Task<PermissionResponse> GetPermissionAsync(string permissionId)
 		{
-			return await this.GetAsync<PermissionResponse>($"permissions/{id}").ConfigureAwait(false);
+			return await this.GetAsync<PermissionResponse>($"permissions/{permissionId}").ConfigureAwait(false);
 		}
 
 		public async Task<ListResponse<PermissionResponse>> GetPermissionListAsync(int? offset = null, int? count = null)
