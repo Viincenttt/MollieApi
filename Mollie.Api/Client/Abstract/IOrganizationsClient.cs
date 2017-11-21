@@ -5,6 +5,6 @@ namespace Mollie.Api.Client.Abstract
 {
 	public interface IOrganizationsClient
 	{
-		Task<OrganizationResponse> GetOrganizationAsync(string id);
+		Task<OrganizationResponse> GetOrganizationAsync(string organizationId);
 	}
 }
