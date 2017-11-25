@@ -1,11 +1,13 @@
-﻿namespace Mollie.Api.Models.Invoice
+﻿using System;
+
+namespace Mollie.Api.Models.Invoice
 {
 	public class InvoiceLine
 	{
 		/// <summary>
-		/// The administrative period (YYYY-MM) on which the line should be booked.
+		/// The administrative period (YYYY) on which the line should be booked.
 		/// </summary>
-		public string Period { get; set; }
+		public DateTime Period { get; set; }
 
 		/// <summary>
 		/// Description of the product.

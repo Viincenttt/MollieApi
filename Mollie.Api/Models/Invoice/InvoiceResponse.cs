@@ -1,17 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models.Settlement;
 
 namespace Mollie.Api.Models.Invoice
 {
 	public class InvoiceResponse
 	{
-		/// <summary>
-		/// Indicates the response contains a invoice.
-		/// </summary>
-		public string Resource { get; set; }
-
 		/// <summary>
 		/// The invoice's unique identifier, for example inv_FrvewDA3Pr.
 		/// </summary>
@@ -40,12 +34,12 @@ namespace Mollie.Api.Models.Invoice
 		/// <summary>
 		/// Optional – The date on which the invoice was paid (in YYYY-MM-DD format). Only for paid invoices.
 		/// </summary>
-		public DateTime PaidDate { get; set; }
+		public DateTime? PaidDate { get; set; }
 
 		/// <summary>
 		/// Optional – The date on which the invoice is due (in YYYY-MM-DD format). Only for due invoices.
 		/// </summary>
-		public DateTime DueDate { get; set; }
+		public DateTime? DueDate { get; set; }
 
 		/// <summary>
 		/// The total amount of the invoice with and without VAT.

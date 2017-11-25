@@ -14,27 +14,45 @@ namespace Mollie.Api.Client
 		public async Task<InvoiceResponse> GetInvoiceAsync(string invoiceId, bool includeLines = false, bool includeSettlements = false)
 		{
 			var includes = BuildIncludeParameter(includeLines, includeSettlements);
-			return await this.GetAsync<InvoiceResponse>($"invoices/{invoiceId}{includes}").ConfigureAwait(false);
+			var queryString = BuildQuerytString(includes);
+			return await this.GetAsync<InvoiceResponse>($"invoices/{invoiceId}{queryString}").ConfigureAwait(false);
 		}
 
-		public Task<ListResponse<InvoiceResponse>> GetInvoiceListAsync(string reference = null, int? year = null, int? offset = null, int? count = null,
+		public async Task<ListResponse<InvoiceResponse>> GetInvoiceListAsync(string reference = null, int? year = null, int? offset = null, int? count = null,
 			bool includeLines = false, bool includeSettlements = false)
 		{
-			throw new System.NotImplementedException();
+			// Build parameter list
+			var parameters = BuildIncludeParameter(includeLines, includeSettlements);
+
+			if (!string.IsNullOrWhiteSpace(reference))
+				parameters.Add("reference", reference);
+
+			if (year.HasValue)
+				parameters.Add("year", year.Value.ToString());
+
+			// Convert parameters to string
+			var queryString = BuildQuerytString(parameters);
+
+			return await this.GetListAsync<ListResponse<InvoiceResponse>>($"invoices{queryString}", offset, count).ConfigureAwait(false);
 		}
 
-		private string BuildIncludeParameter(bool includeLines = false, bool includeSettlements = false)
+		private Dictionary<string, string> BuildIncludeParameter(bool includeLines = false, bool includeSettlements = false)
 		{
-			var result = string.Empty;
+			var result = new Dictionary<string, string>();
 
 			var includeList = new List<string>();
 			if (includeLines) includeList.Add("lines");
 			if (includeSettlements) includeList.Add("settlements");
 
 			if (includeList.Any())
-				result = $"?includes={string.Join(",", includeList)}";
+				result.Add("include", string.Join(",", includeList));
 
 			return result;
+		}
+
+		private string BuildQuerytString(Dictionary<string, string> parameters)
+		{
+			return "?" + string.Join("&", parameters.Select(x => $"{x.Key}={x.Value}"));
 		}
 	}
 }
