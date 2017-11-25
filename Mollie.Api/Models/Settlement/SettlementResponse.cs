@@ -20,13 +20,13 @@ namespace Mollie.Api.Models.Settlement
 		/// When requesting the next settlement the returned date signifies the expected settlement date.
 		/// When requesting the open settlement (open funds) the return value is null.
 		/// </summary>
-		public DateTime CreatedDatetime { get; set; }
+		public DateTime? CreatedDatetime { get; set; }
 
 		/// <summary>
 		/// The date on which the settlement was settled.
 		/// When requesting the open settlement or next settlement the return value is null.
 		/// </summary>
-		public DateTime SettledDatetime { get; set; }
+		public DateTime? SettledDatetime { get; set; }
 
 		/// <summary>
 		/// The status of the settlement.
