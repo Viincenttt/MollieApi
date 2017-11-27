@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Mollie.Api.Extensions
 {
-	public static class DictionaryExtensions
+	internal static class DictionaryExtensions
 	{
 		public static string ToQueryString(this Dictionary<string, string> parameters)
 		{
