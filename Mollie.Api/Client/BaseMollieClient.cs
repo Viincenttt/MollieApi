@@ -84,6 +84,18 @@ namespace Mollie.Api.Client {
             }
         }
 
+	    protected void ValidateApiKeyIsOauthAccesstoken(bool isConstructor = false)
+	    {
+			if (!_apiKey.StartsWith("access_"))
+			{
+				if (isConstructor)
+				{
+					throw new InvalidOperationException("The provided token isn't an oauth token. You have invoked the method with oauth parameters thus an oauth accesstoken is required.");
+				}
+				throw new ArgumentException("The provided token isn't an oauth token.");
+			}
+		}
+
         /// <summary>
         /// Creates a new rest client for the Mollie API
         /// </summary>

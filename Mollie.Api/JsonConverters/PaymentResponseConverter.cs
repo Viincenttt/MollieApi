@@ -2,7 +2,6 @@
 using Mollie.Api.Framework.Factories;
 using Mollie.Api.Models.Payment;
 using Mollie.Api.Models.Payment.Response;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Mollie.Api.JsonConverters {
