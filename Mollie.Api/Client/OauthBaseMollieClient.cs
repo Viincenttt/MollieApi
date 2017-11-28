@@ -11,10 +11,7 @@ namespace Mollie.Api.Client
 				throw new ArgumentNullException(nameof(oauthAccessToken), "Mollie API key cannot be empty");
 			}
 
-			if (!oauthAccessToken.StartsWith("access_"))
-			{
-				throw new ArgumentException("The provided token isn't an oauth token.", nameof(oauthAccessToken));
-			}
+			this.ValidateApiKeyIsOauthAccesstoken(true);
 		}
 	}
 }

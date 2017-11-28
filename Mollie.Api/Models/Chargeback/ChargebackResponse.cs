@@ -1,4 +1,5 @@
 ﻿using System;
+using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Chargeback
 {
@@ -10,11 +11,16 @@ namespace Mollie.Api.Models.Chargeback
 		public string Id { get; set; }
 
 		/// <summary>
+		/// The id of the payment this chargeback belongs to.
+		/// </summary>
+		[JsonProperty(PropertyName = "payment")]
+		public string PaymentId { get; set; }
+
 		/// The id of the payment this chargeback belongs to. However if the payment include is requested, it will be the original payment, as described in Get payment.
 		/// </summary>
 		public string Payment { get; set; }
 
-		/// <summary>
+      /// <summary>
 		/// The amount charged back.
 		/// </summary>
 		public decimal Amount { get; set; }
@@ -28,5 +34,5 @@ namespace Mollie.Api.Models.Chargeback
 		/// The date and time the chargeback was reversed, in ISO 8601 format.
 		/// </summary>
 		public DateTime? ReversedDatetime { get; set; }
-	}
+    }
 }
