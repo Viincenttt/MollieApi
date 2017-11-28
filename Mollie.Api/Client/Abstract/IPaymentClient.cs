@@ -6,9 +6,12 @@ using Mollie.Api.Models.Payment.Response;
 namespace Mollie.Api.Client.Abstract {
     public interface IPaymentClient {
         Task<PaymentResponse> CreatePaymentAsync(PaymentRequest paymentRequest);
+
         Task<PaymentResponse> GetPaymentAsync(string paymentId);
 
-        Task<ListResponse<PaymentResponse>>
-            GetPaymentListAsync(int? offset = default(int?), int? count = default(int?));
+	    Task DeletePaymentAsync(string paymentId);
+
+		Task<ListResponse<PaymentResponse>>
+            GetPaymentListAsync(int? offset = null, int? count = null, string profileId = null, bool? testMode = null);
     }
 }

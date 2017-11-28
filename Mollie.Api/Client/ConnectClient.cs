@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -45,9 +43,7 @@ namespace Mollie.Api.Client {
                 parameters.Add("redirect_uri", redirectUri);
             }
 
-            return $"{ApiEndPoint}authorize?" + string.Join("&",
-                       parameters.Select(p => string.Format(
-                           $"{WebUtility.UrlEncode(p.Key)}={WebUtility.UrlEncode(p.Value)}")));
+            return $"{ApiEndPoint}authorize" + parameters.ToQueryString();
         }
 
         public async Task<TokenResponse> GetAccessTokenAsync(TokenRequest request) {

@@ -28,7 +28,7 @@ namespace Mollie.Api.Client {
         }
 
         public async Task DeleteProfileAsync(string profileId) {
-            await this.DeleteAsync($"profiles/{profileId}");
+            await this.DeleteAsync($"profiles/{profileId}").ConfigureAwait(false); ;
         }
 
         public async Task<ListResponseSimple<ApiKey>> GetProfileApiKeyListAsync(string profileId) {

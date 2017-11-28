@@ -69,6 +69,21 @@ namespace Mollie.Api.Models.Payment.Request {
         /// </summary>
         public string MandateId { get; set; }
 
+		/// <summary>
+		///		Oauth only - The payment profile's unique identifier, for example pfl_3RkSN1zuPE. This field is mandatory.
+		/// </summary>
+		public string ProfileId { get; set; }
+
+		/// <summary>
+		///		Oauth only - Optional – Set this to true to make this payment a test payment.
+		/// </summary>
+		public bool? TestMode { get; set; }
+
+		/// <summary>
+		///		Oauth only - Optional – Adding an Application Fee allows you to charge the merchant a small sum for the payment and transfer this to your own account.
+		/// </summary>
+		public PaymentRequestApplicationFee ApplicationFee { get; set; }
+
         public void SetMetadata(object metadataObj, JsonSerializerSettings jsonSerializerSettings = null) {
             this.Metadata = JsonConvert.SerializeObject(metadataObj, jsonSerializerSettings);
         }
