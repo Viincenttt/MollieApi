@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Mollie.Api.Client;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Payment;
 using Mollie.Api.Models.Payment.Request;
@@ -215,6 +216,20 @@ namespace Mollie.Tests.Integration.Api {
 
             // Then: Make sure we get the mandate id back in the details
             Assert.AreEqual(validMandate.Id, result.MandateId);
+        }
+
+        [Test]
+        public async Task PaymentWithInvalidJsonThrowsException() {
+            // If: We create a payment with invalid json
+            PaymentRequest paymentRequest = new PaymentRequest() {
+                Amount = 100,
+                Description = "Description",
+                RedirectUrl = this.DefaultRedirectUrl,
+                Metadata = "IAmNotAValidJsonString"
+            };
+
+            // When + Then: We send the payment request to Mollie, we expect the exception
+            Assert.ThrowsAsync<MollieApiException>(() => this._paymentClient.CreatePaymentAsync(paymentRequest));
         }
 
         private async Task<MandateResponse> GetFirstValidMandate() {

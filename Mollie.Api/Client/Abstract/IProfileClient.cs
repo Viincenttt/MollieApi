@@ -5,7 +5,7 @@ using Mollie.Api.Models.Profile.Request;
 using Mollie.Api.Models.Profile.Response;
 
 namespace Mollie.Api.Client.Abstract {
-    internal interface IProfileClient {
+    public interface IProfileClient {
         Task<ProfileResponse> CreateProfileAsync(ProfileRequest request);
 
         Task<ProfileResponse> GetProfileAsync(string profileId);
