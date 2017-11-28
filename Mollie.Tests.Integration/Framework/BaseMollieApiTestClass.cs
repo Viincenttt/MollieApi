@@ -8,7 +8,7 @@ namespace Mollie.Tests.Integration.Framework {
         protected readonly string DefaultRedirectUrl = "http://mysite.com";
         protected readonly string DefaultWebhookUrl = "http://mysite.com/webhook";
 
-        protected readonly string ApiTestKey = "test_yGJ4USbh3BWV5AkGbdh4NG4EG2UdaF"; // Insert you API key here
+        protected readonly string ApiTestKey = "test_sUTyTaTrC2g5H6eNkwUyy3ewhc6eNH"; // Insert you API key here
 
         protected IPaymentClient _paymentClient;
         protected IPaymentMethodClient _paymentMethodClient;
@@ -17,6 +17,7 @@ namespace Mollie.Tests.Integration.Framework {
         protected ISubscriptionClient _subscriptionClient;
         protected IMandateClient _mandateClient;
         protected ICustomerClient _customerClient;
+        protected IProfileClient _profileClient;
 
         [OneTimeSetUp]
         public void InitClass() {
@@ -28,6 +29,7 @@ namespace Mollie.Tests.Integration.Framework {
             this._subscriptionClient = new SubscriptionClient(this.ApiTestKey);
             this._mandateClient = new MandateClient(this.ApiTestKey);
             this._customerClient = new CustomerClient(this.ApiTestKey);
+            this._profileClient = new ProfileClient(this.ApiTestKey);
         }
 
         private void EnsureTestApiKey() {

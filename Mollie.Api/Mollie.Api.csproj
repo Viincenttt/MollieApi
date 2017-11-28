@@ -10,8 +10,8 @@
     <Product>Mollie Payment API</Product>
     <PackageProjectUrl>https://github.com/Viincenttt/MollieApi</PackageProjectUrl>
     <PackageTags>Mollie</PackageTags>
-    <AssemblyVersion>1.4.4.0</AssemblyVersion>
-    <FileVersion>1.4.4.0</FileVersion>
+    <AssemblyVersion>1.4.4.1</AssemblyVersion>
+    <FileVersion>1.4.4.1</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
