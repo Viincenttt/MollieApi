@@ -1,12 +1,14 @@
 ﻿using System.Threading.Tasks;
+using Mollie.Api.Models.List;
+using Mollie.Api.Models.Subscription;
 
 namespace Mollie.Api.Client.Abstract {
-    using Models.Subscription;
-    using Models.List;
     public interface ISubscriptionClient {
         Task CancelSubscriptionAsync(string customerId, string subscriptionId);
         Task<SubscriptionResponse> CreateSubscriptionAsync(string customerId, SubscriptionRequest request);
         Task<SubscriptionResponse> GetSubscriptionAsync(string customerId, string subscriptionId);
-        Task<ListResponse<SubscriptionResponse>> GetSubscriptionListAsync(string customerId, int? offset = default(int?), int? count = default(int?));
+
+        Task<ListResponse<SubscriptionResponse>> GetSubscriptionListAsync(string customerId,
+            int? offset = default(int?), int? count = default(int?));
     }
 }

@@ -2,12 +2,10 @@
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Permission;
 
-namespace Mollie.Api.Client.Abstract
-{
-	public interface IPermissionsClient
-	{
-		Task<PermissionResponse> GetPermissionAsync(string permissionId);
+namespace Mollie.Api.Client.Abstract {
+    public interface IPermissionsClient {
+        Task<PermissionResponse> GetPermissionAsync(string permissionId);
 
-		Task<ListResponse<PermissionResponse>> GetPermissionListAsync(int? offset = null, int? count = null);
-	}
+        Task<ListResponse<PermissionResponse>> GetPermissionListAsync(int? offset = null, int? count = null);
+    }
 }

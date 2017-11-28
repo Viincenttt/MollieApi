@@ -7,8 +7,7 @@ namespace Mollie.Api.Models.List {
         public ListResponseLinks Links { get; set; }
     }
 
-    public class ListResponseSimple<T>
-    {
+    public class ListResponseSimple<T> {
         public int Count { get; set; }
 
         public List<T> Data { get; set; }

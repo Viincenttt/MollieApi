@@ -1,7 +1,5 @@
-﻿namespace Mollie.Api.Models.Profile
-{
-    public enum CategoryCode
-    {
+﻿namespace Mollie.Api.Models.Profile {
+    public enum CategoryCode {
         GeneralMerchandise = 5399,
         ElectronicsComputersAndSoftware = 5732,
         TravelRentalAndTransportation = 4121,

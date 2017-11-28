@@ -5,7 +5,8 @@ using Mollie.Api.Models.List;
 
 namespace Mollie.Api.Client {
     public class CustomerClient : BaseMollieClient, ICustomerClient {
-        public CustomerClient(string apiKey) : base (apiKey) { }
+        public CustomerClient(string apiKey) : base(apiKey) {
+        }
 
         public async Task<CustomerResponse> CreateCustomerAsync(CustomerRequest request) {
             return await this.PostAsync<CustomerResponse>($"customers", request).ConfigureAwait(false);
@@ -16,7 +17,8 @@ namespace Mollie.Api.Client {
         }
 
         public async Task<ListResponse<CustomerResponse>> GetCustomerListAsync(int? offset = null, int? count = null) {
-            return await this.GetListAsync<ListResponse<CustomerResponse>>("customers", offset, count).ConfigureAwait(false);
+            return await this.GetListAsync<ListResponse<CustomerResponse>>("customers", offset, count)
+                .ConfigureAwait(false);
         }
     }
 }
