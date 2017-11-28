@@ -13,7 +13,7 @@ namespace Mollie.Api.Client {
         public async Task<InvoiceResponse> GetInvoiceAsync(string invoiceId, bool includeLines = false,
             bool includeSettlements = false) {
             var includes = this.BuildIncludeParameter(includeLines, includeSettlements);
-            var queryString = this.BuildQuerytString(includes);
+            var queryString = this.BuildQueryString(includes);
             return await this.GetAsync<InvoiceResponse>($"invoices/{invoiceId}{queryString}").ConfigureAwait(false);
         }
 
@@ -32,7 +32,7 @@ namespace Mollie.Api.Client {
             }
 
             // Convert parameters to string
-            var queryString = this.BuildQuerytString(parameters);
+            var queryString = this.BuildQueryString(parameters);
 
             return await this.GetListAsync<ListResponse<InvoiceResponse>>($"invoices{queryString}", offset, count)
                 .ConfigureAwait(false);
@@ -53,7 +53,7 @@ namespace Mollie.Api.Client {
             return result;
         }
 
-        private string BuildQuerytString(Dictionary<string, string> parameters) {
+        private string BuildQueryString(Dictionary<string, string> parameters) {
             return "?" + string.Join("&", parameters.Select(x => $"{x.Key}={x.Value}"));
         }
     }
