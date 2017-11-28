@@ -19,9 +19,9 @@ namespace Mollie.Api.Client {
         private readonly HttpClient _httpClient;
 
         protected BaseMollieClient(string apiKey) {
-            if (string.IsNullOrEmpty(apiKey)) {
-                throw new ArgumentException("Mollie API key cannot be empty");
-            }
+            if (string.IsNullOrWhiteSpace(apiKey)) {
+				throw new ArgumentNullException(nameof(apiKey), "Mollie API key cannot be empty");
+			}
 
             _apiKey = apiKey;
             _defaultJsonDeserializerSettings = CreateDefaultJsonDeserializerSettings();
