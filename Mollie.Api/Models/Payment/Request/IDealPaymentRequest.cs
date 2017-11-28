@@ -1,7 +1,7 @@
 namespace Mollie.Api.Models.Payment.Request {
     public class IdealPaymentRequest : PaymentRequest {
         public IdealPaymentRequest() {
-            Method = PaymentMethod.Ideal;
+            this.Method = PaymentMethod.Ideal;
         }
 
         /// <summary>

@@ -30,7 +30,7 @@ namespace Mollie.Api.Models.Refund {
         public RefundStatus Status { get; set; }
 
         public override string ToString() {
-            return $"Id: {Id} - PaymentId: {Payment.Id}";
+            return $"Id: {this.Id} - PaymentId: {this.Payment.Id}";
         }
     }
 }

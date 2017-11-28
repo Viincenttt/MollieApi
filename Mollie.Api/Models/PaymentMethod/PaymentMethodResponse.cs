@@ -26,7 +26,7 @@ namespace Mollie.Api.Models.PaymentMethod {
         public PaymentMethodResponseImage Image { get; set; }
 
         public override string ToString() {
-            return Description;
+            return this.Description;
         }
     }
 }

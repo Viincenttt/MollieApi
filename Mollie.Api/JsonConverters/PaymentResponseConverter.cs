@@ -9,17 +9,17 @@ namespace Mollie.Api.JsonConverters {
         private readonly PaymentResponseFactory _paymentResponseFactory;
 
         public PaymentResponseConverter(PaymentResponseFactory paymentResponseFactory) {
-            _paymentResponseFactory = paymentResponseFactory;
+            this._paymentResponseFactory = paymentResponseFactory;
         }
 
         protected override PaymentResponse Create(Type objectType, JObject jObject) {
-            var paymentMethod = GetPaymentMethod(jObject);
+            var paymentMethod = this.GetPaymentMethod(jObject);
 
-            return _paymentResponseFactory.Create(paymentMethod);
+            return this._paymentResponseFactory.Create(paymentMethod);
         }
 
         private PaymentMethod? GetPaymentMethod(JObject jObject) {
-            if (FieldExists("method", jObject)) {
+            if (this.FieldExists("method", jObject)) {
                 var paymentMethodValue = (string) jObject["method"];
                 if (!string.IsNullOrEmpty(paymentMethodValue)) {
                     return (PaymentMethod) Enum.Parse(typeof(PaymentMethod), paymentMethodValue, true);

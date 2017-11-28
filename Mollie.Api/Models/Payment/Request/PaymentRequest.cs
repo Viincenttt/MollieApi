@@ -70,11 +70,11 @@ namespace Mollie.Api.Models.Payment.Request {
         public string MandateId { get; set; }
 
         public void SetMetadata(object metadataObj, JsonSerializerSettings jsonSerializerSettings = null) {
-            Metadata = JsonConvert.SerializeObject(metadataObj, jsonSerializerSettings);
+            this.Metadata = JsonConvert.SerializeObject(metadataObj, jsonSerializerSettings);
         }
 
         public override string ToString() {
-            return $"Method: {Method} - Amount: {Amount}";
+            return $"Method: {this.Method} - Amount: {this.Amount}";
         }
     }
 }

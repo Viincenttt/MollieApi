@@ -10,15 +10,16 @@ namespace Mollie.Api.Client {
         }
 
         public async Task<PaymentResponse> CreatePaymentAsync(PaymentRequest paymentRequest) {
-            return await PostAsync<PaymentResponse>("payments", paymentRequest).ConfigureAwait(false);
+            return await this.PostAsync<PaymentResponse>("payments", paymentRequest).ConfigureAwait(false);
         }
 
         public async Task<ListResponse<PaymentResponse>> GetPaymentListAsync(int? offset = null, int? count = null) {
-            return await GetListAsync<ListResponse<PaymentResponse>>("payments", offset, count).ConfigureAwait(false);
+            return await this.GetListAsync<ListResponse<PaymentResponse>>("payments", offset, count)
+                .ConfigureAwait(false);
         }
 
         public async Task<PaymentResponse> GetPaymentAsync(string paymentId) {
-            return await GetAsync<PaymentResponse>($"payments/{paymentId}").ConfigureAwait(false);
+            return await this.GetAsync<PaymentResponse>($"payments/{paymentId}").ConfigureAwait(false);
         }
     }
 }

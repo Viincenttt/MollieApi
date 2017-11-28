@@ -14,7 +14,7 @@
         public decimal Maximum { get; set; }
 
         public override string ToString() {
-            return $"Minimum: {Minimum} - Maximum: {Maximum}";
+            return $"Minimum: {this.Minimum} - Maximum: {this.Maximum}";
         }
     }
 }

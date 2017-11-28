@@ -11,12 +11,12 @@ namespace Mollie.Api.Client {
 
         public async Task<ListResponse<PaymentMethodResponse>> GetPaymentMethodListAsync(int? offset = null,
             int? count = null) {
-            return await GetListAsync<ListResponse<PaymentMethodResponse>>("methods", offset, count)
+            return await this.GetListAsync<ListResponse<PaymentMethodResponse>>("methods", offset, count)
                 .ConfigureAwait(false);
         }
 
         public async Task<PaymentMethodResponse> GetPaymentMethodAsync(PaymentMethod paymentMethod) {
-            return await GetAsync<PaymentMethodResponse>($"methods/{paymentMethod.ToString().ToLower()}")
+            return await this.GetAsync<PaymentMethodResponse>($"methods/{paymentMethod.ToString().ToLower()}")
                 .ConfigureAwait(false);
         }
     }

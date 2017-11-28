@@ -14,7 +14,7 @@
         public string Bigger { get; set; }
 
         public override string ToString() {
-            return Normal;
+            return this.Normal;
         }
     }
 }

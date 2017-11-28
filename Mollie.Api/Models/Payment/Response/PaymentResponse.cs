@@ -134,11 +134,11 @@ namespace Mollie.Api.Models.Payment.Response {
         public string SubscriptionId { get; set; }
 
         public T GetMetadata<T>(JsonSerializerSettings jsonSerializerSettings = null) {
-            return JsonConvert.DeserializeObject<T>(Metadata, jsonSerializerSettings);
+            return JsonConvert.DeserializeObject<T>(this.Metadata, jsonSerializerSettings);
         }
 
         public override string ToString() {
-            return $"Id: {Id} - Status: {Status} - Method: {Method} - Amount: {Amount}";
+            return $"Id: {this.Id} - Status: {this.Status} - Method: {this.Method} - Amount: {this.Amount}";
         }
     }
 }

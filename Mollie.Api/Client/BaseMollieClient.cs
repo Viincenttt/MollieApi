@@ -20,17 +20,17 @@ namespace Mollie.Api.Client {
 
         protected BaseMollieClient(string apiKey) {
             if (string.IsNullOrWhiteSpace(apiKey)) {
-				throw new ArgumentNullException(nameof(apiKey), "Mollie API key cannot be empty");
-			}
+                throw new ArgumentNullException(nameof(apiKey), "Mollie API key cannot be empty");
+            }
 
-            _apiKey = apiKey;
-            _defaultJsonDeserializerSettings = CreateDefaultJsonDeserializerSettings();
-            _httpClient = CreateHttpClient();
+            this._apiKey = apiKey;
+            this._defaultJsonDeserializerSettings = this.CreateDefaultJsonDeserializerSettings();
+            this._httpClient = this.CreateHttpClient();
         }
 
         protected async Task<T> GetAsync<T>(string relativeUri) {
-            var response = await _httpClient.GetAsync(relativeUri).ConfigureAwait(false);
-            return await ProcessHttpResponseMessage<T>(response).ConfigureAwait(false);
+            var response = await this._httpClient.GetAsync(relativeUri).ConfigureAwait(false);
+            return await this.ProcessHttpResponseMessage<T>(response).ConfigureAwait(false);
         }
 
         protected async Task<T> GetListAsync<T>(string relativeUri, int? offset, int? count) {
@@ -42,29 +42,29 @@ namespace Mollie.Api.Client {
                 var separator = string.IsNullOrEmpty(queryString) ? "?" : "&";
                 queryString += $"{separator}count={count.Value}";
             }
-            var response = await _httpClient.GetAsync(relativeUri + queryString).ConfigureAwait(false);
-            return await ProcessHttpResponseMessage<T>(response).ConfigureAwait(false);
+            var response = await this._httpClient.GetAsync(relativeUri + queryString).ConfigureAwait(false);
+            return await this.ProcessHttpResponseMessage<T>(response).ConfigureAwait(false);
         }
 
         protected async Task<T> PostAsync<T>(string relativeUri, object data) {
             var jsonData = JsonConvertExtensions.SerializeObjectCamelCase(data);
-            var response = await _httpClient
+            var response = await this._httpClient
                 .PostAsync(relativeUri, new StringContent(jsonData, Encoding.UTF8, "application/json"))
                 .ConfigureAwait(false);
 
-            return await ProcessHttpResponseMessage<T>(response).ConfigureAwait(false);
+            return await this.ProcessHttpResponseMessage<T>(response).ConfigureAwait(false);
         }
 
         protected async Task DeleteAsync(string relativeUri) {
-            var response = await _httpClient.DeleteAsync(relativeUri).ConfigureAwait(false);
-            await ProcessHttpResponseMessage<object>(response).ConfigureAwait(false);
+            var response = await this._httpClient.DeleteAsync(relativeUri).ConfigureAwait(false);
+            await this.ProcessHttpResponseMessage<object>(response).ConfigureAwait(false);
         }
 
         private async Task<T> ProcessHttpResponseMessage<T>(HttpResponseMessage response) {
             var resultContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode) {
-                return JsonConvert.DeserializeObject<T>(resultContent, _defaultJsonDeserializerSettings);
+                return JsonConvert.DeserializeObject<T>(resultContent, this._defaultJsonDeserializerSettings);
             }
             switch (response.StatusCode) {
                 case HttpStatusCode.BadRequest:
@@ -81,17 +81,15 @@ namespace Mollie.Api.Client {
             }
         }
 
-	    protected void ValidateApiKeyIsOauthAccesstoken(bool isConstructor = false)
-	    {
-			if (!_apiKey.StartsWith("access_"))
-			{
-				if (isConstructor)
-				{
-					throw new InvalidOperationException("The provided token isn't an oauth token. You have invoked the method with oauth parameters thus an oauth accesstoken is required.");
-				}
-				throw new ArgumentException("The provided token isn't an oauth token.");
-			}
-		}
+        protected void ValidateApiKeyIsOauthAccesstoken(bool isConstructor = false) {
+            if (!this._apiKey.StartsWith("access_")) {
+                if (isConstructor) {
+                    throw new InvalidOperationException(
+                        "The provided token isn't an oauth token. You have invoked the method with oauth parameters thus an oauth accesstoken is required.");
+                }
+                throw new ArgumentException("The provided token isn't an oauth token.");
+            }
+        }
 
         /// <summary>
         ///     Creates a new rest client for the Mollie API
@@ -101,7 +99,7 @@ namespace Mollie.Api.Client {
             httpClient.BaseAddress = new Uri(ApiEndPoint);
             httpClient.DefaultRequestHeaders.Accept.Clear();
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _apiKey);
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this._apiKey);
 
             return httpClient;
         }

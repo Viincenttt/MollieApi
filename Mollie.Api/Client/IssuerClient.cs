@@ -9,11 +9,12 @@ namespace Mollie.Api.Client {
         }
 
         public async Task<ListResponse<IssuerResponse>> GetIssuerListAsync(int? offset = null, int? count = null) {
-            return await GetListAsync<ListResponse<IssuerResponse>>("issuers", offset, count).ConfigureAwait(false);
+            return await this.GetListAsync<ListResponse<IssuerResponse>>("issuers", offset, count)
+                .ConfigureAwait(false);
         }
 
         public async Task<IssuerResponse> GetIssuerAsync(string issuerId) {
-            return await GetAsync<IssuerResponse>($"issuers/{issuerId}").ConfigureAwait(false);
+            return await this.GetAsync<IssuerResponse>($"issuers/{issuerId}").ConfigureAwait(false);
         }
     }
 }

@@ -2,14 +2,14 @@
     public class TokenRequest {
         public TokenRequest(string code, string redirectUri) {
             if (code.StartsWith("refresh_")) {
-                GrantType = "refresh_token";
-                RefreshToken = code;
+                this.GrantType = "refresh_token";
+                this.RefreshToken = code;
             }
             else {
-                GrantType = "authorization_code";
-                Code = code;
+                this.GrantType = "authorization_code";
+                this.Code = code;
             }
-            RedirectUri = redirectUri;
+            this.RedirectUri = redirectUri;
         }
 
         /// <summary>

@@ -5,7 +5,7 @@ using Newtonsoft.Json.Converters;
 namespace Mollie.Api.Models.Mandate {
     public class MandateRequest {
         public MandateRequest() {
-            Method = Payment.PaymentMethod.DirectDebit;
+            this.Method = Payment.PaymentMethod.DirectDebit;
         }
 
         /// <summary>
