@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Mollie.Api.JsonConverters {
-    using System.Reflection;
-
-    /// <summary>Base Generic JSON Converter that can help quickly define converters for specific types by automatically
-    /// generating the CanConvert, ReadJson, and WriteJson methods, requiring the implementer only to define a strongly typed Create method.</summary>
+    /// <summary>
+    ///     Base Generic JSON Converter that can help quickly define converters for specific types by automatically
+    ///     generating the CanConvert, ReadJson, and WriteJson methods, requiring the implementer only to define a strongly
+    ///     typed Create method.
+    /// </summary>
     public abstract class JsonCreationConverter<T> : JsonConverter {
         /// <summary>Create an instance of objectType, based properties in the JSON object</summary>
         /// <param name="objectType">type of object expected</param>
@@ -30,18 +32,19 @@ namespace Mollie.Api.JsonConverters {
         /// <param name="existingValue">Ignored</param>
         /// <param name="serializer">Newtonsoft.Json.JsonSerializer to use.</param>
         /// <returns>Deserialized Object</returns>
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer) {
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
+            JsonSerializer serializer) {
             if (reader.TokenType == JsonToken.Null)
                 return null;
 
             // Load JObject from stream
-            JObject jObject = JObject.Load(reader);
+            var jObject = JObject.Load(reader);
 
             // Create target object based on JObject
-            T target = Create(objectType, jObject);
+            var target = Create(objectType, jObject);
 
             //Create a new reader for this jObject, and set all properties to match the original reader.
-            JsonReader jObjectReader = jObject.CreateReader();
+            var jObjectReader = jObject.CreateReader();
             jObjectReader.Culture = reader.Culture;
             jObjectReader.DateParseHandling = reader.DateParseHandling;
             jObjectReader.DateTimeZoneHandling = reader.DateTimeZoneHandling;

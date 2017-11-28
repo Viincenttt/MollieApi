@@ -16,7 +16,11 @@ namespace Mollie.Api.Models.Chargeback
 		[JsonProperty(PropertyName = "payment")]
 		public string PaymentId { get; set; }
 
-		/// <summary>
+		/// The id of the payment this chargeback belongs to. However if the payment include is requested, it will be the original payment, as described in Get payment.
+		/// </summary>
+		public string Payment { get; set; }
+
+      /// <summary>
 		/// The amount charged back.
 		/// </summary>
 		public decimal Amount { get; set; }

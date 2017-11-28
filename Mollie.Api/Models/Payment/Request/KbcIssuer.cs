@@ -1,14 +1,11 @@
-﻿namespace Mollie.Api.Models.Payment.Request {
-    using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Converters;
-
+namespace Mollie.Api.Models.Payment.Request {
     [JsonConverter(typeof(StringEnumConverter))]
     public enum KbcIssuer {
-        [EnumMember(Value = "kbc")]
-        Kbc,
-        [EnumMember(Value = "cbc")]
-        Cbc
+        [EnumMember(Value = "kbc")] Kbc,
+        [EnumMember(Value = "cbc")] Cbc
     }
 }
