@@ -8,25 +8,30 @@ using Mollie.Api.Models.Payment.Response;
 
 namespace Mollie.Api.Client {
     public class PaymentClient : BaseMollieClient, IPaymentClient {
-        public PaymentClient(string apiKey) : base(apiKey) {
-        }
+
+	    public PaymentClient(string apiKey) : base(apiKey) { }
 
         public async Task<PaymentResponse> CreatePaymentAsync(PaymentRequest paymentRequest) {
 
-			if (!string.IsNullOrWhiteSpace(paymentRequest.ProfileId) || paymentRequest.TestMode.HasValue || paymentRequest.ApplicationFee != null)
+			if (!string.IsNullOrWhiteSpace(paymentRequest.ProfileId) || paymentRequest.Testmode.HasValue || paymentRequest.ApplicationFee != null)
 				ValidateApiKeyIsOauthAccesstoken();
 
-            return await this.PostAsync<PaymentResponse>("payments", paymentRequest).ConfigureAwait(false);
+            return await PostAsync<PaymentResponse>("payments", paymentRequest).ConfigureAwait(false);
         }
 
-	    public async Task<PaymentResponse> GetPaymentAsync(string paymentId)
+	    public async Task<PaymentResponse> GetPaymentAsync(string paymentId, bool testmode = false)
 	    {
-		    return await this.GetAsync<PaymentResponse>($"payments/{paymentId}").ConfigureAwait(false);
-	    }
+		    if (testmode)
+			    ValidateApiKeyIsOauthAccesstoken();
+
+		    var testmodeParameter = testmode ? "?testmode=true" : string.Empty;
+
+			return await GetAsync<PaymentResponse>($"payments/{paymentId}{testmodeParameter}").ConfigureAwait(false);
+		}
 
 		public async Task DeletePaymentAsync(string paymentId)
 	    {
-		    await this.DeleteAsync($"payments/{paymentId}").ConfigureAwait(false);
+		    await DeleteAsync($"payments/{paymentId}").ConfigureAwait(false);
 		}
 
 	    public async Task<ListResponse<PaymentResponse>> GetPaymentListAsync(int? offset = null, int? count = null, string profileId = null, bool? testMode = null)
@@ -42,7 +47,7 @@ namespace Mollie.Api.Client {
 		    if (testMode.HasValue)
 			    parameters.Add("testmode", testMode.Value.ToString().ToLower());
 
-			return await this.GetListAsync<ListResponse<PaymentResponse>>($"payments{parameters.ToQueryString()}", offset, count)
+			return await GetListAsync<ListResponse<PaymentResponse>>($"payments{parameters.ToQueryString()}", offset, count)
 				.ConfigureAwait(false);
 		}
     }
