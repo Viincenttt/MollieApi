@@ -2,6 +2,8 @@
     public enum RefundStatus {
         Pending,
         Processing,
-        Refunded
+        Refunded,
+        Queued,
+        Failed
     }
 }
