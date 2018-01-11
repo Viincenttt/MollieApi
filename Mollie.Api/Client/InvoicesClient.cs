@@ -14,12 +14,11 @@ namespace Mollie.Api.Client {
         public async Task<InvoiceResponse> GetInvoiceAsync(string invoiceId, bool includeLines = false,
             bool includeSettlements = false) {
             var includes = this.BuildIncludeParameter(includeLines, includeSettlements);
-            return await this.GetAsync<InvoiceResponse>($"invoices/{invoiceId}{includes.ToQueryString()}").ConfigureAwait(false);
+            return await this.GetAsync<InvoiceResponse>($"invoices/{invoiceId}{includes.ToQueryString()}")
+                .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<InvoiceResponse>> GetInvoiceListAsync(string reference = null, int? year = null,
-            int? offset = null, int? count = null,
-            bool includeLines = false, bool includeSettlements = false) {
+        public async Task<ListResponse<InvoiceResponse>> GetInvoiceListAsync(string reference = null, int? year = null, int? offset = null, int? count = null, bool includeLines = false, bool includeSettlements = false) {
             // Build parameter list
             var parameters = this.BuildIncludeParameter(includeLines, includeSettlements);
 
@@ -40,8 +39,13 @@ namespace Mollie.Api.Client {
             var result = new Dictionary<string, string>();
 
             var includeList = new List<string>();
-            if (includeLines) includeList.Add("lines");
-            if (includeSettlements) includeList.Add("settlements");
+            if (includeLines) {
+                includeList.Add("lines");
+            }
+
+            if (includeSettlements) {
+                includeList.Add("settlements");
+            }
 
             if (includeList.Any()) {
                 result.Add("include", string.Join(",", includeList));

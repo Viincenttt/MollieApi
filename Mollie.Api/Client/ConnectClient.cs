@@ -12,7 +12,8 @@ using Newtonsoft.Json;
 
 namespace Mollie.Api.Client {
     public class ConnectClient : IConnectClient {
-        public const string ApiEndPoint = "https://www.mollie.com/oauth2/";
+        public const string AuthorizeEndPoint = "https://www.mollie.com/oauth2/authorize";
+        public const string TokenEndPoint = "https://api.mollie.nl/oauth2/tokens";
         private readonly string _clientId;
         private readonly HttpClient _httpClient;
 
@@ -43,14 +44,14 @@ namespace Mollie.Api.Client {
                 parameters.Add("redirect_uri", redirectUri);
             }
 
-            return $"{ApiEndPoint}authorize" + parameters.ToQueryString();
+            return AuthorizeEndPoint + parameters.ToQueryString();
         }
 
         public async Task<TokenResponse> GetAccessTokenAsync(TokenRequest request) {
             var jsonData = JsonConvertExtensions.SerializeObjectSnakeCase(request);
 
             var response = await this._httpClient
-                .PostAsync("tokens", new StringContent(jsonData, Encoding.UTF8, "application/json"))
+                .PostAsync(TokenEndPoint, new StringContent(jsonData, Encoding.UTF8, "application/json"))
                 .ConfigureAwait(false);
             var resultContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
@@ -62,7 +63,6 @@ namespace Mollie.Api.Client {
         /// </summary>
         private HttpClient CreateHttpClient(string clientId, string clientSecret) {
             var httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri(ApiEndPoint);
             httpClient.DefaultRequestHeaders.Accept.Clear();
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", this.Base64Encode($"{clientId}:{clientSecret}"));

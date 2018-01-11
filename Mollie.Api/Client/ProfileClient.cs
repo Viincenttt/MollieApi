@@ -11,38 +11,42 @@ namespace Mollie.Api.Client {
         }
 
         public async Task<ProfileResponse> CreateProfileAsync(ProfileRequest request) {
-            return await this.PostAsync<ProfileResponse>("profiles", request).ConfigureAwait(false);
+            return await PostAsync<ProfileResponse>("profiles", request)
+                .ConfigureAwait(false);
         }
 
         public async Task<ProfileResponse> GetProfileAsync(string profileId) {
-            return await this.GetAsync<ProfileResponse>($"profiles/{profileId}").ConfigureAwait(false);
+            return await GetAsync<ProfileResponse>($"profiles/{profileId}")
+                .ConfigureAwait(false);
         }
 
         public async Task<ListResponse<ProfileResponse>> GetProfileListAsync(int? offset = null, int? count = null) {
-            return await this.GetListAsync<ListResponse<ProfileResponse>>("profiles", offset, count)
+            return await GetListAsync<ListResponse<ProfileResponse>>("profiles", offset, count)
                 .ConfigureAwait(false);
         }
 
         public async Task<ProfileResponse> UpdateProfileAsync(string profileId, ProfileRequest request) {
-            return await this.PostAsync<ProfileResponse>($"profiles/{profileId}", request).ConfigureAwait(false);
+            return await PostAsync<ProfileResponse>($"profiles/{profileId}", request)
+                .ConfigureAwait(false);
         }
 
         public async Task DeleteProfileAsync(string profileId) {
-            await this.DeleteAsync($"profiles/{profileId}").ConfigureAwait(false); ;
+            await DeleteAsync($"profiles/{profileId}")
+                .ConfigureAwait(false);
         }
 
         public async Task<ListResponseSimple<ApiKey>> GetProfileApiKeyListAsync(string profileId) {
-            return await this.GetListAsync<ListResponseSimple<ApiKey>>($"profiles/{profileId}/apikeys", null, null)
+            return await GetListAsync<ListResponseSimple<ApiKey>>($"profiles/{profileId}/apikeys", null, null)
                 .ConfigureAwait(false);
         }
 
         public async Task<ApiKey> GetProfileApiKeyAsync(string profileId, Mode mode) {
-            return await this.GetAsync<ApiKey>($"profiles/{profileId}/apikeys/{mode.ToString().ToLower()}")
+            return await GetAsync<ApiKey>($"profiles/{profileId}/apikeys/{mode.ToString().ToLower()}")
                 .ConfigureAwait(false);
         }
 
         public async Task<ApiKey> ResetProfileApiKeyAsync(string profileId, Mode mode) {
-            return await this.PostAsync<ApiKey>($"profiles/{profileId}/apikeys/{mode.ToString().ToLower()}", null)
+            return await PostAsync<ApiKey>($"profiles/{profileId}/apikeys/{mode.ToString().ToLower()}", null)
                 .ConfigureAwait(false);
         }
     }
