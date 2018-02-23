@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 
 namespace Mollie.Api.Extensions {
     internal static class DictionaryExtensions {
@@ -7,7 +8,7 @@ namespace Mollie.Api.Extensions {
             if (!parameters.Any())
                 return string.Empty;
 
-            return "?" + string.Join("&", parameters.Select(x => $"{x.Key}={x.Value}"));
+            return "?" + string.Join("&", parameters.Select(x => $"{WebUtility.UrlEncode(x.Key)}={WebUtility.UrlEncode(x.Value)}"));
         }
     }
 }

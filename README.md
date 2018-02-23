@@ -27,6 +27,12 @@ This library currently supports the following API's:
 - Subscriptions API
 - Issuer API
 - Refund API
+- Connect API
+- Chargebacks API
+- Invoices API
+- Permissions API
+- Profiles API
+- Organisations API
 
 ### Creating a API client object
 Every API has it's own API client class. These are: PaymentClient, PaymentMethodClient, CustomerClient, MandateClient, SubscriptionClient, IssuerClient and RefundClient classes. 

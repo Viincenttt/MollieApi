@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
+using Mollie.Api.Extensions;
 using Mollie.Api.Models.Invoice;
 using Mollie.Api.Models.List;
 
@@ -13,13 +14,11 @@ namespace Mollie.Api.Client {
         public async Task<InvoiceResponse> GetInvoiceAsync(string invoiceId, bool includeLines = false,
             bool includeSettlements = false) {
             var includes = this.BuildIncludeParameter(includeLines, includeSettlements);
-            var queryString = this.BuildQueryString(includes);
-            return await this.GetAsync<InvoiceResponse>($"invoices/{invoiceId}{queryString}").ConfigureAwait(false);
+            return await this.GetAsync<InvoiceResponse>($"invoices/{invoiceId}{includes.ToQueryString()}")
+                .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<InvoiceResponse>> GetInvoiceListAsync(string reference = null, int? year = null,
-            int? offset = null, int? count = null,
-            bool includeLines = false, bool includeSettlements = false) {
+        public async Task<ListResponse<InvoiceResponse>> GetInvoiceListAsync(string reference = null, int? year = null, int? offset = null, int? count = null, bool includeLines = false, bool includeSettlements = false) {
             // Build parameter list
             var parameters = this.BuildIncludeParameter(includeLines, includeSettlements);
 
@@ -31,10 +30,7 @@ namespace Mollie.Api.Client {
                 parameters.Add("year", year.Value.ToString());
             }
 
-            // Convert parameters to string
-            var queryString = this.BuildQueryString(parameters);
-
-            return await this.GetListAsync<ListResponse<InvoiceResponse>>($"invoices{queryString}", offset, count)
+            return await this.GetListAsync<ListResponse<InvoiceResponse>>($"invoices{parameters.ToQueryString()}", offset, count)
                 .ConfigureAwait(false);
         }
 
@@ -43,18 +39,19 @@ namespace Mollie.Api.Client {
             var result = new Dictionary<string, string>();
 
             var includeList = new List<string>();
-            if (includeLines) includeList.Add("lines");
-            if (includeSettlements) includeList.Add("settlements");
+            if (includeLines) {
+                includeList.Add("lines");
+            }
+
+            if (includeSettlements) {
+                includeList.Add("settlements");
+            }
 
             if (includeList.Any()) {
                 result.Add("include", string.Join(",", includeList));
             }
 
             return result;
-        }
-
-        private string BuildQueryString(Dictionary<string, string> parameters) {
-            return "?" + string.Join("&", parameters.Select(x => $"{x.Key}={x.Value}"));
         }
     }
 }
