@@ -15,7 +15,7 @@ namespace Mollie.Tests.Integration.Framework {
             var customerResponse = new CustomerResponse { Id = "dummy_customer" };
 
             mollieClientMock.Setup(x => x.CreatePaymentAsync(It.IsAny<PaymentRequest>())).Returns(() => Task.FromResult(paymentResponse));
-            mollieClientMock.Setup(x => x.GetPaymentAsync(It.IsAny<string>())).Returns(() => Task.FromResult(paymentResponse));
+            mollieClientMock.Setup(x => x.GetPaymentAsync(It.IsAny<string>(), It.IsAny<bool>())).Returns(() => Task.FromResult(paymentResponse));
             mollieClientMock.Setup(x => x.CreateCustomerAsync(It.IsAny<CustomerRequest>())).Returns(() => Task.FromResult(customerResponse));
             mollieClientMock.Setup(x => x.GetCustomerAsync(It.IsAny<string>())).Returns(() => Task.FromResult(customerResponse));
 
