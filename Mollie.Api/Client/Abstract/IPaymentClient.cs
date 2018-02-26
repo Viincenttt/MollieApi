@@ -15,9 +15,21 @@ namespace Mollie.Api.Client.Abstract {
 		/// <returns></returns>
 		Task<PaymentResponse> GetPaymentAsync(string paymentId, bool testmode = false);
 
+        /// <summary>
+        /// Some payment methods are cancellable for an amount of time, usually until the next day. Or as long as the payment status is open. Payments may be cancelled manually from the Dashboard, or automatically by using this endpoint.
+        /// </summary>
+        /// <param name="paymentId"></param>
+        /// <returns></returns>
 	    Task DeletePaymentAsync(string paymentId);
 
-		Task<ListResponse<PaymentResponse>>
-            GetPaymentListAsync(int? offset = null, int? count = null, string profileId = null, bool? testMode = null);
+        /// <summary>
+        /// Retrieve all payments created with the current payment profile, ordered from newest to oldest.
+        /// </summary>
+        /// <param name="offset"></param>
+        /// <param name="count"></param>
+        /// <param name="profileId"></param>
+        /// <param name="testMode"></param>
+        /// <returns></returns>
+		Task<ListResponse<PaymentResponse>> GetPaymentListAsync(int? offset = null, int? count = null, string profileId = null, bool? testMode = null);
     }
 }

@@ -13,41 +13,43 @@ namespace Mollie.Api.Client {
 
         public async Task<PaymentResponse> CreatePaymentAsync(PaymentRequest paymentRequest) {
 
-			if (!string.IsNullOrWhiteSpace(paymentRequest.ProfileId) || paymentRequest.Testmode.HasValue || paymentRequest.ApplicationFee != null)
-				ValidateApiKeyIsOauthAccesstoken();
+            if (!string.IsNullOrWhiteSpace(paymentRequest.ProfileId) || paymentRequest.Testmode.HasValue || paymentRequest.ApplicationFee != null) {
+                this.ValidateApiKeyIsOauthAccesstoken();
+            }
 
-            return await PostAsync<PaymentResponse>("payments", paymentRequest).ConfigureAwait(false);
+            return await this.PostAsync<PaymentResponse>("payments", paymentRequest).ConfigureAwait(false);
         }
 
-	    public async Task<PaymentResponse> GetPaymentAsync(string paymentId, bool testmode = false)
-	    {
-		    if (testmode)
-			    ValidateApiKeyIsOauthAccesstoken();
+	    public async Task<PaymentResponse> GetPaymentAsync(string paymentId, bool testmode = false) {
+	        if (testmode) {
+	            this.ValidateApiKeyIsOauthAccesstoken();
+            }
 
 		    var testmodeParameter = testmode ? "?testmode=true" : string.Empty;
 
-			return await GetAsync<PaymentResponse>($"payments/{paymentId}{testmodeParameter}").ConfigureAwait(false);
+			return await this.GetAsync<PaymentResponse>($"payments/{paymentId}{testmodeParameter}").ConfigureAwait(false);
 		}
 
-		public async Task DeletePaymentAsync(string paymentId)
-	    {
-		    await DeleteAsync($"payments/{paymentId}").ConfigureAwait(false);
+		public async Task DeletePaymentAsync(string paymentId) {
+		    await this.DeleteAsync($"payments/{paymentId}").ConfigureAwait(false);
 		}
 
-	    public async Task<ListResponse<PaymentResponse>> GetPaymentListAsync(int? offset = null, int? count = null, string profileId = null, bool? testMode = null)
-	    {
-			if (!string.IsNullOrWhiteSpace(profileId) || testMode.HasValue)
-				ValidateApiKeyIsOauthAccesstoken();
+	    public async Task<ListResponse<PaymentResponse>> GetPaymentListAsync(int? offset = null, int? count = null, string profileId = null, bool? testMode = null) {
+	        if (!string.IsNullOrWhiteSpace(profileId) || testMode.HasValue) {
+	            this.ValidateApiKeyIsOauthAccesstoken();
+            }
 
 		    var parameters = new Dictionary<string, string>();
-			
-			if (!string.IsNullOrWhiteSpace(profileId))
-				parameters.Add("profileId", profileId);
 
-		    if (testMode.HasValue)
-			    parameters.Add("testmode", testMode.Value.ToString().ToLower());
+	        if (!string.IsNullOrWhiteSpace(profileId)) {
+	            parameters.Add("profileId", profileId);
+            }
 
-			return await GetListAsync<ListResponse<PaymentResponse>>($"payments{parameters.ToQueryString()}", offset, count)
+	        if (testMode.HasValue) {
+	            parameters.Add("testmode", testMode.Value.ToString().ToLower());
+            }
+
+			return await this.GetListAsync<ListResponse<PaymentResponse>>($"payments{parameters.ToQueryString()}", offset, count)
 				.ConfigureAwait(false);
 		}
     }
