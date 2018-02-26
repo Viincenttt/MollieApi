@@ -17,6 +17,8 @@ namespace Mollie.Api.Models.Payment {
         [EnumMember(Value = "paypal")] PayPal,
         [EnumMember(Value = "paysafecard")] PaySafeCard,
         [EnumMember(Value = "kbc")] Kbc,
-        [EnumMember(Value = "giftcard")] GiftCard
+        [EnumMember(Value = "giftcard")] GiftCard,
+        [EnumMember(Value = "inghomepay")] IngHomePay,
+
     }
 }
