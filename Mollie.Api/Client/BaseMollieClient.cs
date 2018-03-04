@@ -9,6 +9,7 @@ using Mollie.Api.Extensions;
 using Mollie.Api.Framework.Factories;
 using Mollie.Api.JsonConverters;
 using Newtonsoft.Json;
+using System.Linq;
 
 namespace Mollie.Api.Client {
     public abstract class BaseMollieClient {
@@ -33,15 +34,27 @@ namespace Mollie.Api.Client {
             return await this.ProcessHttpResponseMessage<T>(response).ConfigureAwait(false);
         }
 
-        protected async Task<T> GetListAsync<T>(string relativeUri, int? offset, int? count) {
-            var queryString = string.Empty;
+        private string BuildListQueryString(int? offset, int? count, IDictionary<string, string> otherParameters = null) {
+            Dictionary<string, string> queryParameters = new Dictionary<string, string>();
             if (offset.HasValue) {
-                queryString += $"?offset={offset.Value}";
+                queryParameters[nameof(offset)] = offset.Value.ToString();
             }
+
             if (count.HasValue) {
-                var separator = string.IsNullOrEmpty(queryString) ? "?" : "&";
-                queryString += $"{separator}count={count.Value}";
+                queryParameters[nameof(count)] = count.Value.ToString();
             }
+            
+            if (otherParameters != null) {
+                foreach (var parameter in otherParameters) {
+                    queryParameters[parameter.Key] = parameter.Value;
+                }
+            }
+
+            return queryParameters.ToQueryString();
+        }
+
+        protected async Task<T> GetListAsync<T>(string relativeUri, int? offset, int? count, IDictionary<string, string> otherParameters = null) {
+            var queryString = this.BuildListQueryString(offset, count, otherParameters);
             var response = await this._httpClient.GetAsync(relativeUri + queryString).ConfigureAwait(false);
             return await this.ProcessHttpResponseMessage<T>(response).ConfigureAwait(false);
         }

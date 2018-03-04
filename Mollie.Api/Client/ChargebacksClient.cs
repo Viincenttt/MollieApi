@@ -40,8 +40,7 @@ namespace Mollie.Api.Client {
             }
 
             return await this
-                .GetListAsync<ListResponse<ChargebackResponse>>($"chargebacks{parameters.ToQueryString()}", offset,
-                    count).ConfigureAwait(false);
+                .GetListAsync<ListResponse<ChargebackResponse>>($"chargebacks", offset, count, parameters).ConfigureAwait(false);
         }
     }
 }

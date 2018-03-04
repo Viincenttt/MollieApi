@@ -49,7 +49,7 @@ namespace Mollie.Api.Client {
 	            parameters.Add("testmode", testMode.Value.ToString().ToLower());
             }
 
-			return await this.GetListAsync<ListResponse<PaymentResponse>>($"payments{parameters.ToQueryString()}", offset, count)
+			return await this.GetListAsync<ListResponse<PaymentResponse>>($"payments", offset, count, parameters)
 				.ConfigureAwait(false);
 		}
     }
