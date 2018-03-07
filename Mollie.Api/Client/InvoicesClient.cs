@@ -30,7 +30,7 @@ namespace Mollie.Api.Client {
                 parameters.Add("year", year.Value.ToString());
             }
 
-            return await this.GetListAsync<ListResponse<InvoiceResponse>>($"invoices{parameters.ToQueryString()}", offset, count)
+            return await this.GetListAsync<ListResponse<InvoiceResponse>>($"invoices", offset, count, parameters)
                 .ConfigureAwait(false);
         }
 

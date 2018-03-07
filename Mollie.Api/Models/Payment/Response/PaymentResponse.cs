@@ -29,6 +29,11 @@ namespace Mollie.Api.Models.Payment.Response {
         [JsonConverter(typeof(StringEnumConverter))]
         public PaymentStatus? Status { get; set; }
 
+		/// <summary>
+		/// Optional – Whether or not the payment can be cancelled.
+		/// </summary>
+		public bool CanBeCancelled { get; set; }
+
         /// <summary>
         ///     The date and time the payment became paid, in ISO 8601 format. Null is returned if the payment isn't completed
         ///     (yet).
