@@ -22,12 +22,13 @@ namespace Mollie.Api.Models.Payment.Request {
         /// </summary>
         public string RedirectUrl { get; set; }
 
-        /// <summary>
-        ///     Optional - Use this parameter to set a wehook URL for this payment only. Mollie will ignore any webhook set in your
-        ///     website profile for this
-        ///     payment.
-        /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
+	    /// <summary>
+	    ///     Optional – Normally, a payment method selection screen is shown. However, when using this parameter, your customer
+	    ///     will skip the selection screen and will be sent directly to the chosen payment method. The parameter enables you to
+	    ///     fully integrate the payment method selection into your website, however note Mollie's country based conversion
+	    ///     optimization is lost.
+	    /// </summary>
+	    [JsonConverter(typeof(StringEnumConverter))]
         public PaymentMethod? Method { get; set; }
 
         /// <summary>
@@ -38,12 +39,10 @@ namespace Mollie.Api.Models.Payment.Request {
         [JsonConverter(typeof(RawJsonConverter))]
         public string Metadata { get; set; }
 
-        /// <summary>
-        ///     Optional - Provide any data you like in JSON notation, and we will save the data alongside the payment. Whenever
-        ///     you fetch the payment with our
-        ///     API, we'll also include the metadata. You can use up to 1kB of JSON.
-        /// </summary>
-        public string WebhookUrl { get; set; }
+		/// <summary>
+		///     Set the webhook URL, where we will send payment status updates to.
+		/// </summary>
+		public string WebhookUrl { get; set; }
 
         /// <summary>
         ///     Optional - Allow you to preset the language to be used in the payment screens shown to the consumer. When this
