@@ -19,5 +19,6 @@ namespace Mollie.Api.Models.Payment {
         [EnumMember(Value = "kbc")] Kbc,
         [EnumMember(Value = "giftcard")] GiftCard,
         [EnumMember(Value = "inghomepay")] IngHomePay,
+		[EnumMember(Value = "refund")] Refund,
     }
 }
