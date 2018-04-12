@@ -6,7 +6,6 @@ using Mollie.Api.Models.Payment;
 using Mollie.Api.Models.Payment.Request;
 using Mollie.Api.Models.Payment.Response;
 using Mollie.Api.Models.Payment.Response.Specific;
-using Mollie.Api.Models.Subscription;
 using Mollie.Tests.Integration.Framework;
 using NUnit.Framework;
 
