@@ -6,6 +6,7 @@ using Mollie.WebApplicationExample.Infrastructure;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Mollie.Api.Client.Abstract;
+using Mollie.Api.Models;
 
 namespace Mollie.WebApplicationExample.Controllers {
     public class MandateController : Controller {
@@ -35,15 +36,13 @@ namespace Mollie.WebApplicationExample.Controllers {
         public async Task<ActionResult> Create(string customerId) {
             // You need at least 1 payment to make a new mandate
             var result = await this._paymentClient.CreatePaymentAsync(new PaymentRequest() {
-                Amount = 1,
+                Amount = new Amount("EUR", "100.00"),
                 Description = "First payment",
                 Locale = Api.Models.Payment.Locale.NL,
                 CustomerId = customerId,
                 RecurringType = Api.Models.Payment.RecurringType.First,
                 RedirectUrl = @"http://www.google.nl"
             });
-
-
             return this.Redirect(result.Links.PaymentUrl);
         }
     }

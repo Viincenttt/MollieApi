@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using Mollie.Api.Models;
 using Mollie.Api.Models.Customer;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Payment;
@@ -68,7 +69,7 @@ namespace Mollie.Tests.Integration.Api {
 
         private async Task<PaymentResponse> CreatePayment(string customerId, PaymentMethod method) {
             PaymentRequest paymentRequest = new PaymentRequest() {
-                Amount = 100,
+                Amount = new Amount("EUR", "100.00"),
                 Description = "Description",
                 RedirectUrl = this.DefaultRedirectUrl,
                 Method = method,

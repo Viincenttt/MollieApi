@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
+using Mollie.Api.Models;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Payment.Request;
 using Mollie.Api.Models.Payment.Response;
@@ -46,7 +47,7 @@ namespace Mollie.WebApplicationExample.Controllers {
         public async Task<ActionResult> Create(PaymentRequestModel paymentRequestModel) {
             if (this.ModelState.IsValid) {
                 PaymentRequest paymentRequest = new PaymentRequest();
-                paymentRequest.Amount = paymentRequestModel.Amount;
+                paymentRequest.Amount = new Amount(paymentRequestModel.Currency, paymentRequestModel.Amount);
                 paymentRequest.Description = paymentRequestModel.Description;
                 paymentRequest.RedirectUrl = paymentRequestModel.RedirectUrl;
                 await this._paymentClient.CreatePaymentAsync(paymentRequest);

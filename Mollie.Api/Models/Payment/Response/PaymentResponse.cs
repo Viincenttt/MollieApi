@@ -35,20 +35,20 @@ namespace Mollie.Api.Models.Payment.Response {
 		public bool CanBeCancelled { get; set; }
 
         /// <summary>
-        ///     The date and time the payment became paid, in ISO 8601 format. Null is returned if the payment isn't completed
-        ///     (yet).
+        /// The date and time the payment became paid, in ISO 8601 format. Null is returned if the payment isn't completed
+        /// (yet).
         /// </summary>
         public DateTime? PaidDatetime { get; set; }
 
         /// <summary>
-        ///     The date and time the payment was cancelled, in ISO 8601 format. Null is returned if the payment isn't cancelled
-        ///     (yet).
+        /// The date and time the payment was cancelled, in ISO 8601 format. Null is returned if the payment isn't cancelled
+        /// (yet).
         /// </summary>
         public DateTime? CancelledDatetime { get; set; }
 
         /// <summary>
-        ///     The date and time the payment was expired, in ISO 8601 format. Null is returned if the payment did not expire
-        ///     (yet).
+        /// The date and time the payment was expired, in ISO 8601 format. Null is returned if the payment did not expire
+        /// (yet).
         /// </summary>
         public DateTime? ExpiredDatetime { get; set; }
 
@@ -63,15 +63,15 @@ namespace Mollie.Api.Models.Payment.Response {
         public DateTime? FailedDatetime { get; set; }
 
         /// <summary>
-        ///     The amount in EURO.
+        /// The amount of the payment, e.g. {"currency":"EUR", "value":"100.00"} for a €100.00 payment.
         /// </summary>
-        public decimal Amount { get; set; }
+        public Amount Amount { get; set; }
 
         /// <summary>
-        ///     Only available when refunds are available for this payment – The total amount in EURO that is already refunded. For
-        ///     some payment methods, this
-        ///     amount may be higher than the payment amount, for example to allow reimbursement of the costs for a return shipment
-        ///     to the consumer.
+        /// Only available when refunds are available for this payment – The total amount in EURO that is already refunded. For
+        /// some payment methods, this
+        /// amount may be higher than the payment amount, for example to allow reimbursement of the costs for a return shipment
+        /// to the consumer.
         /// </summary>
         public decimal? AmountRefunded { get; set; }
 
@@ -130,6 +130,16 @@ namespace Mollie.Api.Models.Payment.Response {
         ///     An object with several URLs important to the payment process.
         /// </summary>
         public PaymentResponseLinks Links { get; set; }
+        
+        /// <summary>
+        ///     The URL Mollie will call as soon an important status change takes place.
+        /// </summary>
+        public string WebhookUrl { get; set; }
+
+        /// <summary>
+        ///     The URL the consumer will be redirected to after completing or cancelling the payment process.
+        /// </summary>
+        public string RedirectUrl { get; set; }
 
         /// <summary>
         ///     Only available for recurring payments – If the payment is a recurring payment, this field will hold the ID of the

@@ -5,20 +5,22 @@ using Newtonsoft.Json.Converters;
 namespace Mollie.Api.Models.Payment.Request {
     public class PaymentRequest {
         /// <summary>
-        ///     Required - The amount in EURO that you want to charge, e.g. 100.00 if you would want to charge € 100,00.
+        /// The amount that you want to charge, e.g. {"currency":"EUR", "value":"100.00"} if you would want to charge €100.00.
         /// </summary>
-        public decimal Amount { get; set; }
+        public Amount Amount { get; set; }
 
         /// <summary>
-        ///     Required - The description of the payment you're creating. This will be shown to the consumer on their card or bank
-        ///     statement when possible.
+        /// The description of the payment you’re creating. This will be shown to the consumer on their card or bank statement 
+        /// when possible. We truncate the description automatically according to the limits of the used payment method. The 
+        /// description is also visible in any exports you generate. We recommend you use a unique identifier so that you can 
+        /// always link the payment to the order.This is particularly useful for bookkeeping.
         /// </summary>
         public string Description { get; set; }
 
         /// <summary>
-        ///     Required - The URL the consumer will be redirected to after the payment process. It could make sense for the
-        ///     redirectURL to contain a unique
-        ///     identifier – like your order ID – so you can show the right page referencing the order when the consumer returns.
+        /// Required - The URL the consumer will be redirected to after the payment process. It could make sense for the
+        /// redirectURL to contain a unique
+        /// identifier – like your order ID – so you can show the right page referencing the order when the consumer returns.
         /// </summary>
         public string RedirectUrl { get; set; }
 
