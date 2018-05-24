@@ -38,7 +38,7 @@ namespace Mollie.WebApplicationExample.Controllers {
             var result = await this._paymentClient.CreatePaymentAsync(new PaymentRequest() {
                 Amount = new Amount("EUR", "100.00"),
                 Description = "First payment",
-                Locale = Api.Models.Payment.Locale.NL,
+                Locale = Api.Models.Payment.Locale.nl_NL,
                 CustomerId = customerId,
                 RecurringType = Api.Models.Payment.RecurringType.First,
                 RedirectUrl = @"http://www.google.nl"

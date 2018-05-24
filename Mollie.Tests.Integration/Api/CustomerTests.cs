@@ -82,7 +82,7 @@ namespace Mollie.Tests.Integration.Api {
             CustomerRequest customerRequest = new CustomerRequest() {
                 Email = email,
                 Name = name,
-                Locale = Locale.NL
+                Locale = Locale.nl_NL
             };
 
             return await this._customerClient.CreateCustomerAsync(customerRequest);

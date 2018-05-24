@@ -66,7 +66,7 @@ namespace Mollie.Tests.Integration.Api {
                 Amount = new Amount("EUR", "100.00"),
                 Description = "Description",
                 RedirectUrl = this.DefaultRedirectUrl,
-                Locale = Locale.NL,
+                Locale = Locale.nl_NL,
                 Metadata = @"{""firstName"":""John"",""lastName"":""Doe""}",
                 Method = PaymentMethod.BankTransfer,
                 WebhookUrl = this.DefaultWebhookUrl
@@ -77,7 +77,8 @@ namespace Mollie.Tests.Integration.Api {
 
             // Then: Make sure all requested parameters match the response parameter values
             Assert.IsNotNull(result);
-            Assert.AreEqual(paymentRequest.Amount, result.Amount);
+            Assert.AreEqual(paymentRequest.Amount.Currency, result.Amount.Currency);
+            Assert.AreEqual(paymentRequest.Amount.Value, result.Amount.Value);
             Assert.AreEqual(paymentRequest.Description, result.Description);
             Assert.AreEqual(paymentRequest.RedirectUrl, result.RedirectUrl);
             Assert.AreEqual(paymentRequest.Locale, result.Locale);
@@ -109,7 +110,8 @@ namespace Mollie.Tests.Integration.Api {
             // Then: Make sure all requested parameters match the response parameter values
             Assert.IsNotNull(result);
             Assert.AreEqual(expectedResponseType, result.GetType());
-            Assert.AreEqual(paymentRequest.Amount, result.Amount);
+            Assert.AreEqual(paymentRequest.Amount.Currency, result.Amount.Currency);
+            Assert.AreEqual(paymentRequest.Amount.Value, result.Amount.Value);
             Assert.AreEqual(paymentRequest.Description, result.Description);
             Assert.AreEqual(paymentRequest.RedirectUrl, result.RedirectUrl);
         }
@@ -121,7 +123,7 @@ namespace Mollie.Tests.Integration.Api {
                 Amount = new Amount("EUR", "100.00"),
                 Description = "Description",
                 RedirectUrl = this.DefaultRedirectUrl,
-                Locale = Locale.DE
+                Locale = Locale.de_DE
             };
 
             // When: We send the payment request to Mollie and attempt to retrieve it
@@ -131,7 +133,8 @@ namespace Mollie.Tests.Integration.Api {
             // Then
             Assert.IsNotNull(result);
             Assert.AreEqual(paymentResponse.Id, result.Id);
-            Assert.AreEqual(paymentResponse.Amount, result.Amount);
+            Assert.AreEqual(paymentResponse.Amount.Currency, result.Amount.Currency);
+            Assert.AreEqual(paymentResponse.Amount.Value, result.Amount.Value);
             Assert.AreEqual(paymentResponse.Description, result.Description);
             Assert.AreEqual(paymentResponse.RedirectUrl, result.RedirectUrl);
         }
