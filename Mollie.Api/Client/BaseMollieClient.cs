@@ -13,7 +13,7 @@ using System.Linq;
 
 namespace Mollie.Api.Client {
     public abstract class BaseMollieClient {
-        public const string ApiEndPoint = "https://api.mollie.nl/v1/";
+        public const string ApiEndPoint = "https://api.mollie.nl/v2/";
 
         private readonly string _apiKey;
         private readonly JsonSerializerSettings _defaultJsonDeserializerSettings;
