@@ -58,6 +58,11 @@ namespace Mollie.Api.Models.Payment.Response {
         public string ExpiryPeriod { get; set; }
 
         /// <summary>
+        /// The date and time the payment failed, in ISO 8601 format. This parameter is omitted if the payment did not fail (yet).
+        /// </summary>
+        public DateTime? FailedDatetime { get; set; }
+
+        /// <summary>
         ///     The amount in EURO.
         /// </summary>
         public decimal Amount { get; set; }
