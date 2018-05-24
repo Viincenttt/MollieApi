@@ -22,7 +22,7 @@ namespace Mollie.Tests.Integration.Api {
             MollieApiException mollieApiException = aggregateException.InnerExceptions.FirstOrDefault(x => x.GetType() == typeof(MollieApiException)) as MollieApiException;
             Assert.IsNotNull(mollieApiException);
             Assert.IsNotNull(mollieApiException.Details);
-            Assert.True(!String.IsNullOrEmpty(mollieApiException.Details.Message));
+            Assert.True(!String.IsNullOrEmpty(mollieApiException.Details.Detail));
         }
     }
 }

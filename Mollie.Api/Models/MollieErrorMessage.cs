@@ -1,11 +1,11 @@
 ﻿namespace Mollie.Api.Models {
     public class MollieErrorMessage {
-        public string Type { get; set; }
-        public string Message { get; set; }
-        public string Field { get; set; }
+        public int Status { get; set; }
+        public string Title { get; set; }
+        public string Detail { get; set; }
 
         public override string ToString() {
-            return this.Message;
+            return $"Status: {this.Status} - {this.Title} - {this.Detail}";
         }
     }
 }
