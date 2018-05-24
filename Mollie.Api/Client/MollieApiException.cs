@@ -1,5 +1,5 @@
 ﻿using System;
-using Mollie.Api.Models;
+using Mollie.Api.Models.Error;
 using Newtonsoft.Json;
 
 namespace Mollie.Api.Client {

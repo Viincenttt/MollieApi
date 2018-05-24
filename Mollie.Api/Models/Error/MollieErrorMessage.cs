@@ -1,4 +1,4 @@
-﻿namespace Mollie.Api.Models {
+﻿namespace Mollie.Api.Models.Error {
     public class MollieErrorMessage {
         public int Status { get; set; }
         public string Title { get; set; }
