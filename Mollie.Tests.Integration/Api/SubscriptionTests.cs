@@ -84,8 +84,8 @@ namespace Mollie.Tests.Integration.Api {
             ListResponse<CustomerListData> customers = await this._customerClient.GetCustomerListAsync();
             
             foreach (CustomerResponse customer in customers.Embedded.Customers) {
-                ListResponse<MandateResponse> mandates = await this._mandateClient.GetMandateListAsync(customer.Id);
-                if (mandates.Data.Any(x => x.Status == MandateStatus.Valid)) {
+                ListResponse<MandateListData> mandates = await this._mandateClient.GetMandateListAsync(customer.Id);
+                if (mandates.Embedded.Mandates.Any(x => x.Status == MandateStatus.Valid)) {
                     return customer.Id;
                 }
             }

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
+using Mollie.Api.Models.List.Specific;
 
 namespace Mollie.WebApplicationExample.Controllers {
     public class MandateController : Controller {
@@ -22,8 +23,8 @@ namespace Mollie.WebApplicationExample.Controllers {
         public async Task<ActionResult> Index(string customerId) {
             ViewBag.CustomerId = customerId;
 
-            ListResponse<MandateResponse> mandateList = await this._mandateClient.GetMandateListAsync(customerId);
-            return this.View(mandateList.Data);
+            ListResponse<MandateListData> mandateList = await this._mandateClient.GetMandateListAsync(customerId);
+            return this.View(mandateList.Embedded.Mandates);
         }
 
         [HttpGet]

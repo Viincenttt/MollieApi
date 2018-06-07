@@ -245,8 +245,8 @@ namespace Mollie.Tests.Integration.Api {
             }
 
             foreach (CustomerResponse customer in customers.Embedded.Customers) {
-                ListResponse<MandateResponse> customerMandates = await this._mandateClient.GetMandateListAsync(customer.Id);
-                MandateResponse firstValidMandate = customerMandates.Data.FirstOrDefault(x => x.Status == MandateStatus.Valid);
+                ListResponse<MandateListData> customerMandates = await this._mandateClient.GetMandateListAsync(customer.Id);
+                MandateResponse firstValidMandate = customerMandates.Embedded.Mandates.FirstOrDefault(x => x.Status == MandateStatus.Valid);
                 if (firstValidMandate != null) {
                     return firstValidMandate;
                 }
