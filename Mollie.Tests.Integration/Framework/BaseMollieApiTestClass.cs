@@ -25,7 +25,6 @@ namespace Mollie.Tests.Integration.Framework {
             this._paymentClient = new PaymentClient(this.ApiTestKey);
             this._paymentMethodClient = new PaymentMethodClient(this.ApiTestKey);
             this._refundClient = new RefundClient(this.ApiTestKey);
-            this._issuerClient = new IssuerClient(this.ApiTestKey);
             this._subscriptionClient = new SubscriptionClient(this.ApiTestKey);
             this._mandateClient = new MandateClient(this.ApiTestKey);
             this._customerClient = new CustomerClient(this.ApiTestKey);

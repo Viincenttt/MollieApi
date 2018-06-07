@@ -108,7 +108,6 @@
   <ItemGroup>
     <Compile Include="Api\ApiExceptionTests.cs" />
     <Compile Include="Api\CustomerTests.cs" />
-    <Compile Include="Api\IssuerTests.cs" />
     <Compile Include="Api\MandateTests.cs" />
     <Compile Include="Api\PaymentTests.cs" />
     <Compile Include="Api\RefundTests.cs" />
