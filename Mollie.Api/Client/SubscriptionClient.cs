@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models.List;
+using Mollie.Api.Models.List.Specific;
 using Mollie.Api.Models.Subscription;
 
 namespace Mollie.Api.Client {
@@ -8,8 +9,8 @@ namespace Mollie.Api.Client {
         public SubscriptionClient(string apiKey) : base(apiKey) {
         }
 
-        public async Task<ListResponse<SubscriptionResponse>> GetSubscriptionListAsync(string customerId, string from = null, int? limit = null) {
-            return await this.GetListAsync<ListResponse<SubscriptionResponse>>($"customers/{customerId}/subscriptions", from, limit).ConfigureAwait(false);
+        public async Task<ListResponse<SubscriptionListData>> GetSubscriptionListAsync(string customerId, string from = null, int? limit = null) {
+            return await this.GetListAsync<ListResponse<SubscriptionListData>>($"customers/{customerId}/subscriptions", from, limit).ConfigureAwait(false);
         }
 
         public async Task<SubscriptionResponse> GetSubscriptionAsync(string customerId, string subscriptionId) {

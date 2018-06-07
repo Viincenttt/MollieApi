@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Mollie.Api.Models;
 using Mollie.Api.Models.Customer;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.List.Specific;
@@ -13,15 +14,16 @@ namespace Mollie.Tests.Integration.Api {
     [TestFixture]
     public class SubscriptionTests : BaseMollieApiTestClass {
         [Test]
-        public async Task CanRetrieveMandateList() {
+        public async Task CanRetrieveSubscriptionList() {
             // Given
             string customerId = await this.GetFirstCustomerWithValidMandate();
 
             // When: Retrieve subscription list with default settings
-            ListResponse<SubscriptionResponse> response = await this._subscriptionClient.GetSubscriptionListAsync(customerId);
+            ListResponse<SubscriptionListData> response = await this._subscriptionClient.GetSubscriptionListAsync(customerId);
 
             // Then
             Assert.IsNotNull(response);
+            Assert.IsNotNull(response.Embedded);
         }
 
         [Test]
@@ -31,10 +33,10 @@ namespace Mollie.Tests.Integration.Api {
             int numberOfSubscriptions = 5;
 
             // When: Retrieve 5 subscriptions
-            ListResponse<SubscriptionResponse> response = await this._subscriptionClient.GetSubscriptionListAsync(customerId, null, numberOfSubscriptions);
+            ListResponse<SubscriptionListData> response = await this._subscriptionClient.GetSubscriptionListAsync(customerId, null, numberOfSubscriptions);
 
             // Then
-            Assert.IsTrue(response.Data.Count <= numberOfSubscriptions);
+            Assert.IsTrue(response.Embedded.Subscriptions.Count <= numberOfSubscriptions);
         }
 
         [Test]
@@ -42,7 +44,7 @@ namespace Mollie.Tests.Integration.Api {
             // Given
             string customerId = await this.GetFirstCustomerWithValidMandate();
             SubscriptionRequest subscriptionRequest = new SubscriptionRequest();
-            subscriptionRequest.Amount = 100;
+            subscriptionRequest.Amount = new Amount("EUR", "100.00");
             subscriptionRequest.Times = 5;
             subscriptionRequest.Interval = "1 month";
             subscriptionRequest.Description = $"Subscription {DateTime.Now}"; // Subscriptions must have a unique name
@@ -53,11 +55,12 @@ namespace Mollie.Tests.Integration.Api {
             SubscriptionResponse subscriptionResponse = await this._subscriptionClient.CreateSubscriptionAsync(customerId, subscriptionRequest);
 
             // Then
-            Assert.AreEqual(subscriptionRequest.Amount, subscriptionResponse.Amount);
+            Assert.AreEqual(subscriptionRequest.Amount.Value, subscriptionResponse.Amount.Value);
+            Assert.AreEqual(subscriptionRequest.Amount.Currency, subscriptionResponse.Amount.Currency);
             Assert.AreEqual(subscriptionRequest.Times, subscriptionResponse.Times);
             Assert.AreEqual(subscriptionRequest.Interval, subscriptionResponse.Interval);
             Assert.AreEqual(subscriptionRequest.Description, subscriptionResponse.Description);
-            Assert.AreEqual(subscriptionRequest.WebhookUrl, subscriptionResponse.Links.WebhookUrl);
+            Assert.AreEqual(subscriptionRequest.WebhookUrl, subscriptionResponse.WebhookUrl);
             Assert.AreEqual(subscriptionRequest.StartDate.Value.Date, subscriptionResponse.StartDate);
         }
 
@@ -65,11 +68,11 @@ namespace Mollie.Tests.Integration.Api {
         public async Task CanCancelSubscription() {
             // Given
             string customerId = await this.GetFirstCustomerWithValidMandate();
-            ListResponse<SubscriptionResponse> subscriptions = await this._subscriptionClient.GetSubscriptionListAsync(customerId);
+            ListResponse<SubscriptionListData> subscriptions = await this._subscriptionClient.GetSubscriptionListAsync(customerId);
 
             // When
             if (subscriptions.Count > 0) {
-                string subscriptionId = subscriptions.Data.First().Id;
+                string subscriptionId = subscriptions.Embedded.Subscriptions.First().Id;
                 await this._subscriptionClient.CancelSubscriptionAsync(customerId, subscriptionId);
                 SubscriptionResponse cancelledSubscription = await this._subscriptionClient.GetSubscriptionAsync(customerId, subscriptionId);
 

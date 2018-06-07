@@ -8,7 +8,7 @@ namespace Mollie.Api.Models.Subscription {
         ///     The constant amount in EURO that you want to charge with each subscription payment, e.g. 100.00 if you would want
         ///     to charge € 100,00.
         /// </summary>
-        public decimal Amount { get; set; }
+        public Amount Amount { get; set; }
 
         /// <summary>
         ///     Optional – Total number of charges for the subscription to complete. Leave empty for an on-going subscription.

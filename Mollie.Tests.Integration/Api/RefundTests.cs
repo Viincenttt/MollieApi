@@ -79,6 +79,7 @@ namespace Mollie.Tests.Integration.Api {
 
             // Then
             Assert.IsNotNull(refundList);
+            Assert.IsNotNull(refundList.Embedded);
         }
 
         private async Task<PaymentResponse> CreatePayment(decimal amount = 100) {

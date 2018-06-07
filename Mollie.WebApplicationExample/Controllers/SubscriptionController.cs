@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models.List;
+using Mollie.Api.Models.List.Specific;
 using Mollie.Api.Models.Subscription;
 using Mollie.WebApplicationExample.Infrastructure;
 using Mollie.WebApplicationExample.Models;
@@ -17,10 +18,10 @@ namespace Mollie.WebApplicationExample.Controllers {
 
         [HttpGet]
         public async Task<ActionResult> Index(string customerId) {
-            ListResponse<SubscriptionResponse> subscriptions = await this._subscriptionClient.GetSubscriptionListAsync(customerId);
+            ListResponse<SubscriptionListData> subscriptions = await this._subscriptionClient.GetSubscriptionListAsync(customerId);
             SubscriptionListViewModel viewModel = new SubscriptionListViewModel() {
                 CustomerId = customerId,
-                Subscriptions = subscriptions.Data
+                Subscriptions = subscriptions.Embedded.Subscriptions
             };
 
             return this.View(viewModel);
@@ -42,7 +43,8 @@ namespace Mollie.WebApplicationExample.Controllers {
         public async Task<ActionResult> Create(SubscriptionRequestModel subscriptionRequestModel) {
             if (this.ModelState.IsValid) {
                 SubscriptionRequest subscriptionRequest = new SubscriptionRequest();
-                subscriptionRequest.Amount = subscriptionRequestModel.Amount;
+                subscriptionRequest.Amount.Currency = subscriptionRequestModel.Currency;
+                subscriptionRequest.Amount.Value = subscriptionRequestModel.Amount;
                 subscriptionRequest.Description = subscriptionRequestModel.Description;
                 subscriptionRequest.Interval = "14 days";
                 await this._subscriptionClient.CreateSubscriptionAsync(subscriptionRequestModel.CustomerId, subscriptionRequest);
