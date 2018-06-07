@@ -7,7 +7,7 @@ namespace Mollie.Api.Models.Payment {
     public enum PaymentMethod {
         [EnumMember(Value = "ideal")] Ideal,
         [EnumMember(Value = "creditcard")] CreditCard,
-        [EnumMember(Value = "mistercash")] MisterCash,
+        [EnumMember(Value = "Bancontact ")] Bancontact,
         [EnumMember(Value = "sofort")] Sofort,
         [EnumMember(Value = "banktransfer")] BankTransfer,
         [EnumMember(Value = "directdebit")] DirectDebit,

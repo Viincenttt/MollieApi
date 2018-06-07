@@ -1,5 +1,5 @@
 namespace Mollie.Api.Models.Payment.Response {
-    public class MisterCashPaymentResponse : PaymentResponse {
+    public class BancontactPaymentResponse : PaymentResponse {
         public MisterCashPaymentResponseDetails Details { get; set; }
     }
 

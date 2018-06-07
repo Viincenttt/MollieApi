@@ -30,6 +30,6 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="profileId"></param>
         /// <param name="testMode"></param>
         /// <returns></returns>
-		Task<ListResponse<PaymentResponse>> GetPaymentListAsync(int? offset = null, int? count = null, string profileId = null, bool? testMode = null);
+		Task<ListResponse<EmbeddedPaymentListData>> GetPaymentListAsync(int? offset = null, int? count = null, string profileId = null, bool? testMode = null);
     }
 }

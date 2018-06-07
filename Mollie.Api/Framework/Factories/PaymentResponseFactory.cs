@@ -14,8 +14,8 @@ namespace Mollie.Api.Framework.Factories {
                     return new CreditCardPaymentResponse();
                 case PaymentMethod.Ideal:
                     return new IdealPaymentResponse();
-                case PaymentMethod.MisterCash:
-                    return new MisterCashPaymentResponse();
+                case PaymentMethod.Bancontact:
+                    return new BancontactPaymentResponse();
                 case PaymentMethod.PayPal:
                     return new PayPalPaymentResponse();
                 case PaymentMethod.PaySafeCard:
