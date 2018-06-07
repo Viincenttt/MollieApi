@@ -35,7 +35,7 @@ namespace Mollie.WebApplicationExample.Controllers {
         public async Task<ActionResult> Pay(string id) {
             PaymentResponse payment = await this._paymentClient.GetPaymentAsync(id);
 
-            return this.Redirect(payment.Links.PaymentUrl);
+            return this.Redirect(payment.Links.Checkout.Href);
         }
 
         [HttpGet]

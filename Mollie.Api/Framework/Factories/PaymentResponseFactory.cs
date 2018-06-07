@@ -20,8 +20,6 @@ namespace Mollie.Api.Framework.Factories {
                     return new PayPalPaymentResponse();
                 case PaymentMethod.PaySafeCard:
                     return new PaySafeCardPaymentResponse();
-                case PaymentMethod.PodiumCadeaukaart:
-                    return new PodiumCadeauKaartPaymentResponse();
                 case PaymentMethod.Sofort:
                     return new SofortPaymentResponse();
                 case PaymentMethod.Belfius:
@@ -30,6 +28,10 @@ namespace Mollie.Api.Framework.Factories {
                     return new SepaDirectDebitResponse();
                 case PaymentMethod.Kbc:
                     return new KbcPaymentResponse();
+                case PaymentMethod.GiftCard:
+                    return new GiftcardPaymentResponse();
+                case PaymentMethod.IngHomePay:
+                    return new IngHomePayPaymentResponse();
                 default:
                     return new PaymentResponse();
             }

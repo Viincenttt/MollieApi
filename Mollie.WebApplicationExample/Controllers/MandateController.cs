@@ -44,7 +44,7 @@ namespace Mollie.WebApplicationExample.Controllers {
                 SequenceType = Api.Models.Payment.SequenceType.First,
                 RedirectUrl = @"http://www.google.nl"
             });
-            return this.Redirect(result.Links.PaymentUrl);
+            return this.Redirect(result.Links.Checkout.Href);
         }
     }
 }
