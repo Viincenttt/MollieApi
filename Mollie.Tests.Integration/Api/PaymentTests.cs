@@ -94,7 +94,7 @@ namespace Mollie.Tests.Integration.Api {
         [TestCase(typeof(PaymentRequest), PaymentMethod.Sofort, typeof(SofortPaymentResponse))]
         [TestCase(typeof(BankTransferPaymentRequest), PaymentMethod.BankTransfer, typeof(BankTransferPaymentResponse))]
         [TestCase(typeof(PayPalPaymentRequest), PaymentMethod.PayPal, typeof(PayPalPaymentResponse))]
-        [TestCase(typeof(PaymentRequest), PaymentMethod.Bitcoin, typeof(BitcoinPaymentResponse))]
+        [TestCase(typeof(BitcoinPaymentRequest), PaymentMethod.Bitcoin, typeof(BitcoinPaymentResponse))]
         [TestCase(typeof(PaymentRequest), PaymentMethod.Belfius, typeof(BelfiusPaymentResponse))]
         [TestCase(typeof(KbcPaymentRequest), PaymentMethod.Kbc, typeof(KbcPaymentResponse))]
         [TestCase(typeof(PaymentRequest), null, typeof(PaymentResponse))]

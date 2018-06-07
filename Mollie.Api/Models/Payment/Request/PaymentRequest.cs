@@ -24,64 +24,69 @@ namespace Mollie.Api.Models.Payment.Request {
         /// </summary>
         public string RedirectUrl { get; set; }
 
+
         /// <summary>
-        ///     Normally, a payment method selection screen is shown.However, when using this parameter, your customer will skip
-        ///     the selection screen and will be sent directly to the chosen payment method.The parameter enables you to fully 
-        ///     integrate the payment method selection into your website, however note Mollie’s country based conversion optimization
-        ///     is lost.
+        /// Set the webhook URL, where we will send payment status updates to.
+        /// </summary>
+        public string WebhookUrl { get; set; }
+
+
+        /// <summary>
+        /// Allows you to preset the language to be used in the payment screens shown to the consumer. Setting a locale is highly 
+        /// recommended and will greatly improve your conversion rate. When this parameter is omitted, the browser language will 
+        /// be used instead if supported by the payment method. You can provide any ISO 15897 locale, but our payment screen currently
+        /// only supports the following languages: en_US nl_NL nl_BE fr_FR fr_BE de_DE de_AT de_CH es_ES ca_ES pt_PT it_IT nb_NO 
+        /// sv_SE fi_FI da_DK is_IS hu_HU pl_PL lv_LV lt_LT
+        /// </summary>
+        public string Locale { get; set; }
+
+        /// <summary>
+        /// Normally, a payment method selection screen is shown. However, when using this parameter, your customer will skip the 
+        /// selection screen and will be sent directly to the chosen payment method. The parameter enables you to fully integrate 
+        /// the payment method selection into your website, however note Mollie’s country based conversion optimization is lost.
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
         public PaymentMethod? Method { get; set; }
 
         /// <summary>
-        ///     Optional – Provide any data you like in JSON notation, and we will save the data alongside the payment. Whenever
-        ///     you fetch the payment with our
-        ///     API, we'll also include the metadata. You can use up to 1kB of JSON.
+        /// Provide any data you like, for example a string or a JSON object. We will save the data alongside the payment. Whenever 
+        /// you fetch the payment with our API, we’ll also include the metadata. You can use up to approximately 1kB.
         /// </summary>
         [JsonConverter(typeof(RawJsonConverter))]
         public string Metadata { get; set; }
 
         /// <summary>
-        ///     Set the webhook URL, where we will send payment status updates to.
-        /// </summary>
-        public string WebhookUrl { get; set; }
-
-        /// <summary>
-        ///     Optional - Allow you to preset the language to be used in the payment screens shown to the consumer. When this
-        ///     parameter is not provided, the
-        ///     browser language will be used instead (which is usually more accurate). Possible values are: de, en, es, fr, be,
-        ///     be-fr, nl
-        /// </summary>
-        public string Locale { get; set; }
-
-        /// <summary>
-        ///     Id of target customer.
-        /// </summary>
-        public string CustomerId { get; set; }
-
-        /// <summary>
-        ///     Recurring type required by Mollie. First for first payment. Recurring after first successful payment.
+        /// Indicate which type of payment this is in a recurring sequence. If set to first, a first payment is created for the 
+        /// customer, allowing the customer to agree to automatic recurring charges taking place on their account in the future. 
+        /// If set to recurring, the customer’s card is charged automatically. Defaults to oneoff, which is a regular non-recurring 
+        /// payment(see also: Recurring).
         /// </summary>
         public SequenceType? SequenceType { get; set; }
 
         /// <summary>
-        ///     Optional – When creating recurring payments, a specific mandate ID may be supplied to indicate which of the
-        ///     consumer's accounts should be credited.
+        /// The ID of the Customer for whom the payment is being created. This is used for recurring payments and single click payments.
+        /// </summary>
+        public string CustomerId { get; set; }
+
+        /// <summary>
+        /// When creating recurring payments, the ID of a specific Mandate may be supplied to indicate which of the consumer’s accounts 
+        /// should be credited.
         /// </summary>
         public string MandateId { get; set; }
 
 		/// <summary>
-		///		Oauth only - The payment profile's unique identifier, for example pfl_3RkSN1zuPE. This field is mandatory.
+		///	Oauth only - The payment profile's unique identifier, for example pfl_3RkSN1zuPE. This field is mandatory.
 		/// </summary>
 		public string ProfileId { get; set; }
 
 		/// <summary>
-		///		Oauth only - Optional – Set this to true to make this payment a test payment.
+		///	Oauth only - Optional – Set this to true to make this payment a test payment.
 		/// </summary>
 		public bool? Testmode { get; set; }
 
 		/// <summary>
-		///		Oauth only - Optional – Adding an Application Fee allows you to charge the merchant a small sum for the payment and transfer this to your own account.
+		///	Oauth only - Optional – Adding an Application Fee allows you to charge the merchant a small sum for the payment and transfer 
+		/// this to your own account.
 		/// </summary>
 		public PaymentRequestApplicationFee ApplicationFee { get; set; }
 
