@@ -10,7 +10,7 @@ namespace Mollie.Api.Client.Abstract {
 
         Task<ProfileResponse> GetProfileAsync(string profileId);
 
-        Task<ListResponse<ProfileResponse>> GetProfileListAsync(int? offset = null, int? count = null);
+        Task<ListResponse<ProfileResponse>> GetProfileListAsync(string from = null, int? limit = null);
 
         Task<ProfileResponse> UpdateProfileAsync(string profileId, ProfileRequest request);
 

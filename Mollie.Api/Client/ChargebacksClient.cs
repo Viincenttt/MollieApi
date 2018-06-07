@@ -15,15 +15,13 @@ namespace Mollie.Api.Client {
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<ChargebackResponse>> GetChargebacksListAsync(string paymentId,
-            int? offset = null, int? count = null) {
+        public async Task<ListResponse<ChargebackResponse>> GetChargebacksListAsync(string paymentId, string from = null, int? limit = null) {
             return await this
-                .GetListAsync<ListResponse<ChargebackResponse>>($"payments/{paymentId}/chargebacks", offset, count)
+                .GetListAsync<ListResponse<ChargebackResponse>>($"payments/{paymentId}/chargebacks", from, limit)
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<ChargebackResponse>> GetChargebacksListAsync(int? offset = null,
-            int? count = null, string oathProfileId = null, bool? oauthTestmode = null) {
+        public async Task<ListResponse<ChargebackResponse>> GetChargebacksListAsync(string from = null, int? limit = null, string oathProfileId = null, bool? oauthTestmode = null) {
             if (oathProfileId != null || oauthTestmode != null) {
                 this.ValidateApiKeyIsOauthAccesstoken();
             }
@@ -40,7 +38,7 @@ namespace Mollie.Api.Client {
             }
 
             return await this
-                .GetListAsync<ListResponse<ChargebackResponse>>($"chargebacks", offset, count, parameters).ConfigureAwait(false);
+                .GetListAsync<ListResponse<ChargebackResponse>>($"chargebacks", from, limit, parameters).ConfigureAwait(false);
         }
     }
 }

@@ -18,7 +18,7 @@ namespace Mollie.Api.Client {
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<InvoiceResponse>> GetInvoiceListAsync(string reference = null, int? year = null, int? offset = null, int? count = null, bool includeLines = false, bool includeSettlements = false) {
+        public async Task<ListResponse<InvoiceResponse>> GetInvoiceListAsync(string reference = null, int? year = null, string from = null, int? limit = null, bool includeLines = false, bool includeSettlements = false) {
             // Build parameter list
             var parameters = this.BuildIncludeParameter(includeLines, includeSettlements);
 
@@ -30,8 +30,7 @@ namespace Mollie.Api.Client {
                 parameters.Add("year", year.Value.ToString());
             }
 
-            return await this.GetListAsync<ListResponse<InvoiceResponse>>($"invoices", offset, count, parameters)
-                .ConfigureAwait(false);
+            return await this.GetListAsync<ListResponse<InvoiceResponse>>($"invoices", from, limit, parameters).ConfigureAwait(false);
         }
 
         private Dictionary<string, string> BuildIncludeParameter(bool includeLines = false,

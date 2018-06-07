@@ -11,8 +11,7 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="includeLines">Include invoice details such as which products were invoiced.</param>
         /// <param name="includeSettlements">Include settlements for which the invoice was created, if applicable.</param>
         /// <returns></returns>
-        Task<InvoiceResponse> GetInvoiceAsync(string invoiceId, bool includeLines = false,
-            bool includeSettlements = false);
+        Task<InvoiceResponse> GetInvoiceAsync(string invoiceId, bool includeLines = false, bool includeSettlements = false);
 
         /// <summary>
         ///     Retrieve all invoices on the account. Optionally filter on year or invoice number.
@@ -27,7 +26,6 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="includeLines">Include invoice details such as which products were invoiced.</param>
         /// <param name="includeSettlements">Include settlements for which the invoice was created, if applicable.</param>
         /// <returns>List of Invoices</returns>
-        Task<ListResponse<InvoiceResponse>> GetInvoiceListAsync(string reference = null, int? year = null,
-            int? offset = null, int? count = null, bool includeLines = false, bool includeSettlements = false);
+        Task<ListResponse<InvoiceResponse>> GetInvoiceListAsync(string reference = null, int? year = null, string from = null, int? limit = null, bool includeLines = false, bool includeSettlements = false);
     }
 }

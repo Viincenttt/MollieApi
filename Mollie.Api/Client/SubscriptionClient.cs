@@ -8,10 +8,8 @@ namespace Mollie.Api.Client {
         public SubscriptionClient(string apiKey) : base(apiKey) {
         }
 
-        public async Task<ListResponse<SubscriptionResponse>> GetSubscriptionListAsync(string customerId,
-            int? offset = null, int? count = null) {
-            return await this.GetListAsync<ListResponse<SubscriptionResponse>>($"customers/{customerId}/subscriptions",
-                offset, count).ConfigureAwait(false);
+        public async Task<ListResponse<SubscriptionResponse>> GetSubscriptionListAsync(string customerId, string from = null, int? limit = null) {
+            return await this.GetListAsync<ListResponse<SubscriptionResponse>>($"customers/{customerId}/subscriptions", from, limit).ConfigureAwait(false);
         }
 
         public async Task<SubscriptionResponse> GetSubscriptionAsync(string customerId, string subscriptionId) {

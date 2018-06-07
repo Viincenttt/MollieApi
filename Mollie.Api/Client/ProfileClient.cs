@@ -20,8 +20,8 @@ namespace Mollie.Api.Client {
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<ProfileResponse>> GetProfileListAsync(int? offset = null, int? count = null) {
-            return await GetListAsync<ListResponse<ProfileResponse>>("profiles", offset, count)
+        public async Task<ListResponse<ProfileResponse>> GetProfileListAsync(string from = null, int? limit = null) {
+            return await GetListAsync<ListResponse<ProfileResponse>>("profiles", from, limit)
                 .ConfigureAwait(false);
         }
 

@@ -30,7 +30,7 @@ namespace Mollie.Tests.Integration.Api {
             int numberOfSubscriptions = 5;
 
             // When: Retrieve 5 subscriptions
-            ListResponse<SubscriptionResponse> response = await this._subscriptionClient.GetSubscriptionListAsync(customerId, 0, numberOfSubscriptions);
+            ListResponse<SubscriptionResponse> response = await this._subscriptionClient.GetSubscriptionListAsync(customerId, null, numberOfSubscriptions);
 
             // Then
             Assert.IsTrue(response.Data.Count <= numberOfSubscriptions);
@@ -67,7 +67,7 @@ namespace Mollie.Tests.Integration.Api {
             ListResponse<SubscriptionResponse> subscriptions = await this._subscriptionClient.GetSubscriptionListAsync(customerId);
 
             // When
-            if (subscriptions.TotalCount > 0) {
+            if (subscriptions.Count > 0) {
                 string subscriptionId = subscriptions.Data.First().Id;
                 await this._subscriptionClient.CancelSubscriptionAsync(customerId, subscriptionId);
                 SubscriptionResponse cancelledSubscription = await this._subscriptionClient.GetSubscriptionAsync(customerId, subscriptionId);

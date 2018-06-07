@@ -34,7 +34,7 @@ namespace Mollie.Api.Client {
 		    await this.DeleteAsync($"payments/{paymentId}").ConfigureAwait(false);
 		}
 
-	    public async Task<ListResponse<PaymentResponse>> GetPaymentListAsync(int? offset = null, int? count = null, string profileId = null, bool? testMode = null) {
+	    public async Task<ListResponse<PaymentListData>> GetPaymentListAsync(string from = null, int? limit = null, string profileId = null, bool? testMode = null) {
 	        if (!string.IsNullOrWhiteSpace(profileId) || testMode.HasValue) {
 	            this.ValidateApiKeyIsOauthAccesstoken();
             }
@@ -49,7 +49,7 @@ namespace Mollie.Api.Client {
 	            parameters.Add("testmode", testMode.Value.ToString().ToLower());
             }
 
-			return await this.GetListAsync<ListResponse<PaymentResponse>>($"payments", offset, count, parameters)
+			return await this.GetListAsync<ListResponse<PaymentListData>>($"payments", from, limit, parameters)
 				.ConfigureAwait(false);
 		}
     }

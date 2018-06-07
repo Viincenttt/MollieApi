@@ -73,12 +73,12 @@ namespace Mollie.Api.Models.Payment.Response {
         /// amount may be higher than the payment amount, for example to allow reimbursement of the costs for a return shipment
         /// to the consumer.
         /// </summary>
-        public decimal? AmountRefunded { get; set; }
+        public Amount AmountRefunded { get; set; }
 
         /// <summary>
         ///     Only available when refunds are available for this payment – The remaining amount in EURO that can be refunded.
         /// </summary>
-        public decimal? AmountRemaining { get; set; }
+        public Amount AmountRemaining { get; set; }
 
         /// <summary>
         ///     A short description of the payment. The description will be shown on the consumer's bank or card statement when

@@ -9,9 +9,8 @@ namespace Mollie.Api.Client {
         public PaymentMethodClient(string apiKey) : base(apiKey) {
         }
 
-        public async Task<ListResponse<PaymentMethodResponse>> GetPaymentMethodListAsync(int? offset = null,
-            int? count = null) {
-            return await this.GetListAsync<ListResponse<PaymentMethodResponse>>("methods", offset, count)
+        public async Task<ListResponse<PaymentMethodResponse>> GetPaymentMethodListAsync(string from = null, int? limit = null) {
+            return await this.GetListAsync<ListResponse<PaymentMethodResponse>>("methods", from, limit)
                 .ConfigureAwait(false);
         }
 

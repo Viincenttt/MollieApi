@@ -1,9 +1,17 @@
 ﻿using System.Collections.Generic;
+using Mollie.Api.JsonConverters;
+using Mollie.Api.Models.Payment.Response;
+using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.List {
-    public class ListResponse<T> : ListResponseSimple<T> {
-        public int Offset { get; set; }
-        public int TotalCount { get; set; }
+    public class ListResponse<T> {
+        
+        public int Count { get; set; }
+        
+        [JsonProperty("_embedded")]
+        public T Embedded { get; set; }
+        public List<T> Data { get; set; }
+
         public ListResponseLinks Links { get; set; }
     }
 
@@ -11,5 +19,9 @@ namespace Mollie.Api.Models.List {
         public int Count { get; set; }
 
         public List<T> Data { get; set; }
+    }
+
+    public class PaymentListData {
+        public List<PaymentResponse> Payments { get; set; }
     }
 }

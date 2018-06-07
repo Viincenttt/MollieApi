@@ -8,8 +8,8 @@ namespace Mollie.Api.Client {
         public IssuerClient(string apiKey) : base(apiKey) {
         }
 
-        public async Task<ListResponse<IssuerResponse>> GetIssuerListAsync(int? offset = null, int? count = null) {
-            return await this.GetListAsync<ListResponse<IssuerResponse>>("issuers", offset, count)
+        public async Task<ListResponse<IssuerResponse>> GetIssuerListAsync(string from = null, int? limit = null) {
+            return await this.GetListAsync<ListResponse<IssuerResponse>>("issuers", from, limit)
                 .ConfigureAwait(false);
         }
 

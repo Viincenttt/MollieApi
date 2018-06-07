@@ -12,9 +12,8 @@ namespace Mollie.Api.Client {
             return await this.GetAsync<PermissionResponse>($"permissions/{permissionId}").ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<PermissionResponse>> GetPermissionListAsync(int? offset = null,
-            int? count = null) {
-            return await this.GetListAsync<ListResponse<PermissionResponse>>("permissions", offset, count)
+        public async Task<ListResponse<PermissionResponse>> GetPermissionListAsync(string from = null, int? limit = null) {
+            return await this.GetListAsync<ListResponse<PermissionResponse>>("permissions", from, limit)
                 .ConfigureAwait(false);
         }
     }

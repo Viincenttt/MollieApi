@@ -27,7 +27,7 @@ namespace Mollie.Tests.Integration.Api {
             int numberOfCustomers = 5;
 
             // When: Retrieve 5 customers
-            ListResponse<CustomerResponse> response = await this._customerClient.GetCustomerListAsync(0, numberOfCustomers);
+            ListResponse<CustomerResponse> response = await this._customerClient.GetCustomerListAsync(null, numberOfCustomers);
 
             // Then
             Assert.IsTrue(response.Data.Count <= numberOfCustomers);

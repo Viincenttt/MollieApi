@@ -7,8 +7,6 @@ namespace Mollie.Api.Client.Abstract {
         Task CancelSubscriptionAsync(string customerId, string subscriptionId);
         Task<SubscriptionResponse> CreateSubscriptionAsync(string customerId, SubscriptionRequest request);
         Task<SubscriptionResponse> GetSubscriptionAsync(string customerId, string subscriptionId);
-
-        Task<ListResponse<SubscriptionResponse>> GetSubscriptionListAsync(string customerId,
-            int? offset = default(int?), int? count = default(int?));
+        Task<ListResponse<SubscriptionResponse>> GetSubscriptionListAsync(string customerId, string from = null, int? limit = null);
     }
 }

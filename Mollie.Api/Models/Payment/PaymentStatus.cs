@@ -1,7 +1,7 @@
 ﻿namespace Mollie.Api.Models.Payment {
     public enum PaymentStatus {
         Open,
-        Cancelled,
+        Canceled,
         Pending,
         Paid,
         PaidOut,

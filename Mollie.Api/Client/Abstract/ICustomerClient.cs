@@ -7,7 +7,6 @@ namespace Mollie.Api.Client.Abstract {
         Task<CustomerResponse> CreateCustomerAsync(CustomerRequest request);
         Task<CustomerResponse> GetCustomerAsync(string customerId);
 
-        Task<ListResponse<CustomerResponse>> GetCustomerListAsync(int? offset = default(int?),
-            int? count = default(int?));
+        Task<ListResponse<CustomerResponse>> GetCustomerListAsync(string from = null, int? limit = null);
     }
 }

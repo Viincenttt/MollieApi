@@ -17,9 +17,8 @@ namespace Mollie.Api.Client {
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<RefundResponse>> GetRefundListAsync(string paymentId, int? offset = null,
-            int? count = null) {
-            return await this.GetListAsync<ListResponse<RefundResponse>>($"payments/{paymentId}/refunds", offset, count)
+        public async Task<ListResponse<RefundResponse>> GetRefundListAsync(string paymentId, string from = null, int? limit = null) {
+            return await this.GetListAsync<ListResponse<RefundResponse>>($"payments/{paymentId}/refunds", from, limit)
                 .ConfigureAwait(false);
         }
 

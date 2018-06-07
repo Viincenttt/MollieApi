@@ -7,7 +7,6 @@ namespace Mollie.Api.Client.Abstract {
     public interface IPaymentMethodClient {
         Task<PaymentMethodResponse> GetPaymentMethodAsync(PaymentMethod paymentMethod);
 
-        Task<ListResponse<PaymentMethodResponse>> GetPaymentMethodListAsync(int? offset = default(int?),
-            int? count = default(int?));
+        Task<ListResponse<PaymentMethodResponse>> GetPaymentMethodListAsync(string from = null, int? limit = null);
     }
 }

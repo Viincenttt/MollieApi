@@ -12,7 +12,7 @@ namespace Mollie.Api.Models.Payment.Response.Specific {
         /// <summary>
         ///     The amount transferred in BTC.
         /// </summary>
-        public string BitcoinAmount { get; set; }
+        public Amount BitcoinAmount { get; set; }
 
         /// <summary>
         ///     The BTC to EUR exchange rate applied to the payment.

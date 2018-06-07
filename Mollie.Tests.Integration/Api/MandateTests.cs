@@ -14,7 +14,7 @@ namespace Mollie.Tests.Integration.Api {
             // We can only test this if there are customers
             ListResponse<CustomerResponse> customers = await this._customerClient.GetCustomerListAsync();
 
-            if (customers.TotalCount > 0) {
+            if (customers.Count > 0) {
                 // When: Retrieve mandate list with default settings
                 ListResponse<MandateResponse> response = await this._mandateClient.GetMandateListAsync(customers.Data.First().Id);
 
@@ -28,12 +28,12 @@ namespace Mollie.Tests.Integration.Api {
             // We can only test this if there are customers
             ListResponse<CustomerResponse> customers = await this._customerClient.GetCustomerListAsync();
 
-            if (customers.TotalCount > 0) {
+            if (customers.Count > 0) {
                 // If: Number of customers requested is 5
                 int numberOfMandates = 5;
 
                 // When: Retrieve 5 mandates
-                ListResponse<MandateResponse> response = await this._mandateClient.GetMandateListAsync(customers.Data.First().Id, 0, numberOfMandates);
+                ListResponse<MandateResponse> response = await this._mandateClient.GetMandateListAsync(customers.Data.First().Id, null, numberOfMandates);
 
                 // Then
                 Assert.IsTrue(response.Data.Count <= numberOfMandates);
@@ -44,7 +44,7 @@ namespace Mollie.Tests.Integration.Api {
         public async Task CanCreateMandate() {
             // We can only test this if there are customers
             ListResponse<CustomerResponse> customers = await this._customerClient.GetCustomerListAsync();
-            if (customers.TotalCount > 0) {
+            if (customers.Count > 0) {
                 // If: We create a new mandate request
                 MandateRequest mandateRequest = new MandateRequest() {
                     ConsumerAccount = "NL26ABNA0516682814",

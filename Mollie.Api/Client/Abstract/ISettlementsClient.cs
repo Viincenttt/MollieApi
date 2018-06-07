@@ -37,8 +37,7 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="offset">Optional – The number of objects to skip.</param>
         /// <param name="count">Optional – The number of objects to return (with a maximum of 250).</param>
         /// <returns>A list of settlements</returns>
-        Task<ListResponse<SettlementResponse>> GetSettlementsListAsync(string reference = null, int? offset = null,
-            int? count = null);
+        Task<ListResponse<SettlementResponse>> GetSettlementsListAsync(string reference = null, string from = null, int? limit = null);
 
         /// <summary>
         ///     Retrieve all payments included in a settlement.
@@ -48,8 +47,7 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="offset">Optional – The number of objects to skip.</param>
         /// <param name="count">Optional – The number of objects to return (with a maximum of 250).</param>
         /// <returns>A list of payments for a specific settlement</returns>
-        Task<ListResponse<PaymentResponse>> GetSettlementPaymentsListAsync(string settlementId, int? offset = null,
-            int? count = null);
+        Task<ListResponse<PaymentResponse>> GetSettlementPaymentsListAsync(string settlementId, string from = null, int? limit = null);
 
         /// <summary>
         ///     Retrieve all refunds for the given settlement.
@@ -58,8 +56,7 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="offset">Optional – The number of objects to skip.</param>
         /// <param name="count">Optional – The number of objects to return (with a maximum of 250).</param>
         /// <returns>A list of refunds for a specific settlement</returns>
-        Task<ListResponse<RefundResponse>> GetSettlementRefundsListAsync(string settlementId, int? offset = null,
-            int? count = null);
+        Task<ListResponse<RefundResponse>> GetSettlementRefundsListAsync(string settlementId, string from = null, int? limit = null);
 
         /// <summary>
         ///     Retrieve all chargebacks for the given settlement.
@@ -68,7 +65,6 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="offset">Optional – The number of objects to skip.</param>
         /// <param name="count">Optional – The number of objects to return (with a maximum of 250).</param>
         /// <returns>A list of chargebacks for a specific settlement</returns>
-        Task<ListResponse<ChargebackResponse>> GetSettlementChargebacksListAsync(string settlementId,
-            int? offset = null, int? count = null);
+        Task<ListResponse<ChargebackResponse>> GetSettlementChargebacksListAsync(string settlementId, string from = null, int? limit = null);
     }
 }

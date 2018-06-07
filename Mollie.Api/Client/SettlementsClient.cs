@@ -23,32 +23,27 @@ namespace Mollie.Api.Client {
             return await this.GetAsync<SettlementResponse>($"settlements/open").ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<SettlementResponse>> GetSettlementsListAsync(string reference = null,
-            int? offset = null, int? count = null) {
+        public async Task<ListResponse<SettlementResponse>> GetSettlementsListAsync(string reference = null, string from = null, int? limit = null) {
             var queryString = !string.IsNullOrWhiteSpace(reference) ? $"?reference={reference}" : string.Empty;
-            return await this.GetListAsync<ListResponse<SettlementResponse>>($"settlements{queryString}", offset, count)
+            return await this.GetListAsync<ListResponse<SettlementResponse>>($"settlements{queryString}", from, limit)
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<PaymentResponse>> GetSettlementPaymentsListAsync(string settlementId,
-            int? offset = null, int? count = null) {
+        public async Task<ListResponse<PaymentResponse>> GetSettlementPaymentsListAsync(string settlementId, string from = null, int? limit = null) {
             return await this
-                .GetListAsync<ListResponse<PaymentResponse>>($"settlements/{settlementId}/payments", offset, count)
+                .GetListAsync<ListResponse<PaymentResponse>>($"settlements/{settlementId}/payments", from, limit)
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<RefundResponse>> GetSettlementRefundsListAsync(string settlementId,
-            int? offset = null, int? count = null) {
+        public async Task<ListResponse<RefundResponse>> GetSettlementRefundsListAsync(string settlementId, string from = null, int? limit = null) {
             return await this
-                .GetListAsync<ListResponse<RefundResponse>>($"settlements/{settlementId}/refunds", offset, count)
+                .GetListAsync<ListResponse<RefundResponse>>($"settlements/{settlementId}/refunds", from, limit)
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<ChargebackResponse>> GetSettlementChargebacksListAsync(string settlementId,
-            int? offset = null, int? count = null) {
+        public async Task<ListResponse<ChargebackResponse>> GetSettlementChargebacksListAsync(string settlementId, string from = null, int? limit = null) {
             return await this
-                .GetListAsync<ListResponse<ChargebackResponse>>($"settlements/{settlementId}/chargebacks", offset,
-                    count).ConfigureAwait(false);
+                .GetListAsync<ListResponse<ChargebackResponse>>($"settlements/{settlementId}/chargebacks", from, limit).ConfigureAwait(false);
         }
     }
 }

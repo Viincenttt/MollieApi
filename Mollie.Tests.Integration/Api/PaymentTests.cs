@@ -21,10 +21,11 @@ namespace Mollie.Tests.Integration.Api {
         [Test]
         public async Task CanRetrievePaymentList() {
             // When: Retrieve payment list with default settings
-            ListResponse<PaymentResponse> response = await this._paymentClient.GetPaymentListAsync();
+            ListResponse<PaymentListData> response = await this._paymentClient.GetPaymentListAsync();
 
             // Then
             Assert.IsNotNull(response);
+            Assert.IsNotNull(response.Embedded);
         }
 
         [Test]
@@ -33,7 +34,7 @@ namespace Mollie.Tests.Integration.Api {
             int numberOfPayments = 5;
 
             // When: Retrieve 5 payments
-            ListResponse<PaymentResponse> response = await this._paymentClient.GetPaymentListAsync(0, numberOfPayments);
+            ListResponse<PaymentListData> response = await this._paymentClient.GetPaymentListAsync(null, numberOfPayments);
 
             // Then
             Assert.IsTrue(response.Data.Count <= numberOfPayments);
@@ -88,7 +89,7 @@ namespace Mollie.Tests.Integration.Api {
 
         [TestCase(typeof(IdealPaymentRequest), PaymentMethod.Ideal, typeof(IdealPaymentResponse))]
         [TestCase(typeof(CreditCardPaymentRequest), PaymentMethod.CreditCard, typeof(CreditCardPaymentResponse))]
-        [TestCase(typeof(PaymentRequest), PaymentMethod.MisterCash, typeof(MisterCashPaymentResponse))]
+        [TestCase(typeof(PaymentRequest), PaymentMethod.Bancontact, typeof(BancontactPaymentResponse))]
         [TestCase(typeof(PaymentRequest), PaymentMethod.Sofort, typeof(SofortPaymentResponse))]
         [TestCase(typeof(BankTransferPaymentRequest), PaymentMethod.BankTransfer, typeof(BankTransferPaymentResponse))]
         [TestCase(typeof(PayPalPaymentRequest), PaymentMethod.PayPal, typeof(PayPalPaymentResponse))]

@@ -16,8 +16,8 @@ namespace Mollie.Api.Client {
             return await this.GetAsync<CustomerResponse>($"customers/{customerId}").ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<CustomerResponse>> GetCustomerListAsync(int? offset = null, int? count = null) {
-            return await this.GetListAsync<ListResponse<CustomerResponse>>("customers", offset, count)
+        public async Task<ListResponse<CustomerResponse>> GetCustomerListAsync(string from = null, int? limit = null) {
+            return await this.GetListAsync<ListResponse<CustomerResponse>>("customers", from, limit)
                 .ConfigureAwait(false);
         }
     }

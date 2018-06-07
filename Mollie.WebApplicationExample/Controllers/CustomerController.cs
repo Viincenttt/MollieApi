@@ -18,7 +18,7 @@ namespace Mollie.WebApplicationExample.Controllers {
 
         [HttpGet]
         public async Task<ActionResult> Index() {
-            ListResponse<CustomerResponse> paymentList = await this._customerClient.GetCustomerListAsync(0, NumberOfPaymentsToList);
+            ListResponse<CustomerResponse> paymentList = await this._customerClient.GetCustomerListAsync(null, NumberOfPaymentsToList);
             return View(paymentList.Data);
         }
 
