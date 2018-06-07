@@ -149,7 +149,7 @@ namespace Mollie.Tests.Integration.Api {
                 Amount = new Amount("EUR", "100.00"),
                 Description = "Description",
                 RedirectUrl = this.DefaultRedirectUrl,
-                RecurringType = RecurringType.First,
+                SequenceType = SequenceType.First,
                 CustomerId = mandate.CustomerId
             };
 
@@ -158,7 +158,7 @@ namespace Mollie.Tests.Integration.Api {
             PaymentResponse result = await this._paymentClient.GetPaymentAsync(paymentResponse.Id);
 
             // Then: Make sure the recurringtype parameter is entered
-            Assert.AreEqual(RecurringType.First, result.RecurringType);
+            Assert.AreEqual(SequenceType.First, result.SequenceType);
         }
 
         [Test]
@@ -212,7 +212,7 @@ namespace Mollie.Tests.Integration.Api {
                 Amount = new Amount("EUR", "100.00"),
                 Description = "Description",
                 RedirectUrl = this.DefaultRedirectUrl,
-                RecurringType = RecurringType.Recurring,
+                SequenceType = SequenceType.Recurring,
                 CustomerId = validMandate.CustomerId,
                 MandateId = validMandate.Id
             };
@@ -240,7 +240,7 @@ namespace Mollie.Tests.Integration.Api {
 
         private async Task<MandateResponse> GetFirstValidMandate() {
             ListResponse<CustomerListData> customers = await this._customerClient.GetCustomerListAsync();
-            if (!customers.Data.Any()) {
+            if (!customers.Embedded.Customers.Any()) {
                 Assert.Inconclusive("No customers found. Unable to test recurring payment tests");
             }
 

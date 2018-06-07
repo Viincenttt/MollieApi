@@ -62,7 +62,7 @@ namespace Mollie.Api.Models.Payment.Request {
         /// <summary>
         ///     Recurring type required by Mollie. First for first payment. Recurring after first successful payment.
         /// </summary>
-        public RecurringType? RecurringType { get; set; }
+        public SequenceType? SequenceType { get; set; }
 
         /// <summary>
         ///     Optional – When creating recurring payments, a specific mandate ID may be supplied to indicate which of the

@@ -41,7 +41,7 @@ namespace Mollie.WebApplicationExample.Controllers {
                 Description = "First payment",
                 Locale = Api.Models.Payment.Locale.nl_NL,
                 CustomerId = customerId,
-                RecurringType = Api.Models.Payment.RecurringType.First,
+                SequenceType = Api.Models.Payment.SequenceType.First,
                 RedirectUrl = @"http://www.google.nl"
             });
             return this.Redirect(result.Links.PaymentUrl);

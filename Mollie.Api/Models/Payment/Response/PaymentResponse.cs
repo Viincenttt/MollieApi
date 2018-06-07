@@ -124,7 +124,7 @@ namespace Mollie.Api.Models.Payment.Response {
         /// <summary>
         ///     The recurringtype of this payment
         /// </summary>
-        public RecurringType? RecurringType { get; set; }
+        public SequenceType? SequenceType { get; set; }
 
         /// <summary>
         ///     An object with several URLs important to the payment process.
