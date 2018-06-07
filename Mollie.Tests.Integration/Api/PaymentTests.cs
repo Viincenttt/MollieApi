@@ -37,7 +37,7 @@ namespace Mollie.Tests.Integration.Api {
             ListResponse<PaymentListData> response = await this._paymentClient.GetPaymentListAsync(null, numberOfPayments);
 
             // Then
-            Assert.IsTrue(response.Data.Count <= numberOfPayments);
+            Assert.IsTrue(response.Embedded.Payments.Count <= numberOfPayments);
         }
 
         [Test]

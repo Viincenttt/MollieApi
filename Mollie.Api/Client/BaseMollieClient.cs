@@ -35,14 +35,14 @@ namespace Mollie.Api.Client {
             return await this.ProcessHttpResponseMessage<T>(response).ConfigureAwait(false);
         }
 
-        private string BuildListQueryString(string from, int? count, IDictionary<string, string> otherParameters = null) {
+        private string BuildListQueryString(string from, int? limit, IDictionary<string, string> otherParameters = null) {
             Dictionary<string, string> queryParameters = new Dictionary<string, string>();
             if (!String.IsNullOrEmpty(from)) {
                 queryParameters[nameof(from)] = from;
             }
 
-            if (count.HasValue) {
-                queryParameters[nameof(count)] = count.Value.ToString();
+            if (limit.HasValue) {
+                queryParameters[nameof(limit)] = limit.Value.ToString();
             }
             
             if (otherParameters != null) {
@@ -54,8 +54,8 @@ namespace Mollie.Api.Client {
             return queryParameters.ToQueryString();
         }
 
-        protected async Task<T> GetListAsync<T>(string relativeUri, string from, int? count, IDictionary<string, string> otherParameters = null) {
-            var queryString = this.BuildListQueryString(from, count, otherParameters);
+        protected async Task<T> GetListAsync<T>(string relativeUri, string from, int? limit, IDictionary<string, string> otherParameters = null) {
+            var queryString = this.BuildListQueryString(from, limit, otherParameters);
             var response = await this._httpClient.GetAsync(relativeUri + queryString).ConfigureAwait(false);
             return await this.ProcessHttpResponseMessage<T>(response).ConfigureAwait(false);
         }
