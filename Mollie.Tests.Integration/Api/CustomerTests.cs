@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Customer;
 using Mollie.Api.Models.List;
+using Mollie.Api.Models.List.Specific;
 using Mollie.Api.Models.Payment;
 using Mollie.Api.Models.Payment.Request;
 using Mollie.Api.Models.Payment.Response;
@@ -15,10 +16,11 @@ namespace Mollie.Tests.Integration.Api {
         [Test]
         public async Task CanRetrieveCustomerList() {
             // When: Retrieve customer list with default settings
-            ListResponse<CustomerResponse> response = await this._customerClient.GetCustomerListAsync();
+            ListResponse<CustomerListData> response = await this._customerClient.GetCustomerListAsync();
 
             // Then
             Assert.IsNotNull(response);
+            Assert.IsNotNull(response.Embedded);
         }
 
         [Test]
@@ -27,10 +29,10 @@ namespace Mollie.Tests.Integration.Api {
             int numberOfCustomers = 5;
 
             // When: Retrieve 5 customers
-            ListResponse<CustomerResponse> response = await this._customerClient.GetCustomerListAsync(null, numberOfCustomers);
+            ListResponse<CustomerListData> response = await this._customerClient.GetCustomerListAsync(null, numberOfCustomers);
 
             // Then
-            Assert.IsTrue(response.Data.Count <= numberOfCustomers);
+            Assert.IsTrue(response.Embedded.Customers.Count <= numberOfCustomers);
         }
 
         [Test]

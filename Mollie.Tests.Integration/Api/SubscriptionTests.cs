@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Mollie.Api.Models.Customer;
 using Mollie.Api.Models.List;
+using Mollie.Api.Models.List.Specific;
 using Mollie.Api.Models.Mandate;
 using Mollie.Api.Models.Subscription;
 using Mollie.Tests.Integration.Framework;
@@ -80,9 +81,9 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         public async Task<string> GetFirstCustomerWithValidMandate() {
-            ListResponse<CustomerResponse> customers = await this._customerClient.GetCustomerListAsync();
+            ListResponse<CustomerListData> customers = await this._customerClient.GetCustomerListAsync();
             
-            foreach (CustomerResponse customer in customers.Data) {
+            foreach (CustomerResponse customer in customers.Embedded.Customers) {
                 ListResponse<MandateResponse> mandates = await this._mandateClient.GetMandateListAsync(customer.Id);
                 if (mandates.Data.Any(x => x.Status == MandateStatus.Valid)) {
                     return customer.Id;

@@ -20,8 +20,4 @@ namespace Mollie.Api.Models.List {
 
         public List<T> Data { get; set; }
     }
-
-    public class PaymentListData {
-        public List<PaymentResponse> Payments { get; set; }
-    }
 }
