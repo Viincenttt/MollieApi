@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
+using Mollie.Api.Client;
 using Mollie.Api.Models.Customer;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.List.Specific;
@@ -58,7 +60,7 @@ namespace Mollie.Tests.Integration.Api {
 
             // When: We update one of the customers in the list
             string customerIdToUpdate = response.Embedded.Customers.First().Id;
-            string newCustomerName = DateTime.Now.ToShortDateString();
+            string newCustomerName = DateTime.Now.ToShortTimeString();
             CustomerRequest updateParameters = new CustomerRequest() {
                 Name = newCustomerName
             };
@@ -67,6 +69,24 @@ namespace Mollie.Tests.Integration.Api {
             // Then: Make sure the new name is updated
             Assert.IsNotNull(result);
             Assert.AreEqual(newCustomerName, result.Name);
+        }
+
+        [Test]
+        public async Task CanDeleteCustomer() {
+            // If: We retrieve the customer list
+            ListResponse<CustomerListData> response = await this._customerClient.GetCustomerListAsync();
+            if (response.Embedded.Customers.Count == 0) {
+                Assert.Inconclusive("No customers found. Unable to test deleting customers");
+            }
+
+            // When: We delete one of the customers in the list
+            string customerIdToDelete = response.Embedded.Customers.First().Id;
+            await this._customerClient.DeleteCustomerAsync(customerIdToDelete);
+
+            // Then: Make sure its deleted
+            AggregateException aggregateException = Assert.Throws<AggregateException>(() => this._customerClient.GetCustomerAsync(customerIdToDelete).Wait());
+            MollieApiException mollieApiException = aggregateException.InnerExceptions.FirstOrDefault(x => x.GetType() == typeof(MollieApiException)) as MollieApiException;
+            Assert.AreEqual((int)HttpStatusCode.Gone, mollieApiException.Details.Status);
         }
 
         private async Task<CustomerResponse> CreateCustomer(string name, string email) {

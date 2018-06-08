@@ -17,6 +17,10 @@ namespace Mollie.Api.Client {
             return await this.PostAsync<CustomerResponse>($"customers/{customerId}", request).ConfigureAwait(false);
         }
 
+        public async Task DeleteCustomerAsync(string customerId) {
+            await this.DeleteAsync($"customers/{customerId}").ConfigureAwait(false);
+        }
+
         public async Task<CustomerResponse> GetCustomerAsync(string customerId) {
             return await this.GetAsync<CustomerResponse>($"customers/{customerId}").ConfigureAwait(false);
         }

@@ -87,6 +87,7 @@ namespace Mollie.Api.Client {
                 case HttpStatusCode.NotFound:
                 case HttpStatusCode.MethodNotAllowed:
                 case HttpStatusCode.UnsupportedMediaType:
+                case HttpStatusCode.Gone:
                 case (HttpStatusCode) 422: // Unprocessable entity
                     throw new MollieApiException(resultContent);
                 default:
