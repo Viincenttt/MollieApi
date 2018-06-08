@@ -5,7 +5,6 @@ using Mollie.Api.Models.Refund;
 namespace Mollie.Api.Client.Abstract {
     public interface IRefundClient {
         Task CancelRefundAsync(string paymentId, string refundId);
-        Task<RefundResponse> CreateRefundAsync(string paymentId);
         Task<RefundResponse> CreateRefundAsync(string paymentId, RefundRequest refundRequest);
         Task<RefundResponse> GetRefundAsync(string paymentId, string refundId);
 

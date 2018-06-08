@@ -8,10 +8,6 @@ namespace Mollie.Api.Client {
         public RefundClient(string apiKey) : base(apiKey) {
         }
 
-        public async Task<RefundResponse> CreateRefundAsync(string paymentId) {
-            return await this.CreateRefundAsync(paymentId, new RefundRequest()).ConfigureAwait(false);
-        }
-
         public async Task<RefundResponse> CreateRefundAsync(string paymentId, RefundRequest refundRequest) {
             return await this.PostAsync<RefundResponse>($"payments/{paymentId}/refunds", refundRequest)
                 .ConfigureAwait(false);
