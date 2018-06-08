@@ -10,6 +10,7 @@ using Mollie.Api.Framework.Factories;
 using Mollie.Api.JsonConverters;
 using Newtonsoft.Json;
 using System.Linq;
+using Mollie.Api.Models;
 using Mollie.Api.Models.Payment.Response;
 
 namespace Mollie.Api.Client {
@@ -31,6 +32,12 @@ namespace Mollie.Api.Client {
         }
 
         protected async Task<T> GetAsync<T>(string relativeUri) {
+            var response = await this._httpClient.GetAsync(relativeUri).ConfigureAwait(false);
+            return await this.ProcessHttpResponseMessage<T>(response).ConfigureAwait(false);
+        }
+
+        protected async Task<T> GetAsync<T>(UrlObject urlObject) {
+            string relativeUri = this.StripUrlObject(urlObject);
             var response = await this._httpClient.GetAsync(relativeUri).ConfigureAwait(false);
             return await this.ProcessHttpResponseMessage<T>(response).ConfigureAwait(false);
         }
@@ -132,6 +139,14 @@ namespace Mollie.Api.Client {
                     new PaymentResponseConverter(new PaymentResponseFactory())
                 }
             };
+        }
+
+        private string StripUrlObject(UrlObject urlObject) {
+            if (String.IsNullOrEmpty(urlObject?.Href)) {
+                throw new ArgumentException($"Url object is null or href is empty: {urlObject}");
+            }
+
+            return urlObject.Href.Replace(ApiEndPoint, String.Empty);
         }
     }
 }

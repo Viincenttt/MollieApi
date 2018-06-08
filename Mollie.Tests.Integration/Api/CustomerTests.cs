@@ -89,6 +89,21 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual((int)HttpStatusCode.Gone, mollieApiException.Details.Status);
         }
 
+        [Test]
+        public async Task CanGetCustomerByUrlObject() {
+            // If: We create a customer request with only the required parameters
+            string name = "Smit";
+            string email = "johnsmit@mollie.com";
+            CustomerResponse createdCustomer = await this.CreateCustomer(name, email);
+
+            // When: We try to retrieve the customer by Url object
+            CustomerResponse retrievedCustomer = await this._customerClient.GetCustomerAsync(createdCustomer.Links.Self);
+
+            // Then: Make sure it's retrieved
+            Assert.AreEqual(createdCustomer.Name, retrievedCustomer.Name);
+            Assert.AreEqual(createdCustomer.Email, retrievedCustomer.Email);
+        }
+
         private async Task<CustomerResponse> CreateCustomer(string name, string email) {
             CustomerRequest customerRequest = new CustomerRequest() {
                 Email = email,

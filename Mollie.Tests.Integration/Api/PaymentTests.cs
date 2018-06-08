@@ -145,12 +145,13 @@ namespace Mollie.Tests.Integration.Api {
         public async Task CanCreateRecurringPaymentAndRetrieveIt() {
             // If: we create a new recurring payment
             MandateResponse mandate = await this.GetFirstValidMandate();
+            CustomerResponse customer = await this._customerClient.GetCustomerAsync(mandate.Links.Customer);
             PaymentRequest paymentRequest = new PaymentRequest() {
                 Amount = new Amount("EUR", "100.00"),
                 Description = "Description",
                 RedirectUrl = this.DefaultRedirectUrl,
                 SequenceType = SequenceType.First,
-                CustomerId = mandate.CustomerId
+                CustomerId = customer.Id
             };
 
             // When: We send the payment request to Mollie and attempt to retrieve it
@@ -208,12 +209,13 @@ namespace Mollie.Tests.Integration.Api {
         public async Task CanCreatePaymentWithMandate() {
             // If: We create a payment with a mandate id
             MandateResponse validMandate = await this.GetFirstValidMandate();
+            CustomerResponse customer = await this._customerClient.GetCustomerAsync(validMandate.Links.Customer);
             PaymentRequest paymentRequest = new PaymentRequest() {
                 Amount = new Amount("EUR", "100.00"),
                 Description = "Description",
                 RedirectUrl = this.DefaultRedirectUrl,
                 SequenceType = SequenceType.Recurring,
-                CustomerId = validMandate.CustomerId,
+                CustomerId = customer.Id,
                 MandateId = validMandate.Id
             };
 

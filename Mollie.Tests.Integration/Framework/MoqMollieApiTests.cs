@@ -1,4 +1,5 @@
-﻿using Mollie.Api.Models.Customer;
+﻿using System;
+using Mollie.Api.Models.Customer;
 using Mollie.Api.Models.Payment.Request;
 using Mollie.Api.Models.Payment.Response;
 using Moq;
@@ -23,7 +24,7 @@ namespace Mollie.Tests.Integration.Framework {
             Assert.AreEqual(paymentResponse, await mollieClientMock.Object.CreatePaymentAsync(null));
             Assert.AreEqual(paymentResponse, await mollieClientMock.Object.GetPaymentAsync(null));
             Assert.AreEqual(customerResponse, await mollieClientMock.Object.CreateCustomerAsync(null));
-            Assert.AreEqual(customerResponse, await mollieClientMock.Object.GetCustomerAsync(null));
+            Assert.AreEqual(customerResponse, await mollieClientMock.Object.GetCustomerAsync(String.Empty));
         }
     }
 }
