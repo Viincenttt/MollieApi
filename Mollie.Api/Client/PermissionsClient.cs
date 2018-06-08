@@ -1,6 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
+using Mollie.Api.Models;
 using Mollie.Api.Models.List;
+using Mollie.Api.Models.List.Specific;
 using Mollie.Api.Models.Permission;
 
 namespace Mollie.Api.Client {
@@ -12,9 +14,12 @@ namespace Mollie.Api.Client {
             return await this.GetAsync<PermissionResponse>($"permissions/{permissionId}").ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<PermissionResponse>> GetPermissionListAsync(string from = null, int? limit = null) {
-            return await this.GetListAsync<ListResponse<PermissionResponse>>("permissions", from, limit)
-                .ConfigureAwait(false);
+        public async Task<PermissionResponse> GetCustomerAsync(UrlObject url) {
+            return await this.GetAsync<PermissionResponse>(url).ConfigureAwait(false);
+        }
+
+        public async Task<ListResponse<PermissionListData>> GetPermissionListAsync() {
+            return await this.GetListAsync<ListResponse<PermissionListData>>("permissions", null, null).ConfigureAwait(false);
         }
     }
 }
