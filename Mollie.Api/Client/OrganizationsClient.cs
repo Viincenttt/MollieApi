@@ -7,6 +7,10 @@ namespace Mollie.Api.Client {
         public OrganizationsClient(string oauthAccessToken) : base(oauthAccessToken) {
         }
 
+        public async Task<OrganizationResponse> GetCurrentOrganizationAsync() {
+            return await this.GetAsync<OrganizationResponse>($"organizations/me").ConfigureAwait(false);
+        }
+
         public async Task<OrganizationResponse> GetOrganizationAsync(string organizationId) {
             return await this.GetAsync<OrganizationResponse>($"organizations/{organizationId}").ConfigureAwait(false);
         }
