@@ -21,7 +21,7 @@ namespace Mollie.Api.Client {
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<ChargebackListData>> GetChargebacksListAsync(string from = null, int? limit = null, string oathProfileId = null, bool? oauthTestmode = null) {
+        public async Task<ListResponse<ChargebackListData>> GetChargebacksListAsync(string oathProfileId = null, bool? oauthTestmode = null) {
             if (oathProfileId != null || oauthTestmode != null) {
                 this.ValidateApiKeyIsOauthAccesstoken();
             }
@@ -37,7 +37,7 @@ namespace Mollie.Api.Client {
                 parameters.Add("testmode", oauthTestmode.Value.ToString().ToLower());
             }
 
-            return await this.GetListAsync<ListResponse<ChargebackListData>>($"chargebacks", from, limit, parameters).ConfigureAwait(false);
+            return await this.GetListAsync<ListResponse<ChargebackListData>>($"chargebacks", null, null, parameters).ConfigureAwait(false);
         }
     }
 }
