@@ -5,6 +5,7 @@ using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
 using Mollie.Api.Models.Invoice;
 using Mollie.Api.Models.List;
+using Mollie.Api.Models.List.Specific;
 
 namespace Mollie.Api.Client {
     public class InvoicesClient : OauthBaseMollieClient, IInvoicesClient {
@@ -18,7 +19,7 @@ namespace Mollie.Api.Client {
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<InvoiceResponse>> GetInvoiceListAsync(string reference = null, int? year = null, string from = null, int? limit = null, bool includeLines = false, bool includeSettlements = false) {
+        public async Task<ListResponse<InvoiceListData>> GetInvoiceListAsync(string reference = null, int? year = null, string from = null, int? limit = null, bool includeLines = false, bool includeSettlements = false) {
             // Build parameter list
             var parameters = this.BuildIncludeParameter(includeLines, includeSettlements);
 
@@ -30,7 +31,7 @@ namespace Mollie.Api.Client {
                 parameters.Add("year", year.Value.ToString());
             }
 
-            return await this.GetListAsync<ListResponse<InvoiceResponse>>($"invoices", from, limit, parameters).ConfigureAwait(false);
+            return await this.GetListAsync<ListResponse<InvoiceListData>>($"invoices", from, limit, parameters).ConfigureAwait(false);
         }
 
         private Dictionary<string, string> BuildIncludeParameter(bool includeLines = false,

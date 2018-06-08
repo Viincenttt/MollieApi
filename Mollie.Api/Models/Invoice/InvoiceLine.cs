@@ -1,13 +1,11 @@
 ﻿using System;
 
-namespace Mollie.Api.Models.Invoice
-{
-	public class InvoiceLine
-	{
+namespace Mollie.Api.Models.Invoice {
+	public class InvoiceLine {
 		/// <summary>
 		/// The administrative period (YYYY) on which the line should be booked.
 		/// </summary>
-		public DateTime Period { get; set; }
+		public string Period { get; set; }
 
 		/// <summary>
 		/// Description of the product.
@@ -27,6 +25,6 @@ namespace Mollie.Api.Models.Invoice
 		/// <summary>
 		/// Amount excluding VAT.
 		/// </summary>
-		public decimal Amount { get; set; }
+		public Amount Amount { get; set; }
 	}
 }
