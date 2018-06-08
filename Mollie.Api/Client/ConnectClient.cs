@@ -30,8 +30,7 @@ namespace Mollie.Api.Client {
             this._httpClient = this.CreateHttpClient(clientId, clientSecret);
         }
 
-        public string GetAuthorizationUrl(string state, List<string> scopes, string redirectUri = null,
-            bool forceApprovalPrompt = false) {
+        public string GetAuthorizationUrl(string state, List<string> scopes, string redirectUri = null, bool forceApprovalPrompt = false) {
             var parameters = new Dictionary<string, string> {
                 {"client_id", this._clientId},
                 {"state", state},

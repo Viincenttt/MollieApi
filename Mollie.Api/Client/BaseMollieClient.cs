@@ -54,7 +54,9 @@ namespace Mollie.Api.Client {
             
             if (otherParameters != null) {
                 foreach (var parameter in otherParameters) {
-                    queryParameters[parameter.Key] = parameter.Value;
+                    if (!String.IsNullOrEmpty(parameter.Value)) {
+                        queryParameters[parameter.Key] = parameter.Value;
+                    }
                 }
             }
 
