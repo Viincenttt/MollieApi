@@ -13,7 +13,6 @@ namespace Mollie.Api.Models.Payment {
         [EnumMember(Value = "directdebit")] DirectDebit,
         [EnumMember(Value = "belfius")] Belfius,
         [EnumMember(Value = "bitcoin")] Bitcoin,
-        [EnumMember(Value = "podiumcadeaukaart")] PodiumCadeaukaart,
         [EnumMember(Value = "paypal")] PayPal,
         [EnumMember(Value = "paysafecard")] PaySafeCard,
         [EnumMember(Value = "kbc")] Kbc,
