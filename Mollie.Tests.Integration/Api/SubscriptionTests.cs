@@ -76,7 +76,7 @@ namespace Mollie.Tests.Integration.Api {
                 await this._subscriptionClient.CancelSubscriptionAsync(customerId, subscriptionId);
                 SubscriptionResponse cancelledSubscription = await this._subscriptionClient.GetSubscriptionAsync(customerId, subscriptionId);
 
-                Assert.AreEqual(cancelledSubscription.Status, SubscriptionStatus.Cancelled);
+                Assert.AreEqual(cancelledSubscription.Status, SubscriptionStatus.Canceled);
             }
             else {
                 Assert.Inconclusive("No subscriptions found that could be cancelled");

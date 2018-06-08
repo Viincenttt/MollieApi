@@ -15,27 +15,22 @@ namespace Mollie.Api.Models.Subscription {
         public string Id { get; set; }
 
         /// <summary>
-        /// The customer's unique identifier, for example cst_stTC2WHAuS.
-        /// </summary>
-        public string CustomerId { get; set; }
-
-        /// <summary>
         /// The mode used to create this subscription. Mode determines whether the payments are real or test payments.
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
         public Mode Mode { get; set; }
-
+        
         /// <summary>
         ///  The subscription's date and time of creation, in ISO 8601 format.
         /// </summary>
-        public DateTime CreatedDatetime { get; set; }
-
+        public DateTime CreatedAt { get; set; }
+        
         /// <summary>
         /// The subscription's current status, depends on whether the customer has a pending, valid or invalid mandate.
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
         public SubscriptionStatus Status { get; set; }
-
+        
         /// <summary>
         /// The constant amount that is charged with each subscription payment.
         /// </summary>
@@ -72,7 +67,7 @@ namespace Mollie.Api.Models.Subscription {
         /// <summary>
         /// The subscription's date of cancellation, in ISO 8601 format.
         /// </summary>
-        public DateTime? CancelledDateTime { get; set; }
+        public DateTime? CanceledAt { get; set; }
 
         /// <summary>
         /// The URL Mollie will call as soon a payment status change takes place.

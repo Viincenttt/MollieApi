@@ -2,7 +2,7 @@
     public enum SubscriptionStatus {
         Pending,
         Active,
-        Cancelled,
+        Canceled,
         Suspended,
         Completed
     }
