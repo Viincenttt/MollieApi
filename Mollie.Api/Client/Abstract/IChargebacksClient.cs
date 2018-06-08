@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Mollie.Api.Models.Chargeback;
 using Mollie.Api.Models.List;
+using Mollie.Api.Models.List.Specific;
 
 namespace Mollie.Api.Client.Abstract {
     public interface IChargebacksClient {
@@ -19,7 +20,7 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="from">Optional – The number of objects to skip.</param>
         /// <param name="limit">Optional – The number of objects to return (with a maximum of 250).</param>
         /// <returns></returns>
-        Task<ListResponse<ChargebackResponse>> GetChargebacksListAsync(string paymentId, string from = null, int? limit = null);
+        Task<ListResponse<ChargebackListData>> GetChargebacksListAsync(string paymentId, string from = null, int? limit = null);
 
         /// <summary>
         ///     Retrieve all chargebacks for current payment profile (API keys) or the organization (OAuth). Listing the
@@ -30,6 +31,6 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="oathProfileId">Optional – The payment profile's unique identifier, for example pfl_3RkSN1zuPE.</param>
         /// <param name="oauthTestmode">Optional – Set this to true to only consider chargebacks made in testmode.</param>
         /// <returns></returns>
-        Task<ListResponse<ChargebackResponse>> GetChargebacksListAsync(string from = null, int? limit = null, string oathProfileId = null, bool? oauthTestmode = null);
+        Task<ListResponse<ChargebackListData>> GetChargebacksListAsync(string from = null, int? limit = null, string oathProfileId = null, bool? oauthTestmode = null);
     }
 }
