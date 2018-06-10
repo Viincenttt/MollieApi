@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using Mollie.Api.JsonConverters;
-using Mollie.Api.Models.Payment.Response;
 using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.List {
@@ -10,7 +8,6 @@ namespace Mollie.Api.Models.List {
         
         [JsonProperty("_embedded")]
         public T Embedded { get; set; }
-        public List<T> Data { get; set; }
 
         public ListResponseLinks Links { get; set; }
     }
