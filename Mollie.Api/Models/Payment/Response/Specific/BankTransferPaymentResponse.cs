@@ -1,3 +1,5 @@
+using Mollie.Api.Models.Url;
+
 namespace Mollie.Api.Models.Payment.Response.Specific {
     public class BankTransferPaymentResponse : PaymentResponse {
         public BankTransferPaymentResponseDetails Details { get; set; }
@@ -57,12 +59,12 @@ namespace Mollie.Api.Models.Payment.Response.Specific {
         /// <summary>
         /// A link to a hosted payment page where your customer can check the status of their payment.
         /// </summary>
-        public UrlObject Status { get; set; }
+        public UrlLink Status { get; set; }
 
         /// <summary>
         /// A link to a hosted payment page where your customer can finish the payment using an alternative payment method also 
         /// activated on your website profile.
         /// </summary>
-        public UrlObject PayOnline { get; set; }
+        public UrlLink PayOnline { get; set; }
     }
 }

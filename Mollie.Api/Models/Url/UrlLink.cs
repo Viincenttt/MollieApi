@@ -1,5 +1,5 @@
-﻿namespace Mollie.Api.Models {
-    public class UrlObject {
+﻿namespace Mollie.Api.Models.Url {
+    public class UrlLink {
         public string Href { get; set; }
         public string Type { get; set; }
 

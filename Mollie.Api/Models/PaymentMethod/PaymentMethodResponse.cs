@@ -26,7 +26,7 @@ namespace Mollie.Api.Models.PaymentMethod {
         /// An object with several URL objects relevant to the payment method. Every URL object will contain an href and a type field.
         /// </summary>
         [JsonProperty("_links")]
-        public PaymentResponseLinks Links { get; set; }
+        public PaymentMethodResponseLinks Links { get; set; }
 
         public override string ToString() {
             return this.Description;

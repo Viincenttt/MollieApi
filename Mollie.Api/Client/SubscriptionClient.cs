@@ -14,14 +14,11 @@ namespace Mollie.Api.Client {
         }
 
         public async Task<SubscriptionResponse> GetSubscriptionAsync(string customerId, string subscriptionId) {
-            return await this.GetAsync<SubscriptionResponse>($"customers/{customerId}/subscriptions/{subscriptionId}")
-                .ConfigureAwait(false);
+            return await this.GetAsync<SubscriptionResponse>($"customers/{customerId}/subscriptions/{subscriptionId}").ConfigureAwait(false);
         }
 
-        public async Task<SubscriptionResponse>
-            CreateSubscriptionAsync(string customerId, SubscriptionRequest request) {
-            return await this.PostAsync<SubscriptionResponse>($"customers/{customerId}/subscriptions", request)
-                .ConfigureAwait(false);
+        public async Task<SubscriptionResponse> CreateSubscriptionAsync(string customerId, SubscriptionRequest request) {
+            return await this.PostAsync<SubscriptionResponse>($"customers/{customerId}/subscriptions", request).ConfigureAwait(false);
         }
 
         public async Task CancelSubscriptionAsync(string customerId, string subscriptionId) {

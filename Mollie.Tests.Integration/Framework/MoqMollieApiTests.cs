@@ -7,13 +7,14 @@ using NUnit.Framework;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
+using Mollie.Api.Models.Url;
 
 namespace Mollie.Tests.Integration.Framework {
     public class MoqMollieApiTests : BaseMollieApiTestClass {
         [TestCase]
         public async Task MoqMollieClient() {
             var mollieClientMock = new Mock<IMollieClient>();
-            var paymentResponse = new PaymentResponse { Id = "dummy_payment", Links = new PaymentResponseLinks() { Checkout = new UrlObject() { Href = "http://localhost/mollietest"} } };
+            var paymentResponse = new PaymentResponse { Id = "dummy_payment", Links = new PaymentResponseLinks() { Checkout = new UrlLink() { Href = "http://localhost/mollietest"} } };
             var customerResponse = new CustomerResponse { Id = "dummy_customer" };
 
             mollieClientMock.Setup(x => x.CreatePaymentAsync(It.IsAny<PaymentRequest>())).Returns(() => Task.FromResult(paymentResponse));

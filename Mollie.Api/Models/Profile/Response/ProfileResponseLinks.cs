@@ -1,11 +1,17 @@
-﻿namespace Mollie.Api.Models.Profile.Response {
+﻿using System.Collections.Generic;
+using Mollie.Api.Models.Chargeback;
+using Mollie.Api.Models.PaymentMethod;
+using Mollie.Api.Models.Refund;
+using Mollie.Api.Models.Url;
+
+namespace Mollie.Api.Models.Profile.Response {
     public class ProfileResponseLinks {
-        public UrlObject Self { get; set; }
-        public UrlObject Chargebacks { get; set; }
-        public UrlObject Methods { get; set; }
-        public UrlObject Payments { get; set; }
-        public UrlObject Refunds { get; set; }
-        public UrlObject CheckoutPreviewUrl { get; set; }
-        public UrlObject Documentation { get; set; }
+        public UrlObjectLink<ProfileResponse> Self { get; set; }
+        public UrlObjectLink<IEnumerable<ChargebackResponse>> Chargebacks { get; set; }
+        public UrlObjectLink<IEnumerable<PaymentMethodResponse>> Methods { get; set; }
+        public UrlObjectLink<IEnumerable<PaymentMethodResponse>> Payments { get; set; }
+        public UrlObjectLink<IEnumerable<RefundResponse>> Refunds { get; set; }
+        public UrlLink CheckoutPreviewUrl { get; set; }
+        public UrlLink Documentation { get; set; }
     }
 }

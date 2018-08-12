@@ -4,6 +4,7 @@ using Mollie.Api.Models;
 using Mollie.Api.Models.Customer;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.List.Specific;
+using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client {
     public class CustomerClient : BaseMollieClient, ICustomerClient {
@@ -26,7 +27,7 @@ namespace Mollie.Api.Client {
             return await this.GetAsync<CustomerResponse>($"customers/{customerId}").ConfigureAwait(false);
         }
 
-        public async Task<CustomerResponse> GetCustomerAsync(UrlObject url) {
+        public async Task<CustomerResponse> GetCustomerAsync(UrlLink url) {
             return await this.GetAsync<CustomerResponse>(url).ConfigureAwait(false);
         }
 

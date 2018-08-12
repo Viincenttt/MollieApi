@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using System.Linq;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Payment.Response;
+using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client {
     public abstract class BaseMollieClient {
@@ -36,7 +37,7 @@ namespace Mollie.Api.Client {
             return await this.ProcessHttpResponseMessage<T>(response).ConfigureAwait(false);
         }
 
-        protected async Task<T> GetAsync<T>(UrlObject urlObject) {
+        protected async Task<T> GetAsync<T>(UrlLink urlObject) {
             string relativeUri = this.StripUrlObject(urlObject);
             var response = await this._httpClient.GetAsync(relativeUri).ConfigureAwait(false);
             return await this.ProcessHttpResponseMessage<T>(response).ConfigureAwait(false);
@@ -143,7 +144,7 @@ namespace Mollie.Api.Client {
             };
         }
 
-        private string StripUrlObject(UrlObject urlObject) {
+        private string StripUrlObject(UrlLink urlObject) {
             if (String.IsNullOrEmpty(urlObject?.Href)) {
                 throw new ArgumentException($"Url object is null or href is empty: {urlObject}");
             }

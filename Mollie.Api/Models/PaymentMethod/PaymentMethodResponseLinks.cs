@@ -1,11 +1,11 @@
 ﻿using Mollie.Api.Models.Url;
 
-namespace Mollie.Api.Models.Organization {
-    public class OrganizationResponseLinks {
+namespace Mollie.Api.Models.PaymentMethod {
+    public class PaymentMethodResponseLinks {
         /// <summary>
-        /// The API resource URL of the organization itself.
+        /// The API resource URL of the payment method itself.
         /// </summary>
-        public UrlObjectLink<OrganizationResponse> Self { get; set; }
+        public UrlObjectLink<PaymentMethodResponse> Self { get; set; }
 
         /// <summary>
         /// The URL to the payment method retrieval endpoint documentation.
