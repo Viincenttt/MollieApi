@@ -7,13 +7,9 @@ using Mollie.Api.Models.Profile.Response;
 namespace Mollie.Api.Client.Abstract {
     public interface IProfileClient {
         Task<ProfileResponse> CreateProfileAsync(ProfileRequest request);
-
         Task<ProfileResponse> GetProfileAsync(string profileId);
-
         Task<ListResponse<ProfileListData>> GetProfileListAsync(string from = null, int? limit = null);
-
         Task<ProfileResponse> UpdateProfileAsync(string profileId, ProfileRequest request);
-
         Task DeleteProfileAsync(string profileId);
     }
 }

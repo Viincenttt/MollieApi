@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models.Organization;
+using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client {
     public class OrganizationsClient : OauthBaseMollieClient, IOrganizationsClient {
@@ -13,6 +14,10 @@ namespace Mollie.Api.Client {
 
         public async Task<OrganizationResponse> GetOrganizationAsync(string organizationId) {
             return await this.GetAsync<OrganizationResponse>($"organizations/{organizationId}").ConfigureAwait(false);
+        }
+
+        public async Task<OrganizationResponse> GetOrganizationAsync(UrlObjectLink<OrganizationResponse> url) {
+            return await this.GetAsync(url).ConfigureAwait(false);
         }
     }
 }

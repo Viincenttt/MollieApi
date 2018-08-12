@@ -6,7 +6,6 @@ using Moq;
 using NUnit.Framework;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
-using Mollie.Api.Models;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Tests.Integration.Framework {

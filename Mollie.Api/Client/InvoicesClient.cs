@@ -6,6 +6,7 @@ using Mollie.Api.Extensions;
 using Mollie.Api.Models.Invoice;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.List.Specific;
+using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client {
     public class InvoicesClient : OauthBaseMollieClient, IInvoicesClient {
@@ -17,6 +18,10 @@ namespace Mollie.Api.Client {
             var includes = this.BuildIncludeParameter(includeLines, includeSettlements);
             return await this.GetAsync<InvoiceResponse>($"invoices/{invoiceId}{includes.ToQueryString()}")
                 .ConfigureAwait(false);
+        }
+
+        public async Task<InvoiceResponse> GetInvoiceAsync(UrlObjectLink<InvoiceResponse> url) {
+            return await this.GetAsync(url).ConfigureAwait(false);
         }
 
         public async Task<ListResponse<InvoiceListData>> GetInvoiceListAsync(string reference = null, int? year = null, string from = null, int? limit = null, bool includeLines = false, bool includeSettlements = false) {

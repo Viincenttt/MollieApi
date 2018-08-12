@@ -15,8 +15,8 @@ namespace Mollie.Api.Client {
             return await this.GetAsync<PermissionResponse>($"permissions/{permissionId}").ConfigureAwait(false);
         }
 
-        public async Task<PermissionResponse> GetCustomerAsync(UrlLink url) {
-            return await this.GetAsync<PermissionResponse>(url).ConfigureAwait(false);
+        public async Task<PermissionResponse> GetPermissionAsync(UrlObjectLink<PermissionResponse> url) {
+            return await this.GetAsync(url).ConfigureAwait(false);
         }
 
         public async Task<ListResponse<PermissionListData>> GetPermissionListAsync() {

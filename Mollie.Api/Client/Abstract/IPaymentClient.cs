@@ -1,8 +1,10 @@
 ﻿using System.Threading.Tasks;
+using Mollie.Api.Models.Customer;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.List.Specific;
 using Mollie.Api.Models.Payment.Request;
 using Mollie.Api.Models.Payment.Response;
+using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client.Abstract {
     public interface IPaymentClient {
@@ -32,5 +34,8 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="testMode"></param>
         /// <returns></returns>
 		Task<ListResponse<PaymentListData>> GetPaymentListAsync(string from = null, int? limit = null, string profileId = null, bool? testMode = null);
+
+        Task<ListResponse<PaymentListData>> GetPaymentListAsync(UrlObjectLink<ListResponse<PaymentListData>> url);
+        Task<PaymentResponse> GetPaymentAsync(UrlObjectLink<PaymentResponse> url);
     }
 }

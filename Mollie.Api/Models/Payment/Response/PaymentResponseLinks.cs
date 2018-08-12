@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using Mollie.Api.Models.Chargeback;
 using Mollie.Api.Models.Customer;
+using Mollie.Api.Models.List;
+using Mollie.Api.Models.List.Specific;
 using Mollie.Api.Models.Mandate;
 using Mollie.Api.Models.Refund;
 using Mollie.Api.Models.Settlement;
@@ -22,12 +24,12 @@ namespace Mollie.Api.Models.Payment.Response {
         /// <summary>
         /// The API resource URL of the refunds that belong to this payment.
         /// </summary>
-        public UrlObjectLink<IEnumerable<RefundResponse>> Refunds { get; set; }
+        public UrlLink Refunds { get; set; }
 
         /// <summary>
         /// The API resource URL of the chargebacks that belong to this payment.
         /// </summary>
-        public UrlObjectLink<IEnumerable<ChargebackResponse>> Chargebacks { get; set; }
+        public UrlObjectLink<ListResponse<ChargebackListData>> Chargebacks { get; set; }
 
         /// <summary>
         /// The API resource URL of the settlement this payment has been settled with. Not present if not yet settled.

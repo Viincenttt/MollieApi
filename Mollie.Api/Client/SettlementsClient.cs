@@ -6,6 +6,7 @@ using Mollie.Api.Models.List.Specific;
 using Mollie.Api.Models.Payment.Response;
 using Mollie.Api.Models.Refund;
 using Mollie.Api.Models.Settlement;
+using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client {
     public class SettlementsClient : OauthBaseMollieClient, ISettlementsClient {
@@ -39,6 +40,10 @@ namespace Mollie.Api.Client {
 
         public async Task<ListResponse<ChargebackResponse>> GetSettlementChargebacksListAsync(string settlementId, string offset = null, int? count = null) {
             return await this.GetListAsync<ListResponse<ChargebackResponse>>($"settlements/{settlementId}/chargebacks", offset, count).ConfigureAwait(false);
+        }
+
+        public async Task<SettlementResponse> GetSettlementAsync(UrlObjectLink<SettlementResponse> url) {
+            return await this.GetAsync(url).ConfigureAwait(false);
         }
     }
 }

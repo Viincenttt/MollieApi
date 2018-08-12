@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Customer;
@@ -27,8 +28,12 @@ namespace Mollie.Api.Client {
             return await this.GetAsync<CustomerResponse>($"customers/{customerId}").ConfigureAwait(false);
         }
 
-        public async Task<CustomerResponse> GetCustomerAsync(UrlLink url) {
-            return await this.GetAsync<CustomerResponse>(url).ConfigureAwait(false);
+        public async Task<CustomerResponse> GetCustomerAsync(UrlObjectLink<CustomerResponse> url) {
+            return await this.GetAsync(url).ConfigureAwait(false);
+        }
+
+        public async Task<ListResponse<CustomerListData>> GetCustomerListAsync(UrlObjectLink<ListResponse<CustomerListData>> url) {
+            return await this.GetAsync(url).ConfigureAwait(false);
         }
 
         public async Task<ListResponse<CustomerListData>> GetCustomerListAsync(string from = null, int? limit = null) {

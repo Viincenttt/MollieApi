@@ -9,9 +9,6 @@ using Mollie.Api.Extensions;
 using Mollie.Api.Framework.Factories;
 using Mollie.Api.JsonConverters;
 using Newtonsoft.Json;
-using System.Linq;
-using Mollie.Api.Models;
-using Mollie.Api.Models.Payment.Response;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client {
@@ -37,7 +34,7 @@ namespace Mollie.Api.Client {
             return await this.ProcessHttpResponseMessage<T>(response).ConfigureAwait(false);
         }
 
-        protected async Task<T> GetAsync<T>(UrlLink urlObject) {
+        protected async Task<T> GetAsync<T>(UrlObjectLink<T> urlObject) {
             string relativeUri = this.StripUrlObject(urlObject);
             var response = await this._httpClient.GetAsync(relativeUri).ConfigureAwait(false);
             return await this.ProcessHttpResponseMessage<T>(response).ConfigureAwait(false);
