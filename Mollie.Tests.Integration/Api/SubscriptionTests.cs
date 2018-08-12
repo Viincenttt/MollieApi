@@ -44,7 +44,7 @@ namespace Mollie.Tests.Integration.Api {
             // Given
             string customerId = await this.GetFirstCustomerWithValidMandate();
             SubscriptionRequest subscriptionRequest = new SubscriptionRequest();
-            subscriptionRequest.Amount = new Amount("EUR", "100.00");
+            subscriptionRequest.Amount = new Amount(Currency.EUR, "100.00");
             subscriptionRequest.Times = 5;
             subscriptionRequest.Interval = "1 month";
             subscriptionRequest.Description = $"Subscription {DateTime.Now}"; // Subscriptions must have a unique name

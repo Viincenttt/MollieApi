@@ -46,7 +46,7 @@ namespace Mollie.Api.Models.Invoice {
 		public string DueAt { get; set; }
 
         /// <summary>
-        /// Total amount of the invoice excluding VAT, e.g. {"currency":"EUR", "value":"100.00"}.
+        /// Total amount of the invoice excluding VAT, e.g. {"currency":Currency.EUR, "value":"100.00"}.
         /// </summary>
         public Amount NetAmount { get; set; }
 

@@ -24,7 +24,6 @@ namespace Mollie.Api.Models.Payment.Request {
         /// </summary>
         public string RedirectUrl { get; set; }
 
-
         /// <summary>
         /// Set the webhook URL, where we will send payment status updates to.
         /// </summary>

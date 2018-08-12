@@ -13,7 +13,7 @@ namespace Mollie.Tests.Integration.Api {
         public void ShouldThrowMollieApiExceptionWhenInvalidParametersAreGiven() {
             // If: we create a payment request with invalid parameters
             PaymentRequest paymentRequest = new PaymentRequest() {
-                Amount = new Amount("EUR", "100.00"),
+                Amount = new Amount(Currency.EUR, "100.00"),
                 Description = null,
                 RedirectUrl = null
             };

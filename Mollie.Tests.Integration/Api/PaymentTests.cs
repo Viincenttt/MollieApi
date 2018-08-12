@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Mollie.Api.Client;
+using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.List.Specific;
@@ -45,7 +46,7 @@ namespace Mollie.Tests.Integration.Api {
         public async Task CanCreateDefaultPaymentWithOnlyRequiredFields() {
             // If: we create a payment request with only the required parameters
             PaymentRequest paymentRequest = new PaymentRequest() {
-                Amount = new Amount("EUR", "100.00"),
+                Amount = new Amount(Currency.EUR, "100.00"),
                 Description = "Description",
                 RedirectUrl = this.DefaultRedirectUrl
             };
@@ -65,7 +66,7 @@ namespace Mollie.Tests.Integration.Api {
         public async Task CanCreateDefaultPaymentWithAllFields() {
             // If: we create a payment request where all parameters have a value
             PaymentRequest paymentRequest = new PaymentRequest() {
-                Amount = new Amount("EUR", "100.00"),
+                Amount = new Amount(Currency.EUR, "100.00"),
                 Description = "Description",
                 RedirectUrl = this.DefaultRedirectUrl,
                 Locale = Locale.nl_NL,
@@ -101,7 +102,7 @@ namespace Mollie.Tests.Integration.Api {
         public async Task CanCreateSpecificPaymentType(Type paymentType, PaymentMethod? paymentMethod, Type expectedResponseType) {
             // If: we create a specific payment type with some bank transfer specific values
             PaymentRequest paymentRequest = (PaymentRequest) Activator.CreateInstance(paymentType);
-            paymentRequest.Amount = new Amount("EUR", "100.00");
+            paymentRequest.Amount = new Amount(Currency.EUR, "100.00");
             paymentRequest.Description = "Description";
             paymentRequest.RedirectUrl = this.DefaultRedirectUrl;
             paymentRequest.Method = paymentMethod;
@@ -122,7 +123,7 @@ namespace Mollie.Tests.Integration.Api {
         public async Task CanCreatePaymentAndRetrieveIt() {
             // If: we create a new payment request
             PaymentRequest paymentRequest = new PaymentRequest() {
-                Amount = new Amount("EUR", "100.00"),
+                Amount = new Amount(Currency.EUR, "100.00"),
                 Description = "Description",
                 RedirectUrl = this.DefaultRedirectUrl,
                 Locale = Locale.de_DE
@@ -147,7 +148,7 @@ namespace Mollie.Tests.Integration.Api {
             MandateResponse mandate = await this.GetFirstValidMandate();
             CustomerResponse customer = await this._customerClient.GetCustomerAsync(mandate.Links.Customer);
             PaymentRequest paymentRequest = new PaymentRequest() {
-                Amount = new Amount("EUR", "100.00"),
+                Amount = new Amount(Currency.EUR, "100.00"),
                 Description = "Description",
                 RedirectUrl = this.DefaultRedirectUrl,
                 SequenceType = SequenceType.First,
@@ -167,7 +168,7 @@ namespace Mollie.Tests.Integration.Api {
             // If: We create a payment with meta data
             string json = "{\"order_id\":\"4.40\"}";
             PaymentRequest paymentRequest = new PaymentRequest() {
-                Amount = new Amount("EUR", "100.00"),
+                Amount = new Amount(Currency.EUR, "100.00"),
                 Description = "Description",
                 RedirectUrl = this.DefaultRedirectUrl,
                 Metadata = json
@@ -189,7 +190,7 @@ namespace Mollie.Tests.Integration.Api {
             };
 
             PaymentRequest paymentRequest = new PaymentRequest() {
-                Amount = new Amount("EUR", "100.00"),
+                Amount = new Amount(Currency.EUR, "100.00"),
                 Description = "Description",
                 RedirectUrl = this.DefaultRedirectUrl,
             };
@@ -211,7 +212,7 @@ namespace Mollie.Tests.Integration.Api {
             MandateResponse validMandate = await this.GetFirstValidMandate();
             CustomerResponse customer = await this._customerClient.GetCustomerAsync(validMandate.Links.Customer);
             PaymentRequest paymentRequest = new PaymentRequest() {
-                Amount = new Amount("EUR", "100.00"),
+                Amount = new Amount(Currency.EUR, "100.00"),
                 Description = "Description",
                 RedirectUrl = this.DefaultRedirectUrl,
                 SequenceType = SequenceType.Recurring,
@@ -230,7 +231,7 @@ namespace Mollie.Tests.Integration.Api {
         public async Task PaymentWithInvalidJsonThrowsException() {
             // If: We create a payment with invalid json
             PaymentRequest paymentRequest = new PaymentRequest() {
-                Amount = new Amount("EUR", "100.00"),
+                Amount = new Amount(Currency.EUR, "100.00"),
                 Description = "Description",
                 RedirectUrl = this.DefaultRedirectUrl,
                 Metadata = "IAmNotAValidJsonString"

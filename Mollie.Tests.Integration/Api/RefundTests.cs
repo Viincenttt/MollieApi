@@ -24,7 +24,7 @@ namespace Mollie.Tests.Integration.Api {
 
             // When: We attempt to refund this payment
             RefundRequest refundRequest = new RefundRequest() {
-                Amount = new Amount("EUR", amount)
+                Amount = new Amount(Currency.EUR, amount)
             };
             RefundResponse refundResponse = await this._refundClient.CreateRefundAsync(payment.Id, refundRequest);
 
@@ -44,7 +44,7 @@ namespace Mollie.Tests.Integration.Api {
 
             // When: We attempt to refund 50 euro
             RefundRequest refundRequest = new RefundRequest() {
-                Amount = new Amount("EUR", "50.00")
+                Amount = new Amount(Currency.EUR, "50.00")
             };
             RefundResponse refundResponse = await this._refundClient.CreateRefundAsync(payment.Id, refundRequest);
 
@@ -62,7 +62,7 @@ namespace Mollie.Tests.Integration.Api {
             Debugger.Break();
 
             RefundRequest refundRequest = new RefundRequest() {
-                Amount = new Amount("EUR", "50.00")
+                Amount = new Amount(Currency.EUR, "50.00")
             };
             RefundResponse refundResponse = await this._refundClient.CreateRefundAsync(payment.Id, refundRequest);
 
@@ -91,7 +91,7 @@ namespace Mollie.Tests.Integration.Api {
 
         private async Task<PaymentResponse> CreatePayment(string amount = "100.00") {
             PaymentRequest paymentRequest = new CreditCardPaymentRequest();
-            paymentRequest.Amount = new Amount("EUR", amount);
+            paymentRequest.Amount = new Amount(Currency.EUR, amount);
             paymentRequest.Description = "Description";
             paymentRequest.RedirectUrl = this.DefaultRedirectUrl;
 

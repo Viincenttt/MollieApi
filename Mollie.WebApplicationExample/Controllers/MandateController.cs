@@ -37,7 +37,7 @@ namespace Mollie.WebApplicationExample.Controllers {
         public async Task<ActionResult> Create(string customerId) {
             // You need at least 1 payment to make a new mandate
             var result = await this._paymentClient.CreatePaymentAsync(new PaymentRequest() {
-                Amount = new Amount("EUR", "100.00"),
+                Amount = new Amount(Currency.EUR, "100.00"),
                 Description = "First payment",
                 Locale = Api.Models.Payment.Locale.nl_NL,
                 CustomerId = customerId,
