@@ -13,7 +13,6 @@ namespace Mollie.Tests.Integration.Framework {
         protected IPaymentClient _paymentClient;
         protected IPaymentMethodClient _paymentMethodClient;
         protected IRefundClient _refundClient;
-        protected IIssuerClient _issuerClient;
         protected ISubscriptionClient _subscriptionClient;
         protected IMandateClient _mandateClient;
         protected ICustomerClient _customerClient;
