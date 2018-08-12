@@ -40,7 +40,9 @@ namespace Mollie.WebApplicationExample.Controllers {
 
         [HttpGet]
         public ActionResult Create() {
-            PaymentRequestModel payment = new PaymentRequestModel();
+            PaymentRequestModel payment = new PaymentRequestModel() {
+                Currency = Currency.EUR
+            };
             return this.View(payment);
         }
 

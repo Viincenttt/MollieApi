@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
+using Mollie.Api.Models;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.List.Specific;
 using Mollie.Api.Models.Subscription;
@@ -35,7 +36,9 @@ namespace Mollie.WebApplicationExample.Controllers {
 
         [HttpGet]
         public ActionResult Create(string customerId) {
-            SubscriptionRequestModel subscriptionRequest = new SubscriptionRequestModel();
+            SubscriptionRequestModel subscriptionRequest = new SubscriptionRequestModel() {
+                Currency = Currency.EUR
+            };
             subscriptionRequest.CustomerId = customerId;
             return this.View("Create", subscriptionRequest);
         }
@@ -43,7 +46,7 @@ namespace Mollie.WebApplicationExample.Controllers {
         public async Task<ActionResult> Create(SubscriptionRequestModel subscriptionRequestModel) {
             if (this.ModelState.IsValid) {
                 SubscriptionRequest subscriptionRequest = new SubscriptionRequest();
-                subscriptionRequest.Amount.Currency = subscriptionRequestModel.Currency;
+                subscriptionRequest.Amount = new Amount(subscriptionRequestModel.Currency, subscriptionRequestModel.Amount);
                 subscriptionRequest.Amount.Value = subscriptionRequestModel.Amount;
                 subscriptionRequest.Description = subscriptionRequestModel.Description;
                 subscriptionRequest.Interval = "14 days";

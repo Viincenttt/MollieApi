@@ -31,7 +31,9 @@ namespace Mollie.WebApplicationExample.Controllers {
 
         [HttpGet]
         public ActionResult Create() {
-            CustomerRequestModel payment = new CustomerRequestModel();
+            CustomerRequestModel payment = new CustomerRequestModel() {
+                Locale = "nl_NL"
+            };
             return this.View(payment);
         }
 

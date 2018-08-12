@@ -13,12 +13,17 @@
 @using (Html.BeginForm("Create", "Payment", FormMethod.Post, new { @class = "form-horizontal" })) {
     <div class="form-group">
         <label class="col-sm-2 control-label" for="amount">Amount</label>
-        @Html.TextBoxFor(x => x.Amount, new {placeholder = "Amount", @class = "form-control"})
+        @Html.TextBoxFor(x => x.Amount, new { placeholder = "Amount", @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label" for="amount">Currency</label>
+        @Html.TextBoxFor(x => x.Currency, new { placeholder = "Currency", @class = "form-control" })
     </div>
 
     <div class="form-group">
         <label class="col-sm-2 control-label" for="description">Description</label>
-        @Html.TextBoxFor(x => x.Description, new {placeholder = "Description", @class = "form-control"})
+        @Html.TextBoxFor(x => x.Description, new { placeholder = "Description", @class = "form-control" })
     </div>
 
     <div class="form-group">
@@ -26,5 +31,5 @@
         @Html.TextBoxFor(x => x.RedirectUrl, new { placeholder = "Redirect URL", @class = "form-control" })
     </div>
 
-    <input type="submit" value="Save" class="btn btn-primary"/>
+    <input type="submit" value="Save" class="btn btn-primary" />
 }

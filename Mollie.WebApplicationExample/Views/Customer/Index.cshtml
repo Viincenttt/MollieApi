@@ -6,9 +6,8 @@
 
 <h2>Index</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+@Html.ActionLink("Create new payment", "Create", null, new { @class = "btn btn-primary" })
+
 <table class="table">
     <tr>
         <th>
@@ -24,7 +23,7 @@
             @Html.DisplayNameFor(model => model.Metadata)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.CreatedDatetime)
+            @Html.DisplayNameFor(model => model.CreatedAt)
         </th>
         <th></th>
     </tr>
@@ -44,7 +43,7 @@
             @Html.DisplayFor(modelItem => item.Metadata)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.CreatedDatetime)
+            @Html.DisplayFor(modelItem => item.CreatedAt)
         </td>
         <td>
             @Html.ActionLink("Details", "Detail", new { id = item.Id }) |
