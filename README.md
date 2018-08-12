@@ -5,7 +5,7 @@ This project allows you to easily add the [Mollie payment provider](https://www.
 If you have encounter any issues while using this library or have any feature requests, feel free to open an issue on GitHub. 
 
 ## Mollie API v1 and v2
-The API client uses version 2 of the Mollie API. If you want to use version 1 of the Mollie API, you can use version 1.5.2 of the Mollie API Nuget Package. 
+The API client uses version 2 of the Mollie API. If you want to use version 1 of the Mollie API, you can use version 1.5.2 of the Mollie API Nuget Package. Mollie API client 2.0.0+ is not backwards compatible with version 1.5.2 or lower. Please take a look at the [Mollie migration guide](https://docs.mollie.com/payments/migrating-v1-to-v2) for assistence.
 
 ## Getting started
 
