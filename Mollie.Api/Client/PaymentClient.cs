@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
-using Mollie.Api.Extensions;
 using Mollie.Api.Models.List;
+using Mollie.Api.Models.List.Specific;
 using Mollie.Api.Models.Payment.Request;
 using Mollie.Api.Models.Payment.Response;
+using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client {
     public class PaymentClient : BaseMollieClient, IPaymentClient {
@@ -34,7 +35,15 @@ namespace Mollie.Api.Client {
 		    await this.DeleteAsync($"payments/{paymentId}").ConfigureAwait(false);
 		}
 
-	    public async Task<ListResponse<PaymentResponse>> GetPaymentListAsync(int? offset = null, int? count = null, string profileId = null, bool? testMode = null) {
+        public async Task<PaymentResponse> GetPaymentAsync(UrlObjectLink<PaymentResponse> url) {
+            return await this.GetAsync(url).ConfigureAwait(false);
+        }
+
+        public async Task<ListResponse<PaymentListData>> GetPaymentListAsync(UrlObjectLink<ListResponse<PaymentListData>> url) {
+            return await this.GetAsync(url).ConfigureAwait(false);
+        }
+
+        public async Task<ListResponse<PaymentListData>> GetPaymentListAsync(string from = null, int? limit = null, string profileId = null, bool? testMode = null) {
 	        if (!string.IsNullOrWhiteSpace(profileId) || testMode.HasValue) {
 	            this.ValidateApiKeyIsOauthAccesstoken();
             }
@@ -49,7 +58,7 @@ namespace Mollie.Api.Client {
 	            parameters.Add("testmode", testMode.Value.ToString().ToLower());
             }
 
-			return await this.GetListAsync<ListResponse<PaymentResponse>>($"payments", offset, count, parameters)
+			return await this.GetListAsync<ListResponse<PaymentListData>>($"payments", from, limit, parameters)
 				.ConfigureAwait(false);
 		}
     }

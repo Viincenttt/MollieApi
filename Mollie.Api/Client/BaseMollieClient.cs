@@ -9,11 +9,11 @@ using Mollie.Api.Extensions;
 using Mollie.Api.Framework.Factories;
 using Mollie.Api.JsonConverters;
 using Newtonsoft.Json;
-using System.Linq;
+using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client {
     public abstract class BaseMollieClient {
-        public const string ApiEndPoint = "https://api.mollie.nl/v1/";
+        public const string ApiEndPoint = "https://api.mollie.nl/v2/";
 
         private readonly string _apiKey;
         private readonly JsonSerializerSettings _defaultJsonDeserializerSettings;
@@ -34,27 +34,35 @@ namespace Mollie.Api.Client {
             return await this.ProcessHttpResponseMessage<T>(response).ConfigureAwait(false);
         }
 
-        private string BuildListQueryString(int? offset, int? count, IDictionary<string, string> otherParameters = null) {
+        protected async Task<T> GetAsync<T>(UrlObjectLink<T> urlObject) {
+            string relativeUri = this.StripUrlObject(urlObject);
+            var response = await this._httpClient.GetAsync(relativeUri).ConfigureAwait(false);
+            return await this.ProcessHttpResponseMessage<T>(response).ConfigureAwait(false);
+        }
+
+        private string BuildListQueryString(string from, int? limit, IDictionary<string, string> otherParameters = null) {
             Dictionary<string, string> queryParameters = new Dictionary<string, string>();
-            if (offset.HasValue) {
-                queryParameters[nameof(offset)] = offset.Value.ToString();
+            if (!String.IsNullOrEmpty(from)) {
+                queryParameters[nameof(from)] = from;
             }
 
-            if (count.HasValue) {
-                queryParameters[nameof(count)] = count.Value.ToString();
+            if (limit.HasValue) {
+                queryParameters[nameof(limit)] = limit.Value.ToString();
             }
             
             if (otherParameters != null) {
                 foreach (var parameter in otherParameters) {
-                    queryParameters[parameter.Key] = parameter.Value;
+                    if (!String.IsNullOrEmpty(parameter.Value)) {
+                        queryParameters[parameter.Key] = parameter.Value;
+                    }
                 }
             }
 
             return queryParameters.ToQueryString();
         }
 
-        protected async Task<T> GetListAsync<T>(string relativeUri, int? offset, int? count, IDictionary<string, string> otherParameters = null) {
-            var queryString = this.BuildListQueryString(offset, count, otherParameters);
+        protected async Task<T> GetListAsync<T>(string relativeUri, string from, int? limit, IDictionary<string, string> otherParameters = null) {
+            var queryString = this.BuildListQueryString(from, limit, otherParameters);
             var response = await this._httpClient.GetAsync(relativeUri + queryString).ConfigureAwait(false);
             return await this.ProcessHttpResponseMessage<T>(response).ConfigureAwait(false);
         }
@@ -86,6 +94,7 @@ namespace Mollie.Api.Client {
                 case HttpStatusCode.NotFound:
                 case HttpStatusCode.MethodNotAllowed:
                 case HttpStatusCode.UnsupportedMediaType:
+                case HttpStatusCode.Gone:
                 case (HttpStatusCode) 422: // Unprocessable entity
                     throw new MollieApiException(resultContent);
                 default:
@@ -130,6 +139,14 @@ namespace Mollie.Api.Client {
                     new PaymentResponseConverter(new PaymentResponseFactory())
                 }
             };
+        }
+
+        private string StripUrlObject(UrlLink urlObject) {
+            if (String.IsNullOrEmpty(urlObject?.Href)) {
+                throw new ArgumentException($"Url object is null or href is empty: {urlObject}");
+            }
+
+            return urlObject.Href.Replace(ApiEndPoint, String.Empty);
         }
     }
 }

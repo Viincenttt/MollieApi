@@ -6,6 +6,8 @@ using Mollie.WebApplicationExample.Infrastructure;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Mollie.Api.Client.Abstract;
+using Mollie.Api.Models;
+using Mollie.Api.Models.List.Specific;
 
 namespace Mollie.WebApplicationExample.Controllers {
     public class MandateController : Controller {
@@ -21,8 +23,8 @@ namespace Mollie.WebApplicationExample.Controllers {
         public async Task<ActionResult> Index(string customerId) {
             ViewBag.CustomerId = customerId;
 
-            ListResponse<MandateResponse> mandateList = await this._mandateClient.GetMandateListAsync(customerId);
-            return this.View(mandateList.Data);
+            ListResponse<MandateListData> mandateList = await this._mandateClient.GetMandateListAsync(customerId);
+            return this.View(mandateList.Embedded.Mandates);
         }
 
         [HttpGet]
@@ -35,16 +37,14 @@ namespace Mollie.WebApplicationExample.Controllers {
         public async Task<ActionResult> Create(string customerId) {
             // You need at least 1 payment to make a new mandate
             var result = await this._paymentClient.CreatePaymentAsync(new PaymentRequest() {
-                Amount = 1,
+                Amount = new Amount(Currency.EUR, "100.00"),
                 Description = "First payment",
-                Locale = Api.Models.Payment.Locale.NL,
+                Locale = Api.Models.Payment.Locale.nl_NL,
                 CustomerId = customerId,
-                RecurringType = Api.Models.Payment.RecurringType.First,
+                SequenceType = Api.Models.Payment.SequenceType.First,
                 RedirectUrl = @"http://www.google.nl"
             });
-
-
-            return this.Redirect(result.Links.PaymentUrl);
+            return this.Redirect(result.Links.Checkout.Href);
         }
     }
 }

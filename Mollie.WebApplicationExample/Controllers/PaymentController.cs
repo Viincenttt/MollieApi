@@ -2,7 +2,9 @@
 using System.Web.Mvc;
 using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
+using Mollie.Api.Models;
 using Mollie.Api.Models.List;
+using Mollie.Api.Models.List.Specific;
 using Mollie.Api.Models.Payment.Request;
 using Mollie.Api.Models.Payment.Response;
 using Mollie.WebApplicationExample.Infrastructure;
@@ -19,26 +21,28 @@ namespace Mollie.WebApplicationExample.Controllers {
 
         [HttpGet]
         public async Task<ActionResult> Index() {
-            ListResponse<PaymentResponse> paymentList = await this._paymentClient.GetPaymentListAsync(0, NumberOfPaymentsToList);
-            return View(paymentList.Data);
+            ListResponse<PaymentListData> paymentList = await this._paymentClient.GetPaymentListAsync(null, NumberOfPaymentsToList);
+            return this.View(paymentList.Embedded.Payments);
         }
 
         [HttpGet]
         public async Task<ActionResult> Detail(string id) {
             PaymentResponse payment = await this._paymentClient.GetPaymentAsync(id);
-            return View(payment);
+            return this.View(payment);
         }
 
         [HttpPost]
         public async Task<ActionResult> Pay(string id) {
             PaymentResponse payment = await this._paymentClient.GetPaymentAsync(id);
 
-            return this.Redirect(payment.Links.PaymentUrl);
+            return this.Redirect(payment.Links.Checkout.Href);
         }
 
         [HttpGet]
         public ActionResult Create() {
-            PaymentRequestModel payment = new PaymentRequestModel();
+            PaymentRequestModel payment = new PaymentRequestModel() {
+                Currency = Currency.EUR
+            };
             return this.View(payment);
         }
 
@@ -46,7 +50,7 @@ namespace Mollie.WebApplicationExample.Controllers {
         public async Task<ActionResult> Create(PaymentRequestModel paymentRequestModel) {
             if (this.ModelState.IsValid) {
                 PaymentRequest paymentRequest = new PaymentRequest();
-                paymentRequest.Amount = paymentRequestModel.Amount;
+                paymentRequest.Amount = new Amount(paymentRequestModel.Currency, paymentRequestModel.Amount);
                 paymentRequest.Description = paymentRequestModel.Description;
                 paymentRequest.RedirectUrl = paymentRequestModel.RedirectUrl;
                 await this._paymentClient.CreatePaymentAsync(paymentRequest);

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
-using Mollie.Api.Extensions;
 using Mollie.Api.Models.Chargeback;
 using Mollie.Api.Models.List;
+using Mollie.Api.Models.List.Specific;
 
 namespace Mollie.Api.Client {
     public class ChargebacksClient : BaseMollieClient, IChargebacksClient {
@@ -15,15 +15,13 @@ namespace Mollie.Api.Client {
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<ChargebackResponse>> GetChargebacksListAsync(string paymentId,
-            int? offset = null, int? count = null) {
+        public async Task<ListResponse<ChargebackListData>> GetChargebacksListAsync(string paymentId, string from = null, int? limit = null) {
             return await this
-                .GetListAsync<ListResponse<ChargebackResponse>>($"payments/{paymentId}/chargebacks", offset, count)
+                .GetListAsync<ListResponse<ChargebackListData>>($"payments/{paymentId}/chargebacks", from, limit)
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<ChargebackResponse>> GetChargebacksListAsync(int? offset = null,
-            int? count = null, string oathProfileId = null, bool? oauthTestmode = null) {
+        public async Task<ListResponse<ChargebackListData>> GetChargebacksListAsync(string oathProfileId = null, bool? oauthTestmode = null) {
             if (oathProfileId != null || oauthTestmode != null) {
                 this.ValidateApiKeyIsOauthAccesstoken();
             }
@@ -39,8 +37,7 @@ namespace Mollie.Api.Client {
                 parameters.Add("testmode", oauthTestmode.Value.ToString().ToLower());
             }
 
-            return await this
-                .GetListAsync<ListResponse<ChargebackResponse>>($"chargebacks", offset, count, parameters).ConfigureAwait(false);
+            return await this.GetListAsync<ListResponse<ChargebackListData>>($"chargebacks", null, null, parameters).ConfigureAwait(false);
         }
     }
 }

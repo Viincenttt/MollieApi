@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Mollie.Api.Client;
+using Mollie.Api.Models;
 using Mollie.Api.Models.Payment.Request;
 using Mollie.Tests.Integration.Framework;
 using NUnit.Framework;
@@ -12,7 +13,7 @@ namespace Mollie.Tests.Integration.Api {
         public void ShouldThrowMollieApiExceptionWhenInvalidParametersAreGiven() {
             // If: we create a payment request with invalid parameters
             PaymentRequest paymentRequest = new PaymentRequest() {
-                Amount = -100,
+                Amount = new Amount(Currency.EUR, "100.00"),
                 Description = null,
                 RedirectUrl = null
             };
@@ -22,7 +23,7 @@ namespace Mollie.Tests.Integration.Api {
             MollieApiException mollieApiException = aggregateException.InnerExceptions.FirstOrDefault(x => x.GetType() == typeof(MollieApiException)) as MollieApiException;
             Assert.IsNotNull(mollieApiException);
             Assert.IsNotNull(mollieApiException.Details);
-            Assert.True(!String.IsNullOrEmpty(mollieApiException.Details.Message));
+            Assert.True(!String.IsNullOrEmpty(mollieApiException.Details.Detail));
         }
     }
 }

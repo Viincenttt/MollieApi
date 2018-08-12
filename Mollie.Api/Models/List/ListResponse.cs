@@ -1,9 +1,14 @@
 ﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.List {
-    public class ListResponse<T> : ListResponseSimple<T> {
-        public int Offset { get; set; }
-        public int TotalCount { get; set; }
+    public class ListResponse<T> {
+        
+        public int Count { get; set; }
+        
+        [JsonProperty("_embedded")]
+        public T Embedded { get; set; }
+
         public ListResponseLinks Links { get; set; }
     }
 

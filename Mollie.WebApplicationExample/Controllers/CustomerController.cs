@@ -6,6 +6,7 @@ using Mollie.WebApplicationExample.Models;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Mollie.Api.Client.Abstract;
+using Mollie.Api.Models.List.Specific;
 
 namespace Mollie.WebApplicationExample.Controllers {
     public class CustomerController : Controller {
@@ -18,8 +19,8 @@ namespace Mollie.WebApplicationExample.Controllers {
 
         [HttpGet]
         public async Task<ActionResult> Index() {
-            ListResponse<CustomerResponse> paymentList = await this._customerClient.GetCustomerListAsync(0, NumberOfPaymentsToList);
-            return View(paymentList.Data);
+            ListResponse<CustomerListData> paymentList = await this._customerClient.GetCustomerListAsync(null, NumberOfPaymentsToList);
+            return View(paymentList.Embedded.Customers);
         }
 
         [HttpGet]
@@ -30,7 +31,9 @@ namespace Mollie.WebApplicationExample.Controllers {
 
         [HttpGet]
         public ActionResult Create() {
-            CustomerRequestModel payment = new CustomerRequestModel();
+            CustomerRequestModel payment = new CustomerRequestModel() {
+                Locale = "nl_NL"
+            };
             return this.View(payment);
         }
 

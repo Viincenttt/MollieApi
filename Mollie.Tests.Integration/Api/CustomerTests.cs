@@ -1,10 +1,12 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
+using Mollie.Api.Client;
 using Mollie.Api.Models.Customer;
 using Mollie.Api.Models.List;
+using Mollie.Api.Models.List.Specific;
 using Mollie.Api.Models.Payment;
-using Mollie.Api.Models.Payment.Request;
-using Mollie.Api.Models.Payment.Response;
 using Mollie.Tests.Integration.Framework;
 using NUnit.Framework;
 
@@ -14,10 +16,11 @@ namespace Mollie.Tests.Integration.Api {
         [Test]
         public async Task CanRetrieveCustomerList() {
             // When: Retrieve customer list with default settings
-            ListResponse<CustomerResponse> response = await this._customerClient.GetCustomerListAsync();
+            ListResponse<CustomerListData> response = await this._customerClient.GetCustomerListAsync();
 
             // Then
             Assert.IsNotNull(response);
+            Assert.IsNotNull(response.Embedded);
         }
 
         [Test]
@@ -26,10 +29,10 @@ namespace Mollie.Tests.Integration.Api {
             int numberOfCustomers = 5;
 
             // When: Retrieve 5 customers
-            ListResponse<CustomerResponse> response = await this._customerClient.GetCustomerListAsync(0, numberOfCustomers);
+            ListResponse<CustomerListData> response = await this._customerClient.GetCustomerListAsync(null, numberOfCustomers);
 
             // Then
-            Assert.IsTrue(response.Data.Count <= numberOfCustomers);
+            Assert.IsTrue(response.Embedded.Customers.Count <= numberOfCustomers);
         }
 
         [Test]
@@ -48,40 +51,64 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [Test]
-        public async Task CanRetrieveRecentPaymentMethods() {
-            // If: We create a new customer and create several payment for the customer
-            CustomerResponse newCustomer = await this.CreateCustomer("Smit", "johnsmit@mollie.com");
-            await this.CreatePayment(newCustomer.Id, PaymentMethod.BankTransfer);
-            await this.CreatePayment(newCustomer.Id, PaymentMethod.Ideal);
-            await this.CreatePayment(newCustomer.Id, PaymentMethod.CreditCard);
+        public async Task CanUpdateCustomer() {
+            // If: We retrieve the customer list
+            ListResponse<CustomerListData> response = await this._customerClient.GetCustomerListAsync();
+            if (response.Embedded.Customers.Count == 0) {
+                Assert.Inconclusive("No customers found. Unable to test updating customers");
+            }
 
-            // When: retrieving the customer again
-            CustomerResponse customerResponse = await this._customerClient.GetCustomerAsync(newCustomer.Id);
+            // When: We update one of the customers in the list
+            string customerIdToUpdate = response.Embedded.Customers.First().Id;
+            string newCustomerName = DateTime.Now.ToShortTimeString();
+            CustomerRequest updateParameters = new CustomerRequest() {
+                Name = newCustomerName
+            };
+            CustomerResponse result = await this._customerClient.UpdateCustomerAsync(customerIdToUpdate, updateParameters);
 
-            // Then recent payment methods should contain the payment method
-            Assert.IsNotNull(customerResponse.RecentlyUsedMethods);
-            Assert.IsNotNull(customerResponse.RecentlyUsedMethods.FirstOrDefault(x => x == PaymentMethod.BankTransfer));
-            Assert.IsNotNull(customerResponse.RecentlyUsedMethods.FirstOrDefault(x => x == PaymentMethod.Ideal));
-            Assert.IsNotNull(customerResponse.RecentlyUsedMethods.FirstOrDefault(x => x == PaymentMethod.CreditCard));
-
+            // Then: Make sure the new name is updated
+            Assert.IsNotNull(result);
+            Assert.AreEqual(newCustomerName, result.Name);
         }
 
-        private async Task<PaymentResponse> CreatePayment(string customerId, PaymentMethod method) {
-            PaymentRequest paymentRequest = new PaymentRequest() {
-                Amount = 100,
-                Description = "Description",
-                RedirectUrl = this.DefaultRedirectUrl,
-                Method = method,
-                CustomerId = customerId
-            };
-            return await this._paymentClient.CreatePaymentAsync(paymentRequest);
+        [Test]
+        public async Task CanDeleteCustomer() {
+            // If: We retrieve the customer list
+            ListResponse<CustomerListData> response = await this._customerClient.GetCustomerListAsync();
+            if (response.Embedded.Customers.Count == 0) {
+                Assert.Inconclusive("No customers found. Unable to test deleting customers");
+            }
+
+            // When: We delete one of the customers in the list
+            string customerIdToDelete = response.Embedded.Customers.First().Id;
+            await this._customerClient.DeleteCustomerAsync(customerIdToDelete);
+
+            // Then: Make sure its deleted
+            AggregateException aggregateException = Assert.Throws<AggregateException>(() => this._customerClient.GetCustomerAsync(customerIdToDelete).Wait());
+            MollieApiException mollieApiException = aggregateException.InnerExceptions.FirstOrDefault(x => x.GetType() == typeof(MollieApiException)) as MollieApiException;
+            Assert.AreEqual((int)HttpStatusCode.Gone, mollieApiException.Details.Status);
+        }
+
+        [Test]
+        public async Task CanGetCustomerByUrlObject() {
+            // If: We create a customer request with only the required parameters
+            string name = "Smit";
+            string email = "johnsmit@mollie.com";
+            CustomerResponse createdCustomer = await this.CreateCustomer(name, email);
+
+            // When: We try to retrieve the customer by Url object
+            CustomerResponse retrievedCustomer = await this._customerClient.GetCustomerAsync(createdCustomer.Links.Self);
+
+            // Then: Make sure it's retrieved
+            Assert.AreEqual(createdCustomer.Name, retrievedCustomer.Name);
+            Assert.AreEqual(createdCustomer.Email, retrievedCustomer.Email);
         }
 
         private async Task<CustomerResponse> CreateCustomer(string name, string email) {
             CustomerRequest customerRequest = new CustomerRequest() {
                 Email = email,
                 Name = name,
-                Locale = Locale.NL
+                Locale = Locale.nl_NL
             };
 
             return await this._customerClient.CreateCustomerAsync(customerRequest);
