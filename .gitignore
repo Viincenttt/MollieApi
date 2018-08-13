@@ -280,3 +280,4 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 Mollie.Api/Client/ProfileClient.cs
+bundles

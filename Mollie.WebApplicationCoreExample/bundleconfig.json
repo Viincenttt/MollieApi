@@ -1,0 +1,17 @@
+﻿[
+  {
+    "outputFileName": "wwwroot/css/bundles/vendor.min.css",
+    "inputFiles": [
+      "node_modules/bootstrap/dist/css/bootstrap.min.css"
+    ],
+    "minify": { "enabled": false }
+  },
+  {
+    "outputFileName": "wwwroot/js/bundles/vendor.min.js",
+    "inputFiles": [
+      "node_modules/jquery/dist/jquery.min.js",
+      "node_modules/bootstrap/dist/js/bootstrap.min.js"
+    ],
+    "minify": { "enabled": false }
+  }
+]
