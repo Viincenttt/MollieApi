@@ -10,7 +10,7 @@ namespace Mollie.Api.Models.List {
         public T Embedded { get; set; }
 
         [JsonProperty("_links")]
-        public ListResponseLinks Links { get; set; }
+        public ListResponseLinks<T> Links { get; set; }
     }
 
     public class ListResponseSimple<T> {
