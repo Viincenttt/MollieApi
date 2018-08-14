@@ -35,6 +35,7 @@ namespace Mollie.Api.Client {
         }
 
         protected async Task<T> GetAsync<T>(UrlObjectLink<T> urlObject) {
+            this.ValidateUrlLink(urlObject);
             string relativeUri = this.StripUrlObject(urlObject);
             var response = await this._httpClient.GetAsync(relativeUri).ConfigureAwait(false);
             return await this.ProcessHttpResponseMessage<T>(response).ConfigureAwait(false);
@@ -141,11 +142,19 @@ namespace Mollie.Api.Client {
             };
         }
 
-        private string StripUrlObject(UrlLink urlObject) {
+        private void ValidateUrlLink(UrlLink urlObject) {
+            // Make sure the URL is not empty
             if (String.IsNullOrEmpty(urlObject?.Href)) {
                 throw new ArgumentException($"Url object is null or href is empty: {urlObject}");
             }
 
+            // Don't execute any requests that don't point to the Mollie API URL for security reasons
+            if (!urlObject.Href.Contains(ApiEndPoint)) {
+                throw new ArgumentException($"Url does not point to the Mollie API: {urlObject.Href}");
+            }
+        }
+
+        private string StripUrlObject(UrlLink urlObject) {
             return urlObject.Href.Replace(ApiEndPoint, String.Empty);
         }
     }
