@@ -13,7 +13,7 @@ namespace Mollie.Api.Models.Payment {
         [EnumMember(Value = "directdebit")] DirectDebit,
         [EnumMember(Value = "eps")] Eps,
         [EnumMember(Value = "giftcard")] GiftCard,
-        [EnumMember(Value = "giropay ")] Giropay,
+        [EnumMember(Value = "giropay")] Giropay,
         [EnumMember(Value = "ideal")] Ideal,
         [EnumMember(Value = "inghomepay")] IngHomePay,
         [EnumMember(Value = "kbc")] Kbc,
