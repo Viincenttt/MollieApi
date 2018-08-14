@@ -34,10 +34,10 @@
     </table>
 
     @if (Model.Links.Previous != null) {
-        <a class="btn btn-secondary" role="button" asp-action="Previous" asp-route-url="@Model.Links.Next.Href">Previous</a>
+        <a class="btn btn-primary" role="button" asp-action="Previous" asp-route-url="@Model.Links.Previous.Href"><< Previous</a>
     }
 
     @if (Model.Links.Next != null) {
-        <a class="btn btn-secondary" role="button" asp-action="Next" asp-route-url="@Model.Links.Next.Href">Next</a>
+        <a class="btn btn-primary float-right" role="button" asp-action="Next" asp-route-url="@Model.Links.Next.Href">Next >></a>
     }
 </div>
