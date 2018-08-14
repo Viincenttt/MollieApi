@@ -7,6 +7,13 @@
     "minify": { "enabled": false }
   },
   {
+    "outputFileName": "wwwroot/css/bundles/site.min.css",
+    "inputFiles": [
+      "wwwroot/css/Site.css"
+    ],
+    "minify": { "enabled": false }
+  },
+  {
     "outputFileName": "wwwroot/js/bundles/vendor.min.js",
     "inputFiles": [
       "node_modules/jquery/dist/jquery.min.js",

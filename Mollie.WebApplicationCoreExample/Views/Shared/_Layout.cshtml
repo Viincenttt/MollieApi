@@ -7,9 +7,11 @@
 
     <link rel="stylesheet" href="~/css/bundles/vendor.min.css">
     <environment include="Development">
+        <link href="~/css/Site.css" rel="stylesheet" />
     </environment>
 
     <environment exclude="Development">
+        <link rel="stylesheet" href="~/css/bundles/site.min.css">
     </environment>
 </head>
 <body>
@@ -17,7 +19,7 @@
         <a class="navbar-brand" href="#">Mollie API Demo Application</a>
         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item"><a class="nav-link" href="#">Payments</a></li>
+                <li class="nav-item"><a class="nav-link" asp-action="Index" asp-controller="Payment">Payments</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">Customers</a></li>
             </ul>
         </div>

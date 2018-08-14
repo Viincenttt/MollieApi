@@ -1,0 +1,35 @@
+﻿@using Mollie.Api.Models.Payment.Response
+@model Mollie.Api.Models.List.ListResponse<Mollie.Api.Models.List.Specific.PaymentListData>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="container">
+    <h2>List of payments</h2>
+    
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Date created</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Status</th>
+            <th scope="col">Method</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (PaymentResponse payment in Model.Embedded.Payments) {
+            <tr>
+                <td>@payment.Id</td>
+                <td>@payment.CreatedAt</td>
+                <td>@payment.Amount.Value @payment.Amount.Currency</td>
+                <td>@payment.Status</td>
+                <td>@payment.Method</td>
+                <td>&nbsp;</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
