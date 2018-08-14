@@ -6,21 +6,26 @@
         /// <summary>
         /// The URL to the current set of payments.
         /// </summary>
-        public string Self { get; set; }
+        public ListResponseLink Self { get; set; }
 
         /// <summary>
         /// The previous set of objects, if available.
         /// </summary>
-        public string Previous { get; set; }
+        public ListResponseLink Previous { get; set; }
 
         /// <summary>
         /// The next set of objects, if available.
         /// </summary>
-        public string Next { get; set; }
+        public ListResponseLink Next { get; set; }
 
         /// <summary>
         /// The URL to the payments list endpoint documentation.
         /// </summary>
-        public string Documentation { get; set; }
+        public ListResponseLink Documentation { get; set; }
+    }
+
+    public class ListResponseLink {
+        public string Href { get; set; }
+        public string Type { get; set; }
     }
 }
