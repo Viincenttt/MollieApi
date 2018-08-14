@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Mollie.WebApplicationCoreExample.Extensions;
+using Mollie.WebApplicationCoreExample.Middleware;
 
 namespace Mollie.WebApplicationCoreExample {
     public class Startup {
@@ -18,6 +18,8 @@ namespace Mollie.WebApplicationCoreExample {
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env) {
+            // TODO: Add middleware to validate Mollie API key and display an error if a live/invalid api key is passed
+
             app.UseDeveloperExceptionPage();
             app.UseStaticFiles();
             app.UseMvcWithDefaultRoute();
