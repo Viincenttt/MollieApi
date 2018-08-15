@@ -2,11 +2,15 @@
 @model Mollie.Api.Models.List.ListResponse<Mollie.Api.Models.List.Specific.PaymentListData>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "List payments";
 }
 
 <div class="container">
     <h2>List of payments</h2>
+    
+    <div class="clearfix">
+        <a asp-action="Create" class="btn btn-primary float-right">Create new payment</a>
+    </div>
 
     <table class="table table-striped">
         <thead>

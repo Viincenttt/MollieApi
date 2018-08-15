@@ -20,6 +20,8 @@ namespace Mollie.WebApplicationCoreExample {
         public void Configure(IApplicationBuilder app, IHostingEnvironment env) {
             // TODO: Add middleware to validate Mollie API key and display an error if a live/invalid api key is passed
 
+            // TODO: Add middleware to catch all mollie API exceptions
+
             app.UseDeveloperExceptionPage();
             app.UseStaticFiles();
             app.UseMvcWithDefaultRoute();
