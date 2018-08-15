@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
 using Mollie.Api.Models.List;
@@ -50,9 +51,14 @@ namespace Mollie.WebApplicationCoreExample.Controllers {
                 RedirectUrl = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}"
             };
 
-            await this._paymentClient.CreatePaymentAsync(paymentRequest);
-
-            return this.RedirectToAction(nameof(this.Index));
+            try {
+                await this._paymentClient.CreatePaymentAsync(paymentRequest);
+                return this.RedirectToAction(nameof(this.Index));
+            }
+            catch (MollieApiException ex) {
+                this.ModelState.AddModelError("MollieApiError", $"Error from Mollie API: {ex.Details.Title} - {ex.Details.Detail }");
+                return this.View();
+            } 
         }
 
         private async Task<ViewResult> GetListByUrl(string url) {
