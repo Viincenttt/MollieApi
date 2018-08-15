@@ -32,12 +32,14 @@
             }
         </tbody>
     </table>
+    
+    <div class="clearfix">
+        @if (Model.Links.Previous != null) {
+            <a class="btn btn-primary" role="button" asp-action="Previous" asp-route-url="@Model.Links.Previous.Href">&lt;&lt; Previous</a>
+        }
 
-    @if (Model.Links.Previous != null) {
-        <a class="btn btn-primary" role="button" asp-action="Previous" asp-route-url="@Model.Links.Previous.Href"><< Previous</a>
-    }
-
-    @if (Model.Links.Next != null) {
-        <a class="btn btn-primary float-right" role="button" asp-action="Next" asp-route-url="@Model.Links.Next.Href">Next >></a>
-    }
+        @if (Model.Links.Next != null) {
+            <a class="btn btn-primary float-right" role="button" asp-action="Next" asp-route-url="@Model.Links.Next.Href">Next &gt;&gt;</a>
+        }
+    </div>
 </div>
