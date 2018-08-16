@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 
-namespace Mollie.WebApplicationCoreExample.Validators {
+namespace Mollie.WebApplicationCoreExample.Framework.Validators {
     public class StaticStringListAttribute : ValidationAttribute {
         private readonly Type _staticClass;
 

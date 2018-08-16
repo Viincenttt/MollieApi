@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace Mollie.WebApplicationCoreExample.Extensions {
+namespace Mollie.WebApplicationCoreExample.Framework.Extensions {
     public static class HtmlHelperExtensions {
         public static IEnumerable<SelectListItem> GetStaticStringSelectList(this IHtmlHelper htmlHelper, Type type) {
             foreach (FieldInfo fieldInfo in type.GetFields(BindingFlags.Static | BindingFlags.Public)) {

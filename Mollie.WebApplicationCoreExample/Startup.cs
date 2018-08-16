@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Mollie.WebApplicationCoreExample.Middleware;
+using Mollie.WebApplicationCoreExample.Framework.Middleware;
 
 namespace Mollie.WebApplicationCoreExample {
     public class Startup {
@@ -13,6 +14,7 @@ namespace Mollie.WebApplicationCoreExample {
 
         public void ConfigureServices(IServiceCollection services) {
             services.AddMollieApi(this._configuration["MollieApiKey"]);
+            services.AddAutoMapper();
 
             services.AddMvc();
         }

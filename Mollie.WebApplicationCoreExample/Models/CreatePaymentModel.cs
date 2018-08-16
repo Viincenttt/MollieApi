@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Mollie.Api.Models;
-using Mollie.WebApplicationCoreExample.Validators;
+using Mollie.WebApplicationCoreExample.Framework.Validators;
 
 namespace Mollie.WebApplicationCoreExample.Models {
     public class CreatePaymentModel {

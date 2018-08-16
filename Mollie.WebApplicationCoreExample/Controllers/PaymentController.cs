@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
@@ -13,15 +14,17 @@ using Mollie.WebApplicationCoreExample.Models;
 namespace Mollie.WebApplicationCoreExample.Controllers {
     public class PaymentController : Controller {
         private readonly IPaymentClient _paymentClient;
+        private readonly IMapper _mapper;
 
-        public PaymentController(IPaymentClient paymentClient) {
+        public PaymentController(IPaymentClient paymentClient, IMapper mapper) {
             this._paymentClient = paymentClient;
+            this._mapper = mapper;
         }
 
         [HttpGet]
         public async Task<ViewResult> Index() {
             ListResponse<PaymentListData> paymentList = await this._paymentClient.GetPaymentListAsync();
-            OverviewModel<PaymentResponse> model = this.CreateOverviewModel(paymentList);
+            OverviewModel<PaymentResponse> model = this._mapper.Map<OverviewModel<PaymentResponse>>(paymentList);
 
             return this.View(model);
         }
@@ -51,11 +54,8 @@ namespace Mollie.WebApplicationCoreExample.Controllers {
                 return this.View();
             }
 
-            PaymentRequest paymentRequest = new PaymentRequest() {
-                Amount = new Amount(model.Currency, model.Amount.ToString(CultureInfo.InvariantCulture)),
-                Description = model.Description,
-                RedirectUrl = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}"
-            };
+            PaymentRequest paymentRequest = this._mapper.Map<PaymentRequest>(model);
+            paymentRequest.RedirectUrl = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}";
             
             await this._paymentClient.CreatePaymentAsync(paymentRequest);
             return this.RedirectToAction(nameof(this.Index));
@@ -67,18 +67,8 @@ namespace Mollie.WebApplicationCoreExample.Controllers {
             };
 
             ListResponse<PaymentListData> paymentList = await this._paymentClient.GetPaymentListAsync(urlObject);
-            OverviewModel<PaymentResponse> model = this.CreateOverviewModel(paymentList);
+            OverviewModel<PaymentResponse> model = this._mapper.Map<OverviewModel<PaymentResponse>>(paymentList);
             return this.View(nameof(this.Index), model);
-        }
-
-        private OverviewModel<PaymentResponse> CreateOverviewModel(ListResponse<PaymentListData> paymentList) {
-            return new OverviewModel<PaymentResponse>() {
-                Items = paymentList.Embedded.Payments,
-                Navigation = new OverviewNavigationLinks() {
-                    Next = paymentList.Links.Next,
-                    Previous = paymentList.Links.Previous
-                }
-            };
         }
     }
 }
