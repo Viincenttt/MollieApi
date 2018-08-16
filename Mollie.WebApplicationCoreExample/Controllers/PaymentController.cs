@@ -6,6 +6,7 @@ using Mollie.Api.Models;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.List.Specific;
 using Mollie.Api.Models.Payment.Request;
+using Mollie.Api.Models.Payment.Response;
 using Mollie.Api.Models.Url;
 using Mollie.WebApplicationCoreExample.Models;
 
@@ -20,7 +21,9 @@ namespace Mollie.WebApplicationCoreExample.Controllers {
         [HttpGet]
         public async Task<ViewResult> Index() {
             ListResponse<PaymentListData> paymentList = await this._paymentClient.GetPaymentListAsync();
-            return this.View(paymentList);
+            OverviewModel<PaymentResponse> model = this.CreateOverviewModel(paymentList);
+
+            return this.View(model);
         }
 
         [HttpGet]
@@ -64,7 +67,18 @@ namespace Mollie.WebApplicationCoreExample.Controllers {
             };
 
             ListResponse<PaymentListData> paymentList = await this._paymentClient.GetPaymentListAsync(urlObject);
-            return this.View(nameof(this.Index), paymentList);
+            OverviewModel<PaymentResponse> model = this.CreateOverviewModel(paymentList);
+            return this.View(nameof(this.Index), model);
+        }
+
+        private OverviewModel<PaymentResponse> CreateOverviewModel(ListResponse<PaymentListData> paymentList) {
+            return new OverviewModel<PaymentResponse>() {
+                Items = paymentList.Embedded.Payments,
+                Navigation = new OverviewNavigationLinks() {
+                    Next = paymentList.Links.Next,
+                    Previous = paymentList.Links.Previous
+                }
+            };
         }
     }
 }
