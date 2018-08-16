@@ -5,7 +5,7 @@
         public string Detail { get; set; }
 
         public override string ToString() {
-            return $"Status: {this.Status} - {this.Title} - {this.Detail}";
+            return $"{this.Title} - {this.Detail}";
         }
     }
 }

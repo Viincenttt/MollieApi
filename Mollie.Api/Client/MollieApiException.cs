@@ -6,8 +6,12 @@ namespace Mollie.Api.Client {
     public class MollieApiException : Exception {
         public MollieErrorMessage Details { get; set; }
 
-        public MollieApiException(string json) : base("Exception occured while communicating with Mollie API. View the Details property for more information") {
-            this.Details = JsonConvert.DeserializeObject<MollieErrorMessage>(json);
+        public MollieApiException(string json) : base(ParseErrorMessage(json).ToString()){
+            this.Details = ParseErrorMessage(json);
+        }
+
+        private static MollieErrorMessage ParseErrorMessage(string json) {
+            return JsonConvert.DeserializeObject<MollieErrorMessage>(json);
         }
     }
 }
