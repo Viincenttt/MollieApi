@@ -14,7 +14,7 @@ namespace Mollie.WebApplicationCoreExample.Services.Automapper {
                 .ForMember(x => x.Amount, m => m.MapFrom(x => new Amount(x.Currency, x.Amount.ToString(CultureInfo.InvariantCulture))));
 
             this.CreateMap<ListResponse<PaymentListData>, OverviewModel<PaymentResponse>>()
-                .ForMember(x => x.Items, m => m.MapFrom(x => x.Embedded.Payments))
+                .ForMember(x => x.Items, m => m.MapFrom(x => x.Embedded.Items))
                 .ForMember(x => x.Navigation, m => m.MapFrom(x => new OverviewNavigationLinks(x.Links.Previous, x.Links.Next)));
         }
     }

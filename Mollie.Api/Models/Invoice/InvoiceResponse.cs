@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Mollie.Api.Models.Settlement;
 using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Invoice {
-	public class InvoiceResponse {
+	public class InvoiceResponse : IResponseObject {
         /// <summary>
         /// Indicates the response contains an invoice object. Will always contain invoice for this endpoint.
         /// </summary>

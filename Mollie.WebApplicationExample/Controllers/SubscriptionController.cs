@@ -22,7 +22,7 @@ namespace Mollie.WebApplicationExample.Controllers {
             ListResponse<SubscriptionListData> subscriptions = await this._subscriptionClient.GetSubscriptionListAsync(customerId);
             SubscriptionListViewModel viewModel = new SubscriptionListViewModel() {
                 CustomerId = customerId,
-                Subscriptions = subscriptions.Embedded.Subscriptions
+                Subscriptions = subscriptions.Embedded.Items
             };
 
             return this.View(viewModel);

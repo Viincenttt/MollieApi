@@ -24,7 +24,7 @@ namespace Mollie.WebApplicationExample.Controllers {
             ViewBag.CustomerId = customerId;
 
             ListResponse<MandateListData> mandateList = await this._mandateClient.GetMandateListAsync(customerId);
-            return this.View(mandateList.Embedded.Mandates);
+            return this.View(mandateList.Embedded.Items);
         }
 
         [HttpGet]

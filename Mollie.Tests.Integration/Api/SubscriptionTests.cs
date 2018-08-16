@@ -36,7 +36,7 @@ namespace Mollie.Tests.Integration.Api {
             ListResponse<SubscriptionListData> response = await this._subscriptionClient.GetSubscriptionListAsync(customerId, null, numberOfSubscriptions);
 
             // Then
-            Assert.IsTrue(response.Embedded.Subscriptions.Count <= numberOfSubscriptions);
+            Assert.IsTrue(response.Embedded.Items.Count <= numberOfSubscriptions);
         }
 
         [Test]
@@ -72,7 +72,7 @@ namespace Mollie.Tests.Integration.Api {
 
             // When
             if (subscriptions.Count > 0) {
-                string subscriptionId = subscriptions.Embedded.Subscriptions.First().Id;
+                string subscriptionId = subscriptions.Embedded.Items.First().Id;
                 await this._subscriptionClient.CancelSubscriptionAsync(customerId, subscriptionId);
                 SubscriptionResponse cancelledSubscription = await this._subscriptionClient.GetSubscriptionAsync(customerId, subscriptionId);
 
@@ -86,9 +86,9 @@ namespace Mollie.Tests.Integration.Api {
         public async Task<string> GetFirstCustomerWithValidMandate() {
             ListResponse<CustomerListData> customers = await this._customerClient.GetCustomerListAsync();
             
-            foreach (CustomerResponse customer in customers.Embedded.Customers) {
+            foreach (CustomerResponse customer in customers.Embedded.Items) {
                 ListResponse<MandateListData> mandates = await this._mandateClient.GetMandateListAsync(customer.Id);
-                if (mandates.Embedded.Mandates.Any(x => x.Status == MandateStatus.Valid)) {
+                if (mandates.Embedded.Items.Any(x => x.Status == MandateStatus.Valid)) {
                     return customer.Id;
                 }
             }

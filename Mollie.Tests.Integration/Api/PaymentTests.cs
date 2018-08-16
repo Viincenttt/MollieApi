@@ -39,7 +39,7 @@ namespace Mollie.Tests.Integration.Api {
             ListResponse<PaymentListData> response = await this._paymentClient.GetPaymentListAsync(null, numberOfPayments);
 
             // Then
-            Assert.IsTrue(response.Embedded.Payments.Count <= numberOfPayments);
+            Assert.IsTrue(response.Embedded.Items.Count <= numberOfPayments);
         }
 
         [Test]
@@ -243,13 +243,13 @@ namespace Mollie.Tests.Integration.Api {
 
         private async Task<MandateResponse> GetFirstValidMandate() {
             ListResponse<CustomerListData> customers = await this._customerClient.GetCustomerListAsync();
-            if (!customers.Embedded.Customers.Any()) {
+            if (!customers.Embedded.Items.Any()) {
                 Assert.Inconclusive("No customers found. Unable to test recurring payment tests");
             }
 
-            foreach (CustomerResponse customer in customers.Embedded.Customers) {
+            foreach (CustomerResponse customer in customers.Embedded.Items) {
                 ListResponse<MandateListData> customerMandates = await this._mandateClient.GetMandateListAsync(customer.Id);
-                MandateResponse firstValidMandate = customerMandates.Embedded.Mandates.FirstOrDefault(x => x.Status == MandateStatus.Valid);
+                MandateResponse firstValidMandate = customerMandates.Embedded.Items.FirstOrDefault(x => x.Status == MandateStatus.Valid);
                 if (firstValidMandate != null) {
                     return firstValidMandate;
                 }

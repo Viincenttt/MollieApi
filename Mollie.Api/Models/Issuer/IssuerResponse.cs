@@ -1,5 +1,5 @@
 ﻿namespace Mollie.Api.Models.Issuer {
-    public class IssuerResponse {
+    public class IssuerResponse : IResponseObject {
         /// <summary>
         ///     The issuer's unique identifier, for example ideal_ABNANL2A. When creating a payment, specify this ID as the issuer
         ///     parameter to forward

@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.PaymentMethod {
-    public class PaymentMethodResponse {
+    public class PaymentMethodResponse : IResponseObject {
         /// <summary>
         /// Indicates the response contains a method object. Will always contain method for this endpoint.
         /// </summary>

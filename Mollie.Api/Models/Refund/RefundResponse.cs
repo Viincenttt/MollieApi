@@ -1,9 +1,8 @@
 ﻿using System;
-using Mollie.Api.Models.Payment.Response;
 using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Refund {
-    public class RefundResponse {
+    public class RefundResponse : IResponseObject {
         /// <summary>
         /// Indicates the response contains a refund object. Will always contain refund for this endpoint.
         /// </summary>

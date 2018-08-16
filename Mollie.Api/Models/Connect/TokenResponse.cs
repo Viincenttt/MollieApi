@@ -1,5 +1,5 @@
 ﻿namespace Mollie.Api.Models.Connect {
-    public class TokenResponse {
+    public class TokenResponse : IResponseObject {
         /// <summary>
         ///     The access token, with which you will be able to access the Mollie API on the merchant's behalf.
         /// </summary>

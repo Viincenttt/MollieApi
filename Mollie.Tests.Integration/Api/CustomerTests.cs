@@ -32,7 +32,7 @@ namespace Mollie.Tests.Integration.Api {
             ListResponse<CustomerListData> response = await this._customerClient.GetCustomerListAsync(null, numberOfCustomers);
 
             // Then
-            Assert.IsTrue(response.Embedded.Customers.Count <= numberOfCustomers);
+            Assert.IsTrue(response.Embedded.Items.Count <= numberOfCustomers);
         }
 
         [Test]
@@ -54,12 +54,12 @@ namespace Mollie.Tests.Integration.Api {
         public async Task CanUpdateCustomer() {
             // If: We retrieve the customer list
             ListResponse<CustomerListData> response = await this._customerClient.GetCustomerListAsync();
-            if (response.Embedded.Customers.Count == 0) {
+            if (response.Embedded.Items.Count == 0) {
                 Assert.Inconclusive("No customers found. Unable to test updating customers");
             }
 
             // When: We update one of the customers in the list
-            string customerIdToUpdate = response.Embedded.Customers.First().Id;
+            string customerIdToUpdate = response.Embedded.Items.First().Id;
             string newCustomerName = DateTime.Now.ToShortTimeString();
             CustomerRequest updateParameters = new CustomerRequest() {
                 Name = newCustomerName
@@ -75,12 +75,12 @@ namespace Mollie.Tests.Integration.Api {
         public async Task CanDeleteCustomer() {
             // If: We retrieve the customer list
             ListResponse<CustomerListData> response = await this._customerClient.GetCustomerListAsync();
-            if (response.Embedded.Customers.Count == 0) {
+            if (response.Embedded.Items.Count == 0) {
                 Assert.Inconclusive("No customers found. Unable to test deleting customers");
             }
 
             // When: We delete one of the customers in the list
-            string customerIdToDelete = response.Embedded.Customers.First().Id;
+            string customerIdToDelete = response.Embedded.Items.First().Id;
             await this._customerClient.DeleteCustomerAsync(customerIdToDelete);
 
             // Then: Make sure its deleted

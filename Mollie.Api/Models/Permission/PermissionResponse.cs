@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Permission {
-    public class PermissionResponse {
+    public class PermissionResponse : IResponseObject {
         /// <summary>
         /// Indicates the response contains a permission object.
         /// Possible values: permission

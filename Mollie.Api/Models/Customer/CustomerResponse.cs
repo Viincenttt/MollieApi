@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 namespace Mollie.Api.Models.Customer {
-    public class CustomerResponse {
+    public class CustomerResponse : IResponseObject {
         /// <summary>
         /// Indicates the response contains a customer object. Will always contain customer for this endpoint.
         /// </summary>

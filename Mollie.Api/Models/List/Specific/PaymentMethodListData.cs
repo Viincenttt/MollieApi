@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using Mollie.Api.Models.PaymentMethod;
+using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.List.Specific {
-    public class PaymentMethodListData {
-        public List<PaymentMethodResponse> Methods { get; set; }
+    public class PaymentMethodListData : IListData<PaymentMethodResponse> {
+        [JsonProperty("methods")]
+        public List<PaymentMethodResponse> Items { get; set; }
     }
 }

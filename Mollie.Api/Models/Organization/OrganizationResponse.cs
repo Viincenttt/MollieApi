@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Organization {
-    public class OrganizationResponse {
+    public class OrganizationResponse : IResponseObject {
         /// <summary>
         /// Indicates the response contains a organization object.
         /// </summary>
