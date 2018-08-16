@@ -19,7 +19,7 @@
 
                 <div class="form-group">
                     <label asp-for="Currency"></label>
-                    <input class="form-control" asp-for="Currency" />
+                    <select class="form-control" asp-for="Currency" asp-items="@Html.GetStaticStringSelectList(typeof(Currency))"></select>
                 </div>
 
                 <div class="form-group">

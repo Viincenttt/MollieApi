@@ -1,7 +1,6 @@
 ﻿using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
 using Mollie.Api.Models.List;
@@ -36,7 +35,11 @@ namespace Mollie.WebApplicationCoreExample.Controllers {
 
         [HttpGet]
         public ViewResult Create() {
-            return this.View();
+            CreatePaymentModel model = new CreatePaymentModel() {
+                Currency = Currency.EUR
+            };
+
+            return this.View(model);
         }
 
         [HttpPost]
