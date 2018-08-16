@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Mollie.Api.Models.Payment.Request;
 
 namespace Mollie.WebApplicationCoreExample.Models {
     public class CreatePaymentModel {
         [Required]
+        [Range(0.01, 1000, ErrorMessage = "Please enter a number between 0.01 and 1000")]
         public decimal Amount { get; set; }
 
         [Required]
