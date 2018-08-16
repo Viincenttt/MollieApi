@@ -50,15 +50,9 @@ namespace Mollie.WebApplicationCoreExample.Controllers {
                 Description = model.Description,
                 RedirectUrl = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}"
             };
-
-            try {
-                await this._paymentClient.CreatePaymentAsync(paymentRequest);
-                return this.RedirectToAction(nameof(this.Index));
-            }
-            catch (MollieApiException ex) {
-                this.ModelState.AddModelError("MollieApiError", $"Error from Mollie API: {ex.Details.Title} - {ex.Details.Detail }");
-                return this.View();
-            } 
+            
+            await this._paymentClient.CreatePaymentAsync(paymentRequest);
+            return this.RedirectToAction(nameof(this.Index));
         }
 
         private async Task<ViewResult> GetListByUrl(string url) {
