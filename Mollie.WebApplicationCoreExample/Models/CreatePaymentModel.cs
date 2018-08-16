@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Mollie.Api.Models;
+using Mollie.WebApplicationCoreExample.Validators;
 
 namespace Mollie.WebApplicationCoreExample.Models {
     public class CreatePaymentModel {
@@ -8,6 +10,7 @@ namespace Mollie.WebApplicationCoreExample.Models {
         public decimal Amount { get; set; }
 
         [Required]
+        [StaticStringList(typeof(Currency))]
         public string Currency { get; set; }
 
         [Required]
