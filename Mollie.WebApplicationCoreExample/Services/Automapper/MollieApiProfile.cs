@@ -8,8 +8,8 @@ using Mollie.Api.Models.Payment.Response;
 using Mollie.WebApplicationCoreExample.Models;
 
 namespace Mollie.WebApplicationCoreExample.Services.Automapper {
-    public class WebsiteProfile : Profile {
-        public WebsiteProfile() {
+    public class MollieApiProfile : Profile {
+        public MollieApiProfile() {
             this.CreateMap<CreatePaymentModel, PaymentRequest>()
                 .ForMember(x => x.Amount, m => m.MapFrom(x => new Amount(x.Currency, x.Amount.ToString(CultureInfo.InvariantCulture))));
 
