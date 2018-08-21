@@ -4,7 +4,7 @@ using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
 using Mollie.Api.Models.List;
-using Mollie.Api.Models.List.Specific;
+
 using Mollie.Api.Models.Subscription;
 using Mollie.WebApplicationExample.Infrastructure;
 using Mollie.WebApplicationExample.Models;
@@ -19,10 +19,10 @@ namespace Mollie.WebApplicationExample.Controllers {
 
         [HttpGet]
         public async Task<ActionResult> Index(string customerId) {
-            ListResponse<SubscriptionListData> subscriptions = await this._subscriptionClient.GetSubscriptionListAsync(customerId);
+            ListResponse<SubscriptionResponse> subscriptions = await this._subscriptionClient.GetSubscriptionListAsync(customerId);
             SubscriptionListViewModel viewModel = new SubscriptionListViewModel() {
                 CustomerId = customerId,
-                Subscriptions = subscriptions.Embedded.Items
+                Subscriptions = subscriptions.Items
             };
 
             return this.View(viewModel);

@@ -1,41 +1,35 @@
 ﻿using System;
+using Newtonsoft.Json;
 
 namespace Mollie.Api.JsonConverters {
-
-    using Framework.Factories;
-
-    using Models.Payment;
-    using Models.Payment.Response;
-
     using Newtonsoft.Json.Linq;
-    /*
-    public class ListResponseJsonConverter : JsonCreationConverter<PaymentResponse> {
-        private readonly PaymentResponseFactory _paymentResponseFactory;
+    public class ListResponseConverter : JsonConverter {
 
-        public PaymentResponseConverter(PaymentResponseFactory paymentResponseFactory)
-        {
-            this._paymentResponseFactory = paymentResponseFactory;
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer) {
+            throw new NotImplementedException("Not implemented");
         }
 
-        protected override PaymentResponse Create(Type objectType, JObject jObject)
-        {
-            var paymentMethod = this.GetPaymentMethod(jObject);
-
-            return this._paymentResponseFactory.Create(paymentMethod);
-        }
-
-        private PaymentMethod? GetPaymentMethod(JObject jObject)
-        {
-            if (this.FieldExists("method", jObject))
-            {
-                var paymentMethodValue = (string)jObject["method"];
-                if (!string.IsNullOrEmpty(paymentMethodValue))
-                {
-                    return (PaymentMethod)Enum.Parse(typeof(PaymentMethod), paymentMethodValue, true);
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer) {
+            if (reader.TokenType == JsonToken.Null) {
+                return null;
+            }
+            else {
+                // Find the first array object and deserialize it to the list we want
+                JObject obj = JObject.Load(reader);
+                if (obj.First?.First is JArray objectArray) {
+                    return objectArray.ToObject(objectType);
                 }
             }
 
             return null;
         }
-    }*/
+
+        public override bool CanWrite {
+            get { return false; }
+        }
+
+        public override bool CanConvert(Type objectType) {
+            return false;
+        }
+    }
 }

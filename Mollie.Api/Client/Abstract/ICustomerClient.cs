@@ -1,9 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Mollie.Api.Models;
+﻿using System.Threading.Tasks;
 using Mollie.Api.Models.Customer;
 using Mollie.Api.Models.List;
-using Mollie.Api.Models.List.Specific;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client.Abstract {
@@ -13,7 +10,7 @@ namespace Mollie.Api.Client.Abstract {
         Task DeleteCustomerAsync(string customerId);
         Task<CustomerResponse> GetCustomerAsync(string customerId);
         Task<CustomerResponse> GetCustomerAsync(UrlObjectLink<CustomerResponse> url);
-        Task<ListResponse<CustomerListData>> GetCustomerListAsync(UrlObjectLink<ListResponse<CustomerListData>> url);
-        Task<ListResponse<CustomerListData>> GetCustomerListAsync(string from = null, int? limit = null);
+        Task<ListResponse<CustomerResponse>> GetCustomerListAsync(UrlObjectLink<ListResponse<CustomerResponse>> url);
+        Task<ListResponse<CustomerResponse>> GetCustomerListAsync(string from = null, int? limit = null);
     }
 }

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
 using Mollie.Api.Models.List;
-using Mollie.Api.Models.List.Specific;
+
 using Mollie.Api.Models.Payment.Request;
 using Mollie.Api.Models.Payment.Response;
 using Mollie.Api.Models.Url;
@@ -23,7 +23,7 @@ namespace Mollie.WebApplicationCoreExample.Controllers {
 
         [HttpGet]
         public async Task<ViewResult> Index() {
-            ListResponse<PaymentListData> paymentList = await this._paymentClient.GetPaymentListAsync();
+            ListResponse<PaymentResponse> paymentList = await this._paymentClient.GetPaymentListAsync();
             OverviewModel<PaymentResponse> model = this._mapper.Map<OverviewModel<PaymentResponse>>(paymentList);
 
             return this.View(model);
@@ -62,11 +62,11 @@ namespace Mollie.WebApplicationCoreExample.Controllers {
         }
 
         private async Task<ViewResult> GetListByUrl(string url) {
-            UrlObjectLink<ListResponse<PaymentListData>> urlObject = new UrlObjectLink<ListResponse<PaymentListData>>() {
+            UrlObjectLink<ListResponse<PaymentResponse>> urlObject = new UrlObjectLink<ListResponse<PaymentResponse>>() {
                 Href = url
             };
 
-            ListResponse<PaymentListData> paymentList = await this._paymentClient.GetPaymentListAsync(urlObject);
+            ListResponse<PaymentResponse> paymentList = await this._paymentClient.GetPaymentListAsync(urlObject);
             OverviewModel<PaymentResponse> model = this._mapper.Map<OverviewModel<PaymentResponse>>(paymentList);
             return this.View(nameof(this.Index), model);
         }

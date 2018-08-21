@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Mollie.Api.Client;
-using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
 using Mollie.Api.Models.List;
-using Mollie.Api.Models.List.Specific;
 using Mollie.Api.Models.Payment;
 using Mollie.Api.Models.Payment.Request;
 using Mollie.Api.Models.Payment.Response;
@@ -23,11 +21,11 @@ namespace Mollie.Tests.Integration.Api {
         [Test]
         public async Task CanRetrievePaymentList() {
             // When: Retrieve payment list with default settings
-            ListResponse<PaymentListData> response = await this._paymentClient.GetPaymentListAsync();
+            ListResponse<PaymentResponse> response = await this._paymentClient.GetPaymentListAsync();
 
             // Then
             Assert.IsNotNull(response);
-            Assert.IsNotNull(response.Embedded);
+            Assert.IsNotNull(response.Items);
         }
 
         [Test]
@@ -36,10 +34,10 @@ namespace Mollie.Tests.Integration.Api {
             int numberOfPayments = 5;
 
             // When: Retrieve 5 payments
-            ListResponse<PaymentListData> response = await this._paymentClient.GetPaymentListAsync(null, numberOfPayments);
+            ListResponse<PaymentResponse> response = await this._paymentClient.GetPaymentListAsync(null, numberOfPayments);
 
             // Then
-            Assert.IsTrue(response.Embedded.Items.Count <= numberOfPayments);
+            Assert.IsTrue(response.Items.Count <= numberOfPayments);
         }
 
         [Test]
@@ -242,14 +240,14 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         private async Task<MandateResponse> GetFirstValidMandate() {
-            ListResponse<CustomerListData> customers = await this._customerClient.GetCustomerListAsync();
-            if (!customers.Embedded.Items.Any()) {
+            ListResponse<CustomerResponse> customers = await this._customerClient.GetCustomerListAsync();
+            if (!customers.Items.Any()) {
                 Assert.Inconclusive("No customers found. Unable to test recurring payment tests");
             }
 
-            foreach (CustomerResponse customer in customers.Embedded.Items) {
-                ListResponse<MandateListData> customerMandates = await this._mandateClient.GetMandateListAsync(customer.Id);
-                MandateResponse firstValidMandate = customerMandates.Embedded.Items.FirstOrDefault(x => x.Status == MandateStatus.Valid);
+            foreach (CustomerResponse customer in customers.Items) {
+                ListResponse<MandateResponse> customerMandates = await this._mandateClient.GetMandateListAsync(customer.Id);
+                MandateResponse firstValidMandate = customerMandates.Items.FirstOrDefault(x => x.Status == MandateStatus.Valid);
                 if (firstValidMandate != null) {
                     return firstValidMandate;
                 }

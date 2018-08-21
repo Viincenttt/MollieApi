@@ -4,7 +4,7 @@ using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
 using Mollie.Api.Models.List;
-using Mollie.Api.Models.List.Specific;
+
 using Mollie.Api.Models.Payment.Request;
 using Mollie.Api.Models.Payment.Response;
 using Mollie.WebApplicationExample.Infrastructure;
@@ -21,8 +21,8 @@ namespace Mollie.WebApplicationExample.Controllers {
 
         [HttpGet]
         public async Task<ActionResult> Index() {
-            ListResponse<PaymentListData> paymentList = await this._paymentClient.GetPaymentListAsync(null, NumberOfPaymentsToList);
-            return this.View(paymentList.Embedded.Items);
+            ListResponse<PaymentResponse> paymentList = await this._paymentClient.GetPaymentListAsync(null, NumberOfPaymentsToList);
+            return this.View(paymentList.Items);
         }
 
         [HttpGet]

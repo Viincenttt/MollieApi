@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Mollie.Api.Client;
 using Mollie.Api.Models.Customer;
 using Mollie.Api.Models.List;
-using Mollie.Api.Models.List.Specific;
 using Mollie.Api.Models.Payment;
 using Mollie.Tests.Integration.Framework;
 using NUnit.Framework;
@@ -16,11 +15,11 @@ namespace Mollie.Tests.Integration.Api {
         [Test]
         public async Task CanRetrieveCustomerList() {
             // When: Retrieve customer list with default settings
-            ListResponse<CustomerListData> response = await this._customerClient.GetCustomerListAsync();
+            ListResponse<CustomerResponse> response = await this._customerClient.GetCustomerListAsync();
 
             // Then
             Assert.IsNotNull(response);
-            Assert.IsNotNull(response.Embedded);
+            Assert.IsNotNull(response.Items);
         }
 
         [Test]
@@ -29,10 +28,10 @@ namespace Mollie.Tests.Integration.Api {
             int numberOfCustomers = 5;
 
             // When: Retrieve 5 customers
-            ListResponse<CustomerListData> response = await this._customerClient.GetCustomerListAsync(null, numberOfCustomers);
+            ListResponse<CustomerResponse> response = await this._customerClient.GetCustomerListAsync(null, numberOfCustomers);
 
             // Then
-            Assert.IsTrue(response.Embedded.Items.Count <= numberOfCustomers);
+            Assert.IsTrue(response.Items.Count <= numberOfCustomers);
         }
 
         [Test]
@@ -53,13 +52,13 @@ namespace Mollie.Tests.Integration.Api {
         [Test]
         public async Task CanUpdateCustomer() {
             // If: We retrieve the customer list
-            ListResponse<CustomerListData> response = await this._customerClient.GetCustomerListAsync();
-            if (response.Embedded.Items.Count == 0) {
+            ListResponse<CustomerResponse> response = await this._customerClient.GetCustomerListAsync();
+            if (response.Items.Count == 0) {
                 Assert.Inconclusive("No customers found. Unable to test updating customers");
             }
 
             // When: We update one of the customers in the list
-            string customerIdToUpdate = response.Embedded.Items.First().Id;
+            string customerIdToUpdate = response.Items.First().Id;
             string newCustomerName = DateTime.Now.ToShortTimeString();
             CustomerRequest updateParameters = new CustomerRequest() {
                 Name = newCustomerName
@@ -74,13 +73,13 @@ namespace Mollie.Tests.Integration.Api {
         [Test]
         public async Task CanDeleteCustomer() {
             // If: We retrieve the customer list
-            ListResponse<CustomerListData> response = await this._customerClient.GetCustomerListAsync();
-            if (response.Embedded.Items.Count == 0) {
+            ListResponse<CustomerResponse> response = await this._customerClient.GetCustomerListAsync();
+            if (response.Items.Count == 0) {
                 Assert.Inconclusive("No customers found. Unable to test deleting customers");
             }
 
             // When: We delete one of the customers in the list
-            string customerIdToDelete = response.Embedded.Items.First().Id;
+            string customerIdToDelete = response.Items.First().Id;
             await this._customerClient.DeleteCustomerAsync(customerIdToDelete);
 
             // Then: Make sure its deleted

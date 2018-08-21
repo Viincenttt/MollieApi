@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Mollie.Api.Models.List;
-using Mollie.Api.Models.List.Specific;
+
 using Mollie.Api.Models.Payment;
 using Mollie.Api.Models.PaymentMethod;
 using Mollie.Tests.Integration.Framework;
@@ -12,11 +12,11 @@ namespace Mollie.Tests.Integration.Api {
         [Test]
         public async Task CanRetrievePaymentMethodList() {
             // When: Retrieve payment list with default settings
-            ListResponse<PaymentMethodListData> response = await this._paymentMethodClient.GetPaymentMethodListAsync();
+            ListResponse<PaymentMethodResponse> response = await this._paymentMethodClient.GetPaymentMethodListAsync();
 
             // Then: Make sure it can be retrieved
             Assert.IsNotNull(response);
-            Assert.IsNotNull(response.Embedded);
+            Assert.IsNotNull(response.Items);
         }
 
         [TestCase(PaymentMethod.Ideal)]

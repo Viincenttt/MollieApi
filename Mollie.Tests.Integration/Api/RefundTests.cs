@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Mollie.Api.Models;
 using Mollie.Api.Models.List;
-using Mollie.Api.Models.List.Specific;
+
 using Mollie.Api.Models.Payment.Request;
 using Mollie.Api.Models.Payment.Response;
 using Mollie.Api.Models.Refund;
@@ -83,11 +83,11 @@ namespace Mollie.Tests.Integration.Api {
             PaymentResponse payment = await this.CreatePayment();
 
             // When: Retrieve refund list for this payment
-            ListResponse<RefundListData> refundList = await this._refundClient.GetRefundListAsync(payment.Id);
+            ListResponse<RefundResponse> refundList = await this._refundClient.GetRefundListAsync(payment.Id);
 
             // Then
             Assert.IsNotNull(refundList);
-            Assert.IsNotNull(refundList.Embedded);
+            Assert.IsNotNull(refundList.Items);
         }
 
         private async Task<PaymentResponse> CreatePayment(string amount = "100.00") {

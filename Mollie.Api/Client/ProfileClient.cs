@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models.List;
-using Mollie.Api.Models.List.Specific;
 using Mollie.Api.Models.Profile.Request;
 using Mollie.Api.Models.Profile.Response;
 
@@ -18,8 +17,8 @@ namespace Mollie.Api.Client {
             return await this.GetAsync<ProfileResponse>($"profiles/{profileId}").ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<ProfileListData>> GetProfileListAsync(string from = null, int? limit = null) {
-            return await this.GetListAsync<ListResponse<ProfileListData>>("profiles", from, limit).ConfigureAwait(false);
+        public async Task<ListResponse<ProfileResponse>> GetProfileListAsync(string from = null, int? limit = null) {
+            return await this.GetListAsync<ListResponse<ProfileResponse>>("profiles", from, limit).ConfigureAwait(false);
         }
 
         public async Task<ProfileResponse> UpdateProfileAsync(string profileId, ProfileRequest request) {

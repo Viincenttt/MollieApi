@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models.Customer;
 using Mollie.Api.Models.List;
-using Mollie.Api.Models.List.Specific;
+
 using Mollie.Api.Models.Payment.Response;
 using Mollie.WebApplicationCoreExample.Models;
 
@@ -20,7 +20,7 @@ namespace Mollie.WebApplicationCoreExample.Controllers {
 
         [HttpGet]
         public async Task<ViewResult> Index() {
-            ListResponse<CustomerListData> customerList = await this._customerClient.GetCustomerListAsync();
+            ListResponse<CustomerResponse> customerList = await this._customerClient.GetCustomerListAsync();
             OverviewModel<CustomerResponse> model = this._mapper.Map<OverviewModel<CustomerResponse>>(customerList);
 
             return this.View(model);
