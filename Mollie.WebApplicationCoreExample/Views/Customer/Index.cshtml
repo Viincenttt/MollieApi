@@ -1,0 +1,38 @@
+﻿@using Mollie.Api.Models.Customer;
+
+@model OverviewModel<CustomerResponse>
+
+@{
+    ViewData["Title"] = "List payments";
+}
+
+<div class="container">
+    <h2>List of customers</h2>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Date created</th>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Locale</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (CustomerResponse customer in Model.Items) {
+                <tr>
+                    <td>@customer.Id</td>
+                    <td>@customer.CreatedAt</td>
+                    <td>@customer.Name</td>
+                    <td><a href="mailto:@customer.Email">@customer.Email</a></td>
+                    <td>@customer.Locale</td>
+                    <td>&nbsp;</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    
+    @Html.Partial("_OverviewNavigation", Model.Navigation)
+</div>
