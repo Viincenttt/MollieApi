@@ -1,4 +1,5 @@
-﻿@using Mollie.Api.Models.Payment.Response
+﻿@using Mollie.Api.Models.Payment
+@using Mollie.Api.Models.Payment.Response
 @model OverviewModel<PaymentResponse>
 
 @{
@@ -31,7 +32,11 @@
                     <td>@payment.Amount.Value @payment.Amount.Currency</td>
                     <td>@payment.Status</td>
                     <td>@payment.Method</td>
-                    <td>&nbsp;</td>
+                    <td>
+                        @if (payment.Status == PaymentStatus.Open) {
+                            <a href="@payment.Links.Checkout.Href" class="btn btn-primary" target="_blank">Pay</a>
+                        }
+                    </td>
                 </tr>
             }
         </tbody>
