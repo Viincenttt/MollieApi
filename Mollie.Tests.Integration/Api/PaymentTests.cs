@@ -226,7 +226,7 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [Test]
-        public async Task PaymentWithInvalidJsonThrowsException() {
+        public void PaymentWithInvalidJsonThrowsException() {
             // If: We create a payment with invalid json
             PaymentRequest paymentRequest = new PaymentRequest() {
                 Amount = new Amount(Currency.EUR, "100.00"),
