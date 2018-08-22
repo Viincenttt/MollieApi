@@ -3,7 +3,10 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Mollie.Api.Models.Customer;
+using Mollie.Api.Models.Payment.Response;
 using Mollie.WebApplicationCoreExample.Framework.Middleware;
+using Mollie.WebApplicationCoreExample.Services.Overview;
 
 namespace Mollie.WebApplicationCoreExample {
     public class Startup {
@@ -14,8 +17,10 @@ namespace Mollie.WebApplicationCoreExample {
 
         public void ConfigureServices(IServiceCollection services) {
             services.AddMollieApi(this._configuration["MollieApiKey"]);
-            services.AddAutoMapper();
+            services.AddScoped<IOverviewClient<PaymentResponse>, PaymentOverviewClient>();
+            services.AddScoped<IOverviewClient<CustomerResponse>, CustomerOverviewClient>();
 
+            services.AddAutoMapper();
             services.AddMvc();
         }
 
