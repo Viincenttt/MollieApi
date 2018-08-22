@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Mollie.Api.Models.PaymentMethod {
     public class PaymentMethodResponse {
@@ -22,10 +23,15 @@ namespace Mollie.Api.Models.PaymentMethod {
         /// </summary>
         public PaymentMethodResponseImage Image { get; set; }
 
-        /// <summary>
-        /// An object with several URL objects relevant to the payment method. Every URL object will contain an href and a type field.
-        /// </summary>
-        [JsonProperty("_links")]
+		/// <summary>
+		///		List of Issuers
+		/// </summary>
+		public List<Issuer.IssuerResponse> Issuers { get; set; }
+
+		/// <summary>
+		/// An object with several URL objects relevant to the payment method. Every URL object will contain an href and a type field.
+		/// </summary>
+		[JsonProperty("_links")]
         public PaymentMethodResponseLinks Links { get; set; }
 
         public override string ToString() {
