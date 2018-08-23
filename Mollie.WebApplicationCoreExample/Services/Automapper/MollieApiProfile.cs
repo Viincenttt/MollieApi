@@ -13,6 +13,8 @@ namespace Mollie.WebApplicationCoreExample.Services.Automapper {
             this.CreateMap<CreatePaymentModel, PaymentRequest>()
                 .ForMember(x => x.Amount, m => m.MapFrom(x => new Amount(x.Currency, x.Amount.ToString(CultureInfo.InvariantCulture))));
 
+            this.CreateMap<CreateCustomerModel, CustomerRequest>();
+
             this.CreateOverviewMap<PaymentResponse>();
             this.CreateOverviewMap<CustomerResponse>();
         }
