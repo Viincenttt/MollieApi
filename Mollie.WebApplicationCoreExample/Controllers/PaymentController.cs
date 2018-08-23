@@ -1,23 +1,19 @@
 ﻿using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
-using Mollie.Api.Models.Payment.Request;
 using Mollie.Api.Models.Payment.Response;
 using Mollie.WebApplicationCoreExample.Models;
 using Mollie.WebApplicationCoreExample.Services.Overview;
+using Mollie.WebApplicationCoreExample.Services.Payment;
 
 namespace Mollie.WebApplicationCoreExample.Controllers {
     public class PaymentController : Controller {
-        private readonly IPaymentClient _paymentClient;
         private readonly IOverviewClient<PaymentResponse> _paymentOverviewClient;
-        private readonly IMapper _mapper;
+        private readonly IPaymentStorageClient _paymentStorageClient;
 
-        public PaymentController(IPaymentClient paymentClient, IMapper mapper, IOverviewClient<PaymentResponse> paymentOverviewClient) {
-            this._paymentClient = paymentClient;
-            this._mapper = mapper;
+        public PaymentController(IOverviewClient<PaymentResponse> paymentOverviewClient, IPaymentStorageClient paymentStorageClient) {
             this._paymentOverviewClient = paymentOverviewClient;
+            this._paymentStorageClient = paymentStorageClient;
         }
 
         [HttpGet]
@@ -47,10 +43,7 @@ namespace Mollie.WebApplicationCoreExample.Controllers {
                 return this.View();
             }
 
-            PaymentRequest paymentRequest = this._mapper.Map<PaymentRequest>(model);
-            paymentRequest.RedirectUrl = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}";
-            
-            await this._paymentClient.CreatePaymentAsync(paymentRequest);
+            await this._paymentStorageClient.Create(model);
             return this.RedirectToAction(nameof(this.Index));
         }
     }

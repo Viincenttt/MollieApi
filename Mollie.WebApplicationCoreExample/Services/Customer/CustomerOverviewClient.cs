@@ -3,8 +3,9 @@ using AutoMapper;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models.Customer;
 using Mollie.WebApplicationCoreExample.Models;
+using Mollie.WebApplicationCoreExample.Services.Overview;
 
-namespace Mollie.WebApplicationCoreExample.Services.Overview {
+namespace Mollie.WebApplicationCoreExample.Services.Customer {
     public class CustomerOverviewClient : OverviewClientBase<CustomerResponse> {
         private readonly ICustomerClient _customerClient;
 
