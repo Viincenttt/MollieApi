@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Mollie.Api.Models.Customer;
 using Mollie.WebApplicationCoreExample.Models;
 using Mollie.WebApplicationCoreExample.Services.Customer;
-using Mollie.WebApplicationCoreExample.Services.Overview;
+using Mollie.WebApplicationCoreExample.Services;
 
 namespace Mollie.WebApplicationCoreExample.Controllers {
     public class CustomerController : Controller {

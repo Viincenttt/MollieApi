@@ -5,7 +5,7 @@ using Mollie.Api.Models.List;
 using Mollie.Api.Models.Url;
 using Mollie.WebApplicationCoreExample.Models;
 
-namespace Mollie.WebApplicationCoreExample.Services.Overview {
+namespace Mollie.WebApplicationCoreExample.Services {
     public abstract class OverviewClientBase<T> where T : IResponseObject {
         private readonly IMapper _mapper;
 

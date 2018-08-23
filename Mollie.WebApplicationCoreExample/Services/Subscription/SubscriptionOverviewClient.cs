@@ -3,14 +3,9 @@ using AutoMapper;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models.Subscription;
 using Mollie.WebApplicationCoreExample.Models;
-using Mollie.WebApplicationCoreExample.Services.Overview;
+using Mollie.WebApplicationCoreExample.Services;
 
 namespace Mollie.WebApplicationCoreExample.Services.Subscription {
-    public interface ISubscriptionOverviewClient {
-        Task<OverviewModel<SubscriptionResponse>> GetList(string customerId);
-        Task<OverviewModel<SubscriptionResponse>> GetListByUrl(string url);
-    }
-
     public class SubscriptionOverviewClient : OverviewClientBase<SubscriptionResponse>, ISubscriptionOverviewClient {
         private readonly ISubscriptionClient _subscriptionClient;
 

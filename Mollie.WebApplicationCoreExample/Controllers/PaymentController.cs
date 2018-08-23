@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Payment.Response;
 using Mollie.WebApplicationCoreExample.Models;
-using Mollie.WebApplicationCoreExample.Services.Overview;
+using Mollie.WebApplicationCoreExample.Services;
 using Mollie.WebApplicationCoreExample.Services.Payment;
 
 namespace Mollie.WebApplicationCoreExample.Controllers {
