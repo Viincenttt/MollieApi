@@ -32,7 +32,7 @@
                     <td>@payment.Method</td>
                     <td>
                         @if (payment.Status == PaymentStatus.Open) {
-                            <a href="@payment.Links.Checkout.Href" class="btn btn-primary" target="_blank">Pay</a>
+                            <a href="@payment.Links.Checkout.Href" class="btn btn-outline-secondary" target="_blank">Pay</a>
                         }
                     </td>
                 </tr>
