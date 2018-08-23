@@ -5,10 +5,6 @@ using Mollie.Api.Models.Customer;
 using Mollie.WebApplicationCoreExample.Models;
 
 namespace Mollie.WebApplicationCoreExample.Services.Customer {
-    public interface ICustomerStorageClient {
-        Task Create(CreateCustomerModel model);
-    }
-
     public class CustomerStorageClient : ICustomerStorageClient {
         private readonly ICustomerClient _customerClient;
         private readonly IMapper _mapper;

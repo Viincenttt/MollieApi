@@ -6,15 +6,12 @@ using Mollie.Api.Models.Url;
 using Mollie.WebApplicationCoreExample.Models;
 
 namespace Mollie.WebApplicationCoreExample.Services.Overview {
-    public abstract class OverviewClientBase<T> : IOverviewClient<T> where T : IResponseObject {
+    public abstract class OverviewClientBase<T> where T : IResponseObject {
         private readonly IMapper _mapper;
 
         protected OverviewClientBase(IMapper mapper) {
             this._mapper = mapper;
         }
-
-        public abstract Task<OverviewModel<T>> GetList();
-        public abstract Task<OverviewModel<T>> GetList(string url);
 
         protected OverviewModel<T> Map(ListResponse<T> list) {
             return this._mapper.Map<OverviewModel<T>>(list);

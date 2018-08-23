@@ -8,10 +8,10 @@ using Mollie.WebApplicationCoreExample.Services.Payment;
 
 namespace Mollie.WebApplicationCoreExample.Controllers {
     public class PaymentController : Controller {
-        private readonly IOverviewClient<PaymentResponse> _paymentOverviewClient;
+        private readonly IPaymentOverviewClient _paymentOverviewClient;
         private readonly IPaymentStorageClient _paymentStorageClient;
 
-        public PaymentController(IOverviewClient<PaymentResponse> paymentOverviewClient, IPaymentStorageClient paymentStorageClient) {
+        public PaymentController(IPaymentOverviewClient paymentOverviewClient, IPaymentStorageClient paymentStorageClient) {
             this._paymentOverviewClient = paymentOverviewClient;
             this._paymentStorageClient = paymentStorageClient;
         }
@@ -24,7 +24,7 @@ namespace Mollie.WebApplicationCoreExample.Controllers {
 
         [HttpGet]
         public async Task<ViewResult> ApiUrl([FromQuery]string url) {
-            OverviewModel<PaymentResponse> model = await this._paymentOverviewClient.GetList(url);
+            OverviewModel<PaymentResponse> model = await this._paymentOverviewClient.GetListByUrl(url);
             return this.View(nameof(this.Index), model);
         }
 

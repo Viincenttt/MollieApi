@@ -6,10 +6,6 @@ using Mollie.Api.Models.Payment.Request;
 using Mollie.WebApplicationCoreExample.Models;
 
 namespace Mollie.WebApplicationCoreExample.Services.Payment {
-    public interface IPaymentStorageClient {
-        Task Create(CreatePaymentModel model);
-    }
-
     public class PaymentStorageClient : IPaymentStorageClient {
         private readonly IPaymentClient _paymentClient;
         private readonly IMapper _mapper;

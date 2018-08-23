@@ -5,6 +5,7 @@ using Mollie.Api.Models.Customer;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Payment.Request;
 using Mollie.Api.Models.Payment.Response;
+using Mollie.Api.Models.Subscription;
 using Mollie.WebApplicationCoreExample.Models;
 
 namespace Mollie.WebApplicationCoreExample.Services.Automapper {
@@ -17,6 +18,7 @@ namespace Mollie.WebApplicationCoreExample.Services.Automapper {
 
             this.CreateOverviewMap<PaymentResponse>();
             this.CreateOverviewMap<CustomerResponse>();
+            this.CreateOverviewMap<SubscriptionResponse>();
         }
 
         private void CreateOverviewMap<TResponseType>() where TResponseType : IResponseObject {

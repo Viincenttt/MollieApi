@@ -7,10 +7,10 @@ using Mollie.WebApplicationCoreExample.Services.Overview;
 
 namespace Mollie.WebApplicationCoreExample.Controllers {
     public class CustomerController : Controller {
-        private readonly IOverviewClient<CustomerResponse> _customerOverviewClient;
+        private readonly ICustomerOverviewClient _customerOverviewClient;
         private readonly ICustomerStorageClient _customerStorageClient;
 
-        public CustomerController(IOverviewClient<CustomerResponse> customerOverviewClient, ICustomerStorageClient customerStorageClient) {
+        public CustomerController(ICustomerOverviewClient customerOverviewClient, ICustomerStorageClient customerStorageClient) {
             this._customerOverviewClient = customerOverviewClient;
             this._customerStorageClient = customerStorageClient;
         }
@@ -23,7 +23,7 @@ namespace Mollie.WebApplicationCoreExample.Controllers {
 
         [HttpGet]
         public async Task<ViewResult> ApiUrl([FromQuery]string url) {
-            OverviewModel<CustomerResponse> model = await this._customerOverviewClient.GetList(url);
+            OverviewModel<CustomerResponse> model = await this._customerOverviewClient.GetListByUrl(url);
             return this.View(nameof(this.Index), model);
         }
 
