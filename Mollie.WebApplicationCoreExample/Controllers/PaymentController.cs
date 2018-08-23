@@ -31,6 +31,7 @@ namespace Mollie.WebApplicationCoreExample.Controllers {
         [HttpGet]
         public ViewResult Create() {
             CreatePaymentModel model = new CreatePaymentModel() {
+                Amount = 10,
                 Currency = Currency.EUR
             };
 

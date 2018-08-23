@@ -7,6 +7,10 @@
 <div class="container">
     <h2>List of subscriptions</h2>
     
+    <div class="clearfix">
+        <a asp-action="Create" asp-route-customerId="@ViewBag.CustomerId" class="btn btn-primary float-right">Create new subscription</a>
+    </div>
+
     <table class="table table-striped">
         <thead>
         <tr>

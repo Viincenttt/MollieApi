@@ -22,6 +22,7 @@ namespace Mollie.WebApplicationCoreExample {
             services.AddScoped<ISubscriptionOverviewClient, SubscriptionOverviewClient>();
             services.AddScoped<IPaymentStorageClient, PaymentStorageClient>();
             services.AddScoped<ICustomerStorageClient, CustomerStorageClient>();
+            services.AddScoped<ISubscriptionStorageClient, SubscriptionStorageClient>();
 
             services.AddAutoMapper();
             services.AddMvc();

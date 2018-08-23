@@ -3,7 +3,7 @@ using AutoMapper;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models.Payment.Response;
 using Mollie.WebApplicationCoreExample.Models;
-using Mollie.WebApplicationCoreExample.Services.Overview;
+using Mollie.WebApplicationCoreExample.Services;
 
 namespace Mollie.WebApplicationCoreExample.Services.Payment {
     public class PaymentOverviewClient : OverviewClientBase<PaymentResponse>, IPaymentOverviewClient {
