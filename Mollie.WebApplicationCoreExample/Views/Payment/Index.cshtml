@@ -34,6 +34,12 @@
                         @if (payment.Status == PaymentStatus.Open) {
                             <a href="@payment.Links.Checkout.Href" class="btn btn-outline-secondary" target="_blank">Pay</a>
                         }
+                        
+                        @if (payment.Status == PaymentStatus.Paid) {
+                            <form method="post" asp-controller="Refund" asp-action="Refund" asp-route-paymentId="@payment.Id">
+                                <input type="submit" name="Refund" value="Refund" class="btn btn-outline-secondary"/>
+                            </form>
+                        }
                     </td>
                 </tr>
             }

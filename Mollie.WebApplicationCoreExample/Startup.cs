@@ -7,6 +7,7 @@ using Mollie.WebApplicationCoreExample.Framework.Middleware;
 using Mollie.WebApplicationCoreExample.Services.Customer;
 using Mollie.WebApplicationCoreExample.Services.Mandate;
 using Mollie.WebApplicationCoreExample.Services.Payment;
+using Mollie.WebApplicationCoreExample.Services.Payment.Refund;
 using Mollie.WebApplicationCoreExample.Services.Subscription;
 
 namespace Mollie.WebApplicationCoreExample {
@@ -26,6 +27,7 @@ namespace Mollie.WebApplicationCoreExample {
             services.AddScoped<ICustomerStorageClient, CustomerStorageClient>();
             services.AddScoped<ISubscriptionStorageClient, SubscriptionStorageClient>();
             services.AddScoped<IMandateStorageClient, MandateStorageClient>();
+            services.AddScoped<IRefundPaymentClient, RefundPaymentClient>();
 
             services.AddAutoMapper();
             services.AddMvc();
