@@ -5,10 +5,6 @@ using Mollie.Api.Models.Subscription;
 using Mollie.WebApplicationCoreExample.Models;
 
 namespace Mollie.WebApplicationCoreExample.Services.Subscription {
-    public interface ISubscriptionStorageClient {
-        Task Create(CreateSubscriptionModel model);
-    }
-
     public class SubscriptionStorageClient : ISubscriptionStorageClient {
         private readonly ISubscriptionClient _subscriptionClient;
         private readonly IMapper _mapper;
