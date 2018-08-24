@@ -134,7 +134,7 @@ Mollie allows you to set offset and count properties so you can paginate the lis
 ```c#
 PaymentMethodClient _paymentMethodClient = new PaymentMethodClient("{your_api_key}");
 ListResponse<PaymentMethodListData> paymentMethodList = await this._paymentMethodClient.GetPaymentMethodListAsync();
-foreach (PaymentMethodResponse paymentMethod in paymentMethodList.Embedded.Methods) {
+foreach (PaymentMethodResponse paymentMethod in paymentMethodList.Items) {
 	// Your code here
 }
 ```
