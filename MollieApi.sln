@@ -3,13 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mollie.WebApplicationExample", "Mollie.WebApplicationExample\Mollie.WebApplicationExample.csproj", "{CD033343-9322-42AC-9449-38AD06A940B2}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mollie.Api", "Mollie.Api\Mollie.Api.csproj", "{DBA9DC3A-D562-4D15-A7FB-B0A1DC3E517B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mollie.Tests.Integration", "Mollie.Tests.Integration\Mollie.Tests.Integration.csproj", "{72A1C650-0D72-44BB-A63F-2C711EB209A2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mollie.WebApplicationCoreExample", "Mollie.WebApplicationCoreExample\Mollie.WebApplicationCoreExample.csproj", "{64FFA13B-522C-4FD7-9825-43EC3B7DADB1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mollie.WebApplicationCoreExample", "Mollie.WebApplicationCoreExample\Mollie.WebApplicationCoreExample.csproj", "{64FFA13B-522C-4FD7-9825-43EC3B7DADB1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +15,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{CD033343-9322-42AC-9449-38AD06A940B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CD033343-9322-42AC-9449-38AD06A940B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CD033343-9322-42AC-9449-38AD06A940B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CD033343-9322-42AC-9449-38AD06A940B2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DBA9DC3A-D562-4D15-A7FB-B0A1DC3E517B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DBA9DC3A-D562-4D15-A7FB-B0A1DC3E517B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DBA9DC3A-D562-4D15-A7FB-B0A1DC3E517B}.Release|Any CPU.ActiveCfg = Release|Any CPU
