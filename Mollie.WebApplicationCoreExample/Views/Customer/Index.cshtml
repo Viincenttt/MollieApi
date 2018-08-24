@@ -32,6 +32,7 @@
                     <td>@customer.Locale</td>
                     <td>
                         <a asp-controller="Mandate" asp-action="Index" asp-route-customerId="@customer.Id" class="btn btn-outline-secondary">View mandates</a>
+                        <a asp-controller="Subscription" asp-action="Index" asp-route-customerId="@customer.Id" class="btn btn-outline-secondary">View subscriptions</a>
                     </td>
                 </tr>
             }
