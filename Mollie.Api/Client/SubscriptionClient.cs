@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net.Http;
+using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models.List;
 
@@ -7,7 +8,7 @@ using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client {
     public class SubscriptionClient : BaseMollieClient, ISubscriptionClient {
-        public SubscriptionClient(string apiKey) : base(apiKey) {
+        public SubscriptionClient(string apiKey, HttpClient httpClient = null) : base(apiKey, httpClient) {
         }
 
         public async Task<ListResponse<SubscriptionResponse>> GetSubscriptionListAsync(string customerId, string from = null, int? limit = null) {

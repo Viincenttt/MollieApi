@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models.List;
@@ -9,7 +10,7 @@ using Mollie.Api.Models.Url;
 namespace Mollie.Api.Client {
     public class PaymentClient : BaseMollieClient, IPaymentClient {
 
-	    public PaymentClient(string apiKey) : base(apiKey) { }
+	    public PaymentClient(string apiKey, HttpClient httpClient = null) : base(apiKey, httpClient) { }
 
         public async Task<PaymentResponse> CreatePaymentAsync(PaymentRequest paymentRequest) {
 

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net.Http;
+using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Profile.Request;
@@ -6,7 +7,7 @@ using Mollie.Api.Models.Profile.Response;
 
 namespace Mollie.Api.Client {
     public class ProfileClient : BaseMollieClient, IProfileClient {
-        public ProfileClient(string apiKey) : base(apiKey) {
+        public ProfileClient(string apiKey, HttpClient httpClient = null) : base(apiKey, httpClient) {
         }
 
         public async Task<ProfileResponse> CreateProfileAsync(ProfileRequest request) {

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net.Http;
+using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models.Customer;
 using Mollie.Api.Models.List;
@@ -6,7 +7,7 @@ using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client {
     public class CustomerClient : BaseMollieClient, ICustomerClient {
-        public CustomerClient(string apiKey) : base(apiKey) {
+        public CustomerClient(string apiKey, HttpClient httpClient = null) : base(apiKey, httpClient) {
         }
 
         public async Task<CustomerResponse> CreateCustomerAsync(CustomerRequest request) {

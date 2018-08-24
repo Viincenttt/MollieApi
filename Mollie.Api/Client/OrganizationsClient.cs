@@ -1,11 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net.Http;
+using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models.Organization;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client {
     public class OrganizationsClient : OauthBaseMollieClient, IOrganizationsClient {
-        public OrganizationsClient(string oauthAccessToken) : base(oauthAccessToken) {
+        public OrganizationsClient(string oauthAccessToken, HttpClient httpClient = null) : base(oauthAccessToken, httpClient) {
         }
 
         public async Task<OrganizationResponse> GetCurrentOrganizationAsync() {

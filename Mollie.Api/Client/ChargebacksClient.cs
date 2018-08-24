@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models.Chargeback;
@@ -6,7 +7,7 @@ using Mollie.Api.Models.List;
 
 namespace Mollie.Api.Client {
     public class ChargebacksClient : BaseMollieClient, IChargebacksClient {
-        public ChargebacksClient(string apiKey) : base(apiKey) {
+        public ChargebacksClient(string apiKey, HttpClient httpClient = null) : base(apiKey, httpClient) {
         }
 
         public async Task<ChargebackResponse> GetChargebackAsync(string paymentId, string chargebackId) {

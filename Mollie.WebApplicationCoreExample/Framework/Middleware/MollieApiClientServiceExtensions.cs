@@ -5,6 +5,7 @@ using Mollie.Api.Client.Abstract;
 namespace Mollie.WebApplicationCoreExample.Framework.Middleware {
     public static class MollieApiClientServiceExtensions {
         public static IServiceCollection AddMollieApi(this IServiceCollection services, string apiKey) {
+            services.AddScoped<IPaymentClient, PaymentClient>();
             services.AddScoped<IPaymentClient, PaymentClient>(x => new PaymentClient(apiKey));
             services.AddScoped<ICustomerClient, CustomerClient>(x => new CustomerClient(apiKey));
             services.AddScoped<IRefundClient, RefundClient>(x => new RefundClient(apiKey));
