@@ -46,7 +46,7 @@ namespace Mollie.WebApplicationCoreExample.Controllers {
             }
 
             await this._subscriptionStorageClient.Create(model);
-            return this.RedirectToAction(nameof(this.Index));
+            return this.RedirectToAction(nameof(this.Index), new { customerId = model.CustomerId });
         }
     }
 }

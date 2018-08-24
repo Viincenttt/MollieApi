@@ -5,11 +5,6 @@ using Mollie.Api.Models.Mandate;
 using Mollie.WebApplicationCoreExample.Models;
 
 namespace Mollie.WebApplicationCoreExample.Services.Mandate {
-    public interface IMandateOverviewClient {
-        Task<OverviewModel<MandateResponse>> GetList(string customerId);
-        Task<OverviewModel<MandateResponse>> GetListByUrl(string url);
-    }
-
     public class MandateOverviewClient : OverviewClientBase<MandateResponse>, IMandateOverviewClient {
         private readonly IMandateClient _mandateClient;
 
