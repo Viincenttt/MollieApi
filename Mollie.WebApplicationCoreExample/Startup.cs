@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Mollie.WebApplicationCoreExample.Framework.Middleware;
 using Mollie.WebApplicationCoreExample.Services.Customer;
+using Mollie.WebApplicationCoreExample.Services.Mandate;
 using Mollie.WebApplicationCoreExample.Services.Payment;
 using Mollie.WebApplicationCoreExample.Services.Subscription;
 
@@ -20,6 +21,7 @@ namespace Mollie.WebApplicationCoreExample {
             services.AddScoped<IPaymentOverviewClient, PaymentOverviewClient>();
             services.AddScoped<ICustomerOverviewClient, CustomerOverviewClient>();
             services.AddScoped<ISubscriptionOverviewClient, SubscriptionOverviewClient>();
+            services.AddScoped<IMandateOverviewClient, MandateOverviewClient>();
             services.AddScoped<IPaymentStorageClient, PaymentStorageClient>();
             services.AddScoped<ICustomerStorageClient, CustomerStorageClient>();
             services.AddScoped<ISubscriptionStorageClient, SubscriptionStorageClient>();
