@@ -19,25 +19,26 @@ namespace Mollie.Api.Client {
         private readonly JsonSerializerSettings _defaultJsonDeserializerSettings;
         private readonly HttpClient _httpClient;
 
-        protected BaseMollieClient(string apiKey) {
+        protected BaseMollieClient(string apiKey, HttpClient httpClient = null) {
             if (string.IsNullOrWhiteSpace(apiKey)) {
                 throw new ArgumentNullException(nameof(apiKey), "Mollie API key cannot be empty");
             }
 
+            this._httpClient = httpClient ?? new HttpClient();
             this._apiKey = apiKey;
             this._defaultJsonDeserializerSettings = this.CreateDefaultJsonDeserializerSettings();
-            this._httpClient = this.CreateHttpClient();
         }
 
         protected async Task<T> GetAsync<T>(string relativeUri) {
-            var response = await this._httpClient.GetAsync(relativeUri).ConfigureAwait(false);
+            HttpRequestMessage httpRequest = this.CreateHttpRequest(HttpMethod.Get, relativeUri);
+            var response = await this._httpClient.SendAsync(httpRequest).ConfigureAwait(false);
             return await this.ProcessHttpResponseMessage<T>(response).ConfigureAwait(false);
         }
 
         protected async Task<T> GetAsync<T>(UrlObjectLink<T> urlObject) {
             this.ValidateUrlLink(urlObject);
-            string relativeUri = this.StripUrlObject(urlObject);
-            var response = await this._httpClient.GetAsync(relativeUri).ConfigureAwait(false);
+            HttpRequestMessage httpRequest = this.CreateHttpRequest(HttpMethod.Get, urlObject.Href);
+            var response = await this._httpClient.SendAsync(httpRequest).ConfigureAwait(false);
             return await this.ProcessHttpResponseMessage<T>(response).ConfigureAwait(false);
         }
 
@@ -64,21 +65,23 @@ namespace Mollie.Api.Client {
 
         protected async Task<T> GetListAsync<T>(string relativeUri, string from, int? limit, IDictionary<string, string> otherParameters = null) {
             var queryString = this.BuildListQueryString(from, limit, otherParameters);
-            var response = await this._httpClient.GetAsync(relativeUri + queryString).ConfigureAwait(false);
+            HttpRequestMessage httpRequest = this.CreateHttpRequest(HttpMethod.Get, relativeUri + queryString);
+            var response = await this._httpClient.SendAsync(httpRequest).ConfigureAwait(false);
             return await this.ProcessHttpResponseMessage<T>(response).ConfigureAwait(false);
         }
 
         protected async Task<T> PostAsync<T>(string relativeUri, object data) {
             var jsonData = JsonConvertExtensions.SerializeObjectCamelCase(data);
-            var response = await this._httpClient
-                .PostAsync(relativeUri, new StringContent(jsonData, Encoding.UTF8, "application/json"))
-                .ConfigureAwait(false);
+            var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+            HttpRequestMessage httpRequest = this.CreateHttpRequest(HttpMethod.Post, relativeUri, content);
+            var response = await this._httpClient.SendAsync(httpRequest).ConfigureAwait(false);
 
             return await this.ProcessHttpResponseMessage<T>(response).ConfigureAwait(false);
         }
 
         protected async Task DeleteAsync(string relativeUri) {
-            var response = await this._httpClient.DeleteAsync(relativeUri).ConfigureAwait(false);
+            HttpRequestMessage httpRequest = this.CreateHttpRequest(HttpMethod.Delete, relativeUri);
+            var response = await this._httpClient.SendAsync(httpRequest).ConfigureAwait(false);
             await this.ProcessHttpResponseMessage<object>(response).ConfigureAwait(false);
         }
 
@@ -115,19 +118,6 @@ namespace Mollie.Api.Client {
         }
 
         /// <summary>
-        ///     Creates a new rest client for the Mollie API
-        /// </summary>
-        private HttpClient CreateHttpClient() {
-            var httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri(ApiEndPoint);
-            httpClient.DefaultRequestHeaders.Accept.Clear();
-            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this._apiKey);
-
-            return httpClient;
-        }
-
-        /// <summary>
         ///     Creates the default Json serial settings for the JSON.NET parsing.
         /// </summary>
         /// <returns></returns>
@@ -154,8 +144,13 @@ namespace Mollie.Api.Client {
             }
         }
 
-        private string StripUrlObject(UrlLink urlObject) {
-            return urlObject.Href.Replace(ApiEndPoint, String.Empty);
+        private HttpRequestMessage CreateHttpRequest(HttpMethod method, string relativeUri, HttpContent content = null) {
+            HttpRequestMessage httpRequest = new HttpRequestMessage(method, new Uri(new Uri(ApiEndPoint), relativeUri));
+            httpRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", this._apiKey);
+            httpRequest.Content = content;
+
+            return httpRequest;
         }
     }
 }
