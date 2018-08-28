@@ -1,6 +1,11 @@
 ﻿namespace Mollie.Api.Models.Issuer {
     public class IssuerResponse : IResponseObject {
         /// <summary>
+        /// Contains "issuer"
+        /// </summary>
+        public string Resource { get; set; }
+
+        /// <summary>
         ///     The issuer's unique identifier, for example ideal_ABNANL2A. When creating a payment, specify this ID as the issuer
         ///     parameter to forward
         ///     the consumer to their banking environment directly.
@@ -13,8 +18,8 @@
         public string Name { get; set; }
 
         /// <summary>
-        ///     The payment method this issuer belongs to. The Issuers API currently only supports iDEAL.
+        ///     Different Issuer Image icons (iDEAL).
         /// </summary>
-        public string Method { get; set; }
+        public IssuerResponseImage Image { get; set; }
     }
 }

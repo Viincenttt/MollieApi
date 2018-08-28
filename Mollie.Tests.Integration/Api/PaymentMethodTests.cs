@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Mollie.Api.Models.List;
 
 using Mollie.Api.Models.Payment;
@@ -36,6 +37,34 @@ namespace Mollie.Tests.Integration.Api {
             Assert.IsNotNull(paymentMethod);
             Assert.IsNotNull(paymentMethod.Id);
             Assert.AreEqual(method, paymentMethod.Id);
+        }
+
+        [Test]
+        public async Task CanRetrieveIdealIssuers() {
+            // When: retrieving the ideal method we can include the issuers
+            PaymentMethodResponse paymentMethod = await this._paymentMethodClient.GetPaymentMethodAsync(PaymentMethod.Ideal, true);
+
+            // Then: We should have one or multiple issuers
+            Assert.IsNotNull(paymentMethod);
+            Assert.IsTrue(paymentMethod.Issuers.Any());
+        }
+
+        [Test]
+        public async Task DoNotRetrieveIssuersWhenIncludeIsFalse() {
+            // When: retrieving the ideal method with the include parameter set to false
+            PaymentMethodResponse paymentMethod = await this._paymentMethodClient.GetPaymentMethodAsync(PaymentMethod.Ideal, false);
+
+            // Then: Issuers should not be included
+            Assert.IsNull(paymentMethod.Issuers);
+        }
+
+        [Test]
+        public async Task DoNotRetrieveIssuersWhenIncludeIsNull() {
+            // When: retrieving the ideal method with the include parameter set to null
+            PaymentMethodResponse paymentMethod = await this._paymentMethodClient.GetPaymentMethodAsync(PaymentMethod.Ideal, null);
+
+            // Then: Issuers should not be included
+            Assert.IsNull(paymentMethod.Issuers);
         }
     }
 }

@@ -30,13 +30,18 @@ namespace Mollie.Api.Client {
             return await this.GetAsync(url).ConfigureAwait(false);
         }
 
-        public async Task<PaymentMethodResponse> GetPaymentMethodAsync(PaymentMethod paymentMethod, string locale = null) {
-            Dictionary<string, string> parameters = new Dictionary<string, string>() {
-                {nameof(locale), locale}
-            };
-            string queryString = parameters.ToQueryString();
+		public async Task<PaymentMethodResponse> GetPaymentMethodAsync(PaymentMethod paymentMethod, bool? includeIssuers = null, string locale = null) {
+			var parameters = new Dictionary<string, string>();
+		    if (includeIssuers == true) {
+		        parameters.Add("include", "issuers");
+            }
+		    if (locale != null) {
+		        parameters.Add(nameof(locale), locale);
+            }
+				
+			string queryString = parameters.ToQueryString();
 
-            return await this.GetAsync<PaymentMethodResponse>($"methods/{paymentMethod.ToString().ToLower()}{queryString}").ConfigureAwait(false);
-        }
-    }
+			return await this.GetAsync<PaymentMethodResponse>($"methods/{paymentMethod.ToString().ToLower()}{queryString}").ConfigureAwait(false);
+		}
+	}
 }
