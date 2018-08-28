@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client;
 using Mollie.Api.Models;
@@ -237,6 +238,28 @@ namespace Mollie.Tests.Integration.Api {
 
             // When + Then: We send the payment request to Mollie, we expect the exception
             Assert.ThrowsAsync<MollieApiException>(() => this._paymentClient.CreatePaymentAsync(paymentRequest));
+        }
+
+        [Test]
+        public async Task PaymentWithDifferentHttpInstance() {
+            // If: We create a PaymentClient with our own HttpClient instance
+            HttpClient myHttpClientInstance = new HttpClient();
+            PaymentClient paymentClient = new PaymentClient(this.ApiTestKey, myHttpClientInstance);
+            PaymentRequest paymentRequest = new PaymentRequest() {
+                Amount = new Amount(Currency.EUR, "100.00"),
+                Description = "Description",
+                RedirectUrl = this.DefaultRedirectUrl
+            };
+
+            // When: I create a new payment
+            PaymentResponse result = await paymentClient.CreatePaymentAsync(paymentRequest);
+
+            // Then: It should still work... lol
+            Assert.IsNotNull(result);
+            Assert.AreEqual(paymentRequest.Amount.Currency, result.Amount.Currency);
+            Assert.AreEqual(paymentRequest.Amount.Value, result.Amount.Value);
+            Assert.AreEqual(paymentRequest.Description, result.Description);
+            Assert.AreEqual(paymentRequest.RedirectUrl, result.RedirectUrl);
         }
 
         private async Task<MandateResponse> GetFirstValidMandate() {
