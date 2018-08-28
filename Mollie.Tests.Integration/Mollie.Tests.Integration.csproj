@@ -114,7 +114,6 @@
     <Compile Include="Api\RefundTests.cs" />
     <Compile Include="Api\SubscriptionTests.cs" />
     <Compile Include="Framework\BaseMollieApiTestClass.cs" />
-    <Compile Include="Framework\MoqMollieApiTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
