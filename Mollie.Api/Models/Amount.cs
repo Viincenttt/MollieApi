@@ -15,6 +15,8 @@
             this.Value = value;
         }
 
+        public Amount() { }
+
         public override string ToString() {
             return $"{this.Value} {this.Currency}";
         }
