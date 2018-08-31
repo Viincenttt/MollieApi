@@ -9,6 +9,8 @@ In May 2018, Mollie launched version 2 of their API. Version 2 offers support fo
 
 Mollie API version 2 is not backwards compatible with version 1. This means some of the Mollie API client code has been changed and you will need to update your project if you want to use Mollie API client version 2.0.0+. Please take a look at the [Mollie migration guide](https://docs.mollie.com/payments/migrating-v1-to-v2) for assistence.
 
+## Contributions 
+
 ## Getting started
 
 ### Installing the library
@@ -68,7 +70,6 @@ The full list of payment specific request classes is:
 - PayPalPaymentRequest
 - PaySafeCardPaymentRequest
 - SepaDirectDebitRequest
-
 
 #### Retrieving a payment by id
 ```c#
@@ -171,4 +172,49 @@ ListResponse<RefundListData> refundList = await this._refundClient.GetRefundList
 ```c#
 RefundClient refundClient = new RefundClient("{your_api_key}");
 await refundClient.CancelRefundAsync(paymentId, refundId);
+```
+
+### Customer methods
+#### Creating a new customer
+Customers will appear in the Mollie Dashboard where you can manage their details, and also view their payments and subscriptions.
+```c#
+CustomerRequest customerRequest = new CustomerRequest() {
+	Email = email,
+	Name = name,
+	Locale = Locale.nl_NL
+};
+
+CustomerClient customerClient = new CustomerClient("{your_api_key}");
+CustomerResponse customerResponse = await customerClient.CreateCustomerAsync(customerRequest);
+```
+
+#### Retrieve a customer by id
+Retrieve a single customer by its ID.
+```c#
+CustomerClient customerClient = new CustomerClient("{your_api_key}");
+CustomerResponse customerResponse = await customerClient.GetCustomerAsync(customerId);
+```
+
+#### Retrieve customer list
+Mollie allows you to set offset and count properties so you can paginate the list. The offset and count parameters are optional.
+```c#
+CustomerClient customerClient = new CustomerClient("{your_api_key}");
+ListResponse<CustomerResponse> response = await customerClient.GetCustomerListAsync();
+```
+
+#### Updating a customer
+Update an existing customer.
+```c#
+CustomerClient customerClient = new CustomerClient("{your_api_key}");
+CustomerRequest updateParameters = new CustomerRequest() {
+	Name = newCustomerName
+};
+CustomerResponse result = await customerClient.UpdateCustomerAsync("{customerIdToUpdate}", updateParameters);
+```
+
+#### Deleting a customer
+Delete a customer. All mandates and subscriptions created for this customer will be canceled as well.
+```c#
+CustomerClient customerClient = new CustomerClient("{your_api_key}");
+await customerClient.DeleteCustomerAsync("{customerIdToDelete}");
 ```
