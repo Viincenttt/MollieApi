@@ -9,7 +9,7 @@ In May 2018, Mollie launched version 2 of their API. Version 2 offers support fo
 
 Mollie API version 2 is not backwards compatible with version 1. This means some of the Mollie API client code has been changed and you will need to update your project if you want to use Mollie API client version 2.0.0+. Please take a look at the [Mollie migration guide](https://docs.mollie.com/payments/migrating-v1-to-v2) for assistence.
 
-## Contributions 
+
 
 ## Getting started
 
@@ -45,8 +45,11 @@ These client API classes allow you to send and receive requests to the Mollie RE
 ```c#
 IPaymentClient paymentClient = new PaymentClient("{your_api_key}");
 ```
-### Payments
-#### Creating a payment
+
+
+
+## Payment API
+### Creating a payment
 ```c#
 IPaymentClient paymentClient = new PaymentClient("{your_api_key}");
 PaymentRequest paymentRequest = new PaymentRequest() {
@@ -71,7 +74,7 @@ The full list of payment specific request classes is:
 - PaySafeCardPaymentRequest
 - SepaDirectDebitRequest
 
-#### Retrieving a payment by id
+### Retrieving a payment by id
 ```c#
 PaymentClient paymentClient = new PaymentClient("{your_api_key}");
 PaymentResponse result = paymentClient.GetPaymentAsync(paymentResponse.Id).Result;
@@ -96,7 +99,7 @@ The full list of payment specific response classes is:
 - SepaDirectDebitResponse
 - SofortPaymentResponse
 
-#### Setting metadata
+### Setting metadata
 Mollie allows you to send any metadata you like in JSON notation and will save the data alongside the payment. When you fetch the payment with the API, Mollie will include the metadata. The library allows you to set the metadata JSON string manually, by setting the Metadata property of the PaymentRequest class, but the recommended way of setting/getting the metadata is to use the SetMetadata/Getmetadata methods. 
 
 For example: 
@@ -122,15 +125,17 @@ PaymentResponse result = await this._paymentClient.CreatePaymentAsync(paymentReq
 CustomMetadataClass metadataResponse = result.GetMetadata<CustomMetadataClass>();
 ```
 
-#### Retrieving a list off payments
+### Retrieving a list off payments
 Mollie allows you to set offset and count properties so you can paginate the list. The offset and count parameters are optional. The maximum number of payments you can request in a single roundtrip is 250. 
 ```c#
 PaymentClient paymentClient = new PaymentClient("{your_api_key}");
 ListResponse<PaymentResponse> response = paymentClient.GetPaymentListAsync(offset, count).Result;
 ```
 
-### Payment methods
-#### Retrieving a list of all payment methods
+
+
+## Payment methods
+### Retrieving a list of all payment methods
 Mollie allows you to set offset and count properties so you can paginate the list. The offset and count parameters are optional.
 ```c#
 PaymentMethodClient _paymentMethodClient = new PaymentMethodClient("{your_api_key}");
@@ -139,14 +144,14 @@ foreach (PaymentMethodResponse paymentMethod in paymentMethodList.Items) {
 	// Your code here
 }
 ```
-#### Retrieving a single payment method
+### Retrieving a single payment method
 ```c#
 PaymentMethodClient _paymentMethodClient = new PaymentMethodClient("{your_api_key}");
 PaymentMethodResponse paymentMethodResponse = paymentMethodClient.GetPaymentMethodAsync(PaymentMethod.Ideal).Result;
 ```
 
-### Refund methods
-#### Create a new refund
+## Refund methods
+### Create a new refund
 ```c#
 RefundClient refundClient = new RefundClient("{your_api_key}");
 RefundResponse refundResponse = await this._refundClient.CreateRefundAsync("test", new RefundRequest() {
@@ -155,27 +160,29 @@ RefundResponse refundResponse = await this._refundClient.CreateRefundAsync("test
 });
 ```
 
-#### Retrieve a refund by payment and refund id
+### Retrieve a refund by payment and refund id
 ```c#
 RefundClient refundClient = new RefundClient("{your_api_key}");
 RefundResponse refundResponse = await this._refundClient.GetRefundAsync(paymentId, refundId);
 ```
 
-#### Retrieve refund list
+### Retrieve refund list
 Mollie allows you to set offset and count properties so you can paginate the list. The offset and count parameters are optional.
 ```c#
 RefundClient refundClient = new RefundClient("{your_api_key}");
 ListResponse<RefundListData> refundList = await this._refundClient.GetRefundListAsync(payment.Id, offset, count);
 ```
 
-#### Cancel a refund
+### Cancel a refund
 ```c#
 RefundClient refundClient = new RefundClient("{your_api_key}");
 await refundClient.CancelRefundAsync(paymentId, refundId);
 ```
 
-### Customer methods
-#### Creating a new customer
+
+
+## Customer methods
+### Creating a new customer
 Customers will appear in the Mollie Dashboard where you can manage their details, and also view their payments and subscriptions.
 ```c#
 CustomerRequest customerRequest = new CustomerRequest() {
@@ -188,21 +195,21 @@ CustomerClient customerClient = new CustomerClient("{your_api_key}");
 CustomerResponse customerResponse = await customerClient.CreateCustomerAsync(customerRequest);
 ```
 
-#### Retrieve a customer by id
+### Retrieve a customer by id
 Retrieve a single customer by its ID.
 ```c#
 CustomerClient customerClient = new CustomerClient("{your_api_key}");
 CustomerResponse customerResponse = await customerClient.GetCustomerAsync(customerId);
 ```
 
-#### Retrieve customer list
+### Retrieve customer list
 Mollie allows you to set offset and count properties so you can paginate the list. The offset and count parameters are optional.
 ```c#
 CustomerClient customerClient = new CustomerClient("{your_api_key}");
 ListResponse<CustomerResponse> response = await customerClient.GetCustomerListAsync();
 ```
 
-#### Updating a customer
+### Updating a customer
 Update an existing customer.
 ```c#
 CustomerClient customerClient = new CustomerClient("{your_api_key}");
@@ -212,7 +219,7 @@ CustomerRequest updateParameters = new CustomerRequest() {
 CustomerResponse result = await customerClient.UpdateCustomerAsync("{customerIdToUpdate}", updateParameters);
 ```
 
-#### Deleting a customer
+### Deleting a customer
 Delete a customer. All mandates and subscriptions created for this customer will be canceled as well.
 ```c#
 CustomerClient customerClient = new CustomerClient("{your_api_key}");
