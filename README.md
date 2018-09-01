@@ -4,14 +4,12 @@ This project allows you to easily add the [Mollie payment provider](https://www.
 
 If you have encounter any issues while using this library or have any feature requests, feel free to open an issue on GitHub. 
 
-## Mollie API v1 and v2
+## 1. Mollie API v1 and v2
 In May 2018, Mollie launched version 2 of their API. Version 2 offers support for multicurrency, improved error messages and much more.  The current version of the Mollie API client supports all API version 2 features. If you want to keep using version 1, you can use version 1.5.2 of the Mollie API Nuget package. Version 2.0.0+ of the Mollie API client supports version 2 of the API.  
 
 Mollie API version 2 is not backwards compatible with version 1. This means some of the Mollie API client code has been changed and you will need to update your project if you want to use Mollie API client version 2.0.0+. Please take a look at the [Mollie migration guide](https://docs.mollie.com/payments/migrating-v1-to-v2) for assistence.
 
-
-
-## Getting started
+## 2. Getting started
 
 ### Installing the library
 The easiest way to install the Mollie Api library is to use the [Nuget Package](https://www.nuget.org/packages/Mollie.Api).
@@ -48,7 +46,7 @@ IPaymentClient paymentClient = new PaymentClient("{your_api_key}");
 
 
 
-## Payment API
+## 3. Payment API
 ### Creating a payment
 ```c#
 IPaymentClient paymentClient = new PaymentClient("{your_api_key}");
@@ -134,7 +132,7 @@ ListResponse<PaymentResponse> response = paymentClient.GetPaymentListAsync(offse
 
 
 
-## Payment methods
+## 4. Payment methods
 ### Retrieving a list of all payment methods
 Mollie allows you to set offset and count properties so you can paginate the list. The offset and count parameters are optional.
 ```c#
@@ -150,7 +148,7 @@ PaymentMethodClient _paymentMethodClient = new PaymentMethodClient("{your_api_ke
 PaymentMethodResponse paymentMethodResponse = paymentMethodClient.GetPaymentMethodAsync(PaymentMethod.Ideal).Result;
 ```
 
-## Refund methods
+## 5. Refund methods
 ### Create a new refund
 ```c#
 RefundClient refundClient = new RefundClient("{your_api_key}");
@@ -181,7 +179,7 @@ await refundClient.CancelRefundAsync(paymentId, refundId);
 
 
 
-## Customer methods
+## 6. Customer methods
 ### Creating a new customer
 Customers will appear in the Mollie Dashboard where you can manage their details, and also view their payments and subscriptions.
 ```c#
