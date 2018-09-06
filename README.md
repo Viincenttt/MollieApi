@@ -253,7 +253,7 @@ MandateResponse mandateResponse = await this._mandateClient.CreateMandateAsync("
 Retrieve a mandate by its ID and its customer’s ID. The mandate will either contain IBAN or credit card details, depending on the type of mandate.
 ```c#
 MandateClient mandateclient = new MandateClient("{your_api_key}");
-MandateResponse mandateResponse = await mandateclient.GetMandateAsync("{customerId", "{mandateId}");
+MandateResponse mandateResponse = await mandateclient.GetMandateAsync("{customerId}", "{mandateId}");
 ```
 
 ### Retrieve mandate list
@@ -267,5 +267,5 @@ ListResponse<MandateResponse> response = await mandateclient.GetMandateListAsync
 Revoke a customer’s mandate. You will no longer be able to charge the consumer’s bank account or credit card with this mandate.
 ```c#
 MandateClient mandateclient = new MandateClient("{your_api_key}");
-await mandateclient.RevokeMandate("{customerId", "{mandateId}");
+await mandateclient.RevokeMandate("{customerId}", "{mandateId}");
 ```
