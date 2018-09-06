@@ -11,7 +11,7 @@ If you have encounter any issues while using this library or have any feature re
 [4. Payment methods](#4-payment-methods)  
 [5. Refund methods](#5-refund-methods)  
 [6. Customer methods](#6-customer-methods)  
-[7. Mandate methods](#7-Mandate-methods)  
+[7. Mandate methods](#7-mandate-methods)  
 
 ## 1. Mollie API v1 and v2
 In May 2018, Mollie launched version 2 of their API. Version 2 offers support for multicurrency, improved error messages and much more.  The current version of the Mollie API client supports all API version 2 features. If you want to keep using version 1, you can use version 1.5.2 of the Mollie API Nuget package. Version 2.0.0+ of the Mollie API client supports version 2 of the API.  
