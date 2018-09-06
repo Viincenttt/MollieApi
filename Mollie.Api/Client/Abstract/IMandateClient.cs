@@ -12,5 +12,6 @@ namespace Mollie.Api.Client.Abstract {
         Task<MandateResponse> CreateMandateAsync(string customerId, MandateRequest request);
         Task<ListResponse<MandateResponse>> GetMandateListAsync(UrlObjectLink<ListResponse<MandateResponse>> url);
         Task<MandateResponse> GetMandateAsync(UrlObjectLink<MandateResponse> url);
+        Task RevokeMandate(string customerId, string mandateId);
     }
 }
