@@ -11,6 +11,7 @@ If you have encounter any issues while using this library or have any feature re
 [4. Payment methods](#4-payment-methods)  
 [5. Refund methods](#5-refund-methods)  
 [6. Customer methods](#6-customer-methods)  
+[7. Mandate methods](#7-Mandate-methods)  
 
 ## 1. Mollie API v1 and v2
 In May 2018, Mollie launched version 2 of their API. Version 2 offers support for multicurrency, improved error messages and much more.  The current version of the Mollie API client supports all API version 2 features. If you want to keep using version 1, you can use version 1.5.2 of the Mollie API Nuget package. Version 2.0.0+ of the Mollie API client supports version 2 of the API.  
@@ -230,4 +231,41 @@ Delete a customer. All mandates and subscriptions created for this customer will
 ```c#
 CustomerClient customerClient = new CustomerClient("{your_api_key}");
 await customerClient.DeleteCustomerAsync("{customerIdToDelete}");
+```
+
+
+
+## 7. Mandate methods
+Mandates allow you to charge a customer’s credit card or bank account recurrently.
+
+### Creating a new mandate
+Create a mandate for a specific customer.
+```c#
+MandateClient mandateclient = new MandateClient("{your_api_key}");
+MandateRequest mandateRequest = new MandateRequest() {
+	ConsumerAccount = "NL26ABNA0516682814",
+	ConsumerName = "John Doe"
+};
+MandateResponse mandateResponse = await this._mandateClient.CreateMandateAsync("{customerId}", mandateRequest);
+```
+
+### Retrieve a mandate by id
+Retrieve a mandate by its ID and its customer’s ID. The mandate will either contain IBAN or credit card details, depending on the type of mandate.
+```c#
+MandateClient mandateclient = new MandateClient("{your_api_key}");
+MandateResponse mandateResponse = await mandateclient.GetMandateAsync("{customerId", "{mandateId}");
+```
+
+### Retrieve mandate list
+Retrieve all mandates for the given customerId, ordered from newest to oldest. Mollie allows you to set offset and count properties so you can paginate the list. The offset and count parameters are optional.
+```c#
+MandateClient mandateclient = new MandateClient("{your_api_key}");
+ListResponse<MandateResponse> response = await mandateclient.GetMandateListAsync("{customerId}");
+```
+
+### Retrieve mandate list
+Revoke a customer’s mandate. You will no longer be able to charge the consumer’s bank account or credit card with this mandate.
+```c#
+MandateClient mandateclient = new MandateClient("{your_api_key}");
+await mandateclient.RevokeMandate("{customerId", "{mandateId}");
 ```
