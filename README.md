@@ -12,6 +12,7 @@ If you have encounter any issues while using this library or have any feature re
 [5. Refund methods](#5-refund-methods)  
 [6. Customer methods](#6-customer-methods)  
 [7. Mandate methods](#7-mandate-methods)  
+[8. Subscription methods](#7-subscription-methods)  
 
 ## 1. Mollie API v1 and v2
 In May 2018, Mollie launched version 2 of their API. Version 2 offers support for multicurrency, improved error messages and much more.  The current version of the Mollie API client supports all API version 2 features. If you want to keep using version 1, you can use version 1.5.2 of the Mollie API Nuget package. Version 2.0.0+ of the Mollie API client supports version 2 of the API.  
@@ -263,9 +264,47 @@ MandateClient mandateclient = new MandateClient("{your_api_key}");
 ListResponse<MandateResponse> response = await mandateclient.GetMandateListAsync("{customerId}");
 ```
 
-### Retrieve mandate list
+### Revoking a mandate
 Revoke a customer’s mandate. You will no longer be able to charge the consumer’s bank account or credit card with this mandate.
 ```c#
 MandateClient mandateclient = new MandateClient("{your_api_key}");
 await mandateclient.RevokeMandate("{customerId}", "{mandateId}");
+```
+
+
+
+## 8. Subscription methods
+With subscriptions, you can schedule recurring payments to take place at regular intervals. For example, by simply specifying an amount and an interval, you can create an endless subscription to charge a monthly fee, until the consumer cancels their subscription. Or, you could use the times parameter to only charge a limited number of times, for example to split a big transaction in multiple parts.
+
+### Creating a new subscription
+Create a subscription for a specific customer.
+```c#
+SubscriptionClient subscriptionClient = new SubscriptionClient("{your_api_key}");
+SubscriptionRequest subscriptionRequest = new SubscriptionRequest() {
+	Amount = new Amount(Currency.EUR, "100.00"),
+	Times = 5,
+    	Interval = "1 month",
+	Description = "{uniqueIdentifierForSubscription}"
+};
+SubscriptionResponse subscriptionResponse = await subscriptionClient.CreateSubscriptionAsync("{customerId}", subscriptionRequest);
+```
+
+### Retrieve a subscription by id
+Retrieve a subscription by its ID and its customer’s ID.
+```c#
+SubscriptionClient subscriptionClient = new SubscriptionClient("{your_api_key}");
+SubscriptionResponse subscriptionResponse = await subscriptionClient.GetSubscriptionAsync("{customerId}", "{subscriptionId}");
+```
+
+### Retrieve subscription list
+Retrieve all subscriptions of a customer.
+```c#
+SubscriptionClient subscriptionClient = new SubscriptionClient("{your_api_key}");
+ListResponse<SubscriptionResponse> response = await subscriptionClient.GetSubscriptionListAsync(customerId, null, numberOfSubscriptions);
+```
+
+### Cancelling a subscription
+```c#
+SubscriptionClient subscriptionClient = new SubscriptionClient("{your_api_key}");
+await subscriptionClient.CancelSubscriptionAsync("{customerId}", "{subscriptionId}");
 ```
