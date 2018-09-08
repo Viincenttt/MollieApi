@@ -82,6 +82,15 @@ The full list of payment specific request classes is:
 - PaySafeCardPaymentRequest
 - SepaDirectDebitRequest
 
+For example, if you'd want to create a bank transfer payment, you can instantiate a new BankTransferPaymentRequest:
+```c#
+IPaymentClient paymentClient = new PaymentClient("{your_api_key}");
+BankTransferPaymentRequest paymentRequest = new BankTransferPaymentRequest();
+// Set bank transfer specific BillingEmail property
+paymentRequest.BillingEmail = "johndoe@gmail.com";
+BankTransferPaymentResponse response = (BankTransferPaymentResponse)await this._paymentClient.CreatePaymentAsync(paymentRequest);
+```
+
 ### Retrieving a payment by id
 ```c#
 PaymentClient paymentClient = new PaymentClient("{your_api_key}");
