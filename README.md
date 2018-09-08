@@ -37,7 +37,6 @@ This library currently supports the following API's:
 - Customers API
 - Mandates API
 - Subscriptions API
-- Issuer API
 - Refund API
 - Connect API
 - Chargebacks API
