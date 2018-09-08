@@ -8,11 +8,11 @@ If you have encounter any issues while using this library or have any feature re
 [1. Mollie API v1 and V2](#1-mollie-api-v1-and-v2)  
 [2. Getting started](#2-getting-started)  
 [3. Payment API](#3-payment-api)  
-[4. Payment methods](#4-payment-methods)  
-[5. Refund methods](#5-refund-methods)  
-[6. Customer methods](#6-customer-methods)  
-[7. Mandate methods](#7-mandate-methods)  
-[8. Subscription methods](#8-subscription-methods)  
+[4. Payment method API](#4-payment-method-api)  
+[5. Refund API](#5-refund-api)  
+[6. Customer API](#6-customer-api)  
+[7. Mandate API](#7-mandate-api)  
+[8. Subscription API](#8-subscription-api)  
 
 ## 1. Mollie API v1 and v2
 In May 2018, Mollie launched version 2 of their API. Version 2 offers support for multicurrency, improved error messages and much more.  The current version of the Mollie API client supports all API version 2 features. If you want to keep using version 1, you can use version 1.5.2 of the Mollie API Nuget package. Version 2.0.0+ of the Mollie API client supports version 2 of the API.  
@@ -152,7 +152,7 @@ ListResponse<PaymentResponse> response = paymentClient.GetPaymentListAsync(offse
 
 
 
-## 4. Payment methods
+## 4. Payment method API
 ### Retrieving a list of all payment methods
 Mollie allows you to set offset and count properties so you can paginate the list. The offset and count parameters are optional.
 ```c#
@@ -168,7 +168,7 @@ IPaymentMethodClient _paymentMethodClient = new PaymentMethodClient("{your_api_k
 PaymentMethodResponse paymentMethodResponse = paymentMethodClient.GetPaymentMethodAsync(PaymentMethod.Ideal).Result;
 ```
 
-## 5. Refund methods
+## 5. Refund API
 ### Create a new refund
 ```c#
 IRefundClient refundClient = new RefundClient("{your_api_key}");
@@ -199,7 +199,7 @@ await refundClient.CancelRefundAsync(paymentId, refundId);
 
 
 
-## 6. Customer methods
+## 6. Customer API
 ### Creating a new customer
 Customers will appear in the Mollie Dashboard where you can manage their details, and also view their payments and subscriptions.
 ```c#
@@ -246,7 +246,7 @@ await customerClient.DeleteCustomerAsync("{customerIdToDelete}");
 
 
 
-## 7. Mandate methods
+## 7. Mandate API
 Mandates allow you to charge a customer’s credit card or bank account recurrently.
 
 ### Creating a new mandate
@@ -283,7 +283,7 @@ await mandateclient.RevokeMandate("{customerId}", "{mandateId}");
 
 
 
-## 8. Subscription methods
+## 8. Subscription API
 With subscriptions, you can schedule recurring payments to take place at regular intervals. For example, by simply specifying an amount and an interval, you can create an endless subscription to charge a monthly fee, until the consumer cancels their subscription. Or, you could use the times parameter to only charge a limited number of times, for example to split a big transaction in multiple parts.
 
 ### Creating a new subscription
