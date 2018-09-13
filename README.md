@@ -65,7 +65,7 @@ PaymentRequest paymentRequest = new PaymentRequest() {
     RedirectUrl = "http://google.com"
 };
 
-PaymentResponse paymentResponse = paymentClient.CreatePaymentAsync(paymentRequest).Result;
+PaymentResponse paymentResponse = await paymentClient.CreatePaymentAsync(paymentRequest);
 ```
 
 If you want to create a payment with a specific paymentmethod, there are seperate classes that allow you to set paymentmethod specific parameters. For example, a bank transfer payment allows you to set the billing e-mail and due date. Have a look at the [Mollie create payment documentation](https://www.mollie.com/nl/docs/reference/payments/create) for more information. 
@@ -93,7 +93,7 @@ BankTransferPaymentResponse response = (BankTransferPaymentResponse)await this._
 ### Retrieving a payment by id
 ```c#
 IPaymentClient paymentClient = new PaymentClient("{your_api_key}");
-PaymentResponse result = paymentClient.GetPaymentAsync(paymentResponse.Id).Result;
+PaymentResponse result = await paymentClient.GetPaymentAsync(paymentResponse.Id);
 ```
 
 Keep in mind that some payment methods have specific payment detail values. For example: PayPal payments have reference and customer reference properties. In order to access these properties you have to cast the PaymentResponse to the PayPalPaymentResponse and access the Detail property. 
@@ -146,7 +146,7 @@ CustomMetadataClass metadataResponse = result.GetMetadata<CustomMetadataClass>()
 Mollie allows you to set offset and count properties so you can paginate the list. The offset and count parameters are optional. The maximum number of payments you can request in a single roundtrip is 250. 
 ```c#
 IPaymentClient paymentClient = new PaymentClient("{your_api_key}");
-ListResponse<PaymentResponse> response = paymentClient.GetPaymentListAsync(offset, count).Result;
+ListResponse<PaymentResponse> response = await paymentClient.GetPaymentListAsync(offset, count);
 ```
 
 
@@ -164,7 +164,7 @@ foreach (PaymentMethodResponse paymentMethod in paymentMethodList.Items) {
 ### Retrieving a single payment method
 ```c#
 IPaymentMethodClient _paymentMethodClient = new PaymentMethodClient("{your_api_key}");
-PaymentMethodResponse paymentMethodResponse = paymentMethodClient.GetPaymentMethodAsync(PaymentMethod.Ideal).Result;
+PaymentMethodResponse paymentMethodResponse = await paymentMethodClient.GetPaymentMethodAsync(PaymentMethod.Ideal);
 ```
 
 ## 5. Refund API
