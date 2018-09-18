@@ -50,7 +50,7 @@ Every API has it's own API client class. For example: PaymentClient, PaymentMeth
 
 These client API classes allow you to send and receive requests to the Mollie REST webservice. To create a API client class, you simple instantiate a new object for the API you require. For example, if you want to create new payments, you can use the PaymentClient class. 
 ```c#
-IPaymentClient paymentClient = new PaymentClient("{your_api_key}");
+IPaymentClient paymentClient = new PaymentClient("{yourApiKey}");
 ```
 
 
@@ -58,7 +58,7 @@ IPaymentClient paymentClient = new PaymentClient("{your_api_key}");
 ## 3. Payment API
 ### Creating a payment
 ```c#
-IPaymentClient paymentClient = new PaymentClient("{your_api_key}");
+IPaymentClient paymentClient = new PaymentClient("{yourApiKey}");
 PaymentRequest paymentRequest = new PaymentRequest() {
     Amount = new Amount(Currency.EUR, "100.00"),
     Description = "Test payment of the example project",
@@ -83,7 +83,7 @@ The full list of payment specific request classes is:
 
 For example, if you'd want to create a bank transfer payment, you can instantiate a new BankTransferPaymentRequest:
 ```c#
-IPaymentClient paymentClient = new PaymentClient("{your_api_key}");
+IPaymentClient paymentClient = new PaymentClient("{yourApiKey}");
 BankTransferPaymentRequest paymentRequest = new BankTransferPaymentRequest();
 // Set bank transfer specific BillingEmail property
 paymentRequest.BillingEmail = "{billingEmail}";
@@ -92,7 +92,7 @@ BankTransferPaymentResponse response = (BankTransferPaymentResponse)await this._
 
 ### Retrieving a payment by id
 ```c#
-IPaymentClient paymentClient = new PaymentClient("{your_api_key}");
+IPaymentClient paymentClient = new PaymentClient("{yourApiKey}");
 PaymentResponse result = await paymentClient.GetPaymentAsync(paymentResponse.Id);
 ```
 
