@@ -86,7 +86,7 @@ For example, if you'd want to create a bank transfer payment, you can instantiat
 IPaymentClient paymentClient = new PaymentClient("{your_api_key}");
 BankTransferPaymentRequest paymentRequest = new BankTransferPaymentRequest();
 // Set bank transfer specific BillingEmail property
-paymentRequest.BillingEmail = "johndoe@gmail.com";
+paymentRequest.BillingEmail = "{billingEmail}";
 BankTransferPaymentResponse response = (BankTransferPaymentResponse)await this._paymentClient.CreatePaymentAsync(paymentRequest);
 ```
 
@@ -123,13 +123,13 @@ For example:
 // Custom metadata class that contains the data you want to include in the metadata class. 
 CustomMetadataClass metadataRequest = new CustomMetadataClass() {
     OrderId = 1,
-    Description = "Custom description"
+    Description = "{customDescription}"
 };
 
 // Create a new payment
 PaymentRequest paymentRequest = new PaymentRequest() {
     Amount = new Amount(Currency.EUR, "100.00"),
-    Description = "Description",
+    Description = "{description}",
     RedirectUrl = this.DefaultRedirectUrl,
 };
 
@@ -137,7 +137,7 @@ PaymentRequest paymentRequest = new PaymentRequest() {
 paymentRequest.SetMetadata(metadataRequest);
 
 // When we retrieve the payment response, we can convert our metadata back to our custom class
-IPaymentClient paymentClient = new PaymentClient("{your_api_key}");
+IPaymentClient paymentClient = new PaymentClient("{yourApiKey}");
 PaymentResponse result = await paymentClient.CreatePaymentAsync(paymentRequest);
 CustomMetadataClass metadataResponse = result.GetMetadata<CustomMetadataClass>();
 ```
@@ -145,8 +145,8 @@ CustomMetadataClass metadataResponse = result.GetMetadata<CustomMetadataClass>()
 ### Retrieving a list off payments
 Mollie allows you to set offset and count properties so you can paginate the list. The offset and count parameters are optional. The maximum number of payments you can request in a single roundtrip is 250. 
 ```c#
-IPaymentClient paymentClient = new PaymentClient("{your_api_key}");
-ListResponse<PaymentResponse> response = await paymentClient.GetPaymentListAsync(offset, count);
+IPaymentClient paymentClient = new PaymentClient("{yourApiKey}");
+ListResponse<PaymentResponse> response = await paymentClient.GetPaymentListAsync("{offset}", "{count}");
 ```
 
 
@@ -155,7 +155,7 @@ ListResponse<PaymentResponse> response = await paymentClient.GetPaymentListAsync
 ### Retrieving a list of all payment methods
 Mollie allows you to set offset and count properties so you can paginate the list. The offset and count parameters are optional.
 ```c#
-IPaymentMethodClient _paymentMethodClient = new PaymentMethodClient("{your_api_key}");
+IPaymentMethodClient _paymentMethodClient = new PaymentMethodClient("{yourApiKey}");
 ListResponse<PaymentMethodListData> paymentMethodList = await this._paymentMethodClient.GetPaymentMethodListAsync();
 foreach (PaymentMethodResponse paymentMethod in paymentMethodList.Items) {
 	// Your code here
@@ -163,37 +163,37 @@ foreach (PaymentMethodResponse paymentMethod in paymentMethodList.Items) {
 ```
 ### Retrieving a single payment method
 ```c#
-IPaymentMethodClient _paymentMethodClient = new PaymentMethodClient("{your_api_key}");
+IPaymentMethodClient _paymentMethodClient = new PaymentMethodClient("{yourApiKey}");
 PaymentMethodResponse paymentMethodResponse = await paymentMethodClient.GetPaymentMethodAsync(PaymentMethod.Ideal);
 ```
 
 ## 5. Refund API
 ### Create a new refund
 ```c#
-IRefundClient refundClient = new RefundClient("{your_api_key}");
-RefundResponse refundResponse = await this._refundClient.CreateRefundAsync("test", new RefundRequest() {
+IRefundClient refundClient = new RefundClient("{yourApiKey}");
+RefundResponse refundResponse = await this._refundClient.CreateRefundAsync("{paymentId}", new RefundRequest() {
 	Amount = new Amount(Currency.EUR, "100"),
-	Description = "Refund description"
+	Description = "{description}"
 });
 ```
 
 ### Retrieve a refund by payment and refund id
 ```c#
-IRefundClient refundClient = new RefundClient("{your_api_key}");
-RefundResponse refundResponse = await this._refundClient.GetRefundAsync(paymentId, refundId);
+IRefundClient refundClient = new RefundClient("{yourApiKey}");
+RefundResponse refundResponse = await this._refundClient.GetRefundAsync("{paymentId}", "{refundId}");
 ```
 
 ### Retrieve refund list
 Mollie allows you to set offset and count properties so you can paginate the list. The offset and count parameters are optional.
 ```c#
-IRefundClient refundClient = new RefundClient("{your_api_key}");
-ListResponse<RefundListData> refundList = await this._refundClient.GetRefundListAsync(payment.Id, offset, count);
+IRefundClient refundClient = new RefundClient("{yourApiKey}");
+ListResponse<RefundListData> refundList = await this._refundClient.GetRefundListAsync("{paymentId}", "{offset}", "{count}");
 ```
 
 ### Cancel a refund
 ```c#
-IRefundClient refundClient = new RefundClient("{your_api_key}");
-await refundClient.CancelRefundAsync(paymentId, refundId);
+IRefundClient refundClient = new RefundClient("{yourApiKey}");
+await refundClient.CancelRefundAsync("{paymentId}", "{refundId}");
 ```
 
 
@@ -203,35 +203,35 @@ await refundClient.CancelRefundAsync(paymentId, refundId);
 Customers will appear in the Mollie Dashboard where you can manage their details, and also view their payments and subscriptions.
 ```c#
 CustomerRequest customerRequest = new CustomerRequest() {
-	Email = email,
-	Name = name,
+	Email = "{email}",
+	Name = "{name}",
 	Locale = Locale.nl_NL
 };
 
-ICustomerClient customerClient = new CustomerClient("{your_api_key}");
+ICustomerClient customerClient = new CustomerClient("{yourApiKey}");
 CustomerResponse customerResponse = await customerClient.CreateCustomerAsync(customerRequest);
 ```
 
 ### Retrieve a customer by id
 Retrieve a single customer by its ID.
 ```c#
-ICustomerClient customerClient = new CustomerClient("{your_api_key}");
+ICustomerClient customerClient = new CustomerClient("{yourApiKey}");
 CustomerResponse customerResponse = await customerClient.GetCustomerAsync(customerId);
 ```
 
 ### Retrieve customer list
 Mollie allows you to set offset and count properties so you can paginate the list. The offset and count parameters are optional.
 ```c#
-ICustomerClient customerClient = new CustomerClient("{your_api_key}");
+ICustomerClient customerClient = new CustomerClient("{yourApiKey}");
 ListResponse<CustomerResponse> response = await customerClient.GetCustomerListAsync();
 ```
 
 ### Updating a customer
 Update an existing customer.
 ```c#
-ICustomerClient customerClient = new CustomerClient("{your_api_key}");
+ICustomerClient customerClient = new CustomerClient("{yourApiKey}");
 CustomerRequest updateParameters = new CustomerRequest() {
-	Name = newCustomerName
+	Name = "{customerName}"
 };
 CustomerResponse result = await customerClient.UpdateCustomerAsync("{customerIdToUpdate}", updateParameters);
 ```
@@ -239,7 +239,7 @@ CustomerResponse result = await customerClient.UpdateCustomerAsync("{customerIdT
 ### Deleting a customer
 Delete a customer. All mandates and subscriptions created for this customer will be canceled as well.
 ```c#
-ICustomerClient customerClient = new CustomerClient("{your_api_key}");
+ICustomerClient customerClient = new CustomerClient("{yourApiKey}");
 await customerClient.DeleteCustomerAsync("{customerIdToDelete}");
 ```
 
@@ -251,10 +251,10 @@ Mandates allow you to charge a customer’s credit card or bank account recurren
 ### Creating a new mandate
 Create a mandate for a specific customer.
 ```c#
-IMandateClient mandateclient = new MandateClient("{your_api_key}");
+IMandateClient mandateclient = new MandateClient("{yourApiKey}");
 MandateRequest mandateRequest = new MandateRequest() {
-	ConsumerAccount = "NL26ABNA0516682814",
-	ConsumerName = "John Doe"
+	ConsumerAccount = "{iban}",
+	ConsumerName = "{customerName}"
 };
 MandateResponse mandateResponse = await this._mandateClient.CreateMandateAsync("{customerId}", mandateRequest);
 ```
@@ -262,21 +262,21 @@ MandateResponse mandateResponse = await this._mandateClient.CreateMandateAsync("
 ### Retrieve a mandate by id
 Retrieve a mandate by its ID and its customer’s ID. The mandate will either contain IBAN or credit card details, depending on the type of mandate.
 ```c#
-IMandateClient mandateclient = new MandateClient("{your_api_key}");
+IMandateClient mandateclient = new MandateClient("{yourApiKey}");
 MandateResponse mandateResponse = await mandateclient.GetMandateAsync("{customerId}", "{mandateId}");
 ```
 
 ### Retrieve mandate list
 Retrieve all mandates for the given customerId, ordered from newest to oldest. Mollie allows you to set offset and count properties so you can paginate the list. The offset and count parameters are optional.
 ```c#
-IMandateClient mandateclient = new MandateClient("{your_api_key}");
+IMandateClient mandateclient = new MandateClient("{yourApiKey}");
 ListResponse<MandateResponse> response = await mandateclient.GetMandateListAsync("{customerId}");
 ```
 
 ### Revoking a mandate
 Revoke a customer’s mandate. You will no longer be able to charge the consumer’s bank account or credit card with this mandate.
 ```c#
-IMandateClient mandateclient = new MandateClient("{your_api_key}");
+IMandateClient mandateclient = new MandateClient("{yourApiKey}");
 await mandateclient.RevokeMandate("{customerId}", "{mandateId}");
 ```
 
@@ -288,7 +288,7 @@ With subscriptions, you can schedule recurring payments to take place at regular
 ### Creating a new subscription
 Create a subscription for a specific customer.
 ```c#
-ISubscriptionClient subscriptionClient = new SubscriptionClient("{your_api_key}");
+ISubscriptionClient subscriptionClient = new SubscriptionClient("{yourApiKey}");
 SubscriptionRequest subscriptionRequest = new SubscriptionRequest() {
 	Amount = new Amount(Currency.EUR, "100.00"),
 	Times = 5,
@@ -301,19 +301,19 @@ SubscriptionResponse subscriptionResponse = await subscriptionClient.CreateSubsc
 ### Retrieve a subscription by id
 Retrieve a subscription by its ID and its customer’s ID.
 ```c#
-ISubscriptionClient subscriptionClient = new SubscriptionClient("{your_api_key}");
+ISubscriptionClient subscriptionClient = new SubscriptionClient("{yourApiKey}");
 SubscriptionResponse subscriptionResponse = await subscriptionClient.GetSubscriptionAsync("{customerId}", "{subscriptionId}");
 ```
 
 ### Retrieve subscription list
 Retrieve all subscriptions of a customer.
 ```c#
-ISubscriptionClient subscriptionClient = new SubscriptionClient("{your_api_key}");
-ListResponse<SubscriptionResponse> response = await subscriptionClient.GetSubscriptionListAsync(customerId, null, numberOfSubscriptions);
+ISubscriptionClient subscriptionClient = new SubscriptionClient("{yourApiKey}");
+ListResponse<SubscriptionResponse> response = await subscriptionClient.GetSubscriptionListAsync("{customerId}", null, {numberOfSubscriptions});
 ```
 
 ### Cancelling a subscription
 ```c#
-ISubscriptionClient subscriptionClient = new SubscriptionClient("{your_api_key}");
+ISubscriptionClient subscriptionClient = new SubscriptionClient("{yourApiKey}");
 await subscriptionClient.CancelSubscriptionAsync("{customerId}", "{subscriptionId}");
 ```
