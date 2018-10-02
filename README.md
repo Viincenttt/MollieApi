@@ -317,3 +317,12 @@ ListResponse<SubscriptionResponse> response = await subscriptionClient.GetSubscr
 ISubscriptionClient subscriptionClient = new SubscriptionClient("{yourApiKey}");
 await subscriptionClient.CancelSubscriptionAsync("{customerId}", "{subscriptionId}");
 ```
+
+### Updating a subscription
+```c#
+ISubscriptionClient subscriptionClient = new SubscriptionClient("{yourApiKey}");
+SubscriptionUpdateRequest updatedSubscriptionRequest = new SubscriptionUpdateRequest() {
+	Description = $"Updated subscription {DateTime.Now}"
+};
+await subscriptionClient.UpdateSubscriptionAsync("{customerId}", "{subscriptionId}", updatedSubscriptionRequest);
+```
