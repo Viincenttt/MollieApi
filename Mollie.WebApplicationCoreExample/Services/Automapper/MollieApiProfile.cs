@@ -6,6 +6,7 @@ using Mollie.Api.Models.List;
 using Mollie.Api.Models.Mandate;
 using Mollie.Api.Models.Payment.Request;
 using Mollie.Api.Models.Payment.Response;
+using Mollie.Api.Models.PaymentMethod;
 using Mollie.Api.Models.Subscription;
 using Mollie.WebApplicationCoreExample.Models;
 
@@ -25,6 +26,7 @@ namespace Mollie.WebApplicationCoreExample.Services.Automapper {
             this.CreateOverviewMap<CustomerResponse>();
             this.CreateOverviewMap<SubscriptionResponse>();
             this.CreateOverviewMap<MandateResponse>();
+            this.CreateOverviewMap<PaymentMethodResponse>();
         }
 
         private void CreateOverviewMap<TResponseType>() where TResponseType : IResponseObject {
