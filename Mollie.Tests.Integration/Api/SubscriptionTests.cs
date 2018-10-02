@@ -76,7 +76,30 @@ namespace Mollie.Tests.Integration.Api {
                 await this._subscriptionClient.CancelSubscriptionAsync(customerId, subscriptionId);
                 SubscriptionResponse cancelledSubscription = await this._subscriptionClient.GetSubscriptionAsync(customerId, subscriptionId);
 
+                // Then
                 Assert.AreEqual(cancelledSubscription.Status, SubscriptionStatus.Canceled);
+            }
+            else {
+                Assert.Inconclusive("No subscriptions found that could be cancelled");
+            }
+        }
+
+        [Test]
+        public async Task CanUpdateSubscription() {
+            // Given 
+            string customerId = await this.GetFirstCustomerWithValidMandate();
+            ListResponse<SubscriptionResponse> subscriptions = await this._subscriptionClient.GetSubscriptionListAsync(customerId);
+
+            // When
+            if (subscriptions.Count > 0) {
+                string subscriptionId = subscriptions.Items.First().Id;
+                SubscriptionUpdateRequest request = new SubscriptionUpdateRequest() {
+                    Description = $"Updated subscription {DateTime.Now}"
+                };
+                SubscriptionResponse response = await this._subscriptionClient.UpdateSubscriptionAsync(customerId, subscriptionId, request);
+
+                // Then
+                Assert.AreEqual(request.Description, response.Description);
             }
             else {
                 Assert.Inconclusive("No subscriptions found that could be cancelled");
