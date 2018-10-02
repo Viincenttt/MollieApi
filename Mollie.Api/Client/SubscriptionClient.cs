@@ -34,5 +34,9 @@ namespace Mollie.Api.Client {
         public async Task CancelSubscriptionAsync(string customerId, string subscriptionId) {
             await this.DeleteAsync($"customers/{customerId}/subscriptions/{subscriptionId}").ConfigureAwait(false);
         }
+
+        public async Task<SubscriptionResponse> UpdateSubscriptionAsync(string customerId, string subscriptionId, SubscriptionUpdateRequest request) {
+            return await this.PatchAsync<SubscriptionResponse>($"customers/{customerId}/subscriptions/{subscriptionId}", request).ConfigureAwait(false);
+        }
     }
 }

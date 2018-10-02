@@ -79,6 +79,15 @@ namespace Mollie.Api.Client {
             return await this.ProcessHttpResponseMessage<T>(response).ConfigureAwait(false);
         }
 
+        protected async Task<T> PatchAsync<T>(string relativeUri, object data) {
+            var jsonData = JsonConvertExtensions.SerializeObjectCamelCase(data);
+            var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+            HttpRequestMessage httpRequest = this.CreateHttpRequest(new HttpMethod("PATCH"), relativeUri, content);
+            var response = await this._httpClient.SendAsync(httpRequest).ConfigureAwait(false);
+
+            return await this.ProcessHttpResponseMessage<T>(response).ConfigureAwait(false);
+        }
+
         protected async Task DeleteAsync(string relativeUri) {
             HttpRequestMessage httpRequest = this.CreateHttpRequest(HttpMethod.Delete, relativeUri);
             var response = await this._httpClient.SendAsync(httpRequest).ConfigureAwait(false);
