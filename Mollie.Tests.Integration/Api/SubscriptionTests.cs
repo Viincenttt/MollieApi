@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Mollie.Api.Client;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Customer;
 using Mollie.Api.Models.List;
 
 using Mollie.Api.Models.Mandate;
+using Mollie.Api.Models.Payment.Request;
+using Mollie.Api.Models.Payment.Response;
 using Mollie.Api.Models.Subscription;
 using Mollie.Tests.Integration.Framework;
 using NUnit.Framework;
@@ -104,6 +107,44 @@ namespace Mollie.Tests.Integration.Api {
             else {
                 Assert.Inconclusive("No subscriptions found that could be cancelled");
             }
+        }
+
+        [Test]
+        public async Task SubscriptionWithInvalidJsonThrowsException() {
+            // If: We create a subscription with invalid json
+            string customerId = await this.GetFirstCustomerWithValidMandate();
+            SubscriptionRequest subscriptionRequest = new SubscriptionRequest();
+            subscriptionRequest.Amount = new Amount(Currency.EUR, "100.00");
+            subscriptionRequest.Times = 5;
+            subscriptionRequest.Interval = "1 month";
+            subscriptionRequest.Description = $"Subscription {DateTime.Now}"; // Subscriptions must have a unique name
+            subscriptionRequest.WebhookUrl = "http://www.google.nl";
+            subscriptionRequest.StartDate = DateTime.Now.AddDays(1);
+            subscriptionRequest.Metadata = "IAmNotAValidJsonString";
+
+            // When + Then: We send the subscription request to Mollie, we expect the exception
+            Assert.ThrowsAsync<MollieApiException>(() => this._subscriptionClient.CreateSubscriptionAsync(customerId, subscriptionRequest));
+        }
+
+        [Test]
+        public async Task CanCreateSubscriptionWithMetaData() {
+            // If: We create a subscription with meta data
+            string json = "{\"order_id\":\"4.40\"}";
+            string customerId = await this.GetFirstCustomerWithValidMandate();
+            SubscriptionRequest subscriptionRequest = new SubscriptionRequest();
+            subscriptionRequest.Amount = new Amount(Currency.EUR, "100.00");
+            subscriptionRequest.Times = 5;
+            subscriptionRequest.Interval = "1 month";
+            subscriptionRequest.Description = $"Subscription {DateTime.Now}"; // Subscriptions must have a unique name
+            subscriptionRequest.WebhookUrl = "http://www.google.nl";
+            subscriptionRequest.StartDate = DateTime.Now.AddDays(1);
+            subscriptionRequest.Metadata = json;
+
+            // When We send the subscription request to Mollie
+            SubscriptionResponse result = await this._subscriptionClient.CreateSubscriptionAsync(customerId, subscriptionRequest);
+
+            // Then: Make sure we get the same json result as metadata
+            Assert.AreEqual(json, result.Metadata);
         }
 
         public async Task<string> GetFirstCustomerWithValidMandate() {
