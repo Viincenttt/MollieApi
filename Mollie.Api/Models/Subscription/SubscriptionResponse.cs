@@ -52,6 +52,12 @@ namespace Mollie.Api.Models.Subscription {
         public DateTime StartDate { get; set; }
 
         /// <summary>
+        /// The date of the next scheduled payment in YYYY-MM-DD format. When there will be no next payment, for example
+        /// when the subscription has ended, this parameter will not be returned.
+        /// </summary>
+        public DateTime? NextPaymentDate { get; set; }
+
+        /// <summary>
         /// A description unique per customer. This will be included in the payment description along with the charge date in
         /// Y-m-d format.
         /// </summary>
