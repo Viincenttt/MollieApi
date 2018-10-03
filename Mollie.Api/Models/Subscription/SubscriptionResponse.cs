@@ -1,4 +1,5 @@
 ﻿using System;
+using Mollie.Api.JsonConverters;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -81,9 +82,20 @@ namespace Mollie.Api.Models.Subscription {
         public string WebhookUrl { get; set; }
 
         /// <summary>
+        /// The optional metadata you provided upon subscription creation. Metadata can for example be used to link a plan to a
+        /// subscription.
+        /// </summary>
+        [JsonConverter(typeof(RawJsonConverter))]
+        public string Metadata { get; set; }
+
+        /// <summary>
         /// An object with several URL objects relevant to the subscription. Every URL object will contain an href and a type field.
         /// </summary>
         [JsonProperty("_links")]
         public SubscriptionResponseLinks Links { get; set; }
+
+        public T GetMetadata<T>(JsonSerializerSettings jsonSerializerSettings = null) {
+            return JsonConvert.DeserializeObject<T>(this.Metadata, jsonSerializerSettings);
+        }
     }
 }
