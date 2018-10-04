@@ -1,5 +1,5 @@
 ﻿namespace Mollie.Api.Models.Order {
-    public class OrderAddressDetails {
+    public class OrderAddressDetails : AddressObject {
         /// <summary>
         /// The title of the person, for example Mr. or Mrs..
         /// </summary>
@@ -26,10 +26,5 @@
         /// the E.164 format. For example +31208202070.
         /// </summary>
         public string Phone { get; set; }
-
-        /// <summary>
-        /// The other address fields
-        /// </summary>
-        public AddressObject Address { get; set; }
     }
 }
