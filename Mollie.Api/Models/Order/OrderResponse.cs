@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 namespace Mollie.Api.Models.Order {
-    public class OrderResponse {
+    public class OrderResponse : IResponseObject {
         /// <summary>
         /// Indicates the response contains an order object. Will always contain order for this endpoint.
         /// </summary>
