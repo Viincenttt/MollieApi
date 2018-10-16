@@ -1,9 +1,11 @@
-﻿using System;
+using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace Mollie.Api.Models.Subscription {
-    public class SubscriptionResponse : IResponseObject {
+namespace Mollie.Api.Models.Subscription
+{
+    public class SubscriptionResponse : IResponseObject
+    {
         /// <summary>
         /// Indicates the response contains a subscription object.
         /// </summary>
@@ -19,18 +21,18 @@ namespace Mollie.Api.Models.Subscription {
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
         public Mode Mode { get; set; }
-        
+
         /// <summary>
         ///  The subscription's date and time of creation, in ISO 8601 format.
         /// </summary>
         public DateTime CreatedAt { get; set; }
-        
+
         /// <summary>
         /// The subscription's current status, depends on whether the customer has a pending, valid or invalid mandate.
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
         public SubscriptionStatus Status { get; set; }
-        
+
         /// <summary>
         /// The constant amount that is charged with each subscription payment.
         /// </summary>
