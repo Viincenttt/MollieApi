@@ -13,7 +13,6 @@ namespace Mollie.Api.Client {
 	    public PaymentClient(string apiKey, HttpClient httpClient = null) : base(apiKey, httpClient) { }
 
         public async Task<PaymentResponse> CreatePaymentAsync(PaymentRequest paymentRequest) {
-
             if (!string.IsNullOrWhiteSpace(paymentRequest.ProfileId) || paymentRequest.Testmode.HasValue || paymentRequest.ApplicationFee != null) {
                 this.ValidateApiKeyIsOauthAccesstoken();
             }
@@ -61,5 +60,9 @@ namespace Mollie.Api.Client {
 			return await this.GetListAsync<ListResponse<PaymentResponse>>($"payments", from, limit, parameters)
 				.ConfigureAwait(false);
 		}
+
+        public async Task<ListResponse<PaymentResponse>> GetCustomerPaymentListAsync(string customerId, string from = null, int? limit = null) {
+            return await this.GetListAsync<ListResponse<PaymentResponse>>($"payments/{customerId}", from, limit).ConfigureAwait(false);
+        }
     }
 }
