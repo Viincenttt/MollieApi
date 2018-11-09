@@ -75,7 +75,7 @@ The full list of payment specific request classes is:
 - BitcoinPaymentRequest
 - CreditCardPaymentRequest
 - GiftcardPaymentRequest
-- IDealPaymentRequest
+- IdealPaymentRequest
 - KbcPaymentRequest
 - PayPalPaymentRequest
 - PaySafeCardPaymentRequest
