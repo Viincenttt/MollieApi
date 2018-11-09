@@ -87,7 +87,7 @@ IPaymentClient paymentClient = new PaymentClient("{yourApiKey}");
 BankTransferPaymentRequest paymentRequest = new BankTransferPaymentRequest();
 // Set bank transfer specific BillingEmail property
 paymentRequest.BillingEmail = "{billingEmail}";
-BankTransferPaymentResponse response = (BankTransferPaymentResponse)await this._paymentClient.CreatePaymentAsync(paymentRequest);
+BankTransferPaymentResponse response = (BankTransferPaymentResponse)await paymentClient.CreatePaymentAsync(paymentRequest);
 ```
 
 ### Retrieving a payment by id
