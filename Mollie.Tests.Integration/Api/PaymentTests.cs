@@ -165,6 +165,23 @@ namespace Mollie.Tests.Integration.Api {
         [Test]
         public async Task CanCreatePaymentWithMetaData() {
             // If: We create a payment with meta data
+            string metadata = "this is my metadata";
+            PaymentRequest paymentRequest = new PaymentRequest() {
+                Amount = new Amount(Currency.EUR, "100.00"),
+                Description = "Description",
+                RedirectUrl = this.DefaultRedirectUrl,
+                Metadata = metadata
+            };
+
+            // When: We send the payment request to Mollie
+            PaymentResponse result = await this._paymentClient.CreatePaymentAsync(paymentRequest);
+
+            // Then: Make sure we get the same json result as metadata
+            Assert.AreEqual(metadata, result.Metadata);
+        }
+
+        public async Task CanCreatePaymentWithJsonMetaData() {
+            // If: We create a payment with meta data
             string json = "{\"order_id\":\"4.40\"}";
             PaymentRequest paymentRequest = new PaymentRequest() {
                 Amount = new Amount(Currency.EUR, "100.00"),
