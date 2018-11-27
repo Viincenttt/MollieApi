@@ -50,7 +50,7 @@ namespace Mollie.Tests.Integration.Api {
             subscriptionRequest.Amount = new Amount(Currency.EUR, "100.00");
             subscriptionRequest.Times = 5;
             subscriptionRequest.Interval = "1 month";
-            subscriptionRequest.Description = $"Subscription {DateTime.Now}"; // Subscriptions must have a unique name
+            subscriptionRequest.Description = $"Subscription {Guid.NewGuid()}"; // Subscriptions must have a unique name
             subscriptionRequest.WebhookUrl = "http://www.google.nl";
             subscriptionRequest.StartDate = DateTime.Now.AddDays(1);
 
@@ -97,7 +97,7 @@ namespace Mollie.Tests.Integration.Api {
             if (subscriptions.Count > 0) {
                 string subscriptionId = subscriptions.Items.First().Id;
                 SubscriptionUpdateRequest request = new SubscriptionUpdateRequest() {
-                    Description = $"Updated subscription {DateTime.Now}"
+                    Description = $"Updated subscription {Guid.NewGuid()}"
                 };
                 SubscriptionResponse response = await this._subscriptionClient.UpdateSubscriptionAsync(customerId, subscriptionId, request);
 
@@ -117,7 +117,7 @@ namespace Mollie.Tests.Integration.Api {
             subscriptionRequest.Amount = new Amount(Currency.EUR, "100.00");
             subscriptionRequest.Times = 5;
             subscriptionRequest.Interval = "1 month";
-            subscriptionRequest.Description = $"Subscription {DateTime.Now}"; // Subscriptions must have a unique name
+            subscriptionRequest.Description = $"Subscription {Guid.NewGuid()}"; // Subscriptions must have a unique name
             subscriptionRequest.WebhookUrl = "http://www.google.nl";
             subscriptionRequest.StartDate = DateTime.Now.AddDays(1);
             subscriptionRequest.Metadata = "IAmNotAValidJsonString";
@@ -135,7 +135,7 @@ namespace Mollie.Tests.Integration.Api {
             subscriptionRequest.Amount = new Amount(Currency.EUR, "100.00");
             subscriptionRequest.Times = 5;
             subscriptionRequest.Interval = "1 month";
-            subscriptionRequest.Description = $"Subscription {DateTime.Now}"; // Subscriptions must have a unique name
+            subscriptionRequest.Description = $"Subscription {Guid.NewGuid()}"; // Subscriptions must have a unique name
             subscriptionRequest.WebhookUrl = "http://www.google.nl";
             subscriptionRequest.StartDate = DateTime.Now.AddDays(1);
             subscriptionRequest.Metadata = json;
