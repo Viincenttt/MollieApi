@@ -165,6 +165,24 @@ namespace Mollie.Tests.Integration.Api {
         [Test]
         public async Task CanCreatePaymentWithMetaData() {
             // If: We create a payment with meta data
+            string metadata = "this is my metadata";
+            PaymentRequest paymentRequest = new PaymentRequest() {
+                Amount = new Amount(Currency.EUR, "100.00"),
+                Description = "Description",
+                RedirectUrl = this.DefaultRedirectUrl,
+                Metadata = metadata
+            };
+
+            // When: We send the payment request to Mollie
+            PaymentResponse result = await this._paymentClient.CreatePaymentAsync(paymentRequest);
+
+            // Then: Make sure we get the same json result as metadata
+            Assert.AreEqual(metadata, result.Metadata);
+        }
+
+        [Test]
+        public async Task CanCreatePaymentWithJsonMetaData() {
+            // If: We create a payment with meta data
             string json = "{\"order_id\":\"4.40\"}";
             PaymentRequest paymentRequest = new PaymentRequest() {
                 Amount = new Amount(Currency.EUR, "100.00"),
@@ -224,20 +242,6 @@ namespace Mollie.Tests.Integration.Api {
 
             // Then: Make sure we get the mandate id back in the details
             Assert.AreEqual(validMandate.Id, result.MandateId);
-        }
-
-        [Test]
-        public void PaymentWithInvalidJsonThrowsException() {
-            // If: We create a payment with invalid json
-            PaymentRequest paymentRequest = new PaymentRequest() {
-                Amount = new Amount(Currency.EUR, "100.00"),
-                Description = "Description",
-                RedirectUrl = this.DefaultRedirectUrl,
-                Metadata = "IAmNotAValidJsonString"
-            };
-
-            // When + Then: We send the payment request to Mollie, we expect the exception
-            Assert.ThrowsAsync<MollieApiException>(() => this._paymentClient.CreatePaymentAsync(paymentRequest));
         }
 
         [Test]

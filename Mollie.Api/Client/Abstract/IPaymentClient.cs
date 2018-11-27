@@ -37,5 +37,6 @@ namespace Mollie.Api.Client.Abstract {
 
         Task<ListResponse<PaymentResponse>> GetPaymentListAsync(UrlObjectLink<ListResponse<PaymentResponse>> url);
         Task<PaymentResponse> GetPaymentAsync(UrlObjectLink<PaymentResponse> url);
+        Task<ListResponse<PaymentResponse>> GetCustomerPaymentListAsync(string customerId, string from = null, int? limit = null);
     }
 }

@@ -1,0 +1,30 @@
+﻿@model OverviewModel<PaymentMethodResponse>
+
+@{
+    ViewData["Title"] = "List payment methods";
+}
+
+<div class="container">
+    <h2>List of payment methods</h2>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Description</th>
+                <th scope="col">Size1x</th>
+                <th scope="col">Size2x</th>
+                <th scope="col">Svg</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (PaymentMethodResponse paymentMethod in Model.Items) {
+                <tr>
+                    <td>@paymentMethod.Description</td>
+                    <td><img src="@paymentMethod.Image.Size1x" alt="@paymentMethod.Description" /></td>
+                    <td><img src="@paymentMethod.Image.Size2x" alt="@paymentMethod.Description" /></td>
+                    <td><img src="@paymentMethod.Image.Svg" alt="@paymentMethod.Description" /></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
