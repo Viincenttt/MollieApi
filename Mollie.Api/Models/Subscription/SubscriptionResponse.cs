@@ -1,4 +1,5 @@
-using System;
+﻿using System;
+using Mollie.Api.JsonConverters;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -54,6 +55,12 @@ namespace Mollie.Api.Models.Subscription
         public DateTime StartDate { get; set; }
 
         /// <summary>
+        /// The date of the next scheduled payment in YYYY-MM-DD format. When there will be no next payment, for example
+        /// when the subscription has ended, this parameter will not be returned.
+        /// </summary>
+        public DateTime? NextPaymentDate { get; set; }
+
+        /// <summary>
         /// A description unique per customer. This will be included in the payment description along with the charge date in
         /// Y-m-d format.
         /// </summary>
@@ -77,9 +84,20 @@ namespace Mollie.Api.Models.Subscription
         public string WebhookUrl { get; set; }
 
         /// <summary>
+        /// The optional metadata you provided upon subscription creation. Metadata can for example be used to link a plan to a
+        /// subscription.
+        /// </summary>
+        [JsonConverter(typeof(RawJsonConverter))]
+        public string Metadata { get; set; }
+
+        /// <summary>
         /// An object with several URL objects relevant to the subscription. Every URL object will contain an href and a type field.
         /// </summary>
         [JsonProperty("_links")]
         public SubscriptionResponseLinks Links { get; set; }
+
+        public T GetMetadata<T>(JsonSerializerSettings jsonSerializerSettings = null) {
+            return JsonConvert.DeserializeObject<T>(this.Metadata, jsonSerializerSettings);
+        }
     }
 }

@@ -60,7 +60,7 @@ namespace Mollie.Api.Models.Payment.Response {
         /// <summary>
         /// The time until the payment will expire in ISO 8601 duration format.
         /// </summary>
-        public string ExpiredAt { get; set; }
+        public DateTime? ExpiredAt { get; set; }
 
         /// <summary>
         /// The date and time the payment failed, in ISO 8601 format. This parameter is omitted if the payment did not fail (yet).
@@ -112,7 +112,6 @@ namespace Mollie.Api.Models.Payment.Response {
         /// <summary>
         /// The optional metadata you provided upon payment creation. Metadata can be used to link an order to a payment.
         /// </summary>
-        [JsonConverter(typeof(RawJsonConverter))]
         public string Metadata { get; set; }
 
         /// <summary>

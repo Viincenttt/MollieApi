@@ -88,8 +88,13 @@ namespace Mollie.Api.Client {
             return await this.ProcessHttpResponseMessage<T>(response).ConfigureAwait(false);
         }
 
-        protected async Task DeleteAsync(string relativeUri) {
+        protected async Task DeleteAsync(string relativeUri, object data = null) {
             HttpRequestMessage httpRequest = this.CreateHttpRequest(HttpMethod.Delete, relativeUri);
+            if (data != null) {
+                var jsonData = JsonConvertExtensions.SerializeObjectCamelCase(data);
+                var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+                httpRequest.Content = content;
+            }
             var response = await this._httpClient.SendAsync(httpRequest).ConfigureAwait(false);
             await this.ProcessHttpResponseMessage<object>(response).ConfigureAwait(false);
         }

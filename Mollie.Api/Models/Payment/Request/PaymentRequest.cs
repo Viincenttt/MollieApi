@@ -51,7 +51,6 @@ namespace Mollie.Api.Models.Payment.Request {
         /// Provide any data you like, for example a string or a JSON object. We will save the data alongside the payment. Whenever 
         /// you fetch the payment with our API, we’ll also include the metadata. You can use up to approximately 1kB.
         /// </summary>
-        [JsonConverter(typeof(RawJsonConverter))]
         public string Metadata { get; set; }
 
         /// <summary>
@@ -60,6 +59,7 @@ namespace Mollie.Api.Models.Payment.Request {
         /// If set to recurring, the customer’s card is charged automatically. Defaults to oneoff, which is a regular non-recurring 
         /// payment(see also: Recurring).
         /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
         public SequenceType? SequenceType { get; set; }
 
         /// <summary>

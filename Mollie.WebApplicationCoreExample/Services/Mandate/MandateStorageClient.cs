@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models.Mandate;
-using Mollie.Api.Models.Payment;
 
 namespace Mollie.WebApplicationCoreExample.Services.Mandate {
     public interface IMandateStorageClient {
@@ -21,7 +20,7 @@ namespace Mollie.WebApplicationCoreExample.Services.Mandate {
 
         private MandateRequest CreateDefaultMandateRequest() {
             return new MandateRequest() {
-                Method = PaymentMethod.DirectDebit,
+                Method = Api.Models.Payment.PaymentMethod.DirectDebit,
                 ConsumerName = "John Smit",
                 ConsumerAccount = "NL86INGB0002445588", // IBAN van de belastingdienst ;D
             };

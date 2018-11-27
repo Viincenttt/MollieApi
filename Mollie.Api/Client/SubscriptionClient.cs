@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models.List;
-
+using Mollie.Api.Models.Payment.Response;
 using Mollie.Api.Models.Subscription;
 using Mollie.Api.Models.Url;
 
@@ -37,6 +37,10 @@ namespace Mollie.Api.Client {
 
         public async Task<SubscriptionResponse> UpdateSubscriptionAsync(string customerId, string subscriptionId, SubscriptionUpdateRequest request) {
             return await this.PatchAsync<SubscriptionResponse>($"customers/{customerId}/subscriptions/{subscriptionId}", request).ConfigureAwait(false);
+        }
+
+        public async Task<ListResponse<PaymentResponse>> GetSubscriptionPaymentListAsync(string customerId, string subscriptionId, string from = null, int? limit = null) {
+            return await this.GetListAsync<ListResponse<PaymentResponse>>($"customers/{customerId}/subscriptions/{subscriptionId}", from, limit).ConfigureAwait(false);
         }
     }
 }
