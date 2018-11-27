@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using Mollie.Api.Models.Order;
 using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Refund {
@@ -37,12 +35,6 @@ namespace Mollie.Api.Models.Refund {
         /// Since refunds may be delayed for certain payment methods, the refund carries a status field.
         /// </summary>
         public RefundStatus Status { get; set; }
-
-        /// <summary>
-        /// An array of order line objects as described in Get order. Only available if the refund was created via the
-        /// Create Order Refund API.
-        /// </summary>
-        public IEnumerable<OrderAddressDetails> Lines { get; set; }
 
         /// <summary>
         /// The date and time the refund was issued, in ISO 8601 format.

@@ -17,7 +17,6 @@ namespace Mollie.Tests.Integration.Framework {
         protected IMandateClient _mandateClient;
         protected ICustomerClient _customerClient;
         protected IProfileClient _profileClient;
-        protected IOrderClient _orderClient;
 
         [OneTimeSetUp]
         public void InitClass() {
@@ -29,7 +28,6 @@ namespace Mollie.Tests.Integration.Framework {
             this._mandateClient = new MandateClient(this.ApiTestKey);
             this._customerClient = new CustomerClient(this.ApiTestKey);
             this._profileClient = new ProfileClient(this.ApiTestKey);
-            this._orderClient = new OrderClient(this.ApiTestKey);
         }
 
         private void EnsureTestApiKey() {
