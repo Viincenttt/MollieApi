@@ -142,7 +142,7 @@ PaymentResponse result = await paymentClient.CreatePaymentAsync(paymentRequest);
 CustomMetadataClass metadataResponse = result.GetMetadata<CustomMetadataClass>();
 ```
 
-### Retrieving a list off payments
+### Retrieving a list of payments
 Mollie allows you to set offset and count properties so you can paginate the list. The offset and count parameters are optional. The maximum number of payments you can request in a single roundtrip is 250. 
 ```c#
 IPaymentClient paymentClient = new PaymentClient("{yourApiKey}");
