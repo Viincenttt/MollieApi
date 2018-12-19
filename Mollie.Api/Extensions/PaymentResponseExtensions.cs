@@ -1,4 +1,6 @@
-﻿namespace Mollie.Api.Extensions
+﻿using Mollie.Api.Models.Payment.Response;
+
+namespace Mollie.Api.Extensions
 {
     public static class PaymentResponseExtensions
     {
