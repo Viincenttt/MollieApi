@@ -17,7 +17,7 @@ namespace Mollie.Api.JsonConverters {
                 // Find the first array object and deserialize it to the list we want
                 JObject obj = JObject.Load(reader);
                 if (obj.First?.First is JArray objectArray) {
-                    return objectArray.ToObject(objectType);
+                    return objectArray.ToObject(objectType, serializer);
                 }
             }
 
