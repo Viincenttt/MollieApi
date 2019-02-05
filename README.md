@@ -4,7 +4,7 @@ This project allows you to easily add the [Mollie payment provider](https://www.
 
 If you have encounter any issues while using this library or have any feature requests, feel free to open an issue on GitHub. 
 
-# Contributions
+## Contributions
 
 Have you spotted a bug or want to add a missing feature? All pull requests are welcome! Please provide a description of the bug or feature you have fixed/added. Make sure to target the latest development branch. The development branch is named development-&lt;version-number&gt;.   
 
