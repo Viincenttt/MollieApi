@@ -86,7 +86,7 @@ namespace Mollie.Tests.Integration.Api {
                 Description = "Description",
                 RedirectUrl = this.DefaultRedirectUrl,
                 Locale = Locale.nl_NL,
-                Metadata = @"{""firstName"":""John"",""lastName"":""Doe""}",
+                Metadata = "{\"firstName\":\"John\",\"lastName\":\"Doe\"}",
                 Method = PaymentMethod.BankTransfer,
                 WebhookUrl = this.DefaultWebhookUrl
             };

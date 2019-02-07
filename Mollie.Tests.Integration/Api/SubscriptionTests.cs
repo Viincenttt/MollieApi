@@ -110,23 +110,6 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [Test]
-        public async Task SubscriptionWithInvalidJsonThrowsException() {
-            // If: We create a subscription with invalid json
-            string customerId = await this.GetFirstCustomerWithValidMandate();
-            SubscriptionRequest subscriptionRequest = new SubscriptionRequest();
-            subscriptionRequest.Amount = new Amount(Currency.EUR, "100.00");
-            subscriptionRequest.Times = 5;
-            subscriptionRequest.Interval = "1 month";
-            subscriptionRequest.Description = $"Subscription {Guid.NewGuid()}"; // Subscriptions must have a unique name
-            subscriptionRequest.WebhookUrl = "http://www.google.nl";
-            subscriptionRequest.StartDate = DateTime.Now.AddDays(1);
-            subscriptionRequest.Metadata = "IAmNotAValidJsonString";
-
-            // When + Then: We send the subscription request to Mollie, we expect the exception
-            Assert.ThrowsAsync<MollieApiException>(() => this._subscriptionClient.CreateSubscriptionAsync(customerId, subscriptionRequest));
-        }
-
-        [Test]
         public async Task CanCreateSubscriptionWithMetaData() {
             // If: We create a subscription with meta data
             string json = "{\"order_id\":\"4.40\"}";
