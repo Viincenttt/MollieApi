@@ -103,6 +103,40 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(createdCustomer.Email, retrievedCustomer.Email);
         }
 
+        [Test]
+        public async Task CanCreateCustomerWithJsonMetadata() {
+            // If: We create a customer request with json metadata
+            CustomerRequest customerRequest = new CustomerRequest() {
+                Email =  "johnsmit@mollie.com",
+                Name = "Smit",
+                Metadata =  "{\"order_id\":\"4.40\"}",
+                Locale = Locale.nl_NL
+            };
+
+            // When: We try to retrieve the customer by Url object
+            CustomerResponse retrievedCustomer = await this._customerClient.CreateCustomerAsync(customerRequest);
+
+            // Then: Make sure it's retrieved
+            Assert.AreEqual(customerRequest.Metadata, retrievedCustomer.Metadata);
+        }
+
+        [Test]
+        public async Task CanCreateCustomerWithStringMetadata() {
+            // If: We create a customer request with string metadata
+            CustomerRequest customerRequest = new CustomerRequest() {
+                Email = "johnsmit@mollie.com",
+                Name = "Smit",
+                Metadata = "This is my metadata",
+                Locale = Locale.nl_NL
+            };
+
+            // When: We try to retrieve the customer by Url object
+            CustomerResponse retrievedCustomer = await this._customerClient.CreateCustomerAsync(customerRequest);
+
+            // Then: Make sure it's retrieved
+            Assert.AreEqual(customerRequest.Metadata, retrievedCustomer.Metadata);
+        }
+
         private async Task<CustomerResponse> CreateCustomer(string name, string email) {
             CustomerRequest customerRequest = new CustomerRequest() {
                 Email = email,
