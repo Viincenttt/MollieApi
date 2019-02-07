@@ -6,6 +6,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Mollie.Api.Extensions;
+using Mollie.Api.Framework;
 using Mollie.Api.Framework.Factories;
 using Mollie.Api.JsonConverters;
 using Newtonsoft.Json;
@@ -15,18 +16,18 @@ namespace Mollie.Api.Client {
     public abstract class BaseMollieClient {
         public const string ApiEndPoint = "https://api.mollie.com/v2/";
 
-        private readonly string _apiKey;
-        private readonly JsonSerializerSettings _defaultJsonDeserializerSettings;
+        private readonly string _apiKey;        
         private readonly HttpClient _httpClient;
+        private readonly JsonConverterService _jsonConverterService;
 
         protected BaseMollieClient(string apiKey, HttpClient httpClient = null) {
             if (string.IsNullOrWhiteSpace(apiKey)) {
                 throw new ArgumentNullException(nameof(apiKey), "Mollie API key cannot be empty");
             }
 
+            this._jsonConverterService = new JsonConverterService();
             this._httpClient = httpClient ?? new HttpClient();
             this._apiKey = apiKey;
-            this._defaultJsonDeserializerSettings = this.CreateDefaultJsonDeserializerSettings();
         }
 
         protected async Task<T> GetAsync<T>(string relativeUri) {
@@ -71,7 +72,7 @@ namespace Mollie.Api.Client {
         }
 
         protected async Task<T> PostAsync<T>(string relativeUri, object data) {
-            var jsonData = JsonConvertExtensions.SerializeObjectCamelCase(data);
+            var jsonData = this._jsonConverterService.Serialize(data);
             var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
             HttpRequestMessage httpRequest = this.CreateHttpRequest(HttpMethod.Post, relativeUri, content);
             var response = await this._httpClient.SendAsync(httpRequest).ConfigureAwait(false);
@@ -80,7 +81,7 @@ namespace Mollie.Api.Client {
         }
 
         protected async Task<T> PatchAsync<T>(string relativeUri, object data) {
-            var jsonData = JsonConvertExtensions.SerializeObjectCamelCase(data);
+            var jsonData = this._jsonConverterService.Serialize(data);
             var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
             HttpRequestMessage httpRequest = this.CreateHttpRequest(new HttpMethod("PATCH"), relativeUri, content);
             var response = await this._httpClient.SendAsync(httpRequest).ConfigureAwait(false);
@@ -91,7 +92,7 @@ namespace Mollie.Api.Client {
         protected async Task DeleteAsync(string relativeUri, object data = null) {
             HttpRequestMessage httpRequest = this.CreateHttpRequest(HttpMethod.Delete, relativeUri);
             if (data != null) {
-                var jsonData = JsonConvertExtensions.SerializeObjectCamelCase(data);
+                var jsonData = this._jsonConverterService.Serialize(data);
                 var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
                 httpRequest.Content = content;
             }
@@ -103,7 +104,7 @@ namespace Mollie.Api.Client {
             var resultContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode) {
-                return JsonConvert.DeserializeObject<T>(resultContent, this._defaultJsonDeserializerSettings);
+                return this._jsonConverterService.Deserialize<T>(resultContent);
             }
             switch (response.StatusCode) {
                 case HttpStatusCode.BadRequest:
@@ -130,22 +131,7 @@ namespace Mollie.Api.Client {
                 throw new ArgumentException("The provided token isn't an oauth token.");
             }
         }
-
-        /// <summary>
-        ///     Creates the default Json serial settings for the JSON.NET parsing.
-        /// </summary>
-        /// <returns></returns>
-        private JsonSerializerSettings CreateDefaultJsonDeserializerSettings() {
-            return new JsonSerializerSettings {
-                DateFormatString = "MM-dd-yyyy",
-                NullValueHandling = NullValueHandling.Ignore,
-                Converters = new List<JsonConverter> {
-                    // Add a special converter for payment responses, because we need to create specific classes based on the payment method
-                    new PaymentResponseConverter(new PaymentResponseFactory())
-                }
-            };
-        }
-
+        
         private void ValidateUrlLink(UrlLink urlObject) {
             // Make sure the URL is not empty
             if (String.IsNullOrEmpty(urlObject?.Href)) {
