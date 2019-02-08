@@ -11,5 +11,11 @@ namespace Mollie.Api.Extensions {
 
             return "?" + string.Join("&", parameters.Select(x => $"{WebUtility.UrlEncode(x.Key)}={WebUtility.UrlEncode(x.Value)}"));
         }
+
+        public static void AddValueIfNotNullOrEmpty(this IDictionary<string, string> dictionary, string key, string value) {
+            if (!string.IsNullOrEmpty(value)) {
+                dictionary.Add(key, value);
+            }
+        }
     }
 }

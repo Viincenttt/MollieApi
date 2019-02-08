@@ -123,19 +123,12 @@ namespace Mollie.Api.Client {
 
         private string BuildListQueryString(string from, int? limit, IDictionary<string, string> otherParameters = null) {
             Dictionary<string, string> queryParameters = new Dictionary<string, string>();
-            if (!String.IsNullOrEmpty(from)) {
-                queryParameters[nameof(from)] = from;
-            }
-
-            if (limit.HasValue) {
-                queryParameters[nameof(limit)] = limit.Value.ToString();
-            }
+            queryParameters.AddValueIfNotNullOrEmpty(nameof(from), from);
+            queryParameters.AddValueIfNotNullOrEmpty(nameof(limit), Convert.ToString(limit));
 
             if (otherParameters != null) {
                 foreach (var parameter in otherParameters) {
-                    if (!String.IsNullOrEmpty(parameter.Value)) {
-                        queryParameters[parameter.Key] = parameter.Value;
-                    }
+                    queryParameters.AddValueIfNotNullOrEmpty(parameter.Key, parameter.Value);
                 }
             }
 
