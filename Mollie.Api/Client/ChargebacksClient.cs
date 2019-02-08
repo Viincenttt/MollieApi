@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
+using Mollie.Api.Extensions;
 using Mollie.Api.Models.Chargeback;
 using Mollie.Api.Models.List;
 
@@ -21,21 +23,15 @@ namespace Mollie.Api.Client {
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<ChargebackResponse>> GetChargebacksListAsync(string oathProfileId = null, bool? oauthTestmode = null) {
-            if (oathProfileId != null || oauthTestmode != null) {
+        public async Task<ListResponse<ChargebackResponse>> GetChargebacksListAsync(string profileId = null, bool? testmode = null) {
+            if (profileId != null || testmode != null) {
                 this.ValidateApiKeyIsOauthAccesstoken();
             }
 
             // Build parameters
             var parameters = new Dictionary<string, string>();
-
-            if (!string.IsNullOrWhiteSpace(oathProfileId)) {
-                parameters.Add("profileId", oathProfileId);
-            }
-
-            if (oauthTestmode.HasValue) {
-                parameters.Add("testmode", oauthTestmode.Value.ToString().ToLower());
-            }
+            parameters.AddValueIfNotNullOrEmpty(nameof(profileId), profileId);
+            parameters.AddValueIfNotNullOrEmpty(nameof(testmode), Convert.ToString(testmode).ToLower());
 
             return await this.GetListAsync<ListResponse<ChargebackResponse>>($"chargebacks", null, null, parameters).ConfigureAwait(false);
         }

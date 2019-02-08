@@ -9,12 +9,11 @@ namespace Mollie.Api.JsonConverters {
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer) {
-            writer.WriteRawValue((string) value);
+            writer.WriteRawValue(value.ToString());
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
-            JsonSerializer serializer) {
-            return JToken.Load(reader).ToString(Formatting.None);
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer) {
+            return JToken.Load(reader).ToString();
         }
     }
 }

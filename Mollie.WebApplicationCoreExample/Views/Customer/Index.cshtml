@@ -6,7 +6,7 @@
 
 <div class="container">
     <h2>List of customers</h2>
-    
+
     <div class="clearfix">
         <a asp-action="Create" class="btn btn-primary float-right">Create new customer</a>
     </div>
@@ -38,6 +38,6 @@
             }
         </tbody>
     </table>
-    
-    @Html.Partial("_OverviewNavigation", Model.Navigation)
+
+    <partial name="_OverviewNavigation" model="Model.Navigation" />
 </div>

@@ -40,10 +40,7 @@ namespace Mollie.Api.Client {
                 {"response_type", "code"},
                 {"approval_prompt", forceApprovalPrompt ? "force" : "auto"}
             };
-
-            if (!string.IsNullOrWhiteSpace(redirectUri)) {
-                parameters.Add("redirect_uri", redirectUri);
-            }
+            parameters.AddValueIfNotNullOrEmpty("redirect_uri", redirectUri);
 
             return AuthorizeEndPoint + parameters.ToQueryString();
         }
