@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
+using Mollie.Api.Extensions;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Payment.Request;
 using Mollie.Api.Models.Payment.Response;
@@ -48,17 +50,10 @@ namespace Mollie.Api.Client {
             }
 
 		    var parameters = new Dictionary<string, string>();
+            parameters.AddValueIfNotNullOrEmpty(nameof(profileId), profileId);
+            parameters.AddValueIfNotNullOrEmpty(nameof(testMode), Convert.ToString(testMode).ToLower());
 
-	        if (!string.IsNullOrWhiteSpace(profileId)) {
-	            parameters.Add("profileId", profileId);
-            }
-
-	        if (testMode.HasValue) {
-	            parameters.Add("testmode", testMode.Value.ToString().ToLower());
-            }
-
-			return await this.GetListAsync<ListResponse<PaymentResponse>>($"payments", from, limit, parameters)
-				.ConfigureAwait(false);
+			return await this.GetListAsync<ListResponse<PaymentResponse>>($"payments", from, limit, parameters).ConfigureAwait(false);
 		}
 
         public async Task<ListResponse<PaymentResponse>> GetCustomerPaymentListAsync(string customerId, string from = null, int? limit = null) {

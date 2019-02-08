@@ -111,8 +111,7 @@ namespace Mollie.Api.Client {
             }
         }
 
-        private HttpRequestMessage
-            CreateHttpRequest(HttpMethod method, string relativeUri, HttpContent content = null) {
+        private HttpRequestMessage CreateHttpRequest(HttpMethod method, string relativeUri, HttpContent content = null) {
             HttpRequestMessage httpRequest = new HttpRequestMessage(method, new Uri(new Uri(ApiEndPoint), relativeUri));
             httpRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", this._apiKey);
