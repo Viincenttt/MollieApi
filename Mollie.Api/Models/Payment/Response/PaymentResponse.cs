@@ -112,6 +112,7 @@ namespace Mollie.Api.Models.Payment.Response {
         /// <summary>
         /// The optional metadata you provided upon payment creation. Metadata can be used to link an order to a payment.
         /// </summary>
+        [JsonConverter(typeof(RawJsonConverter))]
         public string Metadata { get; set; }
 
         /// <summary>

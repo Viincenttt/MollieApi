@@ -17,7 +17,7 @@ namespace Mollie.Api.Client {
 
         public async Task<ListResponse<PaymentMethodResponse>> GetPaymentMethodListAsync(SequenceType? sequenceType = null, string locale = null, Amount amount = null) {
             Dictionary<string, string> parameters = new Dictionary<string, string>() {
-                {nameof(sequenceType).ToLower(), sequenceType.ToString().ToLower()},
+                {nameof(sequenceType), sequenceType.ToString().ToLower()},
                 {nameof(locale), locale},
                 {"amount[value]", amount?.Value},
                 {"amount[currency]", amount?.Currency}

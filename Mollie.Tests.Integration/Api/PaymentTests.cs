@@ -31,7 +31,7 @@ namespace Mollie.Tests.Integration.Api {
 
         [Test]
         public async Task ListPaymentsNeverReturnsMorePaymentsThenTheNumberOfRequestedPayments() {
-            // If: Number of payments requested is 5
+            // When: Number of payments requested is 5
             int numberOfPayments = 5;
 
             // When: Retrieve 5 payments
@@ -42,8 +42,25 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [Test]
+        public async Task WhenRetrievingAListOfPaymentsPaymentSubclassesShouldBeInitialized() {
+            // Given: We create a new payment 
+            IdealPaymentRequest paymentRequest = new IdealPaymentRequest() {
+                Amount = new Amount(Currency.EUR, "100.00"),
+                Description = "Description",
+                RedirectUrl = this.DefaultRedirectUrl
+            };
+            await this._paymentClient.CreatePaymentAsync(paymentRequest);
+
+            // When: We retrieve it in a list
+            ListResponse<PaymentResponse> result = await this._paymentClient.GetPaymentListAsync(null, 5);
+
+            // Then: We expect a list with a single ideal payment            
+            Assert.IsAssignableFrom<IdealPaymentResponse>(result.Items.First());
+        }
+
+        [Test]
         public async Task CanCreateDefaultPaymentWithOnlyRequiredFields() {
-            // If: we create a payment request with only the required parameters
+            // When: we create a payment request with only the required parameters
             PaymentRequest paymentRequest = new PaymentRequest() {
                 Amount = new Amount(Currency.EUR, "100.00"),
                 Description = "Description",
@@ -69,7 +86,7 @@ namespace Mollie.Tests.Integration.Api {
                 Description = "Description",
                 RedirectUrl = this.DefaultRedirectUrl,
                 Locale = Locale.nl_NL,
-                Metadata = @"{""firstName"":""John"",""lastName"":""Doe""}",
+                Metadata = "{\"firstName\":\"John\",\"lastName\":\"Doe\"}",
                 Method = PaymentMethod.BankTransfer,
                 WebhookUrl = this.DefaultWebhookUrl
             };
