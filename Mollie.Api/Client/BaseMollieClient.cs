@@ -7,16 +7,13 @@ using System.Text;
 using System.Threading.Tasks;
 using Mollie.Api.Extensions;
 using Mollie.Api.Framework;
-using Mollie.Api.Framework.Factories;
-using Mollie.Api.JsonConverters;
-using Newtonsoft.Json;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client {
     public abstract class BaseMollieClient {
         public const string ApiEndPoint = "https://api.mollie.com/v2/";
 
-        private readonly string _apiKey;        
+        private readonly string _apiKey;
         private readonly HttpClient _httpClient;
         private readonly JsonConverterService _jsonConverterService;
 
@@ -30,74 +27,42 @@ namespace Mollie.Api.Client {
             this._apiKey = apiKey;
         }
 
-        protected async Task<T> GetAsync<T>(string relativeUri) {
-            HttpRequestMessage httpRequest = this.CreateHttpRequest(HttpMethod.Get, relativeUri);
-            var response = await this._httpClient.SendAsync(httpRequest).ConfigureAwait(false);
-            return await this.ProcessHttpResponseMessage<T>(response).ConfigureAwait(false);
-        }
-
-        protected async Task<T> GetAsync<T>(UrlObjectLink<T> urlObject) {
-            this.ValidateUrlLink(urlObject);
-            HttpRequestMessage httpRequest = this.CreateHttpRequest(HttpMethod.Get, urlObject.Href);
-            var response = await this._httpClient.SendAsync(httpRequest).ConfigureAwait(false);
-            return await this.ProcessHttpResponseMessage<T>(response).ConfigureAwait(false);
-        }
-
-        private string BuildListQueryString(string from, int? limit, IDictionary<string, string> otherParameters = null) {
-            Dictionary<string, string> queryParameters = new Dictionary<string, string>();
-            if (!String.IsNullOrEmpty(from)) {
-                queryParameters[nameof(from)] = from;
-            }
-
-            if (limit.HasValue) {
-                queryParameters[nameof(limit)] = limit.Value.ToString();
-            }
-            
-            if (otherParameters != null) {
-                foreach (var parameter in otherParameters) {
-                    if (!String.IsNullOrEmpty(parameter.Value)) {
-                        queryParameters[parameter.Key] = parameter.Value;
-                    }
-                }
-            }
-
-            return queryParameters.ToQueryString();
-        }
-
-        protected async Task<T> GetListAsync<T>(string relativeUri, string from, int? limit, IDictionary<string, string> otherParameters = null) {
-            var queryString = this.BuildListQueryString(from, limit, otherParameters);
-            HttpRequestMessage httpRequest = this.CreateHttpRequest(HttpMethod.Get, relativeUri + queryString);
-            var response = await this._httpClient.SendAsync(httpRequest).ConfigureAwait(false);
-            return await this.ProcessHttpResponseMessage<T>(response).ConfigureAwait(false);
-        }
-
-        protected async Task<T> PostAsync<T>(string relativeUri, object data) {
-            var jsonData = this._jsonConverterService.Serialize(data);
-            var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-            HttpRequestMessage httpRequest = this.CreateHttpRequest(HttpMethod.Post, relativeUri, content);
-            var response = await this._httpClient.SendAsync(httpRequest).ConfigureAwait(false);
-
-            return await this.ProcessHttpResponseMessage<T>(response).ConfigureAwait(false);
-        }
-
-        protected async Task<T> PatchAsync<T>(string relativeUri, object data) {
-            var jsonData = this._jsonConverterService.Serialize(data);
-            var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-            HttpRequestMessage httpRequest = this.CreateHttpRequest(new HttpMethod("PATCH"), relativeUri, content);
-            var response = await this._httpClient.SendAsync(httpRequest).ConfigureAwait(false);
-
-            return await this.ProcessHttpResponseMessage<T>(response).ConfigureAwait(false);
-        }
-
-        protected async Task DeleteAsync(string relativeUri, object data = null) {
-            HttpRequestMessage httpRequest = this.CreateHttpRequest(HttpMethod.Delete, relativeUri);
+        private async Task<T> SendHttpRequest<T>(HttpMethod httpMethod, string relativeUri, object data = null) {
+            HttpRequestMessage httpRequest = this.CreateHttpRequest(httpMethod, relativeUri);
             if (data != null) {
                 var jsonData = this._jsonConverterService.Serialize(data);
                 var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
                 httpRequest.Content = content;
             }
+
             var response = await this._httpClient.SendAsync(httpRequest).ConfigureAwait(false);
-            await this.ProcessHttpResponseMessage<object>(response).ConfigureAwait(false);
+            return await this.ProcessHttpResponseMessage<T>(response).ConfigureAwait(false);
+        }
+
+        protected async Task<T> GetListAsync<T>(string relativeUri, string from, int? limit, IDictionary<string, string> otherParameters = null) {
+            string url = relativeUri + this.BuildListQueryString(from, limit, otherParameters);
+            return await this.SendHttpRequest<T>(HttpMethod.Get, url);
+        }
+
+        protected async Task<T> GetAsync<T>(string relativeUri) {
+            return await this.SendHttpRequest<T>(HttpMethod.Get, relativeUri);
+        }
+
+        protected async Task<T> GetAsync<T>(UrlObjectLink<T> urlObject) {
+            this.ValidateUrlLink(urlObject);
+            return await this.GetAsync<T>(urlObject.Href);
+        }
+
+        protected async Task<T> PostAsync<T>(string relativeUri, object data) {
+            return await this.SendHttpRequest<T>(HttpMethod.Post, relativeUri, data);
+        }
+
+        protected async Task<T> PatchAsync<T>(string relativeUri, object data) {
+            return await this.SendHttpRequest<T>(new HttpMethod("PATCH"), relativeUri, data);
+        }
+
+        protected async Task DeleteAsync(string relativeUri, object data = null) {
+            await this.SendHttpRequest<object>(HttpMethod.Delete, relativeUri, data);
         }
 
         private async Task<T> ProcessHttpResponseMessage<T>(HttpResponseMessage response) {
@@ -106,6 +71,7 @@ namespace Mollie.Api.Client {
             if (response.IsSuccessStatusCode) {
                 return this._jsonConverterService.Deserialize<T>(resultContent);
             }
+
             switch (response.StatusCode) {
                 case HttpStatusCode.BadRequest:
                 case HttpStatusCode.Unauthorized:
@@ -128,10 +94,11 @@ namespace Mollie.Api.Client {
                     throw new InvalidOperationException(
                         "The provided token isn't an oauth token. You have invoked the method with oauth parameters thus an oauth accesstoken is required.");
                 }
+
                 throw new ArgumentException("The provided token isn't an oauth token.");
             }
         }
-        
+
         private void ValidateUrlLink(UrlLink urlObject) {
             // Make sure the URL is not empty
             if (String.IsNullOrEmpty(urlObject?.Href)) {
@@ -144,13 +111,35 @@ namespace Mollie.Api.Client {
             }
         }
 
-        private HttpRequestMessage CreateHttpRequest(HttpMethod method, string relativeUri, HttpContent content = null) {
+        private HttpRequestMessage
+            CreateHttpRequest(HttpMethod method, string relativeUri, HttpContent content = null) {
             HttpRequestMessage httpRequest = new HttpRequestMessage(method, new Uri(new Uri(ApiEndPoint), relativeUri));
             httpRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", this._apiKey);
             httpRequest.Content = content;
 
             return httpRequest;
+        }
+
+        private string BuildListQueryString(string from, int? limit, IDictionary<string, string> otherParameters = null) {
+            Dictionary<string, string> queryParameters = new Dictionary<string, string>();
+            if (!String.IsNullOrEmpty(from)) {
+                queryParameters[nameof(from)] = from;
+            }
+
+            if (limit.HasValue) {
+                queryParameters[nameof(limit)] = limit.Value.ToString();
+            }
+
+            if (otherParameters != null) {
+                foreach (var parameter in otherParameters) {
+                    if (!String.IsNullOrEmpty(parameter.Value)) {
+                        queryParameters[parameter.Key] = parameter.Value;
+                    }
+                }
+            }
+
+            return queryParameters.ToQueryString();
         }
     }
 }
