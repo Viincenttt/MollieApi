@@ -68,8 +68,7 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [Test]
-        public async Task CanRetrievePricing()
-        {
+        public async Task CanRetrievePricing() {
             // When: retrieving the ideal method we can include the issuers
             PaymentMethodResponse paymentMethod = await this._paymentMethodClient.GetPaymentMethodAsync(PaymentMethod.Ideal, includePricing: true);
 
@@ -79,8 +78,7 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [Test]
-        public async Task DoNotRetrievePricingWhenIncludeIsFalse()
-        {
+        public async Task DoNotRetrievePricingWhenIncludeIsFalse() {
             // When: retrieving the ideal method with the include parameter set to false
             PaymentMethodResponse paymentMethod = await this._paymentMethodClient.GetPaymentMethodAsync(PaymentMethod.Ideal, includePricing: false);
 
@@ -89,8 +87,7 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [Test]
-        public async Task DoNotRetrievePricingWhenIncludeIsNull()
-        {
+        public async Task DoNotRetrievePricingWhenIncludeIsNull() {
             // When: retrieving the ideal method with the include parameter set to null
             PaymentMethodResponse paymentMethod = await this._paymentMethodClient.GetPaymentMethodAsync(PaymentMethod.Ideal, includePricing: null);
 
@@ -99,8 +96,7 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [Test]
-        public async Task CanRetrieveAllMethods()
-        {
+        public async Task CanRetrieveAllMethods() {
             // When: retrieving the all mollie payment methods
             ListResponse<PaymentMethodResponse> paymentMethods = await this._paymentMethodClient.GetAllPaymentMethodListAsync();
 
@@ -110,8 +106,7 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [Test]
-        public async Task CanRetrievePricingForAllMethods()
-        {
+        public async Task CanRetrievePricingForAllMethods() {
             // When: retrieving the ideal method we can include the issuers
             ListResponse<PaymentMethodResponse> paymentMethods = await this._paymentMethodClient.GetAllPaymentMethodListAsync(includePricing: true);
 
@@ -120,8 +115,7 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [Test]
-        public async Task CanRetrieveIssuersForAllMethods()
-        {
+        public async Task CanRetrieveIssuersForAllMethods() {
             // When: retrieving the all mollie payment methods we can include the issuers
             ListResponse<PaymentMethodResponse> paymentMethods = await this._paymentMethodClient.GetAllPaymentMethodListAsync(includeIssuers: true);
 
