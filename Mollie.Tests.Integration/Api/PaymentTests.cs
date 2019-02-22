@@ -13,7 +13,6 @@ using NUnit.Framework;
 
 namespace Mollie.Tests.Integration.Api {
     using System.Linq;
-
     using Mollie.Api.Models.Customer;
     using Mollie.Api.Models.Mandate;
 
@@ -115,6 +114,7 @@ namespace Mollie.Tests.Integration.Api {
         [TestCase(typeof(PaymentRequest), PaymentMethod.Belfius, typeof(BelfiusPaymentResponse))]
         [TestCase(typeof(KbcPaymentRequest), PaymentMethod.Kbc, typeof(KbcPaymentResponse))]
         [TestCase(typeof(PaymentRequest), null, typeof(PaymentResponse))]
+        //[TestCase(typeof(Przelewy24PaymentRequest), PaymentMethod.Przelewy24, typeof(PaymentResponse))] // Payment option is not enabled in website profile
         public async Task CanCreateSpecificPaymentType(Type paymentType, PaymentMethod? paymentMethod, Type expectedResponseType) {
             // If: we create a specific payment type with some bank transfer specific values
             PaymentRequest paymentRequest = (PaymentRequest) Activator.CreateInstance(paymentType);
@@ -122,6 +122,12 @@ namespace Mollie.Tests.Integration.Api {
             paymentRequest.Description = "Description";
             paymentRequest.RedirectUrl = this.DefaultRedirectUrl;
             paymentRequest.Method = paymentMethod;
+
+            // Set required billing email for Przelewy24
+            if (paymentRequest is Przelewy24PaymentRequest request)
+            {
+                request.BillingEmail = "example@example.com";
+            }
 
             // When: We send the payment request to Mollie
             PaymentResponse result = await this._paymentClient.CreatePaymentAsync(paymentRequest);
