@@ -1,7 +1,6 @@
 ﻿namespace Mollie.Api.Models.PaymentMethod.Pricing
 {
-    public class PricingResponse : IResponseObject
-    {
+    public class PricingResponse : IResponseObject {
         /// <summary>
         /// The area or product-type where the pricing is applied for, translated in the optional locale passed.
         /// </summary>

@@ -1,7 +1,6 @@
 ﻿namespace Mollie.Api.Models.PaymentMethod.Pricing
 {
-    public class FixedPricingResponse : IResponseObject
-    {
+    public class FixedPricingResponse : IResponseObject {
         /// <summary>
         /// The ISO 4217 currency code.
         /// </summary>
