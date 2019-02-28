@@ -101,7 +101,8 @@ namespace Mollie.Api.Models.Payment.Response {
         [EnumMember(Value = "invalid_card_type")] InvalidCardType,
         [EnumMember(Value = "refused_by_issuer")] RefusedByIssuer,
         [EnumMember(Value = "insufficient_funds")] InsufficientFunds,
-        [EnumMember(Value = "inactive_card")] InactiveCard
+        [EnumMember(Value = "inactive_card")] InactiveCard,
+        [EnumMember(Value = "unknown_reason")] UnknownReason
     }
 
     /// <summary>
@@ -114,7 +115,8 @@ namespace Mollie.Api.Models.Payment.Response {
         Dankort,
         [EnumMember(Value = "Diners Club")] DinersClub,
         Discover,
-        [EnumMember(Value = "JCB Laser")] JcbLaser,
+        [EnumMember(Value = "JCB")] Jcb,
+        [EnumMember(Value = "Laser")] Laser,
         Maestro,
         Mastercard,
         Unionpay,
