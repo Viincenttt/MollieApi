@@ -116,6 +116,7 @@
     <Compile Include="Api\PaymentTests.cs" />
     <Compile Include="Api\RefundTests.cs" />
     <Compile Include="Api\SubscriptionTests.cs" />
+    <Compile Include="Extensions\DictionaryExtensionsTests.cs" />
     <Compile Include="Framework\BaseMollieApiTestClass.cs" />
     <Compile Include="Framework\JsonConverterServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
