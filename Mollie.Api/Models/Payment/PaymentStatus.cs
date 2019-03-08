@@ -3,11 +3,9 @@
         Open,
         Canceled,
         Pending,
-        Paid,
-        PaidOut,
-        Refunded,
+        Authorized,
         Expired,
         Failed,
-        Charged_Back
+        Paid
     }
 }
