@@ -10,5 +10,10 @@
         /// statement when possible. Max 140 characters.
         /// </summary>
         public string Description { get; set; }
+
+        /// <summary>
+        /// Set this to true to refund a test mode payment.
+        /// </summary>
+        public bool? Testmode { get; set; }
     }
 }
