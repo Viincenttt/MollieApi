@@ -11,6 +11,11 @@ namespace Mollie.Api.Client {
         }
 
         public async Task<RefundResponse> CreateRefundAsync(string paymentId, RefundRequest refundRequest) {
+            if (refundRequest.Testmode.HasValue)
+            {
+                this.ValidateApiKeyIsOauthAccesstoken();
+            }
+
             return await this.PostAsync<RefundResponse>($"payments/{paymentId}/refunds", refundRequest).ConfigureAwait(false);
         }
 
