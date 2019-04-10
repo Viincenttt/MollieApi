@@ -22,8 +22,8 @@ namespace Mollie.Api.Client {
             return await this.PatchAsync<OrderResponse>($"orders/{orderId}", orderUpdateRequest).ConfigureAwait(false); 
         }
 
-        public async Task<OrderResponse> UpdateOrderLinesAsync(string orderId, string orderLineId, OrderLineRequest orderLine) {
-            return await this.PatchAsync<OrderResponse>($"orders/{orderId}/lines/{orderLineId}", orderLine).ConfigureAwait(false);
+        public async Task<OrderResponse> UpdateOrderLinesAsync(string orderId, string orderLineId, OrderLineUpdateRequest orderLineUpdateRequest) {
+            return await this.PatchAsync<OrderResponse>($"orders/{orderId}/lines/{orderLineId}", orderLineUpdateRequest).ConfigureAwait(false);
         }
 
         public async Task CancelOrderAsync(string orderId) {

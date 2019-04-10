@@ -8,7 +8,7 @@ namespace Mollie.Api.Client.Abstract {
         Task<OrderResponse> CreateOrderAsync(OrderRequest orderRequest);
         Task<OrderResponse> GetOrderAsync(string orderId);
         Task<OrderResponse> UpdateOrderAsync(string orderId, OrderUpdateRequest orderUpdateRequest);
-        Task<OrderResponse> UpdateOrderLinesAsync(string orderId, string orderLineId, OrderLineRequest orderLine);
+        Task<OrderResponse> UpdateOrderLinesAsync(string orderId, string orderLineId, OrderLineUpdateRequest orderLineUpdateRequest);
         Task CancelOrderAsync(string orderId);
         Task<ListResponse<OrderResponse>> GetOrderListAsync(string from = null, int? limit = null);
         Task<ListResponse<OrderResponse>> GetOrderListAsync(UrlObjectLink<ListResponse<OrderResponse>> url);
