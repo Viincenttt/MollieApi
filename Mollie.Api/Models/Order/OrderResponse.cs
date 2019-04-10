@@ -138,7 +138,7 @@ namespace Mollie.Api.Models.Order {
         /// </summary>
         public DateTime? CompletedAt { get; set; }
 
-        public IEnumerable<OrderLineRequest> Lines { get; set; }
+        public IEnumerable<OrderLineResponse> Lines { get; set; }
 
         /// <summary>
         /// An object with several URL objects relevant to the order. Every URL object will contain an href and a type field.

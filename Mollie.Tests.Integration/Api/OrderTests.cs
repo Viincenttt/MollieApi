@@ -73,15 +73,15 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(OrderStatus.Canceled, cancelledOrder.Status);
         }
 
-        [Test]
-        public async Task CanUpdateOrderLine() {
-            // If: we create a new order
-            OrderRequest orderRequest = this.CreateOrderRequestWithOnlyRequiredFields();
-            OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
+        //[Test]
+        //public async Task CanUpdateOrderLine() {
+        //    // If: we create a new order
+        //    OrderRequest orderRequest = this.CreateOrderRequestWithOnlyRequiredFields();
+        //    OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
 
-            // When: We update the order line
-            await this._orderClient.UpdateOrderLinesAsync(createdOrder.Id, createdOrder.Lines.First().id)
-        }
+        //    // When: We update the order line
+        //    await this._orderClient.UpdateOrderLinesAsync(createdOrder.Id, createdOrder.Lines.First().id)
+        //}
 
         [Test]
         public async Task CanRetrieveOrderList() {
