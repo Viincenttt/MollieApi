@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Order;
