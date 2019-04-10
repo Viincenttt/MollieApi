@@ -20,7 +20,7 @@ namespace Mollie.Api.Models.Order {
         /// The lines in the order. Each line contains details such as a description of the item ordered, its
         /// price et cetera. 
         /// </summary>
-        public IEnumerable<OrderLineDetails> Lines { get; set; }
+        public IEnumerable<OrderLineRequest> Lines { get; set; }
 
         /// <summary>
         /// The billing person and address for the order.

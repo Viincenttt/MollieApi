@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Mollie.Api.Models;
 using Mollie.Api.Models.List;
@@ -73,6 +74,16 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [Test]
+        public async Task CanUpdateOrderLine() {
+            // If: we create a new order
+            OrderRequest orderRequest = this.CreateOrderRequestWithOnlyRequiredFields();
+            OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
+
+            // When: We update the order line
+            await this._orderClient.UpdateOrderLinesAsync(createdOrder.Id, createdOrder.Lines.First().id)
+        }
+
+        [Test]
         public async Task CanRetrieveOrderList() {
             // When: Retrieve payment list with default settings
             ListResponse<OrderResponse> response = await this._orderClient.GetOrderListAsync();
@@ -98,8 +109,8 @@ namespace Mollie.Tests.Integration.Api {
             return new OrderRequest() {
                 Amount = new Amount(Currency.EUR, "100.00"),
                 OrderNumber = "16738",
-                Lines = new List<OrderLineDetails>() {
-                    new OrderLineDetails() {
+                Lines = new List<OrderLineRequest>() {
+                    new OrderLineRequest() {
                         Name = "A box of chocolates",
                         Quantity = 1,
                         UnitPrice = new Amount(Currency.EUR, "100.00"),

@@ -19,7 +19,11 @@ namespace Mollie.Api.Client {
         }
 
         public async Task<OrderResponse> UpdateOrderAsync(string orderId, OrderUpdateRequest orderUpdateRequest) {
-            return await this.PatchAsync<OrderResponse>($"orders/{orderId}", orderUpdateRequest).ConfigureAwait(false); ;
+            return await this.PatchAsync<OrderResponse>($"orders/{orderId}", orderUpdateRequest).ConfigureAwait(false); 
+        }
+
+        public async Task<OrderResponse> UpdateOrderLinesAsync(string orderId, string orderLineId, OrderLineRequest orderLine) {
+            return await this.PatchAsync<OrderResponse>($"orders/{orderId}/lines/{orderLineId}", orderLine).ConfigureAwait(false);
         }
 
         public async Task CancelOrderAsync(string orderId) {
@@ -33,5 +37,13 @@ namespace Mollie.Api.Client {
         public async Task<ListResponse<OrderResponse>> GetOrderListAsync(UrlObjectLink<ListResponse<OrderResponse>> url) {
             return await this.GetAsync(url).ConfigureAwait(false);
         }
+
+        //cancel order lines
+
+        //create order payment
+
+        // create order refund
+
+        // list order refunds
     }
 }

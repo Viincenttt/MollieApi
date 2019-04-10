@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Mollie.Api.JsonConverters;
 using Mollie.Api.Models.Payment;
 using Mollie.Api.Models.Subscription;
@@ -136,6 +137,8 @@ namespace Mollie.Api.Models.Order {
         /// If the order is completed, the time of completion will be present in ISO 8601 format.
         /// </summary>
         public DateTime? CompletedAt { get; set; }
+
+        public IEnumerable<OrderLineRequest> Lines { get; set; }
 
         /// <summary>
         /// An object with several URL objects relevant to the order. Every URL object will contain an href and a type field.
