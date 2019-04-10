@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Mollie.Api.Models;
+using Mollie.Api.Models.List;
 using Mollie.Api.Models.Order;
 using Mollie.Api.Models.Payment;
 using Mollie.Tests.Integration.Framework;
@@ -12,7 +13,89 @@ namespace Mollie.Tests.Integration.Api {
         [Test]
         public async Task CanCreateOrderWithOnlyRequiredFields() {
             // If: we create a order request with only the required parameters
-            OrderRequest orderRequest = new OrderRequest() {
+            OrderRequest orderRequest = this.CreateOrderRequestWithOnlyRequiredFields();
+
+            // When: We send the order request to Mollie
+            OrderResponse result = await this._orderClient.CreateOrderAsync(orderRequest);
+
+            // Then: Make sure we get a valid response
+            Assert.IsNotNull(result);
+            Assert.AreEqual(orderRequest.Amount.Value, result.Amount.Value);
+            Assert.AreEqual(orderRequest.Amount.Currency, result.Amount.Currency);
+            Assert.AreEqual(orderRequest.OrderNumber, result.OrderNumber);
+        }
+
+        [Test]
+        public async Task CanRetrieveOrderAfterCreationOrder() {
+            // If: we create a new order
+            OrderRequest orderRequest = this.CreateOrderRequestWithOnlyRequiredFields();
+            OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
+
+            // When: We attempt to retrieve the order
+            OrderResponse retrievedOrder = await this._orderClient.GetOrderAsync(createdOrder.Id);
+
+            // Then: Make sure we get a valid response
+            Assert.IsNotNull(retrievedOrder);
+            Assert.AreEqual(createdOrder.Id, retrievedOrder.Id);
+        }
+
+        [Test]
+        public async Task CanUpdateExistingOrder() {
+            // If: we create a new order
+            OrderRequest orderRequest = this.CreateOrderRequestWithOnlyRequiredFields();
+            OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
+
+            // When: We attempt to update the order
+            OrderUpdateRequest orderUpdateRequest = new OrderUpdateRequest() {
+                OrderNumber = "1337",
+                BillingAddress = createdOrder.BillingAddress
+            };
+            orderUpdateRequest.BillingAddress.City = "Den Haag";
+            OrderResponse updatedOrder = await this._orderClient.UpdateOrderAsync(createdOrder.Id, orderUpdateRequest);
+
+            // Then: Make sure the order is updated
+            Assert.AreEqual(orderUpdateRequest.OrderNumber, updatedOrder.OrderNumber);
+            Assert.AreEqual(orderUpdateRequest.BillingAddress.City, updatedOrder.BillingAddress.City);
+        }
+
+        [Test]
+        public async Task CanCancelCreatedOrder() {
+            // If: we create a new order
+            OrderRequest orderRequest = this.CreateOrderRequestWithOnlyRequiredFields();
+            OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
+
+            // When: We attempt to cancel the order and then retrieve it
+            await this._orderClient.CancelOrderAsync(createdOrder.Id);
+            OrderResponse cancelledOrder = await this._orderClient.GetOrderAsync(createdOrder.Id);
+
+            // Then: The order status should be cancelled
+            Assert.AreEqual(OrderStatus.Canceled, cancelledOrder.Status);
+        }
+
+        [Test]
+        public async Task CanRetrieveOrderList() {
+            // When: Retrieve payment list with default settings
+            ListResponse<OrderResponse> response = await this._orderClient.GetOrderListAsync();
+
+            // Then
+            Assert.IsNotNull(response);
+            Assert.IsNotNull(response.Items);
+        }
+
+        [Test]
+        public async Task ListOrdersNeverReturnsMorePaymentsThenTheNumberOfRequestedOrders() {
+            // When: Number of orders requested is 5
+            int numberOfOrders = 5;
+
+            // When: Retrieve 5 orders
+            ListResponse<OrderResponse> response = await this._orderClient.GetOrderListAsync(null, numberOfOrders);
+
+            // Then
+            Assert.IsTrue(response.Items.Count <= numberOfOrders);
+        }
+
+        private OrderRequest CreateOrderRequestWithOnlyRequiredFields() {
+            return new OrderRequest() {
                 Amount = new Amount(Currency.EUR, "100.00"),
                 OrderNumber = "16738",
                 Lines = new List<OrderLineDetails>() {
@@ -38,15 +121,6 @@ namespace Mollie.Tests.Integration.Api {
                 RedirectUrl = "http://www.google.nl",
                 Locale = Locale.nl_NL
             };
-
-            // When: We send the order request to Mollie
-            OrderResponse result = await this._orderClient.CreateOrderAsync(orderRequest);
-
-            // Then: Make sure we get a valid response
-            Assert.IsNotNull(result);
-            Assert.AreEqual(orderRequest.Amount.Value, result.Amount.Value);
-            Assert.AreEqual(orderRequest.Amount.Currency, result.Amount.Currency);
-            Assert.AreEqual(orderRequest.OrderNumber, result.OrderNumber);
         }
     }
 }

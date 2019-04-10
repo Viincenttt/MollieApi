@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Order;
-using Mollie.Api.Models.Refund;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client {
