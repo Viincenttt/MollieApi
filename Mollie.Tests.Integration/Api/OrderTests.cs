@@ -67,10 +67,10 @@ namespace Mollie.Tests.Integration.Api {
 
             // When: We attempt to cancel the order and then retrieve it
             await this._orderClient.CancelOrderAsync(createdOrder.Id);
-            OrderResponse cancelledOrder = await this._orderClient.GetOrderAsync(createdOrder.Id);
+            OrderResponse canceledOrder = await this._orderClient.GetOrderAsync(createdOrder.Id);
 
             // Then: The order status should be cancelled
-            Assert.AreEqual(OrderStatus.Canceled, cancelledOrder.Status);
+            Assert.AreEqual(OrderStatus.Canceled, canceledOrder.Status);
         }
 
         [Test]

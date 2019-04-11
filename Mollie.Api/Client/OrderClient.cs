@@ -38,6 +38,9 @@ namespace Mollie.Api.Client {
             return await this.GetAsync(url).ConfigureAwait(false);
         }
 
+        public async Task CancelOrderLinesAsync(string orderId, OrderLineCancelationRequest cancelationRequest) {
+            await this.DeleteAsync($"orders/{orderId}/lines", cancelationRequest).ConfigureAwait(false);
+        }
         //cancel order lines
 
         //create order payment

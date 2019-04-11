@@ -12,5 +12,6 @@ namespace Mollie.Api.Client.Abstract {
         Task CancelOrderAsync(string orderId);
         Task<ListResponse<OrderResponse>> GetOrderListAsync(string from = null, int? limit = null);
         Task<ListResponse<OrderResponse>> GetOrderListAsync(UrlObjectLink<ListResponse<OrderResponse>> url);
+        Task CancelOrderLinesAsync(string orderId, OrderLineCancelationRequest cancelationRequest);
     }
 }
