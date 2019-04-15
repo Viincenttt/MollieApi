@@ -1,5 +1,5 @@
 ﻿namespace Mollie.Api.Models.Order {
-    public class CreateOrderPaymentRequest {
+    public class OrderPaymentRequest {
         /// <summary>
         /// Normally, a payment method screen is shown. However, when using this parameter, you can choose a 
         /// specific payment method and your customer will skip the selection screen and is sent directly to 

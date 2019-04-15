@@ -44,11 +44,11 @@ namespace Mollie.Api.Client {
             await this.DeleteAsync($"orders/{orderId}/lines", cancelationRequest).ConfigureAwait(false);
         }
 
-        public async Task<PaymentResponse> CreateOrderPaymentAsync(string orderId, CreateOrderPaymentRequest createOrderPaymentRequest) {
+        public async Task<PaymentResponse> CreateOrderPaymentAsync(string orderId, OrderPaymentRequest createOrderPaymentRequest) {
             return await this.PostAsync<PaymentResponse>($"orders/{orderId}/payments", createOrderPaymentRequest).ConfigureAwait(false);
         }
 
-        public async Task CreateOrderRefundAsync(string orderId, CreateOrderRefundRequest createOrderRefundRequest) {
+        public async Task CreateOrderRefundAsync(string orderId, OrderRefundRequest createOrderRefundRequest) {
             await this.DeleteAsync($"orders/{orderId}/refunds", createOrderRefundRequest);
         }
 
