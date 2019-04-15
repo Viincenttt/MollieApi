@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
@@ -21,7 +22,7 @@ namespace Mollie.Api.Client
 
             parameters.AddValueIfNotNullOrEmpty("locale", locale);
             this.AddOauthParameters(parameters, profileId, testmode);
-            this.AddIncludeParameters(parameters, includeIssuers, includePricing);
+            this.BuildIncludeParameter(parameters, includeIssuers, includePricing);
 
             return await this.GetAsync<PaymentMethodResponse>($"methods/{paymentMethod.ToString().ToLower()}{parameters.ToQueryString()}").ConfigureAwait(false);
         }
@@ -30,7 +31,7 @@ namespace Mollie.Api.Client
             Dictionary<string, string> parameters = new Dictionary<string, string>();
 
             parameters.AddValueIfNotNullOrEmpty("locale", locale);
-            this.AddIncludeParameters(parameters, includeIssuers, includePricing);
+            this.BuildIncludeParameter(parameters, includeIssuers, includePricing);
 
             return await this.GetListAsync<ListResponse<PaymentMethodResponse>>("methods/all", null, null, parameters).ConfigureAwait(false);
         }
@@ -44,7 +45,7 @@ namespace Mollie.Api.Client
             };
 
             this.AddOauthParameters(parameters, profileId, testmode);
-            this.AddIncludeParameters(parameters, includeIssuers, includePricing);
+            this.BuildIncludeParameter(parameters, includeIssuers, includePricing);
 
             return await this.GetListAsync<ListResponse<PaymentMethodResponse>>("methods", null, null, parameters).ConfigureAwait(false);
         }
@@ -64,13 +65,20 @@ namespace Mollie.Api.Client
             }
         }
 
-        private void AddIncludeParameters(Dictionary<string, string> parameters, bool? includeIssuers = null, bool? includePricing = null) {
+        private void BuildIncludeParameter(Dictionary<string, string> parameters, bool? includeIssuers = null, bool? includePricing = null) {
+            var includeList = new List<string>();
+
             if (includeIssuers == true) {
-                parameters.Add("include", "issuers");
+                includeList.Add( "issuers");
             }
 
             if (includePricing == true) {
-                parameters.Add("include", "pricing");
+                includeList.Add("pricing");
+            }
+
+            if (includeList.Any())
+            {
+                parameters.Add("include", string.Join(",", includeList));
             }
         }
     }
