@@ -122,5 +122,15 @@ namespace Mollie.Tests.Integration.Api {
             // Then: We should have one or multiple issuers
             Assert.IsTrue(paymentMethods.Items.Any(x => x.Issuers != null));
         }
+
+        [Test]
+        public async Task CanRetrieveIssuersAndPricingInformation() {
+            // When: retrieving the all mollie payment methods we can include the issuers
+            ListResponse<PaymentMethodResponse> paymentMethods = await this._paymentMethodClient.GetAllPaymentMethodListAsync(includeIssuers: true, includePricing: true);
+            
+            // Then: We should have one or multiple issuers
+            Assert.IsTrue(paymentMethods.Items.Any(x => x.Issuers != null));
+            Assert.IsTrue(paymentMethods.Items.Any(x => x.Pricing != null && x.Pricing.Any(y => y.Fixed.Value > 0)));
+        }
     }
 }

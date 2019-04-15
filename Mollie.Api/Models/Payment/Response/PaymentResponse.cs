@@ -40,6 +40,11 @@ namespace Mollie.Api.Models.Payment.Response {
         public bool IsCancelable { get; set; }
 
         /// <summary>
+        /// The date and time the payment became authorized, in ISO 8601 format. This parameter is omitted if the payment is not authorized (yet).
+        /// </summary>
+        public DateTime? AuthorizedAt { get; set; }
+
+        /// <summary>
         /// The date and time the payment became paid, in ISO 8601 format. Null is returned if the payment isn't completed
         /// (yet).
         /// </summary>
@@ -84,6 +89,11 @@ namespace Mollie.Api.Models.Payment.Response {
         /// Only available when refunds are available for this payment – The remaining amount in EURO that can be refunded.
         /// </summary>
         public Amount AmountRemaining { get; set; }
+
+        /// <summary>
+        /// The total amount that is already captured for this payment. Only available when this payment supports captures.
+        /// </summary>
+        public Amount AmountCaptured { get; set; }
 
         /// <summary>
         /// A short description of the payment. The description will be shown on the consumer's bank or card statement when
@@ -166,6 +176,11 @@ namespace Mollie.Api.Models.Payment.Response {
         /// from the subscription will hold the ID of the subscription that triggered the payment.
         /// </summary>
         public string SubscriptionId { get; set; }
+
+        /// <summary>
+        /// If the payment was created for an order, the ID of that order will be part of the response.
+        /// </summary>
+        public string OrderId { get; set; }
 
         /// <summary>
         /// The application fee, if the payment was created with one.

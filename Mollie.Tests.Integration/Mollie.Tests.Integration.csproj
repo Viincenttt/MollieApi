@@ -112,6 +112,7 @@
     <Compile Include="Api\ApiExceptionTests.cs" />
     <Compile Include="Api\CustomerTests.cs" />
     <Compile Include="Api\MandateTests.cs" />
+    <Compile Include="Api\OrderTests.cs" />
     <Compile Include="Api\PaymentMethodTests.cs" />
     <Compile Include="Api\PaymentTests.cs" />
     <Compile Include="Api\RefundTests.cs" />
