@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Order;
+using Mollie.Api.Models.Payment.Response;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client.Abstract {
@@ -13,5 +14,6 @@ namespace Mollie.Api.Client.Abstract {
         Task<ListResponse<OrderResponse>> GetOrderListAsync(string from = null, int? limit = null);
         Task<ListResponse<OrderResponse>> GetOrderListAsync(UrlObjectLink<ListResponse<OrderResponse>> url);
         Task CancelOrderLinesAsync(string orderId, OrderLineCancelationRequest cancelationRequest);
+        Task<PaymentResponse> CreateOrderPaymentAsync(string orderId, CreateOrderPaymentRequest createOrderPaymentRequest);
     }
 }
