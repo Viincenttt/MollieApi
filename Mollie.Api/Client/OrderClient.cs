@@ -4,6 +4,7 @@ using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Order;
 using Mollie.Api.Models.Payment.Response;
+using Mollie.Api.Models.Refund;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client {
@@ -46,8 +47,13 @@ namespace Mollie.Api.Client {
         public async Task<PaymentResponse> CreateOrderPaymentAsync(string orderId, CreateOrderPaymentRequest createOrderPaymentRequest) {
             return await this.PostAsync<PaymentResponse>($"orders/{orderId}/payments", createOrderPaymentRequest).ConfigureAwait(false);
         }
-        // create order refund
 
-        // list order refunds
+        public async Task CreateOrderRefundAsync(string orderId, CreateOrderRefundRequest createOrderRefundRequest) {
+            await this.DeleteAsync($"orders/{orderId}/refunds", createOrderRefundRequest);
+        }
+
+        public async Task<ListResponse<RefundResponse>> GetOrderRefundListAsync(string orderId, string from = null, int? limit = null) {
+            return await this.GetListAsync<ListResponse<RefundResponse>>($"orders/{orderId}/refunds", from, limit).ConfigureAwait(false);
+        }
     }
 }
