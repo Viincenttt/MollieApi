@@ -36,12 +36,13 @@ namespace Mollie.Api.Client
             return await this.GetListAsync<ListResponse<PaymentMethodResponse>>("methods/all", null, null, parameters).ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<PaymentMethodResponse>> GetPaymentMethodListAsync(SequenceType? sequenceType = null, string locale = null, Amount amount = null, bool? includeIssuers = null, bool? includePricing = null, string profileId = null, bool? testmode = null) {
+        public async Task<ListResponse<PaymentMethodResponse>> GetPaymentMethodListAsync(SequenceType? sequenceType = null, string locale = null, Amount amount = null, bool? includeIssuers = null, bool? includePricing = null, string profileId = null, bool? testmode = null, Resource? resource = null) {
             Dictionary<string, string> parameters = new Dictionary<string, string>() {
                 {"sequenceType", sequenceType.ToString().ToLower()},
                 {"locale", locale},
                 {"amount[value]", amount?.Value},
-                {"amount[currency]", amount?.Currency}
+                {"amount[currency]", amount?.Currency},
+                {"resource", resource.ToString().ToLower()}
             };
 
             this.AddOauthParameters(parameters, profileId, testmode);
