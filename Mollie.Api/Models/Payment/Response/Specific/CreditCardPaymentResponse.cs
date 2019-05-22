@@ -87,7 +87,10 @@ namespace Mollie.Api.Models.Payment.Response {
     /// </summary>
     public enum CreditCardFeeRegion {
         [EnumMember(Value = "intra-eu")] IntraEu,
-        Other
+        [EnumMember(Value = "other")] Other,
+        [EnumMember(Value = "american-express")] AmericanExpress,
+        [EnumMember(Value = "carte-bancaire")] CarteBancaire,
+        [EnumMember(Value = "maestro")] Maestro,
     }
 
     /// <summary>
