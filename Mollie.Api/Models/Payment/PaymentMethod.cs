@@ -24,5 +24,6 @@ namespace Mollie.Api.Models.Payment {
         [EnumMember(Value = "klarnapaylater")] KlarnaPayLater,
         [EnumMember(Value = "klarnasliceit")] KlarnaSliceIt,
         [EnumMember(Value = "przelewy24")] Przelewy24,
+        [EnumMember(Value = "applepay")] ApplePay,
     }
 }

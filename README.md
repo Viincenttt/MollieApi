@@ -6,7 +6,7 @@ If you have encounter any issues while using this library or have any feature re
 
 ## Contributions
 
-Have you spotted a bug or want to add a missing feature? All pull requests are welcome! Please provide a description of the bug or feature you have fixed/added. Make sure to target the latest development branch. The development branch is named development-&lt;version-number&gt;.   
+Have you spotted a bug or want to add a missing feature? All pull requests are welcome! Please provide a description of the bug or feature you have fixed/added. Make sure to target the latest development branch. 
 
 ## Table of contents
 [1. Mollie API v1 and V2](#1-mollie-api-v1-and-v2)  
@@ -17,6 +17,7 @@ Have you spotted a bug or want to add a missing feature? All pull requests are w
 [6. Customer API](#6-customer-api)  
 [7. Mandate API](#7-mandate-api)  
 [8. Subscription API](#8-subscription-api)  
+[9. Order API](#9-order-api)
 
 ## 1. Mollie API v1 and v2
 In May 2018, Mollie launched version 2 of their API. Version 2 offers support for multicurrency, improved error messages and much more.  The current version of the Mollie API client supports all API version 2 features. If you want to keep using version 1, you can use version 1.5.2 of the Mollie API Nuget package. Version 2.0.0+ of the Mollie API client supports version 2 of the API.  
@@ -48,6 +49,7 @@ This library currently supports the following API's:
 - Permissions API
 - Profiles API
 - Organisations API
+- Order API
 
 ### Creating a API client object
 Every API has it's own API client class. For example: PaymentClient, PaymentMethodClient, CustomerClient, MandateClient, SubscriptionClient, IssuerClient and RefundClient classes. All of these API client classes also have their own interface. 
@@ -329,4 +331,78 @@ SubscriptionUpdateRequest updatedSubscriptionRequest = new SubscriptionUpdateReq
 	Description = $"Updated subscription {DateTime.Now}"
 };
 await subscriptionClient.UpdateSubscriptionAsync("{customerId}", "{subscriptionId}", updatedSubscriptionRequest);
+```
+
+
+
+## 9. Order API
+The Orders API allows you to use Mollie for your order management. Pay after delivery payment methods, such as Klarna Pay later and Klarna Slice it require the Orders API and cannot be used with the Payments API.
+
+### Creating a new order
+```c#
+IOrderClient orderClient = new OrderClient("{yourApiKey}");
+OrderRequest orderRequest = new OrderRequest() {
+	Amount = new Amount(Currency.EUR, "100.00"),
+	OrderNumber = "16738",
+	Lines = new List<OrderLineRequest>() {
+		new OrderLineRequest() {
+			Name = "A box of chocolates",
+			Quantity = 1,
+			UnitPrice = new Amount(Currency.EUR, "100.00"),
+			TotalAmount = new Amount(Currency.EUR, "100.00"),
+			VatRate = "21.00",
+			VatAmount = new Amount(Currency.EUR, "17.36")
+		}
+	},
+	BillingAddress = new OrderAddressDetails() {
+		GivenName = "John",
+		FamilyName = "Smit",
+		Email = "johnsmit@gmail.com",
+		City = "Rotterdam",
+		Country = "NL",
+		PostalCode = "0000AA",
+		Region = "Zuid-Holland",
+		StreetAndNumber = "Coolsingel 1"
+	},
+	RedirectUrl = "http://www.google.nl",
+	Locale = Locale.nl_NL
+};
+
+OrderResponse result = await orderClient.CreateOrderAsync(orderRequest);
+```
+
+### Retrieve a order by id
+```c#
+IOrderClient orderClient = new OrderClient("{yourApiKey}");
+OrderResponse retrievedOrder = await orderClient.GetOrderAsync({orderId});
+```
+
+### Update existing order
+```c#
+IOrderClient orderClient = new OrderClient("{yourApiKey}");
+OrderUpdateRequest orderUpdateRequest = new OrderUpdateRequest() {
+	OrderNumber = "1337" 
+};
+OrderResponse updatedOrder = await orderClient.UpdateOrderAsync({orderId}, orderUpdateRequest);
+```
+
+### Cancel existing order
+```c#
+IOrderClient orderClient = new OrderClient("{yourApiKey}");
+ OrderResponse canceledOrder = await this._orderClient.GetOrderAsync({orderId});
+```
+
+### Update order line
+```c#
+IOrderClient orderClient = new OrderClient("{yourApiKey}");
+OrderLineUpdateRequest updateRequest = new OrderLineUpdateRequest() {
+	Name = "A fluffy bear"
+};
+OrderResponse updatedOrder = await orderClient.UpdateOrderLinesAsync({orderId}, createdOrder.Lines.First().Id, updateRequest);
+```
+
+### Retrieve list of orders
+```c#
+IOrderClient orderClient = new OrderClient("{yourApiKey}");
+ListResponse<OrderResponse> response = await orderClient.GetOrderListAsync();
 ```
