@@ -1,6 +1,11 @@
-﻿namespace Mollie.Api.Models.Order.SpecificParameters
+﻿using Mollie.Api.Models.Payment;
+
+namespace Mollie.Api.Models.Order.SpecificParameters
 {
-    public abstract class PaymentSpecificParameters
+    public class PaymentSpecificParameters
     {
+        public string CustomerId { get; set; }
+        public SequenceType SequenceType { get; set; }
+
     }
 }
