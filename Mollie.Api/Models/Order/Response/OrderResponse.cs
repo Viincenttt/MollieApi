@@ -139,6 +139,9 @@ namespace Mollie.Api.Models.Order {
         public DateTime? CompletedAt { get; set; }
 
         public IEnumerable<OrderLineResponse> Lines { get; set; }
+        
+        [JsonProperty("_embedded")]
+        public OrderEmbeddedResponse Embedded { get; set; }
 
         /// <summary>
         /// An object with several URL objects relevant to the order. Every URL object will contain an href and a type field.
