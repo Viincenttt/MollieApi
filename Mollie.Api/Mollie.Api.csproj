@@ -3,8 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard1.2;net45</TargetFrameworks>
     <Version>2.0.6.1</Version>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>    
-    <IncludeSymbolsInPackage>true</IncludeSymbolsInPackage>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Authors>Vincent Kok</Authors>
     <Description>This is a wrapper for the Mollie REST webservice. All payment methods and webservice calls are supported.</Description>
     <Company>Vincent Kok</Company>
