@@ -10,9 +10,8 @@
     <Product>Mollie Payment API</Product>
     <PackageProjectUrl>https://github.com/Viincenttt/MollieApi</PackageProjectUrl>
     <PackageTags>Mollie</PackageTags>
-    <AssemblyVersion>2.0.6.2</AssemblyVersion>
-    <FileVersion>2.0.6.2</FileVersion>
-    <AssemblyName>Mollie.Api.Tritac</AssemblyName>
+    <AssemblyVersion>2.0.6.1</AssemblyVersion>
+    <FileVersion>2.0.6.1</FileVersion>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
