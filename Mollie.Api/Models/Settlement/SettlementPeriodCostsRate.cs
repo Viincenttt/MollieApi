@@ -9,6 +9,6 @@
         /// <summary>
         /// A string describing the variable costs as a percentage.
         /// </summary>
-		public string Variable { get; set; }
+		public string Percentage { get; set; }
 	}
 }
