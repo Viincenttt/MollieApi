@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Mollie.Api.JsonConverters;
-using Mollie.Api.Models.Order.SpecificParameters;
+using Mollie.Api.Models.Order.Request.PaymentSpecificParameters;
 using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Order {

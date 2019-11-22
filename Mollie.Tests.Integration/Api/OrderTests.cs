@@ -5,7 +5,6 @@ using Mollie.Api.Models;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Order;
 using Mollie.Api.Models.Payment;
-using Mollie.Api.Models.Payment.Response;
 using Mollie.Tests.Integration.Framework;
 using NUnit.Framework;
 
