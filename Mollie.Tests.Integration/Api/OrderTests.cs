@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 using Mollie.Api.Models;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Order;
+using Mollie.Api.Models.Order.Request.PaymentSpecificParameters;
 using Mollie.Api.Models.Payment;
-using Mollie.Api.Models.Payment.Response;
 using Mollie.Tests.Integration.Framework;
 using NUnit.Framework;
 
@@ -16,6 +16,24 @@ namespace Mollie.Tests.Integration.Api {
         public async Task CanCreateOrderWithOnlyRequiredFields() {
             // If: we create a order request with only the required parameters
             OrderRequest orderRequest = this.CreateOrderRequestWithOnlyRequiredFields();
+
+            // When: We send the order request to Mollie
+            OrderResponse result = await this._orderClient.CreateOrderAsync(orderRequest);
+
+            // Then: Make sure we get a valid response
+            Assert.IsNotNull(result);
+            Assert.AreEqual(orderRequest.Amount.Value, result.Amount.Value);
+            Assert.AreEqual(orderRequest.Amount.Currency, result.Amount.Currency);
+            Assert.AreEqual(orderRequest.OrderNumber, result.OrderNumber);
+        }
+
+        [Test]
+        public async Task CanCreateOrderWithPaymentSpecificOptions() {
+            // If: we create a order request with payment specific parameters
+            OrderRequest orderRequest = this.CreateOrderRequestWithOnlyRequiredFields();
+            orderRequest.Payment = new IDealSpecificParameters() {
+                Issuer = "ideal_INGBNL2A"
+            };
 
             // When: We send the order request to Mollie
             OrderResponse result = await this._orderClient.CreateOrderAsync(orderRequest);
