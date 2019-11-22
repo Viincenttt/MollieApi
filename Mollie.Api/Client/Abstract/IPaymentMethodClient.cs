@@ -7,7 +7,7 @@ using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client.Abstract {
     public interface IPaymentMethodClient {
-		Task<PaymentMethodResponse> GetPaymentMethodAsync(PaymentMethod paymentMethod, bool? includeIssuers = null, string locale = null, bool? includePricing = null, string profileId = null, bool? testmode = null);
+		Task<PaymentMethodResponse> GetPaymentMethodAsync(PaymentMethod paymentMethod, bool? includeIssuers = null, string locale = null, bool? includePricing = null, string profileId = null, bool? testmode = null, string currency = null);
         Task<ListResponse<PaymentMethodResponse>> GetAllPaymentMethodListAsync(string locale = null, bool? includeIssuers = null, bool? includePricing = null);
         Task<ListResponse<PaymentMethodResponse>> GetPaymentMethodListAsync(SequenceType? sequenceType = null, string locale = null, Amount amount = null, bool? includeIssuers = null, bool? includePricing = null, string profileId = null, bool? testmode = null, Resource? resource = null);
         Task<PaymentMethodResponse> GetPaymentMethodAsync(UrlObjectLink<PaymentMethodResponse> url);
