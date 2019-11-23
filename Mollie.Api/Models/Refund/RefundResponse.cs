@@ -56,10 +56,20 @@ namespace Mollie.Api.Models.Refund {
         public string PaymentId { get; set; }
 
         /// <summary>
+        /// Provide any data you like, for example a string or a JSON object. We will save the data alongside the refund. Whenever 
+        /// you fetch the refund with our API, we’ll also include the metadata. You can use up to approximately 1kB.
+        /// </summary>
+        public string Metadata { get; set; }
+
+        /// <summary>
         /// An object with several URL objects relevant to the refund. Every URL object will contain an href and a type field.
         /// </summary>
         [JsonProperty("_links")]
         public RefundResponseLinks Links { get; set; }
+
+        public T GetMetadata<T>(JsonSerializerSettings jsonSerializerSettings = null) {
+            return JsonConvert.DeserializeObject<T>(this.Metadata, jsonSerializerSettings);
+        }
 
         public override string ToString() {
             return $"Id: {this.Id} - PaymentId: {this.PaymentId}";

@@ -98,5 +98,27 @@ namespace Mollie.Tests.Integration.Api {
 
             return await this._paymentClient.CreatePaymentAsync(paymentRequest);
         }
+
+        [Test]
+        public async Task CanCreateRefundWithMetaData() {
+            // If: We create a payment
+            string amount = "100.00";
+            PaymentResponse payment = await this.CreatePayment(amount);
+
+            // We can only test this if you make the payment using the payment.Links.Checkout property. 
+            // If you don't do this, this test will fail because we can only refund payments that have been paid
+            Debugger.Break(); 
+
+            // When: We attempt to refund this payment with meta data.
+            var metadata = "this is my metadata";
+            RefundRequest refundRequest = new RefundRequest() {
+                Amount = new Amount(Currency.EUR, amount),
+                Metadata = metadata
+            };
+            RefundResponse refundResponse = await this._refundClient.CreateRefundAsync(payment.Id, refundRequest);
+
+            // Then: Make sure we get the same json result as metadata
+            Assert.AreEqual(metadata, refundResponse.Metadata);
+        }
     }
 }

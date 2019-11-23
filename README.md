@@ -371,6 +371,57 @@ OrderRequest orderRequest = new OrderRequest() {
 OrderResponse result = await orderClient.CreateOrderAsync(orderRequest);
 ```
 
+If you want to create a order with a specific payment parameters you can provide a specific payment implementation. For example, a bank transfer payment allows you to set the billing e-mail and due date. Have a look at the [Mollie payment specific parameters](https://docs.mollie.com/reference/v2/orders-api/create-order#payment-specific-parameters) for more information. 
+
+The full list of payment specific parameters classes is:
+- ApplePaySpecificParameters
+- BankTransferSpecificParameters
+- BitcoinSpecificParameters
+- CreditCardSpecificParameters
+- GiftcardSpecificParameters
+- IDealSpecificParameters
+- KbcSpecificParameters
+- PayPalSpecificParameters
+- PaySafeCardSpecificParameters
+- Przelewy24SpecificParameters
+- SepaDirectDebitSpecificParameters
+
+For example, if you'd want to create a order with bank transfer payment:
+```c#
+IOrderClient orderClient = new OrderClient("{yourApiKey}");
+OrderRequest orderRequest = new OrderRequest() {
+	Amount = new Amount(Currency.EUR, "100.00"),
+	OrderNumber = "16738",
+	Method = PaymentMethod.BankTransfer,
+	Payment = new BankTransferSpecificParameters {
+		BillingEmail = "example@example.nl"
+	},
+	Lines = new List<OrderLineRequest>() {
+		new OrderLineRequest() {
+			Name = "A box of chocolates",
+			Quantity = 1,
+			UnitPrice = new Amount(Currency.EUR, "100.00"),
+			TotalAmount = new Amount(Currency.EUR, "100.00"),
+			VatRate = "21.00",
+			VatAmount = new Amount(Currency.EUR, "17.36")
+		}
+	},
+	BillingAddress = new OrderAddressDetails() {
+		GivenName = "John",
+		FamilyName = "Smit",
+		Email = "johnsmit@gmail.com",
+		City = "Rotterdam",
+		Country = "NL",
+		PostalCode = "0000AA",
+		Region = "Zuid-Holland",
+		StreetAndNumber = "Coolsingel 1"
+	},
+	RedirectUrl = "http://www.google.nl",
+	Locale = Locale.nl_NL
+};
+```
+
+
 ### Retrieve a order by id
 ```c#
 IOrderClient orderClient = new OrderClient("{yourApiKey}");

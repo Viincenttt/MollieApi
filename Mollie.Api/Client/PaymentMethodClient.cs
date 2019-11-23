@@ -17,10 +17,11 @@ namespace Mollie.Api.Client
         public PaymentMethodClient(string apiKey, HttpClient httpClient = null) : base(apiKey, httpClient) {
         }
 
-        public async Task<PaymentMethodResponse> GetPaymentMethodAsync(PaymentMethod paymentMethod, bool? includeIssuers = null, string locale = null, bool? includePricing = null, string profileId = null, bool? testmode = null) {
+        public async Task<PaymentMethodResponse> GetPaymentMethodAsync(PaymentMethod paymentMethod, bool? includeIssuers = null, string locale = null, bool? includePricing = null, string profileId = null, bool? testmode = null, string currency = null) {
             Dictionary<string, string> parameters = new Dictionary<string, string>();
 
             parameters.AddValueIfNotNullOrEmpty("locale", locale);
+            parameters.AddValueIfNotNullOrEmpty("currency", currency);
             this.AddOauthParameters(parameters, profileId, testmode);
             this.BuildIncludeParameter(parameters, includeIssuers, includePricing);
 
