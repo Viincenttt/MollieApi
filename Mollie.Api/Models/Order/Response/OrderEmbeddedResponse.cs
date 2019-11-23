@@ -16,6 +16,5 @@ namespace Mollie.Api.Models.Order {
         public IEnumerable<PaymentResponse> Payments { get; set; }
 
         public IEnumerable<RefundResponse> Refunds { get; set; }
-
     }
 }

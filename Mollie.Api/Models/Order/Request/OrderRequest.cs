@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Mollie.Api.JsonConverters;
+using Mollie.Api.Models.Order.Request.PaymentSpecificParameters;
 using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Order {
@@ -60,6 +61,11 @@ namespace Mollie.Api.Models.Order {
         /// you to fully integrate the payment method selection into your website.
         /// </summary>
         public Payment.PaymentMethod? Method { get; set; }
+
+        /// <summary>
+        /// Optional - Any payment specific properties can be passed here.
+        /// </summary>
+        public PaymentSpecificParameters Payment { get; set; }
 
         /// <summary>
         /// Provide any data you like, and we will save the data alongside the subscription. Whenever you fetch the subscription

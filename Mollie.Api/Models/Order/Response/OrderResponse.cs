@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Mollie.Api.JsonConverters;
 using Mollie.Api.Models.Payment;
-using Mollie.Api.Models.Subscription;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -140,6 +139,9 @@ namespace Mollie.Api.Models.Order {
 
         public IEnumerable<OrderLineResponse> Lines { get; set; }
         
+        [JsonProperty("_embedded")]
+        public OrderEmbeddedResponse Embedded { get; set; }
+
         [JsonProperty("_embedded")]
         public OrderEmbeddedResponse Embedded { get; set; }
 
