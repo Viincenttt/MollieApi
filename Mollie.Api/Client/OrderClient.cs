@@ -59,6 +59,7 @@ namespace Mollie.Api.Client {
         public async Task<ListResponse<RefundResponse>> GetOrderRefundListAsync(string orderId, string from = null, int? limit = null) {
             return await this.GetListAsync<ListResponse<RefundResponse>>($"orders/{orderId}/refunds", from, limit).ConfigureAwait(false);
         }
+
         private Dictionary<string, string> BuildEmbedParameter(bool embedPayments = false, bool embedRefunds = false) {
             var result = new Dictionary<string, string>();
 

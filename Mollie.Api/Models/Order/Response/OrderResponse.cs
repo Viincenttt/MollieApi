@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Mollie.Api.JsonConverters;
+using Mollie.Api.Models.Order.Response;
 using Mollie.Api.Models.Payment;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
