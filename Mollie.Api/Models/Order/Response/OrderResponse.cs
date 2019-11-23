@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Mollie.Api.JsonConverters;
+using Mollie.Api.Models.Order.Response;
 using Mollie.Api.Models.Payment;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -138,9 +139,6 @@ namespace Mollie.Api.Models.Order {
         public DateTime? CompletedAt { get; set; }
 
         public IEnumerable<OrderLineResponse> Lines { get; set; }
-        
-        [JsonProperty("_embedded")]
-        public OrderEmbeddedResponse Embedded { get; set; }
 
         [JsonProperty("_embedded")]
         public OrderEmbeddedResponse Embedded { get; set; }
