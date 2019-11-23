@@ -39,6 +39,11 @@ namespace Mollie.Api.Models.Subscription {
         /// </summary>
         public string Metadata { get; set; }
 
+        /// <summary>
+        /// The mandate used for this subscription. Please note that this parameter can not set together with method.
+        /// </summary>
+        public string MandateId { get; set; }
+
         public void SetMetadata(object metadataObj, JsonSerializerSettings jsonSerializerSettings = null) {
             this.Metadata = JsonConvert.SerializeObject(metadataObj, jsonSerializerSettings);
         }
