@@ -106,7 +106,8 @@ namespace Mollie.Api.Models.Payment.Response {
         [EnumMember(Value = "insufficient_funds")] InsufficientFunds,
         [EnumMember(Value = "inactive_card")] InactiveCard,
         [EnumMember(Value = "unknown_reason")] UnknownReason,
-        [EnumMember(Value = "possible_fraud")] PossibleFraud
+        [EnumMember(Value = "possible_fraud")] PossibleFraud,
+        [EnumMember(Value = "authentication_failed")] AuthenticationFailed
 	}
 
     /// <summary>
