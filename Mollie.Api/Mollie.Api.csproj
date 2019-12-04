@@ -12,6 +12,7 @@
     <PackageTags>Mollie</PackageTags>
     <AssemblyVersion>2.0.7.1</AssemblyVersion>
     <FileVersion>2.0.7.1</FileVersion>
+    <PackageLicenseUrl>https://github.com/Viincenttt/MollieApi/blob/development/LICENSE</PackageLicenseUrl>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
