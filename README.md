@@ -289,7 +289,7 @@ await mandateclient.RevokeMandate("{customerId}", "{mandateId}");
 
 
 ## 8. Subscription API
-With subscriptions, you can schedule recurring payments to take place at regular intervals. For example, by simply specifying an amount and an interval, you can create an endless subscription to charge a monthly fee, until the consumer cancels their subscription. Or, you could use the times parameter to only charge a limited number of times, for example to split a big transaction in multiple parts.
+With subscriptions, you can schedule recurring payments to take place at regular intervals. For example, by simply specifying an amount and an interval, you can create an endless subscription to charge a monthly fee, until the consumer cancels their subscription. Or, you could use the times parameter to only charge a limited number of times, for example to split a big transaction in multiple parts. You must create a mandate with the customers ID before a subscription can be made.
 
 ### Creating a new subscription
 Create a subscription for a specific customer.
