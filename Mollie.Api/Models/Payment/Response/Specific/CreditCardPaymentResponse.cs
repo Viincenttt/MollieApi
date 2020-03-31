@@ -52,10 +52,10 @@ namespace Mollie.Api.Models.Payment.Response {
 
         /// <summary>
         /// Only available if the payment succeeded. – The fee region for the payment. See your credit card addendum for
-        /// details. intra-eu for consumer cards from the EU, and other for all other cards.
+        /// details. intra-eu for consumer cards from the EU, and other for all other cards. Use the CreditCardFeeRegion
+        /// static class for a list of known credit card fee regions.
         /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
-        public CreditCardFeeRegion? FeeRegion { get; set; }
+        public string FeeRegion { get; set; }
 
         /// <summary>
         /// Only available for failed payments. Contains a failure reason code.
@@ -85,12 +85,11 @@ namespace Mollie.Api.Models.Payment.Response {
     /// Only available if the payment has been completed – The fee region for the payment: intra-eu for consumer cards from the EU, and 
     /// other for all other cards.
     /// </summary>
-    public enum CreditCardFeeRegion {
-        [EnumMember(Value = "intra-eu")] IntraEu,
-        [EnumMember(Value = "other")] Other,
-        [EnumMember(Value = "american-express")] AmericanExpress,
-        [EnumMember(Value = "carte-bancaire")] CarteBancaire,
-        [EnumMember(Value = "maestro")] Maestro,
+    public static class CreditCardFeeRegion {
+        public const string IntraEu = "intra-eu";
+        public const string AmericanExpress = "american-express";
+        public const string CarteBancaire = "carte-bancaire";
+        public const string Maestro = "maestro";
     }
 
     /// <summary>
