@@ -7,8 +7,10 @@ using Mollie.Api.Framework;
 using NUnit.Framework;
 
 namespace Mollie.Tests.Integration.Framework {
-    [SingleThreaded]
+    [CustomRetry(3)]
     public abstract class BaseMollieApiTestClass {
+        public const int NumberOfRetries = 3;
+
         protected readonly string DefaultRedirectUrl = "http://mysite.com";
         protected readonly string DefaultWebhookUrl = "http://mysite.com/webhook";
 
@@ -42,7 +44,7 @@ namespace Mollie.Tests.Integration.Framework {
         public void Init() {
             // Mollie returns a 429 response code (Too many requests) if we send a lot of requests in a short timespan. 
             // In order to avoid hitting their rate limit, we add a small delay between each tests. 
-            TimeSpan timeBetweenTests = TimeSpan.FromMilliseconds(1000);
+            TimeSpan timeBetweenTests = TimeSpan.FromMilliseconds(500);
             Thread.Sleep(timeBetweenTests);
         }
 

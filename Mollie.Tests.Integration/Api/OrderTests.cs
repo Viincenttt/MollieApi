@@ -12,7 +12,7 @@ using NUnit.Framework;
 namespace Mollie.Tests.Integration.Api {
     [TestFixture]
     public class OrderTests : BaseMollieApiTestClass {
-        [Test]
+        [Test][CustomRetry(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanCreateOrderWithOnlyRequiredFields() {
             // If: we create a order request with only the required parameters
             OrderRequest orderRequest = this.CreateOrderRequestWithOnlyRequiredFields();
@@ -27,7 +27,7 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(orderRequest.OrderNumber, result.OrderNumber);
         }
 
-        [Test]
+        [Test][CustomRetry(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanCreateOrderWithPaymentSpecificOptions() {
             // If: we create a order request with payment specific parameters
             OrderRequest orderRequest = this.CreateOrderRequestWithOnlyRequiredFields();
@@ -45,7 +45,7 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(orderRequest.OrderNumber, result.OrderNumber);
         }
 
-        [Test]
+        [Test][CustomRetry(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanRetrieveOrderAfterCreationOrder() {
             // If: we create a new order
             OrderRequest orderRequest = this.CreateOrderRequestWithOnlyRequiredFields();
@@ -59,7 +59,7 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(createdOrder.Id, retrievedOrder.Id);
         }
 
-        [Test]
+        [Test][CustomRetry(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanUpdateExistingOrder() {
             // If: we create a new order
             OrderRequest orderRequest = this.CreateOrderRequestWithOnlyRequiredFields();
@@ -78,7 +78,7 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(orderUpdateRequest.BillingAddress.City, updatedOrder.BillingAddress.City);
         }
 
-        [Test]
+        [Test][CustomRetry(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanCancelCreatedOrder() {
             // If: we create a new order
             OrderRequest orderRequest = this.CreateOrderRequestWithOnlyRequiredFields();
@@ -92,7 +92,7 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(OrderStatus.Canceled, canceledOrder.Status);
         }
 
-        [Test]
+        [Test][CustomRetry(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanUpdateOrderLine() {
             // If: we create a new order
             OrderRequest orderRequest = this.CreateOrderRequestWithOnlyRequiredFields();
@@ -108,7 +108,7 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(updateRequest.Name, updatedOrder.Lines.First().Name);
         }
 
-        [Test]
+        [Test][CustomRetry(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanRetrieveOrderList() {
             // When: Retrieve payment list with default settings
             ListResponse<OrderResponse> response = await this._orderClient.GetOrderListAsync();
@@ -118,7 +118,7 @@ namespace Mollie.Tests.Integration.Api {
             Assert.IsNotNull(response.Items);
         }
 
-        [Test]
+        [Test][CustomRetry(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task ListOrdersNeverReturnsMorePaymentsThenTheNumberOfRequestedOrders() {
             // If: Number of orders requested is 5
             int numberOfOrders = 5;
