@@ -19,3 +19,5 @@ jobs:
       run: dotnet build Mollie.Tests.Integration --configuration Release --no-restore
     - name: Test
       run: dotnet test --no-restore --verbosity normal
+      env:
+        Mollie__ApiKey: ${{ secrets.Mollie__ApiKey }}
