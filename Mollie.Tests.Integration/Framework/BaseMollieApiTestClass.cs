@@ -6,8 +6,6 @@ using Mollie.Api.Client.Abstract;
 using Mollie.Api.Framework;
 using NUnit.Framework;
 
-[assembly: Apartment(ApartmentState.STA)]
-
 namespace Mollie.Tests.Integration.Framework {
     public abstract class BaseMollieApiTestClass {
         protected readonly string DefaultRedirectUrl = "http://mysite.com";
