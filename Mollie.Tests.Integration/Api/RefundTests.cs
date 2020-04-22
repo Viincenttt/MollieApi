@@ -100,6 +100,7 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [Test]
+        [Ignore("We can only test this in debug mode, because we actually have to use the PaymentUrl to make the payment, since Mollie can only refund payments that have been paid")]
         public async Task CanCreateRefundWithMetaData() {
             // If: We create a payment
             string amount = "100.00";
