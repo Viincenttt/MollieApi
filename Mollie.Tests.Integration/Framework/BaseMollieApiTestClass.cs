@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
 using NUnit.Framework;
@@ -32,6 +33,14 @@ namespace Mollie.Tests.Integration.Framework {
             this._profileClient = new ProfileClient(this.ApiTestKey);
             this._orderClient = new OrderClient(this.ApiTestKey);
             this._shipmentClient = new ShipmentClient(this.ApiTestKey);
+        }
+
+        [SetUp]
+        public void Init() {
+            // Mollie returns a 429 response code (Too many requests) if we send a lot of requests in a short timespan. 
+            // In order to avoid hitting their rate limit, we add a small delay between each tests. 
+            TimeSpan timeBetweenTests = TimeSpan.FromMilliseconds(100);
+            Thread.Sleep(timeBetweenTests);
         }
 
         private void EnsureTestApiKey() {
