@@ -10,7 +10,7 @@ namespace Mollie.Tests.Integration.Api {
     [TestFixture]
     public class PaymentMethodTests : BaseMollieApiTestClass {
 
-        [Test]
+        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanRetrievePaymentMethodList() {
             // When: Retrieve payment list with default settings
             ListResponse<PaymentMethodResponse> response = await this._paymentMethodClient.GetPaymentMethodListAsync();
@@ -21,12 +21,10 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [TestCase(PaymentMethod.Ideal)]
-        [TestCase(PaymentMethod.CreditCard)]
         [TestCase(PaymentMethod.Bancontact)]
         [TestCase(PaymentMethod.Sofort)]
         [TestCase(PaymentMethod.BankTransfer)]
         [TestCase(PaymentMethod.Belfius)]
-        [TestCase(PaymentMethod.Bitcoin)]
         [TestCase(PaymentMethod.PayPal)]
         [TestCase(PaymentMethod.Kbc)]
         public async Task CanRetrieveSinglePaymentMethod(PaymentMethod method) {
@@ -39,7 +37,7 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(method, paymentMethod.Id);
         }
 
-        [Test]
+        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanRetrieveIdealIssuers() {
             // When: retrieving the ideal method we can include the issuers
             PaymentMethodResponse paymentMethod = await this._paymentMethodClient.GetPaymentMethodAsync(PaymentMethod.Ideal, true);
@@ -49,7 +47,7 @@ namespace Mollie.Tests.Integration.Api {
             Assert.IsTrue(paymentMethod.Issuers.Any());
         }
 
-        [Test]
+        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task DoNotRetrieveIssuersWhenIncludeIsFalse() {
             // When: retrieving the ideal method with the include parameter set to false
             PaymentMethodResponse paymentMethod = await this._paymentMethodClient.GetPaymentMethodAsync(PaymentMethod.Ideal, false);
@@ -58,7 +56,7 @@ namespace Mollie.Tests.Integration.Api {
             Assert.IsNull(paymentMethod.Issuers);
         }
 
-        [Test]
+        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task DoNotRetrieveIssuersWhenIncludeIsNull() {
             // When: retrieving the ideal method with the include parameter set to null
             PaymentMethodResponse paymentMethod = await this._paymentMethodClient.GetPaymentMethodAsync(PaymentMethod.Ideal, null);
@@ -67,7 +65,7 @@ namespace Mollie.Tests.Integration.Api {
             Assert.IsNull(paymentMethod.Issuers);
         }
 
-        [Test]
+        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanRetrievePricing() {
             // When: retrieving the ideal method we can include the issuers
             PaymentMethodResponse paymentMethod = await this._paymentMethodClient.GetPaymentMethodAsync(PaymentMethod.Ideal, includePricing: true);
@@ -77,7 +75,7 @@ namespace Mollie.Tests.Integration.Api {
             Assert.IsTrue(paymentMethod.Pricing.Any());
         }
 
-        [Test]
+        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task DoNotRetrievePricingWhenIncludeIsFalse() {
             // When: retrieving the ideal method with the include parameter set to false
             PaymentMethodResponse paymentMethod = await this._paymentMethodClient.GetPaymentMethodAsync(PaymentMethod.Ideal, includePricing: false);
@@ -86,7 +84,7 @@ namespace Mollie.Tests.Integration.Api {
             Assert.IsNull(paymentMethod.Pricing);
         }
 
-        [Test]
+        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task DoNotRetrievePricingWhenIncludeIsNull() {
             // When: retrieving the ideal method with the include parameter set to null
             PaymentMethodResponse paymentMethod = await this._paymentMethodClient.GetPaymentMethodAsync(PaymentMethod.Ideal, includePricing: null);
@@ -95,7 +93,7 @@ namespace Mollie.Tests.Integration.Api {
             Assert.IsNull(paymentMethod.Pricing);
         }
 
-        [Test]
+        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanRetrieveAllMethods() {
             // When: retrieving the all mollie payment methods
             ListResponse<PaymentMethodResponse> paymentMethods = await this._paymentMethodClient.GetAllPaymentMethodListAsync();
@@ -105,7 +103,7 @@ namespace Mollie.Tests.Integration.Api {
             Assert.IsTrue(paymentMethods.Items.Any());
         }
 
-        [Test]
+        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanRetrievePricingForAllMethods() {
             // When: retrieving the ideal method we can include the issuers
             ListResponse<PaymentMethodResponse> paymentMethods = await this._paymentMethodClient.GetAllPaymentMethodListAsync(includePricing: true);
@@ -114,7 +112,7 @@ namespace Mollie.Tests.Integration.Api {
             Assert.IsTrue(paymentMethods.Items.Any(x => x.Pricing != null && x.Pricing.Any(y => y.Fixed.Value > 0)));
         }
 
-        [Test]
+        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanRetrieveIssuersForAllMethods() {
             // When: retrieving the all mollie payment methods we can include the issuers
             ListResponse<PaymentMethodResponse> paymentMethods = await this._paymentMethodClient.GetAllPaymentMethodListAsync(includeIssuers: true);
@@ -123,7 +121,7 @@ namespace Mollie.Tests.Integration.Api {
             Assert.IsTrue(paymentMethods.Items.Any(x => x.Issuers != null));
         }
 
-        [Test]
+        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanRetrieveIssuersAndPricingInformation() {
             // When: retrieving the all mollie payment methods we can include the issuers
             ListResponse<PaymentMethodResponse> paymentMethods = await this._paymentMethodClient.GetAllPaymentMethodListAsync(includeIssuers: true, includePricing: true);

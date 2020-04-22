@@ -12,7 +12,7 @@ using NUnit.Framework;
 namespace Mollie.Tests.Integration.Api {
     [TestFixture]
     public class RefundTests : BaseMollieApiTestClass {
-        [Test]
+        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         [Ignore("We can only test this in debug mode, because we actually have to use the PaymentUrl to make the payment, since Mollie can only refund payments that have been paid")]
         public async Task CanCreateRefund() {
             // If: We create a payment
@@ -33,7 +33,7 @@ namespace Mollie.Tests.Integration.Api {
             Assert.IsNotNull(refundResponse);
         }
 
-        [Test]
+        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         [Ignore("We can only test this in debug mode, because we actually have to use the PaymentUrl to make the payment, since Mollie can only refund payments that have been paid")]
         public async Task CanCreatePartialRefund() {
             // If: We create a payment of 250 euro
@@ -53,7 +53,7 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual("50.00", refundResponse.Amount.Value);
         }
 
-        [Test]
+        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         [Ignore("We can only test this in debug mode, because we actually have to use the PaymentUrl to make the payment, since Mollie can only refund payments that have been paid")]
         public async Task CanRetrieveSingleRefund() {
             // If: We create a payment
@@ -77,7 +77,7 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(refundResponse.Amount.Currency, result.Amount.Currency);
         }
 
-        [Test]
+        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanRetrieveRefundList() {
             // If: We create a payment
             PaymentResponse payment = await this.CreatePayment();
@@ -91,7 +91,7 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         private async Task<PaymentResponse> CreatePayment(string amount = "100.00") {
-            PaymentRequest paymentRequest = new CreditCardPaymentRequest();
+            PaymentRequest paymentRequest = new PayPalPaymentRequest();
             paymentRequest.Amount = new Amount(Currency.EUR, amount);
             paymentRequest.Description = "Description";
             paymentRequest.RedirectUrl = this.DefaultRedirectUrl;
@@ -99,7 +99,8 @@ namespace Mollie.Tests.Integration.Api {
             return await this._paymentClient.CreatePaymentAsync(paymentRequest);
         }
 
-        [Test]
+        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [Ignore("We can only test this in debug mode, because we actually have to use the PaymentUrl to make the payment, since Mollie can only refund payments that have been paid")]
         public async Task CanCreateRefundWithMetaData() {
             // If: We create a payment
             string amount = "100.00";
