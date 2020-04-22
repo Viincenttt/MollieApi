@@ -21,12 +21,10 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [TestCase(PaymentMethod.Ideal)]
-        [TestCase(PaymentMethod.CreditCard)]
         [TestCase(PaymentMethod.Bancontact)]
         [TestCase(PaymentMethod.Sofort)]
         [TestCase(PaymentMethod.BankTransfer)]
         [TestCase(PaymentMethod.Belfius)]
-        [TestCase(PaymentMethod.Bitcoin)]
         [TestCase(PaymentMethod.PayPal)]
         [TestCase(PaymentMethod.Kbc)]
         public async Task CanRetrieveSinglePaymentMethod(PaymentMethod method) {

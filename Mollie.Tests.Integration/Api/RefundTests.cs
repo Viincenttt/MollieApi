@@ -91,7 +91,7 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         private async Task<PaymentResponse> CreatePayment(string amount = "100.00") {
-            PaymentRequest paymentRequest = new CreditCardPaymentRequest();
+            PaymentRequest paymentRequest = new PayPalPaymentRequest();
             paymentRequest.Amount = new Amount(Currency.EUR, amount);
             paymentRequest.Description = "Description";
             paymentRequest.RedirectUrl = this.DefaultRedirectUrl;
