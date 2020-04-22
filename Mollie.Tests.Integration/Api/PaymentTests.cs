@@ -269,7 +269,7 @@ namespace Mollie.Tests.Integration.Api {
         public async Task PaymentWithDifferentHttpInstance() {
             // If: We create a PaymentClient with our own HttpClient instance
             HttpClient myHttpClientInstance = new HttpClient();
-            PaymentClient paymentClient = new PaymentClient(this.ApiTestKey, myHttpClientInstance);
+            PaymentClient paymentClient = new PaymentClient(this.GetApiKeyFromConfiguration(), myHttpClientInstance);
             PaymentRequest paymentRequest = new PaymentRequest() {
                 Amount = new Amount(Currency.EUR, "100.00"),
                 Description = "Description",
