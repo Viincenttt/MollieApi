@@ -10,7 +10,7 @@ using NUnit.Framework;
 namespace Mollie.Tests.Integration.Api {
     [TestFixture]
     public class MandateTests : BaseMollieApiTestClass {
-        [Test][CustomRetry(BaseMollieApiTestClass.NumberOfRetries)]
+        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanRetrieveMandateList() {
             // We can only test this if there are customers
             ListResponse<CustomerResponse> customers = await this._customerClient.GetCustomerListAsync();
@@ -25,7 +25,7 @@ namespace Mollie.Tests.Integration.Api {
             }
         }
 
-        [Test][CustomRetry(BaseMollieApiTestClass.NumberOfRetries)]
+        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task ListMandatesNeverReturnsMoreCustomersThenTheNumberOfRequestedMandates() {
             // We can only test this if there are customers
             ListResponse<CustomerResponse> customers = await this._customerClient.GetCustomerListAsync();
@@ -42,7 +42,7 @@ namespace Mollie.Tests.Integration.Api {
             }
         }
 
-        [Test][CustomRetry(BaseMollieApiTestClass.NumberOfRetries)]
+        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanCreateMandate() {
             // We can only test this if there are customers
             ListResponse<CustomerResponse> customers = await this._customerClient.GetCustomerListAsync();

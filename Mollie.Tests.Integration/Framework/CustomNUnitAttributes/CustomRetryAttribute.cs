@@ -6,8 +6,8 @@ using System;
 
 namespace Mollie.Tests.Integration.Framework
 {
-    [AttributeUsage(AttributeTargets.All, AllowMultiple = false, Inherited = true)]
-    public class CustomRetry : PropertyAttribute, IWrapSetUpTearDown
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
+    public class RetryOnFailureAttribute : PropertyAttribute, IWrapSetUpTearDown
     {
         private int _count;
 
@@ -15,11 +15,9 @@ namespace Mollie.Tests.Integration.Framework
         /// Construct a RepeatAttribute
         /// </summary>
         /// <param name="count">The number of times to run the test</param>
-        public CustomRetry(int count) : base(count) {
+        public RetryOnFailureAttribute(int count) : base(count) {
             _count = count;
         }
-
-        #region IWrapSetUpTearDown Members
 
         /// <summary>
         /// Wrap a command and return the result.
@@ -29,10 +27,6 @@ namespace Mollie.Tests.Integration.Framework
         public TestCommand Wrap(TestCommand command) {
             return new CustomRetryCommand(command, _count);
         }
-
-        #endregion
-
-        #region Nested CustomRetry Class
 
         /// <summary>
         /// The test command for the RetryAttribute
@@ -76,7 +70,5 @@ namespace Mollie.Tests.Integration.Framework
                 return context.CurrentResult;
             }
         }
-
-        #endregion
     }
 }

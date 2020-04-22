@@ -7,7 +7,6 @@ using Mollie.Api.Framework;
 using NUnit.Framework;
 
 namespace Mollie.Tests.Integration.Framework {
-    [CustomRetry(3)]
     public abstract class BaseMollieApiTestClass {
         public const int NumberOfRetries = 3;
 

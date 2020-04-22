@@ -10,7 +10,7 @@ namespace Mollie.Tests.Integration.Api
 {
     [TestFixture]
     public class ShipmentTests : BaseMollieApiTestClass {
-        [Test][CustomRetry(BaseMollieApiTestClass.NumberOfRetries)]
+        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         [Ignore("For manual testing only")]
         public async Task CanCreateShipmentWithOnlyRequiredFields() {
             // the order needs to be autorized to do a shipment on. this can only be done by waiting.
@@ -23,7 +23,7 @@ namespace Mollie.Tests.Integration.Api
             Assert.IsTrue(result.CreatedAt >= DateTime.Now);
         }
 
-        [Test][CustomRetry(BaseMollieApiTestClass.NumberOfRetries)]
+        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         [Ignore("For manual testing only")]
         public async Task CanListShipmentsForOrder(){
             string validOrderId = "XXXXX";

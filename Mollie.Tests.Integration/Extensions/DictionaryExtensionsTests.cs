@@ -9,8 +9,7 @@ namespace Mollie.Tests.Integration.Extensions
     [TestFixture]
     public class DictionaryExtensionsTests
     {
-
-        [Test][CustomRetry(BaseMollieApiTestClass.NumberOfRetries)]
+        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public void CanCreateUrlQueryFromDictionary()
         {
             // Arrange
@@ -28,7 +27,7 @@ namespace Mollie.Tests.Integration.Extensions
             Assert.AreEqual(expected, result);
         }
 
-        [Test][CustomRetry(BaseMollieApiTestClass.NumberOfRetries)]
+        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public void CanCreateUrlQueryFromEmptyDictionary()
         {
             // Arrange
@@ -42,7 +41,7 @@ namespace Mollie.Tests.Integration.Extensions
             Assert.AreEqual(expected, result);
         }
 
-        [Test][CustomRetry(BaseMollieApiTestClass.NumberOfRetries)]
+        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public void CanAddParameterToDictionaryIfNotEmptyDictionary()
         {
             // Arrange
@@ -58,7 +57,7 @@ namespace Mollie.Tests.Integration.Extensions
             Assert.AreEqual(parameterValue, parameters[parameterName]);
         }
 
-        [Test][CustomRetry(BaseMollieApiTestClass.NumberOfRetries)]
+        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public void CannotAddParameterToDictionaryIfEmptyDictionary()
         {
             // Arrange

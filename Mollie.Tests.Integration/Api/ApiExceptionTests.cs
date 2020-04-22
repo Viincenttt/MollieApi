@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace Mollie.Tests.Integration.Api {
     [TestFixture]
     public class ApiExceptionTests : BaseMollieApiTestClass {
-        [Test][CustomRetry(BaseMollieApiTestClass.NumberOfRetries)]
+        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public void ShouldThrowMollieApiExceptionWhenInvalidParametersAreGiven() {
             // If: we create a payment request with invalid parameters
             PaymentRequest paymentRequest = new PaymentRequest() {

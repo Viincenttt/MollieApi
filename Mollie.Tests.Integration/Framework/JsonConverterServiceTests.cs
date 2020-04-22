@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace Mollie.Tests.Integration.Framework {
     [TestFixture]
     public class JsonConverterServiceTests {
-        [Test][CustomRetry(BaseMollieApiTestClass.NumberOfRetries)]
+        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public void CanDeserializeJsonMetadata() {
             // Given: A JSON metadata value
             JsonConverterService jsonConverterService = new JsonConverterService();
@@ -23,7 +23,7 @@ namespace Mollie.Tests.Integration.Framework {
             Assert.AreEqual(metadataJson, payments.Metadata);
         }
 
-        [Test][CustomRetry(BaseMollieApiTestClass.NumberOfRetries)]
+        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public void CanDeserializeStringMetadataValue() {
             // Given: A JSON metadata value
             JsonConverterService jsonConverterService = new JsonConverterService();
@@ -37,7 +37,7 @@ namespace Mollie.Tests.Integration.Framework {
             Assert.AreEqual(metadataJson, payments.Metadata);
         }
 
-        [Test][CustomRetry(BaseMollieApiTestClass.NumberOfRetries)]
+        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public void CanDeserializeNullMetadataValue() {
             // Given: A JSON metadata value
             JsonConverterService jsonConverterService = new JsonConverterService();
