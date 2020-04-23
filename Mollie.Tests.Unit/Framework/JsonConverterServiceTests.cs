@@ -2,10 +2,10 @@
 using Mollie.Api.Models.Payment.Response;
 using NUnit.Framework;
 
-namespace Mollie.Tests.Integration.Framework {
+namespace Mollie.Tests.Unit.Framework {
     [TestFixture]
     public class JsonConverterServiceTests {
-        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [Test]
         public void CanDeserializeJsonMetadata() {
             // Given: A JSON metadata value
             JsonConverterService jsonConverterService = new JsonConverterService();
@@ -23,7 +23,7 @@ namespace Mollie.Tests.Integration.Framework {
             Assert.AreEqual(metadataJson, payments.Metadata);
         }
 
-        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [Test]
         public void CanDeserializeStringMetadataValue() {
             // Given: A JSON metadata value
             JsonConverterService jsonConverterService = new JsonConverterService();
@@ -37,7 +37,7 @@ namespace Mollie.Tests.Integration.Framework {
             Assert.AreEqual(metadataJson, payments.Metadata);
         }
 
-        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [Test]
         public void CanDeserializeNullMetadataValue() {
             // Given: A JSON metadata value
             JsonConverterService jsonConverterService = new JsonConverterService();
