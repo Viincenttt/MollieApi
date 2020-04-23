@@ -1,16 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Mollie.Api.Extensions;
-using Mollie.Tests.Integration.Framework;
 using NUnit.Framework;
 
-namespace Mollie.Tests.Integration.Extensions
+namespace Mollie.Tests.Unit.Extensions
 {
     [TestFixture]
     public class DictionaryExtensionsTests
     {
-        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public void CanCreateUrlQueryFromDictionary()
+        [Test]
+        public void ToQueryString_WhenMultipleKeyValuePairsAreAdded_MultipleParametersAreAddedToQueryString()
         {
             // Arrange
             var parameters = new Dictionary<string, string>()
@@ -27,8 +26,8 @@ namespace Mollie.Tests.Integration.Extensions
             Assert.AreEqual(expected, result);
         }
 
-        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public void CanCreateUrlQueryFromEmptyDictionary()
+        [Test]
+        public void ToQueryString_WhenDictionaryIsEmpty_QueryStringIsEmpty()
         {
             // Arrange
             var parameters = new Dictionary<string, string>();
@@ -41,8 +40,8 @@ namespace Mollie.Tests.Integration.Extensions
             Assert.AreEqual(expected, result);
         }
 
-        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public void CanAddParameterToDictionaryIfNotEmptyDictionary()
+        [Test]
+        public void AddValueIfNotNullOrEmpty_ValueIsNotNull_ValueIsAdded()
         {
             // Arrange
             var parameters = new Dictionary<string, string>();
@@ -57,8 +56,8 @@ namespace Mollie.Tests.Integration.Extensions
             Assert.AreEqual(parameterValue, parameters[parameterName]);
         }
 
-        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public void CannotAddParameterToDictionaryIfEmptyDictionary()
+        [Test]
+        public void AddValueIfNotNullOrEmpty_ValueIsEmpty_ValueIsNotAdded()
         {
             // Arrange
             var parameters = new Dictionary<string, string>();

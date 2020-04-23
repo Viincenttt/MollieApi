@@ -2,11 +2,11 @@
 using Mollie.Api.Models.Payment.Response;
 using NUnit.Framework;
 
-namespace Mollie.Tests.Integration.Framework {
+namespace Mollie.Tests.Unit.Framework {
     [TestFixture]
     public class JsonConverterServiceTests {
-        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public void CanDeserializeJsonMetadata() {
+        [Test]
+        public void Deserialize_JsonData_IsDeserialized() {
             // Given: A JSON metadata value
             JsonConverterService jsonConverterService = new JsonConverterService();
             string metadataJson = @"{
@@ -23,8 +23,8 @@ namespace Mollie.Tests.Integration.Framework {
             Assert.AreEqual(metadataJson, payments.Metadata);
         }
 
-        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public void CanDeserializeStringMetadataValue() {
+        [Test]
+        public void Deserialize_StringData_IsDeserialized() {
             // Given: A JSON metadata value
             JsonConverterService jsonConverterService = new JsonConverterService();
             string metadataJson = "This is my metadata";
@@ -37,8 +37,8 @@ namespace Mollie.Tests.Integration.Framework {
             Assert.AreEqual(metadataJson, payments.Metadata);
         }
 
-        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public void CanDeserializeNullMetadataValue() {
+        [Test]
+        public void Deserialize_JsonDataWithNullValues_IsDeserialized() {
             // Given: A JSON metadata value
             JsonConverterService jsonConverterService = new JsonConverterService();
             string metadataJson = @"null";
