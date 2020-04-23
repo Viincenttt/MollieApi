@@ -9,7 +9,7 @@ namespace Mollie.Tests.Unit.Extensions
     public class DictionaryExtensionsTests
     {
         [Test]
-        public void CanCreateUrlQueryFromDictionary()
+        public void ToQueryString_WhenMultipleKeyValuePairsAreAdded_MultipleParametersAreAddedToQueryString()
         {
             // Arrange
             var parameters = new Dictionary<string, string>()
@@ -27,7 +27,7 @@ namespace Mollie.Tests.Unit.Extensions
         }
 
         [Test]
-        public void CanCreateUrlQueryFromEmptyDictionary()
+        public void ToQueryString_WhenDictionaryIsEmpty_QueryStringIsEmpty()
         {
             // Arrange
             var parameters = new Dictionary<string, string>();
@@ -41,7 +41,7 @@ namespace Mollie.Tests.Unit.Extensions
         }
 
         [Test]
-        public void CanAddParameterToDictionaryIfNotEmptyDictionary()
+        public void AddValueIfNotNullOrEmpty_ValueIsNotNull_ValueIsAdded()
         {
             // Arrange
             var parameters = new Dictionary<string, string>();
@@ -57,7 +57,7 @@ namespace Mollie.Tests.Unit.Extensions
         }
 
         [Test]
-        public void CannotAddParameterToDictionaryIfEmptyDictionary()
+        public void AddValueIfNotNullOrEmpty_ValueIsEmpty_ValueIsNotAdded()
         {
             // Arrange
             var parameters = new Dictionary<string, string>();

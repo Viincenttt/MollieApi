@@ -6,7 +6,7 @@ namespace Mollie.Tests.Unit.Framework {
     [TestFixture]
     public class JsonConverterServiceTests {
         [Test]
-        public void CanDeserializeJsonMetadata() {
+        public void Deserialize_JsonData_IsDeserialized() {
             // Given: A JSON metadata value
             JsonConverterService jsonConverterService = new JsonConverterService();
             string metadataJson = @"{
@@ -24,7 +24,7 @@ namespace Mollie.Tests.Unit.Framework {
         }
 
         [Test]
-        public void CanDeserializeStringMetadataValue() {
+        public void Deserialize_StringData_IsDeserialized() {
             // Given: A JSON metadata value
             JsonConverterService jsonConverterService = new JsonConverterService();
             string metadataJson = "This is my metadata";
@@ -38,7 +38,7 @@ namespace Mollie.Tests.Unit.Framework {
         }
 
         [Test]
-        public void CanDeserializeNullMetadataValue() {
+        public void Deserialize_JsonDataWithNullValues_IsDeserialized() {
             // Given: A JSON metadata value
             JsonConverterService jsonConverterService = new JsonConverterService();
             string metadataJson = @"null";
