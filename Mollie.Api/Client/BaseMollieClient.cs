@@ -45,24 +45,24 @@ namespace Mollie.Api.Client {
         }
 
         protected async Task<T> GetAsync<T>(string relativeUri) {
-            return await this.SendHttpRequest<T>(HttpMethod.Get, relativeUri);
+            return await this.SendHttpRequest<T>(HttpMethod.Get, relativeUri).ConfigureAwait(false);
         }
 
         protected async Task<T> GetAsync<T>(UrlObjectLink<T> urlObject) {
             this.ValidateUrlLink(urlObject);
-            return await this.GetAsync<T>(urlObject.Href);
+            return await this.GetAsync<T>(urlObject.Href).ConfigureAwait(false); ;
         }
 
         protected async Task<T> PostAsync<T>(string relativeUri, object data) {
-            return await this.SendHttpRequest<T>(HttpMethod.Post, relativeUri, data);
+            return await this.SendHttpRequest<T>(HttpMethod.Post, relativeUri, data).ConfigureAwait(false); ;
         }
 
         protected async Task<T> PatchAsync<T>(string relativeUri, object data) {
-            return await this.SendHttpRequest<T>(new HttpMethod("PATCH"), relativeUri, data);
+            return await this.SendHttpRequest<T>(new HttpMethod("PATCH"), relativeUri, data).ConfigureAwait(false); ;
         }
 
         protected async Task DeleteAsync(string relativeUri, object data = null) {
-            await this.SendHttpRequest<object>(HttpMethod.Delete, relativeUri, data);
+            await this.SendHttpRequest<object>(HttpMethod.Delete, relativeUri, data).ConfigureAwait(false); ;
         }
 
         private async Task<T> ProcessHttpResponseMessage<T>(HttpResponseMessage response) {

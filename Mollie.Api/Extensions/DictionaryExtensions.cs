@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("Mollie.Tests.Integration")]
 namespace Mollie.Api.Extensions {
-    internal static class DictionaryExtensions {
+    public static class DictionaryExtensions {
         public static string ToQueryString(this IDictionary<string, string> parameters) {
             if (!parameters.Any()) {
                 return string.Empty;

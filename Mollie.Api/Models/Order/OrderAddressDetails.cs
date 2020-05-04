@@ -1,6 +1,11 @@
 ﻿namespace Mollie.Api.Models.Order {
     public class OrderAddressDetails : AddressObject {
         /// <summary>
+        /// The person’s organization, if applicable.
+        /// </summary>
+        public string OrganizationName { get; set; }
+
+        /// <summary>
         /// The title of the person, for example Mr. or Mrs..
         /// </summary>
         public string Title { get; set; }

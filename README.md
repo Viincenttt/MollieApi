@@ -59,6 +59,11 @@ These client API classes allow you to send and receive requests to the Mollie RE
 IPaymentClient paymentClient = new PaymentClient("{yourApiKey}");
 ```
 
+### List of constant strings
+In the past, this library used enums that were decorated with the EnumMemberAttribute for static values that were defined in the Mollie documentation. We are now moving away from this idea and using constant strings where possible. The reason for this is that enum values often broke when Mollie added new values to their API. This means that I had to release a new version every time when Mollie added a new value and all library consumers had to update their version. The following static classes are available with const string values that you can use to set and compare values in your code:
+- Mollie.Api.Models.Payment.Response.CreditCardFeeRegion
+- Mollie.Api.Models.Payment.Locale
+- Mollie.Api.Models.Currency
 
 
 ## 3. Payment API

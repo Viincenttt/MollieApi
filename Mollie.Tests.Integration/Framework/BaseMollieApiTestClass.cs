@@ -1,14 +1,17 @@
 ﻿using System;
+using System.Threading;
+using Microsoft.Extensions.Configuration;
 using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
+using Mollie.Api.Framework;
 using NUnit.Framework;
 
 namespace Mollie.Tests.Integration.Framework {
     public abstract class BaseMollieApiTestClass {
+        public const int NumberOfRetries = 3;
+
         protected readonly string DefaultRedirectUrl = "http://mysite.com";
         protected readonly string DefaultWebhookUrl = "http://mysite.com/webhook";
-
-        protected readonly string ApiTestKey = "test_yGJ4USbh3BWV5AkGbdh4NG4EG2UdaF"; // Insert you API key here
 
         protected IPaymentClient _paymentClient;
         protected IPaymentMethodClient _paymentMethodClient;
@@ -22,24 +25,40 @@ namespace Mollie.Tests.Integration.Framework {
 
         [OneTimeSetUp]
         public void InitClass() {
-            this.EnsureTestApiKey();
-            this._paymentClient = new PaymentClient(this.ApiTestKey);
-            this._paymentMethodClient = new PaymentMethodClient(this.ApiTestKey);
-            this._refundClient = new RefundClient(this.ApiTestKey);
-            this._subscriptionClient = new SubscriptionClient(this.ApiTestKey);
-            this._mandateClient = new MandateClient(this.ApiTestKey);
-            this._customerClient = new CustomerClient(this.ApiTestKey);
-            this._profileClient = new ProfileClient(this.ApiTestKey);
-            this._orderClient = new OrderClient(this.ApiTestKey);
-            this._shipmentClient = new ShipmentClient(this.ApiTestKey);
+            string apiKey = this.GetApiKeyFromConfiguration();
+            this.EnsureTestApiKey(apiKey);
+
+            this._paymentClient = new PaymentClient(apiKey);
+            this._paymentMethodClient = new PaymentMethodClient(apiKey);
+            this._refundClient = new RefundClient(apiKey);
+            this._subscriptionClient = new SubscriptionClient(apiKey);
+            this._mandateClient = new MandateClient(apiKey);
+            this._customerClient = new CustomerClient(apiKey);
+            this._profileClient = new ProfileClient(apiKey);
+            this._orderClient = new OrderClient(apiKey);
+            this._shipmentClient = new ShipmentClient(apiKey);
         }
 
-        private void EnsureTestApiKey() {
-            if (String.IsNullOrEmpty(this.ApiTestKey)) {
+        [SetUp]
+        public void Init() {
+            // Mollie returns a 429 response code (Too many requests) if we send a lot of requests in a short timespan. 
+            // In order to avoid hitting their rate limit, we add a small delay between each tests. 
+            TimeSpan timeBetweenTests = TimeSpan.FromMilliseconds(500);
+            Thread.Sleep(timeBetweenTests);
+        }
+
+        protected string GetApiKeyFromConfiguration() {
+            IConfiguration configuration = ConfigurationFactory.GetConfiguration();
+            MollieConfiguration mollieConfiguration = configuration.GetSection("Mollie").Get<MollieConfiguration>();
+            return mollieConfiguration.ApiKey;
+        } 
+
+        private void EnsureTestApiKey(string apiKey) {
+            if (String.IsNullOrEmpty(apiKey)) {
                 throw new ArgumentException("Please enter you API key in the BaseMollieApiTestClass class");
             }
 
-            if (!this.ApiTestKey.StartsWith("test")) {
+            if (!apiKey.StartsWith("test")) {
                 throw new ArgumentException("You should not run these tests on your live key!");
             }
         }

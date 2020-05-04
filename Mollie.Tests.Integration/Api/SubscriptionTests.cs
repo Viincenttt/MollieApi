@@ -16,7 +16,7 @@ using NUnit.Framework;
 namespace Mollie.Tests.Integration.Api {
     [TestFixture]
     public class SubscriptionTests : BaseMollieApiTestClass {
-        [Test]
+        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanRetrieveSubscriptionList() {
             // Given
             string customerId = await this.GetFirstCustomerWithValidMandate();
@@ -29,7 +29,7 @@ namespace Mollie.Tests.Integration.Api {
             Assert.IsNotNull(response.Items);
         }
 
-        [Test]
+        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task ListSubscriptionsNeverReturnsMoreCustomersThenTheNumberOfRequestedSubscriptions() {
             // Given: Number of customers requested is 5
             string customerId = await this.GetFirstCustomerWithValidMandate();
@@ -42,7 +42,7 @@ namespace Mollie.Tests.Integration.Api {
             Assert.IsTrue(response.Items.Count <= numberOfSubscriptions);
         }
 
-        [Test]
+        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanCreateSubscription() {
             // Given
             string customerId = await this.GetFirstCustomerWithValidMandate();
@@ -67,7 +67,7 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(subscriptionRequest.StartDate.Value.Date, subscriptionResponse.StartDate);
         }
 
-        [Test]
+        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanCancelSubscription() {
             // Given
             string customerId = await this.GetFirstCustomerWithValidMandate();
@@ -87,7 +87,7 @@ namespace Mollie.Tests.Integration.Api {
             }
         }
 
-        [Test]
+        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanUpdateSubscription() {
             // Given 
             string customerId = await this.GetFirstCustomerWithValidMandate();
@@ -109,7 +109,7 @@ namespace Mollie.Tests.Integration.Api {
             }
         }
 
-        [Test]
+        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanCreateSubscriptionWithMetaData() {
             // If: We create a subscription with meta data
             string json = "{\"order_id\":\"4.40\"}";
