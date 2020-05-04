@@ -1,19 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 
-namespace Mollie.WebApplicationCoreExample.Framework.Validators
-{
-    public class DecimalPlacesAttribute : ValidationAttribute
-    {
+namespace Mollie.WebApplicationCoreExample.Framework.Validators {
+    public class DecimalPlacesAttribute : ValidationAttribute {
         public int DecimalPlaces { get; }
 
-        public DecimalPlacesAttribute(int decimalPlaces)
-        {
+        public DecimalPlacesAttribute(int decimalPlaces) {
             DecimalPlaces = decimalPlaces;
         }
 
-        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
-        {
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext) {
             decimal amount = (decimal)value;
             string text = amount.ToString(CultureInfo.InvariantCulture);
             int dotIndex = text.IndexOf('.');
