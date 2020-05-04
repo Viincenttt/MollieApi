@@ -1,0 +1,27 @@
+name: .NET Core
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.101
+    - name: Install dependencies
+      run: dotnet restore
+    - name: Build unit test project
+      run: dotnet build Mollie.Tests.Unit --configuration Release --no-restore
+    - name: Run unit tests
+      run: dotnet test Mollie.Tests.Unit --no-restore --verbosity normal
+    - name: Build integration test project
+      run: dotnet build Mollie.Tests.Integration --configuration Release --no-restore
+    - name: Run integration tests
+      run: dotnet test Mollie.Tests.Integration --no-restore --verbosity normal
+      env:
+        Mollie__ApiKey: ${{ secrets.Mollie__ApiKey }}

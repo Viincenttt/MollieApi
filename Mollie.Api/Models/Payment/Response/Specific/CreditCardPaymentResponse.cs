@@ -62,6 +62,11 @@ namespace Mollie.Api.Models.Payment.Response {
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
         public CreditCardFailureReason? FailureReason { get; set; }
+
+        /// <summary>
+        /// A localized message that can be shown to your customer, depending on the failureReason
+        /// </summary>
+        public string FailureMessage { get; set; }
     }
 
     /// <summary>

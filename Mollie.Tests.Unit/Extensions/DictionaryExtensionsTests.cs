@@ -3,14 +3,13 @@ using System.Linq;
 using Mollie.Api.Extensions;
 using NUnit.Framework;
 
-namespace Mollie.Tests.Integration.Extensions
+namespace Mollie.Tests.Unit.Extensions
 {
     [TestFixture]
     public class DictionaryExtensionsTests
     {
-
         [Test]
-        public void CanCreateUrlQueryFromDictionary()
+        public void ToQueryString_WhenMultipleKeyValuePairsAreAdded_MultipleParametersAreAddedToQueryString()
         {
             // Arrange
             var parameters = new Dictionary<string, string>()
@@ -28,7 +27,7 @@ namespace Mollie.Tests.Integration.Extensions
         }
 
         [Test]
-        public void CanCreateUrlQueryFromEmptyDictionary()
+        public void ToQueryString_WhenDictionaryIsEmpty_QueryStringIsEmpty()
         {
             // Arrange
             var parameters = new Dictionary<string, string>();
@@ -42,7 +41,7 @@ namespace Mollie.Tests.Integration.Extensions
         }
 
         [Test]
-        public void CanAddParameterToDictionaryIfNotEmptyDictionary()
+        public void AddValueIfNotNullOrEmpty_ValueIsNotNull_ValueIsAdded()
         {
             // Arrange
             var parameters = new Dictionary<string, string>();
@@ -58,7 +57,7 @@ namespace Mollie.Tests.Integration.Extensions
         }
 
         [Test]
-        public void CannotAddParameterToDictionaryIfEmptyDictionary()
+        public void AddValueIfNotNullOrEmpty_ValueIsEmpty_ValueIsNotAdded()
         {
             // Arrange
             var parameters = new Dictionary<string, string>();
