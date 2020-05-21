@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Mollie.Api.JsonConverters;
+using Newtonsoft.Json;
+using System;
 
 namespace Mollie.Api.Models.Order {
     public class OrderLineResponse : OrderLineRequest {
@@ -66,5 +68,13 @@ namespace Mollie.Api.Models.Order {
         /// The order line’s date and time of creation
         /// </summary>
         public DateTime CreatedAt { get; set; }
+
+        /// <summary>
+        /// Provide any data you like, for example a string or a JSON object. We will save the data 
+        /// alongside the order. Whenever you fetch the order with our API, we’ll also include the 
+        /// metadata. You can use up to approximately 1kB.
+        /// </summary>
+        [JsonConverter(typeof(RawJsonConverter))]
+        public string Metadata { get; set; }
     }
 }
