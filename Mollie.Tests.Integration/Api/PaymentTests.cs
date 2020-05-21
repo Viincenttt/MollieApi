@@ -287,6 +287,65 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(paymentRequest.RedirectUrl, result.RedirectUrl);
         }
 
+        [Test]
+        [RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        public async Task CanCreatePaymentWithDecimalAmountAndRetrieveIt()
+        {
+            // If: we create a new payment request
+            PaymentRequest paymentRequest = new PaymentRequest()
+            {
+                Amount = new Amount(Currency.EUR, 100.1235m),
+                Description = "Description",
+                RedirectUrl = this.DefaultRedirectUrl,
+                Locale = Locale.de_DE
+            };
+
+            // When: We send the payment request to Mollie and attempt to retrieve it
+            PaymentResponse paymentResponse = await this._paymentClient.CreatePaymentAsync(paymentRequest);
+            PaymentResponse result = await this._paymentClient.GetPaymentAsync(paymentResponse.Id);
+
+            // Then
+            Assert.IsNotNull(result);
+            Assert.AreEqual(paymentResponse.Id, result.Id);
+            Assert.AreEqual(paymentResponse.Amount.Currency, result.Amount.Currency);
+            Assert.AreEqual(paymentResponse.Amount.Value, result.Amount.Value);
+            Assert.AreEqual(paymentResponse.Description, result.Description);
+            Assert.AreEqual(paymentResponse.RedirectUrl, result.RedirectUrl);
+        }
+
+        [Test]
+        [RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        public async Task CanCreatePaymentWithImplicitAmountCastAndRetrieveIt()
+        {
+            var initialAmount = 100.75m;
+
+            // If: we create a new payment request
+            PaymentRequest paymentRequest = new PaymentRequest()
+            {
+                Amount = new Amount(Currency.EUR, initialAmount),
+                Description = "Description",
+                RedirectUrl = this.DefaultRedirectUrl,
+                Locale = Locale.de_DE
+            };
+
+            // When: We send the payment request to Mollie and attempt to retrieve it
+            PaymentResponse paymentResponse = await this._paymentClient.CreatePaymentAsync(paymentRequest);
+            PaymentResponse result = await this._paymentClient.GetPaymentAsync(paymentResponse.Id);
+
+            decimal responseAmount = paymentResponse.Amount; // Implicit cast
+            decimal resultAmount = result.Amount; // Implicit cast
+
+            // Then
+            Assert.IsNotNull(result);
+            Assert.AreEqual(paymentResponse.Id, result.Id);
+            Assert.AreEqual(paymentResponse.Amount.Currency, result.Amount.Currency);
+            Assert.AreEqual(paymentResponse.Amount.Value, result.Amount.Value);
+            Assert.AreEqual(responseAmount, resultAmount);
+            Assert.AreEqual(initialAmount, resultAmount);
+            Assert.AreEqual(paymentResponse.Description, result.Description);
+            Assert.AreEqual(paymentResponse.RedirectUrl, result.RedirectUrl);
+        }
+
         private async Task<MandateResponse> GetFirstValidMandate() {
             ListResponse<CustomerResponse> customers = await this._customerClient.GetCustomerListAsync();
             if (!customers.Items.Any()) {
