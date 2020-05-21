@@ -18,7 +18,8 @@ namespace Mollie.Tests.Integration.Api {
 
     [TestFixture]
     public class PaymentTests : BaseMollieApiTestClass {
-        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [Test]
+        [RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanRetrievePaymentList() {
             // When: Retrieve payment list with default settings
             ListResponse<PaymentResponse> response = await this._paymentClient.GetPaymentListAsync();
@@ -28,7 +29,8 @@ namespace Mollie.Tests.Integration.Api {
             Assert.IsNotNull(response.Items);
         }
 
-        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [Test]
+        [RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task ListPaymentsNeverReturnsMorePaymentsThenTheNumberOfRequestedPayments() {
             // When: Number of payments requested is 5
             int numberOfPayments = 5;
@@ -40,7 +42,8 @@ namespace Mollie.Tests.Integration.Api {
             Assert.IsTrue(response.Items.Count <= numberOfPayments);
         }
 
-        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [Test]
+        [RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task WhenRetrievingAListOfPaymentsPaymentSubclassesShouldBeInitialized() {
             // Given: We create a new payment 
             IdealPaymentRequest paymentRequest = new IdealPaymentRequest() {
@@ -57,7 +60,8 @@ namespace Mollie.Tests.Integration.Api {
             Assert.IsAssignableFrom<IdealPaymentResponse>(result.Items.First());
         }
 
-        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [Test]
+        [RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanCreateDefaultPaymentWithOnlyRequiredFields() {
             // When: we create a payment request with only the required parameters
             PaymentRequest paymentRequest = new PaymentRequest() {
@@ -76,8 +80,9 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(paymentRequest.Description, result.Description);
             Assert.AreEqual(paymentRequest.RedirectUrl, result.RedirectUrl);
         }
-        
-        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
+
+        [Test]
+        [RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanCreateDefaultPaymentWithAllFields() {
             // If: we create a payment request where all parameters have a value
             PaymentRequest paymentRequest = new PaymentRequest() {
@@ -115,15 +120,14 @@ namespace Mollie.Tests.Integration.Api {
         //[TestCase(typeof(Przelewy24PaymentRequest), PaymentMethod.Przelewy24, typeof(PaymentResponse))] // Payment option is not enabled in website profile
         public async Task CanCreateSpecificPaymentType(Type paymentType, PaymentMethod? paymentMethod, Type expectedResponseType) {
             // If: we create a specific payment type with some bank transfer specific values
-            PaymentRequest paymentRequest = (PaymentRequest) Activator.CreateInstance(paymentType);
+            PaymentRequest paymentRequest = (PaymentRequest)Activator.CreateInstance(paymentType);
             paymentRequest.Amount = new Amount(Currency.EUR, "100.00");
             paymentRequest.Description = "Description";
             paymentRequest.RedirectUrl = this.DefaultRedirectUrl;
             paymentRequest.Method = paymentMethod;
 
             // Set required billing email for Przelewy24
-            if (paymentRequest is Przelewy24PaymentRequest request)
-            {
+            if (paymentRequest is Przelewy24PaymentRequest request) {
                 request.BillingEmail = "example@example.com";
             }
 
@@ -139,7 +143,8 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(paymentRequest.RedirectUrl, result.RedirectUrl);
         }
 
-        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [Test]
+        [RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanCreatePaymentAndRetrieveIt() {
             // If: we create a new payment request
             PaymentRequest paymentRequest = new PaymentRequest() {
@@ -162,7 +167,8 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(paymentResponse.RedirectUrl, result.RedirectUrl);
         }
 
-        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [Test]
+        [RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanCreateRecurringPaymentAndRetrieveIt() {
             // If: we create a new recurring payment
             MandateResponse mandate = await this.GetFirstValidMandate();
@@ -183,7 +189,8 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(SequenceType.First, result.SequenceType);
         }
 
-        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [Test]
+        [RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanCreatePaymentWithMetaData() {
             // If: We create a payment with meta data
             string metadata = "this is my metadata";
@@ -201,7 +208,8 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(metadata, result.Metadata);
         }
 
-        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [Test]
+        [RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanCreatePaymentWithJsonMetaData() {
             // If: We create a payment with meta data
             string json = "{\"order_id\":\"4.40\"}";
@@ -219,7 +227,8 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(json, result.Metadata);
         }
 
-        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [Test]
+        [RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanCreatePaymentWithCustomMetaDataClass() {
             // If: We create a payment with meta data
             CustomMetadataClass metadataRequest = new CustomMetadataClass() {
@@ -244,7 +253,8 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(metadataRequest.Description, metadataResponse.Description);
         }
 
-        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [Test]
+        [RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanCreatePaymentWithMandate() {
             // If: We create a payment with a mandate id
             MandateResponse validMandate = await this.GetFirstValidMandate();
@@ -265,7 +275,8 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(validMandate.Id, result.MandateId);
         }
 
-        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [Test]
+        [RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task PaymentWithDifferentHttpInstance() {
             // If: We create a PaymentClient with our own HttpClient instance
             HttpClient myHttpClientInstance = new HttpClient();
@@ -289,11 +300,9 @@ namespace Mollie.Tests.Integration.Api {
 
         [Test]
         [RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public async Task CanCreatePaymentWithDecimalAmountAndRetrieveIt()
-        {
+        public async Task CanCreatePaymentWithDecimalAmountAndRetrieveIt() {
             // If: we create a new payment request
-            PaymentRequest paymentRequest = new PaymentRequest()
-            {
+            PaymentRequest paymentRequest = new PaymentRequest() {
                 Amount = new Amount(Currency.EUR, 100.1235m),
                 Description = "Description",
                 RedirectUrl = this.DefaultRedirectUrl,
@@ -315,13 +324,11 @@ namespace Mollie.Tests.Integration.Api {
 
         [Test]
         [RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public async Task CanCreatePaymentWithImplicitAmountCastAndRetrieveIt()
-        {
+        public async Task CanCreatePaymentWithImplicitAmountCastAndRetrieveIt() {
             var initialAmount = 100.75m;
 
             // If: we create a new payment request
-            PaymentRequest paymentRequest = new PaymentRequest()
-            {
+            PaymentRequest paymentRequest = new PaymentRequest() {
                 Amount = new Amount(Currency.EUR, initialAmount),
                 Description = "Description",
                 RedirectUrl = this.DefaultRedirectUrl,

@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Globalization;
 
-namespace Mollie.Api.Models
-{
-    public class Amount
-    {
+namespace Mollie.Api.Models {
+    public class Amount {
         /// <summary>
         /// An ISO 4217 currency code. The currencies supported depend on the payment methods that are enabled on your account.
         /// </summary>
@@ -15,8 +13,7 @@ namespace Mollie.Api.Models
         /// </summary>
         public string Value { get; set; }
 
-        public Amount(string currency, string value)
-        {
+        public Amount(string currency, string value) {
             this.Currency = currency;
             this.Value = value;
         }
@@ -26,8 +23,7 @@ namespace Mollie.Api.Models
         /// </summary>
         /// <param name="currency"></param>
         /// <param name="value"></param>
-        public Amount(string currency, decimal value)
-        {
+        public Amount(string currency, decimal value) {
             this.Currency = currency;
             this.Value = value.ToString("0.00", CultureInfo.InvariantCulture);
         }
@@ -41,8 +37,7 @@ namespace Mollie.Api.Models
         public static implicit operator decimal(Amount amount)
             => Decimal.TryParse(amount.Value, NumberStyles.Number, CultureInfo.InvariantCulture, out var a) ? a : throw new InvalidCastException($"Cannot convert {amount.Value} to decimal");
 
-        public override string ToString()
-        {
+        public override string ToString() {
             return $"{this.Value} {this.Currency}";
         }
     }
