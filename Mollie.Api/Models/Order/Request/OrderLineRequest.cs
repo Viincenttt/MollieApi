@@ -1,4 +1,7 @@
-﻿namespace Mollie.Api.Models.Order {
+﻿using Mollie.Api.JsonConverters;
+using Newtonsoft.Json;
+
+namespace Mollie.Api.Models.Order {
     public class OrderLineRequest {
         /// <summary>
         /// The type of product bought, for example, a physical or a digital product. Must be one of the following values:
@@ -60,5 +63,11 @@
         /// A link pointing to the product page in your web shop of the product sold.
         /// </summary>
         public string ProductUrl { get; set; }
+
+        /// <summary>
+        /// The optional metadata you provided upon line creation.
+        /// </summary>
+        [JsonConverter(typeof(RawJsonConverter))]
+        public string Metadata { get; set; }
     }
 }
