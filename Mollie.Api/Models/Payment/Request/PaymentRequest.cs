@@ -83,11 +83,17 @@ namespace Mollie.Api.Models.Payment.Request {
 		/// </summary>
 		public bool? Testmode { get; set; }
 
-		/// <summary>
-		///	Oauth only - Optional – Adding an Application Fee allows you to charge the merchant a small sum for the payment and transfer 
-		/// this to your own account.
+        /// <summary>
+		///	Optional – Set this to true to request a QR Code (if possible).
 		/// </summary>
-		public PaymentRequestApplicationFee ApplicationFee { get; set; }
+        [JsonIgnore]
+        public bool? IncludeQrCode { get; set; }
+
+        /// <summary>
+        ///	Oauth only - Optional – Adding an Application Fee allows you to charge the merchant a small sum for the payment and transfer
+        /// this to your own account.
+        /// </summary>
+        public PaymentRequestApplicationFee ApplicationFee { get; set; }
 
         public void SetMetadata(object metadataObj, JsonSerializerSettings jsonSerializerSettings = null) {
             this.Metadata = JsonConvert.SerializeObject(metadataObj, jsonSerializerSettings);

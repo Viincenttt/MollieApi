@@ -19,7 +19,9 @@ namespace Mollie.Api.Client {
                 this.ValidateApiKeyIsOauthAccesstoken();
             }
 
-            return await this.PostAsync<PaymentResponse>("payments", paymentRequest).ConfigureAwait(false);
+            var qrCodeParameter = paymentRequest.IncludeQrCode == true ? "?include=details.qrCode" : string.Empty;
+
+            return await this.PostAsync<PaymentResponse>($"payments{qrCodeParameter}", paymentRequest).ConfigureAwait(false);
         }
 
 	    public async Task<PaymentResponse> GetPaymentAsync(string paymentId, bool testmode = false) {

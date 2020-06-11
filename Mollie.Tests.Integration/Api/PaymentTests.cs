@@ -353,7 +353,70 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(paymentResponse.RedirectUrl, result.RedirectUrl);
         }
 
-        private async Task<MandateResponse> GetFirstValidMandate() {
+        [Test]
+        [RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        public async Task CanCreateBancontantPaymentWithQrCode()
+        {
+            // When: we create a payment request with only the required parameters
+            PaymentRequest paymentRequest = new PaymentRequest()
+            {
+                Amount = new Amount(Currency.EUR, "100.00"),
+                Description = "Description",
+                RedirectUrl = this.DefaultRedirectUrl,
+                Method = PaymentMethod.Bancontact,
+                IncludeQrCode = true
+            };
+
+            // When: We send the payment request to Mollie
+            PaymentResponse result = await this._paymentClient.CreatePaymentAsync(paymentRequest);
+
+            // Then: Make sure we get a valid response
+            Assert.IsNotNull(result);
+
+            // Try to cast to a BancontactPaymentResponse
+            BancontactPaymentResponse bancontactResponse = result as BancontactPaymentResponse;
+
+            // Check if result is a BancontactPaymentResponse
+            Assert.IsNotNull(bancontactResponse);
+
+            // Check if bancontactResponse contains a QR Code
+            Assert.IsNotNull(bancontactResponse.Details?.QrCode);
+
+        }
+
+        [Test]
+        [RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        public async Task CanCreateKbcPaymentWithoutQrCode()
+        {
+            // When: we create a payment request with only the required parameters
+            PaymentRequest paymentRequest = new PaymentRequest()
+            {
+                Amount = new Amount(Currency.EUR, "100.00"),
+                Description = "Description",
+                RedirectUrl = this.DefaultRedirectUrl,
+                Method = PaymentMethod.Kbc,
+                IncludeQrCode = true
+            };
+
+            // When: We send the payment request to Mollie
+            PaymentResponse result = await this._paymentClient.CreatePaymentAsync(paymentRequest);
+
+            // Then: Make sure we get a valid response
+            Assert.IsNotNull(result);
+
+            // Try to cast to a KbcPaymentResponse
+            KbcPaymentResponse kbcResponse = result as KbcPaymentResponse;
+
+            // Check if result is a KbcPaymentResponse
+            Assert.IsNotNull(kbcResponse);
+
+            // Make sure that kbcResponse doesn't have details
+            Assert.IsNull(kbcResponse.Details);
+
+        }
+
+        private async Task<MandateResponse> GetFirstValidMandate()
+        {
             ListResponse<CustomerResponse> customers = await this._customerClient.GetCustomerListAsync();
             if (!customers.Items.Any()) {
                 Assert.Inconclusive("No customers found. Unable to test recurring payment tests");
