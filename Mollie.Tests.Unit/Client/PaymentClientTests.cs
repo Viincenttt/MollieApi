@@ -38,9 +38,7 @@ namespace Mollie.Tests.Unit.Client {
              PaymentResponse paymentResponse = await paymentClient.CreatePaymentAsync(paymentRequest);
 
             // Then
-            Assert.AreEqual(paymentRequest.Amount.Value, paymentResponse.Amount.Value);
-            Assert.AreEqual(paymentRequest.Amount.Currency, paymentResponse.Amount.Currency);
-            Assert.AreEqual(paymentRequest.Description, paymentResponse.Description);
+            this.AssertPaymentIsEqual(paymentRequest, paymentResponse);
         }
         
         [Test]
@@ -53,7 +51,7 @@ namespace Mollie.Tests.Unit.Client {
                 Method = PaymentMethod.Ideal
             };
             const string expectedPaymentMethodJson = "\"method\":[\"ideal\"";
-            const string expectedJsonResponse = @"{
+            const string jsonResponse = @"{
                 ""amount"":{
                     ""currency"":""EUR"",
                     ""value"":""100.00""
@@ -61,10 +59,7 @@ namespace Mollie.Tests.Unit.Client {
                 ""description"":""Description"",
                 ""method"":""ideal"",
                 ""redirectUrl"":""http://www.mollie.com""}";
-            var mockHttp = new MockHttpMessageHandler();
-            mockHttp.Expect(HttpMethod.Post, $"{BaseMollieClient.ApiEndPoint}payments")
-                .WithPartialContent(expectedPaymentMethodJson)
-                .Respond("application/json", expectedJsonResponse);
+            var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Post, $"{BaseMollieClient.ApiEndPoint}payments", expectedPaymentMethodJson, jsonResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
             PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
 
@@ -73,15 +68,13 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then            
             mockHttp.VerifyNoOutstandingExpectation();
-            Assert.AreEqual(paymentRequest.Amount.Value, paymentResponse.Amount.Value);
-            Assert.AreEqual(paymentRequest.Amount.Currency, paymentResponse.Amount.Currency);
-            Assert.AreEqual(paymentRequest.Description, paymentResponse.Description);
+            this.AssertPaymentIsEqual(paymentRequest, paymentResponse);
             Assert.AreEqual(paymentRequest.Method, paymentResponse.Method);            
         }
 
         [Test]
         public async Task CreatePaymentAsync_PaymentWithMultiplePaymentMethods_RequestIsSerializedInExpectedFormat() {
-            // Given: We create a payment request with a single payment method
+            // Given: We create a payment request with multiple payment methods
             PaymentRequest paymentRequest = new PaymentRequest() {
                 Amount = new Amount(Currency.EUR, "100.00"),
                 Description = "Description",
@@ -101,22 +94,32 @@ namespace Mollie.Tests.Unit.Client {
                 ""description"":""Description"",
                 ""method"": null,
                 ""redirectUrl"":""http://www.mollie.com""}";
-            var mockHttp = new MockHttpMessageHandler();
-            mockHttp.Expect(HttpMethod.Post, $"{BaseMollieClient.ApiEndPoint}payments")
-                .WithPartialContent(expectedPaymentMethodJson)
-                .Respond("application/json", expectedJsonResponse);
+            var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Post, $"{BaseMollieClient.ApiEndPoint}payments", expectedPaymentMethodJson, expectedJsonResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
             PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
 
             // When: We send the request
             PaymentResponse paymentResponse = await paymentClient.CreatePaymentAsync(paymentRequest);
 
-            // Then            
+            // Then
             mockHttp.VerifyNoOutstandingExpectation();
+            this.AssertPaymentIsEqual(paymentRequest, paymentResponse);
+            Assert.IsNull(paymentResponse.Method);
+        }
+
+        private void AssertPaymentIsEqual(PaymentRequest paymentRequest, PaymentResponse paymentResponse) {
             Assert.AreEqual(paymentRequest.Amount.Value, paymentResponse.Amount.Value);
             Assert.AreEqual(paymentRequest.Amount.Currency, paymentResponse.Amount.Currency);
             Assert.AreEqual(paymentRequest.Description, paymentResponse.Description);
-            Assert.IsNull(paymentResponse.Method);
+        }
+
+        private MockHttpMessageHandler CreateMockHttpMessageHandler(HttpMethod httpMethod, string url, string expectedPartialContent, string response) {
+            MockHttpMessageHandler mockHttp = new MockHttpMessageHandler();
+            mockHttp.Expect(httpMethod, url)
+                .WithPartialContent(expectedPartialContent)
+                .Respond("application/json", response);
+
+            return mockHttp;
         }
     }
 }
