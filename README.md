@@ -71,6 +71,7 @@ In the past, this library used enums that were decorated with the EnumMemberAttr
 - Mollie.Api.Models.Payment.Response.CreditCardFailureReason
 - Mollie.Api.Models.Payment.Response.CreditCardLabel
 - Mollie.Api.Models.Payment.Response.CreditCardFeeRegion
+- Mollie.Api.Models.Payment.Response.PayPalSellerProtection
 - Mollie.Api.Models.Mandate.InvoiceStatus
 - Mollie.Api.Models.Mandate.MandateStatus
 - Mollie.Api.Models.Order.OrderLineDetailsType
