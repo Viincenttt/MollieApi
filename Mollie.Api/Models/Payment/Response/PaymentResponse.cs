@@ -159,7 +159,7 @@ namespace Mollie.Api.Models.Payment.Response {
         /// to automatic recurring charges taking place on their account in the future. Set to recurring for payments where the customer’s card
         /// is charged automatically.
         /// </summary>
-        public SequenceType? SequenceType { get; set; }
+        public string SequenceType { get; set; }
 
 
         /// <summary>

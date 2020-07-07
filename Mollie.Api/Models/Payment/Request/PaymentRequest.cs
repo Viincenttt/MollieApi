@@ -60,7 +60,7 @@ namespace Mollie.Api.Models.Payment.Request {
         /// payment(see also: Recurring).
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
-        public SequenceType? SequenceType { get; set; }
+        public string SequenceType { get; set; }
 
         /// <summary>
         /// The ID of the Customer for whom the payment is being created. This is used for recurring payments and single click payments.
