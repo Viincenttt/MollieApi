@@ -12,6 +12,7 @@ using Mollie.Tests.Integration.Framework;
 using NUnit.Framework;
 
 namespace Mollie.Tests.Integration.Api {
+    using System.Collections.Generic;
     using System.Linq;
     using Mollie.Api.Models.Customer;
     using Mollie.Api.Models.Mandate;
@@ -107,6 +108,31 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(paymentRequest.Locale, result.Locale);
             Assert.AreEqual(paymentRequest.WebhookUrl, result.WebhookUrl);
             Assert.IsTrue(this.IsJsonResultEqual(paymentRequest.Metadata, result.Metadata));
+        }
+
+        [Test]
+        public async Task CanCreateDefaultPaymentWithMultiplePaymentMethods() {
+            // If: we create a payment request and specify multiple payment methods
+            PaymentRequest paymentRequest = new PaymentRequest() {
+                Amount = new Amount(Currency.EUR, "100.00"),
+                Description = "Description",
+                RedirectUrl = this.DefaultRedirectUrl,
+                Methods = new List<string>() {
+                    PaymentMethod.Ideal,
+                    PaymentMethod.CreditCard,
+                    PaymentMethod.DirectDebit
+                }
+            };
+
+            // When: We send the payment request to Mollie
+            PaymentResponse result = await this._paymentClient.CreatePaymentAsync(paymentRequest);
+
+            // Then: Make sure we get a valid response
+            Assert.IsNotNull(result);
+            Assert.AreEqual(paymentRequest.Amount.Currency, result.Amount.Currency);
+            Assert.AreEqual(paymentRequest.Amount.Value, result.Amount.Value);
+            Assert.AreEqual(paymentRequest.Description, result.Description);
+            Assert.AreEqual(paymentRequest.RedirectUrl, result.RedirectUrl);
         }
 
         [TestCase(typeof(IdealPaymentRequest), PaymentMethod.Ideal, typeof(IdealPaymentResponse))]
