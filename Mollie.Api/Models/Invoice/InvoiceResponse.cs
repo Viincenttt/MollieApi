@@ -27,7 +27,7 @@ namespace Mollie.Api.Models.Invoice {
 		/// <summary>
 		/// Status of the invoices
 		/// </summary>
-		public InvoiceStatus Status { get; set; }
+		public string Status { get; set; }
 
 		/// <summary>
 		/// The invoice date (in YYYY-MM-DD format).
