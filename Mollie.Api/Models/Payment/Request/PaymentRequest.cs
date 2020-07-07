@@ -59,7 +59,6 @@ namespace Mollie.Api.Models.Payment.Request {
         /// If set to recurring, the customer’s card is charged automatically. Defaults to oneoff, which is a regular non-recurring 
         /// payment(see also: Recurring).
         /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
         public string SequenceType { get; set; }
 
         /// <summary>

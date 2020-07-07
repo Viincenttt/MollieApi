@@ -13,7 +13,6 @@ namespace Mollie.Api.Models.Subscription {
         /// Optional – The payment method used for this subscription, either forced on creation or null if any of the
         /// customer's valid mandates may be used.
         /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
         public string Method { get; set; }
     }
 }

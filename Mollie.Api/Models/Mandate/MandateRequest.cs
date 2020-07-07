@@ -11,7 +11,6 @@ namespace Mollie.Api.Models.Mandate {
         /// <summary>
         /// Payment method of the mandate.
         /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
         public string Method { get; set; }
 
         /// <summary>
