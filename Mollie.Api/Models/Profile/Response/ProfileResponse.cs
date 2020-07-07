@@ -43,7 +43,7 @@ namespace Mollie.Api.Models.Profile.Response {
         /// <summary>
         /// The industry associated with the profile's tradename or brand.
         /// </summary>
-        public CategoryCode CategoryCode { get; set; }
+        public int CategoryCode { get; set; }
 
         /// <summary>
         /// The profile status determines whether the payment profile is able to receive live payments.

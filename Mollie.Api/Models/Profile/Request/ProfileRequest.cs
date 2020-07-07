@@ -23,7 +23,7 @@
         /// <summary>
         /// The industry associated with the profile's tradename or brand.
         /// </summary>
-        public CategoryCode CategoryCode { get; set; }
+        public int CategoryCode { get; set; }
         
         /// <summary>
         /// Optional – Creating a test profile by setting this parameter to test, enables you to start using the API without
