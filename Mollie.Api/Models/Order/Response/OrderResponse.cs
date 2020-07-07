@@ -32,7 +32,7 @@ namespace Mollie.Api.Models.Order {
         /// The mode used to create this order.
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
-        public PaymentMode Mode { get; set; }
+        public Mode Mode { get; set; }
 
         /// <summary>
         /// The total amount of the order, including VAT and discounts.

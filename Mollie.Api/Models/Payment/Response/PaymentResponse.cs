@@ -20,7 +20,7 @@ namespace Mollie.Api.Models.Payment.Response {
         /// <summary>
         /// The mode used to create this payment. Mode determines whether a payment is real or a test payment.
         /// </summary>
-        public PaymentMode Mode { get; set; }
+        public Mode Mode { get; set; }
 
         /// <summary>
         /// The payment's date and time of creation, in ISO 8601 format.

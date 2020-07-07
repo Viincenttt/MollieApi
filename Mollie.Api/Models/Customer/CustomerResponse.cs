@@ -22,7 +22,7 @@ namespace Mollie.Api.Models.Customer {
         /// The mode used to create this payment. Mode determines whether a payment is real or a test payment.
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
-        public PaymentMode Mode { get; set; }
+        public Mode Mode { get; set; }
 
         /// <summary>
         /// Name of your customer.
