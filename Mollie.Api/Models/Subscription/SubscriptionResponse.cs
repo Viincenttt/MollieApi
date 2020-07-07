@@ -29,8 +29,7 @@ namespace Mollie.Api.Models.Subscription {
         /// <summary>
         /// The subscription's current status, depends on whether the customer has a pending, valid or invalid mandate.
         /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
-        public SubscriptionStatus Status { get; set; }
+        public string Status { get; set; }
         
         /// <summary>
         /// The constant amount that is charged with each subscription payment.
