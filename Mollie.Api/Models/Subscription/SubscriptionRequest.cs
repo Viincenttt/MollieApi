@@ -8,10 +8,11 @@ namespace Mollie.Api.Models.Subscription {
         /// Interval to wait between charges like 1 month(s) or 14 days.
         /// </summary>
         public string Interval { get; set; }
-        
+
         /// <summary>
         /// Optional – The payment method used for this subscription, either forced on creation or null if any of the
-        /// customer's valid mandates may be used.
+        /// customer's valid mandates may be used. See the Mollie.Api.Models.Payment.PaymentMethod class for a full
+        /// list of known values.
         /// </summary>
         public string Method { get; set; }
     }

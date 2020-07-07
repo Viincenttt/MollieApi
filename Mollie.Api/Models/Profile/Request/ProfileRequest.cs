@@ -21,7 +21,8 @@
         public string Phone { get; set; }
 
         /// <summary>
-        /// The industry associated with the profile's tradename or brand.
+        /// The industry associated with the profile's tradename or brand. See the Mollie.Api.Models.Profile.CategoryCode class 
+        /// for a full list of known values.
         /// </summary>
         public int CategoryCode { get; set; }
         

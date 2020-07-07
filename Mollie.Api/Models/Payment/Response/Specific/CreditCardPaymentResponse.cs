@@ -1,8 +1,4 @@
-﻿using System.Runtime.Serialization;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-
-namespace Mollie.Api.Models.Payment.Response {
+﻿namespace Mollie.Api.Models.Payment.Response {
     public class CreditCardPaymentResponse : PaymentResponse {
         /// <summary>
         /// An object with credit card details.
@@ -28,7 +24,8 @@ namespace Mollie.Api.Models.Payment.Response {
         public string CardFingerprint { get; set; }
 
         /// <summary>
-        /// Not always available. – The card's target audience.
+        /// Not always available. – The card's target audience. See the Mollie.Api.Models.Payment.Response.CreditCardAudience 
+        /// class for a full list of known values
         /// </summary>
         public string CardAudience { get; set; }
 
@@ -51,8 +48,8 @@ namespace Mollie.Api.Models.Payment.Response {
 
         /// <summary>
         /// Only available if the payment succeeded. – The fee region for the payment. See your credit card addendum for
-        /// details. intra-eu for consumer cards from the EU, and other for all other cards. Use the CreditCardFeeRegion
-        /// static class for a list of known credit card fee regions.
+        /// details. intra-eu for consumer cards from the EU, and other for all other cards. See the 
+        /// Mollie.Api.Models.Payment.Response.CreditCardFeeRegion class for a full list of known values
         /// </summary>
         public string FeeRegion { get; set; }
 

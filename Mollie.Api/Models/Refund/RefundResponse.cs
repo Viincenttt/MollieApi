@@ -35,7 +35,8 @@ namespace Mollie.Api.Models.Refund {
         public string Description { get; set; }
 
         /// <summary>
-        /// Since refunds may be delayed for certain payment methods, the refund carries a status field.
+        /// Since refunds may be delayed for certain payment methods, the refund carries a status field. See the 
+        /// Mollie.Api.Models.Refund.RefundStatus class for a full list of known values.
         /// </summary>
         public string Status { get; set; }
 

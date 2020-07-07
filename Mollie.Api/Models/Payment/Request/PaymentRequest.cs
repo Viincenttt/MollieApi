@@ -43,6 +43,7 @@ namespace Mollie.Api.Models.Payment.Request {
         /// Normally, a payment method selection screen is shown. However, when using this parameter, your customer will skip the 
         /// selection screen and will be sent directly to the chosen payment method. The parameter enables you to fully integrate 
         /// the payment method selection into your website, however note Mollie’s country based conversion optimization is lost.
+        /// See the Mollie.Api.Models.Payment.PaymentMethod class for a full list of known values.
         /// </summary>
         public string Method { get; set; }
 
@@ -57,7 +58,7 @@ namespace Mollie.Api.Models.Payment.Request {
         /// Indicate which type of payment this is in a recurring sequence. If set to first, a first payment is created for the 
         /// customer, allowing the customer to agree to automatic recurring charges taking place on their account in the future. 
         /// If set to recurring, the customer’s card is charged automatically. Defaults to oneoff, which is a regular non-recurring 
-        /// payment(see also: Recurring).
+        /// payment(see also: Recurring). See the Mollie.Api.Models.Payment.SequenceType class for a full list of known values.
         /// </summary>
         public string SequenceType { get; set; }
 

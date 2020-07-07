@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Mollie.Api.JsonConverters;
 using Mollie.Api.Models.Order.Response;
-using Mollie.Api.Models.Payment;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -24,7 +23,8 @@ namespace Mollie.Api.Models.Order {
         public string ProfileId { get; set; }
 
         /// <summary>
-        /// The payment method last used when paying for the order.
+        /// The payment method last used when paying for the order - See the 
+        /// Mollie.Api.Models.Payment.PaymentMethod class for a full list of known values.
         /// </summary>
         public string Method { get; set; }
 
@@ -50,7 +50,7 @@ namespace Mollie.Api.Models.Order {
         public Amount AmountRefunded { get; set; }
 
         /// <summary>
-        /// The status of the order. 
+        /// The status of the order - See the Mollie.Api.Models.Order.OrderStatus class for a full list of known values.
         /// </summary>
         public string Status { get; set; }
 

@@ -25,9 +25,10 @@ namespace Mollie.Api.Models.Subscription {
         ///  The subscription's date and time of creation, in ISO 8601 format.
         /// </summary>
         public DateTime CreatedAt { get; set; }
-        
+
         /// <summary>
         /// The subscription's current status, depends on whether the customer has a pending, valid or invalid mandate.
+        /// See the Mollie.Api.Models.Subscription.SubscriptionStatus class for a full list of known values.
         /// </summary>
         public string Status { get; set; }
         
@@ -65,7 +66,8 @@ namespace Mollie.Api.Models.Subscription {
 
         /// <summary>
         /// The payment method used for this subscription, either forced on creation by specifying the method parameter, or
-        /// null if any of the customer's valid mandates may be used.
+        /// null if any of the customer's valid mandates may be used. See the Mollie.Api.Models.Payment.PaymentMethod class
+        /// for a full list of known values.
         /// </summary>
         public string Method { get; set; }
 

@@ -10,7 +10,8 @@ namespace Mollie.Api.Models.Order {
         public string Id { get; set; }
 
         /// <summary>
-        /// Status of the order line
+        /// Status of the order line - See the Mollie.Api.Models.Order.OrderLineStatus class for 
+        /// a full list of known values.
         /// </summary>
         public string Status { get; set; }
 

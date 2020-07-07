@@ -29,7 +29,7 @@ namespace Mollie.Api.Models.Payment.Response {
 
         /// <summary>
         /// The payment's status. Please refer to the page about statuses for more info about which statuses occur at what
-        /// point.
+        /// point. See the Mollie.Api.Models.Payment.PaymentStatus class for a full list of known values.
         /// </summary>
         public string Status { get; set; }
 
@@ -111,8 +111,9 @@ namespace Mollie.Api.Models.Payment.Response {
         public string WebhookUrl { get; set; }
 
         /// <summary>
-        ///     The payment method used for this payment, either forced on creation by specifying the method parameter, or chosen
-        ///     by the consumer our payment method selection screen.
+        /// The payment method used for this payment, either forced on creation by specifying the method parameter, or chosen
+        /// by the consumer our payment method selection screen. See the Mollie.Api.Models.Payment.PaymentMethod class for a 
+        /// full list of known values.
         /// </summary>
         public string Method { get; set; }
 
@@ -157,7 +158,7 @@ namespace Mollie.Api.Models.Payment.Response {
         /// <summary>
         /// Indicates which type of payment this is in a recurring sequence. Set to first for first payments that allow the customer to agree 
         /// to automatic recurring charges taking place on their account in the future. Set to recurring for payments where the customer’s card
-        /// is charged automatically.
+        /// is charged automatically. See the Mollie.Api.Models.Payment.SequenceType class for a full list of known values.
         /// </summary>
         public string SequenceType { get; set; }
 

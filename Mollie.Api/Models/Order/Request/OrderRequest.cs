@@ -58,7 +58,8 @@ namespace Mollie.Api.Models.Order {
         /// <summary>
         /// Normally, a payment method selection screen is shown. However, when using this parameter, your customer
         /// will skip the selection screen and will be sent directly to the chosen payment method. The parameter enables
-        /// you to fully integrate the payment method selection into your website.
+        /// you to fully integrate the payment method selection into your website. See the 
+        /// Mollie.Api.Models.Payment.PaymentMethod class for a full list of known values.
         /// </summary>
         public string Method { get; set; }
 

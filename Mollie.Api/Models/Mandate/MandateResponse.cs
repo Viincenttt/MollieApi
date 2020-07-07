@@ -15,12 +15,13 @@ namespace Mollie.Api.Models.Mandate {
         public string Id { get; set; }
 
         /// <summary>
-        /// Current status of mandate.
+        /// Current status of mandate - See the Mollie.Api.Models.Mandate.MandateStatus class for a full 
+        /// list of known values.
         /// </summary>
         public string Status { get; set; }
 
         /// <summary>
-        /// Payment method of the mandate.
+        /// Payment method of the mandate - See the Mollie.Api.Models.Payment.PaymentMethod class for a full list of known values.
         /// </summary>
         public string Method { get; set; }
 

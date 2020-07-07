@@ -4,8 +4,8 @@ using Newtonsoft.Json;
 namespace Mollie.Api.Models.Order {
     public class OrderLineRequest {
         /// <summary>
-        /// The type of product bought, for example, a physical or a digital product. Must be one of the following values:
-        /// physical (default), discount, digital, shipping_fee, store_credit, gift_card, surcharge
+        /// The type of product bought, for example, a physical or a digital product. See the 
+        /// Mollie.Api.Models.Order.OrderLineDetailsType class for a full list of known values.
         /// </summary>
         public string Type { get; set; }
 
