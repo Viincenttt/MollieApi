@@ -3,7 +3,6 @@
         public const string Bancontact = "bancontact";
         public const string BankTransfer = "banktransfer";
         public const string Belfius = "belfius";
-        public const string Bitcoin = "bitcoin";
         public const string CreditCard = "creditcard";
         public const string DirectDebit = "directdebit";
         public const string Eps = "eps";

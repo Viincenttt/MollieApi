@@ -8,8 +8,6 @@ namespace Mollie.Api.Framework.Factories {
             switch (paymentMethod) {
                 case PaymentMethod.BankTransfer:
                     return new BankTransferPaymentResponse();
-                case PaymentMethod.Bitcoin:
-                    return new BitcoinPaymentResponse();
                 case PaymentMethod.CreditCard:
                     return new CreditCardPaymentResponse();
                 case PaymentMethod.Ideal:
