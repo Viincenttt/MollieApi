@@ -35,7 +35,7 @@ namespace Mollie.Api.Models.Settlement {
 		/// <summary>
 		/// The status of the settlement.
 		/// </summary>
-		public SettlementStatus Status { get; set; }
+		public string Status { get; set; }
 
 		/// <summary>
 		/// The total amount paid out with this settlement.
