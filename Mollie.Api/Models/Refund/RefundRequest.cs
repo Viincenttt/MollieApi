@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Mollie.Api.JsonConverters;
+using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Refund {
     public class RefundRequest {
@@ -17,6 +18,7 @@ namespace Mollie.Api.Models.Refund {
         /// Provide any data you like, for example a string or a JSON object. We will save the data alongside the refund. Whenever 
         /// you fetch the refund with our API, we’ll also include the metadata. You can use up to approximately 1kB.
         /// </summary>
+        [JsonConverter(typeof(RawJsonConverter))]
         public string Metadata { get; set; }
 
         /// <summary>

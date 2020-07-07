@@ -32,7 +32,7 @@ namespace Mollie.Tests.Integration.Api {
         [Test]
         [RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task ListPaymentsNeverReturnsMorePaymentsThenTheNumberOfRequestedPayments() {
-            // When: Number of payments requested is 5
+            // Given: Number of payments requested is 5
             int numberOfPayments = 5;
 
             // When: Retrieve 5 payments
