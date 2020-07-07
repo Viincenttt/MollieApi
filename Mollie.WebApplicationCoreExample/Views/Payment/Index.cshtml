@@ -19,6 +19,7 @@
                 <th scope="col">Amount</th>
                 <th scope="col">Status</th>
                 <th scope="col">Method</th>
+                <th scope="col">Metadata</th>
                 <th scope="col">Actions</th>
             </tr>
         </thead>
@@ -30,6 +31,19 @@
                     <td>@payment.Amount.ToString()</td>
                     <td>@payment.Status</td>
                     <td>@payment.Method</td>
+                    <td>
+                        @if (!String.IsNullOrEmpty(payment.Metadata)) {
+                            <button class="btn btn-outline-secondary" type="button" data-toggle="collapse" data-target="#metadata-payment-@payment.Id" aria-expanded="false" aria-controls="collapseExample">
+                                Show metadata
+                            </button>
+
+                            <div class="collapse" id="metadata-payment-@payment.Id">
+                                <div class="card card-body">
+                                    @payment.Metadata
+                                </div>
+                            </div>
+                        }
+                    </td>
                     <td>
                         @if (payment.Status == PaymentStatus.Open) {
                             <a href="@payment.Links.Checkout.Href" class="btn btn-outline-secondary" target="_blank">Pay</a>
