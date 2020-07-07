@@ -58,10 +58,10 @@ namespace Mollie.Api.Models.Payment.Response {
         public string FeeRegion { get; set; }
 
         /// <summary>
-        /// Only available for failed payments. Contains a failure reason code.
+        /// Only available for failed payments. Contains a failure reason code. See the 
+        /// Mollie.Api.Models.Payment.Response.CreditCardFailureReason class for a full list of known failure reasons
         /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
-        public CreditCardFailureReason? FailureReason { get; set; }
+        public string FailureReason { get; set; }
 
         /// <summary>
         /// A localized message that can be shown to your customer, depending on the failureReason
@@ -100,19 +100,19 @@ namespace Mollie.Api.Models.Payment.Response {
     /// <summary>
     /// Only available for failed payments. Contains a failure reason code.
     /// </summary>
-    public enum CreditCardFailureReason {
-        [EnumMember(Value = "invalid_card_number")] InvalidCardNumber,
-        [EnumMember(Value = "invalid_cvv")] InvalidCvv,
-        [EnumMember(Value = "invalid_card_holder_name")] InvalidCardHolderName,
-        [EnumMember(Value = "card_expired")] CardExpired,
-        [EnumMember(Value = "invalid_card_type")] InvalidCardType,
-        [EnumMember(Value = "refused_by_issuer")] RefusedByIssuer,
-        [EnumMember(Value = "insufficient_funds")] InsufficientFunds,
-        [EnumMember(Value = "inactive_card")] InactiveCard,
-        [EnumMember(Value = "unknown_reason")] UnknownReason,
-        [EnumMember(Value = "possible_fraud")] PossibleFraud,
-        [EnumMember(Value = "authentication_failed")] AuthenticationFailed
-	}
+    public static class CreditCardFailureReason {
+        public const string InvalidCardNumber = "invalid_card_number";
+        public const string InvalidCvv = "invalid_cvv";
+        public const string InvalidCardHolderName = "invalid_card_holder_name";
+        public const string CardExpired = "CardExpired";
+        public const string InvalidCardType = "invalid_card_type";
+        public const string RefusedByIssuer = "refused_by_issuer";
+        public const string InsufficientFunds = "insufficient_funds";
+        public const string InactiveCard = "inactive_card";
+        public const string UnknownReason = "unknown_reason";
+        public const string PossibleFraud = "possible_fraud";
+        public const string AuthenticationFailed = "authentication_failed";
+    }
 
     /// <summary>
     /// The card's label. Note that not all labels can be acquired through Mollie.
