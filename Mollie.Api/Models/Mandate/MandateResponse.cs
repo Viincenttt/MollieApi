@@ -17,8 +17,7 @@ namespace Mollie.Api.Models.Mandate {
         /// <summary>
         /// Current status of mandate.
         /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
-        public MandateStatus Status { get; set; }
+        public string Status { get; set; }
 
         /// <summary>
         /// Payment method of the mandate. Possible values: directdebit creditcard

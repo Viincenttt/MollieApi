@@ -1,9 +1,9 @@
 ﻿using System.Runtime.Serialization;
 
 namespace Mollie.Api.Models.Mandate {
-    public enum MandateStatus {
-        [EnumMember(Value = "valid")] Valid,
-        [EnumMember(Value = "invalid")] Invalid,
-        [EnumMember(Value = "pending")] Pending
+    public static class MandateStatus {
+        public const string Valid = "valid";
+        public const string Invalid = "invalid";
+        public const string Pending = "pending";
     }
 }
