@@ -25,7 +25,7 @@ namespace Mollie.Api.Client
             this.AddOauthParameters(parameters, profileId, testmode);
             this.BuildIncludeParameter(parameters, includeIssuers, includePricing);
 
-            return await this.GetAsync<PaymentMethodResponse>($"methods/{paymentMethod.ToString().ToLower()}{parameters.ToQueryString()}").ConfigureAwait(false);
+            return await this.GetAsync<PaymentMethodResponse>($"methods/{paymentMethod.ToLower()}{parameters.ToQueryString()}").ConfigureAwait(false);
         }
 
         public async Task<ListResponse<PaymentMethodResponse>> GetAllPaymentMethodListAsync(string locale = null, bool? includeIssuers = null, bool? includePricing = null) {
@@ -39,7 +39,7 @@ namespace Mollie.Api.Client
 
         public async Task<ListResponse<PaymentMethodResponse>> GetPaymentMethodListAsync(string sequenceType = null, string locale = null, Amount amount = null, bool? includeIssuers = null, bool? includePricing = null, string profileId = null, bool? testmode = null, Resource? resource = null) {
             Dictionary<string, string> parameters = new Dictionary<string, string>() {
-                {"sequenceType", sequenceType.ToString().ToLower()},
+                {"sequenceType", sequenceType?.ToLower()},
                 {"locale", locale},
                 {"amount[value]", amount?.Value},
                 {"amount[currency]", amount?.Currency},
