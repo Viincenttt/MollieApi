@@ -27,7 +27,7 @@ namespace Mollie.Tests.Integration.Api {
         [TestCase(PaymentMethod.Belfius)]
         [TestCase(PaymentMethod.PayPal)]
         [TestCase(PaymentMethod.Kbc)]
-        public async Task CanRetrieveSinglePaymentMethod(PaymentMethod method) {
+        public async Task CanRetrieveSinglePaymentMethod(string method) {
             // When: retrieving a payment method
             PaymentMethodResponse paymentMethod = await this._paymentMethodClient.GetPaymentMethodAsync(method);
 

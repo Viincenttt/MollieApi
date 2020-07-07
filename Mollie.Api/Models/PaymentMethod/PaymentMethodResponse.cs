@@ -13,7 +13,7 @@ namespace Mollie.Api.Models.PaymentMethod {
         /// <summary>
         /// The unique identifier of the payment method. When used during payment creation, the payment method selection screen will be skipped.
         /// </summary>
-        public Payment.PaymentMethod Id { get; set; }
+        public string Id { get; set; }
 
         /// <summary>
         /// The full name of the payment method.

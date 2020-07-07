@@ -118,7 +118,7 @@ namespace Mollie.Tests.Integration.Api {
         [TestCase(typeof(KbcPaymentRequest), PaymentMethod.Kbc, typeof(KbcPaymentResponse))]
         [TestCase(typeof(PaymentRequest), null, typeof(PaymentResponse))]
         //[TestCase(typeof(Przelewy24PaymentRequest), PaymentMethod.Przelewy24, typeof(PaymentResponse))] // Payment option is not enabled in website profile
-        public async Task CanCreateSpecificPaymentType(Type paymentType, PaymentMethod? paymentMethod, Type expectedResponseType) {
+        public async Task CanCreateSpecificPaymentType(Type paymentType, string paymentMethod, Type expectedResponseType) {
             // If: we create a specific payment type with some bank transfer specific values
             PaymentRequest paymentRequest = (PaymentRequest)Activator.CreateInstance(paymentType);
             paymentRequest.Amount = new Amount(Currency.EUR, "100.00");

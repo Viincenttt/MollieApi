@@ -17,7 +17,7 @@ namespace Mollie.Api.Client
         public PaymentMethodClient(string apiKey, HttpClient httpClient = null) : base(apiKey, httpClient) {
         }
 
-        public async Task<PaymentMethodResponse> GetPaymentMethodAsync(PaymentMethod paymentMethod, bool? includeIssuers = null, string locale = null, bool? includePricing = null, string profileId = null, bool? testmode = null, string currency = null) {
+        public async Task<PaymentMethodResponse> GetPaymentMethodAsync(string paymentMethod, bool? includeIssuers = null, string locale = null, bool? includePricing = null, string profileId = null, bool? testmode = null, string currency = null) {
             Dictionary<string, string> parameters = new Dictionary<string, string>();
 
             parameters.AddValueIfNotNullOrEmpty("locale", locale);

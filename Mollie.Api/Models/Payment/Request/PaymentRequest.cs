@@ -44,8 +44,7 @@ namespace Mollie.Api.Models.Payment.Request {
         /// selection screen and will be sent directly to the chosen payment method. The parameter enables you to fully integrate 
         /// the payment method selection into your website, however note Mollie’s country based conversion optimization is lost.
         /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
-        public PaymentMethod? Method { get; set; }
+        public string Method { get; set; }
 
         /// <summary>
         /// Provide any data you like, for example a string or a JSON object. We will save the data alongside the payment. Whenever 

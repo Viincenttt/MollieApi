@@ -14,6 +14,6 @@ namespace Mollie.Api.Models.Subscription {
         /// customer's valid mandates may be used.
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
-        public Payment.PaymentMethod? Method { get; set; }
+        public string Method { get; set; }
     }
 }

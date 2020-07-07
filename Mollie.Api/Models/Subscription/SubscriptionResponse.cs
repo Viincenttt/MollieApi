@@ -69,7 +69,7 @@ namespace Mollie.Api.Models.Subscription {
         /// null if any of the customer's valid mandates may be used.
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
-        public Payment.PaymentMethod? Method { get; set; }
+        public string Method { get; set; }
 
         /// <summary>
         /// The subscription's date of cancellation, in ISO 8601 format.

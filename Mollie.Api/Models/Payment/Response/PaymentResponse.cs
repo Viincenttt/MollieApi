@@ -113,11 +113,9 @@ namespace Mollie.Api.Models.Payment.Response {
 
         /// <summary>
         ///     The payment method used for this payment, either forced on creation by specifying the method parameter, or chosen
-        ///     by the consumer our
-        ///     payment method selection screen.
+        ///     by the consumer our payment method selection screen.
         /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
-        public PaymentMethod? Method { get; set; }
+        public string Method { get; set; }
 
         /// <summary>
         /// The optional metadata you provided upon payment creation. Metadata can be used to link an order to a payment.

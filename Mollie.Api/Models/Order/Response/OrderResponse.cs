@@ -26,8 +26,7 @@ namespace Mollie.Api.Models.Order {
         /// <summary>
         /// The payment method last used when paying for the order.
         /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
-        public Payment.PaymentMethod? Method { get; set; }
+        public string Method { get; set; }
 
         /// <summary>
         /// The mode used to create this order.

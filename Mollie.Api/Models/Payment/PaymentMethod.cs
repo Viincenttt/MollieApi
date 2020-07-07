@@ -1,30 +1,25 @@
-﻿using System.Runtime.Serialization;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-
-namespace Mollie.Api.Models.Payment {
-    [JsonConverter(typeof(StringEnumConverter))]
-    public enum PaymentMethod {
-        [EnumMember(Value = "bancontact")] Bancontact,
-        [EnumMember(Value = "banktransfer")] BankTransfer,
-        [EnumMember(Value = "belfius")] Belfius,
-        [EnumMember(Value = "bitcoin")] Bitcoin,
-        [EnumMember(Value = "creditcard")] CreditCard,
-        [EnumMember(Value = "directdebit")] DirectDebit,
-        [EnumMember(Value = "eps")] Eps,
-        [EnumMember(Value = "giftcard")] GiftCard,
-        [EnumMember(Value = "giropay")] Giropay,
-        [EnumMember(Value = "ideal")] Ideal,
-        [EnumMember(Value = "inghomepay")] IngHomePay,
-        [EnumMember(Value = "kbc")] Kbc,
-        [EnumMember(Value = "paypal")] PayPal,
-        [EnumMember(Value = "paysafecard")] PaySafeCard,
-        [EnumMember(Value = "sofort")] Sofort,
-        [EnumMember(Value = "refund")] Refund,
-        [EnumMember(Value = "klarnapaylater")] KlarnaPayLater,
-        [EnumMember(Value = "klarnasliceit")] KlarnaSliceIt,
-        [EnumMember(Value = "przelewy24")] Przelewy24,
-        [EnumMember(Value = "applepay")] ApplePay,
-        [EnumMember(Value = "mealvoucher")] MealVoucher
+﻿namespace Mollie.Api.Models.Payment {
+    public static class PaymentMethod {
+        public const string Bancontact = "bancontact";
+        public const string BankTransfer = "banktransfer";
+        public const string Belfius = "belfius";
+        public const string Bitcoin = "bitcoin";
+        public const string CreditCard = "creditcard";
+        public const string DirectDebit = "directdebit";
+        public const string Eps = "eps";
+        public const string GiftCard = "giftcard";
+        public const string Giropay = "giropay";
+        public const string Ideal = "ideal";
+        public const string IngHomePay = "inghomepay";
+        public const string Kbc = "kbc";
+        public const string PayPal = "paypal";
+        public const string PaySafeCard = "paysafecard";
+        public const string Sofort = "sofort";
+        public const string Refund = "refund";
+        public const string KlarnaPayLater = "klarnapaylater";
+        public const string KlarnaSliceIt = "klarnasliceit";
+        public const string Przelewy24 = "przelewy24";
+        public const string ApplePay = "applepay";
+        public const string MealVoucher = "mealvoucher";
     }
 }

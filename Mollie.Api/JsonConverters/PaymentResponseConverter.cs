@@ -13,16 +13,16 @@ namespace Mollie.Api.JsonConverters {
         }
 
         protected override PaymentResponse Create(Type objectType, JObject jObject) {
-            PaymentMethod? paymentMethod = this.GetPaymentMethod(jObject);
+            string paymentMethod = this.GetPaymentMethod(jObject);
 
             return this._paymentResponseFactory.Create(paymentMethod);
         }
 
-        private PaymentMethod? GetPaymentMethod(JObject jObject) {
+        private string GetPaymentMethod(JObject jObject) {
             if (this.FieldExists("method", jObject)) {
-                var paymentMethodValue = (string) jObject["method"];
+                string paymentMethodValue = (string) jObject["method"];
                 if (!string.IsNullOrEmpty(paymentMethodValue)) {
-                    return (PaymentMethod) Enum.Parse(typeof(PaymentMethod), paymentMethodValue, true);
+                    return paymentMethodValue;
                 }
             }
 

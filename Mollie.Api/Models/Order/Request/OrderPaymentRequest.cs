@@ -6,7 +6,7 @@
         /// the chosen payment method. The parameter enables you to fully integrate the payment method 
         /// selection into your website.
         /// </summary>
-        public Payment.PaymentMethod? Method { get; set; }
+        public string Method { get; set; }
 
         /// <summary>
         /// The ID of the Customer for whom the payment is being created. This is used for recurring payments

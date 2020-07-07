@@ -12,7 +12,7 @@ namespace Mollie.Api.Models.Mandate {
         /// Payment method of the mandate.
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
-        public Payment.PaymentMethod Method { get; set; }
+        public string Method { get; set; }
 
         /// <summary>
         /// Required - Name of consumer you add to the mandate

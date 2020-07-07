@@ -33,6 +33,6 @@
 		/// <summary>
 		/// The payment method ID, if applicable.
 		/// </summary>
-		public Payment.PaymentMethod? Method { get; set; }
+		public string Method { get; set; }
 	}
 }

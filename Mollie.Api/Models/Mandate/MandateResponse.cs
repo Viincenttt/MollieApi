@@ -20,9 +20,9 @@ namespace Mollie.Api.Models.Mandate {
         public string Status { get; set; }
 
         /// <summary>
-        /// Payment method of the mandate. Possible values: directdebit creditcard
+        /// Payment method of the mandate.
         /// </summary>
-        public Payment.PaymentMethod Method { get; set; }
+        public string Method { get; set; }
 
         /// <summary>
         /// Mandate details that are different per payment method. Available fields depend on that payment method.
