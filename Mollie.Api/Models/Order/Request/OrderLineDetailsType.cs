@@ -1,16 +1,11 @@
-﻿using System.Runtime.Serialization;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-
-namespace Mollie.Api.Models.Order {
-    [JsonConverter(typeof(StringEnumConverter))]
-    public enum OrderLineDetailsType {
-        [EnumMember(Value = "physical")] Physical,
-        [EnumMember(Value = "discount")] Discount,
-        [EnumMember(Value = "digital")] Digital,
-        [EnumMember(Value = "shipping_fee")] ShippingFee,
-        [EnumMember(Value = "store_credit")] StoreCredit,
-        [EnumMember(Value = "gift_card")] GiftCard,
-        [EnumMember(Value = "surcharge")] Surcharge,
+﻿namespace Mollie.Api.Models.Order {
+    public static class OrderLineDetailsType {
+        public const string Physical = "physical";
+        public const string Discount = "discount";
+        public const string Digital = "digital";
+        public const string ShippingFee = "shipping_fee";
+        public const string StoreCredit = "gift_card";
+        public const string GiftCard = "gift_card";
+        public const string Surcharge = "surcharge";
     }
 }

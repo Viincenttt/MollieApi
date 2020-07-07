@@ -7,7 +7,7 @@ namespace Mollie.Api.Models.Order {
         /// The type of product bought, for example, a physical or a digital product. Must be one of the following values:
         /// physical (default), discount, digital, shipping_fee, store_credit, gift_card, surcharge
         /// </summary>
-        public OrderLineDetailsType? Type { get; set; }
+        public string Type { get; set; }
 
         /// <summary>
         /// A description of the order line, for example LEGO 4440 Forest Police Station.
