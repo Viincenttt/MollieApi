@@ -48,7 +48,7 @@ namespace Mollie.Api.Models.Profile.Response {
         /// <summary>
         /// The profile status determines whether the payment profile is able to receive live payments.
         /// </summary>
-        public ProfileStatus Status { get; set; }
+        public string Status { get; set; }
 
         /// <summary>
         /// The presence of a review object indicates changes have been made that have not yet been approved by Mollie.
