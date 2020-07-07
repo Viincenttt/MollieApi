@@ -105,8 +105,8 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(paymentRequest.Description, result.Description);
             Assert.AreEqual(paymentRequest.RedirectUrl, result.RedirectUrl);
             Assert.AreEqual(paymentRequest.Locale, result.Locale);
-            Assert.AreEqual(paymentRequest.Metadata, result.Metadata);
             Assert.AreEqual(paymentRequest.WebhookUrl, result.WebhookUrl);
+            Assert.IsTrue(this.IsJsonResultEqual(paymentRequest.Metadata, result.Metadata));
         }
 
         [TestCase(typeof(IdealPaymentRequest), PaymentMethod.Ideal, typeof(IdealPaymentResponse))]
@@ -224,7 +224,7 @@ namespace Mollie.Tests.Integration.Api {
             PaymentResponse result = await this._paymentClient.CreatePaymentAsync(paymentRequest);
 
             // Then: Make sure we get the same json result as metadata
-            Assert.AreEqual(json, result.Metadata);
+            Assert.IsTrue(this.IsJsonResultEqual(json, result.Metadata));
         }
 
         [Test]

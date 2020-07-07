@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Threading;
 using Microsoft.Extensions.Configuration;
 using Mollie.Api.Client;
@@ -61,6 +62,10 @@ namespace Mollie.Tests.Integration.Framework {
             if (!apiKey.StartsWith("test")) {
                 throw new ArgumentException("You should not run these tests on your live key!");
             }
+        }
+
+        protected bool IsJsonResultEqual(string json1, string json2) {
+            return String.Compare(json1, json2, CultureInfo.CurrentCulture, CompareOptions.IgnoreCase | CompareOptions.IgnoreSymbols) == 0;
         }
     }
 }

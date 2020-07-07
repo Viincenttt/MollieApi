@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -117,7 +118,7 @@ namespace Mollie.Tests.Integration.Api {
             CustomerResponse retrievedCustomer = await this._customerClient.CreateCustomerAsync(customerRequest);
 
             // Then: Make sure it's retrieved
-            Assert.AreEqual(customerRequest.Metadata, retrievedCustomer.Metadata);
+            Assert.IsTrue(this.IsJsonResultEqual(customerRequest.Metadata, retrievedCustomer.Metadata));
         }
 
         [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]

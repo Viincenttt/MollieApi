@@ -127,7 +127,7 @@ namespace Mollie.Tests.Integration.Api {
             SubscriptionResponse result = await this._subscriptionClient.CreateSubscriptionAsync(customerId, subscriptionRequest);
 
             // Then: Make sure we get the same json result as metadata
-            Assert.AreEqual(json, result.Metadata);
+            Assert.IsTrue(this.IsJsonResultEqual(json, result.Metadata));
         }
 
         public async Task<string> GetFirstCustomerWithValidMandate() {
