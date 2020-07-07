@@ -60,12 +60,39 @@ These client API classes allow you to send and receive requests to the Mollie RE
 IPaymentClient paymentClient = new PaymentClient("{yourApiKey}");
 ```
 
-### List of constant strings
+### List of constant value strings
 In the past, this library used enums that were decorated with the EnumMemberAttribute for static values that were defined in the Mollie documentation. We are now moving away from this idea and using constant strings where possible. The reason for this is that enum values often broke when Mollie added new values to their API. This means that I had to release a new version every time when Mollie added a new value and all library consumers had to update their version. The following static classes are available with const string values that you can use to set and compare values in your code:
+- Mollie.Api.Models.Payment.PaymentMethod
+- Mollie.Api.Models.Payment.PaymentStatus
+- Mollie.Api.Models.Payment.SequenceType
+- Mollie.Api.Models.Payment.Request.KbcIssuer
+- Mollie.Api.Models.Payment.Response.CreditCardAudience
+- Mollie.Api.Models.Payment.Response.CreditCardSecurity
+- Mollie.Api.Models.Payment.Response.CreditCardFailureReason
+- Mollie.Api.Models.Payment.Response.CreditCardLabel
 - Mollie.Api.Models.Payment.Response.CreditCardFeeRegion
+- Mollie.Api.Models.Mandate.InvoiceStatus
+- Mollie.Api.Models.Mandate.MandateStatus
+- Mollie.Api.Models.Order.OrderLineDetailsType
+- Mollie.Api.Models.Order.OrderLineStatus
+- Mollie.Api.Models.Order.OrderStatus
+- Mollie.Api.Models.Profile.CategoryCode
+- Mollie.Api.Models.Profile.ProfileStatus
+- Mollie.Api.Models.Refund.RefundStatus
+- Mollie.Api.Models.Settlement.SettlementStatus
+- Mollie.Api.Models.Subscription.SubscriptionStatus
 - Mollie.Api.Models.Payment.Locale
 - Mollie.Api.Models.Currency
 
+You can use these classes similar to how you use enums. For example, when creating a new payment, you can 
+```c#
+PaymentRequest paymentRequest = new PaymentRequest() {
+    Amount = new Amount(Currency.EUR, "100.00"),
+    Description = "Test payment of the example project",
+    RedirectUrl = "http://google.com",
+	Method = Mollie.Api.Models.Payment.PaymentMethod.Ideal // instead of "Ideal"
+};
+```
 
 ## 3. Payment API
 ### Creating a payment
