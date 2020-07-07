@@ -31,8 +31,7 @@ namespace Mollie.Api.Models.Payment.Response {
         /// The payment's status. Please refer to the page about statuses for more info about which statuses occur at what
         /// point.
         /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
-        public PaymentStatus? Status { get; set; }
+        public string Status { get; set; }
 
         /// <summary>
         /// Whether or not the payment can be canceled.
