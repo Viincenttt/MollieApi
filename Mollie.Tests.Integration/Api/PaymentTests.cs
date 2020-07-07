@@ -106,12 +106,34 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(paymentRequest.Description, result.Description);
             Assert.AreEqual(paymentRequest.RedirectUrl, result.RedirectUrl);
             Assert.AreEqual(paymentRequest.Locale, result.Locale);
-            Assert.AreEqual(paymentRequest.WebhookUrl, result.WebhookUrl);
+            Assert.AreEqual(paymentRequest.WebhookUrl, result.WebhookUrl);            
             Assert.IsTrue(this.IsJsonResultEqual(paymentRequest.Metadata, result.Metadata));
         }
 
         [Test]
-        public async Task CanCreateDefaultPaymentWithMultiplePaymentMethods() {
+        public async Task CanCreatePaymentWithSinglePaymentMethod() {
+            // If: we create a payment request and specify multiple payment methods
+            PaymentRequest paymentRequest = new PaymentRequest() {
+                Amount = new Amount(Currency.EUR, "100.00"),
+                Description = "Description",
+                RedirectUrl = this.DefaultRedirectUrl,
+                Method = PaymentMethod.Ideal
+            };
+
+            // When: We send the payment request to Mollie
+            PaymentResponse result = await this._paymentClient.CreatePaymentAsync(paymentRequest);
+
+            // Then: Make sure we get a valid response
+            Assert.IsNotNull(result);
+            Assert.AreEqual(paymentRequest.Amount.Currency, result.Amount.Currency);
+            Assert.AreEqual(paymentRequest.Amount.Value, result.Amount.Value);
+            Assert.AreEqual(paymentRequest.Description, result.Description);
+            Assert.AreEqual(paymentRequest.RedirectUrl, result.RedirectUrl);
+            Assert.AreEqual(paymentRequest.Method, result.Method);
+        }
+
+        [Test]
+        public async Task CanCreatePaymentWithMultiplePaymentMethods() {
             // If: we create a payment request and specify multiple payment methods
             PaymentRequest paymentRequest = new PaymentRequest() {
                 Amount = new Amount(Currency.EUR, "100.00"),
@@ -133,6 +155,7 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(paymentRequest.Amount.Value, result.Amount.Value);
             Assert.AreEqual(paymentRequest.Description, result.Description);
             Assert.AreEqual(paymentRequest.RedirectUrl, result.RedirectUrl);
+            Assert.IsNull(result.Method);
         }
 
         [TestCase(typeof(IdealPaymentRequest), PaymentMethod.Ideal, typeof(IdealPaymentResponse))]
