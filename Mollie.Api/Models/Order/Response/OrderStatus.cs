@@ -1,16 +1,11 @@
-﻿using System.Runtime.Serialization;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-
-namespace Mollie.Api.Models.Order {
-    [JsonConverter(typeof(StringEnumConverter))]
-    public enum OrderStatus {
-        [EnumMember(Value = "created")] Created,
-        [EnumMember(Value = "paid")] Paid,
-        [EnumMember(Value = "authorized")] Authorized,
-        [EnumMember(Value = "canceled")] Canceled,
-        [EnumMember(Value = "shipping")] Shipping,
-        [EnumMember(Value = "completed")] Completed,
-        [EnumMember(Value = "expired")] Expired
+﻿namespace Mollie.Api.Models.Order {
+    public static class OrderStatus {
+        public const string Created = "created";
+        public const string Paid = "paid";
+        public const string Authorized = "authorized";
+        public const string Canceled = "canceled";
+        public const string Shipping = "shipping";
+        public const string Completed = "completed";
+        public const string Expired = "expired";
     }
 }

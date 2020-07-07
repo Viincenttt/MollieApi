@@ -53,7 +53,7 @@ namespace Mollie.Api.Models.Order {
         /// <summary>
         /// The status of the order. 
         /// </summary>
-        public OrderStatus Status { get; set; }
+        public string Status { get; set; }
 
         /// <summary>
         /// Whether or not the order can be (partially) canceled.
