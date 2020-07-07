@@ -37,7 +37,7 @@ namespace Mollie.Api.Models.Refund {
         /// <summary>
         /// Since refunds may be delayed for certain payment methods, the refund carries a status field.
         /// </summary>
-        public RefundStatus Status { get; set; }
+        public string Status { get; set; }
 
         /// <summary>
         /// An array of order line objects as described in Get order. Only available if the refund was created via the
