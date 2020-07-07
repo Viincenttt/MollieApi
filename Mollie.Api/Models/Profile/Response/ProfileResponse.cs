@@ -73,6 +73,6 @@ namespace Mollie.Api.Models.Profile.Response {
         /// <summary>
         /// The status of the requested profile changes.
         /// </summary>
-        public ReviewStatus Status { get; set; }
+        public string Status { get; set; }
     }
 }

@@ -1,13 +1,14 @@
 ﻿namespace Mollie.Api.Models.Profile {
-    public enum ReviewStatus {
+    public static class ReviewStatus {
         /// <summary>
-        ///     The changes are pending review. We will review your changes soon.
+        /// The changes are pending review. We will review your changes soon.
         /// </summary>
-        Pending,
+        public const string Pending = nameof(Pending);
 
         /// <summary>
-        ///     We've reviewed and rejected your changes.
+        /// We've reviewed and rejected your changes.
         /// </summary>
-        Rejected
+        public const string Rejected = nameof(Rejected);
     }
+        
 }
