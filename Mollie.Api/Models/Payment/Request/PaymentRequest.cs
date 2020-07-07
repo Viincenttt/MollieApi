@@ -1,9 +1,14 @@
 ﻿using Mollie.Api.JsonConverters;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Mollie.Api.Models.Payment.Request {
     public class PaymentRequest {
+        public PaymentRequest() {
+            this.Methods = new List<string>();
+        }
+
         /// <summary>
         /// The amount that you want to charge, e.g. {"currency":"EUR", "value":"100.00"} if you would want to charge €100.00.
         /// </summary>
@@ -29,7 +34,6 @@ namespace Mollie.Api.Models.Payment.Request {
         /// </summary>
         public string WebhookUrl { get; set; }
 
-
         /// <summary>
         /// Allows you to preset the language to be used in the payment screens shown to the consumer. Setting a locale is highly 
         /// recommended and will greatly improve your conversion rate. When this parameter is omitted, the browser language will 
@@ -45,7 +49,29 @@ namespace Mollie.Api.Models.Payment.Request {
         /// the payment method selection into your website, however note Mollie’s country based conversion optimization is lost.
         /// See the Mollie.Api.Models.Payment.PaymentMethod class for a full list of known values.
         /// </summary>
-        public string Method { get; set; }
+        [JsonIgnore]
+        public string Method { 
+            get {
+                return this.Methods.FirstOrDefault();
+            }
+            set {
+                this.Methods.Clear();
+                if (!string.IsNullOrEmpty(value)) {
+                    this.Methods.Add(value);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Normally, a payment method screen is shown. However, when using this parameter, you can choose a specific payment method
+        /// and your customer will skip the selection screen and is sent directly to the chosen payment method. The parameter 
+        /// enables you to fully integrate the payment method selection into your website.
+        /// You can also specify the methods in an array.By doing so we will still show the payment method selection screen but will 
+        /// only show the methods specified in the array. For example, you can use this functionality to only show payment methods 
+        /// from a specific country to your customer.
+        /// </summary>
+        [JsonProperty("method")]
+        public IList<string> Methods { get; set; }
 
         /// <summary>
         /// Provide any data you like, for example a string or a JSON object. We will save the data alongside the payment. Whenever 
