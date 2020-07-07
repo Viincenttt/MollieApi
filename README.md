@@ -133,7 +133,7 @@ BankTransferPaymentResponse response = (BankTransferPaymentResponse)await paymen
 ### Retrieving a payment by id
 ```c#
 IPaymentClient paymentClient = new PaymentClient("{yourApiKey}");
-PaymentResponse result = await paymentClient.GetPaymentAsync(paymentResponse.Id);
+PaymentResponse result = await paymentClient.GetPaymentAsync({paymentId});
 ```
 
 Keep in mind that some payment methods have specific payment detail values. For example: PayPal payments have reference and customer reference properties. In order to access these properties you have to cast the PaymentResponse to the PayPalPaymentResponse and access the Detail property. 
@@ -154,6 +154,17 @@ The full list of payment specific response classes is:
 - PaySafeCardPaymentResponse
 - SepaDirectDebitResponse
 - SofortPaymentResponse
+
+### Updating a payment
+Some properties of a payment can be updated after the payment has been created. 
+```c#
+IPaymentClient paymentClient = new PaymentClient("{yourApiKey}");
+PaymentUpdateRequest paymentUpdateRequest = new PaymentUpdateRequest() {
+	Description = "Updated description",
+	Metadata = "My metadata"
+};
+PaymentResponse updatedPayment = await this._paymentClient.UpdatePaymentAsync({paymentId}, paymentUpdateRequest);
+```
 
 ### Setting metadata
 Mollie allows you to send any metadata you like in JSON notation and will save the data alongside the payment. When you fetch the payment with the API, Mollie will include the metadata. The library allows you to set the metadata JSON string manually, by setting the Metadata property of the PaymentRequest class, but the recommended way of setting/getting the metadata is to use the SetMetadata/Getmetadata methods. 
