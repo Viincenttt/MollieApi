@@ -63,6 +63,11 @@
         /// A localized message that can be shown to your customer, depending on the failureReason
         /// </summary>
         public string FailureMessage { get; set; }
+
+        /// <summary>
+        /// The wallet used when creating the payment.
+        /// </summary>
+        public string Wallet { get; set; }
     }
 
     /// <summary>
