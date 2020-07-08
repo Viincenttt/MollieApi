@@ -94,6 +94,12 @@ namespace Mollie.Api.Models.Subscription {
         [JsonProperty("_links")]
         public SubscriptionResponseLinks Links { get; set; }
 
+        /// <summary>
+        /// Adding an application fee allows you to charge the merchant for each payment in the subscription and 
+        /// transfer these amounts to your own account.
+        /// </summary>
+        public ApplicationFee ApplicationFee { get; set; }
+
         public T GetMetadata<T>(JsonSerializerSettings jsonSerializerSettings = null) {
             return JsonConvert.DeserializeObject<T>(this.Metadata, jsonSerializerSettings);
         }
