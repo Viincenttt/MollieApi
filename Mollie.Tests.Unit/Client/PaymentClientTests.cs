@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Mollie.Tests.Unit.Client {
     [TestFixture]
-    public class PaymentClientTests {
+    public class PaymentClientTests : BaseClientTests {
         private const string defaultPaymentJsonResponse = @"{
             ""amount"":{
                 ""currency"":""EUR"",
@@ -193,18 +193,6 @@ namespace Mollie.Tests.Unit.Client {
             Assert.AreEqual(paymentRequest.Amount.Value, paymentResponse.Amount.Value);
             Assert.AreEqual(paymentRequest.Amount.Currency, paymentResponse.Amount.Currency);
             Assert.AreEqual(paymentRequest.Description, paymentResponse.Description);
-        }
-
-        private MockHttpMessageHandler CreateMockHttpMessageHandler(HttpMethod httpMethod, string url, string response, string expectedPartialContent = null) {
-            MockHttpMessageHandler mockHttp = new MockHttpMessageHandler();
-            MockedRequest mockedRequest = mockHttp.Expect(httpMethod, url)
-                .Respond("application/json", response);
-
-            if (!string.IsNullOrEmpty(expectedPartialContent)) {
-                mockedRequest.WithPartialContent(expectedPartialContent);
-            }                
-
-            return mockHttp;
         }
     }
 }
