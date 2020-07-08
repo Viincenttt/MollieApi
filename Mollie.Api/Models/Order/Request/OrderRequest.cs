@@ -87,6 +87,12 @@ namespace Mollie.Api.Models.Order {
         /// </summary>
         public bool? ShopperCountryMustMatchBillingCountry { get; set; }
 
+        /// <summary>
+        /// Adding an application fee allows you to charge the merchant for the payment and transfer this to your own account.
+        /// </summary>
+        [JsonProperty("payment.applicationFee")]
+        public ApplicationFee ApplicationFee { get; set; }
+
         public void SetMetadata(object metadataObj, JsonSerializerSettings jsonSerializerSettings = null) {
             this.Metadata = JsonConvert.SerializeObject(metadataObj, jsonSerializerSettings);
         }
