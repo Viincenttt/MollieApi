@@ -60,6 +60,24 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        public async Task CanRetrieveOrderAndIncludeEmbeddedData() {
+            // If: we create a new order
+            OrderRequest orderRequest = this.CreateOrderRequestWithOnlyRequiredFields();
+            OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
+
+            // When: We attempt to retrieve the order and add the include parameters
+            OrderResponse retrievedOrder = await this._orderClient.GetOrderAsync(createdOrder.Id, embedPayments: true, embedShipments: true, embedRefunds: true);
+
+            // Then: Make sure we get a valid response
+            Assert.IsNotNull(retrievedOrder);
+            Assert.AreEqual(createdOrder.Id, retrievedOrder.Id);
+            Assert.IsNotNull(retrievedOrder.Embedded);
+            Assert.IsNotNull(retrievedOrder.Embedded.Payments);
+            Assert.IsNotNull(retrievedOrder.Embedded.Shipments);
+            Assert.IsNotNull(retrievedOrder.Embedded.Refunds);
+        }
+
+        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanUpdateExistingOrder() {
             // If: we create a new order
             OrderRequest orderRequest = this.CreateOrderRequestWithOnlyRequiredFields();
