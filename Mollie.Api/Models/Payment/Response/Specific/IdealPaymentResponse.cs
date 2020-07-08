@@ -21,5 +21,10 @@
         /// Only available if the payment has been completed – The consumer's bank's BIC.
         /// </summary>
         public string ConsumerBic { get; set; }
+
+        /// <summary>
+        /// Include a QR code object. Only available for iDEAL, Bancontact and bank transfer payments.
+        /// </summary>
+        public QrCode QrCode { get; set; }
     }
 }
