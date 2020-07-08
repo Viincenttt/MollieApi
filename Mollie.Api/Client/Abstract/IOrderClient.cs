@@ -8,7 +8,7 @@ using Mollie.Api.Models.Url;
 namespace Mollie.Api.Client.Abstract {
     public interface IOrderClient {
         Task<OrderResponse> CreateOrderAsync(OrderRequest orderRequest);
-        Task<OrderResponse> GetOrderAsync(string orderId, bool testmode = false, bool embedPayments = false, bool embedRefunds = false, bool embedShipments = false);
+        Task<OrderResponse> GetOrderAsync(string orderId, bool embedPayments = false, bool embedRefunds = false, bool embedShipments = false);
         Task<OrderResponse> UpdateOrderAsync(string orderId, OrderUpdateRequest orderUpdateRequest);
         Task<OrderResponse> UpdateOrderLinesAsync(string orderId, string orderLineId, OrderLineUpdateRequest orderLineUpdateRequest);
         Task CancelOrderAsync(string orderId);
