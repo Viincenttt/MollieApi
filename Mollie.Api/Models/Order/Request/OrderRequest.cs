@@ -75,6 +75,18 @@ namespace Mollie.Api.Models.Order {
         [JsonConverter(typeof(RawJsonConverter))]
         public string Metadata { get; set; }
 
+        /// <summary>
+        /// The date the order should expire in YYYY-MM-DD format. The minimum date is tomorrow and the maximum date is 100 days 
+        /// after tomorrow.
+        /// </summary>
+        public string ExpiresAt { get; set; }
+
+        /// <summary>
+        /// For digital goods, you must make sure to apply the VAT rate from your customer’s country in most jurisdictions. Use 
+        /// this parameter to restrict the payment methods available to your customer to methods from the billing country only.
+        /// </summary>
+        public bool? ShopperCountryMustMatchBillingCountry { get; set; }
+
         public void SetMetadata(object metadataObj, JsonSerializerSettings jsonSerializerSettings = null) {
             this.Metadata = JsonConvert.SerializeObject(metadataObj, jsonSerializerSettings);
         }
