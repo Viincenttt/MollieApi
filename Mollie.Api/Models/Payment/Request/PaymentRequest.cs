@@ -6,7 +6,6 @@ using System.Linq;
 namespace Mollie.Api.Models.Payment.Request {
     public class PaymentRequest {
         public PaymentRequest() {
-            this.Methods = new List<string>();
         }
 
         /// <summary>
@@ -55,8 +54,11 @@ namespace Mollie.Api.Models.Payment.Request {
                 return this.Methods.FirstOrDefault();
             }
             set {
-                this.Methods.Clear();
-                if (!string.IsNullOrEmpty(value)) {
+                if (value == null) {
+                    this.Methods = null;
+                }
+                else {
+                    this.Methods = new List<string>();
                     this.Methods.Add(value);
                 }
             }
