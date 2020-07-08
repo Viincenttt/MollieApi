@@ -22,14 +22,13 @@ namespace Mollie.Api.Client {
             return await this.PostAsync<PaymentResponse>("payments", paymentRequest).ConfigureAwait(false);
         }
 
-	    public async Task<PaymentResponse> GetPaymentAsync(string paymentId, bool testmode = false) {
+	    public async Task<PaymentResponse> GetPaymentAsync(string paymentId, bool testmode = false, bool includeQrCode = false, bool includeRemainderDetails = false) {
 	        if (testmode) {
 	            this.ValidateApiKeyIsOauthAccesstoken();
             }
 
-		    var testmodeParameter = testmode ? "?testmode=true" : string.Empty;
-
-			return await this.GetAsync<PaymentResponse>($"payments/{paymentId}{testmodeParameter}").ConfigureAwait(false);
+            var queryParameters = this.BuildQueryParameters(testmode, includeQrCode, includeRemainderDetails);
+			return await this.GetAsync<PaymentResponse>($"payments/{paymentId}{queryParameters.ToQueryString()}").ConfigureAwait(false);
 		}
 
 		public async Task DeletePaymentAsync(string paymentId) {
@@ -58,6 +57,20 @@ namespace Mollie.Api.Client {
 
         public async Task<PaymentResponse> UpdatePaymentAsync(string paymentId, PaymentUpdateRequest paymentUpdateRequest) {
             return await this.PatchAsync<PaymentResponse>($"payments/{paymentId}", paymentUpdateRequest).ConfigureAwait(false);
+        }
+
+        private Dictionary<string, string> BuildQueryParameters(bool testmode = false, bool includeQrCode = false, bool includeRemainderDetails = false) {
+            var result = new Dictionary<string, string>();
+            result.AddValueIfTrue(nameof(testmode), testmode);
+            result.AddValueIfNotNullOrEmpty("include", this.BuildIncludeParameter(includeQrCode, includeRemainderDetails));
+            return result;
+        }
+
+        private string BuildIncludeParameter(bool includeQrCode = false, bool includeRemainderDetails = false) {
+            var includeList = new List<string>();
+            includeList.AddValueIfTrue("details.qrCode", includeQrCode);
+            includeList.AddValueIfTrue("details.remainderDetails", includeRemainderDetails);
+            return includeList.ToIncludeParameter();
         }
     }
 }
