@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Mollie.Api.Client;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Customer;
 using Mollie.Api.Models.List;
-
 using Mollie.Api.Models.Mandate;
-using Mollie.Api.Models.Payment.Request;
-using Mollie.Api.Models.Payment.Response;
 using Mollie.Api.Models.Subscription;
 using Mollie.Tests.Integration.Framework;
 using NUnit.Framework;
@@ -23,6 +19,18 @@ namespace Mollie.Tests.Integration.Api {
 
             // When: Retrieve subscription list with default settings
             ListResponse<SubscriptionResponse> response = await this._subscriptionClient.GetSubscriptionListAsync(customerId);
+
+            // Then
+            Assert.IsNotNull(response);
+            Assert.IsNotNull(response.Items);
+        }
+
+        [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        public async Task CanRetrieveAllSubscriptionList() {
+            // Given
+
+            // When: Retrieve subscription list with default settings
+            ListResponse<SubscriptionResponse> response = await this._subscriptionClient.GetAllSubscriptionList();
 
             // Then
             Assert.IsNotNull(response);

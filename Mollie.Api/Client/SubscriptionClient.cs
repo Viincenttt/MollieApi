@@ -15,6 +15,10 @@ namespace Mollie.Api.Client {
             return await this.GetListAsync<ListResponse<SubscriptionResponse>>($"customers/{customerId}/subscriptions", from, limit).ConfigureAwait(false);
         }
 
+        public async Task<ListResponse<SubscriptionResponse>> GetAllSubscriptionList(string from = null, int? limit = null) {
+            return await this.GetListAsync<ListResponse<SubscriptionResponse>>($"subscriptions", from, limit).ConfigureAwait(false);
+        }
+
         public async Task<ListResponse<SubscriptionResponse>> GetSubscriptionListAsync(UrlObjectLink<ListResponse<SubscriptionResponse>> url) {
             return await this.GetAsync(url).ConfigureAwait(false);
         }
