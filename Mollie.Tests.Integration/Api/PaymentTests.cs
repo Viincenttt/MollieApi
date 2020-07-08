@@ -158,6 +158,29 @@ namespace Mollie.Tests.Integration.Api {
 
         [Test]
         [RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        public async Task CanCreatePaymentAndRetrieveQrCode() {
+            // Given: We create a payment with a payment method that supports QR codes
+            PaymentRequest paymentRequest = new PaymentRequest() {
+                Amount = new Amount(Currency.EUR, "100.00"),
+                Description = "Description",
+                RedirectUrl = this.DefaultRedirectUrl,
+                Method = PaymentMethod.Ideal
+            };
+
+            // When: We send the request to Mollie
+            PaymentResponse result = await this._paymentClient.CreatePaymentAsync(paymentRequest, includeQrCode: true);
+
+            // Then
+            IdealPaymentResponse idealPaymentResult = result as IdealPaymentResponse;
+            Assert.IsNotNull(idealPaymentResult);
+            IdealPaymentResponseDetails idealPaymentDetails = idealPaymentResult.Details;
+            Assert.IsNotNull(idealPaymentDetails);
+            Assert.IsNotNull(idealPaymentDetails.QrCode);
+            Assert.IsNotNull(idealPaymentDetails.QrCode.Src);
+        }
+
+        [Test]
+        [RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanCreatePaymentWithMultiplePaymentMethods() {
             // When: we create a payment request and specify multiple payment methods
             PaymentRequest paymentRequest = new PaymentRequest() {
