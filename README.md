@@ -130,6 +130,21 @@ paymentRequest.BillingEmail = "{billingEmail}";
 BankTransferPaymentResponse response = (BankTransferPaymentResponse)await paymentClient.CreatePaymentAsync(paymentRequest);
 ```
 
+Some payment methods also support QR codes. In order to retrieve a QR code, you have to set the `includeQrCode` parameter to `true` when sending the payment request. For example:
+```c#
+PaymentRequest paymentRequest = new PaymentRequest() {
+	Amount = new Amount(Currency.EUR, "100.00"),
+	Description = "Description",
+	RedirectUrl = "http://www.mollie.com",
+	Method = PaymentMethod.Ideal
+};
+IPaymentClient paymentClient = new PaymentClient("{yourApiKey}");
+PaymentResponse result = await this._paymentClient.CreatePaymentAsync(paymentRequest, includeQrCode: true);
+IdealPaymentResponse idealPaymentResult = result as IdealPaymentResponse;
+IdealPaymentResponseDetails idealPaymentDetails = idealPaymentResult.Details;
+string qrCode = idealPaymentDetails.QrCode.Src;
+```
+
 ### Retrieving a payment by id
 ```c#
 IPaymentClient paymentClient = new PaymentClient("{yourApiKey}");
