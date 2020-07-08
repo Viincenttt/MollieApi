@@ -19,8 +19,8 @@ namespace Mollie.Api.Client {
             return await this.PostAsync<OrderResponse>("orders", orderRequest).ConfigureAwait(false);
         }
 
-        public async Task<OrderResponse> GetOrderAsync(string orderId, bool embedPayments = false, bool embedRefunds = false) {
-            var embeds = this.BuildEmbedParameter(embedPayments, embedRefunds);
+        public async Task<OrderResponse> GetOrderAsync(string orderId, bool testmode = false, bool embedPayments = false, bool embedRefunds = false, bool embedShipments = false) {
+            var embeds = this.BuildQueryParameters(testmode, embedPayments, embedRefunds, embedShipments);
             return await this.GetAsync<OrderResponse>($"orders/{orderId}{embeds.ToQueryString()}").ConfigureAwait(false);
         }
 
@@ -60,23 +60,19 @@ namespace Mollie.Api.Client {
             return await this.GetListAsync<ListResponse<RefundResponse>>($"orders/{orderId}/refunds", from, limit).ConfigureAwait(false);
         }
 
-        private Dictionary<string, string> BuildEmbedParameter(bool embedPayments = false, bool embedRefunds = false) {
+        private Dictionary<string, string> BuildQueryParameters(bool testmode = false, bool embedPayments = false, bool embedRefunds = false, bool embedShipments = false) {
             var result = new Dictionary<string, string>();
-
-            var embedList = new List<string>();
-            if (embedPayments) {
-                embedList.Add("payments");
-            }
-
-            if (embedRefunds) {
-                embedList.Add("refunds");
-            }
-
-            if (embedList.Any()) {
-                result.Add("embed", string.Join(",", embedList));
-            }
-
+            result.AddValueIfTrue(nameof(testmode), testmode);
+            result.AddValueIfNotNullOrEmpty("embed", this.BuildEmbedParameter(embedPayments, embedRefunds, embedShipments));
             return result;
+        }
+
+        private string BuildEmbedParameter(bool embedPayments = false, bool embedRefunds = false, bool embedShipments = false) {
+            var includeList = new List<string>();
+            includeList.AddValueIfTrue("payments", embedPayments);
+            includeList.AddValueIfTrue("refunds", embedRefunds);
+            includeList.AddValueIfTrue("shipments", embedShipments);
+            return includeList.ToIncludeParameter();
         }
     }
 }
