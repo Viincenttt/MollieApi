@@ -14,12 +14,15 @@ namespace Mollie.Api.Client {
 
 	    public PaymentClient(string apiKey, HttpClient httpClient = null) : base(apiKey, httpClient) { }
 
-        public async Task<PaymentResponse> CreatePaymentAsync(PaymentRequest paymentRequest) {
+        public async Task<PaymentResponse> CreatePaymentAsync(PaymentRequest paymentRequest, bool includeQrCode = false) {
             if (!string.IsNullOrWhiteSpace(paymentRequest.ProfileId) || paymentRequest.Testmode.HasValue || paymentRequest.ApplicationFee != null) {
                 this.ValidateApiKeyIsOauthAccesstoken();
             }
 
-            return await this.PostAsync<PaymentResponse>("payments", paymentRequest).ConfigureAwait(false);
+            var queryParameters = this.BuildQueryParameters(
+                includeQrCode: includeQrCode);
+
+            return await this.PostAsync<PaymentResponse>($"payments{queryParameters.ToQueryString()}", paymentRequest).ConfigureAwait(false);
         }
 
 	    public async Task<PaymentResponse> GetPaymentAsync(string paymentId, bool testmode = false, bool includeQrCode = false, bool includeRemainderDetails = false) {

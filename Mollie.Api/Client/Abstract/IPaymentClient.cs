@@ -1,14 +1,12 @@
 ﻿using System.Threading.Tasks;
-using Mollie.Api.Models.Customer;
 using Mollie.Api.Models.List;
-
 using Mollie.Api.Models.Payment.Request;
 using Mollie.Api.Models.Payment.Response;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client.Abstract {
     public interface IPaymentClient {
-        Task<PaymentResponse> CreatePaymentAsync(PaymentRequest paymentRequest);
+        Task<PaymentResponse> CreatePaymentAsync(PaymentRequest paymentRequest, bool includeQrCode = false);
 
 		/// <summary>
 		///		Retrieve a single payment object by its payment identifier.
