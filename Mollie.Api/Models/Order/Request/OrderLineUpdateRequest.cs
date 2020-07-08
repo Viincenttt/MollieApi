@@ -1,4 +1,7 @@
-﻿namespace Mollie.Api.Models.Order {
+﻿using Mollie.Api.JsonConverters;
+using Newtonsoft.Json;
+
+namespace Mollie.Api.Models.Order {
     public class OrderLineUpdateRequest {
         /// <summary>
         /// A description of the order line, for example LEGO 4440 Forest Police Station.
@@ -14,6 +17,14 @@
         /// A link pointing to the product page in your web shop of the product sold.
         /// </summary>
         public string ProductUrl { get; set; }
+
+        /// <summary>
+        /// Provide any data you like, for example a string or a JSON object. We will 
+        /// save the data alongside the order line. Whenever you fetch the order with our API,
+        /// we'll also include the metadata. You can use up to approximately 1kB.
+        /// </summary>
+        [JsonConverter(typeof(RawJsonConverter))]
+        public string Metadata { get; set; }
 
         /// <summary>
         /// The number of items in the order line.
@@ -48,5 +59,9 @@
         /// string and not as a float to ensure the correct number of decimals are passed.
         /// </summary>
         public string VatRate { get; set; }
+
+        public void SetMetadata(object metadataObj, JsonSerializerSettings jsonSerializerSettings = null) {
+            this.Metadata = JsonConvert.SerializeObject(metadataObj, jsonSerializerSettings);
+        }
     }
 }
