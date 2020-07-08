@@ -154,6 +154,21 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.VerifyNoOutstandingExpectation();
         }
 
+        [Test]
+        public async Task GetPaymentListAsync_IncludeQrCode_QueryStringContainsIncludeQrCodeParameter() {
+            // Given: We make a request to retrieve a payment without wanting any extra data
+            var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments?include=details.qrCode", defaultPaymentJsonResponse);
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
+
+            // When: We send the request
+            await paymentClient.GetPaymentListAsync(includeQrCode: true);
+
+            // Then
+            mockHttp.VerifyNoOutstandingExpectation();
+        }
+
+
         private void AssertPaymentIsEqual(PaymentRequest paymentRequest, PaymentResponse paymentResponse) {
             Assert.AreEqual(paymentRequest.Amount.Value, paymentResponse.Amount.Value);
             Assert.AreEqual(paymentRequest.Amount.Currency, paymentResponse.Amount.Currency);
