@@ -4,9 +4,12 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Mollie.Api.Client;
+using Mollie.Api.Models;
 using Mollie.Api.Models.Customer;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Payment;
+using Mollie.Api.Models.Payment.Request;
+using Mollie.Api.Models.Payment.Response;
 using Mollie.Tests.Integration.Framework;
 using NUnit.Framework;
 
@@ -136,6 +139,27 @@ namespace Mollie.Tests.Integration.Api {
 
             // Then: Make sure it's retrieved
             Assert.AreEqual(customerRequest.Metadata, retrievedCustomer.Metadata);
+        }
+
+        [Test]
+        [RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        public async Task CanCreateNewCustomerPayment() {
+            // If: We create a customer request with only the required parameters
+            string name = "Smit";
+            string email = "johnsmit@mollie.com";
+            CustomerResponse customer = await this.CreateCustomer(name, email);
+            PaymentRequest paymentRequest = new PaymentRequest() {
+                Amount = new Amount(Currency.EUR, "100.00"),
+                Description = "Description",
+                RedirectUrl = this.DefaultRedirectUrl
+            };
+
+            // When: We create a payment request for this customer to Mollie
+            PaymentResponse paymentResponse = await this._customerClient.CreateCustomerPayment(customer.Id, paymentRequest);
+
+            // Then: Make sure the requested parameters match the response parameter values
+            Assert.IsNotNull(paymentResponse);
+            Assert.AreEqual(customer.Id, paymentResponse.CustomerId);
         }
 
         private async Task<CustomerResponse> CreateCustomer(string name, string email) {
