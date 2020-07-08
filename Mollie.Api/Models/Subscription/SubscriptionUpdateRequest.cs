@@ -29,6 +29,11 @@ namespace Mollie.Api.Models.Subscription {
         public string Description { get; set; }
 
         /// <summary>
+        /// Interval to wait between charges, for example 1 month or 14 days.
+        /// </summary>
+        public string Interval { get; set; }
+
+        /// <summary>
         /// Optional – Use this parameter to set a webhook URL for all subscription payments.
         /// </summary>
         public string WebhookUrl { get; set; }
