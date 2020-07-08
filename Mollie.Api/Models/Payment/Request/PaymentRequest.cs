@@ -113,7 +113,7 @@ namespace Mollie.Api.Models.Payment.Request {
 		///	Oauth only - Optional – Adding an Application Fee allows you to charge the merchant a small sum for the payment and transfer 
 		/// this to your own account.
 		/// </summary>
-		public PaymentRequestApplicationFee ApplicationFee { get; set; }
+		public ApplicationFee ApplicationFee { get; set; }
 
         /// <summary>
         /// For digital goods in most jurisdictions, you must apply the VAT rate from your customer’s country. Choose the VAT rates 

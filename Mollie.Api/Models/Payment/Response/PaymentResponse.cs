@@ -183,7 +183,7 @@ namespace Mollie.Api.Models.Payment.Response {
         /// <summary>
         /// The application fee, if the payment was created with one.
         /// </summary>
-        public PaymentRequestApplicationFee ApplicationFee { get; set; }
+        public ApplicationFee ApplicationFee { get; set; }
 
         /// <summary>
         /// An object with several URL objects relevant to the payment. Every URL object will contain an href and a type field.
