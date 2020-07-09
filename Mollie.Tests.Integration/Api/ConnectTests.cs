@@ -35,7 +35,7 @@ namespace Mollie.Tests.Integration.Api {
         }
         
         [Test]
-        // [Ignore("We can only test this in debug mode, because we login to the mollie dashboard and login to get the auth token")]
+        [Ignore("We can only test this in debug mode, because we login to the mollie dashboard and login to get the auth token")]
         public async Task GetAccessTokenAsync_WithValidTokenRequest_ReturnsAccessToken() {
             // Given: We fetch create a token request
             string authCode = "abcde"; // Set a valid access token here
@@ -50,7 +50,7 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [Test]
-        // [Ignore("We can only test this in debug mode, because we need a valid access token")]
+        [Ignore("We can only test this in debug mode, because we need a valid access token")]
         public async Task RevokeAccessTokenAsync_WithValidToken_DoesNotThrowError() {
             // Given: We create a revoke token request
             string accessToken = "abcde";
