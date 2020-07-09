@@ -84,6 +84,7 @@ In the past, this library used enums that were decorated with the EnumMemberAttr
 - Mollie.Api.Models.Subscription.SubscriptionStatus
 - Mollie.Api.Models.Payment.Locale
 - Mollie.Api.Models.Currency
+- Mollie.Api.Models.Connect.AppPermissions
 
 You can use these classes similar to how you use enums. For example, when creating a new payment, you can 
 ```c#
