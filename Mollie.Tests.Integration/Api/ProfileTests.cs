@@ -1,4 +1,5 @@
-﻿using Mollie.Api.Client;
+﻿
+using Mollie.Api.Client;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Payment;
 using Mollie.Api.Models.PaymentMethod;
@@ -55,6 +56,16 @@ namespace Mollie.Tests.Integration.Api {
             // Then: Make sure a payment method is returned
             Assert.IsNotNull(paymentMethodResponse);
             Assert.AreEqual(PaymentMethod.Ideal, paymentMethodResponse.Id);
+        }
+
+        [Test]
+        public async Task DisablePaymentMethodAsync_WhenDisablingPaymentMethodForCurrentProfile_NoErrorIsThrown() {
+            // Given
+
+            // When: We enable a payment method for the current profile
+            await this._profileClient.DisablePaymentMethodAsync(PaymentMethod.Ideal);
+
+            // Then
         }
     }
 }
