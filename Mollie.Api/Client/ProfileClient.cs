@@ -50,5 +50,21 @@ namespace Mollie.Api.Client {
         public async Task DeleteProfileAsync(string profileId) {
             await this.DeleteAsync($"profiles/{profileId}").ConfigureAwait(false);
         }
+
+        public async Task<EnableGiftCardIssuerResponse> EnableGiftCardIssuerAsync(string profileId, string issuer) {
+            return await this.PostAsync<EnableGiftCardIssuerResponse>($"profiles/{profileId}/methods/giftcard/issuers/{issuer}", null).ConfigureAwait(false);
+        }
+
+        public async Task<EnableGiftCardIssuerResponse> EnableGiftCardIssuerAsync(string issuer) {
+            return await this.PostAsync<EnableGiftCardIssuerResponse>($"profiles/me/methods/giftcard/issuers/{issuer}", null).ConfigureAwait(false);
+        }
+
+        public async Task DisableGiftCardIssuerAsync(string profileId, string issuer) {
+            await this.DeleteAsync($"profiles/{profileId}/methods/giftcard/issuers/{issuer}", null).ConfigureAwait(false);
+        }
+
+        public async Task DisableGiftCardIssuerAsync(string issuer) {
+            await this.DeleteAsync($"profiles/me/methods/giftcard/issuers/{issuer}", null).ConfigureAwait(false);
+        }
     }
 }

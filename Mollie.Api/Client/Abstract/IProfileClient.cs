@@ -16,5 +16,9 @@ namespace Mollie.Api.Client.Abstract {
         Task<PaymentMethodResponse> EnablePaymentMethodAsync(string paymentMethod);
         Task DisablePaymentMethodAsync(string profileId, string paymentMethod);
         Task DisablePaymentMethodAsync(string paymentMethod);
+        Task<EnableGiftCardIssuerResponse> EnableGiftCardIssuerAsync(string profileId, string issuer);
+        Task<EnableGiftCardIssuerResponse> EnableGiftCardIssuerAsync(string issuer);
+        Task DisableGiftCardIssuerAsync(string profileId, string issuer);
+        Task DisableGiftCardIssuerAsync(string issuer);
     }
 }
