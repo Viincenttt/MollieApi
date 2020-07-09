@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models.List;
+using Mollie.Api.Models.PaymentMethod;
 using Mollie.Api.Models.Profile.Request;
 using Mollie.Api.Models.Profile.Response;
 
@@ -28,6 +29,14 @@ namespace Mollie.Api.Client {
 
         public async Task<ProfileResponse> UpdateProfileAsync(string profileId, ProfileRequest request) {
             return await this.PostAsync<ProfileResponse>($"profiles/{profileId}", request).ConfigureAwait(false);
+        }
+
+        public async Task<PaymentMethodResponse> EnablePaymentMethodAsync(string profileId, string paymentMethod) {
+            return await this.PostAsync<PaymentMethodResponse>($"profiles/{profileId}/methods/{paymentMethod}", null).ConfigureAwait(false);
+        }
+
+        public async Task<PaymentMethodResponse> EnablePaymentMethodAsync(string paymentMethod) {
+            return await this.PostAsync<PaymentMethodResponse>($"profiles/me/methods/{paymentMethod}", null).ConfigureAwait(false);
         }
 
         public async Task DeleteProfileAsync(string profileId) {
