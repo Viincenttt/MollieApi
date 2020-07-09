@@ -25,12 +25,18 @@ namespace Mollie.Api.Client.Abstract {
             bool forceApprovalPrompt = false);
 
         /// <summary>
-        ///     Exchange the auth code received at the Authorize endpoint for an actual access token, with which you can
-        ///     communicate with the Mollie API.
-        ///     Or Refresh the accestoken
+        /// Exchange the auth code received at the Authorize endpoint for an actual access token, with which you can
+        /// communicate with the Mollie API. Or Refresh the accestoken
         /// </summary>
         /// <param name="request"></param>
         /// <returns>An token object.</returns>
         Task<TokenResponse> GetAccessTokenAsync(TokenRequest request);
+
+        /// <summary>
+        /// Revoke an access- or a refresh token. Once revoked the token can not be used anymore.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        Task RevokeToken(RevokeTokenRequest request);
     }
 }

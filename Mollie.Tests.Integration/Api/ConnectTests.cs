@@ -3,7 +3,6 @@ using Mollie.Api.Models.Connect;
 using Mollie.Tests.Integration.Framework;
 using NUnit.Framework;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Mollie.Tests.Integration.Api {
@@ -36,12 +35,12 @@ namespace Mollie.Tests.Integration.Api {
         }
         
         [Test]
-        //[Ignore("We can only test this in debug mode, because we login to the mollie dashboard and login to get the auth token")]
-        public async Task GetAccessTokenAsync() {
-            // Given: We fetch the authcode from the authorization URL
-            string authCode = "abcdef"; // Set a valid access token here
+        // [Ignore("We can only test this in debug mode, because we login to the mollie dashboard and login to get the auth token")]
+        public async Task GetAccessTokenAsync_WithValidTokenRequest_ReturnsAccessToken() {
+            // Given: We fetch create a token request
+            string authCode = "abcde"; // Set a valid access token here
             ConnectClient connectClient = new ConnectClient(this.ClientId, this.ClientSecret);
-            TokenRequest tokenRequest = new TokenRequest(authCode, "https://www.vincentkok.net");
+            TokenRequest tokenRequest = new TokenRequest(authCode, DefaultRedirectUrl);
 
             // When: We request the auth code
             TokenResponse tokenResponse = await connectClient.GetAccessTokenAsync(tokenRequest);
@@ -50,14 +49,19 @@ namespace Mollie.Tests.Integration.Api {
             Assert.IsFalse(string.IsNullOrEmpty(tokenResponse.AccessToken));
         }
 
-        private async Task<string> GetAuthorizationCode(string authorizationUrl) {
-            HttpClient httpClient = new HttpClient();
-            HttpResponseMessage response = await httpClient.GetAsync(authorizationUrl);
+        [Test]
+        // [Ignore("We can only test this in debug mode, because we need a valid access token")]
+        public async Task RevokeAccessTokenAsync_WithValidToken_DoesNotThrowError() {
+            // Given: We create a revoke token request
+            string accessToken = "abcde";
+            ConnectClient connectClient = new ConnectClient(this.ClientId, this.ClientSecret);
+            RevokeTokenRequest revokeTokenRequest = new RevokeTokenRequest() {
+                TokenTypeHint = TokenType.AccessToken,
+                Token = accessToken
+            };
 
-            response.EnsureSuccessStatusCode();
-            string responseUri = response.RequestMessage.RequestUri.ToString();
-
-            return responseUri;
+            // When: we send the request
+            await connectClient.RevokeToken(revokeTokenRequest);
         }
     }
 }

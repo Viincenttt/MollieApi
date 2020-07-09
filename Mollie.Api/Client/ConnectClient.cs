@@ -45,6 +45,10 @@ namespace Mollie.Api.Client {
             return await this.PostAsync<TokenResponse>("tokens", request).ConfigureAwait(false);
         }
 
+        public async Task RevokeToken(RevokeTokenRequest request) {
+            await this.DeleteAsync("tokens", request).ConfigureAwait(false);
+        }
+
         protected override HttpRequestMessage CreateHttpRequest(HttpMethod method, string relativeUri, HttpContent content = null) {
             HttpRequestMessage httpRequest = new HttpRequestMessage(method, new Uri(new Uri(ConnectClient.TokenEndPoint), relativeUri));
             httpRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
