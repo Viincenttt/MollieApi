@@ -39,6 +39,14 @@ namespace Mollie.Api.Client {
             return await this.PostAsync<PaymentMethodResponse>($"profiles/me/methods/{paymentMethod}", null).ConfigureAwait(false);
         }
 
+        public async Task DisablePaymentMethodAsync(string profileId, string paymentMethod) {
+            await this.DeleteAsync($"profiles/{profileId}/methods/{paymentMethod}").ConfigureAwait(false);
+        }
+
+        public async Task DisablePaymentMethodAsync(string paymentMethod) {
+            await this.DeleteAsync($"profiles/me/methods/{paymentMethod}").ConfigureAwait(false);
+        }
+
         public async Task DeleteProfileAsync(string profileId) {
             await this.DeleteAsync($"profiles/{profileId}").ConfigureAwait(false);
         }
