@@ -45,7 +45,7 @@ namespace Mollie.Api.Client {
             return await this.PostAsync<TokenResponse>("tokens", request).ConfigureAwait(false);
         }
 
-        public async Task RevokeToken(RevokeTokenRequest request) {
+        public async Task RevokeTokenAsync(RevokeTokenRequest request) {
             await this.DeleteAsync("tokens", request).ConfigureAwait(false);
         }
 

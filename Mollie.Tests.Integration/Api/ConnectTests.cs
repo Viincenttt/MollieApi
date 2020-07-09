@@ -61,7 +61,7 @@ namespace Mollie.Tests.Integration.Api {
             };
 
             // When: we send the request
-            await connectClient.RevokeToken(revokeTokenRequest);
+            await connectClient.RevokeTokenAsync(revokeTokenRequest);
         }
     }
 }

@@ -37,6 +37,6 @@ namespace Mollie.Api.Client.Abstract {
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        Task RevokeToken(RevokeTokenRequest request);
+        Task RevokeTokenAsync(RevokeTokenRequest request);
     }
 }
