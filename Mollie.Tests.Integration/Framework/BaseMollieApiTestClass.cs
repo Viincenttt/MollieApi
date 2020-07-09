@@ -4,7 +4,6 @@ using System.Threading;
 using Microsoft.Extensions.Configuration;
 using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
-using Mollie.Api.Framework;
 using NUnit.Framework;
 
 namespace Mollie.Tests.Integration.Framework {
@@ -13,7 +12,10 @@ namespace Mollie.Tests.Integration.Framework {
 
         protected readonly string DefaultRedirectUrl = "http://mysite.com";
         protected readonly string DefaultWebhookUrl = "http://mysite.com/webhook";
-        protected readonly MollieConfiguration Configuration = ConfigurationFactory.GetConfiguration().GetSection("Mollie").Get<MollieConfiguration>();
+        protected readonly MollieIntegationTestConfiguration Configuration = ConfigurationFactory.GetConfiguration().GetSection("Mollie").Get<MollieIntegationTestConfiguration>();
+        protected string ApiKey => this.Configuration.ApiKey;
+        protected string ClientId => this.Configuration.ClientId;
+        protected string ClientSecret => this.Configuration.ClientSecret;
 
         protected IPaymentClient _paymentClient;
         protected IPaymentMethodClient _paymentMethodClient;
@@ -46,11 +48,7 @@ namespace Mollie.Tests.Integration.Framework {
             // In order to avoid hitting their rate limit, we add a small delay between each tests. 
             TimeSpan timeBetweenTests = TimeSpan.FromMilliseconds(500);
             Thread.Sleep(timeBetweenTests);
-        }
-
-        protected string ApiKey => this.Configuration.ApiKey;
-        protected string ClientId => this.Configuration.ClientId;
-        protected string ClientSecret => this.Configuration.ClientSecret;
+        }        
 
         private void EnsureTestApiKey(string apiKey) {
             if (String.IsNullOrEmpty(apiKey)) {
