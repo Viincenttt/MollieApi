@@ -376,7 +376,7 @@ namespace Mollie.Tests.Integration.Api {
         public async Task PaymentWithDifferentHttpInstance() {
             // When: We create a PaymentClient with our own HttpClient instance
             HttpClient myHttpClientInstance = new HttpClient();
-            PaymentClient paymentClient = new PaymentClient(this.GetApiKeyFromConfiguration(), myHttpClientInstance);
+            PaymentClient paymentClient = new PaymentClient(this.ApiKey, myHttpClientInstance);
             PaymentRequest paymentRequest = new PaymentRequest() {
                 Amount = new Amount(Currency.EUR, "100.00"),
                 Description = "Description",
@@ -386,7 +386,7 @@ namespace Mollie.Tests.Integration.Api {
             // When: I create a new payment
             PaymentResponse result = await paymentClient.CreatePaymentAsync(paymentRequest);
 
-            // Then: It should still work... lol
+            // Then: It should still work in the same way
             Assert.IsNotNull(result);
             Assert.AreEqual(paymentRequest.Amount.Currency, result.Amount.Currency);
             Assert.AreEqual(paymentRequest.Amount.Value, result.Amount.Value);

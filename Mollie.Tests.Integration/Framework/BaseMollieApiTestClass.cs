@@ -13,6 +13,7 @@ namespace Mollie.Tests.Integration.Framework {
 
         protected readonly string DefaultRedirectUrl = "http://mysite.com";
         protected readonly string DefaultWebhookUrl = "http://mysite.com/webhook";
+        protected readonly MollieConfiguration Configuration = ConfigurationFactory.GetConfiguration().GetSection("Mollie").Get<MollieConfiguration>();
 
         protected IPaymentClient _paymentClient;
         protected IPaymentMethodClient _paymentMethodClient;
@@ -26,18 +27,17 @@ namespace Mollie.Tests.Integration.Framework {
 
         [OneTimeSetUp]
         public void InitClass() {
-            string apiKey = this.GetApiKeyFromConfiguration();
-            this.EnsureTestApiKey(apiKey);
+            this.EnsureTestApiKey(this.ApiKey);
 
-            this._paymentClient = new PaymentClient(apiKey);
-            this._paymentMethodClient = new PaymentMethodClient(apiKey);
-            this._refundClient = new RefundClient(apiKey);
-            this._subscriptionClient = new SubscriptionClient(apiKey);
-            this._mandateClient = new MandateClient(apiKey);
-            this._customerClient = new CustomerClient(apiKey);
-            this._profileClient = new ProfileClient(apiKey);
-            this._orderClient = new OrderClient(apiKey);
-            this._shipmentClient = new ShipmentClient(apiKey);
+            this._paymentClient = new PaymentClient(this.ApiKey);
+            this._paymentMethodClient = new PaymentMethodClient(this.ApiKey);
+            this._refundClient = new RefundClient(this.ApiKey);
+            this._subscriptionClient = new SubscriptionClient(this.ApiKey);
+            this._mandateClient = new MandateClient(this.ApiKey);
+            this._customerClient = new CustomerClient(this.ApiKey);
+            this._profileClient = new ProfileClient(this.ApiKey);
+            this._orderClient = new OrderClient(this.ApiKey);
+            this._shipmentClient = new ShipmentClient(this.ApiKey);
         }
 
         [SetUp]
@@ -48,11 +48,9 @@ namespace Mollie.Tests.Integration.Framework {
             Thread.Sleep(timeBetweenTests);
         }
 
-        protected string GetApiKeyFromConfiguration() {
-            IConfiguration configuration = ConfigurationFactory.GetConfiguration();
-            MollieConfiguration mollieConfiguration = configuration.GetSection("Mollie").Get<MollieConfiguration>();
-            return mollieConfiguration.ApiKey;
-        } 
+        protected string ApiKey => this.Configuration.ApiKey;
+        protected string ClientId => this.Configuration.ClientId;
+        protected string ClientSecret => this.Configuration.ClientSecret;
 
         private void EnsureTestApiKey(string apiKey) {
             if (String.IsNullOrEmpty(apiKey)) {
