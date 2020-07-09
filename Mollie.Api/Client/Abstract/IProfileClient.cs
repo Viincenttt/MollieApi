@@ -11,5 +11,6 @@ namespace Mollie.Api.Client.Abstract {
         Task<ListResponse<ProfileResponse>> GetProfileListAsync(string from = null, int? limit = null);
         Task<ProfileResponse> UpdateProfileAsync(string profileId, ProfileRequest request);
         Task DeleteProfileAsync(string profileId);
+        Task<ProfileResponse> GetCurrentProfileAsync();
     }
 }

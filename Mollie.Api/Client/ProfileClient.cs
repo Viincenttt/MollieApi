@@ -18,6 +18,10 @@ namespace Mollie.Api.Client {
             return await this.GetAsync<ProfileResponse>($"profiles/{profileId}").ConfigureAwait(false);
         }
 
+        public async Task<ProfileResponse> GetCurrentProfileAsync() {
+            return await this.GetAsync<ProfileResponse>("profiles/me").ConfigureAwait(false);
+        }
+
         public async Task<ListResponse<ProfileResponse>> GetProfileListAsync(string from = null, int? limit = null) {
             return await this.GetListAsync<ListResponse<ProfileResponse>>("profiles", from, limit).ConfigureAwait(false);
         }
