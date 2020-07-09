@@ -2,6 +2,7 @@
 using Mollie.Api.Client;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Payment;
+using Mollie.Api.Models.Payment.Response.Specific;
 using Mollie.Api.Models.PaymentMethod;
 using Mollie.Api.Models.Profile.Response;
 using Mollie.Tests.Integration.Framework;
@@ -62,8 +63,31 @@ namespace Mollie.Tests.Integration.Api {
         public async Task DisablePaymentMethodAsync_WhenDisablingPaymentMethodForCurrentProfile_NoErrorIsThrown() {
             // Given
 
-            // When: We enable a payment method for the current profile
+            // When: We disable a payment method for the current profile
             await this._profileClient.DisablePaymentMethodAsync(PaymentMethod.Ideal);
+
+            // Then
+        }
+
+        [Test]
+        public async Task EnableGiftCardIssuerAsync_WhenEnablingGiftCardIssuerForCurrentProfile_EnableGiftCardIssuerResponseIsReturned() {
+            // Given
+            const string issuerToEnable = "festivalcadeau";
+
+            // When: We enable a payment method for the current profile
+            EnableGiftCardIssuerResponse giftcardIssuerResponse = await this._profileClient.EnableGiftCardIssuerAsync(issuerToEnable);
+
+            // Then: Make sure a payment method is returned
+            Assert.IsNotNull(giftcardIssuerResponse);
+            Assert.AreEqual(issuerToEnable, giftcardIssuerResponse.Id);
+        }
+
+        [Test]
+        public async Task DisableGiftCardIssuerAsync_WhenDisablingGiftCardIssuerForCurrentProfile_NoErrorIsThrown() {
+            // Given
+
+            // When: We disable a issuer method for the current profile
+            await this._profileClient.DisableGiftCardIssuerAsync("festivalcadeau");
 
             // Then
         }
