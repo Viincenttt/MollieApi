@@ -28,18 +28,18 @@ namespace Mollie.Tests.Integration.Api {
             ConnectClient connectClient = new ConnectClient(this.ClientId, this.ClientSecret);
 
             // When: We get the authorization URL
-            string authorizationUrl = connectClient.GetAuthorizationUrl("abcde", new List<string>() { AppPermissions.PaymentsRead, AppPermissions.PaymentsWrite });
+            string authorizationUrl = connectClient.GetAuthorizationUrl("abcdef", new List<string>() { AppPermissions.PaymentsRead, AppPermissions.PaymentsWrite });
 
             // Then: 
-            string expectedUrl = $"https://www.mollie.com/oauth2/authorize?client_id={this.ClientId}&state=abcde&scope=payments.read+payments.write&response_type=code&approval_prompt=auto";
+            string expectedUrl = $"https://www.mollie.com/oauth2/authorize?client_id={this.ClientId}&state=abcdef&scope=payments.read+payments.write&response_type=code&approval_prompt=auto";
             Assert.AreEqual(expectedUrl, authorizationUrl);
         }
         
         [Test]
-        [Ignore("We can only test this in debug mode, because we login to the mollie dashboard and login to get the auth token")]
+        //[Ignore("We can only test this in debug mode, because we login to the mollie dashboard and login to get the auth token")]
         public async Task GetAccessTokenAsync() {
             // Given: We fetch the authcode from the authorization URL
-            string authCode = "abcde"; // Set a valid access token here
+            string authCode = "abcdef"; // Set a valid access token here
             ConnectClient connectClient = new ConnectClient(this.ClientId, this.ClientSecret);
             TokenRequest tokenRequest = new TokenRequest(authCode, "https://www.vincentkok.net");
 
