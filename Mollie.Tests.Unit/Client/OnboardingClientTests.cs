@@ -1,4 +1,6 @@
 ﻿using Mollie.Api.Client;
+using Mollie.Api.Models;
+using Mollie.Api.Models.Onboarding.Request;
 using Mollie.Api.Models.Onboarding.Response;
 using NUnit.Framework;
 using System.Net.Http;
@@ -11,6 +13,7 @@ namespace Mollie.Tests.Unit.Client {
         public const string defaultStatus = OnboardingStatus.Completed;
         public const string canReceivePayments = "true";
         public const string canReceiveSettlements = "true";
+        public const string defaultStreetAndNumber = "My address";
 
         public static readonly string defaultOnboardingStatusJsonResponse = $@"{{
     ""resource"": ""onboarding"",
@@ -19,6 +22,11 @@ namespace Mollie.Tests.Unit.Client {
     ""status"": ""{defaultStatus}"",
     ""canReceivePayments"": {canReceivePayments},
     ""canReceiveSettlements"": {canReceiveSettlements},
+}}";
+
+        public static readonly string defaultOnboardingStatusJsonRequest = $@"{{
+""organization"":{{""name"":""{defaultName}"",""address"":{{""streetAndNumber"":""{defaultStreetAndNumber}""}}}},
+""profile"":{{""name"":""{defaultName}""}}
 }}";
 
         [Test]
@@ -39,6 +47,32 @@ namespace Mollie.Tests.Unit.Client {
             Assert.AreEqual(defaultStatus, onboardingResponse.Status);
             Assert.AreEqual(canReceivePayments, onboardingResponse.CanReceivePayments.ToString().ToLower());
             Assert.AreEqual(canReceiveSettlements, onboardingResponse.CanReceiveSettlements.ToString().ToLower());
+        }
+
+        [Test]
+        public async Task SubmitOnboardingDataAsync_DefaultBehaviour_RequestIsParsed() {
+            // Given: We request a capture with a payment id and capture id
+            string expectedUrl = $"{BaseMollieClient.ApiEndPoint}onboarding/me";
+            SubmitOnboardingDataRequest submitOnboardingDataRequest = new SubmitOnboardingDataRequest() {
+                Organization = new OnboardingOrganizationRequest() {
+                    Name = defaultName,
+                    Address = new AddressObject() {
+                        StreetAndNumber = defaultStreetAndNumber
+                    }
+                },
+                Profile = new OnboardingProfileRequest() {
+                    Name = defaultName
+                }
+            };
+            var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Post, expectedUrl, string.Empty);
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            OnboardingClient onboardingClient = new OnboardingClient("api-key", httpClient);
+
+            // When: We make the request
+            await onboardingClient.SubmitOnboardingDataAsync(submitOnboardingDataRequest);
+
+            // Then: There should be no outstanding requests
+            mockHttp.VerifyNoOutstandingExpectation();
         }
     }
 }
