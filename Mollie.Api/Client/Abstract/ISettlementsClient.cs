@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Mollie.Api.Models.Capture;
 using Mollie.Api.Models.Chargeback;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Payment.Response;
@@ -16,5 +17,6 @@ namespace Mollie.Api.Client.Abstract {
         Task<ListResponse<RefundResponse>> GetSettlementRefundsListAsync(string settlementId, string from = null, int? limit = null);
         Task<ListResponse<ChargebackResponse>> GetSettlementChargebacksListAsync(string settlementId, string from = null, int? limit = null);
         Task<SettlementResponse> GetSettlementAsync(UrlObjectLink<SettlementResponse> url);
+        Task<ListResponse<CaptureResponse>> ListSettlementCaptures(string settlementId);
     }
 }
