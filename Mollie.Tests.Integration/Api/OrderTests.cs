@@ -27,6 +27,45 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(orderRequest.OrderNumber, result.OrderNumber);
         }
 
+        [Test]
+        [RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        public async Task CanCreateOrderWithMultiplePaymentMethods() {
+            // When: we create a order request and specify multiple payment methods
+            OrderRequest orderRequest = this.CreateOrderRequestWithOnlyRequiredFields();
+            orderRequest.Methods = new List<string>() {
+                PaymentMethod.Ideal,
+                PaymentMethod.CreditCard,
+                PaymentMethod.DirectDebit
+            };
+
+            // When: We send the order request to Mollie
+            OrderResponse result = await this._orderClient.CreateOrderAsync(orderRequest);
+
+            // Then: Make sure we get a valid response
+            Assert.IsNotNull(result);
+            Assert.AreEqual(orderRequest.Amount.Value, result.Amount.Value);
+            Assert.AreEqual(orderRequest.Amount.Currency, result.Amount.Currency);
+            Assert.AreEqual(orderRequest.OrderNumber, result.OrderNumber);
+        }
+
+        [Test]
+        [RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        public async Task CanCreateOrderWithSinglePaymentMethod() {
+            // When: we create a order request and specify a single payment method
+            OrderRequest orderRequest = this.CreateOrderRequestWithOnlyRequiredFields();
+            orderRequest.Method = PaymentMethod.Ideal;
+
+            // When: We send the order request to Mollie
+            OrderResponse result = await this._orderClient.CreateOrderAsync(orderRequest);
+
+            // Then: Make sure we get a valid response
+            Assert.AreEqual(PaymentMethod.Ideal, orderRequest.Methods.First());
+            Assert.IsNotNull(result);
+            Assert.AreEqual(orderRequest.Amount.Value, result.Amount.Value);
+            Assert.AreEqual(orderRequest.Amount.Currency, result.Amount.Currency);
+            Assert.AreEqual(orderRequest.OrderNumber, result.OrderNumber);
+        }
+
         [Test][RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanCreateOrderWithPaymentSpecificOptions() {
             // If: we create a order request with payment specific parameters
