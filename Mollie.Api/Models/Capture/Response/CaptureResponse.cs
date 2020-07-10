@@ -52,20 +52,9 @@ namespace Mollie.Api.Models.Capture
         public DateTime CreatedAt { get; set; }
 
         /// <summary>
-        /// The optional metadata you provided upon subscription creation. Metadata can for example be used to link a plan to a
-        /// subscription.
-        /// </summary>
-        [JsonConverter(typeof(RawJsonConverter))]
-        public string Metadata { get; set; }
-
-        /// <summary>
         /// An object with several URL objects relevant to the order. Every URL object will contain an href and a type field.
         /// </summary>
         [JsonProperty("_links")]
         public CaptureResponseLinks Links { get; set; }
-
-        public T GetMetadata<T>(JsonSerializerSettings jsonSerializerSettings = null) {
-            return JsonConvert.DeserializeObject<T>(this.Metadata, jsonSerializerSettings);
-        }
     }
 }
