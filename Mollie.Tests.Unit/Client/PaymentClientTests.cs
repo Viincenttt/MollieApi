@@ -52,7 +52,7 @@ namespace Mollie.Tests.Unit.Client {
                 RedirectUrl = "http://www.mollie.com",
                 Method = PaymentMethod.Ideal
             };
-            const string expectedPaymentMethodJson = "\"method\":[\"ideal\"";
+            string expectedPaymentMethodJson = $"\"method\":[\"{PaymentMethod.Ideal}\"";
             const string jsonResponse = @"{
                 ""amount"":{
                     ""currency"":""EUR"",
