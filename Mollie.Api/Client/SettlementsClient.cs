@@ -10,7 +10,7 @@ using Mollie.Api.Models.Settlement;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client {
-    public class SettlementsClient : OauthBaseMollieClient, ISettlementsClient {
+    public class SettlementsClient : BaseMollieClient, ISettlementsClient {
         public SettlementsClient(string oauthAccessToken, HttpClient httpClient = null) : base(oauthAccessToken, httpClient) {
         }
 
@@ -47,7 +47,7 @@ namespace Mollie.Api.Client {
             return await this.GetAsync(url).ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<CaptureResponse>> ListSettlementCaptures(string settlementId) {
+        public async Task<ListResponse<CaptureResponse>> ListSettlementCapturesAsync(string settlementId) {
             return await this.GetListAsync<ListResponse<CaptureResponse>>($"settlements/{settlementId}/captures", null, null).ConfigureAwait(false);
         }
     }
