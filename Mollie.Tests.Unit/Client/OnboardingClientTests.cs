@@ -31,7 +31,7 @@ namespace Mollie.Tests.Unit.Client {
 
         [Test]
         public async Task GetOnboardingStatusAsync_DefaultBehaviour_ResponseIsParsed() {
-            // Given: We request a capture with a payment id and capture id
+            // Given: We request the onboarding status
             string expectedUrl = $"{BaseMollieClient.ApiEndPoint}onboarding/me";
             var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, defaultOnboardingStatusJsonResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
@@ -51,7 +51,7 @@ namespace Mollie.Tests.Unit.Client {
 
         [Test]
         public async Task SubmitOnboardingDataAsync_DefaultBehaviour_RequestIsParsed() {
-            // Given: We request a capture with a payment id and capture id
+            // Given: We submit an onboarding status request
             string expectedUrl = $"{BaseMollieClient.ApiEndPoint}onboarding/me";
             SubmitOnboardingDataRequest submitOnboardingDataRequest = new SubmitOnboardingDataRequest() {
                 Organization = new OnboardingOrganizationRequest() {
