@@ -19,6 +19,7 @@ Have you spotted a bug or want to add a missing feature? All pull requests are w
 [7. Mandate API](#7-mandate-api)  
 [8. Subscription API](#8-subscription-api)  
 [9. Order API](#9-order-api)
+[10. Organizations API](#10-organizations-api)
 
 ## 1. Mollie API v1 and v2
 In May 2018, Mollie launched version 2 of their API. Version 2 offers support for multicurrency, improved error messages and much more.  The current version of the Mollie API client supports all API version 2 features. If you want to keep using version 1, you can use version 1.5.2 of the Mollie API Nuget package. Version 2.0.0+ of the Mollie API client supports version 2 of the API.  
@@ -580,7 +581,7 @@ ListResponse<OrderResponse> response = await orderClient.GetOrderListAsync();
 Cancels an existing order. Take a look at the documentation on this endpoint to see which conditions need to apply before an order can be canceled.
 ```c#
 IOrderClient orderClient = new OrderClient("{yourApiKey}");
- OrderResponse canceledOrder = await this._orderClient.GetOrderAsync({orderId});
+ OrderResponse canceledOrder = await orderClient.GetOrderAsync({orderId});
 ```
 
 ### Cancel order lines
@@ -594,7 +595,7 @@ OrderLineCancellationRequest cancellationRequest = new OrderLineCancellationRequ
 	}
 };
 IOrderClient orderClient = new OrderClient("{yourApiKey}");
-OrderResponse result = await this._orderClient.CancelOrderLinesAsync({orderId}, cancellationRequest);
+OrderResponse result = await orderClient.CancelOrderLinesAsync({orderId}, cancellationRequest);
 ```
 
 ### Create order payment
@@ -606,7 +607,7 @@ OrderPaymentRequest orderPaymentRequest = new OrderPaymentRequest() {
 	MandateId = {mandateId}
 };
 IOrderClient orderClient = new OrderClient("{yourApiKey}");
-OrderResponse result = await this._orderClient.CreateOrderPaymentAsync({orderId}, orderPaymentRequest);
+OrderResponse result = await orderClient.CreateOrderPaymentAsync({orderId}, orderPaymentRequest);
 ```
 
 ### Create order refund
@@ -621,12 +622,26 @@ OrderRefundRequest orderRefundRequest = new OrderRefundRequest() {
 	Description = ""
 };
 IOrderClient orderClient = new OrderClient("{yourApiKey}");
-OrderResponse result = await this._orderClient.CreateOrderRefundAsync({orderId}, orderRefundRequest);
+OrderResponse result = await orderClient.CreateOrderRefundAsync({orderId}, orderRefundRequest);
 ```
 
 ### List order refunds
 Retrieve all order refunds.
 ```C#
 IOrderClient orderClient = new OrderClient("{yourApiKey}");
-ListResponse<RefundResponse> result = await this._orderClient.GetOrderRefundListAsync({orderId});
+ListResponse<RefundResponse> result = await orderClient.GetOrderRefundListAsync({orderId});
+```
+
+## 10. Organizations API
+### Get current organization
+Retrieve the currently authenticated organization.
+```C#
+IOrganizationsClient client = new OrganizationsClient("{yourApiKey}");
+OrganizationResponse result = await client.GetCurrentOrganizationAsync();
+```
+
+### Get organization
+```C#
+IOrganizationsClient client = new OrganizationsClient("{yourApiKey}");
+OrganizationResponse result = await client.GetOrganizationAsync({organizationId});
 ```
