@@ -391,20 +391,36 @@ ISubscriptionClient subscriptionClient = new SubscriptionClient("{yourApiKey}");
 SubscriptionResponse subscriptionResponse = await subscriptionClient.GetSubscriptionAsync("{customerId}", "{subscriptionId}");
 ```
 
-### Retrieve subscription list
+### Cancelling a subscription
+A subscription can be canceled any time by calling DELETE on the resource endpoint.
+```c#
+ISubscriptionClient subscriptionClient = new SubscriptionClient("{yourApiKey}");
+await subscriptionClient.CancelSubscriptionAsync("{customerId}", "{subscriptionId}");
+```
+
+### Retrieve customer subscription list
 Retrieve all subscriptions of a customer.
 ```c#
 ISubscriptionClient subscriptionClient = new SubscriptionClient("{yourApiKey}");
 ListResponse<SubscriptionResponse> response = await subscriptionClient.GetSubscriptionListAsync("{customerId}", null, {numberOfSubscriptions});
 ```
 
-### Cancelling a subscription
+### Retrieve all subscription list
+Retrieve all subscriptions
 ```c#
 ISubscriptionClient subscriptionClient = new SubscriptionClient("{yourApiKey}");
-await subscriptionClient.CancelSubscriptionAsync("{customerId}", "{subscriptionId}");
+ListResponse<SubscriptionResponse> response = await subscriptionClient.GetAllSubscriptionList();
+```
+
+### List subscription payments
+Retrieve all payments of a specific subscriptions of a customer.
+```c#
+ISubscriptionClient subscriptionClient = new SubscriptionClient("{yourApiKey}");
+ListResponse<PaymentResponse> response = await subscriptionClient.GetSubscriptionPaymentListAsync({customerId}, {subscriptionId});
 ```
 
 ### Updating a subscription
+Some fields of a subscription can be updated by calling PATCH on the resource endpoint. Each field is optional. You cannot update a canceled subscription.
 ```c#
 ISubscriptionClient subscriptionClient = new SubscriptionClient("{yourApiKey}");
 SubscriptionUpdateRequest updatedSubscriptionRequest = new SubscriptionUpdateRequest() {
