@@ -97,7 +97,7 @@ In the past, this library used enums that were decorated with the EnumMemberAttr
 You can use these classes similar to how you use enums. For example, when creating a new payment, you can do the following:
 ```c#
 PaymentRequest paymentRequest = new PaymentRequest() {
-    Amount = new Amount(Currency.EUR, "100.00"),
+    Amount = new Amount(Currency.EUR, 100.00m),
     Description = "Test payment of the example project",
     RedirectUrl = "http://google.com",
 	Method = Mollie.Api.Models.Payment.PaymentMethod.Ideal // instead of "Ideal"
@@ -109,7 +109,7 @@ PaymentRequest paymentRequest = new PaymentRequest() {
 ```c#
 IPaymentClient paymentClient = new PaymentClient("{yourApiKey}");
 PaymentRequest paymentRequest = new PaymentRequest() {
-    Amount = new Amount(Currency.EUR, "100.00"),
+    Amount = new Amount(Currency.EUR, 100.00m),
     Description = "Test payment of the example project",
     RedirectUrl = "http://google.com"
 };
@@ -144,7 +144,7 @@ BankTransferPaymentResponse response = (BankTransferPaymentResponse)await paymen
 Some payment methods also support QR codes. In order to retrieve a QR code, you have to set the `includeQrCode` parameter to `true` when sending the payment request. For example:
 ```c#
 PaymentRequest paymentRequest = new PaymentRequest() {
-	Amount = new Amount(Currency.EUR, "100.00"),
+	Amount = new Amount(Currency.EUR, 100.00m),
 	Description = "Description",
 	RedirectUrl = "http://www.mollie.com",
 	Method = PaymentMethod.Ideal
@@ -160,7 +160,7 @@ string qrCode = idealPaymentDetails.QrCode.Src;
 It is also possible to pass multiple payment methods when creating a new payment. Mollie will then only show the payment methods you've specified when creating the payment request. 
 ```c#
 PaymentRequest paymentRequest = new PaymentRequest() {
-	Amount = new Amount(Currency.EUR, "100.00"),
+	Amount = new Amount(Currency.EUR, 100.00m),
 	Description = "Description",
 	RedirectUrl = "http://www.mollie.com",
 	Methods = new List<string>() {
@@ -219,7 +219,7 @@ CustomMetadataClass metadataRequest = new CustomMetadataClass() {
 
 // Create a new payment
 PaymentRequest paymentRequest = new PaymentRequest() {
-    Amount = new Amount(Currency.EUR, "100.00"),
+    Amount = new Amount(Currency.EUR, 100.00m),
     Description = "{description}",
     RedirectUrl = this.DefaultRedirectUrl,
 };
@@ -338,7 +338,7 @@ await customerClient.DeleteCustomerAsync("{customerIdToDelete}");
 Creates a payment for the customer.
 ```c#
 PaymentRequest paymentRequest = new PaymentRequest() {
-    Amount = new Amount(Currency.EUR, "100.00"),
+    Amount = new Amount(Currency.EUR, 100.00m),
     Description = "{description}",
     RedirectUrl = this.DefaultRedirectUrl,
 };
@@ -392,7 +392,7 @@ Create a subscription for a specific customer.
 ```c#
 ISubscriptionClient subscriptionClient = new SubscriptionClient("{yourApiKey}");
 SubscriptionRequest subscriptionRequest = new SubscriptionRequest() {
-	Amount = new Amount(Currency.EUR, "100.00"),
+	Amount = new Amount(Currency.EUR, 100.00m),
 	Times = 5,
     	Interval = "1 month",
 	Description = "{uniqueIdentifierForSubscription}"
@@ -454,14 +454,14 @@ The Orders API allows you to use Mollie for your order management. Pay after del
 ```c#
 IOrderClient orderClient = new OrderClient("{yourApiKey}");
 OrderRequest orderRequest = new OrderRequest() {
-	Amount = new Amount(Currency.EUR, "100.00"),
+	Amount = new Amount(Currency.EUR, 100.00m),
 	OrderNumber = "16738",
 	Lines = new List<OrderLineRequest>() {
 		new OrderLineRequest() {
 			Name = "A box of chocolates",
 			Quantity = 1,
-			UnitPrice = new Amount(Currency.EUR, "100.00"),
-			TotalAmount = new Amount(Currency.EUR, "100.00"),
+			UnitPrice = new Amount(Currency.EUR, 100.00m),
+			TotalAmount = new Amount(Currency.EUR, 100.00m),
 			VatRate = "21.00",
 			VatAmount = new Amount(Currency.EUR, "17.36")
 		}
@@ -502,7 +502,7 @@ For example, if you'd want to create a order with bank transfer payment:
 ```c#
 IOrderClient orderClient = new OrderClient("{yourApiKey}");
 OrderRequest orderRequest = new OrderRequest() {
-	Amount = new Amount(Currency.EUR, "100.00"),
+	Amount = new Amount(Currency.EUR, 100.00m),
 	OrderNumber = "16738",
 	Method = PaymentMethod.BankTransfer,
 	Payment = new BankTransferSpecificParameters {
@@ -512,8 +512,8 @@ OrderRequest orderRequest = new OrderRequest() {
 		new OrderLineRequest() {
 			Name = "A box of chocolates",
 			Quantity = 1,
-			UnitPrice = new Amount(Currency.EUR, "100.00"),
-			TotalAmount = new Amount(Currency.EUR, "100.00"),
+			UnitPrice = new Amount(Currency.EUR, 100.00m),
+			TotalAmount = new Amount(Currency.EUR, 100.00m),
 			VatRate = "21.00",
 			VatAmount = new Amount(Currency.EUR, "17.36")
 		}
@@ -537,7 +537,7 @@ OrderRequest orderRequest = new OrderRequest() {
 It is also possible to pass multiple payment methods when creating a new order. Mollie will then only show the payment methods you've specified when creating the payment request. 
 ```c#
 OrderRequest orderRequest = new OrderRequest() {
-	Amount = new Amount(Currency.EUR, "100.00"),
+	Amount = new Amount(Currency.EUR, 100.00m),
 	OrderNumber = "16738",
 	Methods = new List<string>() {
 		PaymentMethod.Ideal,
