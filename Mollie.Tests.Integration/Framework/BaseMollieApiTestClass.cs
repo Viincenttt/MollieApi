@@ -14,8 +14,8 @@ namespace Mollie.Tests.Integration.Framework {
         protected readonly string DefaultWebhookUrl = "http://mysite.com/webhook";
         protected readonly MollieIntegationTestConfiguration Configuration = ConfigurationFactory.GetConfiguration().GetSection("Mollie").Get<MollieIntegationTestConfiguration>();
         protected string ApiKey => this.Configuration.ApiKey;
-        protected string ClientId => this.Configuration.ClientId;
-        protected string ClientSecret => this.Configuration.ClientSecret;
+        protected string ClientId => this.Configuration.ClientId ?? "client-id";
+        protected string ClientSecret => this.Configuration.ClientSecret ?? "client-secret";
 
         protected IPaymentClient _paymentClient;
         protected IPaymentMethodClient _paymentMethodClient;
