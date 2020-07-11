@@ -71,7 +71,7 @@ namespace Mollie.Tests.Unit.Client {
             // Given: we create a order with a single payment method
             OrderRequest orderRequest = this.CreateOrderRequestWithOnlyRequiredFields();
             orderRequest.Method = PaymentMethod.Ideal;
-            string expectedPaymentMethodJson = $"\"method\":[\"{PaymentMethod.Ideal}\"";
+            string expectedPaymentMethodJson = $"\"method\":[\"{PaymentMethod.Ideal}";
             const string jsonResponse = defaultOrderJsonResponse;
             var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Post, $"{BaseMollieClient.ApiEndPoint}orders", jsonResponse, expectedPaymentMethodJson);
             HttpClient httpClient = mockHttp.ToHttpClient();
