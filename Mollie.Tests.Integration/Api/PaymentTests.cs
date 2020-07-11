@@ -20,7 +20,7 @@ namespace Mollie.Tests.Integration.Api {
     [TestFixture]
     public class PaymentTests : BaseMollieApiTestClass {
         [Test]
-        [RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanRetrievePaymentList() {
             // When: Retrieve payment list with default settings
             ListResponse<PaymentResponse> response = await this._paymentClient.GetPaymentListAsync();
@@ -31,7 +31,7 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [Test]
-        [RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task ListPaymentsNeverReturnsMorePaymentsThenTheNumberOfRequestedPayments() {
             // Given: Number of payments requested is 5
             int numberOfPayments = 5;
@@ -44,7 +44,7 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [Test]
-        [RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task WhenRetrievingAListOfPaymentsPaymentSubclassesShouldBeInitialized() {
             // Given: We create a new payment 
             IdealPaymentRequest paymentRequest = new IdealPaymentRequest() {
@@ -62,7 +62,7 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [Test]
-        [RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanCreateDefaultPaymentWithOnlyRequiredFields() {
             // Given: we create a payment request with only the required parameters
             PaymentRequest paymentRequest = new PaymentRequest() {
@@ -83,7 +83,7 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [Test]
-        [RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanCreateDefaultPaymentWithAllFields() {
             // Given: we create a payment request where all parameters have a value
             PaymentRequest paymentRequest = new PaymentRequest() {
@@ -111,7 +111,7 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [Test]
-        [RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanUpdatePayment() {
             // Given: We create a payment with only the required parameters
             PaymentRequest paymentRequest = new PaymentRequest() {
@@ -134,7 +134,7 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [Test]
-        [RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanCreatePaymentWithSinglePaymentMethod() {
             // Given: we create a payment request and specify multiple payment methods
             PaymentRequest paymentRequest = new PaymentRequest() {
@@ -157,7 +157,7 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [Test]
-        [RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanCreatePaymentAndRetrieveQrCode() {
             // Given: We create a payment with a payment method that supports QR codes
             PaymentRequest paymentRequest = new PaymentRequest() {
@@ -180,7 +180,7 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [Test]
-        [RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanCreatePaymentWithMultiplePaymentMethods() {
             // When: we create a payment request and specify multiple payment methods
             PaymentRequest paymentRequest = new PaymentRequest() {
@@ -206,7 +206,7 @@ namespace Mollie.Tests.Integration.Api {
             Assert.IsNull(result.Method);
         }
 
-        [RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
         [TestCase(typeof(IdealPaymentRequest), PaymentMethod.Ideal, typeof(IdealPaymentResponse))]
         [TestCase(typeof(PaymentRequest), PaymentMethod.Bancontact, typeof(BancontactPaymentResponse))]
         [TestCase(typeof(PaymentRequest), PaymentMethod.Sofort, typeof(SofortPaymentResponse))]
@@ -241,7 +241,7 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [Test]
-        [RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanCreatePaymentAndRetrieveIt() {
             // When: we create a new payment request
             PaymentRequest paymentRequest = new PaymentRequest() {
@@ -265,7 +265,7 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [Test]
-        [RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanCreateRecurringPaymentAndRetrieveIt() {
             // When: we create a new recurring payment
             MandateResponse mandate = await this.GetFirstValidMandate();
@@ -287,7 +287,7 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [Test]
-        [RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanCreatePaymentWithMetaData() {
             // When: We create a payment with meta data
             string metadata = "this is my metadata";
@@ -306,7 +306,7 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [Test]
-        [RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanCreatePaymentWithJsonMetaData() {
             // When: We create a payment with meta data
             string json = "{\"order_id\":\"4.40\"}";
@@ -325,7 +325,7 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [Test]
-        [RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanCreatePaymentWithCustomMetaDataClass() {
             // When: We create a payment with meta data
             CustomMetadataClass metadataRequest = new CustomMetadataClass() {
@@ -351,7 +351,7 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [Test]
-        [RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanCreatePaymentWithMandate() {
             // When: We create a payment with a mandate id
             MandateResponse validMandate = await this.GetFirstValidMandate();
@@ -373,7 +373,7 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [Test]
-        [RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task PaymentWithDifferentHttpInstance() {
             // When: We create a PaymentClient with our own HttpClient instance
             HttpClient myHttpClientInstance = new HttpClient();
@@ -396,7 +396,7 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [Test]
-        [RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanCreatePaymentWithDecimalAmountAndRetrieveIt() {
             // When: we create a new payment request
             PaymentRequest paymentRequest = new PaymentRequest() {
@@ -420,7 +420,7 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [Test]
-        [RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanCreatePaymentWithImplicitAmountCastAndRetrieveIt() {
             var initialAmount = 100.75m;
 

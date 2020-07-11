@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace Mollie.Tests.Integration.Framework {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
-    public class RetryOnFailureAttribute : PropertyAttribute, IWrapSetUpTearDown {
+    public class RetryOnApiRateLimitFailureAttribute : PropertyAttribute, IWrapSetUpTearDown {
         private int _count;
         private const int TimeToSleepAfterTestFails = 10000;
         private const string RateLimitException = "System.Net.Http.HttpRequestException : Unknown http exception occured with status code: 429.";
@@ -16,7 +16,7 @@ namespace Mollie.Tests.Integration.Framework {
         /// Construct a RepeatAttribute
         /// </summary>
         /// <param name="count">The number of times to run the test</param>
-        public RetryOnFailureAttribute(int count) : base(count) {
+        public RetryOnApiRateLimitFailureAttribute(int count) : base(count) {
             _count = count;
         }
 
