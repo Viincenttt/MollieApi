@@ -21,6 +21,7 @@ Have you spotted a bug or want to add a missing feature? All pull requests are w
 [9. Order API](#9-order-api)
 [10. Organizations API](#10-organizations-api)
 [11. Connect Api](#11-connect-api)
+[12. Profile Api](#12-profile-api)
 
 ## 1. Mollie API v1 and v2
 In May 2018, Mollie launched version 2 of their API. Version 2 offers support for multicurrency, improved error messages and much more.  The current version of the Mollie API client supports all API version 2 features. If you want to keep using version 1, you can use version 1.5.2 of the Mollie API Nuget package. Version 2.0.0+ of the Mollie API client supports version 2 of the API.  
@@ -673,4 +674,60 @@ RevokeTokenRequest revokeTokenRequest = new RevokeTokenRequest() {
 	Token = {accessToken}
 };
 TokenResponse result = client.RevokeTokenAsync(revokeTokenRequest);
+```
+
+## 12. Profile Api
+### Create profile
+In order to process payments, you need to create a website profile. A website profile can easily be created via the Dashboard manually. However, the Mollie API also allows automatic profile creation via the Profiles API.
+```C#
+ProfileRequest profileRequest = new ProfileRequest() {
+	Name = {name},
+	Website = {website},
+	...
+};
+IProfileClient client = new ProfileClient({yourApiKey);
+ProfileResponse response = client.CreateProfileAsync(profileRequest);
+```
+
+### Get profile
+Retrieve details of a profile, using the profile’s identifier.
+```C#
+IProfileClient client = new ProfileClient({yourApiKey);
+ProfileResponse profileResponse = await client.GetProfileAsync({profileId});
+```
+
+### Get current profile
+Use this API if you are creating a plugin or SaaS application that allows users to enter a Mollie API key, and you want to give a confirmation of the website profile that will be used in your plugin or application.
+```C#
+IProfileClient client = new ProfileClient({yourApiKey);
+ProfileResponse profileResponse = await client.GetCurrentProfileAsync();
+```
+
+### Update profile
+A profile is required to process payments. A profile can easily be created and updated via the Dashboard manually. However, the Mollie API also allows automatic profile creation and updates via the Profiles API.
+```C#
+ProfileRequest profileRequest = new ProfileRequest() {
+	Name = {name},
+	Website = {website},
+	...
+};
+IProfileClient client = new ProfileClient({yourApiKey);
+ProfileResponse profileResponse = await client.UpdateProfileAsync({profileId}, profileRequest);
+```
+
+### Enable or disable payment method
+Enable or disable a payment method on a specific or authenticated profile to use it with payments.
+```C#
+IProfileClient client = new ProfileClient({yourApiKey);
+PaymentMethodResponse paymentMethodResponse = await profileClient.EnablePaymentMethodAsync({profileId}, PaymentMethod.Ideal);
+await profileClient.DisablePaymentMethodAsync({profileId}, PaymentMethod.Ideal);
+```
+
+### Enable or disable gift card issuer
+Enable or disable a gift card issuer on a specific or authenticated profile to use it with payments.
+```C#
+IProfileClient client = new ProfileClient({yourApiKey);
+const string issuerToToggle = "festivalcadeau";
+EnableGiftCardIssuerResponse paymentMethodResponse = await profileClient.EnableGiftCardIssuerAsync({profileId}, issuerToToggle);
+await profileClient.DisableGiftCardIssuerAsync({profileId}, issuerToToggle);
 ```
