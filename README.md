@@ -158,7 +158,7 @@ PaymentRequest paymentRequest = new PaymentRequest() {
 	Amount = new Amount(Currency.EUR, "100.00"),
 	Description = "Description",
 	RedirectUrl = "http://www.mollie.com",
-	Method = new List<string>() {
+	Methods = new List<string>() {
 		PaymentMethod.Ideal,
 		PaymentMethod.CreditCard,
 		PaymentMethod.DirectDebit
@@ -501,14 +501,29 @@ OrderRequest orderRequest = new OrderRequest() {
 };
 ```
 
+#### Passing multiple payment methods
+It is also possible to pass multiple payment methods when creating a new order. Mollie will then only show the payment methods you've specified when creating the payment request. 
+```c#
+OrderRequest orderRequest = new OrderRequest() {
+	Amount = new Amount(Currency.EUR, "100.00"),
+	OrderNumber = "16738",
+	Methods = new List<string>() {
+		PaymentMethod.Ideal,
+		PaymentMethod.CreditCard,
+		PaymentMethod.DirectDebit
+	}
+	...
+```
 
 ### Retrieve a order by id
+Retrieve a single order by its ID.
 ```c#
 IOrderClient orderClient = new OrderClient("{yourApiKey}");
 OrderResponse retrievedOrder = await orderClient.GetOrderAsync({orderId});
 ```
 
 ### Update existing order
+This endpoint can be used to update the billing and/or shipping address of an order.
 ```c#
 IOrderClient orderClient = new OrderClient("{yourApiKey}");
 OrderUpdateRequest orderUpdateRequest = new OrderUpdateRequest() {
@@ -517,13 +532,8 @@ OrderUpdateRequest orderUpdateRequest = new OrderUpdateRequest() {
 OrderResponse updatedOrder = await orderClient.UpdateOrderAsync({orderId}, orderUpdateRequest);
 ```
 
-### Cancel existing order
-```c#
-IOrderClient orderClient = new OrderClient("{yourApiKey}");
- OrderResponse canceledOrder = await this._orderClient.GetOrderAsync({orderId});
-```
-
 ### Update order line
+This endpoint can be used to update an order line. Only the lines that belong to an order with status created, pending or authorized can be updated.
 ```c#
 IOrderClient orderClient = new OrderClient("{yourApiKey}");
 OrderLineUpdateRequest updateRequest = new OrderLineUpdateRequest() {
@@ -533,7 +543,63 @@ OrderResponse updatedOrder = await orderClient.UpdateOrderLinesAsync({orderId}, 
 ```
 
 ### Retrieve list of orders
+Retrieve all orders.
 ```c#
 IOrderClient orderClient = new OrderClient("{yourApiKey}");
 ListResponse<OrderResponse> response = await orderClient.GetOrderListAsync();
+```
+
+### Cancel existing order
+Cancels an existing order. Take a look at the documentation on this endpoint to see which conditions need to apply before an order can be canceled.
+```c#
+IOrderClient orderClient = new OrderClient("{yourApiKey}");
+ OrderResponse canceledOrder = await this._orderClient.GetOrderAsync({orderId});
+```
+
+### Cancel order lines
+This endpoint can be used to cancel one or more order lines that were previously authorized using a pay after delivery payment method. Use the Cancel Order API if you want to cancel the entire order or the remainder of the order.
+```c#
+OrderLineCancellationRequest cancellationRequest = new OrderLineCancellationRequest() {
+	Lines = new List<OrderLineDetails>() {
+		Id = {orderLineId},
+		Quantity = 5,
+		Amount = new Amount("EUR", 5)
+	}
+};
+IOrderClient orderClient = new OrderClient("{yourApiKey}");
+OrderResponse result = await this._orderClient.CancelOrderLinesAsync({orderId}, cancellationRequest);
+```
+
+### Create order payment
+An order has an automatically created payment that your customer can use to pay for the order. When the payment expires you can create a new payment for the order using this endpoint.
+```c#
+OrderPaymentRequest orderPaymentRequest = new OrderPaymentRequest() {
+	Method = PaymentMethod.Ideal,
+	CustomerId = {customerId},
+	MandateId = {mandateId}
+};
+IOrderClient orderClient = new OrderClient("{yourApiKey}");
+OrderResponse result = await this._orderClient.CreateOrderPaymentAsync({orderId}, orderPaymentRequest);
+```
+
+### Create order refund
+When using the Orders API, refunds should be made against the Order. When using pay after delivery payment methods such as Klarna Pay later and Klarna Slice it, this ensures that your customer will receive credit invoices with the correct product information on them and generally have a great experience.
+```c#
+OrderRefundRequest orderRefundRequest = new OrderRefundRequest() {
+	Lines = new List<OrderLineDetails>() {
+		Id = {orderLineId},
+		Quantity = 5,
+		Amount = new Amount("EUR", 5)
+	},
+	Description = ""
+};
+IOrderClient orderClient = new OrderClient("{yourApiKey}");
+OrderResponse result = await this._orderClient.CreateOrderRefundAsync({orderId}, orderRefundRequest);
+```
+
+### List order refunds
+Retrieve all order refunds.
+```C#
+IOrderClient orderClient = new OrderClient("{yourApiKey}");
+ListResponse<RefundResponse> result = await this._orderClient.GetOrderRefundListAsync({orderId});
 ```
