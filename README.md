@@ -1,4 +1,5 @@
 # MollieApi
+![](https://github.com/Viincenttt/MollieApi/workflows/Run%20automated%20tests/badge.svg)
 
 This project allows you to easily add the [Mollie payment provider](https://www.mollie.com) to your application. Mollie has excellent [documentation](https://www.mollie.com/nl/docs/overzicht) which I highly recommend you read before using this library. 
 
