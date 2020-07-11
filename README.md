@@ -20,6 +20,7 @@ Have you spotted a bug or want to add a missing feature? All pull requests are w
 [8. Subscription API](#8-subscription-api)  
 [9. Order API](#9-order-api)
 [10. Organizations API](#10-organizations-api)
+[11. Connect Api](#11-connect-api)
 
 ## 1. Mollie API v1 and v2
 In May 2018, Mollie launched version 2 of their API. Version 2 offers support for multicurrency, improved error messages and much more.  The current version of the Mollie API client supports all API version 2 features. If you want to keep using version 1, you can use version 1.5.2 of the Mollie API Nuget package. Version 2.0.0+ of the Mollie API client supports version 2 of the API.  
@@ -644,4 +645,32 @@ OrganizationResponse result = await client.GetCurrentOrganizationAsync();
 ```C#
 IOrganizationsClient client = new OrganizationsClient("{yourApiKey}");
 OrganizationResponse result = await client.GetOrganizationAsync({organizationId});
+```
+
+## 11. Connect Api
+### Creating a authorization URL
+The Authorize endpoint is the endpoint on Mollie web site where the merchant logs in, and grants authorization to your client application. E.g. when the merchant clicks on the Connect with Mollie button, you should redirect the merchant to the Authorize endpoint.
+```C#
+IConnectClient client = new ConnectClient({clientId}, {clientSecret});
+List<string> scopes = new List<string>() { AppPermissions.PaymentsRead };
+string authorizationUrl = client.GetAuthorizationUrl({state}, scopes);
+```
+
+### Generate token
+Exchange the auth code received at the Authorize endpoint for an actual access token, with which you can communicate with the Mollie API.
+```C#
+IConnectClient client = new ConnectClient({clientId}, {clientSecret});
+TokenRequest request = new TokenRequest({authCode}, {redirectUrl});
+TokenResponse result = client.GetAccessTokenAsync(request);
+```
+
+### Revoke token
+Revoke an access- or a refresh token. Once revoked the token can not be used anymore.
+```C#
+IConnectClient client = new ConnectClient({clientId}, {clientSecret});
+RevokeTokenRequest revokeTokenRequest = new RevokeTokenRequest() {
+	TokenTypeHint = TokenType.AccessToken,
+	Token = {accessToken}
+};
+TokenResponse result = client.RevokeTokenAsync(revokeTokenRequest);
 ```
