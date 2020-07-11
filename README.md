@@ -23,6 +23,7 @@ Have you spotted a bug or want to add a missing feature? All pull requests are w
 [11. Connect Api](#11-connect-api)
 [12. Profile Api](#12-profile-api)
 [13. Captures API](#13-captures-api)
+[14. Onboarding Api](#14-onboarding-api)
 
 ## 1. Mollie API v1 and v2
 In May 2018, Mollie launched version 2 of their API. Version 2 offers support for multicurrency, improved error messages and much more.  The current version of the Mollie API client supports all API version 2 features. If you want to keep using version 1, you can use version 1.5.2 of the Mollie API Nuget package. Version 2.0.0+ of the Mollie API client supports version 2 of the API.  
@@ -746,4 +747,30 @@ Retrieve all captures for a certain payment.
 ```C#
 CaptureClient captureClient = new CaptureClient({yourApiKey});
 ListResponse<CaptureResponse> result = await captureClient.GetCapturesListAsync({paymentId});
+```
+
+## 14. Onboarding Api
+### Get onboarding status
+Get the status of onboarding of the authenticated organization.
+```C#
+OnboardingClient onboardingClient = new OnboardingClient({yourApiKey});
+OnboardingStatusResponse onboardingResponse = await onboardingClient.GetOnboardingStatusAsync();
+```
+
+### Submit onboarding data
+Submit data that will be prefilled in the merchant’s onboarding. Please note that the data you submit will only be processed when the onboarding status is needs-data.
+```C#
+SubmitOnboardingDataRequest submitOnboardingDataRequest = new SubmitOnboardingDataRequest() {
+	Organization = new OnboardingOrganizationRequest() {
+		Name = {name},
+		Address = new AddressObject() {
+			StreetAndNumber = {streetAndNumber}
+		}
+	},
+	Profile = new OnboardingProfileRequest() {
+		Name = {name}
+	}
+};
+OnboardingClient onboardingClient = new OnboardingClient({yourApiKey});
+await onboardingClient.SubmitOnboardingDataAsync(submitOnboardingDataRequest);
 ```
