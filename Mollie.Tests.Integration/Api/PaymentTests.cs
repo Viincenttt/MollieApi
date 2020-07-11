@@ -206,6 +206,7 @@ namespace Mollie.Tests.Integration.Api {
             Assert.IsNull(result.Method);
         }
 
+        [RetryOnFailure(BaseMollieApiTestClass.NumberOfRetries)]
         [TestCase(typeof(IdealPaymentRequest), PaymentMethod.Ideal, typeof(IdealPaymentResponse))]
         [TestCase(typeof(PaymentRequest), PaymentMethod.Bancontact, typeof(BancontactPaymentResponse))]
         [TestCase(typeof(PaymentRequest), PaymentMethod.Sofort, typeof(SofortPaymentResponse))]

@@ -3,13 +3,14 @@ using NUnit.Framework.Interfaces;
 using NUnit.Framework.Internal;
 using NUnit.Framework.Internal.Commands;
 using System;
+using System.Threading;
 
-namespace Mollie.Tests.Integration.Framework
-{
+namespace Mollie.Tests.Integration.Framework {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
-    public class RetryOnFailureAttribute : PropertyAttribute, IWrapSetUpTearDown
-    {
+    public class RetryOnFailureAttribute : PropertyAttribute, IWrapSetUpTearDown {
         private int _count;
+        private const int TimeToSleepAfterTestFails = 10000;
+        private const string RateLimitException = "System.Net.Http.HttpRequestException : Unknown http exception occured with status code: 429.";
 
         /// <summary>
         /// Construct a RepeatAttribute
@@ -55,7 +56,7 @@ namespace Mollie.Tests.Integration.Framework
 
                 while (count-- > 0) {
                     context.CurrentResult = innerCommand.Execute(context);
-                    var results = context.CurrentResult.ResultState;
+                    var results = context.CurrentResult.ResultState;                    
 
                     if (results != ResultState.Error
                         && results != ResultState.Failure
@@ -65,6 +66,9 @@ namespace Mollie.Tests.Integration.Framework
                         && results != ResultState.ChildFailure) {
                         break;
                     }
+                    else if (context.CurrentResult.Message == RateLimitException) {
+                        Thread.Sleep(TimeToSleepAfterTestFails);
+                    }                    
                 }
 
                 return context.CurrentResult;
