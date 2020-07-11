@@ -9,7 +9,7 @@ namespace Mollie.Tests.Integration.Framework {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
     public class RetryOnApiRateLimitFailureAttribute : PropertyAttribute, IWrapSetUpTearDown {
         private int _count;
-        private const int TimeToSleepAfterTestFails = 10000;
+        private const int TimeToSleepAfterTestFails = 20000;
         private const string RateLimitException = "System.Net.Http.HttpRequestException : Unknown http exception occured with status code: 429.";
 
         /// <summary>
