@@ -49,7 +49,7 @@ This library currently supports the following API's:
 - Invoices API
 - Permissions API
 - Profiles API
-- Organisations API
+- Organizations API
 - Order API
 - Captures API
 - Onboarding API
@@ -329,6 +329,17 @@ ICustomerClient customerClient = new CustomerClient("{yourApiKey}");
 await customerClient.DeleteCustomerAsync("{customerIdToDelete}");
 ```
 
+### Create customer payment
+Creates a payment for the customer.
+```c#
+PaymentRequest paymentRequest = new PaymentRequest() {
+    Amount = new Amount(Currency.EUR, "100.00"),
+    Description = "{description}",
+    RedirectUrl = this.DefaultRedirectUrl,
+};
+ICustomerClient customerClient = new CustomerClient("{yourApiKey}");
+PaymentResponse result = await customerClient.CreateCustomerPayment({customerId}, paymentRequest);
+```
 
 
 ## 7. Mandate API
