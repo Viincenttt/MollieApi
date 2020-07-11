@@ -51,6 +51,8 @@ This library currently supports the following API's:
 - Profiles API
 - Organisations API
 - Order API
+- Captures API
+- Onboarding API
 
 ### Creating a API client object
 Every API has it's own API client class. For example: PaymentClient, PaymentMethodClient, CustomerClient, MandateClient, SubscriptionClient, IssuerClient and RefundClient classes. All of these API client classes also have their own interface. 
@@ -61,7 +63,7 @@ IPaymentClient paymentClient = new PaymentClient("{yourApiKey}");
 ```
 
 ### List of constant value strings
-In the past, this library used enums that were decorated with the EnumMemberAttribute for static values that were defined in the Mollie documentation. We are now moving away from this idea and using constant strings where possible. The reason for this is that enum values often broke when Mollie added new values to their API. This means that I had to release a new version every time when Mollie added a new value and all library consumers had to update their version. The following static classes are available with const string values that you can use to set and compare values in your code:
+In the past, this library used enums that were decorated with the EnumMemberAttribute for static values that were defined in the Mollie documentation. We have now moved away from this idea and are using constant strings everywhere. The reason for this is that enum values often broke when Mollie added new values to their API. This means that I had to release a new version every time when Mollie added a new value and all library consumers had to update their version. The following static classes are available with const string values that you can use to set and compare values in your code:
 - Mollie.Api.Models.Payment.PaymentMethod
 - Mollie.Api.Models.Payment.PaymentStatus
 - Mollie.Api.Models.Payment.SequenceType
@@ -87,7 +89,7 @@ In the past, this library used enums that were decorated with the EnumMemberAttr
 - Mollie.Api.Models.Connect.AppPermissions
 - Mollie.Api.Models.Onboarding.Response.OnboardingStatus
 
-You can use these classes similar to how you use enums. For example, when creating a new payment, you can 
+You can use these classes similar to how you use enums. For example, when creating a new payment, you can do the following:
 ```c#
 PaymentRequest paymentRequest = new PaymentRequest() {
     Amount = new Amount(Currency.EUR, "100.00"),
@@ -113,14 +115,15 @@ PaymentResponse paymentResponse = await paymentClient.CreatePaymentAsync(payment
 If you want to create a payment with a specific paymentmethod, there are seperate classes that allow you to set paymentmethod specific parameters. For example, a bank transfer payment allows you to set the billing e-mail and due date. Have a look at the [Mollie create payment documentation](https://www.mollie.com/nl/docs/reference/payments/create) for more information. 
 
 The full list of payment specific request classes is:
+- ApplePayPaymentRequest
 - BankTransferPaymentRequest
-- BitcoinPaymentRequest
 - CreditCardPaymentRequest
 - GiftcardPaymentRequest
 - IdealPaymentRequest
 - KbcPaymentRequest
 - PayPalPaymentRequest
 - PaySafeCardPaymentRequest
+- Przelewy24PaymentRequest
 - SepaDirectDebitRequest
 
 For example, if you'd want to create a bank transfer payment, you can instantiate a new BankTransferPaymentRequest:
@@ -132,6 +135,7 @@ paymentRequest.BillingEmail = "{billingEmail}";
 BankTransferPaymentResponse response = (BankTransferPaymentResponse)await paymentClient.CreatePaymentAsync(paymentRequest);
 ```
 
+#### QR codes
 Some payment methods also support QR codes. In order to retrieve a QR code, you have to set the `includeQrCode` parameter to `true` when sending the payment request. For example:
 ```c#
 PaymentRequest paymentRequest = new PaymentRequest() {
@@ -145,6 +149,21 @@ PaymentResponse result = await this._paymentClient.CreatePaymentAsync(paymentReq
 IdealPaymentResponse idealPaymentResult = result as IdealPaymentResponse;
 IdealPaymentResponseDetails idealPaymentDetails = idealPaymentResult.Details;
 string qrCode = idealPaymentDetails.QrCode.Src;
+```
+
+#### Passing multiple payment methods
+It is also possible to pass multiple payment methods when creating a new payment. Mollie will then only show the payment methods you've specified when creating the payment request. 
+```c#
+PaymentRequest paymentRequest = new PaymentRequest() {
+	Amount = new Amount(Currency.EUR, "100.00"),
+	Description = "Description",
+	RedirectUrl = "http://www.mollie.com",
+	Method = new List<string>() {
+		PaymentMethod.Ideal,
+		PaymentMethod.CreditCard,
+		PaymentMethod.DirectDebit
+	}
+};
 ```
 
 ### Retrieving a payment by id
@@ -161,7 +180,6 @@ The full list of payment specific response classes is:
 - BancontactPaymentResponse
 - BankTransferPaymentResponse
 - BelfiusPaymentResponse
-- BitcoinPaymentResponse
 - CreditCardPaymentResponse
 - GiftcardPaymentResponse
 - IdealPaymentResponse
