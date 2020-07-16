@@ -74,15 +74,15 @@
     /// The card's target audience.
     /// </summary>
     public static class CreditCardAudience {
-        public const string Consumer = nameof(Consumer);
-        public const string Business = nameof(Business);
+        public const string Consumer = "consumer";
+        public const string Business = "business";
     }
 
     /// <summary>
     /// Only available if the payment has been completed – The type of security used during payment processing.
     /// </summary>
     public static class CreditCardSecurity {
-        public const string Normal = nameof(Normal);
+        public const string Normal = "normal";
         public const string Secure3D = "3dsecure";
     }
 

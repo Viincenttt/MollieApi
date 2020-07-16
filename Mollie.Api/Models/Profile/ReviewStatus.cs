@@ -3,12 +3,12 @@
         /// <summary>
         /// The changes are pending review. We will review your changes soon.
         /// </summary>
-        public const string Pending = nameof(Pending);
+        public const string Pending = "pending";
 
         /// <summary>
         /// We've reviewed and rejected your changes.
         /// </summary>
-        public const string Rejected = nameof(Rejected);
+        public const string Rejected = "rejected";
     }
         
 }
