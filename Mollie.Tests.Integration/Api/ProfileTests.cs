@@ -32,11 +32,11 @@ namespace Mollie.Tests.Integration.Api {
             // Given
 
             // When: We enable a payment method for the current profile
-            PaymentMethodResponse paymentMethodResponse = await this._profileClient.EnablePaymentMethodAsync(PaymentMethod.Ideal);
+            PaymentMethodResponse paymentMethodResponse = await this._profileClient.EnablePaymentMethodAsync(PaymentMethod.CreditCard);
 
             // Then: Make sure a payment method is returned
             Assert.IsNotNull(paymentMethodResponse);
-            Assert.AreEqual(PaymentMethod.Ideal, paymentMethodResponse.Id);
+            Assert.AreEqual(PaymentMethod.CreditCard, paymentMethodResponse.Id);
         }
 
         [Test]

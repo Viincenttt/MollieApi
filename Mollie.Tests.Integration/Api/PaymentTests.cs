@@ -47,7 +47,7 @@ namespace Mollie.Tests.Integration.Api {
         [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task WhenRetrievingAListOfPaymentsPaymentSubclassesShouldBeInitialized() {
             // Given: We create a new payment 
-            IdealPaymentRequest paymentRequest = new IdealPaymentRequest() {
+            CreditCardPaymentRequest paymentRequest = new CreditCardPaymentRequest() {
                 Amount = new Amount(Currency.EUR, "100.00"),
                 Description = "Description",
                 RedirectUrl = this.DefaultRedirectUrl
@@ -58,7 +58,7 @@ namespace Mollie.Tests.Integration.Api {
             ListResponse<PaymentResponse> result = await this._paymentClient.GetPaymentListAsync(null, 5);
 
             // Then: We expect a list with a single ideal payment            
-            Assert.IsAssignableFrom<IdealPaymentResponse>(result.Items.First());
+            Assert.IsAssignableFrom<CreditCardPaymentResponse>(result.Items.First());
         }
 
         [Test]
@@ -141,7 +141,7 @@ namespace Mollie.Tests.Integration.Api {
                 Amount = new Amount(Currency.EUR, "100.00"),
                 Description = "Description",
                 RedirectUrl = this.DefaultRedirectUrl,
-                Method = PaymentMethod.Ideal
+                Method = PaymentMethod.CreditCard
             };
 
             // When: We send the payment request to Mollie
@@ -154,29 +154,6 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(paymentRequest.Description, result.Description);
             Assert.AreEqual(paymentRequest.RedirectUrl, result.RedirectUrl);
             Assert.AreEqual(paymentRequest.Method, result.Method);
-        }
-
-        [Test]
-        [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public async Task CanCreatePaymentAndRetrieveQrCode() {
-            // Given: We create a payment with a payment method that supports QR codes
-            PaymentRequest paymentRequest = new PaymentRequest() {
-                Amount = new Amount(Currency.EUR, "100.00"),
-                Description = "Description",
-                RedirectUrl = this.DefaultRedirectUrl,
-                Method = PaymentMethod.Ideal
-            };
-
-            // When: We send the request to Mollie
-            PaymentResponse result = await this._paymentClient.CreatePaymentAsync(paymentRequest, includeQrCode: true);
-
-            // Then
-            IdealPaymentResponse idealPaymentResult = result as IdealPaymentResponse;
-            Assert.IsNotNull(idealPaymentResult);
-            IdealPaymentResponseDetails idealPaymentDetails = idealPaymentResult.Details;
-            Assert.IsNotNull(idealPaymentDetails);
-            Assert.IsNotNull(idealPaymentDetails.QrCode);
-            Assert.IsNotNull(idealPaymentDetails.QrCode.Src);
         }
 
         [Test]
@@ -207,7 +184,6 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        [TestCase(typeof(IdealPaymentRequest), PaymentMethod.Ideal, typeof(IdealPaymentResponse))]
         [TestCase(typeof(PaymentRequest), PaymentMethod.Bancontact, typeof(BancontactPaymentResponse))]
         [TestCase(typeof(PaymentRequest), PaymentMethod.Sofort, typeof(SofortPaymentResponse))]
         [TestCase(typeof(BankTransferPaymentRequest), PaymentMethod.BankTransfer, typeof(BankTransferPaymentResponse))]

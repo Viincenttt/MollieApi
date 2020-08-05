@@ -20,7 +20,6 @@ namespace Mollie.Tests.Integration.Api {
             Assert.IsNotNull(response.Items);
         }
 
-        [TestCase(PaymentMethod.Ideal)]
         [TestCase(PaymentMethod.Bancontact)]
         [TestCase(PaymentMethod.Sofort)]
         [TestCase(PaymentMethod.BankTransfer)]
@@ -38,9 +37,9 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public async Task CanRetrieveIdealIssuers() {
+        public async Task CanRetrieveKbcIssuers() {
             // When: retrieving the ideal method we can include the issuers
-            PaymentMethodResponse paymentMethod = await this._paymentMethodClient.GetPaymentMethodAsync(PaymentMethod.Ideal, true);
+            PaymentMethodResponse paymentMethod = await this._paymentMethodClient.GetPaymentMethodAsync(PaymentMethod.Kbc, true);
 
             // Then: We should have one or multiple issuers
             Assert.IsNotNull(paymentMethod);
@@ -50,7 +49,7 @@ namespace Mollie.Tests.Integration.Api {
         [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task DoNotRetrieveIssuersWhenIncludeIsFalse() {
             // When: retrieving the ideal method with the include parameter set to false
-            PaymentMethodResponse paymentMethod = await this._paymentMethodClient.GetPaymentMethodAsync(PaymentMethod.Ideal, false);
+            PaymentMethodResponse paymentMethod = await this._paymentMethodClient.GetPaymentMethodAsync(PaymentMethod.Kbc, false);
 
             // Then: Issuers should not be included
             Assert.IsNull(paymentMethod.Issuers);
@@ -59,7 +58,7 @@ namespace Mollie.Tests.Integration.Api {
         [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanRetrievePricing() {
             // When: retrieving the ideal method we can include the issuers
-            PaymentMethodResponse paymentMethod = await this._paymentMethodClient.GetPaymentMethodAsync(PaymentMethod.Ideal, includePricing: true);
+            PaymentMethodResponse paymentMethod = await this._paymentMethodClient.GetPaymentMethodAsync(PaymentMethod.CreditCard, includePricing: true);
 
             // Then: We should have one or multiple issuers
             Assert.IsNotNull(paymentMethod);
@@ -69,7 +68,7 @@ namespace Mollie.Tests.Integration.Api {
         [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task DoNotRetrievePricingWhenIncludeIsFalse() {
             // When: retrieving the ideal method with the include parameter set to false
-            PaymentMethodResponse paymentMethod = await this._paymentMethodClient.GetPaymentMethodAsync(PaymentMethod.Ideal, includePricing: false);
+            PaymentMethodResponse paymentMethod = await this._paymentMethodClient.GetPaymentMethodAsync(PaymentMethod.CreditCard, includePricing: false);
 
             // Then: Issuers should not be included
             Assert.IsNull(paymentMethod.Pricing);

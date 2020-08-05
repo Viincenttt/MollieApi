@@ -53,13 +53,13 @@ namespace Mollie.Tests.Integration.Api {
         public async Task CanCreateOrderWithSinglePaymentMethod() {
             // When: we create a order request and specify a single payment method
             OrderRequest orderRequest = this.CreateOrderRequestWithOnlyRequiredFields();
-            orderRequest.Method = PaymentMethod.Ideal;
+            orderRequest.Method = PaymentMethod.CreditCard;
 
             // When: We send the order request to Mollie
             OrderResponse result = await this._orderClient.CreateOrderAsync(orderRequest);
 
             // Then: Make sure we get a valid response
-            Assert.AreEqual(PaymentMethod.Ideal, orderRequest.Methods.First());
+            Assert.AreEqual(PaymentMethod.CreditCard, orderRequest.Methods.First());
             Assert.IsNotNull(result);
             Assert.AreEqual(orderRequest.Amount.Value, result.Amount.Value);
             Assert.AreEqual(orderRequest.Amount.Currency, result.Amount.Currency);
