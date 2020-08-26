@@ -6,6 +6,6 @@
         public static string fr_FR = "fr_FR";
         public static string nl_BE = "nl_BE";
         public static string fr_BE = "fr_BE";
-        public static string nl_NL = "nl_BE";
+        public static string nl_NL = "nl_NL";
     }
 }
