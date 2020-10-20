@@ -51,8 +51,8 @@ namespace Mollie.Api.Client {
             return await this.PostAsync<PaymentResponse>($"orders/{orderId}/payments", createOrderPaymentRequest).ConfigureAwait(false);
         }
 
-        public async Task CreateOrderRefundAsync(string orderId, OrderRefundRequest createOrderRefundRequest) {
-            await this.DeleteAsync($"orders/{orderId}/refunds", createOrderRefundRequest);
+        public async Task<OrderRefundResponse> CreateOrderRefundAsync(string orderId, OrderRefundRequest createOrderRefundRequest) {
+            return await this.PostAsync<OrderRefundResponse>($"orders/{orderId}/refunds", createOrderRefundRequest);
         }
 
         public async Task<ListResponse<RefundResponse>> GetOrderRefundListAsync(string orderId, string from = null, int? limit = null) {

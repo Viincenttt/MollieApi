@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using Mollie.Api.JsonConverters;
+using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Order {
     public class OrderRefundRequest {
@@ -13,5 +15,11 @@ namespace Mollie.Api.Models.Order {
         /// bank statement when possible. Max. 140 characters.
         /// </summary>
         public string Description { get; set; }
+
+        /// <summary>
+        /// The optional metadata you provided upon line creation.
+        /// </summary>
+        [JsonConverter(typeof(RawJsonConverter))]
+        public string Metadata { get; set; }
     }
 }

@@ -41,12 +41,6 @@ namespace Mollie.Api.Models.Refund {
         public string Status { get; set; }
 
         /// <summary>
-        /// An array of order line objects as described in Get order. Only available if the refund was created via the
-        /// Create Order Refund API.
-        /// </summary>
-        public IEnumerable<OrderAddressDetails> Lines { get; set; }
-
-        /// <summary>
         /// The date and time the refund was issued, in ISO 8601 format.
         /// </summary>
         public DateTime? CreatedAt { get; set; }
