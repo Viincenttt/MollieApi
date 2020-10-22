@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Mollie.Api.Extensions;
@@ -121,6 +122,7 @@ namespace Mollie.Api.Client {
             HttpRequestMessage httpRequest = new HttpRequestMessage(method, new Uri(new Uri(this._apiEndpoint), relativeUri));
             httpRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", this._apiKey);
+            httpRequest.Headers.Add("User-Agent", this.GetUserAgent());
             httpRequest.Content = content;
 
             return httpRequest;
@@ -138,6 +140,12 @@ namespace Mollie.Api.Client {
             }
 
             return queryParameters.ToQueryString();
+        }
+
+        private string GetUserAgent() {
+            const string packageName = "Mollie.Api.NET";
+            string versionNumber = typeof(BaseMollieClient).GetTypeInfo().Assembly.GetName().Version.ToString();
+            return $"{packageName}/{versionNumber}";
         }
     }
 }
