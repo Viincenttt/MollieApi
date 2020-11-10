@@ -19,7 +19,8 @@
         public const string ShipmentsWrite = "shipments.write";
         public const string OrganizationRead = "organizations.read";
         public const string OrganizationWrite = "organizations.write";
-        public const string OnboardingRead = "onboarding.write";
+        public const string OnboardingRead = "onboarding.read";
         public const string OnboardingWrite = "onboarding.write";
+        public const string SettlementsRead = "settlements.read";
     }
 }
