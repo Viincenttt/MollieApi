@@ -147,6 +147,30 @@ namespace Mollie.Tests.Unit.Client {
     }}
 }}";
 
+        private readonly string emptyPeriodsSettlementResponse = @$"{{
+   ""resource"":""settlement"",
+   ""id"":""open"",
+   ""createdAt"":""2020-11-11T07:10:53+00:00"",
+   ""status"":""open"",
+   ""amount"":{{
+      ""value"":""0.00"",
+      ""currency"":""EUR""
+   }},
+   ""periods"":[
+      
+   ],
+   ""_links"":{{
+      ""self"":{{
+         ""href"":""https://api.mollie.com/v2/settlements/open"",
+         ""type"":""application/hal+json""
+      }},
+      ""documentation"":{{
+         ""href"":""https://docs.mollie.com/reference/v2/settlements-api/get-open-settlement"",
+         ""type"":""text/html""
+      }}
+   }}
+}}";
+
         [Test]
         public async Task ListSettlementCaptures_DefaultBehaviour_ResponseIsParsed() {
             // Given: We request a list of captures
@@ -188,5 +212,22 @@ namespace Mollie.Tests.Unit.Client {
             Assert.AreEqual(defaultAmountCurrency, settlementResponse.Amount.Currency);
             Assert.AreEqual(1, settlementResponse.Periods.Count);
         }
-    }
+
+        [Test]
+        public async Task GetOpenSettlement_ResponseWithEmptyPeriods_ResponseIsParsed() {
+            // Given: We request a list of captures
+            string expectedUrl = $"{BaseMollieClient.ApiEndPoint}settlements/open";
+            var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, emptyPeriodsSettlementResponse);
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            SettlementsClient settlementsClient = new SettlementsClient("api-key", httpClient);
+
+            // When: We make the request
+            SettlementResponse settlementResponse = await settlementsClient.GetOpenSettlement();
+
+            // Then: Response should be parsed
+            mockHttp.VerifyNoOutstandingExpectation();
+            Assert.IsNotNull(settlementResponse);
+            Assert.AreEqual(0, settlementResponse.Periods.Count);
+        }
+    }    
 }
