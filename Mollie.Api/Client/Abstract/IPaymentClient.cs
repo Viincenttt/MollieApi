@@ -29,7 +29,7 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="from"></param>
         /// <param name="limit"></param>
         /// <param name="profileId"></param>
-        /// <param name="testMode"></param>
+        /// <param name="testmode"></param>
         /// <returns></returns>
 		Task<ListResponse<PaymentResponse>> GetPaymentListAsync(string from = null, int? limit = null, string profileId = null, bool testmode = false, bool includeQrCode = false);
         Task<ListResponse<PaymentResponse>> GetPaymentListAsync(UrlObjectLink<ListResponse<PaymentResponse>> url);
