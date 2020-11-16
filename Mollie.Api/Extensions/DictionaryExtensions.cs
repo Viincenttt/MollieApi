@@ -22,7 +22,13 @@ namespace Mollie.Api.Extensions {
 
         public static void AddValueIfTrue(this IDictionary<string, string> dictionary, string key, bool value) {
             if (value) {
-                dictionary.Add(key, value.ToString().ToLower());
+                dictionary.Add(key, bool.TrueString.ToLower());
+            }
+        }
+        
+        public static void AddValueIfTrue(this IDictionary<string, string> dictionary, string key, bool? value) {
+            if (value == true) {
+                dictionary.Add(key, bool.TrueString.ToLower());
             }
         }
     }

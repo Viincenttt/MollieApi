@@ -11,7 +11,7 @@ namespace Mollie.Api.Client.Abstract {
     public interface ISettlementsClient {
         Task<SettlementResponse> GetSettlementAsync(string settlementId);
         Task<SettlementResponse> GetNextSettlement();
-        Task<SettlementResponse> GetOpenBalance();
+        Task<SettlementResponse> GetOpenSettlement();
         Task<ListResponse<SettlementResponse>> GetSettlementsListAsync(string reference = null, string from = null, int? limit = null);
         Task<ListResponse<PaymentResponse>> GetSettlementPaymentsListAsync(string settlementId, string from = null, int? limit = null);
         Task<ListResponse<RefundResponse>> GetSettlementRefundsListAsync(string settlementId, string from = null, int? limit = null);

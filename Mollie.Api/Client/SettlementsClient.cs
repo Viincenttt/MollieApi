@@ -22,7 +22,7 @@ namespace Mollie.Api.Client {
             return await this.GetAsync<SettlementResponse>($"settlements/next").ConfigureAwait(false);
         }
 
-        public async Task<SettlementResponse> GetOpenBalance() {
+        public async Task<SettlementResponse> GetOpenSettlement() {
             return await this.GetAsync<SettlementResponse>($"settlements/open").ConfigureAwait(false);
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Mollie.Api.JsonConverters;
 using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Settlement {
@@ -47,6 +48,7 @@ namespace Mollie.Api.Models.Settlement {
 		/// This object is a collection of Period objects, which describe the settlement by month in full detail.
 		/// Please refer to the Period object section below.
 		/// </summary>
+		[JsonConverter(typeof(SettlementPeriodConverter))]
 		public Dictionary<int, Dictionary<int, SettlementPeriod>> Periods { get; set; }
 
 		/// <summary>
