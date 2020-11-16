@@ -58,11 +58,8 @@ namespace Mollie.Api.Client {
                 profileId: profileId,
                 testmode: testmode,
                 includeQrCode: includeQrCode);
-            var parameters = new Dictionary<string, string>();
-            parameters.AddValueIfNotNullOrEmpty(nameof(profileId), profileId);
-            parameters.AddValueIfNotNullOrEmpty(nameof(testmode), Convert.ToString(testmode).ToLower());
 
-			return await this.GetListAsync<ListResponse<PaymentResponse>>($"payments", from, limit, queryParameters).ConfigureAwait(false);
+            return await this.GetListAsync<ListResponse<PaymentResponse>>($"payments", from, limit, queryParameters).ConfigureAwait(false);
 		}
 
         public async Task<PaymentResponse> UpdatePaymentAsync(string paymentId, PaymentUpdateRequest paymentUpdateRequest) {
