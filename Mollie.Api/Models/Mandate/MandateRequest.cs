@@ -7,7 +7,7 @@ namespace Mollie.Api.Models.Mandate {
         }
 
         /// <summary>
-        /// Payment method of the mandate - See the Mollie.Api.Models.Payment.PaymentMethod class for a full list of known values.
+        /// Payment method of the mandate - Possible values: `directdebit` `paypal`
         /// </summary>
         public string Method { get; set; }
 
@@ -17,7 +17,7 @@ namespace Mollie.Api.Models.Mandate {
         public string ConsumerName { get; set; }
 
         /// <summary>
-        /// Required - Consumer's IBAN account
+        /// Required for `directdebit` mandates - Consumer's IBAN account
         /// </summary>
         public string ConsumerAccount { get; set; }
 
@@ -25,7 +25,12 @@ namespace Mollie.Api.Models.Mandate {
         /// Optional - The consumer's bank's BIC / SWIFT code.
         /// </summary>
         public string ConsumerBic { get; set; }
-        
+
+        /// <summary>
+        /// Required For Paypal - The consumer's email address.
+        /// </summary>
+        public string ConsumerEmail { get; set; }
+
         /// <summary>
         /// Optional - The date when the mandate was signed.
         /// </summary>
@@ -35,5 +40,10 @@ namespace Mollie.Api.Models.Mandate {
         /// Optional - A custom reference
         /// </summary>
         public string MandateReference { get; set; }
+
+        /// <summary>
+        /// Required for `paypal` mandates - The billing agreement ID given by PayPal.
+        /// </summary>
+        public string PaypalBillingAgreementId { get; set; }
     }
 }
