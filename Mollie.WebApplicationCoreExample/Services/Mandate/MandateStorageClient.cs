@@ -19,7 +19,7 @@ namespace Mollie.WebApplicationCoreExample.Services.Mandate {
         }
 
         private MandateRequest CreateDefaultMandateRequest() {
-            return new MandateRequest() {
+            return new SepaDirectDebitMandateRequest() {
                 Method = Api.Models.Payment.PaymentMethod.DirectDebit,
                 ConsumerName = "John Smit",
                 ConsumerAccount = "NL86INGB0002445588", // IBAN van de belastingdienst ;D
