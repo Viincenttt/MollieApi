@@ -82,6 +82,7 @@ In the past, this library used enums that were decorated with the EnumMemberAttr
 - Mollie.Api.Models.Payment.Response.PayPalSellerProtection
 - Mollie.Api.Models.Mandate.InvoiceStatus
 - Mollie.Api.Models.Mandate.MandateStatus
+- Mollie.Api.Models.Order.OrderLineDetailsCategory
 - Mollie.Api.Models.Order.OrderLineDetailsType
 - Mollie.Api.Models.Order.OrderLineStatus
 - Mollie.Api.Models.Order.OrderStatus

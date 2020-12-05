@@ -15,7 +15,7 @@ namespace Mollie.Tests.Integration.Api {
         [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanCreateOrderWithOnlyRequiredFields() {
             // If: we create a order request with only the required parameters
-            OrderRequest orderRequest = this.CreateOrderRequestWithOnlyRequiredFields();
+            OrderRequest orderRequest = this.CreateOrder();
 
             // When: We send the order request to Mollie
             OrderResponse result = await this._orderClient.CreateOrderAsync(orderRequest);
@@ -25,13 +25,15 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(orderRequest.Amount.Value, result.Amount.Value);
             Assert.AreEqual(orderRequest.Amount.Currency, result.Amount.Currency);
             Assert.AreEqual(orderRequest.OrderNumber, result.OrderNumber);
+            Assert.AreEqual(orderRequest.Lines.Count(), result.Lines.Count());
+            Assert.AreEqual(orderRequest.Lines.First().Type, result.Lines.First().Type);
         }
 
         [Test]
         [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanCreateOrderWithMultiplePaymentMethods() {
             // When: we create a order request and specify multiple payment methods
-            OrderRequest orderRequest = this.CreateOrderRequestWithOnlyRequiredFields();
+            OrderRequest orderRequest = this.CreateOrder();
             orderRequest.Methods = new List<string>() {
                 PaymentMethod.Ideal,
                 PaymentMethod.CreditCard,
@@ -52,7 +54,7 @@ namespace Mollie.Tests.Integration.Api {
         [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanCreateOrderWithSinglePaymentMethod() {
             // When: we create a order request and specify a single payment method
-            OrderRequest orderRequest = this.CreateOrderRequestWithOnlyRequiredFields();
+            OrderRequest orderRequest = this.CreateOrder();
             orderRequest.Method = PaymentMethod.CreditCard;
 
             // When: We send the order request to Mollie
@@ -69,7 +71,7 @@ namespace Mollie.Tests.Integration.Api {
         [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanCreateOrderWithPaymentSpecificOptions() {
             // If: we create a order request with payment specific parameters
-            OrderRequest orderRequest = this.CreateOrderRequestWithOnlyRequiredFields();
+            OrderRequest orderRequest = this.CreateOrder();
             orderRequest.Payment = new IDealSpecificParameters() {
                 Issuer = "ideal_INGBNL2A"
             };
@@ -87,7 +89,7 @@ namespace Mollie.Tests.Integration.Api {
         [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanRetrieveOrderAfterCreationOrder() {
             // If: we create a new order
-            OrderRequest orderRequest = this.CreateOrderRequestWithOnlyRequiredFields();
+            OrderRequest orderRequest = this.CreateOrder();
             OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
 
             // When: We attempt to retrieve the order
@@ -101,7 +103,7 @@ namespace Mollie.Tests.Integration.Api {
         [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanRetrieveOrderAndIncludeEmbeddedData() {
             // If: we create a new order
-            OrderRequest orderRequest = this.CreateOrderRequestWithOnlyRequiredFields();
+            OrderRequest orderRequest = this.CreateOrder();
             OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
 
             // When: We attempt to retrieve the order and add the include parameters
@@ -119,7 +121,7 @@ namespace Mollie.Tests.Integration.Api {
         [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanUpdateExistingOrder() {
             // If: we create a new order
-            OrderRequest orderRequest = this.CreateOrderRequestWithOnlyRequiredFields();
+            OrderRequest orderRequest = this.CreateOrder();
             OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
 
             // When: We attempt to update the order
@@ -138,7 +140,7 @@ namespace Mollie.Tests.Integration.Api {
         [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanCancelCreatedOrder() {
             // If: we create a new order
-            OrderRequest orderRequest = this.CreateOrderRequestWithOnlyRequiredFields();
+            OrderRequest orderRequest = this.CreateOrder();
             OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
 
             // When: We attempt to cancel the order and then retrieve it
@@ -152,7 +154,7 @@ namespace Mollie.Tests.Integration.Api {
         [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanUpdateOrderLine() {
             // If: we create a new order
-            OrderRequest orderRequest = this.CreateOrderRequestWithOnlyRequiredFields();
+            OrderRequest orderRequest = this.CreateOrder();
             OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
 
             // When: We update the order line
@@ -187,13 +189,15 @@ namespace Mollie.Tests.Integration.Api {
             Assert.IsTrue(response.Items.Count <= numberOfOrders);
         }
 
-        private OrderRequest CreateOrderRequestWithOnlyRequiredFields() {
+        private OrderRequest CreateOrder() {
             return new OrderRequest() {
                 Amount = new Amount(Currency.EUR, "100.00"),
                 OrderNumber = "16738",
                 Lines = new List<OrderLineRequest>() {
                     new OrderLineRequest() {
                         Name = "A box of chocolates",
+                        Type = OrderLineDetailsType.Physical,
+                        Category = OrderLineDetailsCategory.Gift,
                         Quantity = 1,
                         UnitPrice = new Amount(Currency.EUR, "100.00"),
                         TotalAmount = new Amount(Currency.EUR, "100.00"),
