@@ -72,6 +72,11 @@ namespace Mollie.Api.Models.Subscription {
         public string Method { get; set; }
 
         /// <summary>
+        /// The mandate used for this subscription. Please note that this parameter can not set together with method.
+        /// </summary>
+        public string MandateId { get; set; }
+
+        /// <summary>
         /// The subscription's date of cancellation, in ISO 8601 format.
         /// </summary>
         public DateTime? CanceledAt { get; set; }
