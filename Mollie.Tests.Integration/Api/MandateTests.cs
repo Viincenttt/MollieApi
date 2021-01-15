@@ -48,7 +48,7 @@ namespace Mollie.Tests.Integration.Api {
             ListResponse<CustomerResponse> customers = await this._customerClient.GetCustomerListAsync();
             if (customers.Count > 0) {
                 // If: We create a new mandate request
-                MandateRequest mandateRequest = new MandateRequest() {
+                SepaDirectDebitMandateRequest mandateRequest = new SepaDirectDebitMandateRequest() {
                     ConsumerAccount = "NL26ABNA0516682814",
                     ConsumerName = "John Doe"
                 };

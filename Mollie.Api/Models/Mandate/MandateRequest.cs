@@ -2,12 +2,8 @@
 
 namespace Mollie.Api.Models.Mandate {
     public class MandateRequest {
-        public MandateRequest() {
-            this.Method = Payment.PaymentMethod.DirectDebit;
-        }
-
         /// <summary>
-        /// Payment method of the mandate - See the Mollie.Api.Models.Payment.PaymentMethod class for a full list of known values.
+        /// Payment method of the mandate - Possible values: `directdebit` `paypal`
         /// </summary>
         public string Method { get; set; }
 
@@ -16,16 +12,6 @@ namespace Mollie.Api.Models.Mandate {
         /// </summary>
         public string ConsumerName { get; set; }
 
-        /// <summary>
-        /// Required - Consumer's IBAN account
-        /// </summary>
-        public string ConsumerAccount { get; set; }
-
-        /// <summary>
-        /// Optional - The consumer's bank's BIC / SWIFT code.
-        /// </summary>
-        public string ConsumerBic { get; set; }
-        
         /// <summary>
         /// Optional - The date when the mandate was signed.
         /// </summary>
