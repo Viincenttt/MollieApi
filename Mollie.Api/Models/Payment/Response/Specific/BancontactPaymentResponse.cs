@@ -26,5 +26,15 @@ transaction what makes it not usefull anymore for identifying returning customer
         /// Bancontact application. This enables the desktop to mobile feature.
         /// </summary>
         public QrCode QrCode { get; set; }
+        
+        /// <summary>
+        /// Only available if the payment is completed – The consumer’s bank account. This may be an IBAN, or it may be a domestic account number.
+        /// </summary>
+        public string ConsumerAccount { get; set; }
+        
+        /// <summary>
+        /// Only available if the payment is completed – The consumer’s name.
+        /// </summary>
+        public string ConsumerName { get; set; }
     }
 }
