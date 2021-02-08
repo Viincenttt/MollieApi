@@ -125,6 +125,12 @@ namespace Mollie.Api.Models.Payment.Request {
         /// </summary>
         public string RestrictPaymentMethodsToCountry { get; set; }
 
+        /// <summary>
+        /// The shipping address details.We advise to provide these details to improve PayPal’s fraud protection, and thus improve conversion.
+        /// The following fields can be added to the object:
+        /// </summary>
+        public ShippingAddress ShippingAddress { get; set; }	    
+	    
         public void SetMetadata(object metadataObj, JsonSerializerSettings jsonSerializerSettings = null) {
             this.Metadata = JsonConvert.SerializeObject(metadataObj, jsonSerializerSettings);
         }
