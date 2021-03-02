@@ -93,6 +93,11 @@ namespace Mollie.Api.Models.Payment.Response {
         /// The total amount that is already captured for this payment. Only available when this payment supports captures.
         /// </summary>
         public Amount AmountCaptured { get; set; }
+        
+        /// <summary>
+        /// The total amount that was charged back for this payment. Only available when the total charged back amount is not zero.
+        /// </summary>
+        public Amount AmountChargedBack { get; set; }
 
         /// <summary>
         /// A short description of the payment. The description will be shown on the consumer's bank or card statement when
