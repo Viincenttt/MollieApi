@@ -39,7 +39,7 @@ namespace Mollie.Api.Client
             return await this.GetListAsync<ListResponse<PaymentMethodResponse>>("methods/all", null, null, queryParameters).ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<PaymentMethodResponse>> GetPaymentMethodListAsync(string sequenceType = null, string locale = null, Amount amount = null, bool includeIssuers = false, bool includePricing = false, string profileId = null, bool testmode = false, Resource? resource = null) {
+        public async Task<ListResponse<PaymentMethodResponse>> GetPaymentMethodListAsync(string sequenceType = null, string locale = null, Amount amount = null, bool includeIssuers = false, bool includePricing = false, string profileId = null, bool testmode = false, Resource? resource = null, string billingCountry = null) {
             Dictionary<string, string> queryParameters = this.BuildQueryParameters(
                sequenceType: sequenceType,
                locale: locale,
@@ -48,7 +48,8 @@ namespace Mollie.Api.Client
                includePricing: includePricing,
                resource: resource,
                profileId: profileId,
-               testmode: testmode);
+               testmode: testmode,
+               billingCountry: billingCountry);
 
             return await this.GetListAsync<ListResponse<PaymentMethodResponse>>("methods", null, null, queryParameters).ConfigureAwait(false);
         }
@@ -57,7 +58,7 @@ namespace Mollie.Api.Client
             return await this.GetAsync(url).ConfigureAwait(false);
         }
 
-        private Dictionary<string, string> BuildQueryParameters(string sequenceType = null, string locale = null, Amount amount = null, bool includeIssuers = false, bool includePricing = false, string profileId = null, bool testmode = false, Resource? resource = null, string currency = null) {
+        private Dictionary<string, string> BuildQueryParameters(string sequenceType = null, string locale = null, Amount amount = null, bool includeIssuers = false, bool includePricing = false, string profileId = null, bool testmode = false, Resource? resource = null, string currency = null, string billingCountry = null) {
             var result = new Dictionary<string, string>();
             result.AddValueIfTrue(nameof(testmode), testmode);
             result.AddValueIfNotNullOrEmpty(nameof(sequenceType), sequenceType?.ToLower());
@@ -68,6 +69,7 @@ namespace Mollie.Api.Client
             result.AddValueIfNotNullOrEmpty("include", this.BuildIncludeParameter(includeIssuers, includePricing));
             result.AddValueIfNotNullOrEmpty(nameof(resource), resource?.ToString()?.ToLower());
             result.AddValueIfNotNullOrEmpty(nameof(currency), currency);
+            result.AddValueIfNotNullOrEmpty(nameof(billingCountry), billingCountry);
             return result;
         }
 
