@@ -17,6 +17,11 @@ namespace Mollie.Api.Models.Order {
         /// A link pointing to the product page in your web shop of the product sold.
         /// </summary>
         public string ProductUrl { get; set; }
+        
+        /// <summary>
+        /// The SKU, EAN, ISBN or UPC of the product sold. The maximum character length is 64.
+        /// </summary>
+        public string Sku { get; set; }
 
         /// <summary>
         /// Provide any data you like, for example a string or a JSON object. We will 
