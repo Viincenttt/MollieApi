@@ -48,7 +48,7 @@ namespace Mollie.Api.Client {
 
         protected async Task<T> GetListAsync<T>(string relativeUri, string from, int? limit, IDictionary<string, string> otherParameters = null) {
             string url = relativeUri + this.BuildListQueryString(from, limit, otherParameters);
-            return await this.SendHttpRequest<T>(HttpMethod.Get, url);
+            return await this.SendHttpRequest<T>(HttpMethod.Get, url).ConfigureAwait(false);
         }
 
         protected async Task<T> GetAsync<T>(string relativeUri) {
