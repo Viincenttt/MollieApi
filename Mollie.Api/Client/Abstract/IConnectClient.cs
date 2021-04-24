@@ -20,9 +20,15 @@ namespace Mollie.Api.Client.Abstract {
         ///     This parameter can be set to force, to force showing the consent screen to the
         ///     merchant, even when it is not necessary
         /// </param>
+        /// <param name="locale">
+        ///     Allows you to preset the language to be used in the login / sign up / authorize flow if the merchant is not known by Mollie. 
+        ///     When this parameter is omitted, the browser language will be used instead. 
+        ///     You can provide any ISO 15897 locale, but the authorize flow currently only supports the following languages:
+        ///     Possible values: en_US nl_NL nl_BE fr_FR fr_BE de_DE es_ES it_IT
+        /// </param>
         /// <returns>The url to the mollie consent screen.</returns>
         string GetAuthorizationUrl(string state, List<string> scopes, string redirectUri = null,
-            bool forceApprovalPrompt = false);
+            bool forceApprovalPrompt = false, string locale = null);
 
         /// <summary>
         /// Exchange the auth code received at the Authorize endpoint for an actual access token, with which you can
