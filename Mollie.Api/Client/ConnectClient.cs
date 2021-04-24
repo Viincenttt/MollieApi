@@ -28,7 +28,7 @@ namespace Mollie.Api.Client {
             this._clientId = clientId;
         }
 
-        public string GetAuthorizationUrl(string state, List<string> scopes, string redirectUri = null, bool forceApprovalPrompt = false) {
+        public string GetAuthorizationUrl(string state, List<string> scopes, string redirectUri = null, bool forceApprovalPrompt = false, string locale = null) {
             var parameters = new Dictionary<string, string> {
                 {"client_id", this._clientId},
                 {"state", state},
@@ -37,6 +37,7 @@ namespace Mollie.Api.Client {
                 {"approval_prompt", forceApprovalPrompt ? "force" : "auto"}
             };
             parameters.AddValueIfNotNullOrEmpty("redirect_uri", redirectUri);
+            parameters.AddValueIfNotNullOrEmpty("locale", locale);
 
             return AuthorizeEndPoint + parameters.ToQueryString();
         }
