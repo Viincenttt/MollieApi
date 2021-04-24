@@ -282,3 +282,4 @@ $RECYCLE.BIN/
 Mollie.Api/Client/ProfileClient.cs
 bundles
 Mollie.Tests.Integration/secrets.json
+.idea/*
