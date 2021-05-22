@@ -112,6 +112,8 @@
         public const string UnknownReason = "unknown_reason";
         public const string PossibleFraud = "possible_fraud";
         public const string AuthenticationFailed = "authentication_failed";
+        public const string AuthenticationAbandoned = "authentication_abandoned";
+        public const string AuthenticationUnavailableAcs = "authentication_unavailable_acs";
     }
 
     /// <summary>
