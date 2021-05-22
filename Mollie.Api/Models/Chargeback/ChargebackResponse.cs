@@ -32,12 +32,12 @@ namespace Mollie.Api.Models.Chargeback {
         /// <summary>
         /// The id of the payment this chargeback belongs to.
         /// </summary>
-	public string PaymentId { get; set; }
+		public string PaymentId { get; set; }
 	    
-	/// <summary>
+		/// <summary>
         /// The reason given for a Chargeback, this can help determine the cost for the chargeback
         /// </summary>
-        public ChargebackResponseReason ChargebackResponseReason { get; set; }
+        public ChargebackResponseReason Reason { get; set; }
 
         /// <summary>
         /// An object with several URL objects relevant to the chargeback. Every URL object will contain an href and a type field.
