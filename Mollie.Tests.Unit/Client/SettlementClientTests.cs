@@ -15,6 +15,7 @@ namespace Mollie.Tests.Unit.Client {
         private const string defaultShipmentId = "shp_3wmsgCJN4U";
         private const string defaultAmountValue = "1027.99";
         private const string defaultAmountCurrency = "EUR";
+        private const string defaultInvoiceId = "inv_FrvewDA3Pr";
 
         private string defaultCaptureListJsonResponse = $@"{{
     ""_embedded"": {{
@@ -131,7 +132,8 @@ namespace Mollie.Tests.Unit.Client {
                             ""currency"": ""EUR""
                         }}
                     }}
-                ]
+                ],
+                ""invoiceId"": ""{defaultInvoiceId}""
             }}
         }}
     }},
@@ -211,6 +213,7 @@ namespace Mollie.Tests.Unit.Client {
             Assert.AreEqual(defaultAmountValue, settlementResponse.Amount.Value);
             Assert.AreEqual(defaultAmountCurrency, settlementResponse.Amount.Currency);
             Assert.AreEqual(1, settlementResponse.Periods.Count);
+            Assert.AreEqual(defaultInvoiceId, settlementResponse.Periods[2018][4].InvoiceId);
         }
 
         [Test]
