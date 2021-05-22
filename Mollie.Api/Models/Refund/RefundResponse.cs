@@ -20,6 +20,12 @@ namespace Mollie.Api.Models.Refund {
         /// The amount refunded to the consumer with this refund.
         /// </summary>
         public Amount Amount { get; set; }
+        
+        /// <summary>
+        /// The identifier referring to the settlement this payment was settled with. For example, stl_BkEjN2eBb.
+        /// This field is omitted if the refund is not settled (yet).
+        /// </summary>
+        public string SettlementId { get; set; }
 
         /// <summary>
         /// This optional field will contain the amount that will be deducted from your account balance, converted 
