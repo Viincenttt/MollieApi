@@ -40,11 +40,11 @@ transaction what makes it not usefull anymore for identifying returning customer
         /// <summary>
         /// Only available if the payment is completed – The consumer’s bank’s BIC / SWIFT code.
         /// </summary>
-        public string ConsumerBic{ get; set; }
+        public string ConsumerBic { get; set; }
         
         /// <summary>
         /// The reason why the payment did not succeed. Only available when there's a reason known.
         /// </summary>
-        public string FailureReason{ get; set; }
+        public string FailureReason { get; set; }
     }
 }
