@@ -31,10 +31,20 @@ transaction what makes it not usefull anymore for identifying returning customer
         /// Only available if the payment is completed – The consumer’s bank account. This may be an IBAN, or it may be a domestic account number.
         /// </summary>
         public string ConsumerAccount { get; set; }
-        
+
         /// <summary>
         /// Only available if the payment is completed – The consumer’s name.
         /// </summary>
         public string ConsumerName { get; set; }
+
+        /// <summary>
+        /// Only available if the payment is completed – The consumer’s bank’s BIC / SWIFT code.
+        /// </summary>
+        public string ConsumerBic { get; set; }
+        
+        /// <summary>
+        /// The reason why the payment did not succeed. Only available when there's a reason known.
+        /// </summary>
+        public string FailureReason { get; set; }
     }
 }
