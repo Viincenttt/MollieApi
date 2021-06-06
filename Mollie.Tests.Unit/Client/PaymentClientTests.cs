@@ -34,7 +34,7 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.When($"{BaseMollieClient.ApiEndPoint}*")
                 .Respond("application/json", jsonToReturnInMockResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
-            PaymentClient paymentClient = new PaymentClient("abcde", httpClient); 
+            PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
 
              // When: We send the request
              PaymentResponse paymentResponse = await paymentClient.CreatePaymentAsync(paymentRequest);
@@ -42,7 +42,7 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             this.AssertPaymentIsEqual(paymentRequest, paymentResponse);
         }
-        
+
         [Test]
         public async Task CreatePaymentAsync_PaymentWithSinglePaymentMethod_RequestIsSerializedInExpectedFormat() {
             // Given: We create a payment request with a single payment method
@@ -68,10 +68,10 @@ namespace Mollie.Tests.Unit.Client {
             // When: We send the request
             PaymentResponse paymentResponse = await paymentClient.CreatePaymentAsync(paymentRequest);
 
-            // Then            
+            // Then
             mockHttp.VerifyNoOutstandingExpectation();
             this.AssertPaymentIsEqual(paymentRequest, paymentResponse);
-            Assert.AreEqual(paymentRequest.Method, paymentResponse.Method);            
+            Assert.AreEqual(paymentRequest.Method, paymentResponse.Method);
         }
 
         [Test]
@@ -186,8 +186,69 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
-        }        
+        }
 
+        [Test]
+        public async Task GetPaymentAsync_EmbedRefunds_QueryStringContainsEmbedRefundsParameter()
+        {
+            // Given: We make a request to retrieve a payment with embedded refunds
+            const string paymentId = "abcde";
+            var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}?embed=refunds", defaultPaymentJsonResponse);
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
+
+            // When: We send the request
+            await paymentClient.GetPaymentAsync(paymentId, embedRefunds: true);
+
+            // Then
+            mockHttp.VerifyNoOutstandingExpectation();
+        }
+
+        [Test]
+        public async Task GetPaymentListAsync_EmbedRefunds_QueryStringContainsEmbedRefundsParameter()
+        {
+            // Given: We make a request to retrieve a payment with embedded refunds
+            var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments?embed=refunds", defaultPaymentJsonResponse);
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
+
+            // When: We send the request
+            await paymentClient.GetPaymentListAsync(embedRefunds: true);
+
+            // Then
+            mockHttp.VerifyNoOutstandingExpectation();
+        }
+
+        [Test]
+        public async Task GetPaymentAsync_EmbedChargebacks_QueryStringContainsEmbedChargebacksParameter()
+        {
+            // Given: We make a request to retrieve a payment with embedded refunds
+            const string paymentId = "abcde";
+            var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}?embed=chargebacks", defaultPaymentJsonResponse);
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
+
+            // When: We send the request
+            await paymentClient.GetPaymentAsync(paymentId, embedChargebacks: true);
+
+            // Then
+            mockHttp.VerifyNoOutstandingExpectation();
+        }
+
+        [Test]
+        public async Task GetPaymentListAsync_EmbedChargebacks_QueryStringContainsEmbedChargebacksParameter()
+        {
+            // Given: We make a request to retrieve a payment with embedded refunds
+            var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments?embed=chargebacks", defaultPaymentJsonResponse);
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
+
+            // When: We send the request
+            await paymentClient.GetPaymentListAsync(embedChargebacks: true);
+
+            // Then
+            mockHttp.VerifyNoOutstandingExpectation();
+        }
 
         private void AssertPaymentIsEqual(PaymentRequest paymentRequest, PaymentResponse paymentResponse) {
             Assert.AreEqual(paymentRequest.Amount.Value, paymentResponse.Amount.Value);

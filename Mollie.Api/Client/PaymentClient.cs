@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
@@ -25,15 +24,18 @@ namespace Mollie.Api.Client {
             return await this.PostAsync<PaymentResponse>($"payments{queryParameters.ToQueryString()}", paymentRequest).ConfigureAwait(false);
         }
 
-	    public async Task<PaymentResponse> GetPaymentAsync(string paymentId, bool testmode = false, bool includeQrCode = false, bool includeRemainderDetails = false) {
+        public async Task<PaymentResponse> GetPaymentAsync(string paymentId, bool testmode = false, bool includeQrCode = false, bool includeRemainderDetails = false, bool embedRefunds = false, bool embedChargebacks = false) {
 	        if (testmode) {
 	            this.ValidateApiKeyIsOauthAccesstoken();
             }
 
             var queryParameters = this.BuildQueryParameters(
-                testmode: testmode, 
-                includeQrCode: includeQrCode, 
-                includeRemainderDetails: includeRemainderDetails);
+                testmode: testmode,
+                includeQrCode: includeQrCode,
+                includeRemainderDetails: includeRemainderDetails,
+                embedRefunds: embedRefunds,
+                embedChargebacks: embedChargebacks
+                );
 			return await this.GetAsync<PaymentResponse>($"payments/{paymentId}{queryParameters.ToQueryString()}").ConfigureAwait(false);
 		}
 
@@ -49,7 +51,7 @@ namespace Mollie.Api.Client {
             return await this.GetAsync(url).ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<PaymentResponse>> GetPaymentListAsync(string from = null, int? limit = null, string profileId = null, bool testmode = false, bool includeQrCode = false) {
+        public async Task<ListResponse<PaymentResponse>> GetPaymentListAsync(string from = null, int? limit = null, string profileId = null, bool testmode = false, bool includeQrCode = false, bool embedRefunds = false, bool embedChargebacks = false) {
 	        if (!string.IsNullOrWhiteSpace(profileId) || testmode) {
 	            this.ValidateApiKeyIsOauthAccesstoken();
             }
@@ -57,7 +59,9 @@ namespace Mollie.Api.Client {
             var queryParameters = this.BuildQueryParameters(
                 profileId: profileId,
                 testmode: testmode,
-                includeQrCode: includeQrCode);
+                includeQrCode: includeQrCode,
+                embedRefunds: embedRefunds,
+                embedChargebacks: embedChargebacks);
 
             return await this.GetListAsync<ListResponse<PaymentResponse>>($"payments", from, limit, queryParameters).ConfigureAwait(false);
 		}
@@ -66,11 +70,12 @@ namespace Mollie.Api.Client {
             return await this.PatchAsync<PaymentResponse>($"payments/{paymentId}", paymentUpdateRequest).ConfigureAwait(false);
         }
 
-        private Dictionary<string, string> BuildQueryParameters(string profileId = null, bool testmode = false, bool includeQrCode = false, bool includeRemainderDetails = false) {
+        private Dictionary<string, string> BuildQueryParameters(string profileId = null, bool testmode = false, bool includeQrCode = false, bool includeRemainderDetails = false, bool embedRefunds = false, bool embedChargebacks = false) {
             var result = new Dictionary<string, string>();
             result.AddValueIfTrue(nameof(testmode), testmode);
             result.AddValueIfNotNullOrEmpty(nameof(profileId), profileId);
             result.AddValueIfNotNullOrEmpty("include", this.BuildIncludeParameter(includeQrCode, includeRemainderDetails));
+            result.AddValueIfNotNullOrEmpty("embed", this.BuildEmbedParameter(embedRefunds, embedChargebacks));
             return result;
         }
 
@@ -79,6 +84,14 @@ namespace Mollie.Api.Client {
             includeList.AddValueIfTrue("details.qrCode", includeQrCode);
             includeList.AddValueIfTrue("details.remainderDetails", includeRemainderDetails);
             return includeList.ToIncludeParameter();
+        }
+
+        private string BuildEmbedParameter(bool embedRefunds = false, bool embedChargebacks = false)
+        {
+            var embedList = new List<string>();
+            embedList.AddValueIfTrue("refunds", embedRefunds);
+            embedList.AddValueIfTrue("chargebacks", embedChargebacks);
+            return embedList.ToIncludeParameter();
         }
     }
 }
