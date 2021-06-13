@@ -18,6 +18,7 @@ namespace Mollie.Tests.Integration.Framework {
         protected string ClientSecret => this.Configuration.ClientSecret ?? "client-secret";
 
         protected IPaymentClient _paymentClient;
+        protected IPaymentLinkClient _paymentLinkClient;
         protected IPaymentMethodClient _paymentMethodClient;
         protected IRefundClient _refundClient;
         protected ISubscriptionClient _subscriptionClient;
@@ -32,6 +33,7 @@ namespace Mollie.Tests.Integration.Framework {
             this.EnsureTestApiKey(this.ApiKey);
 
             this._paymentClient = new PaymentClient(this.ApiKey);
+            this._paymentLinkClient = new PaymentLinkClient(this.ApiKey);
             this._paymentMethodClient = new PaymentMethodClient(this.ApiKey);
             this._refundClient = new RefundClient(this.ApiKey);
             this._subscriptionClient = new SubscriptionClient(this.ApiKey);

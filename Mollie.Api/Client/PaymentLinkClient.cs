@@ -16,13 +16,13 @@ namespace Mollie.Api.Client
 
         public PaymentLinkClient(string apiKey, HttpClient httpClient = null) : base(apiKey, httpClient) { }
 
-        public async Task<PaymentLinkResponse> CreatePaymentLinkAsync(PaymentLinkRequest paymentRequest)
+        public async Task<PaymentLinkResponse> CreatePaymentLinkAsync(PaymentLinkRequest paymentLinkRequest)
         {
-            if (!string.IsNullOrWhiteSpace(paymentRequest.ProfileId) || paymentRequest.Testmode.HasValue /*|| paymentRequest.ApplicationFee != null*/)
+            if (!string.IsNullOrWhiteSpace(paymentLinkRequest.ProfileId) || paymentLinkRequest.Testmode.HasValue)
             {
                 this.ValidateApiKeyIsOauthAccesstoken();
             }
-            return await this.PostAsync<PaymentLinkResponse>($"payment-links", paymentRequest).ConfigureAwait(false);
+            return await this.PostAsync<PaymentLinkResponse>($"payment-links", paymentLinkRequest).ConfigureAwait(false);
         }
 
         public async Task<PaymentLinkResponse> GetPaymentLinkAsync(string paymentLinkId, bool testmode = false)
@@ -60,7 +60,7 @@ namespace Mollie.Api.Client
                profileId: profileId,
                testmode: testmode);
 
-            return await this.GetListAsync<ListResponse<PaymentLinkResponse>>($"payment-links", from, limit, queryParameters).ConfigureAwait(false);
+            return await this.GetListAsync<ListResponse<PaymentLinkResponse>>("payment-links", from, limit, queryParameters).ConfigureAwait(false);
         }
 
         private Dictionary<string, string> BuildQueryParameters(string profileId = null, bool testmode = false)
