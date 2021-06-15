@@ -25,6 +25,7 @@ Have you spotted a bug or want to add a missing feature? All pull requests are w
 [12. Profile Api](#12-profile-api)  
 [13. Captures API](#13-captures-api)  
 [14. Onboarding Api](#14-onboarding-api)  
+[15. Payment link Api](#15-payment-link-api)  
 
 ## 1. Mollie API v1 and v2
 In May 2018, Mollie launched version 2 of their API. Version 2 offers support for multicurrency, improved error messages and much more.  The current version of the Mollie API client supports all API version 2 features. If you want to keep using version 1, you can use version 1.5.2 of the Mollie API Nuget package. Version 2.0.0+ of the Mollie API client supports version 2 of the API.  
@@ -45,7 +46,8 @@ An example ASP.NET Core web application project is included. In order to use thi
 ### Supported API's
 This library currently supports the following API's:
 - Payments API
-- PaymentMethod
+- PaymentMethod API
+- PaymentLink API
 - Customers API
 - Mandates API
 - Subscriptions API
@@ -775,4 +777,30 @@ SubmitOnboardingDataRequest submitOnboardingDataRequest = new SubmitOnboardingDa
 };
 OnboardingClient onboardingClient = new OnboardingClient({yourApiKey});
 await onboardingClient.SubmitOnboardingDataAsync(submitOnboardingDataRequest);
+```
+
+## 15. Payment link Api
+### Create payment link
+```C#
+PaymentLinkRequest paymentLinkRequest = new PaymentLinkRequest() {
+	Description = "Test",
+	Amount = new Amount(Currency.EUR, 50),
+	WebhookUrl = this.DefaultWebhookUrl,
+	RedirectUrl = this.DefaultRedirectUrl,
+	ExpiresAt = DateTime.Now.AddDays(1)
+};
+PaymentLinkClient client = new PaymentLinkClient({yourApiKey});
+await this._paymentLinkClient.CreatePaymentLinkAsync(paymentLinkRequest);
+```
+
+### Get payment link
+```C#
+PaymentLinkClient client = new PaymentLinkClient({yourApiKey});
+await this._paymentLinkClient.GetPaymentLinkAsync({yourPaymentLinkId});
+```
+
+### List payment links
+```C#
+PaymentLinkClient client = new PaymentLinkClient({yourApiKey});
+ListResponse<PaymentLinkResponse> response = await this._paymentLinkClient.GetPaymentLinkListAsync();
 ```
