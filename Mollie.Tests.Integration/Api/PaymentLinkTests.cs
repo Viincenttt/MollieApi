@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Mollie.Api.Extensions;
 using Mollie.Api.Models;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.PaymentLink.Request;
@@ -30,18 +31,20 @@ namespace Mollie.Tests.Integration.Api {
                 Amount = new Amount(Currency.EUR, 50),
                 WebhookUrl = this.DefaultWebhookUrl,
                 RedirectUrl = this.DefaultRedirectUrl,
-                ExpiresAt = new DateTime(2021, 6, 13)
+                ExpiresAt = DateTime.Now.AddDays(1)
             };
             var createdPaymentLinkResponse = await this._paymentLinkClient.CreatePaymentLinkAsync(paymentLinkRequest);
 
-            // When: We retrieve it in a list
-            var retrievePaymentLinkResponse = await this._paymentLinkClient.CreatePaymentLinkAsync(paymentLinkRequest);
+            // When: We retrieve it
+            var retrievePaymentLinkResponse = await this._paymentLinkClient.GetPaymentLinkAsync(createdPaymentLinkResponse.Id);
 
             // Then: We expect a list with a single ideal payment     
             var verifyPaymentLinkResponse = new Action<PaymentLinkResponse>(response => {
+                var expiresAtWithoutMs = paymentLinkRequest.ExpiresAt.Value.Truncate(TimeSpan.FromSeconds(1));
+                
                 Assert.AreEqual(paymentLinkRequest.Amount.Currency, response.Amount.Currency);
                 Assert.AreEqual(paymentLinkRequest.Amount.Value, response.Amount.Value);
-                Assert.AreEqual(paymentLinkRequest.ExpiresAt, response.ExpiresAt);
+                Assert.AreEqual(expiresAtWithoutMs, response.ExpiresAt);
                 Assert.AreEqual(paymentLinkRequest.Description, response.Description);
                 Assert.AreEqual(paymentLinkRequest.RedirectUrl, response.RedirectUrl);
                 Assert.AreEqual(paymentLinkRequest.WebhookUrl, response.WebhookUrl);
