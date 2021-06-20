@@ -1,8 +1,6 @@
 ﻿using System;
 using Mollie.Api.JsonConverters;
-using Mollie.Api.Models.Payment.Request;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 
 namespace Mollie.Api.Models.Payment.Response {
     public class PaymentResponse : IResponseObject {
@@ -93,7 +91,7 @@ namespace Mollie.Api.Models.Payment.Response {
         /// The total amount that is already captured for this payment. Only available when this payment supports captures.
         /// </summary>
         public Amount AmountCaptured { get; set; }
-        
+
         /// <summary>
         /// The total amount that was charged back for this payment. Only available when the total charged back amount is not zero.
         /// </summary>
@@ -190,12 +188,15 @@ namespace Mollie.Api.Models.Payment.Response {
         /// </summary>
         public ApplicationFee ApplicationFee { get; set; }
 
+        [JsonProperty("_embedded")]
+        public PaymentEmbeddedResponse Embedded { get; set; }
+
         /// <summary>
         /// An object with several URL objects relevant to the payment. Every URL object will contain an href and a type field.
         /// </summary>
         [JsonProperty("_links")]
         public PaymentResponseLinks Links { get; set; }
-        
+
         public T GetMetadata<T>(JsonSerializerSettings jsonSerializerSettings = null) {
             return JsonConvert.DeserializeObject<T>(this.Metadata, jsonSerializerSettings);
         }
