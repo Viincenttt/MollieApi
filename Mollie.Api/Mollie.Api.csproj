@@ -10,10 +10,10 @@
     <Product>Mollie Payment API</Product>
     <PackageProjectUrl>https://github.com/Viincenttt/MollieApi</PackageProjectUrl>
     <PackageTags>Mollie</PackageTags>
-    <AssemblyVersion>2.1.0.7</AssemblyVersion>
-    <FileVersion>2.1.0.7</FileVersion>
+    <AssemblyVersion>2.1.0.8</AssemblyVersion>
+    <FileVersion>2.1.0.8</FileVersion>
     <PackageLicenseUrl></PackageLicenseUrl>
-    <PackageVersion>2.1.0.7</PackageVersion>
+    <PackageVersion>2.1.0.8</PackageVersion>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
