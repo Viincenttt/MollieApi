@@ -9,7 +9,6 @@ namespace Mollie.WebApplicationCoreExample.Framework.Middleware {
         public static IServiceCollection AddMollieApi(this IServiceCollection services, IConfiguration configuration) {
             MollieConfiguration mollieConfiguration = configuration.GetSection("Mollie").Get<MollieConfiguration>();
 
-            services.AddScoped<IPaymentClient, PaymentClient>();
             services.AddScoped<IPaymentClient, PaymentClient>(x => new PaymentClient(mollieConfiguration.ApiKey));
             services.AddScoped<ICustomerClient, CustomerClient>(x => new CustomerClient(mollieConfiguration.ApiKey));
             services.AddScoped<IRefundClient, RefundClient>(x => new RefundClient(mollieConfiguration.ApiKey));

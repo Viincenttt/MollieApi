@@ -1,10 +1,7 @@
-﻿using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Mollie.WebApplicationCoreExample.Framework;
 using Mollie.WebApplicationCoreExample.Framework.Middleware;
 using Mollie.WebApplicationCoreExample.Services.Customer;
 using Mollie.WebApplicationCoreExample.Services.Mandate;
@@ -34,14 +31,22 @@ namespace Mollie.WebApplicationCoreExample {
             services.AddScoped<IMandateStorageClient, MandateStorageClient>();
             services.AddScoped<IRefundPaymentClient, RefundPaymentClient>();
 
-            services.AddAutoMapper();
-            services.AddMvc(options => options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()));
+            services.AddAutoMapper(typeof(Startup));
+
+            services.AddControllersWithViews();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env) {
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
             app.UseDeveloperExceptionPage();
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseMvcWithDefaultRoute();
+            app.UseRouting();
+
+            app.UseEndpoints(endpoints => {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+            });
         }
     }
 }

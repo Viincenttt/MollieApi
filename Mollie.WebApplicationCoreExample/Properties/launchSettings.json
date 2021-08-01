@@ -1,10 +1,10 @@
-{
+﻿{
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:55093/",
-      "sslPort": 0
+      "applicationUrl": "http://localhost:54701",
+      "sslPort": 44382
     }
   },
   "profiles": {
@@ -17,11 +17,12 @@
     },
     "Mollie.WebApplicationCoreExample": {
       "commandName": "Project",
+      "dotnetRunMessages": "true",
       "launchBrowser": true,
+      "applicationUrl": "https://localhost:5001;http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "applicationUrl": "http://localhost:55094/"
+      }
     }
   }
 }
