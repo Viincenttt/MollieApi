@@ -18,7 +18,7 @@ namespace Mollie.Api.Client
 
         public async Task<PaymentLinkResponse> CreatePaymentLinkAsync(PaymentLinkRequest paymentLinkRequest)
         {
-            if (!string.IsNullOrWhiteSpace(paymentLinkRequest.ProfileId) || paymentLinkRequest.Testmode.HasValue)
+            if (!string.IsNullOrWhiteSpace(paymentLinkRequest.ProfileId) && paymentLinkRequest.Testmode.HasValue)
             {
                 this.ValidateApiKeyIsOauthAccesstoken();
             }
