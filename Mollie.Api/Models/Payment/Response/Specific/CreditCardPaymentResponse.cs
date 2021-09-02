@@ -104,7 +104,8 @@
         public const string InvalidCardNumber = "invalid_card_number";
         public const string InvalidCvv = "invalid_cvv";
         public const string InvalidCardHolderName = "invalid_card_holder_name";
-        public const string CardExpired = "CardExpired";
+        public const string CardExpired = "card_expired";
+				public const string CardDeclined = "card_declined";
         public const string InvalidCardType = "invalid_card_type";
         public const string RefusedByIssuer = "refused_by_issuer";
         public const string InsufficientFunds = "insufficient_funds";
