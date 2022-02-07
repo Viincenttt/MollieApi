@@ -105,7 +105,7 @@
         public const string InvalidCvv = "invalid_cvv";
         public const string InvalidCardHolderName = "invalid_card_holder_name";
         public const string CardExpired = "card_expired";
-				public const string CardDeclined = "card_declined";
+        public const string CardDeclined = "card_declined";
         public const string InvalidCardType = "invalid_card_type";
         public const string RefusedByIssuer = "refused_by_issuer";
         public const string InsufficientFunds = "insufficient_funds";
@@ -113,6 +113,7 @@
         public const string UnknownReason = "unknown_reason";
         public const string PossibleFraud = "possible_fraud";
         public const string AuthenticationFailed = "authentication_failed";
+        public const string AuthenticationRequired = "authentication_required";
         public const string AuthenticationAbandoned = "authentication_abandoned";
         public const string AuthenticationUnavailableAcs = "authentication_unavailable_acs";
     }
