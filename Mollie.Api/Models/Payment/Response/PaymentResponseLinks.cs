@@ -34,6 +34,11 @@ namespace Mollie.Api.Models.Payment.Response {
         public UrlObjectLink<SettlementResponse> Settlement { get; set; }
 
         /// <summary>
+        /// The direct link to this payment in the Mollie Dashboard.
+        /// </summary>
+        public UrlLink Dashboard { get; set; }
+
+        /// <summary>
         /// The URL to the payment retrieval endpoint documentation.
         /// </summary>
         public UrlLink Documentation { get; set; }

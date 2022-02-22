@@ -8,6 +8,7 @@ using RichardSzalay.MockHttp;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Mollie.Api.Models.Url;
 
 namespace Mollie.Tests.Unit.Client {
     [TestFixture]
@@ -250,7 +251,87 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.VerifyNoOutstandingExpectation();
         }
 
-        private void AssertPaymentIsEqual(PaymentRequest paymentRequest, PaymentResponse paymentResponse) {
+        [Test]
+        public async Task CreatePaymentAsync_PaymentResponseWithNoDashboardLink_ResponseIsDeserializedInExpectedFormat()
+        {
+            // Given: we create a payment request with only the required parameters
+            PaymentRequest paymentRequest = new PaymentRequest()
+            {
+                Amount = new Amount(Currency.EUR, "100.00"),
+                Description = "Description",
+                RedirectUrl = "http://www.mollie.com"
+            };
+
+            const string jsonToReturnInMockResponse = @"
+            {
+                ""amount"":{
+                    ""currency"":""EUR"",
+                    ""value"":""100.00""
+                },
+                ""description"":""Description"",
+                ""redirectUrl"":""http://www.mollie.com"",
+                ""_links"": {
+                }
+            }";
+
+            var mockHttp = new MockHttpMessageHandler();
+            mockHttp.When($"{BaseMollieClient.ApiEndPoint}*")
+                .Respond("application/json", jsonToReturnInMockResponse);
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
+
+            // When: We send the request
+            PaymentResponse paymentResponse = await paymentClient.CreatePaymentAsync(paymentRequest);
+
+            // Then
+            Assert.IsNull(paymentResponse.Links.Dashboard);
+        }
+
+        [Test]
+        public async Task CreatePaymentAsync_PaymentResponseWithDashboardLink_ResponseIsDeserializedInExpectedFormat()
+        {
+            // Given: we create a payment request with only the required parameters
+            PaymentRequest paymentRequest = new PaymentRequest()
+            {
+                Amount = new Amount(Currency.EUR, "100.00"),
+                Description = "Description",
+                RedirectUrl = "http://www.mollie.com"
+            };
+
+            const string jsonToReturnInMockResponse = @"
+            {
+                ""amount"":{
+                    ""currency"":""EUR"",
+                    ""value"":""100.00""
+                },
+                ""description"":""Description"",
+                ""redirectUrl"":""http://www.mollie.com"",
+                ""_links"": {
+                    ""dashboard"": {
+                        ""href"": ""https://www.mollie.com/dashboard/org_12345678/payments/tr_7UhSN1zuXS"",
+                        ""type"": ""application/json""                        
+                    }
+                }
+            }";
+
+            var mockHttp = new MockHttpMessageHandler();
+            mockHttp.When($"{BaseMollieClient.ApiEndPoint}*")
+                .Respond("application/json", jsonToReturnInMockResponse);
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
+
+            // When: We send the request
+            PaymentResponse paymentResponse = await paymentClient.CreatePaymentAsync(paymentRequest);
+
+            // Then
+            UrlLink dashboardUrl = paymentResponse.Links.Dashboard;
+            Assert.NotNull(dashboardUrl);
+            Assert.AreEqual(dashboardUrl.Href, "https://www.mollie.com/dashboard/org_12345678/payments/tr_7UhSN1zuXS");
+            Assert.AreEqual(dashboardUrl.Type, "application/json");
+        }
+
+        private void AssertPaymentIsEqual(PaymentRequest paymentRequest, PaymentResponse paymentResponse)
+        {
             Assert.AreEqual(paymentRequest.Amount.Value, paymentResponse.Amount.Value);
             Assert.AreEqual(paymentRequest.Amount.Currency, paymentResponse.Amount.Currency);
             Assert.AreEqual(paymentRequest.Description, paymentResponse.Description);
