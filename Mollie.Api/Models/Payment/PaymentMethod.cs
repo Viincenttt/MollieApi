@@ -20,5 +20,6 @@
         public const string Przelewy24 = "przelewy24";
         public const string ApplePay = "applepay";
         public const string MealVoucher = "mealvoucher";
+        public const string In3 = "in3";
     }
 }
