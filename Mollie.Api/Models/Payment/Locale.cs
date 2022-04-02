@@ -7,5 +7,6 @@
         public static string nl_BE = "nl_BE";
         public static string fr_BE = "fr_BE";
         public static string nl_NL = "nl_NL";
+        public static string en_GB = "en_GB";
     }
 }
