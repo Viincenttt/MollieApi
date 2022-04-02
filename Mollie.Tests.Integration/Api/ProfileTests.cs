@@ -70,6 +70,7 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [Test]
+        [Ignore("Currently returns 500 error")]
         public async Task EnableGiftCardIssuerAsync_WhenEnablingGiftCardIssuerForCurrentProfile_EnableGiftCardIssuerResponseIsReturned() {
             // Given
             const string issuerToEnable = "festivalcadeau";
