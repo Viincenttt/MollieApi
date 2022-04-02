@@ -118,6 +118,16 @@ namespace Mollie.Api.Models.Order {
         /// </summary>
         [JsonProperty("payment.applicationFee")]
         public ApplicationFee ApplicationFee { get; set; }
+        
+        /// <summary>
+        ///	Oauth only - The payment profile's unique identifier, for example pfl_3RkSN1zuPE.
+        /// </summary>
+        public string ProfileId { get; set; }
+
+        /// <summary>
+        ///	Oauth only - Optional – Set this to true to make this payment a test payment.
+        /// </summary>
+        public bool? Testmode { get; set; }
 
         public void SetMetadata(object metadataObj, JsonSerializerSettings jsonSerializerSettings = null) {
             this.Metadata = JsonConvert.SerializeObject(metadataObj, jsonSerializerSettings);
