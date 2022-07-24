@@ -18,9 +18,9 @@ namespace Mollie.Api.Client {
             return await this.PostAsync<OrderResponse>("orders", orderRequest).ConfigureAwait(false);
         }
 
-        public async Task<OrderResponse> GetOrderAsync(string orderId, bool embedPayments = false, bool embedRefunds = false, bool embedShipments = false) {
-            var embeds = this.BuildQueryParameters(embedPayments, embedRefunds, embedShipments);
-            return await this.GetAsync<OrderResponse>($"orders/{orderId}{embeds.ToQueryString()}").ConfigureAwait(false);
+        public async Task<OrderResponse> GetOrderAsync(string orderId, bool embedPayments = false, bool embedRefunds = false, bool embedShipments = false, bool testmode = false) {
+            var queryParameters = this.BuildQueryParameters(embedPayments, embedRefunds, embedShipments, testmode);
+            return await this.GetAsync<OrderResponse>($"orders/{orderId}{queryParameters.ToQueryString()}").ConfigureAwait(false);
         }
 
         public async Task<OrderResponse> UpdateOrderAsync(string orderId, OrderUpdateRequest orderUpdateRequest) {
@@ -59,9 +59,10 @@ namespace Mollie.Api.Client {
             return await this.GetListAsync<ListResponse<RefundResponse>>($"orders/{orderId}/refunds", from, limit).ConfigureAwait(false);
         }
 
-        private Dictionary<string, string> BuildQueryParameters(bool embedPayments = false, bool embedRefunds = false, bool embedShipments = false) {
+        private Dictionary<string, string> BuildQueryParameters(bool embedPayments = false, bool embedRefunds = false, bool embedShipments = false, bool testmode = false) {
             var result = new Dictionary<string, string>();
             result.AddValueIfNotNullOrEmpty("embed", this.BuildEmbedParameter(embedPayments, embedRefunds, embedShipments));
+            result.AddValueIfTrue("testmode", testmode);
             return result;
         }
 

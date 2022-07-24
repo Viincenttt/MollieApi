@@ -65,6 +65,21 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
         }
+        
+        [Test]
+        public async Task GetOrderAsync_WithTestModeParameter_QueryStringContainsTestModeParameter() {
+            // Given: We make a request to retrieve a order with a single embed parameter
+            const string orderId = "abcde";
+            var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}orders/{orderId}?testmode=true", defaultOrderJsonResponse);
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            OrderClient orderClient = new OrderClient("abcde", httpClient);
+
+            // When: We send the request
+            await orderClient.GetOrderAsync(orderId, testmode: true);
+
+            // Then
+            mockHttp.VerifyNoOutstandingExpectation();
+        }
 
         [Test]
         public async Task CreateOrderAsync_SinglePaymentMethod_RequestIsSerializedInExpectedFormat() {
