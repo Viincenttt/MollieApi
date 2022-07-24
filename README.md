@@ -373,8 +373,10 @@ Create a mandate for a specific customer.
 ```c#
 IMandateClient mandateclient = new MandateClient("{yourApiKey}");
 MandateRequest mandateRequest = new MandateRequest() {
-	ConsumerAccount = "{iban}",
-	ConsumerName = "{customerName}"
+    Method = Api.Models.Payment.PaymentMethod.DirectDebit,
+    ConsumerName = "John Smit",
+    MandateReference = "My reference",
+    SignatureDate = DateTime.Now
 };
 MandateResponse mandateResponse = await this._mandateClient.CreateMandateAsync("{customerId}", mandateRequest);
 ```
