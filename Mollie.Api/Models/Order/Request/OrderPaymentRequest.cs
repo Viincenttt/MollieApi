@@ -20,5 +20,16 @@
         /// of the consumer’s accounts should be credited.
         /// </summary>
         public string MandateId { get; set; }
+        
+        /// <summary>
+        ///	Oauth only - Optional – Set this to true to make this payment a test payment.
+        /// </summary>
+        public bool? Testmode { get; set; }
+        
+        /// <summary>
+        ///	Oauth only - Optional – Adding an Application Fee allows you to charge the merchant a small sum for the payment and transfer 
+        /// this to your own account.
+        /// </summary>
+        public ApplicationFee ApplicationFee { get; set; }
     }
 }
