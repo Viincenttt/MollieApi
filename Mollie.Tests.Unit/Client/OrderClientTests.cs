@@ -6,6 +6,7 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Mollie.Api.Models.Payment.Response;
 
 namespace Mollie.Tests.Unit.Client {
     [TestFixture]
@@ -20,6 +21,14 @@ namespace Mollie.Tests.Unit.Client {
                 ""currency"": ""EUR""
             },
         }";
+        
+        private const string defaultPaymentJsonResponse = @"{
+            ""amount"":{
+                ""currency"":""EUR"",
+                ""value"":""100.00""
+            },
+            ""description"":""Description"",
+            ""redirectUrl"":""http://www.mollie.com""}";
 
         [Test]
         public async Task GetOrderAsync_NoEmbedParameters_QueryStringIsEmpty() {
@@ -106,8 +115,8 @@ namespace Mollie.Tests.Unit.Client {
             OrderRequest orderRequest = this.CreateOrderRequestWithOnlyRequiredFields();
             orderRequest.Methods = new List<string>() {
                 PaymentMethod.Ideal,
-                    PaymentMethod.CreditCard,
-                    PaymentMethod.DirectDebit
+                PaymentMethod.CreditCard,
+                PaymentMethod.DirectDebit
             };
             string expectedPaymentMethodJson = $"\"method\":[\"{PaymentMethod.Ideal}\",\"{PaymentMethod.CreditCard}\",\"{PaymentMethod.DirectDebit}\"]";
             const string jsonResponse = defaultOrderJsonResponse;
@@ -119,6 +128,58 @@ namespace Mollie.Tests.Unit.Client {
             await orderClient.CreateOrderAsync(orderRequest);
 
             // Then            
+            mockHttp.VerifyNoOutstandingExpectation();
+        }
+        
+        [Test]
+        public async Task CreateOrderPaymentAsync_PaymentWithSinglePaymentMethod_RequestIsSerializedInExpectedFormat() {
+            // Given: We create a payment request with multiple payment methods
+            OrderPaymentRequest orderPaymentRequest = new OrderPaymentRequest() {
+                CustomerId = "customer-id",
+                Testmode = true,
+                MandateId = "mandate-id",
+                Methods = new List<string>() {
+                    PaymentMethod.Ideal
+                }
+            };
+            const string orderId = "order-id";
+            string url = $"{BaseMollieClient.ApiEndPoint}orders/{orderId}/payments";
+            string expectedPaymentMethodJson = $"\"method\":[\"{PaymentMethod.Ideal}\"]";
+            var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Post, url, defaultPaymentJsonResponse, expectedPaymentMethodJson);
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            OrderClient orderClient = new OrderClient("abcde", httpClient);
+
+            // When: We send the request
+            await orderClient.CreateOrderPaymentAsync(orderId, orderPaymentRequest);
+
+            // Then
+            mockHttp.VerifyNoOutstandingExpectation();
+        }
+        
+        [Test]
+        public async Task CreateOrderPaymentAsync_PaymentWithMultiplePaymentMethods_RequestIsSerializedInExpectedFormat() {
+            // Given: We create a payment request with multiple payment methods
+            OrderPaymentRequest orderPaymentRequest = new OrderPaymentRequest() {
+                CustomerId = "customer-id",
+                Testmode = true,
+                MandateId = "mandate-id",
+                Methods = new List<string>() {
+                    PaymentMethod.Ideal,
+                    PaymentMethod.CreditCard,
+                    PaymentMethod.DirectDebit
+                }
+            };
+            const string orderId = "order-id";
+            string url = $"{BaseMollieClient.ApiEndPoint}orders/{orderId}/payments";
+            string expectedPaymentMethodJson = $"\"method\":[\"{PaymentMethod.Ideal}\",\"{PaymentMethod.CreditCard}\",\"{PaymentMethod.DirectDebit}\"]";
+            var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Post, url, defaultPaymentJsonResponse, expectedPaymentMethodJson);
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            OrderClient orderClient = new OrderClient("abcde", httpClient);
+
+            // When: We send the request
+            await orderClient.CreateOrderPaymentAsync(orderId, orderPaymentRequest);
+
+            // Then
             mockHttp.VerifyNoOutstandingExpectation();
         }
 
