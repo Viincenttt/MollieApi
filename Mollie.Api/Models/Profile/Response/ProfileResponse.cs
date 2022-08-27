@@ -41,6 +41,12 @@ namespace Mollie.Api.Models.Profile.Response {
         public string Phone { get; set; }
 
         /// <summary>
+        /// The industry associated with the profile’s trade name or brand. Please refer to the documentation of the business category
+        /// for more information on which values are accepted.
+        /// </summary>
+        public string BusinessCategory { get; set; }
+        
+        /// <summary>
         /// The industry associated with the profile's tradename or brand. See the Mollie.Api.Models.Profile.CategoryCode 
         /// class for a full list of known values.
         /// </summary>
