@@ -29,12 +29,13 @@ namespace Mollie.Api.Client
             return await this.GetAsync<PaymentMethodResponse>($"methods/{paymentMethod.ToLower()}{queryParameters.ToQueryString()}").ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<PaymentMethodResponse>> GetAllPaymentMethodListAsync(string locale = null, Amount amount = null, bool includeIssuers = false, bool includePricing = false) {
+        public async Task<ListResponse<PaymentMethodResponse>> GetAllPaymentMethodListAsync(string locale = null, Amount amount = null, bool includeIssuers = false, bool includePricing = false, string profileId = null) {
             Dictionary<string, string> queryParameters = this.BuildQueryParameters(
                locale: locale,
                amount: amount,
                includeIssuers: includeIssuers,
-               includePricing: includePricing);
+               includePricing: includePricing,
+               profileId: profileId);
 
             return await this.GetListAsync<ListResponse<PaymentMethodResponse>>("methods/all", null, null, queryParameters).ConfigureAwait(false);
         }
