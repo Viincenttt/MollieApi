@@ -44,6 +44,7 @@ namespace Mollie.Api.Models.Profile.Response {
         /// The industry associated with the profile's tradename or brand. See the Mollie.Api.Models.Profile.CategoryCode 
         /// class for a full list of known values.
         /// </summary>
+        [Obsolete("This parameter is deprecated and will be removed in 2022. Please use the businessCategory parameter instead.")]
         public int CategoryCode { get; set; }
 
         /// <summary>

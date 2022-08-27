@@ -1,4 +1,6 @@
-﻿namespace Mollie.Api.Models.Onboarding.Request {
+﻿using System;
+
+namespace Mollie.Api.Models.Onboarding.Request {
     /// <summary>
     /// Data of the payment profile you want to provide.
     /// </summary>
@@ -35,6 +37,7 @@
         /// The industry associated with the profile’s tradename or brand. See the Mollie.Api.Models.Profile.CategoryCode class
         /// for a list of possible values
         /// </summary>
+        [Obsolete("This parameter is deprecated and will be removed in 2022. Please use the businessCategory parameter instead.")]
         public string CategoryCode { get; set; }
     }
 }
