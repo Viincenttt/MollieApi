@@ -13,5 +13,9 @@ namespace Mollie.Api.Models.Shipment{
         /// </summary>
         public IEnumerable<ShipmentLineRequest> Lines { get; set; }
 
+        /// <summary>
+        ///	Oauth only - Optional – Set this to true to make this shipment a test shipment.
+        /// </summary>
+        public bool? Testmode { get; set; }
     }
 }
