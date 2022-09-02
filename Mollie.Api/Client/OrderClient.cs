@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
+using Mollie.Api.Models;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Order;
 using Mollie.Api.Models.Payment.Response;
@@ -31,12 +32,14 @@ namespace Mollie.Api.Client {
             return await this.PatchAsync<OrderResponse>($"orders/{orderId}/lines/{orderLineId}", orderLineUpdateRequest).ConfigureAwait(false);
         }
 
-        public async Task CancelOrderAsync(string orderId) {
-            await this.DeleteAsync($"orders/{orderId}").ConfigureAwait(false);
+        public async Task CancelOrderAsync(string orderId, bool testmode = false) {
+            var data = TestmodeModel.Create(testmode);
+            await this.DeleteAsync($"orders/{orderId}", data).ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<OrderResponse>> GetOrderListAsync(string from = null, int? limit = null) {
-            return await this.GetListAsync<ListResponse<OrderResponse>>($"orders", from, limit).ConfigureAwait(false);
+        public async Task<ListResponse<OrderResponse>> GetOrderListAsync(string from = null, int? limit = null, string profileId = null, bool testmode = false) {
+            var queryParameters = BuildQueryParameters(profileId, testmode);
+            return await this.GetListAsync<ListResponse<OrderResponse>>($"orders", from, limit, queryParameters).ConfigureAwait(false);
         }
 
         public async Task<ListResponse<OrderResponse>> GetOrderListAsync(UrlObjectLink<ListResponse<OrderResponse>> url) {
@@ -55,10 +58,18 @@ namespace Mollie.Api.Client {
             return await this.PostAsync<OrderRefundResponse>($"orders/{orderId}/refunds", createOrderRefundRequest);
         }
 
-        public async Task<ListResponse<RefundResponse>> GetOrderRefundListAsync(string orderId, string from = null, int? limit = null) {
-            return await this.GetListAsync<ListResponse<RefundResponse>>($"orders/{orderId}/refunds", from, limit).ConfigureAwait(false);
+        public async Task<ListResponse<RefundResponse>> GetOrderRefundListAsync(string orderId, string from = null, int? limit = null, bool testmode = false) {
+            var queryParameters = BuildQueryParameters(null, testmode);
+            return await this.GetListAsync<ListResponse<RefundResponse>>($"orders/{orderId}/refunds", from, limit, queryParameters).ConfigureAwait(false);
         }
 
+        private Dictionary<string, string> BuildQueryParameters(string profileId, bool testmode) {
+            var result = new Dictionary<string, string>();
+            result.AddValueIfNotNullOrEmpty("profileId", profileId);
+            result.AddValueIfTrue("testmode", testmode);
+            return result;
+        }
+        
         private Dictionary<string, string> BuildQueryParameters(bool embedPayments = false, bool embedRefunds = false, bool embedShipments = false, bool testmode = false) {
             var result = new Dictionary<string, string>();
             result.AddValueIfNotNullOrEmpty("embed", this.BuildEmbedParameter(embedPayments, embedRefunds, embedShipments));

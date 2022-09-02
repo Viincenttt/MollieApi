@@ -16,5 +16,10 @@
         /// The order number. For example, 16738. We recommend that each order should have a unique order number.
         /// </summary>
         public string OrderNumber { get; set; }
+        
+        /// <summary>
+        ///	Oauth only - Optional
+        /// </summary>
+        public bool? Testmode { get; set; }
     }
 }

@@ -21,5 +21,10 @@ namespace Mollie.Api.Models.Order {
         /// </summary>
         [JsonConverter(typeof(RawJsonConverter))]
         public string Metadata { get; set; }
+        
+        /// <summary>
+        ///	Oauth only - Optional
+        /// </summary>
+        public bool? Testmode { get; set; }
     }
 }

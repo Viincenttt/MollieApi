@@ -64,6 +64,11 @@ namespace Mollie.Api.Models.Order {
         /// string and not as a float to ensure the correct number of decimals are passed.
         /// </summary>
         public string VatRate { get; set; }
+        
+        /// <summary>
+        ///	Oauth only - Optional
+        /// </summary>
+        public bool? Testmode { get; set; }
 
         public void SetMetadata(object metadataObj, JsonSerializerSettings jsonSerializerSettings = null) {
             this.Metadata = JsonConvert.SerializeObject(metadataObj, jsonSerializerSettings);

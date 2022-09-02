@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Models.Payment.Response;
+using RichardSzalay.MockHttp;
 
 namespace Mollie.Tests.Unit.Client {
     [TestFixture]
@@ -88,6 +89,42 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
+        }
+        
+        [TestCase(null, null, null, false, "")]
+        [TestCase("from", null, null, false, "?from=from")]
+        [TestCase("from", 50, null, false, "?from=from&limit=50")]
+        [TestCase(null, null, "profile-id", false, "?profileId=profile-id")]
+        [TestCase(null, null, "profile-id", true, "?profileId=profile-id&testmode=true")]
+        public async Task GetOrderListAsync_QueryParameterOptions_CorrectParametersAreAdded(string from, int? limit, string profileId, bool testmode, string expectedQueryString) {
+            // Given: We make a request to retrieve the list of orders
+            var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}orders{expectedQueryString}", defaultOrderJsonResponse);
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            OrderClient orderClient = new OrderClient("abcde", httpClient);
+
+            // When: We send the request
+            await orderClient.GetOrderListAsync(from, limit, profileId, testmode);
+
+            // Then
+            mockHttp.VerifyNoOutstandingRequest();
+        }
+        
+        [TestCase(null, null, false, "")]
+        [TestCase("from", null, false, "?from=from")]
+        [TestCase("from", 50, false, "?from=from&limit=50")]
+        [TestCase(null, null, true, "?testmode=true")]
+        public async Task GetOrderRefundListAsync_QueryParameterOptions_CorrectParametersAreAdded(string from, int? limit, bool testmode, string expectedQueryString) {
+            // Given: We make a request to retrieve the list of orders
+            const string orderId = "abcde";
+            var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}orders/{orderId}/refunds{expectedQueryString}", defaultOrderJsonResponse);
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            OrderClient orderClient = new OrderClient("abcde", httpClient);
+
+            // When: We send the request
+            await orderClient.GetOrderRefundListAsync(orderId, from, limit, testmode);
+
+            // Then
+            mockHttp.VerifyNoOutstandingRequest();
         }
 
         [Test]
