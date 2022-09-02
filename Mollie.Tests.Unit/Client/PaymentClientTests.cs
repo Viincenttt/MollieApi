@@ -250,6 +250,22 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.VerifyNoOutstandingExpectation();
         }
 
+        [Test]
+        public async Task DeletePaymentAsync_TestmodeIsTrue_RequestContainsTestmodeModel() {
+            // Given: We make a request to retrieve a payment with embedded refunds
+            const string paymentId = "payment-id";
+            string expectedContent = "\"testmode\":true";
+            var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Delete, $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}", defaultPaymentJsonResponse, expectedContent);
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
+
+            // When: We send the request
+            await paymentClient.DeletePaymentAsync(paymentId, true);
+
+            // Then
+            mockHttp.VerifyNoOutstandingExpectation();
+        }
+
         private void AssertPaymentIsEqual(PaymentRequest paymentRequest, PaymentResponse paymentResponse) {
             Assert.AreEqual(paymentRequest.Amount.Value, paymentResponse.Amount.Value);
             Assert.AreEqual(paymentRequest.Amount.Currency, paymentResponse.Amount.Currency);

@@ -21,7 +21,7 @@ namespace Mollie.Api.Client.Abstract {
         /// </summary>
         /// <param name="paymentId"></param>
         /// <returns></returns>
-        Task DeletePaymentAsync(string paymentId);
+        Task DeletePaymentAsync(string paymentId, bool testmode = false);
 
         /// <summary>
         /// Retrieve all payments created with the current payment profile, ordered from newest to oldest.

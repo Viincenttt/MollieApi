@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
+using Mollie.Api.Models;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Payment.Request;
 using Mollie.Api.Models.Payment.Response;
@@ -39,8 +40,9 @@ namespace Mollie.Api.Client {
 			return await this.GetAsync<PaymentResponse>($"payments/{paymentId}{queryParameters.ToQueryString()}").ConfigureAwait(false);
 		}
 
-		public async Task DeletePaymentAsync(string paymentId) {
-		    await this.DeleteAsync($"payments/{paymentId}").ConfigureAwait(false);
+		public async Task DeletePaymentAsync(string paymentId, bool testmode = false) {
+            var data = TestmodeModel.Create(testmode);
+		    await this.DeleteAsync($"payments/{paymentId}", data).ConfigureAwait(false);
 		}
 
         public async Task<PaymentResponse> GetPaymentAsync(UrlObjectLink<PaymentResponse> url) {
