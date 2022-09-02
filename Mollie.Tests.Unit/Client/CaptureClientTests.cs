@@ -58,6 +58,39 @@ namespace Mollie.Tests.Unit.Client {
     ""count"": 1
 }}";
 
+        [TestCase(true, "?testmode=true")]
+        [TestCase(false, "")]
+        public async Task GetCaptureAsync_CorrectQueryParametersAreAdded(bool testmode, string expectedQueryString) {
+            // Given: We make a request to retrieve a capture
+            const string paymentId = "payment-id";
+            const string captureId = "capture-id";
+            var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}/captures/{captureId}{expectedQueryString}", defaultCaptureJsonResponse);
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            CaptureClient captureClient = new CaptureClient("abcde", httpClient);
+
+            // When: We send the request
+            await captureClient.GetCaptureAsync(paymentId, captureId, testmode);
+
+            // Then
+            mockHttp.VerifyNoOutstandingRequest();
+        }
+        
+        [TestCase(true, "?testmode=true")]
+        [TestCase(false, "")]
+        public async Task GetCapturesListAsync_CorrectQueryParametersAreAdded(bool testmode, string expectedQueryString) {
+            // Given: We make a request to retrieve a capture
+            const string paymentId = "payment-id";
+            var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}/captures{expectedQueryString}", defaultCaptureJsonResponse);
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            CaptureClient captureClient = new CaptureClient("abcde", httpClient);
+
+            // When: We send the request
+            await captureClient.GetCapturesListAsync(paymentId, testmode);
+
+            // Then
+            mockHttp.VerifyNoOutstandingRequest();
+        }
+        
         [Test]
         public async Task GetCaptureAsync_DefaultBehaviour_ResponseIsParsed() {
             // Given: We request a capture with a payment id and capture id
