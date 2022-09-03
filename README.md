@@ -121,6 +121,8 @@ PaymentRequest paymentRequest = new PaymentRequest() {
 	Method = Mollie.Api.Models.Payment.PaymentMethod.Ideal // instead of "Ideal"
 };
 ```
+### Testing
+During the process of building your integration, it is important to properly test it. You can access the test mode of the Mollie API in two ways: by using the Test API key, or, if you are using organization access tokens or app tokens, by providing the testmode parameter in your API request. If you are using the Test API key, you do not have to set the testmode parameter anywhere. Any entity you create, retrieve, update or delete using a Test API key can only interact with the test system of Mollie, which is completely isolated from the production environment. 
 
 ## 3. Payment API
 ### Creating a payment
