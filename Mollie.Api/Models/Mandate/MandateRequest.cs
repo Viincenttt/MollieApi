@@ -21,5 +21,10 @@ namespace Mollie.Api.Models.Mandate {
         /// Optional - A custom reference
         /// </summary>
         public string MandateReference { get; set; }
+        
+        /// <summary>
+        ///	Oauth only - Optional – Set this to true to make this mandate a test mandate.
+        /// </summary>
+        public bool? Testmode { get; set; }
     }
 }

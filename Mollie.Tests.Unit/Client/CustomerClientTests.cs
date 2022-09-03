@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Mollie.Api.Client;
 using Mollie.Api.Models.Customer;
-using Mollie.Api.Models.Shipment;
 using NUnit.Framework;
 using RichardSzalay.MockHttp;
 
@@ -16,7 +15,7 @@ namespace Mollie.Tests.Unit.Client {
             
             var mockHttp = new MockHttpMessageHandler();
             mockHttp.When($"{BaseMollieClient.ApiEndPoint}{expectedUrl}")
-                .Respond("application/json", DefaultCustomerJsonToRetiurn);
+                .Respond("application/json", DefaultCustomerJsonToReturn);
             HttpClient httpClient = mockHttp.ToHttpClient();
             CustomerClient customerClient = new CustomerClient("abcde", httpClient);
 
@@ -36,7 +35,7 @@ namespace Mollie.Tests.Unit.Client {
             // Given: We retrieve a list of customers
             var mockHttp = new MockHttpMessageHandler();
             mockHttp.When($"{BaseMollieClient.ApiEndPoint}customers{expectedQueryString}")
-                .Respond("application/json", DefaultCustomerJsonToRetiurn);
+                .Respond("application/json", DefaultCustomerJsonToReturn);
             HttpClient httpClient = mockHttp.ToHttpClient();
             CustomerClient customerClient = new CustomerClient("abcde", httpClient);
 
@@ -58,7 +57,7 @@ namespace Mollie.Tests.Unit.Client {
             const string customerId = "customer-id";
             var mockHttp = new MockHttpMessageHandler();
             mockHttp.When($"{BaseMollieClient.ApiEndPoint}customers/{customerId}/payments{expectedQueryString}")
-                .Respond("application/json", DefaultCustomerJsonToRetiurn);
+                .Respond("application/json", DefaultCustomerJsonToReturn);
             HttpClient httpClient = mockHttp.ToHttpClient();
             CustomerClient customerClient = new CustomerClient("abcde", httpClient);
 
@@ -75,7 +74,7 @@ namespace Mollie.Tests.Unit.Client {
             // Given: We make a request to retrieve a payment with embedded refunds
             const string customerId = "customer-id";
             string expectedContent = "\"testmode\":true";
-            var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Delete, $"{BaseMollieClient.ApiEndPoint}customers/{customerId}", DefaultCustomerJsonToRetiurn, expectedContent);
+            var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Delete, $"{BaseMollieClient.ApiEndPoint}customers/{customerId}", DefaultCustomerJsonToReturn, expectedContent);
             HttpClient httpClient = mockHttp.ToHttpClient();
             CustomerClient customerClient = new CustomerClient("abcde", httpClient);
 
@@ -86,7 +85,7 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.VerifyNoOutstandingExpectation();
         }
 
-        private const string DefaultCustomerJsonToRetiurn = @"{
+        private const string DefaultCustomerJsonToReturn = @"{
     ""resource"": ""customer"",
     ""id"": ""customer-id"",
     ""mode"": ""test"",
