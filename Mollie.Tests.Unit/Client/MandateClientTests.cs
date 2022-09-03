@@ -1,7 +1,6 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client;
-using Mollie.Api.Models.Customer;
 using NUnit.Framework;
 using RichardSzalay.MockHttp;
 
