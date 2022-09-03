@@ -25,6 +25,11 @@ namespace Mollie.Api.Models.Customer {
         /// </summary>
         [JsonConverter(typeof(RawJsonConverter))]
         public string Metadata { get; set; }
+        
+        /// <summary>
+        ///	Oauth only - Optional – Set this to true to make this customer a test customer.
+        /// </summary>
+        public bool? Testmode { get; set; }
 
         public void SetMetadata(object metadataObj, JsonSerializerSettings jsonSerializerSettings = null) {
             this.Metadata = JsonConvert.SerializeObject(metadataObj, jsonSerializerSettings);
