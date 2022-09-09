@@ -9,6 +9,8 @@ using Mollie.Tests.Integration.Framework;
 using NUnit.Framework;
 using System.Linq;
 using System.Threading.Tasks;
+using Mollie.Api.Models;
+using Mollie.Api.Models.Profile.Request;
 
 namespace Mollie.Tests.Integration.Api {
     [TestFixture]
@@ -57,6 +59,27 @@ namespace Mollie.Tests.Integration.Api {
             // Then: Make sure a payment method is returned
             Assert.IsNotNull(paymentMethodResponse);
             Assert.AreEqual(PaymentMethod.Ideal, paymentMethodResponse.Id);
+        }
+        
+        [Test]
+        [Ignore("We can only test this in debug mode, because we need to retrieve a oauth access token to test this method")]
+        public async Task CreateProfileAsync_WithDefaultParameters_CreatesProfile() {
+            // Given
+            ProfileRequest profileRequest = new ProfileRequest {
+                Email = "test@test.com",
+                Mode = Mode.Test,
+                Name = "testuser",
+                BusinessCategory = "PET_SHOPS",
+                Website = "http://github.com",
+                Phone = "+31600000000"
+            };
+            ProfileClient profileClient = new ProfileClient("accesstoken"); // Set access token
+
+            // When: We create a new profile
+            ProfileResponse profileResponse = await profileClient.CreateProfileAsync(profileRequest);
+
+            // Then: Make sure the profile that is created matched the profile request
+            Assert.IsNotNull(profileResponse);
         }
 
         [Test]

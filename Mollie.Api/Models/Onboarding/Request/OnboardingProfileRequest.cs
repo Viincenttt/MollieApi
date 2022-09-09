@@ -38,12 +38,5 @@ namespace Mollie.Api.Models.Onboarding.Request {
         /// for more information on which values are accepted.
         /// </summary>
         public string BusinessCategory { get; set; }
-        
-        /// <summary>
-        /// The industry associated with the profile’s tradename or brand. See the Mollie.Api.Models.Profile.CategoryCode class
-        /// for a list of possible values
-        /// </summary>
-        [Obsolete("This parameter is deprecated and will be removed in 2022. Please use the businessCategory parameter instead.")]
-        public string CategoryCode { get; set; }
     }
 }

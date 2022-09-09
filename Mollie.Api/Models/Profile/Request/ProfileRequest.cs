@@ -29,13 +29,6 @@ namespace Mollie.Api.Models.Profile.Request {
         public string BusinessCategory { get; set; }
         
         /// <summary>
-        /// The industry associated with the profile's tradename or brand. See the Mollie.Api.Models.Profile.CategoryCode class 
-        /// for a full list of known values.
-        /// </summary>
-        [Obsolete("This parameter is deprecated and will be removed in 2022. Please use the businessCategory parameter instead.")]
-        public int CategoryCode { get; set; }
-        
-        /// <summary>
         /// Optional – Creating a test profile by setting this parameter to test, enables you to start using the API without
         /// having to provide all your business info just yet. Defaults to live.
         /// </summary>
