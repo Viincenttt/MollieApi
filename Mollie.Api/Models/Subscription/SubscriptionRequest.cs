@@ -12,5 +12,10 @@
         /// transfer these amounts to your own account.
         /// </summary>
         public ApplicationFee ApplicationFee { get; set; }
+        
+        /// <summary>
+        /// The website profile’s unique identifier, for example pfl_3RkSN1zuPE.
+        /// </summary>
+        public string ProfileId { get; set; }
     }
 }
