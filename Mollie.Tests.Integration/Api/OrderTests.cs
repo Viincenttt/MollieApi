@@ -27,6 +27,9 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(orderRequest.OrderNumber, result.OrderNumber);
             Assert.AreEqual(orderRequest.Lines.Count(), result.Lines.Count());
             Assert.AreEqual(orderRequest.Lines.First().Type, result.Lines.First().Type);
+            Assert.IsNotNull(result.Links);
+            Assert.AreEqual(orderRequest.Lines.First().ImageUrl, result.Lines.First().Links.ImageUrl.Href);
+            Assert.AreEqual(orderRequest.Lines.First().ProductUrl, result.Lines.First().Links.ProductUrl.Href);
         }
 
         [Test]
@@ -188,7 +191,7 @@ namespace Mollie.Tests.Integration.Api {
             // Then
             Assert.IsTrue(response.Items.Count <= numberOfOrders);
         }
-
+        
         private OrderRequest CreateOrder() {
             return new OrderRequest() {
                 Amount = new Amount(Currency.EUR, "100.00"),
@@ -202,7 +205,9 @@ namespace Mollie.Tests.Integration.Api {
                         UnitPrice = new Amount(Currency.EUR, "100.00"),
                         TotalAmount = new Amount(Currency.EUR, "100.00"),
                         VatRate = "21.00",
-                        VatAmount = new Amount(Currency.EUR, "17.36")
+                        VatAmount = new Amount(Currency.EUR, "17.36"),
+                        ImageUrl = "http://www.google.com/",
+                        ProductUrl = "http://www.mollie.nl/",
                     }
                 },
                 BillingAddress = new OrderAddressDetails() {
