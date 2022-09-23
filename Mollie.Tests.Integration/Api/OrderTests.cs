@@ -31,7 +31,7 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(orderRequest.Lines.First().ImageUrl, result.Lines.First().Links.ImageUrl.Href);
             Assert.AreEqual(orderRequest.Lines.First().ProductUrl, result.Lines.First().Links.ProductUrl.Href);
             var expectedMetadataString = result.Lines.First().Metadata
-                .Replace("\r\n", "")
+                .Replace(System.Environment.NewLine, "")
                 .Replace(" ", "");
             Assert.AreEqual(orderRequest.Lines.First().Metadata, expectedMetadataString);
         }
