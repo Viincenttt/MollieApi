@@ -9,11 +9,15 @@ using Mollie.Api.Models.Payment;
 using Mollie.Tests.Integration.Framework;
 using NUnit.Framework;
 
-namespace Mollie.Tests.Integration.Api {
+namespace Mollie.Tests.Integration.Api
+{
     [TestFixture]
-    public class OrderTests : BaseMollieApiTestClass {
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public async Task CanCreateOrderWithOnlyRequiredFields() {
+    public class OrderTests : BaseMollieApiTestClass
+    {
+        [Test]
+        [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        public async Task CanCreateOrderWithOnlyRequiredFields()
+        {
             // If: we create a order request with only the required parameters
             OrderRequest orderRequest = this.CreateOrder();
 
@@ -30,11 +34,13 @@ namespace Mollie.Tests.Integration.Api {
             Assert.IsNotNull(result.Links);
             Assert.AreEqual(orderRequest.Lines.First().ImageUrl, result.Lines.First().Links.ImageUrl.Href);
             Assert.AreEqual(orderRequest.Lines.First().ProductUrl, result.Lines.First().Links.ProductUrl.Href);
+            Assert.AreEqual(orderRequest.Lines.First().Metadata, result.Lines.First().Metadata);
         }
 
         [Test]
         [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public async Task CanCreateOrderWithMultiplePaymentMethods() {
+        public async Task CanCreateOrderWithMultiplePaymentMethods()
+        {
             // When: we create a order request and specify multiple payment methods
             OrderRequest orderRequest = this.CreateOrder();
             orderRequest.Methods = new List<string>() {
@@ -55,7 +61,8 @@ namespace Mollie.Tests.Integration.Api {
 
         [Test]
         [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public async Task CanCreateOrderWithSinglePaymentMethod() {
+        public async Task CanCreateOrderWithSinglePaymentMethod()
+        {
             // When: we create a order request and specify a single payment method
             OrderRequest orderRequest = this.CreateOrder();
             orderRequest.Method = PaymentMethod.CreditCard;
@@ -71,11 +78,14 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(orderRequest.OrderNumber, result.OrderNumber);
         }
 
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public async Task CanCreateOrderWithPaymentSpecificOptions() {
+        [Test]
+        [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        public async Task CanCreateOrderWithPaymentSpecificOptions()
+        {
             // If: we create a order request with payment specific parameters
             OrderRequest orderRequest = this.CreateOrder();
-            orderRequest.Payment = new IDealSpecificParameters() {
+            orderRequest.Payment = new IDealSpecificParameters()
+            {
                 Issuer = "ideal_INGBNL2A"
             };
 
@@ -89,8 +99,10 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(orderRequest.OrderNumber, result.OrderNumber);
         }
 
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public async Task CanRetrieveOrderAfterCreationOrder() {
+        [Test]
+        [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        public async Task CanRetrieveOrderAfterCreationOrder()
+        {
             // If: we create a new order
             OrderRequest orderRequest = this.CreateOrder();
             OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
@@ -103,8 +115,10 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(createdOrder.Id, retrievedOrder.Id);
         }
 
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public async Task CanRetrieveOrderAndIncludeEmbeddedData() {
+        [Test]
+        [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        public async Task CanRetrieveOrderAndIncludeEmbeddedData()
+        {
             // If: we create a new order
             OrderRequest orderRequest = this.CreateOrder();
             OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
@@ -121,14 +135,17 @@ namespace Mollie.Tests.Integration.Api {
             Assert.IsNotNull(retrievedOrder.Embedded.Refunds);
         }
 
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public async Task CanUpdateExistingOrder() {
+        [Test]
+        [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        public async Task CanUpdateExistingOrder()
+        {
             // If: we create a new order
             OrderRequest orderRequest = this.CreateOrder();
             OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
 
             // When: We attempt to update the order
-            OrderUpdateRequest orderUpdateRequest = new OrderUpdateRequest() {
+            OrderUpdateRequest orderUpdateRequest = new OrderUpdateRequest()
+            {
                 OrderNumber = "1337",
                 BillingAddress = createdOrder.BillingAddress
             };
@@ -140,8 +157,10 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(orderUpdateRequest.BillingAddress.City, updatedOrder.BillingAddress.City);
         }
 
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public async Task CanCancelCreatedOrder() {
+        [Test]
+        [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        public async Task CanCancelCreatedOrder()
+        {
             // If: we create a new order
             OrderRequest orderRequest = this.CreateOrder();
             OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
@@ -154,14 +173,17 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(OrderStatus.Canceled, canceledOrder.Status);
         }
 
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public async Task CanUpdateOrderLine() {
+        [Test]
+        [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        public async Task CanUpdateOrderLine()
+        {
             // If: we create a new order
             OrderRequest orderRequest = this.CreateOrder();
             OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
 
             // When: We update the order line
-            OrderLineUpdateRequest updateRequest = new OrderLineUpdateRequest() {
+            OrderLineUpdateRequest updateRequest = new OrderLineUpdateRequest()
+            {
                 Name = "A fluffy bear"
             };
             OrderResponse updatedOrder = await this._orderClient.UpdateOrderLinesAsync(createdOrder.Id, createdOrder.Lines.First().Id, updateRequest);
@@ -170,8 +192,10 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(updateRequest.Name, updatedOrder.Lines.First().Name);
         }
 
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public async Task CanRetrieveOrderList() {
+        [Test]
+        [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        public async Task CanRetrieveOrderList()
+        {
             // When: Retrieve payment list with default settings
             ListResponse<OrderResponse> response = await this._orderClient.GetOrderListAsync();
 
@@ -180,8 +204,10 @@ namespace Mollie.Tests.Integration.Api {
             Assert.IsNotNull(response.Items);
         }
 
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public async Task ListOrdersNeverReturnsMorePaymentsThenTheNumberOfRequestedOrders() {
+        [Test]
+        [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        public async Task ListOrdersNeverReturnsMorePaymentsThenTheNumberOfRequestedOrders()
+        {
             // If: Number of orders requested is 5
             int numberOfOrders = 5;
 
@@ -191,9 +217,11 @@ namespace Mollie.Tests.Integration.Api {
             // Then
             Assert.IsTrue(response.Items.Count <= numberOfOrders);
         }
-        
-        private OrderRequest CreateOrder() {
-            return new OrderRequest() {
+
+        private OrderRequest CreateOrder()
+        {
+            return new OrderRequest()
+            {
                 Amount = new Amount(Currency.EUR, "100.00"),
                 OrderNumber = "16738",
                 Lines = new List<OrderLineRequest>() {
@@ -208,9 +236,11 @@ namespace Mollie.Tests.Integration.Api {
                         VatAmount = new Amount(Currency.EUR, "17.36"),
                         ImageUrl = "http://www.google.com/",
                         ProductUrl = "http://www.mollie.nl/",
+                        Metadata =  "{\"order_id\":\"4.40\"}",
                     }
                 },
-                BillingAddress = new OrderAddressDetails() {
+                BillingAddress = new OrderAddressDetails()
+                {
                     GivenName = "John",
                     FamilyName = "Smit",
                     Email = "johnsmit@gmail.com",
