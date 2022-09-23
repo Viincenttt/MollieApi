@@ -30,7 +30,10 @@ namespace Mollie.Tests.Integration.Api {
             Assert.IsNotNull(result.Links);
             Assert.AreEqual(orderRequest.Lines.First().ImageUrl, result.Lines.First().Links.ImageUrl.Href);
             Assert.AreEqual(orderRequest.Lines.First().ProductUrl, result.Lines.First().Links.ProductUrl.Href);
-            Assert.AreEqual(orderRequest.Lines.First().Metadata, result.Lines.First().Metadata);
+            var expectedMetadataString = result.Lines.First().Metadata
+                .Replace("\r\n", "")
+                .Replace(" ", "");
+            Assert.AreEqual(orderRequest.Lines.First().Metadata, expectedMetadataString);
         }
 
         [Test]
