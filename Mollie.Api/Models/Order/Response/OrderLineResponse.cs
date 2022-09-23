@@ -1,4 +1,5 @@
 ﻿using System;
+using Mollie.Api.JsonConverters;
 using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Order {
@@ -130,5 +131,11 @@ namespace Mollie.Api.Models.Order {
         /// </summary>
         [JsonProperty("_links")]
         public OrderLineResponseLinks Links { get; set; }
+        
+        /// <summary>
+         /// The optional metadata you provided upon line creation.
+         /// </summary>
+         [JsonConverter(typeof(RawJsonConverter))]
+         public string Metadata { get; set; }
     }
 }

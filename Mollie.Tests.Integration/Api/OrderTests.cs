@@ -30,6 +30,7 @@ namespace Mollie.Tests.Integration.Api {
             Assert.IsNotNull(result.Links);
             Assert.AreEqual(orderRequest.Lines.First().ImageUrl, result.Lines.First().Links.ImageUrl.Href);
             Assert.AreEqual(orderRequest.Lines.First().ProductUrl, result.Lines.First().Links.ProductUrl.Href);
+            Assert.AreEqual(orderRequest.Lines.First().Metadata, result.Lines.First().Metadata);
         }
 
         [Test]
@@ -208,6 +209,7 @@ namespace Mollie.Tests.Integration.Api {
                         VatAmount = new Amount(Currency.EUR, "17.36"),
                         ImageUrl = "http://www.google.com/",
                         ProductUrl = "http://www.mollie.nl/",
+                        Metadata =  "{\"order_id\":\"4.40\"}",
                     }
                 },
                 BillingAddress = new OrderAddressDetails() {
