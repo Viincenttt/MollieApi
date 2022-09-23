@@ -133,9 +133,9 @@ namespace Mollie.Api.Models.Order {
         public OrderLineResponseLinks Links { get; set; }
         
         /// <summary>
-         /// The optional metadata you provided upon line creation.
-         /// </summary>
-         [JsonConverter(typeof(RawJsonConverter))]
-         public string Metadata { get; set; }
+        /// The optional metadata you provided upon line creation.
+        /// </summary>
+        [JsonConverter(typeof(RawJsonConverter))]
+        public string Metadata { get; set; }
     }
 }
