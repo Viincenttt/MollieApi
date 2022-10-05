@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
@@ -12,28 +11,35 @@ namespace Mollie.Api.Client {
         public ChargebacksClient(string apiKey, HttpClient httpClient = null) : base(apiKey, httpClient) {
         }
 
-        public async Task<ChargebackResponse> GetChargebackAsync(string paymentId, string chargebackId) {
-            return await this.GetAsync<ChargebackResponse>($"payments/{paymentId}/chargebacks/{chargebackId}")
+        public async Task<ChargebackResponse> GetChargebackAsync(string paymentId, string chargebackId, bool testmode = false) {
+            var queryParameters = this.BuildQueryParameters(testmode);
+            return await this.GetAsync<ChargebackResponse>($"payments/{paymentId}/chargebacks/{chargebackId}{queryParameters.ToQueryString()}")
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<ChargebackResponse>> GetChargebacksListAsync(string paymentId, string from = null, int? limit = null) {
+        public async Task<ListResponse<ChargebackResponse>> GetChargebacksListAsync(string paymentId, string from = null, int? limit = null, bool testmode = false) {
+            var queryParameters = this.BuildQueryParameters(testmode);
             return await this
-                .GetListAsync<ListResponse<ChargebackResponse>>($"payments/{paymentId}/chargebacks", from, limit)
+                .GetListAsync<ListResponse<ChargebackResponse>>($"payments/{paymentId}/chargebacks", from, limit, queryParameters)
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<ChargebackResponse>> GetChargebacksListAsync(string profileId = null, bool? testmode = null) {
-            if (profileId != null || testmode != null) {
-                this.ValidateApiKeyIsOauthAccesstoken();
-            }
-
-            // Build parameters
-            var parameters = new Dictionary<string, string>();
-            parameters.AddValueIfNotNullOrEmpty(nameof(profileId), profileId);
-            parameters.AddValueIfNotNullOrEmpty(nameof(testmode), Convert.ToString(testmode).ToLower());
-
-            return await this.GetListAsync<ListResponse<ChargebackResponse>>($"chargebacks", null, null, parameters).ConfigureAwait(false);
+        public async Task<ListResponse<ChargebackResponse>> GetChargebacksListAsync(string profileId = null, bool testmode = false) {
+            var queryParameters = this.BuildQueryParameters(profileId, testmode);
+            return await this.GetListAsync<ListResponse<ChargebackResponse>>($"chargebacks", null, null, queryParameters).ConfigureAwait(false);
+        }
+        
+        private Dictionary<string, string> BuildQueryParameters(string profileId, bool testmode) {
+            var result = new Dictionary<string, string>();
+            result.AddValueIfNotNullOrEmpty(nameof(profileId), profileId);
+            result.AddValueIfTrue(nameof(testmode), testmode);
+            return result;
+        }
+        
+        private Dictionary<string, string> BuildQueryParameters(bool testmode) {
+            var result = new Dictionary<string, string>();
+            result.AddValueIfTrue(nameof(testmode), testmode);
+            return result;
         }
     }
 }
