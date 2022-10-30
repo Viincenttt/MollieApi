@@ -83,17 +83,17 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [Test]
+        [Ignore("Don't disable payment methods, other tests might break")]
         public async Task DisablePaymentMethodAsync_WhenDisablingPaymentMethodForCurrentProfile_NoErrorIsThrown() {
             // Given
 
             // When: We disable a payment method for the current profile
-            await this._profileClient.DisablePaymentMethodAsync(PaymentMethod.Ideal);
+            await this._profileClient.DisablePaymentMethodAsync(PaymentMethod.CreditCard);
 
             // Then
         }
 
         [Test]
-        [Ignore("Currently returns 500 error")]
         public async Task EnableGiftCardIssuerAsync_WhenEnablingGiftCardIssuerForCurrentProfile_EnableGiftCardIssuerResponseIsReturned() {
             // Given
             const string issuerToEnable = "festivalcadeau";
