@@ -3,6 +3,13 @@
 namespace Mollie.Api.Models.Payment.Response.Specific {
     public class GiftcardPaymentResponse : PaymentResponse {
         /// <summary>
+        /// An object with payment details.
+        /// </summary>
+        public GiftcardPaymentResponseDetails Details { get; set; }
+    }
+
+    public class GiftcardPaymentResponseDetails {
+        /// <summary>
         /// The voucher number, with the last four digits masked. When multiple gift cards are used, this is the first voucher 
         /// number. Example: 606436353088147****.
         /// </summary>

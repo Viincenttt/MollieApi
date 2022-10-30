@@ -190,6 +190,7 @@ namespace Mollie.Tests.Integration.Api {
         [TestCase(typeof(PayPalPaymentRequest), PaymentMethod.PayPal, typeof(PayPalPaymentResponse))]
         [TestCase(typeof(PaymentRequest), PaymentMethod.Belfius, typeof(BelfiusPaymentResponse))]
         [TestCase(typeof(KbcPaymentRequest), PaymentMethod.Kbc, typeof(KbcPaymentResponse))]
+        [TestCase(typeof(GiftcardPaymentRequest), PaymentMethod.GiftCard, typeof(GiftcardPaymentResponse))]
         [TestCase(typeof(PaymentRequest), null, typeof(PaymentResponse))]
         public async Task CanCreateSpecificPaymentType(Type paymentType, string paymentMethod, Type expectedResponseType) {
             // When: we create a specific payment type with some bank transfer specific values
