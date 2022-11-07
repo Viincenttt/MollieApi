@@ -18,7 +18,8 @@ namespace Mollie.Api.Framework {
                 new JsonSerializerSettings {
                     DateFormatString = "yyyy-MM-dd",
                     ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                    NullValueHandling = NullValueHandling.Ignore
+                    NullValueHandling = NullValueHandling.Ignore,
+                    PreserveReferencesHandling = PreserveReferencesHandling.None
                 });
         }
 
