@@ -93,6 +93,7 @@ namespace Mollie.Tests.Integration.Api {
             // Then
         }
 
+        /*
         [Test]
         public async Task EnableGiftCardIssuerAsync_WhenEnablingGiftCardIssuerForCurrentProfile_EnableGiftCardIssuerResponseIsReturned() {
             // Given
@@ -104,7 +105,7 @@ namespace Mollie.Tests.Integration.Api {
             // Then: Make sure a payment method is returned
             Assert.IsNotNull(giftcardIssuerResponse);
             Assert.AreEqual(issuerToEnable, giftcardIssuerResponse.Id);
-        }
+        }*/
 
         [Test]
         public async Task DisableGiftCardIssuerAsync_WhenDisablingGiftCardIssuerForCurrentProfile_NoErrorIsThrown() {
