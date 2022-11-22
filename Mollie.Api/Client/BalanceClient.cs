@@ -11,16 +11,15 @@ namespace Mollie.Api.Client {
         public BalanceClient(string apiKey, HttpClient httpClient = null) : base(apiKey, httpClient) {
         }
         
-        public async Task<BalanceResponse> GetBalance(string balanceId) {
+        public async Task<BalanceResponse> GetBalanceAsync(string balanceId) {
             return await this.GetAsync<BalanceResponse>($"balances/{balanceId}").ConfigureAwait(false);
         }
         
-        public async Task<BalanceResponse> GetPrimaryBalance() {
+        public async Task<BalanceResponse> GetPrimaryBalanceAsync() {
             return await this.GetAsync<BalanceResponse>("balances/primary").ConfigureAwait(false);
         }
         
-        public async Task<ListResponse<BalanceResponse>> ListBalances(string from = null, int? limit = null, string currency = null) {
-            // Testmode?
+        public async Task<ListResponse<BalanceResponse>> ListBalancesAsync(string from = null, int? limit = null, string currency = null) {
             var queryParameters = BuildQueryParameters(currency);
             return await this.GetListAsync<ListResponse<BalanceResponse>>($"balances", from, limit, queryParameters).ConfigureAwait(false);
         }
