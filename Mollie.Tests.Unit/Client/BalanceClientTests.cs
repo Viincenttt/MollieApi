@@ -42,6 +42,40 @@ namespace Mollie.Tests.Unit.Client {
           Assert.AreEqual(getBalanceResponseFactory.TransferDestination.BeneficiaryName, balanceResponse.TransferDestination.BeneficiaryName);
       }
 
+      [Test]
+      public async Task GetPrimaryBalanceAsync_DefaultBehaviour_ResponseIsParsed() {
+          // Given: We request the primary balance
+          var getBalanceResponseFactory = new GetBalanceResponseFactory();
+          var getBalanceResponse = getBalanceResponseFactory.CreateGetBalanceResponse();
+          string expectedUrl = $"{BaseMollieClient.ApiEndPoint}balances/primary";
+          var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, getBalanceResponse);
+          HttpClient httpClient = mockHttp.ToHttpClient();
+          BalanceClient balanceClient = new BalanceClient("api-key", httpClient);
+
+          // When: We make the request
+          BalanceResponse balanceResponse = await balanceClient.GetPrimaryBalanceAsync();
+
+          // Then: Response should be parsed
+          mockHttp.VerifyNoOutstandingExpectation();
+          Assert.IsNotNull(balanceResponse);
+          Assert.AreEqual(getBalanceResponseFactory.BalanceId, balanceResponse.Id);
+          Assert.AreEqual(getBalanceResponseFactory.CreatedAt, balanceResponse.CreatedAt.ToUniversalTime());
+          Assert.AreEqual(getBalanceResponseFactory.TransferThreshold.Currency, balanceResponse.TransferThreshold.Currency);
+          Assert.AreEqual(getBalanceResponseFactory.Currency, balanceResponse.Currency);
+          Assert.AreEqual(getBalanceResponseFactory.Status, balanceResponse.Status);
+          Assert.AreEqual(getBalanceResponseFactory.AvailableAmount.Currency, balanceResponse.AvailableAmount.Currency);
+          Assert.AreEqual(getBalanceResponseFactory.AvailableAmount.Value, balanceResponse.AvailableAmount.Value);
+          Assert.AreEqual(getBalanceResponseFactory.PendingAmount.Currency, balanceResponse.PendingAmount.Currency);
+          Assert.AreEqual(getBalanceResponseFactory.PendingAmount.Value, balanceResponse.PendingAmount.Value);
+          Assert.AreEqual(getBalanceResponseFactory.TransferFrequency, balanceResponse.TransferFrequency);
+          Assert.AreEqual(getBalanceResponseFactory.TransferThreshold.Currency, balanceResponse.TransferThreshold.Currency);
+          Assert.AreEqual(getBalanceResponseFactory.TransferThreshold.Value, balanceResponse.TransferThreshold.Value);
+          Assert.AreEqual(getBalanceResponseFactory.TransferReference, balanceResponse.TransferReference);
+          Assert.AreEqual(getBalanceResponseFactory.TransferDestination.Type, balanceResponse.TransferDestination.Type);
+          Assert.AreEqual(getBalanceResponseFactory.TransferDestination.BankAccount, balanceResponse.TransferDestination.BankAccount);
+          Assert.AreEqual(getBalanceResponseFactory.TransferDestination.BeneficiaryName, balanceResponse.TransferDestination.BeneficiaryName);
+      }
+
       private class GetBalanceResponseFactory {
           public string BalanceId { get; set; } = "bal_gVMhHKqSSRYJyPsuoPNFH";
           public DateTime CreatedAt { get; set; } = DateTime.SpecifyKind(new DateTime(2022, 11, 22, 13, 15, 0), DateTimeKind.Utc);
