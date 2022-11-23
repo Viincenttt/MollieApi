@@ -16,6 +16,7 @@ namespace Mollie.Tests.Integration.Framework {
         protected string ApiKey => this.Configuration.ApiKey;
         protected string ClientId => this.Configuration.ClientId ?? "client-id";
         protected string ClientSecret => this.Configuration.ClientSecret ?? "client-secret";
+        protected string AccessKey => this.Configuration.AccessKey ?? "access-key";
 
         protected IPaymentClient _paymentClient;
         protected IPaymentLinkClient _paymentLinkClient;
@@ -27,6 +28,7 @@ namespace Mollie.Tests.Integration.Framework {
         protected IProfileClient _profileClient;
         protected IOrderClient _orderClient;
         protected IShipmentClient _shipmentClient;
+        protected IBalanceClient _balanceClient;
 
         [OneTimeSetUp]
         public void InitClass() {
@@ -42,6 +44,7 @@ namespace Mollie.Tests.Integration.Framework {
             this._profileClient = new ProfileClient(this.ApiKey);
             this._orderClient = new OrderClient(this.ApiKey);
             this._shipmentClient = new ShipmentClient(this.ApiKey);
+            this._balanceClient = new BalanceClient(this.AccessKey);
         }
 
         [SetUp]

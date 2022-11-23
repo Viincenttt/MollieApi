@@ -40,5 +40,19 @@ namespace Mollie.Api.Models {
         public override string ToString() {
             return $"{this.Value} {this.Currency}";
         }
+
+        public override bool Equals(object obj) {
+            if (obj is Amount amount) {
+                return this.Currency == amount.Currency && this.Value == amount.Value;
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode() {
+            unchecked {
+                return ((Currency != null ? Currency.GetHashCode() : 0) * 397) ^ (Value != null ? Value.GetHashCode() : 0);
+            }
+        }
     }
 }

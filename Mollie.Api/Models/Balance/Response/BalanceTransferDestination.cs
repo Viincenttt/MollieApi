@@ -14,5 +14,9 @@ namespace Mollie.Api.Models.Balance.Response {
         /// The full name of the beneficiary the balance amount is to be transferred to.
         /// </summary>
         public string BeneficiaryName { get; set; }
+
+        public override string ToString() {
+            return $"{Type} - {BankAccount} - {BeneficiaryName}";
+        }
     }
 }
