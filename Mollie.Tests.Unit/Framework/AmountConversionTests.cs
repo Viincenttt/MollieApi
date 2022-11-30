@@ -1,6 +1,4 @@
-﻿using Mollie.Api.Framework;
-using Mollie.Api.Models;
-using Mollie.Api.Models.Payment.Response;
+﻿using Mollie.Api.Models;
 using NUnit.Framework;
 using System;
 
