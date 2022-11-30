@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Mollie.Tests.Integration.Framework;
 using NUnit.Framework;
@@ -59,6 +60,27 @@ namespace Mollie.Tests.Integration.Api {
             // Then: Make sure we can parse the result
             Assert.IsNotNull(result);
             Assert.AreEqual(result.Count, result.Items.Count);
+        }
+        
+        [Test][RetryOnApiRateLimitFailure(NumberOfRetries)]
+        public async Task GetBalanceReportAsync_IsParsedCorrectly() {
+            // Given: We retrieve the primary balance
+            var from = new DateTime(2022, 11, 1);
+            var until = new DateTime(2022, 11, 30);
+            var primaryBalance = await this._balanceClient.GetPrimaryBalanceAsync();
+            
+            // When: We retrieve the primary balance report
+            var result = await this._balanceClient.GetBalanceReportAsync(
+                balanceId: primaryBalance.Id,
+                from: from, 
+                until: until);
+
+            // Then: Make sure we can parse the result
+            Assert.IsNotNull(result);
+            Assert.AreEqual("balance-report", result.Resource);
+            Assert.AreEqual(primaryBalance.Id, result.BalanceId);
+            Assert.AreEqual(from, result.From);
+            Assert.AreEqual(until, result.Until);
         }
     }
 }

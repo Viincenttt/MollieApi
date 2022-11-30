@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
@@ -20,11 +21,24 @@ namespace Mollie.Api.Client {
         }
         
         public async Task<ListResponse<BalanceResponse>> ListBalancesAsync(string from = null, int? limit = null, string currency = null) {
-            var queryParameters = BuildQueryParameters(currency);
+            var queryParameters = BuildListBalanceQueryParameters(currency);
             return await this.GetListAsync<ListResponse<BalanceResponse>>($"balances", from, limit, queryParameters).ConfigureAwait(false);
         }
+
+        public async Task<BalanceReportResponse> GetBalanceReportAsync(string balanceId, DateTime from, DateTime until, string grouping = null) {
+            var queryParameters = BuildGetBalanceReportQueryParameters(from, until, grouping);
+            return await this.GetAsync<BalanceReportResponse>($"balances/{balanceId}/report{queryParameters.ToQueryString()}").ConfigureAwait(false);
+        }
         
-        private Dictionary<string, string> BuildQueryParameters(string currency) {
+        private Dictionary<string, string> BuildGetBalanceReportQueryParameters(DateTime from, DateTime until, string grouping = null) {
+            var result = new Dictionary<string, string>();
+            result.AddValueIfNotNullOrEmpty("from", from.ToString("yyyy-MM-dd"));
+            result.AddValueIfNotNullOrEmpty("until", until.ToString("yyyy-MM-dd"));
+            result.AddValueIfNotNullOrEmpty("grouping", grouping);
+            return result;
+        }
+        
+        private Dictionary<string, string> BuildListBalanceQueryParameters(string currency) {
             var result = new Dictionary<string, string>();
             result.AddValueIfNotNullOrEmpty("currency", currency);
             return result;
