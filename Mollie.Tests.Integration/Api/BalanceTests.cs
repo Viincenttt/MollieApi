@@ -73,7 +73,8 @@ namespace Mollie.Tests.Integration.Api {
             var result = await this._balanceClient.GetBalanceReportAsync(
                 balanceId: primaryBalance.Id,
                 from: from, 
-                until: until);
+                until: until,
+                grouping: "status-balances");
 
             // Then: Make sure we can parse the result
             Assert.IsNotNull(result);
