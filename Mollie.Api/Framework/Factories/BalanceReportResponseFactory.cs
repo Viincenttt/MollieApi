@@ -5,9 +5,9 @@ namespace Mollie.Api.Framework.Factories {
     public class BalanceReportResponseFactory {
         public BalanceReportResponse Create(string reportGrouping) {
             switch (reportGrouping) {
-                case "status-balances":
+                case ReportGrouping.StatusBalances:
                     return new StatusBalanceReportResponse();
-                case "transaction-categories":
+                case ReportGrouping.TransactionCategories:
                     return new TransactionCategoriesReportResponse();
                 default: 
                     return new BalanceReportResponse();
