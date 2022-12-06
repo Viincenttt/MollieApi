@@ -12,6 +12,10 @@ namespace Mollie.Api.Framework.Factories {
                     return new CreditCardPaymentResponse();
                 case PaymentMethod.Ideal:
                     return new IdealPaymentResponse();
+                case PaymentMethod.Giropay:
+                    return new GiropayPaymentResponse();
+                case PaymentMethod.Eps:
+                    return new EpsPaymentResponse();
                 case PaymentMethod.Bancontact:
                     return new BancontactPaymentResponse();
                 case PaymentMethod.PayPal:
