@@ -2,16 +2,24 @@
 using Mollie.Api.Models.Payment.Response;
 using Mollie.Api.Models.Payment.Response.Specific;
 
-namespace Mollie.Api.Framework.Factories {
-    public class PaymentResponseFactory {
-        public PaymentResponse Create(string paymentMethod) {
-            switch (paymentMethod) {
+namespace Mollie.Api.Framework.Factories
+{
+    public class PaymentResponseFactory
+    {
+        public PaymentResponse Create(string paymentMethod)
+        {
+            switch (paymentMethod)
+            {
                 case PaymentMethod.BankTransfer:
                     return new BankTransferPaymentResponse();
                 case PaymentMethod.CreditCard:
                     return new CreditCardPaymentResponse();
                 case PaymentMethod.Ideal:
                     return new IdealPaymentResponse();
+                case PaymentMethod.Giropay:
+                    return new GiropayPaymentResponse();
+                case PaymentMethod.Eps:
+                    return new EpsPaymentResponse();
                 case PaymentMethod.Bancontact:
                     return new BancontactPaymentResponse();
                 case PaymentMethod.PayPal:
