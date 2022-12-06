@@ -190,7 +190,6 @@ namespace Mollie.Tests.Integration.Api {
         [TestCase(typeof(PayPalPaymentRequest), PaymentMethod.PayPal, typeof(PayPalPaymentResponse))]
         [TestCase(typeof(PaymentRequest), PaymentMethod.Belfius, typeof(BelfiusPaymentResponse))]
         [TestCase(typeof(KbcPaymentRequest), PaymentMethod.Kbc, typeof(KbcPaymentResponse))]
-        [TestCase(typeof(GiftcardPaymentRequest), PaymentMethod.GiftCard, typeof(GiftcardPaymentResponse))]
         [TestCase(typeof(PaymentRequest), PaymentMethod.Eps, typeof(EpsPaymentResponse))]
         [TestCase(typeof(PaymentRequest), PaymentMethod.Giropay, typeof(GiropayPaymentResponse))]
         [TestCase(typeof(PaymentRequest), null, typeof(PaymentResponse))]
