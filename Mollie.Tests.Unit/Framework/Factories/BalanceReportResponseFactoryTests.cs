@@ -2,6 +2,8 @@
 using Mollie.Api.Framework.Factories;
 using Mollie.Api.Models.Balance.Response;
 using Mollie.Api.Models.Balance.Response.Specific;
+using Mollie.Api.Models.Balance.Response.Specific.StatusBalance;
+using Mollie.Api.Models.Balance.Response.Specific.TransactionCategories;
 using NUnit.Framework;
 
 namespace Mollie.Tests.Unit.Framework.Factories {

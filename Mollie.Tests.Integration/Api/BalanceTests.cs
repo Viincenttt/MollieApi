@@ -74,7 +74,7 @@ namespace Mollie.Tests.Integration.Api {
                 balanceId: primaryBalance.Id,
                 from: from, 
                 until: until,
-                grouping: "status-balances");
+                grouping: "transaction-categories");
 
             // Then: Make sure we can parse the result
             Assert.IsNotNull(result);
