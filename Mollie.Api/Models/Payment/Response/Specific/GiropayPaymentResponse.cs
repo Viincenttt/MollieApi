@@ -1,15 +1,12 @@
-﻿namespace Mollie.Api.Models.Payment.Response
-{
-    public class GiropayPaymentResponse : PaymentResponse
-    {
+﻿namespace Mollie.Api.Models.Payment.Response {
+    public class GiropayPaymentResponse : PaymentResponse {
         /// <summary>
         /// An object with the consumer bank account details.
         /// </summary>
         public GiropayPaymentResponseDetails Details { get; set; }
     }
 
-    public class GiropayPaymentResponseDetails
-    {
+    public class GiropayPaymentResponseDetails {
         /// <summary>
         /// Only available if the payment has been completed – The consumer's name.
         /// </summary>

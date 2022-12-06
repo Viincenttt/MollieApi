@@ -1,15 +1,12 @@
-﻿namespace Mollie.Api.Models.Payment.Response
-{
-    public class EpsPaymentResponse : PaymentResponse
-    {
+﻿namespace Mollie.Api.Models.Payment.Response {
+    public class EpsPaymentResponse : PaymentResponse {
         /// <summary>
         /// An object with the consumer bank account details.
         /// </summary>
         public EpsPaymentResponseDetails Details { get; set; }
     }
 
-    public class EpsPaymentResponseDetails
-    {
+    public class EpsPaymentResponseDetails {
         /// <summary>
         /// Only available if the payment has been completed – The consumer's name.
         /// </summary>
