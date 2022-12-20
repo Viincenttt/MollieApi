@@ -1,4 +1,5 @@
 ﻿using System;
+using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Balance.Response {
     public class BalanceReportResponse : IResponseObject {
@@ -41,5 +42,11 @@ namespace Mollie.Api.Models.Balance.Response {
         /// Possible values: status-balances transaction-categories
         /// </summary>
         public string Grouping { get; set; }
+        
+        /// <summary>
+        /// An object with several URL objects relevant to the balance report.
+        /// </summary>
+        [JsonProperty("_links")]
+        public BalanceReportLinks Links { get; set; }
     }
 }
