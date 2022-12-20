@@ -9,5 +9,6 @@ namespace Mollie.Api.Client.Abstract {
         Task<BalanceResponse> GetPrimaryBalanceAsync();
         Task<ListResponse<BalanceResponse>> ListBalancesAsync(string from = null, int? limit = null, string currency = null);
         Task<BalanceReportResponse> GetBalanceReportAsync(string balanceId, DateTime from, DateTime until, string grouping = null);
+        Task<BalanceReportResponse> GetPrimaryBalanceReportAsync(DateTime from, DateTime until, string grouping = null);
     }
 }

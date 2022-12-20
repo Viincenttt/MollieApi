@@ -30,6 +30,11 @@ namespace Mollie.Api.Client {
             return await this.GetAsync<BalanceReportResponse>($"balances/{balanceId}/report{queryParameters.ToQueryString()}").ConfigureAwait(false);
         }
         
+        public async Task<BalanceReportResponse> GetPrimaryBalanceReportAsync(DateTime from, DateTime until, string grouping = null) {
+            var queryParameters = BuildGetBalanceReportQueryParameters(from, until, grouping);
+            return await this.GetAsync<BalanceReportResponse>($"balances/primary/report{queryParameters.ToQueryString()}").ConfigureAwait(false);
+        }
+        
         private Dictionary<string, string> BuildGetBalanceReportQueryParameters(DateTime from, DateTime until, string grouping = null) {
             var result = new Dictionary<string, string>();
             result.AddValueIfNotNullOrEmpty("from", from.ToString("yyyy-MM-dd"));
