@@ -91,10 +91,14 @@
     /// other for all other cards.
     /// </summary>
     public static class CreditCardFeeRegion {
-        public const string IntraEu = "intra-eu";
         public const string AmericanExpress = "american-express";
+        public const string AmexIntraEea = "amex-intra-eea";
         public const string CarteBancaire = "carte-bancaire";
+        public const string IntraEu = "intra-eu";
+        public const string IntraEuCorporate = "intra-eu-corporate";
+        public const string Domestic  = "domestic";
         public const string Maestro = "maestro";
+        public const string Other = "other";
     }
 
     /// <summary>
