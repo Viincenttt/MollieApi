@@ -1,22 +1,39 @@
-﻿namespace Mollie.Api.Models.Balance.Response.Specific.TransactionCategories {
+﻿using Newtonsoft.Json;
+
+namespace Mollie.Api.Models.Balance.Response.Specific.TransactionCategories {
     public class TransactionCategoriesReportResponse : BalanceReportResponse {
-        public TransactionCategoriesReportTotalsResponse Totals { get; set; }
+        public TransactionCategoriesTotal Totals { get; set; }
     }
     
-    public class TransactionCategoriesReportTotalsResponse {
-        public TransactionCategoriesReportTotalsOpenResponse Open { get; set; }
+    public class TransactionCategoriesTotal {
+        public TransactionCategoriesSummaryBalances Open { get; set; }
+        public TransactionCategoriesSummaryBalances Close { get; set; }
+        public TransactionCategoriesTransaction Payments { get; set; }
+        public TransactionCategoriesTransaction Refunds { get; set; }
+        public TransactionCategoriesTransaction Chargebacks { get; set; }
+        public TransactionCategoriesTransaction Capital { get; set; }
+        public TransactionCategoriesTransaction Transfers { get; set; }
+        [JsonProperty("fee-prepayments")]
+        public TransactionCategoriesTransaction FeePrepayments { get; set; }
+        public TransactionCategoriesTransaction Corrections { get; set; }
     }
 
-    public class TransactionCategoriesReportTotalsOpenResponse {
-        public TransactionCategoriesReportAmountResponse Pending { get; set; }
-        public TransactionCategoriesReportAmountResponse Available { get; set; }
+    public class TransactionCategoriesSummaryBalances {
+        public TransactionCategoriesAmount Pending { get; set; }
+        public TransactionCategoriesAmount Available { get; set; }
+    }
+    
+    public class TransactionCategoriesTransaction {
+        public TransactionCategoriesAmount Pending { get; set; }
+        public TransactionCategoriesAmount MovedToAvailable { get; set; }
+        public TransactionCategoriesAmount ImmediatelyAvailable { get; set; }
     }
 
-    public class TransactionCategoriesReportAmountResponse {
+    public class TransactionCategoriesAmount {
         public Amount Amount { get; set; }
-    }
 
-    public class TransactionCategoriesPaymentsResponse {
-        public TransactionCategoriesReportAmountResponse Pending { get; set; }
+        public override string ToString() {
+            return this.Amount.ToString();
+        }
     }
 }
