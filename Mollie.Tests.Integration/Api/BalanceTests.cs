@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Mollie.Api.Models.Balance.Response;
+using Mollie.Api.Models.Balance.Response.Specific.StatusBalance;
+using Mollie.Api.Models.Balance.Response.Specific.TransactionCategories;
 using Mollie.Tests.Integration.Framework;
 using NUnit.Framework;
 
@@ -62,8 +65,10 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(result.Count, result.Items.Count);
         }
         
-        [Test][RetryOnApiRateLimitFailure(NumberOfRetries)]
-        public async Task GetBalanceReportAsync_IsParsedCorrectly() {
+        [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [TestCase(ReportGrouping.TransactionCategories, typeof(TransactionCategoriesReportResponse))]
+        [TestCase(ReportGrouping.StatusBalances, typeof(StatusBalanceReportResponse))]
+        public async Task GetBalanceReportAsync_IsParsedCorrectly(string grouping, Type expectedObjectType) {
             // Given: We retrieve the primary balance
             var from = new DateTime(2022, 11, 1);
             var until = new DateTime(2022, 11, 30);
@@ -74,14 +79,16 @@ namespace Mollie.Tests.Integration.Api {
                 balanceId: primaryBalance.Id,
                 from: from, 
                 until: until,
-                grouping: "transaction-categories");
+                grouping: grouping);
 
             // Then: Make sure we can parse the result
             Assert.IsNotNull(result);
+            Assert.AreEqual(expectedObjectType, result.GetType());
             Assert.AreEqual("balance-report", result.Resource);
             Assert.AreEqual(primaryBalance.Id, result.BalanceId);
             Assert.AreEqual(from, result.From);
             Assert.AreEqual(until, result.Until);
+            Assert.AreEqual(grouping, result.Grouping);
         }
     }
 }
