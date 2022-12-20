@@ -9,24 +9,16 @@
     }
 
     public class StatusBalancesPendingBalance {
-        public StatusBalanceAmount Open { get; set; }
-        public StatusBalanceAmount Pending { get; set; }
-        public StatusBalanceAmount MovedToAvailable { get; set; }
-        public StatusBalanceAmount Close { get; set; }
+        public BalanceReportAmount Open { get; set; }
+        public BalanceReportAmount Close { get; set; }
+        public BalanceReportAmountWithSubtotals Pending { get; set; }
+        public BalanceReportAmountWithSubtotals MovedToAvailable { get; set; }
     }
 
     public class StatusBalanceAvailableBalance {
-        public StatusBalanceAmount Open { get; set; }
-        public StatusBalanceAmount MovedFromPending { get; set; }
-        public StatusBalanceAmount ImmediatelyAvailable { get; set; }
-        public StatusBalanceAmount Close { get; set; }
-    }
-
-    public class StatusBalanceAmount {
-        public Amount Amount { get; set; }
-        
-        public override string ToString() {
-            return this.Amount.ToString();
-        }
+        public BalanceReportAmount Open { get; set; }
+        public BalanceReportAmount Close { get; set; }
+        public BalanceReportAmountWithSubtotals MovedFromPending { get; set; }
+        public BalanceReportAmountWithSubtotals ImmediatelyAvailable { get; set; }
     }
 }
