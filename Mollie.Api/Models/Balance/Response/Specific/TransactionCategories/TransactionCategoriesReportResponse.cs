@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Balance.Response.Specific.TransactionCategories {
     public class TransactionCategoriesReportResponse : BalanceReportResponse {
@@ -24,9 +25,9 @@ namespace Mollie.Api.Models.Balance.Response.Specific.TransactionCategories {
     }
     
     public class TransactionCategoriesTransaction {
-        public TransactionCategoriesAmount Pending { get; set; }
-        public TransactionCategoriesAmount MovedToAvailable { get; set; }
-        public TransactionCategoriesAmount ImmediatelyAvailable { get; set; }
+        public TransactionCategoriesAmountWithSubtotals Pending { get; set; }
+        public TransactionCategoriesAmountWithSubtotals MovedToAvailable { get; set; }
+        public TransactionCategoriesAmountWithSubtotals ImmediatelyAvailable { get; set; }
     }
 
     public class TransactionCategoriesAmount {
@@ -35,5 +36,19 @@ namespace Mollie.Api.Models.Balance.Response.Specific.TransactionCategories {
         public override string ToString() {
             return this.Amount.ToString();
         }
+    }
+
+    public class TransactionCategoriesAmountWithSubtotals : TransactionCategoriesAmount {
+        public IEnumerable<TransactionCategoriesSubtotals> Subtotals { get; set; }
+    }
+    
+    public class TransactionCategoriesSubtotals {
+        public string TransactionType { get; set; }
+        public string Method { get; set; }
+        public string PrepaymentPartType { get; set; }
+        public string FeeType { get; set; }
+        public int Count { get; set; }
+        public Amount Amount { get; set; }
+        public IEnumerable<TransactionCategoriesSubtotals> Subtotals { get; set; }
     }
 }
