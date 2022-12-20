@@ -1,4 +1,4 @@
-﻿namespace Mollie.Api.Models.Balance.Response {
+﻿namespace Mollie.Api.Models.Balance.Response.BalanceReport {
     public class BalanceReportAmount {
         public Amount Amount { get; set; }
         

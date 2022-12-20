@@ -1,6 +1,6 @@
 ﻿using Mollie.Api.Models.Url;
 
-namespace Mollie.Api.Models.Balance.Response {
+namespace Mollie.Api.Models.Balance.Response.BalanceReport {
     public class BalanceReportLinks {
         /// <summary>
         /// The API resource URL of the balance report itself.

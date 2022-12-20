@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
 using Mollie.Api.Models.Balance.Response;
+using Mollie.Api.Models.Balance.Response.BalanceReport;
 using Mollie.Api.Models.List;
 
 namespace Mollie.Api.Client {

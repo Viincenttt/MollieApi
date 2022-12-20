@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Mollie.Api.Models.Balance.Response.BalanceReport;
+using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Balance.Response.Specific.TransactionCategories {
     public class TransactionCategoriesReportResponse : BalanceReportResponse {

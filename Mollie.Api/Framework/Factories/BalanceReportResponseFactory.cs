@@ -1,4 +1,5 @@
 using Mollie.Api.Models.Balance.Response;
+using Mollie.Api.Models.Balance.Response.BalanceReport;
 using Mollie.Api.Models.Balance.Response.Specific;
 using Mollie.Api.Models.Balance.Response.Specific.StatusBalance;
 using Mollie.Api.Models.Balance.Response.Specific.TransactionCategories;
