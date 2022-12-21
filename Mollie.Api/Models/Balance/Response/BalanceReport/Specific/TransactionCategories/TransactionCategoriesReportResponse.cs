@@ -1,7 +1,6 @@
-﻿using Mollie.Api.Models.Balance.Response.BalanceReport;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
-namespace Mollie.Api.Models.Balance.Response.Specific.TransactionCategories {
+namespace Mollie.Api.Models.Balance.Response.BalanceReport.Specific.TransactionCategories {
     public class TransactionCategoriesReportResponse : BalanceReportResponse {
         public TransactionCategoriesTotal Totals { get; set; }
     }
