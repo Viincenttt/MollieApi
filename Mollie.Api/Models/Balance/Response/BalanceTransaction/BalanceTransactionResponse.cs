@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Mollie.Api.JsonConverters;
 using Mollie.Api.Models.Balance.Response.BalanceTransaction.Specific;
 using Newtonsoft.Json;
 
@@ -66,12 +67,6 @@ namespace Mollie.Api.Models.Balance.Response.BalanceTransaction {
         /// The date and time of the movement, in ISO 8601 format.
         /// </summary>
         public DateTime CreatedAt { get; set; }
-        
-        /// <summary>
-        /// Depending on the type of the balance transaction, we will try to give more context about the specific event
-        /// that triggered the movement. 
-        /// </summary>
-        public BaseTransactionContext Context { get; set; }
     }
 
     public static class BalanceTransactionContextType {

@@ -2,8 +2,8 @@
 using Mollie.Api.Models.Balance.Response.BalanceTransaction.Specific;
 
 namespace Mollie.Api.Framework.Factories {
-    public class BalanceTransactionContextFactory {
-        public BaseTransactionContext Create(string type) {
+    public class BalanceTransactionFactory {
+        public BalanceTransaction Create(string type) {
             switch (type) {
                 case BalanceTransactionContextType.Payment:
                 case BalanceTransactionContextType.UnauthorizedDirectDebit:
@@ -11,24 +11,24 @@ namespace Mollie.Api.Framework.Factories {
                 case BalanceTransactionContextType.ChargebackReversal:
                 case BalanceTransactionContextType.ApplicationFee:
                 case BalanceTransactionContextType.SplitPayment:
-                    return new PaymentTransactionContext();
+                    return new PaymentBalanceTransaction();
                 case BalanceTransactionContextType.Capture:
-                    return new CaptureTransactionContext();
+                    return new CaptureBalanceTransaction();
                 case BalanceTransactionContextType.Refund:
                 case BalanceTransactionContextType.ReturnedRefund:
                 case BalanceTransactionContextType.PlatformPaymentRefund:
-                    return new RefundTransactionContext();
+                    return new RefundBalanceTransaction();
                 case BalanceTransactionContextType.Chargeback:
                 case BalanceTransactionContextType.PlatformPaymentChargeback:
-                    return new ChargebackTransactionContext();
+                    return new ChargebackBalanceTransaction();
                 case BalanceTransactionContextType.OutgoingTransfer:
                 case BalanceTransactionContextType.CanceledOutgoingTransfer:
                 case BalanceTransactionContextType.ReturnedTransfer:
-                    return new SettlementTransactionContext();
+                    return new SettlementBalanceTransaction();
                 case BalanceTransactionContextType.InvoiceCompensation:
-                    return new InvoiceTransactionContext();
+                    return new InvoiceBalanceTransaction();
                 default: 
-                    return new BaseTransactionContext();
+                    return new BalanceTransaction();
             }
         }
     }

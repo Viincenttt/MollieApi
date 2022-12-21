@@ -39,8 +39,8 @@ namespace Mollie.Api.Framework {
                     new PaymentResponseConverter(new PaymentResponseFactory()),
                     // Add a special converter for the balance report responses, because we need to create specific classes based on the report grouping
                     new BalanceReportResponseJsonConverter(new BalanceReportResponseFactory()),
-                    // Add a special converter for the balance transaction context, because we need to create specific classes based on the transaction type
-                    new BalanceTransactionContextJsonConverter(new BalanceTransactionContextFactory()),
+                    // Add a special converter for the balance transaction responses, because we need to create specific classes based on the transaction type
+                    new BalanceTransactionJsonConverter(new BalanceTransactionFactory()),
                 }
             };
         }

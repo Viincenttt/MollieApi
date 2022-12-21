@@ -1,20 +1,21 @@
 ﻿using System;
 using Mollie.Api.Framework.Factories;
+using Mollie.Api.Models.Balance.Response.BalanceTransaction;
 using Mollie.Api.Models.Balance.Response.BalanceTransaction.Specific;
 using Newtonsoft.Json.Linq;
 
 namespace Mollie.Api.JsonConverters {
-    public class BalanceTransactionContextJsonConverter : JsonCreationConverter<BaseTransactionContext> {
-        private readonly BalanceTransactionContextFactory _balanceTransactionContextFactory;
+    public class BalanceTransactionJsonConverter : JsonCreationConverter<BalanceTransaction> {
+        private readonly BalanceTransactionFactory _balanceTransactionFactory;
 
-        public BalanceTransactionContextJsonConverter(BalanceTransactionContextFactory balanceTransactionContextFactory) {
-            _balanceTransactionContextFactory = balanceTransactionContextFactory;
+        public BalanceTransactionJsonConverter(BalanceTransactionFactory balanceTransactionFactory) {
+            _balanceTransactionFactory = balanceTransactionFactory;
         }
 
-        protected override BaseTransactionContext Create(Type objectType, JObject jObject) {
+        protected override BalanceTransaction Create(Type objectType, JObject jObject) {
             string transactionType = this.GetTransactionType(jObject);
 
-            return this._balanceTransactionContextFactory.Create(transactionType);
+            return this._balanceTransactionFactory.Create(transactionType);
         }
         
         private string GetTransactionType(JObject jObject) {
