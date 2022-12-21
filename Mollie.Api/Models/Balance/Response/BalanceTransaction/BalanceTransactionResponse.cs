@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Mollie.Api.JsonConverters;
-using Mollie.Api.Models.Balance.Response.BalanceTransaction.Specific;
 using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Balance.Response.BalanceTransaction {
@@ -17,6 +15,12 @@ namespace Mollie.Api.Models.Balance.Response.BalanceTransaction {
         /// </summary>
         [JsonProperty("_embedded")]
         public BalanceTransactionEmbeddedResponse Embedded { get; set; }
+        
+        /// <summary>
+        /// Links to help navigate through the lists of balance transactions. Every URL object will contain an href and a type field.
+        /// </summary>
+        [JsonProperty("_links")]
+        public BalanceTransactionResponseLinks Links { get; set; }
     }
 
     public class BalanceTransactionEmbeddedResponse {

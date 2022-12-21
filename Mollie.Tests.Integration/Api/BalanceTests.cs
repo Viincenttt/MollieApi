@@ -91,8 +91,8 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(until, result.Until);
             Assert.AreEqual(grouping, result.Grouping);
         }
-
-        [Test]
+        
+        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task ListBalanceTransactionsAsync_IsParsedCorrectly() {
             // Given
             var balanceId = "bal_CKjKwQdjCwCSArXFAJNFH";
@@ -104,6 +104,8 @@ namespace Mollie.Tests.Integration.Api {
 
             // Then: Make sure we can parse the result
             Assert.IsNotNull(result);
+            Assert.IsNotNull(result.Embedded);
+            Assert.IsNotNull(result.Embedded.BalanceTransactions);
         }
     }
 }
