@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
 using Mollie.Api.Models.Balance.Response;
 using Mollie.Api.Models.Balance.Response.BalanceReport;
+using Mollie.Api.Models.Balance.Response.BalanceTransaction;
 using Mollie.Api.Models.List;
 
 namespace Mollie.Api.Client {
@@ -35,7 +37,24 @@ namespace Mollie.Api.Client {
             var queryParameters = BuildGetBalanceReportQueryParameters(from, until, grouping);
             return await this.GetAsync<BalanceReportResponse>($"balances/primary/report{queryParameters.ToQueryString()}").ConfigureAwait(false);
         }
+
+        public async Task<BalanceTransactionResponse> ListBalanceTransactionsAsync(string balanceId, string from = null, int? limit = null) {
+            var queryParameters = BuildListBalanceTransactionsQueryParameters(from, limit);
+            return await this.GetAsync<BalanceTransactionResponse>($"balances/{balanceId}/transactions{queryParameters.ToQueryString()}").ConfigureAwait(false);
+        }
         
+        public async Task<BalanceTransactionResponse> ListPrimaryBalanceTransactionsAsync(string from = null, int? limit = null) {
+            var queryParameters = BuildListBalanceTransactionsQueryParameters(from, limit);
+            return await this.GetAsync<BalanceTransactionResponse>($"balances/primary/transactions{queryParameters.ToQueryString()}").ConfigureAwait(false);
+        }
+
+        private Dictionary<string, string> BuildListBalanceTransactionsQueryParameters(string from, int? limit) {
+            var result = new Dictionary<string, string>();
+            result.AddValueIfNotNullOrEmpty("from", from);
+            result.AddValueIfNotNullOrEmpty("limit", limit?.ToString(CultureInfo.InvariantCulture));
+            return result;
+        }
+
         private Dictionary<string, string> BuildGetBalanceReportQueryParameters(DateTime from, DateTime until, string grouping = null) {
             var result = new Dictionary<string, string>();
             result.AddValueIfNotNullOrEmpty("from", from.ToString("yyyy-MM-dd"));

@@ -91,5 +91,19 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(until, result.Until);
             Assert.AreEqual(grouping, result.Grouping);
         }
+
+        [Test]
+        public async Task ListBalanceTransactionsAsync_IsParsedCorrectly() {
+            // Given
+            var balanceId = "bal_CKjKwQdjCwCSArXFAJNFH";
+            var from = "baltr_9S8yk4FFqqi2Qm6K3rqRH";
+            var limit = 250;
+            
+            // When: We retrieve the primary balance report
+            var result = await this._balanceClient.ListBalanceTransactionsAsync(balanceId, from);
+
+            // Then: Make sure we can parse the result
+            Assert.IsNotNull(result);
+        }
     }
 }
