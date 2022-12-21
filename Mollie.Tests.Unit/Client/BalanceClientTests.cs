@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Balance.Response;
+using Mollie.Api.Models.Balance.Response.BalanceReport;
+using Mollie.Api.Models.Balance.Response.BalanceReport.Specific.StatusBalance;
+using Mollie.Api.Models.Balance.Response.BalanceReport.Specific.TransactionCategories;
 using NUnit.Framework;
 
 namespace Mollie.Tests.Unit.Client {
@@ -92,6 +96,82 @@ namespace Mollie.Tests.Unit.Client {
           Assert.IsNotNull(balances);
           Assert.AreEqual(2, balances.Count);
           Assert.AreEqual(2, balances.Items.Count);
+      }
+      
+      [Test]
+      public async Task GetBalanceReportAsync_TransactionCategories_ResponseIsParsed() {
+          // Given: We request a balance report
+          string balanceId = "bal_CKjKwQdjCwCSArXFAJNFH";
+          DateTime from = new DateTime(2022, 11, 1);
+          DateTime until = new DateTime(2022, 11, 30);
+          string grouping = ReportGrouping.TransactionCategories;
+          
+          string expectedUrl = $"{BaseMollieClient.ApiEndPoint}balances/{balanceId}/report" +
+                               $"?from={from.ToString("yyyy-MM-dd")}&until={until.ToString("yyyy-MM-dd")}&grouping={grouping}";
+          var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, DefaultGetBalanceReportTransactionCategoriesResponse);
+          HttpClient httpClient = mockHttp.ToHttpClient();
+          BalanceClient balanceClient = new BalanceClient("api-key", httpClient);
+
+          // When: We make the request
+          var balanceReport = await balanceClient.GetBalanceReportAsync(balanceId, from, until, grouping);
+
+          // Then: Response should be parsed
+          mockHttp.VerifyNoOutstandingExpectation();
+          Assert.IsNotNull(balanceReport);
+          Assert.AreEqual(typeof(TransactionCategoriesReportResponse), balanceReport.GetType());
+          var specificBalanceReport = (TransactionCategoriesReportResponse)balanceReport;
+          Assert.AreEqual(grouping, specificBalanceReport.Grouping);
+          Assert.AreEqual(balanceId, specificBalanceReport.BalanceId);
+          Assert.AreEqual("balance-report", specificBalanceReport.Resource);
+          Assert.AreEqual(from, specificBalanceReport.From);
+          Assert.AreEqual(until, specificBalanceReport.Until);
+          Assert.IsNotNull(specificBalanceReport.Totals);
+          Assert.AreEqual("5.30", specificBalanceReport.Totals.Open.Pending.Amount.Value);
+          Assert.AreEqual("EUR", specificBalanceReport.Totals.Open.Pending.Amount.Currency);
+          Assert.AreEqual("0.11", specificBalanceReport.Totals.Open.Available.Amount.Value);
+          Assert.AreEqual("EUR", specificBalanceReport.Totals.Open.Available.Amount.Currency);
+          var childSubTotals = specificBalanceReport.Totals.Payments.Pending.Subtotals.First();
+          Assert.AreEqual("payment", childSubTotals.TransactionType);
+          Assert.AreEqual(36, childSubTotals.Count);
+          var childChildSubTotals = childSubTotals.Subtotals.First();
+          Assert.AreEqual("ideal", childChildSubTotals.Method);
+      }
+      
+      [Test]
+      public async Task GetBalanceReportAsync_StatusBalances_ResponseIsParsed() {
+          // Given: We request a balance report
+          string balanceId = "bal_CKjKwQdjCwCSArXFAJNFH";
+          DateTime from = new DateTime(2022, 11, 1);
+          DateTime until = new DateTime(2022, 11, 30);
+          string grouping = ReportGrouping.StatusBalances;
+          
+          string expectedUrl = $"{BaseMollieClient.ApiEndPoint}balances/{balanceId}/report" +
+                               $"?from={from.ToString("yyyy-MM-dd")}&until={until.ToString("yyyy-MM-dd")}&grouping={grouping}";
+          var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, DefaultGetBalanceReportStatusBalancesResponse);
+          HttpClient httpClient = mockHttp.ToHttpClient();
+          BalanceClient balanceClient = new BalanceClient("api-key", httpClient);
+
+          // When: We make the request
+          var balanceReport = await balanceClient.GetBalanceReportAsync(balanceId, from, until, grouping);
+
+          // Then: Response should be parsed
+          mockHttp.VerifyNoOutstandingExpectation();
+          Assert.IsNotNull(balanceReport);
+          Assert.AreEqual(typeof(StatusBalanceReportResponse), balanceReport.GetType());
+          var specificBalanceReport = (StatusBalanceReportResponse)balanceReport;
+          Assert.AreEqual(grouping, specificBalanceReport.Grouping);
+          Assert.AreEqual(balanceId, specificBalanceReport.BalanceId);
+          Assert.AreEqual("balance-report", specificBalanceReport.Resource);
+          Assert.AreEqual(from, specificBalanceReport.From);
+          Assert.AreEqual(until, specificBalanceReport.Until);
+          Assert.IsNotNull(specificBalanceReport.Totals);
+          Assert.AreEqual("5.30", specificBalanceReport.Totals.PendingBalance.Open.Amount.Value);
+          Assert.AreEqual("EUR", specificBalanceReport.Totals.PendingBalance.Open.Amount.Currency);
+          Assert.AreEqual("3.38", specificBalanceReport.Totals.AvailableBalance.MovedFromPending.Amount.Value);
+          var childSubTotals = specificBalanceReport.Totals.AvailableBalance.MovedFromPending.Subtotals.First();
+          Assert.AreEqual("payment", childSubTotals.TransactionType);
+          var chilcChildSubtotals = childSubTotals.Subtotals.First();
+          Assert.AreEqual("ideal", chilcChildSubtotals.Method);
       }
       
       private readonly string DefaultListBalancesResponse = $@"{{
@@ -184,6 +264,758 @@ namespace Mollie.Tests.Unit.Client {
     }}
   }}
 }}";
+
+      private readonly string DefaultGetBalanceReportTransactionCategoriesResponse = @"{
+    ""resource"": ""balance-report"",
+    ""balanceId"": ""bal_CKjKwQdjCwCSArXFAJNFH"",
+    ""timeZone"": ""Europe/Amsterdam"",
+    ""from"": ""2022-11-01"",
+    ""until"": ""2022-11-30"",
+    ""grouping"": ""transaction-categories"",
+    ""totals"": {
+        ""open"": {
+            ""pending"": {
+                ""amount"": {
+                    ""value"": ""5.30"",
+                    ""currency"": ""EUR""
+                }
+            },
+            ""available"": {
+                ""amount"": {
+                    ""value"": ""0.11"",
+                    ""currency"": ""EUR""
+                }
+            }
+        },
+        ""payments"": {
+            ""pending"": {
+                ""amount"": {
+                    ""value"": ""3.57"",
+                    ""currency"": ""EUR""
+                },
+                ""subtotals"": [{
+                        ""transactionType"": ""payment"",
+                        ""count"": 36,
+                        ""amount"": {
+                            ""value"": ""1.07"",
+                            ""currency"": ""EUR""
+                        },
+                        ""subtotals"": [{
+                                ""method"": ""ideal"",
+                                ""count"": 1,
+                                ""amount"": {
+                                    ""value"": ""0.02"",
+                                    ""currency"": ""EUR""
+                                }
+                            }, {
+                                ""method"": ""pointofsale"",
+                                ""count"": 35,
+                                ""amount"": {
+                                    ""value"": ""1.05"",
+                                    ""currency"": ""EUR""
+                                }
+                            }
+                        ]
+                    }, {
+                        ""transactionType"": ""split-payment"",
+                        ""count"": 3,
+                        ""amount"": {
+                            ""value"": ""2.50"",
+                            ""currency"": ""EUR""
+                        },
+                        ""subtotals"": [{
+                                ""method"": ""ideal"",
+                                ""count"": 3,
+                                ""amount"": {
+                                    ""value"": ""2.50"",
+                                    ""currency"": ""EUR""
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            ""movedToAvailable"": {
+                ""amount"": {
+                    ""value"": ""3.66"",
+                    ""currency"": ""EUR""
+                },
+                ""subtotals"": [{
+                        ""transactionType"": ""payment"",
+                        ""count"": 36,
+                        ""amount"": {
+                            ""value"": ""1.07"",
+                            ""currency"": ""EUR""
+                        },
+                        ""subtotals"": [{
+                                ""method"": ""ideal"",
+                                ""count"": 1,
+                                ""amount"": {
+                                    ""value"": ""0.02"",
+                                    ""currency"": ""EUR""
+                                }
+                            }, {
+                                ""method"": ""pointofsale"",
+                                ""count"": 35,
+                                ""amount"": {
+                                    ""value"": ""1.05"",
+                                    ""currency"": ""EUR""
+                                }
+                            }
+                        ]
+                    }, {
+                        ""transactionType"": ""split-payment"",
+                        ""count"": 3,
+                        ""amount"": {
+                            ""value"": ""2.50"",
+                            ""currency"": ""EUR""
+                        },
+                        ""subtotals"": [{
+                                ""method"": ""ideal"",
+                                ""count"": 3,
+                                ""amount"": {
+                                    ""value"": ""2.50"",
+                                    ""currency"": ""EUR""
+                                }
+                            }
+                        ]
+                    }, {
+                        ""transactionType"": ""released-rolling-reserve"",
+                        ""amount"": {
+                            ""value"": ""0.09"",
+                            ""currency"": ""EUR""
+                        }
+                    }
+                ]
+            },
+            ""immediatelyAvailable"": {
+                ""amount"": {
+                    ""value"": ""0.00"",
+                    ""currency"": ""EUR""
+                }
+            }
+        },
+        ""refunds"": {
+            ""pending"": {
+                ""amount"": {
+                    ""value"": ""0.00"",
+                    ""currency"": ""EUR""
+                }
+            },
+            ""movedToAvailable"": {
+                ""amount"": {
+                    ""value"": ""0.00"",
+                    ""currency"": ""EUR""
+                }
+            },
+            ""immediatelyAvailable"": {
+                ""amount"": {
+                    ""value"": ""-1.00"",
+                    ""currency"": ""EUR""
+                },
+                ""subtotals"": [{
+                        ""transactionType"": ""refund"",
+                        ""count"": 1,
+                        ""amount"": {
+                            ""value"": ""-1.00"",
+                            ""currency"": ""EUR""
+                        },
+                        ""subtotals"": [{
+                                ""method"": ""creditcard"",
+                                ""count"": 1,
+                                ""amount"": {
+                                    ""value"": ""-1.00"",
+                                    ""currency"": ""EUR""
+                                },
+                                ""subtotals"": [{
+                                        ""cardIssuer"": ""other"",
+                                        ""cardAudience"": ""other"",
+                                        ""cardRegion"": ""domestic"",
+                                        ""count"": 1,
+                                        ""amount"": {
+                                            ""value"": ""-1.00"",
+                                            ""currency"": ""EUR""
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        ""chargebacks"": {
+            ""pending"": {
+                ""amount"": {
+                    ""value"": ""0.00"",
+                    ""currency"": ""EUR""
+                }
+            },
+            ""movedToAvailable"": {
+                ""amount"": {
+                    ""value"": ""0.00"",
+                    ""currency"": ""EUR""
+                }
+            },
+            ""immediatelyAvailable"": {
+                ""amount"": {
+                    ""value"": ""0.00"",
+                    ""currency"": ""EUR""
+                }
+            }
+        },
+        ""capital"": {
+            ""pending"": {
+                ""amount"": {
+                    ""value"": ""0.00"",
+                    ""currency"": ""EUR""
+                }
+            },
+            ""movedToAvailable"": {
+                ""amount"": {
+                    ""value"": ""0.00"",
+                    ""currency"": ""EUR""
+                }
+            },
+            ""immediatelyAvailable"": {
+                ""amount"": {
+                    ""value"": ""0.00"",
+                    ""currency"": ""EUR""
+                }
+            }
+        },
+        ""transfers"": {
+            ""pending"": {
+                ""amount"": {
+                    ""value"": ""0.00"",
+                    ""currency"": ""EUR""
+                }
+            },
+            ""movedToAvailable"": {
+                ""amount"": {
+                    ""value"": ""0.00"",
+                    ""currency"": ""EUR""
+                }
+            },
+            ""immediatelyAvailable"": {
+                ""amount"": {
+                    ""value"": ""0.00"",
+                    ""currency"": ""EUR""
+                }
+            }
+        },
+        ""fee-prepayments"": {
+            ""pending"": {
+                ""amount"": {
+                    ""value"": ""-0.28"",
+                    ""currency"": ""EUR""
+                },
+                ""subtotals"": [{
+                        ""prepaymentPartType"": ""fee"",
+                        ""count"": 1,
+                        ""amount"": {
+                            ""value"": ""-0.28"",
+                            ""currency"": ""EUR""
+                        },
+                        ""subtotals"": [{
+                                ""feeType"": ""payment-fee"",
+                                ""count"": 1,
+                                ""amount"": {
+                                    ""value"": ""-0.28"",
+                                    ""currency"": ""EUR""
+                                },
+                                ""subtotals"": [{
+                                        ""method"": ""ideal"",
+                                        ""count"": 1,
+                                        ""amount"": {
+                                            ""value"": ""-0.28"",
+                                            ""currency"": ""EUR""
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            ""movedToAvailable"": {
+                ""amount"": {
+                    ""value"": ""-0.28"",
+                    ""currency"": ""EUR""
+                },
+                ""subtotals"": [{
+                        ""prepaymentPartType"": ""fee"",
+                        ""count"": 1,
+                        ""amount"": {
+                            ""value"": ""-0.28"",
+                            ""currency"": ""EUR""
+                        },
+                        ""subtotals"": [{
+                                ""feeType"": ""payment-fee"",
+                                ""count"": 1,
+                                ""amount"": {
+                                    ""value"": ""-0.28"",
+                                    ""currency"": ""EUR""
+                                },
+                                ""subtotals"": [{
+                                        ""method"": ""ideal"",
+                                        ""count"": 1,
+                                        ""amount"": {
+                                            ""value"": ""-0.28"",
+                                            ""currency"": ""EUR""
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            ""immediatelyAvailable"": {
+                ""amount"": {
+                    ""value"": ""-0.24"",
+                    ""currency"": ""EUR""
+                },
+                ""subtotals"": [{
+                        ""prepaymentPartType"": ""fee"",
+                        ""count"": 1,
+                        ""amount"": {
+                            ""value"": ""-0.25"",
+                            ""currency"": ""EUR""
+                        },
+                        ""subtotals"": [{
+                                ""feeType"": ""refund-fee"",
+                                ""count"": 1,
+                                ""amount"": {
+                                    ""value"": ""-0.25"",
+                                    ""currency"": ""EUR""
+                                }
+                            }
+                        ]
+                    }, {
+                        ""transactionType"": ""invoice-rounding-compensation"",
+                        ""count"": 1,
+                        ""amount"": {
+                            ""value"": ""0.01"",
+                            ""currency"": ""EUR""
+                        }
+                    }
+                ]
+            }
+        },
+        ""corrections"": {
+            ""pending"": {
+                ""amount"": {
+                    ""value"": ""0.00"",
+                    ""currency"": ""EUR""
+                }
+            },
+            ""movedToAvailable"": {
+                ""amount"": {
+                    ""value"": ""0.00"",
+                    ""currency"": ""EUR""
+                }
+            },
+            ""immediatelyAvailable"": {
+                ""amount"": {
+                    ""value"": ""0.00"",
+                    ""currency"": ""EUR""
+                }
+            }
+        },
+        ""close"": {
+            ""pending"": {
+                ""amount"": {
+                    ""value"": ""5.21"",
+                    ""currency"": ""EUR""
+                }
+            },
+            ""available"": {
+                ""amount"": {
+                    ""value"": ""2.25"",
+                    ""currency"": ""EUR""
+                }
+            }
+        }
+    },
+    ""_links"": {
+        ""self"": {
+            ""href"": ""https://api.mollie.com/v2/balances/bal_CKjKwQdjCwCSArXFAJNFH/report"",
+            ""type"": ""application/hal+json""
+        },
+        ""documentation"": {
+            ""href"": ""https://docs.mollie.com/reference/v2/balances-api/get-balance-report"",
+            ""type"": ""text/html""
+        }
+    }
+}";
+
+      private readonly string DefaultGetBalanceReportStatusBalancesResponse = @"{
+    ""resource"": ""balance-report"",
+    ""balanceId"": ""bal_CKjKwQdjCwCSArXFAJNFH"",
+    ""timeZone"": ""Europe/Amsterdam"",
+    ""from"": ""2022-11-01"",
+    ""until"": ""2022-11-30"",
+    ""grouping"": ""status-balances"",
+    ""totals"": {
+        ""pendingBalance"": {
+            ""open"": {
+                ""amount"": {
+                    ""value"": ""5.30"",
+                    ""currency"": ""EUR""
+                }
+            },
+            ""pending"": {
+                ""amount"": {
+                    ""value"": ""3.29"",
+                    ""currency"": ""EUR""
+                },
+                ""subtotals"": [{
+                        ""transactionType"": ""payment"",
+                        ""count"": 36,
+                        ""amount"": {
+                            ""value"": ""1.07"",
+                            ""currency"": ""EUR""
+                        },
+                        ""subtotals"": [{
+                                ""method"": ""ideal"",
+                                ""count"": 1,
+                                ""amount"": {
+                                    ""value"": ""0.02"",
+                                    ""currency"": ""EUR""
+                                }
+                            }, {
+                                ""method"": ""pointofsale"",
+                                ""count"": 35,
+                                ""amount"": {
+                                    ""value"": ""1.05"",
+                                    ""currency"": ""EUR""
+                                }
+                            }
+                        ]
+                    }, {
+                        ""transactionType"": ""split-payment"",
+                        ""count"": 3,
+                        ""amount"": {
+                            ""value"": ""2.50"",
+                            ""currency"": ""EUR""
+                        },
+                        ""subtotals"": [{
+                                ""method"": ""ideal"",
+                                ""count"": 3,
+                                ""amount"": {
+                                    ""value"": ""2.50"",
+                                    ""currency"": ""EUR""
+                                }
+                            }
+                        ]
+                    }, {
+                        ""transactionType"": ""fee-prepayment"",
+                        ""amount"": {
+                            ""value"": ""-0.28"",
+                            ""currency"": ""EUR""
+                        },
+                        ""subtotals"": [{
+                                ""prepaymentPartType"": ""fee"",
+                                ""count"": 1,
+                                ""amount"": {
+                                    ""value"": ""-0.28"",
+                                    ""currency"": ""EUR""
+                                },
+                                ""subtotals"": [{
+                                        ""feeType"": ""payment-fee"",
+                                        ""count"": 1,
+                                        ""amount"": {
+                                            ""value"": ""-0.28"",
+                                            ""currency"": ""EUR""
+                                        },
+                                        ""subtotals"": [{
+                                                ""method"": ""ideal"",
+                                                ""count"": 1,
+                                                ""amount"": {
+                                                    ""value"": ""-0.28"",
+                                                    ""currency"": ""EUR""
+                                                }
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            ""movedToAvailable"": {
+                ""amount"": {
+                    ""value"": ""3.38"",
+                    ""currency"": ""EUR""
+                },
+                ""subtotals"": [{
+                        ""transactionType"": ""payment"",
+                        ""count"": 36,
+                        ""amount"": {
+                            ""value"": ""1.07"",
+                            ""currency"": ""EUR""
+                        },
+                        ""subtotals"": [{
+                                ""method"": ""ideal"",
+                                ""count"": 1,
+                                ""amount"": {
+                                    ""value"": ""0.02"",
+                                    ""currency"": ""EUR""
+                                }
+                            }, {
+                                ""method"": ""pointofsale"",
+                                ""count"": 35,
+                                ""amount"": {
+                                    ""value"": ""1.05"",
+                                    ""currency"": ""EUR""
+                                }
+                            }
+                        ]
+                    }, {
+                        ""transactionType"": ""split-payment"",
+                        ""count"": 3,
+                        ""amount"": {
+                            ""value"": ""2.50"",
+                            ""currency"": ""EUR""
+                        },
+                        ""subtotals"": [{
+                                ""method"": ""ideal"",
+                                ""count"": 3,
+                                ""amount"": {
+                                    ""value"": ""2.50"",
+                                    ""currency"": ""EUR""
+                                }
+                            }
+                        ]
+                    }, {
+                        ""transactionType"": ""fee-prepayment"",
+                        ""amount"": {
+                            ""value"": ""-0.28"",
+                            ""currency"": ""EUR""
+                        },
+                        ""subtotals"": [{
+                                ""prepaymentPartType"": ""fee"",
+                                ""count"": 1,
+                                ""amount"": {
+                                    ""value"": ""-0.28"",
+                                    ""currency"": ""EUR""
+                                },
+                                ""subtotals"": [{
+                                        ""feeType"": ""payment-fee"",
+                                        ""count"": 1,
+                                        ""amount"": {
+                                            ""value"": ""-0.28"",
+                                            ""currency"": ""EUR""
+                                        },
+                                        ""subtotals"": [{
+                                                ""method"": ""ideal"",
+                                                ""count"": 1,
+                                                ""amount"": {
+                                                    ""value"": ""-0.28"",
+                                                    ""currency"": ""EUR""
+                                                }
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }, {
+                        ""transactionType"": ""released-rolling-reserve"",
+                        ""amount"": {
+                            ""value"": ""0.09"",
+                            ""currency"": ""EUR""
+                        }
+                    }
+                ]
+            },
+            ""close"": {
+                ""amount"": {
+                    ""value"": ""5.21"",
+                    ""currency"": ""EUR""
+                }
+            }
+        },
+        ""availableBalance"": {
+            ""open"": {
+                ""amount"": {
+                    ""value"": ""0.11"",
+                    ""currency"": ""EUR""
+                }
+            },
+            ""movedFromPending"": {
+                ""amount"": {
+                    ""value"": ""3.38"",
+                    ""currency"": ""EUR""
+                },
+                ""subtotals"": [{
+                        ""transactionType"": ""payment"",
+                        ""count"": 36,
+                        ""amount"": {
+                            ""value"": ""1.07"",
+                            ""currency"": ""EUR""
+                        },
+                        ""subtotals"": [{
+                                ""method"": ""ideal"",
+                                ""count"": 1,
+                                ""amount"": {
+                                    ""value"": ""0.02"",
+                                    ""currency"": ""EUR""
+                                }
+                            }, {
+                                ""method"": ""pointofsale"",
+                                ""count"": 35,
+                                ""amount"": {
+                                    ""value"": ""1.05"",
+                                    ""currency"": ""EUR""
+                                }
+                            }
+                        ]
+                    }, {
+                        ""transactionType"": ""split-payment"",
+                        ""count"": 3,
+                        ""amount"": {
+                            ""value"": ""2.50"",
+                            ""currency"": ""EUR""
+                        },
+                        ""subtotals"": [{
+                                ""method"": ""ideal"",
+                                ""count"": 3,
+                                ""amount"": {
+                                    ""value"": ""2.50"",
+                                    ""currency"": ""EUR""
+                                }
+                            }
+                        ]
+                    }, {
+                        ""transactionType"": ""fee-prepayment"",
+                        ""amount"": {
+                            ""value"": ""-0.28"",
+                            ""currency"": ""EUR""
+                        },
+                        ""subtotals"": [{
+                                ""prepaymentPartType"": ""fee"",
+                                ""count"": 1,
+                                ""amount"": {
+                                    ""value"": ""-0.28"",
+                                    ""currency"": ""EUR""
+                                },
+                                ""subtotals"": [{
+                                        ""feeType"": ""payment-fee"",
+                                        ""count"": 1,
+                                        ""amount"": {
+                                            ""value"": ""-0.28"",
+                                            ""currency"": ""EUR""
+                                        },
+                                        ""subtotals"": [{
+                                                ""method"": ""ideal"",
+                                                ""count"": 1,
+                                                ""amount"": {
+                                                    ""value"": ""-0.28"",
+                                                    ""currency"": ""EUR""
+                                                }
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }, {
+                        ""transactionType"": ""released-rolling-reserve"",
+                        ""amount"": {
+                            ""value"": ""0.09"",
+                            ""currency"": ""EUR""
+                        }
+                    }
+                ]
+            },
+            ""immediatelyAvailable"": {
+                ""amount"": {
+                    ""value"": ""-1.24"",
+                    ""currency"": ""EUR""
+                },
+                ""subtotals"": [{
+                        ""transactionType"": ""refund"",
+                        ""count"": 1,
+                        ""amount"": {
+                            ""value"": ""-1.00"",
+                            ""currency"": ""EUR""
+                        },
+                        ""subtotals"": [{
+                                ""method"": ""creditcard"",
+                                ""count"": 1,
+                                ""amount"": {
+                                    ""value"": ""-1.00"",
+                                    ""currency"": ""EUR""
+                                },
+                                ""subtotals"": [{
+                                        ""cardIssuer"": ""other"",
+                                        ""cardAudience"": ""other"",
+                                        ""cardRegion"": ""domestic"",
+                                        ""count"": 1,
+                                        ""amount"": {
+                                            ""value"": ""-1.00"",
+                                            ""currency"": ""EUR""
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }, {
+                        ""transactionType"": ""fee-prepayment"",
+                        ""amount"": {
+                            ""value"": ""-0.25"",
+                            ""currency"": ""EUR""
+                        },
+                        ""subtotals"": [{
+                                ""prepaymentPartType"": ""fee"",
+                                ""count"": 1,
+                                ""amount"": {
+                                    ""value"": ""-0.25"",
+                                    ""currency"": ""EUR""
+                                },
+                                ""subtotals"": [{
+                                        ""feeType"": ""refund-fee"",
+                                        ""count"": 1,
+                                        ""amount"": {
+                                            ""value"": ""-0.25"",
+                                            ""currency"": ""EUR""
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }, {
+                        ""transactionType"": ""invoice-rounding-compensation"",
+                        ""count"": 1,
+                        ""amount"": {
+                            ""value"": ""0.01"",
+                            ""currency"": ""EUR""
+                        }
+                    }
+                ]
+            },
+            ""close"": {
+                ""amount"": {
+                    ""value"": ""2.25"",
+                    ""currency"": ""EUR""
+                }
+            }
+        }
+    },
+    ""_links"": {
+        ""self"": {
+            ""href"": ""https://api.mollie.com/v2/balances/bal_CKjKwQdjCwCSArXFAJNFH/report"",
+            ""type"": ""application/hal+json""
+        },
+        ""documentation"": {
+            ""href"": ""https://docs.mollie.com/reference/v2/balances-api/get-balance-report"",
+            ""type"": ""text/html""
+        }
+    }
+}";
 
       private class GetBalanceResponseFactory {
           public string BalanceId { get; set; } = "bal_gVMhHKqSSRYJyPsuoPNFH";
