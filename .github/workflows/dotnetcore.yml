@@ -25,3 +25,4 @@ jobs:
       run: dotnet test Mollie.Tests.Integration --no-restore --verbosity normal
       env:
         Mollie__ApiKey: ${{ secrets.Mollie__ApiKey }}
+        Mollie__AccessKey: ${{ secrets.Mollie__AccessKey }}

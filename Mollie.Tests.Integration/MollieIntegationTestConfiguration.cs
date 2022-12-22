@@ -11,5 +11,7 @@ namespace Mollie.Tests.Integration {
         /// Client secret - only necessery when using the Connect API
         /// </summary>
         public string ClientSecret { get; set; }
+        
+        public string AccessKey { get; set; }
     }
 }

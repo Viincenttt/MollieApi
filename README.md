@@ -28,6 +28,7 @@ Have you spotted a bug or want to add a missing feature? All pull requests are w
 [13. Captures API](#13-captures-api)  
 [14. Onboarding Api](#14-onboarding-api)  
 [15. Payment link Api](#15-payment-link-api)  
+[16. Balances Api](#16-balances-api)  
 
 ## 1. Mollie API v1 and v2
 In May 2018, Mollie launched version 2 of their API. Version 2 offers support for multicurrency, improved error messages and much more.  The current version of the Mollie API client supports all API version 2 features. If you want to keep using version 1, you can use version 1.5.2 of the Mollie API Nuget package. Version 2.0.0+ of the Mollie API client supports version 2 of the API.  
@@ -77,6 +78,7 @@ This library currently supports the following API's:
 - Order API
 - Captures API
 - Onboarding API
+- Balances API
 
 ### Creating a API client object
 Every API has it's own API client class. For example: PaymentClient, PaymentMethodClient, CustomerClient, MandateClient, SubscriptionClient, IssuerClient and RefundClient classes. All of these API client classes also have their own interface. 
@@ -113,6 +115,8 @@ In the past, this library used enums that were decorated with the EnumMemberAttr
 - Mollie.Api.Models.Currency
 - Mollie.Api.Models.Connect.AppPermissions
 - Mollie.Api.Models.Onboarding.Response.OnboardingStatus
+- Mollie.Api.Models.Balance.Response.BalanceReport.ReportGrouping
+- Mollie.Api.Models.Balance.Response.BalanceTransaction.BalanceTransactionContextType
 
 You can use these classes similar to how you use enums. For example, when creating a new payment, you can do the following:
 ```c#
@@ -823,4 +827,60 @@ await this._paymentLinkClient.GetPaymentLinkAsync({yourPaymentLinkId});
 ```C#
 PaymentLinkClient client = new PaymentLinkClient({yourApiKey});
 ListResponse<PaymentLinkResponse> response = await this._paymentLinkClient.GetPaymentLinkListAsync();
+```
+
+## 16. Balances Api
+### Get balance
+Retrieve a balance using a balance id string identifier. 
+```C#
+BalanceClient client = new BalanceClient({yourApiKey});
+BalanceResponse balanceResponse = await this._balanceClient.GetBalanceAsync({yourBalanceId});
+```
+
+### Get primary balance
+Retrieve the primary balance. This is the balance of your account’s primary currency, where all payments are settled to by default.
+```C#
+BalanceClient client = new BalanceClient({yourApiKey});
+BalanceResponse balanceResponse = await this._balanceClient.GetPrimaryBalanceAsync();
+```
+
+### List balances
+Retrieve all the organization’s balances, including the primary balance, ordered from newest to oldest.
+```C#
+BalanceClient client = new BalanceClient({yourApiKey});
+ListResponse<BalanceResponse> balanceList = await this._balanceClient.ListBalancesAsync();
+```
+
+### Get balance report
+You can retrieve reports in two different formats. With the status-balances format, transactions are grouped by status (e.g. pending, available), then by transaction type, and then by other sub-groupings where available (e.g. payment method). With the transaction-categories format, transactions are grouped by transaction type, then by status, and then again by other sub-groupings where available.
+
+This applies to both the "Get balance report" method as well as the "Get primary balance report" method. 
+```C#
+BalanceClient client = new BalanceClient({yourApiKey});
+string reportGrouping = ReportGrouping.TransactionCategories;
+BalanceReportResponse balanceReport = await this._balanceClient.GetBalanceReportAsync({yourBalanceId}, grouping: reportGrouping);
+```
+
+### Get primary balance report
+With the Get primary balance report endpoint you can retrieve a summarized report for all movements on your primary balance within a given timeframe.
+```C#
+BalanceClient client = new BalanceClient({yourApiKey});
+string reportGrouping = ReportGrouping.StatusBalances;
+BalanceReportResponse balanceReport = await this._balanceClient.GetPrimaryBalanceReportAsync(grouping: reportGrouping);
+```
+
+### List balance transactions
+With the List balance transactions endpoint you can retrieve a list of all the movements on your balance. This includes payments, refunds, chargebacks, and settlements.
+```C#
+BalanceClient client = new BalanceClient({yourApiKey});
+BalanceTransactionResponse balanceTransactions = await this._balanceClient.ListBalanceTransactionsAsync({yourBalanceId});
+```
+
+Each transaction in the list of transactions, has a context. The context properties depends on the "type" field of the transaction. For example, a transaction with the type "payment" has a context with a "payment-id" value. For a full list of transaction types and their context specific properties, take a look at the Mollie documentation of the "[List balance transactions](https://docs.mollie.com/reference/v2/balances-api/list-balance-transactions)" endpoint.
+
+### List primary balance transactions
+With the List primary balance transactions endpoint you can retrieve a list of all the movements on your primary balance. This includes payments, refunds, chargebacks, and settlements.
+```C#
+BalanceClient client = new BalanceClient({yourApiKey});
+BalanceTransactionResponse balanceTransactions = await this._balanceClient.ListPrimaryBalanceTransactionsAsync();
 ```

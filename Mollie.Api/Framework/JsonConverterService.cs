@@ -30,14 +30,17 @@ namespace Mollie.Api.Framework {
         /// <summary>
         ///     Creates the default Json serial settings for the JSON.NET parsing.
         /// </summary>
-        /// <returns></returns>
         private JsonSerializerSettings CreateDefaultJsonDeserializerSettings() {
             return new JsonSerializerSettings {
                 DateFormatString = "yyyy-MM-dd",
                 NullValueHandling = NullValueHandling.Ignore,
                 Converters = new List<JsonConverter> {
                     // Add a special converter for payment responses, because we need to create specific classes based on the payment method
-                    new PaymentResponseConverter(new PaymentResponseFactory())
+                    new PaymentResponseConverter(new PaymentResponseFactory()),
+                    // Add a special converter for the balance report responses, because we need to create specific classes based on the report grouping
+                    new BalanceReportResponseJsonConverter(new BalanceReportResponseFactory()),
+                    // Add a special converter for the balance transaction responses, because we need to create specific classes based on the transaction type
+                    new BalanceTransactionJsonConverter(new BalanceTransactionFactory()),
                 }
             };
         }
