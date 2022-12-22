@@ -8,6 +8,7 @@ using Mollie.Api.Models.Balance.Response;
 using Mollie.Api.Models.Balance.Response.BalanceReport;
 using Mollie.Api.Models.Balance.Response.BalanceReport.Specific.StatusBalance;
 using Mollie.Api.Models.Balance.Response.BalanceReport.Specific.TransactionCategories;
+using Mollie.Api.Models.Balance.Response.BalanceTransaction.Specific;
 using NUnit.Framework;
 
 namespace Mollie.Tests.Unit.Client {
@@ -173,6 +174,110 @@ namespace Mollie.Tests.Unit.Client {
           var chilcChildSubtotals = childSubTotals.Subtotals.First();
           Assert.AreEqual("ideal", chilcChildSubtotals.Method);
       }
+      
+      [Test]
+      public async Task ListBalanceTransactionsAsync_StatusBalances_ResponseIsParsed() {
+          // Given
+          string balanceId = "bal_CKjKwQdjCwCSArXFAJNFH";
+          string expectedUrl = $"{BaseMollieClient.ApiEndPoint}balances/{balanceId}/transactions";
+          var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, DefaultListBalanceTransactionsResponse);
+          HttpClient httpClient = mockHttp.ToHttpClient();
+          BalanceClient balanceClient = new BalanceClient("api-key", httpClient);
+
+          // When: We make the request
+          var balanceTransactions = await balanceClient.ListBalanceTransactionsAsync(balanceId);
+
+          // Then: Response should be parsed
+          mockHttp.VerifyNoOutstandingExpectation();
+          Assert.IsNotNull(balanceTransactions?.Embedded?.BalanceTransactions);
+          Assert.AreEqual(balanceTransactions.Embedded.BalanceTransactions.Count(), balanceTransactions.Count);
+          var transaction = balanceTransactions.Embedded.BalanceTransactions.First();
+          Assert.AreEqual("balance_transactions", transaction.Resource);
+          Assert.AreEqual("baltr_9S8yk4FFqqi2Qm6K3rqRH", transaction.Id);
+          Assert.AreEqual("outgoing-transfer", transaction.Type);
+          Assert.AreEqual("-7.76", transaction.ResultAmount.Value);
+          Assert.AreEqual("EUR", transaction.ResultAmount.Currency);
+          Assert.AreEqual("-7.76", transaction.InitialAmount.Value);
+          Assert.AreEqual("EUR", transaction.InitialAmount.Currency);
+          Assert.AreEqual(typeof(SettlementBalanceTransaction), transaction.GetType());
+          var transactionContext = (SettlementBalanceTransaction)transaction;
+          Assert.AreEqual("stl_ma2vu8", transactionContext.Context.SettlementId);
+          Assert.AreEqual("trf_ma2vu8", transactionContext.Context.TransferId);
+      }
+      
+      [Test]
+      public async Task ListPrimaryBalanceTransactionsAsync_StatusBalances_ResponseIsParsed() {
+          // Given
+          string expectedUrl = $"{BaseMollieClient.ApiEndPoint}balances/primary/transactions";
+          var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, DefaultListBalanceTransactionsResponse);
+          HttpClient httpClient = mockHttp.ToHttpClient();
+          BalanceClient balanceClient = new BalanceClient("api-key", httpClient);
+
+          // When: We make the request
+          var balanceTransactions = await balanceClient.ListPrimaryBalanceTransactionsAsync();
+
+          // Then: Response should be parsed
+          mockHttp.VerifyNoOutstandingExpectation();
+          Assert.IsNotNull(balanceTransactions?.Embedded?.BalanceTransactions);
+          Assert.AreEqual(balanceTransactions.Embedded.BalanceTransactions.Count(), balanceTransactions.Count);
+      }
+
+      private readonly string DefaultListBalanceTransactionsResponse = @"
+{
+    ""_embedded"": {
+        ""balance_transactions"": [{
+                ""resource"": ""balance_transactions"",
+                ""id"": ""baltr_9S8yk4FFqqi2Qm6K3rqRH"",
+                ""type"": ""outgoing-transfer"",
+                ""resultAmount"": {
+                    ""value"": ""-7.76"",
+                    ""currency"": ""EUR""
+                },
+                ""initialAmount"": {
+                    ""value"": ""-7.76"",
+                    ""currency"": ""EUR""
+                },
+                ""createdAt"": ""2022-12-21T05:02:50+00:00"",
+                ""context"": {
+                    ""settlementId"": ""stl_ma2vu8"",
+                    ""transferId"": ""trf_ma2vu8""
+                }
+            }, {
+                ""resource"": ""balance_transactions"",
+                ""id"": ""baltr_2cXFV9Wd9AjYqHa8i2qRH"",
+                ""type"": ""payment"",
+                ""resultAmount"": {
+                    ""value"": ""0.15"",
+                    ""currency"": ""EUR""
+                },
+                ""initialAmount"": {
+                    ""value"": ""0.15"",
+                    ""currency"": ""EUR""
+                },
+                ""createdAt"": ""2022-12-20T21:21:09+00:00"",
+                ""context"": {
+                    ""paymentId"": ""tr_JzT2KxV7hZ""
+                }
+            }
+        ]
+    },
+    ""count"": 2,
+    ""_links"": {
+        ""documentation"": {
+            ""href"": ""https://docs.mollie.com/reference/v2/balances-api/list-balance-transactions"",
+            ""type"": ""text/html""
+        },
+        ""self"": {
+            ""href"": ""https://api.mollie.com/v2/balances/bal_CKjKwQdjCwCSArXFAJNFH/transactions?limit=50"",
+            ""type"": ""application/hal+json""
+        },
+        ""previous"": null,
+        ""next"": {
+            ""href"": ""https://api.mollie.com/v2/balances/bal_CKjKwQdjCwCSArXFAJNFH/transactions?from=baltr_pEM6remSK3UGHDRAuzVRH\u0026limit=50"",
+            ""type"": ""application/hal+json""
+        }
+    }
+}";
       
       private readonly string DefaultListBalancesResponse = $@"{{
   ""count"": 2,
