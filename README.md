@@ -26,6 +26,7 @@ Have you spotted a bug or want to add a missing feature? All pull requests are w
 [13. Captures API](#13-captures-api)  
 [14. Onboarding Api](#14-onboarding-api)  
 [15. Payment link Api](#15-payment-link-api)  
+[16. Balances Api](#16-balances-api)  
 
 ## 1. Mollie API v1 and v2
 In May 2018, Mollie launched version 2 of their API. Version 2 offers support for multicurrency, improved error messages and much more.  The current version of the Mollie API client supports all API version 2 features. If you want to keep using version 1, you can use version 1.5.2 of the Mollie API Nuget package. Version 2.0.0+ of the Mollie API client supports version 2 of the API.  
@@ -75,6 +76,7 @@ This library currently supports the following API's:
 - Order API
 - Captures API
 - Onboarding API
+- Balances API
 
 ### Creating a API client object
 Every API has it's own API client class. For example: PaymentClient, PaymentMethodClient, CustomerClient, MandateClient, SubscriptionClient, IssuerClient and RefundClient classes. All of these API client classes also have their own interface. 
@@ -821,4 +823,47 @@ await this._paymentLinkClient.GetPaymentLinkAsync({yourPaymentLinkId});
 ```C#
 PaymentLinkClient client = new PaymentLinkClient({yourApiKey});
 ListResponse<PaymentLinkResponse> response = await this._paymentLinkClient.GetPaymentLinkListAsync();
+```
+
+## 16. Balances Api
+### Get balance
+```C#
+BalanceClient client = new BalanceClient({yourApiKey});
+BalanceResponse balanceResponse = await this._balanceClient.GetBalanceAsync({yourBalanceId});
+```
+
+### Get primary balance
+```C#
+BalanceClient client = new BalanceClient({yourApiKey});
+BalanceResponse balanceResponse = await this._balanceClient.GetPrimaryBalanceAsync();
+```
+
+### List balances
+```C#
+BalanceClient client = new BalanceClient({yourApiKey});
+ListResponse<BalanceResponse> balanceList = await this._balanceClient.ListBalancesAsync();
+```
+
+### Get balance report
+```C#
+BalanceClient client = new BalanceClient({yourApiKey});
+BalanceReportResponse balanceReport = await this._balanceClient.GetBalanceReportAsync({yourBalanceId});
+```
+
+### Get primary balance report
+```C#
+BalanceClient client = new BalanceClient({yourApiKey});
+BalanceReportResponse balanceReport = await this._balanceClient.GetPrimaryBalanceReportAsync();
+```
+
+### List balance transactions
+```C#
+BalanceClient client = new BalanceClient({yourApiKey});
+BalanceTransactionResponse balanceTransactions = await this._balanceClient.ListBalanceTransactionsAsync({yourBalanceId});
+```
+
+### List primary balance transactions
+```C#
+BalanceClient client = new BalanceClient({yourApiKey});
+BalanceTransactionResponse balanceTransactions = await this._balanceClient.ListPrimaryBalanceTransactionsAsync();
 ```
