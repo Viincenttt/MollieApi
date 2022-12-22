@@ -100,7 +100,24 @@ namespace Mollie.Tests.Integration.Api {
             var limit = 250;
             
             // When: We retrieve the primary balance report
-            var result = await this._balanceClient.ListBalanceTransactionsAsync(balanceId, from);
+            var result = await this._balanceClient.ListBalanceTransactionsAsync(balanceId, from, limit);
+
+            // Then: Make sure we can parse the result
+            Assert.IsNotNull(result);
+            Assert.IsNotNull(result.Embedded);
+            Assert.IsNotNull(result.Embedded.BalanceTransactions);
+            Assert.IsNotNull(result.Links);
+            Assert.AreEqual($"https://api.mollie.com/v2/balances/{balanceId}/transactions?from={from}&limit={limit}", result.Links.Self.Href);
+        }
+        
+        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        public async Task ListPrimaryBalanceTransactionsAsync_IsParsedCorrectly() {
+            // Given
+            var from = "baltr_9S8yk4FFqqi2Qm6K3rqRH";
+            var limit = 250;
+            
+            // When: We retrieve the primary balance report
+            var result = await this._balanceClient.ListPrimaryBalanceTransactionsAsync(from, limit);
 
             // Then: Make sure we can parse the result
             Assert.IsNotNull(result);
