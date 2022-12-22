@@ -99,7 +99,7 @@ namespace Mollie.Tests.Integration.Api {
             var from = "baltr_9S8yk4FFqqi2Qm6K3rqRH";
             var limit = 250;
             
-            // When: We retrieve the primary balance report
+            // When: We list the balance transactions
             var result = await this._balanceClient.ListBalanceTransactionsAsync(balanceId, from, limit);
 
             // Then: Make sure we can parse the result
@@ -116,7 +116,7 @@ namespace Mollie.Tests.Integration.Api {
             var from = "baltr_9S8yk4FFqqi2Qm6K3rqRH";
             var limit = 250;
             
-            // When: We retrieve the primary balance report
+            // When: We list the balance transactions
             var result = await this._balanceClient.ListPrimaryBalanceTransactionsAsync(from, limit);
 
             // Then: Make sure we can parse the result

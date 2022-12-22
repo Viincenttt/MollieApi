@@ -874,6 +874,8 @@ BalanceClient client = new BalanceClient({yourApiKey});
 BalanceTransactionResponse balanceTransactions = await this._balanceClient.ListBalanceTransactionsAsync({yourBalanceId});
 ```
 
+Each transaction in the list of transactions, has a context. The context properties depends on the "type" field of the transaction. For example, a transaction with the type "payment" has a context with a "payment-id" value. For a full list of transaction types and their context specific properties, take a look at the Mollie documentation of the "[List balance transactions](https://docs.mollie.com/reference/v2/balances-api/list-balance-transactions)" endpoint.
+
 ### List primary balance transactions
 With the List primary balance transactions endpoint you can retrieve a list of all the movements on your primary balance. This includes payments, refunds, chargebacks, and settlements.
 ```C#
