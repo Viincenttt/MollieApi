@@ -47,7 +47,7 @@ Install-Package Mollie.Api
 This library is built using .NET standard 1.2. This means that the package supports the following .NET implementations:
 | .NET implementation  | Version support |
 | ------------- | ------------- |
-| .NET and .NET Core  | 1.0, 1.1, 2.0, 2.1, 2.2, 3.0, 3.1, 5.0, 6.0  |
+| .NET and .NET Core  | 1.0, 1.1, 2.0, 2.1, 2.2, 3.0, 3.1, 5.0, 6.0, 7.0  |
 | .NET Framework  | 4.5.1, 4.5.2, 4.6, 4.6.1, 4.6.2, 4.7, 4.7.1, 4.7.2, 4.8  |
 | Mono | 4.6, 5.4, 6.4  |
 | Universal Windows Platform | 8.1, 10.0, 10.0.16299 |
