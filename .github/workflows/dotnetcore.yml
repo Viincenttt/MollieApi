@@ -26,3 +26,5 @@ jobs:
       env:
         Mollie__ApiKey: ${{ secrets.Mollie__ApiKey }}
         Mollie__AccessKey: ${{ secrets.Mollie__AccessKey }}
+        Mollie__ClientId: ${{ secrets.Mollie__ClientId }}
+        Mollie__ClientSecret: ${{ secrets.Mollie__ClientSecret }}
