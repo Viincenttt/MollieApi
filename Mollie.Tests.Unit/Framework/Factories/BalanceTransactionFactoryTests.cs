@@ -24,6 +24,7 @@ namespace Mollie.Tests.Unit.Framework.Factories {
         [TestCase(BalanceTransactionContextType.SplitPayment, typeof(PaymentBalanceTransaction))]
         [TestCase(BalanceTransactionContextType.PlatformPaymentRefund, typeof(RefundBalanceTransaction))]
         [TestCase(BalanceTransactionContextType.PlatformPaymentChargeback, typeof(ChargebackBalanceTransaction))]
+        [TestCase("UnknownType", typeof(BalanceTransaction))]
         public void Create_CreatesTypeBasedOnType(string type, Type expectedType) {
             // Given
             var sut = new BalanceTransactionFactory();
