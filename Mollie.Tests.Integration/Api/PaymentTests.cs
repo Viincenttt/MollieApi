@@ -348,6 +348,8 @@ namespace Mollie.Tests.Integration.Api {
 
             // Then: Make sure we get the mandate id back in the details
             Assert.AreEqual(validMandate.Id, result.MandateId);
+            Assert.IsTrue(result.Links.Mandate.Href.EndsWith(validMandate.Id));
+            Assert.IsTrue(result.Links.Customer.Href.EndsWith(customer.Id));
         }
 
         [Test]

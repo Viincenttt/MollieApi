@@ -17,6 +17,16 @@ namespace Mollie.Api.Models.Payment.Response {
         /// The URL your customer should visit to make the payment. This is where you should redirect the consumer to.
         /// </summary>
         public UrlLink Checkout { get; set; }
+        
+        /// <summary>
+        /// The deeplink URL to the app of the payment method. Currently only available for bancontact.
+        /// </summary>
+        public UrlLink MobileAppCheckout { get; set; }
+        
+        /// <summary>
+        /// Direct link to the payment in the Mollie Dashboard.
+        /// </summary>
+        public UrlLink Dashboard { get; set; }
 
         /// <summary>
         /// The API resource URL of the refunds that belong to this payment.
@@ -27,6 +37,11 @@ namespace Mollie.Api.Models.Payment.Response {
         /// The API resource URL of the chargebacks that belong to this payment.
         /// </summary>
         public UrlObjectLink<ListResponse<ChargebackResponse>> Chargebacks { get; set; }
+        
+        /// <summary>
+        /// The API resource URL of the captures that belong to this payment.
+        /// </summary>
+        public UrlLink Captures { get; set; }
 
         /// <summary>
         /// The API resource URL of the settlement this payment has been settled with. Not present if not yet settled.
