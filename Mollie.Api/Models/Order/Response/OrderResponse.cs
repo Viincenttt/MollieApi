@@ -96,6 +96,18 @@ namespace Mollie.Api.Models.Order {
         /// The URL your customer will be redirected to after completing or canceling the payment process.
         /// </summary>
         public string RedirectUrl { get; set; }
+        
+        /// <summary>
+        /// The optional redirect URL you provided during payment creation. Consumer that explicitly cancel the
+        /// order will be redirected to this URL if provided, or otherwise to the redirectUrl instead — see above.
+        ///
+        /// Mollie will always give you status updates via webhooks, including for the canceled status. This parameter
+        /// is therefore entirely optional, but can be useful when implementing a dedicated consumer-facing flow to
+        /// handle order cancellations.
+        ///
+        /// The URL will be null for recurring orders.
+        /// </summary>
+        public string CancelUrl { get; set; }
 
         /// <summary>
         /// The URL Mollie will call as soon an important status change on the order takes place.
