@@ -107,6 +107,18 @@ namespace Mollie.Api.Models.Payment.Response {
         /// The URL the consumer will be redirected to after completing or cancelling the payment process.
         /// </summary>
         public string RedirectUrl { get; set; }
+        
+        /// <summary>
+        /// The optional redirect URL you provided during payment creation. Consumer that explicitly cancel the payment
+        /// will be redirected to this URL if provided, or otherwise to the redirectUrl instead — see above.
+        ///
+        /// Mollie will always give you status updates via webhooks, including for the canceled status. This parameter
+        /// is therefore entirely optional, but can be useful when implementing a dedicated consumer-facing flow to
+        /// handle payment cancellations.
+        ///
+        /// The URL will be null for recurring payments.
+        /// </summary>
+        public string CancelUrl { get; set; }
 
         /// <summary>
         /// The URL Mollie will call as soon an important status change takes place.
@@ -164,7 +176,6 @@ namespace Mollie.Api.Models.Payment.Response {
         /// is charged automatically. See the Mollie.Api.Models.Payment.SequenceType class for a full list of known values.
         /// </summary>
         public string SequenceType { get; set; }
-
 
         /// <summary>
         /// Only available for recurring payments – If the payment is a recurring payment, this field will hold the ID of the
