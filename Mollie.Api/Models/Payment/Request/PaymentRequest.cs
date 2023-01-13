@@ -128,10 +128,11 @@ namespace Mollie.Api.Models.Payment.Request {
 		public ApplicationFee ApplicationFee { get; set; }
 
         /// <summary>
-        /// Oauth only - Optional - An optional routing configuration which enables you to route a successful payment, or part of the payment, to one or more connected accounts. Additionally, you can schedule (parts of) the payment to become available on the connected account on a future date.
+        /// Oauth only - Optional - An optional routing configuration which enables you to route a successful payment, or part of the payment, to one or more connected accounts.
+        /// Additionally, you can schedule (parts of) the payment to become available on the connected account on a future date.
         /// </summary>
         [JsonProperty("routing")]
-        public IList<PaymentRouting> Routings { get; set; }
+        public IList<PaymentRoutingRequest> Routings { get; set; }
 
         /// <summary>
         /// For digital goods in most jurisdictions, you must apply the VAT rate from your customer’s country. Choose the VAT rates 

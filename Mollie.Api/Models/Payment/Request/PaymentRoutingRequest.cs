@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Mollie.Api.Models.Payment.Request
 {
-    public class PaymentRouting
+    public class PaymentRoutingRequest
     {
         /// <summary>
         /// If more than one routing object is given, the routing objects must indicate what portion of the total payment amount is being routed.
