@@ -32,6 +32,7 @@ namespace Mollie.Tests.Unit.Client {
 
             var mockHttp = new MockHttpMessageHandler();
             mockHttp.When($"{BaseMollieClient.ApiEndPoint}*")
+                .With(request => request.Headers.Contains("Idempotency-Key"))
                 .Respond("application/json", jsonToReturnInMockResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
             PaymentClient paymentClient = new PaymentClient("abcde", httpClient);

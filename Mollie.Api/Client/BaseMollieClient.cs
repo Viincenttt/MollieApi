@@ -123,6 +123,7 @@ namespace Mollie.Api.Client {
             httpRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", this._apiKey);
             httpRequest.Headers.Add("User-Agent", this.GetUserAgent());
+            httpRequest.Headers.Add("Idempotency-Key", Guid.NewGuid().ToString());
             httpRequest.Content = content;
 
             return httpRequest;
