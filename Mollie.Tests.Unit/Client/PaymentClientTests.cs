@@ -1,4 +1,5 @@
-﻿using Mollie.Api.Client;
+﻿using System;
+using Mollie.Api.Client;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Payment;
 using Mollie.Api.Models.Payment.Request;
@@ -109,6 +110,61 @@ namespace Mollie.Tests.Unit.Client {
             this.AssertPaymentIsEqual(paymentRequest, paymentResponse);
             Assert.IsNull(paymentResponse.Method);
         }
+        
+        
+        [Test]
+        public async Task CreatePayment_WithRoutingInformation_RequestIsSerializedInExpectedFormat() {
+            // Given: We create a payment request with the routing request
+            PaymentRoutingRequest routingRequest = new PaymentRoutingRequest {
+                Amount = new Amount("EUR", 100),
+                Destination = new RoutingDestination {
+                    Type = "organization",
+                    OrganizationId = "organization-id"
+                },
+                ReleaseDate = new DateTime(2022, 1, 14)
+            };
+            PaymentRequest paymentRequest = new PaymentRequest() {
+                Amount = new Amount(Currency.EUR, "100.00"),
+                Description = "Description",
+                RedirectUrl = "http://www.mollie.com",
+                Routings = new List<PaymentRoutingRequest> {
+                    routingRequest
+                }
+            };
+            string expectedRoutingInformation = $"\"routing\":[{{\"amount\":{{\"currency\":\"EUR\",\"value\":\"100.00\"}},\"destination\":{{\"type\":\"organization\",\"organizationId\":\"organization-id\"}},\"releaseDate\":\"2022-01-14\"}}]}}";
+            const string expectedJsonResponse = @"{
+                ""amount"":{
+                    ""currency"":""EUR"",
+                    ""value"":""100.00""
+                },
+                ""description"":""Description"",
+                ""method"": null,
+                ""redirectUrl"":""http://www.mollie.com"",
+                ""routing"": [{
+                        ""amount"": {
+                            ""currency"": ""EUR"",
+                            ""value"": ""100.00""
+                        },
+                        ""destination"": {
+                            ""type"": ""organization"",
+                            ""organizationId"": ""organization-id""
+                        },
+                        ""releaseDate"": ""2022-01-14""
+                    }
+                ]}";
+            var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Post, $"{BaseMollieClient.ApiEndPoint}payments", expectedJsonResponse, expectedRoutingInformation);
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
+            
+            // When: We send the request
+            PaymentResponse paymentResponse = await paymentClient.CreatePaymentAsync(paymentRequest);
+
+            // Then
+            mockHttp.VerifyNoOutstandingExpectation();
+            this.AssertPaymentIsEqual(paymentRequest, paymentResponse);
+            Assert.IsNull(paymentResponse.Method);
+        }
+
 
         [Test]
         public async Task CreatePaymentAsync_IncludeQrCode_QueryStringContainsIncludeQrCodeParameter() {
@@ -271,6 +327,17 @@ namespace Mollie.Tests.Unit.Client {
             Assert.AreEqual(paymentRequest.Amount.Value, paymentResponse.Amount.Value);
             Assert.AreEqual(paymentRequest.Amount.Currency, paymentResponse.Amount.Currency);
             Assert.AreEqual(paymentRequest.Description, paymentResponse.Description);
+            if (paymentRequest.Routings != null) {
+                Assert.AreEqual(paymentRequest.Routings.Count, paymentResponse.Routings.Count);
+                for (int i = 0; i < paymentRequest.Routings.Count; i++) {
+                    var paymentRequestRouting = paymentRequest.Routings[i];
+                    var paymentResponseRouting = paymentResponse.Routings[i];
+                    Assert.AreEqual(paymentRequestRouting.Amount, paymentResponseRouting.Amount);
+                    Assert.AreEqual(paymentRequestRouting.Destination.Type, paymentResponseRouting.Destination.Type);
+                    Assert.AreEqual(paymentRequestRouting.Destination.OrganizationId, paymentResponseRouting.Destination.OrganizationId);
+                    Assert.AreEqual(paymentRequestRouting.ReleaseDate, paymentResponseRouting.ReleaseDate);
+                }
+            }
         }
     }
 }
