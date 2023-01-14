@@ -1,23 +1,41 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System;
+using System.Net.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Framework;
+using Polly;
+using Polly.Extensions.Http;
 
 namespace Mollie.WebApplicationCoreExample.Framework.Middleware {
     public static class MollieApiClientServiceExtensions {
         public static IServiceCollection AddMollieApi(this IServiceCollection services, IConfiguration configuration) {
             MollieConfiguration mollieConfiguration = configuration.GetSection("Mollie").Get<MollieConfiguration>();
-
-            services.AddScoped<IPaymentClient, PaymentClient>(x => new PaymentClient(mollieConfiguration.ApiKey));
-            services.AddScoped<ICustomerClient, CustomerClient>(x => new CustomerClient(mollieConfiguration.ApiKey));
-            services.AddScoped<IRefundClient, RefundClient>(x => new RefundClient(mollieConfiguration.ApiKey));
-            services.AddScoped<IPaymentMethodClient, PaymentMethodClient>(x => new PaymentMethodClient(mollieConfiguration.ApiKey));
-            services.AddScoped<ISubscriptionClient, SubscriptionClient>(x => new SubscriptionClient(mollieConfiguration.ApiKey));
-            services.AddScoped<IMandateClient, MandateClient>(x => new MandateClient(mollieConfiguration.ApiKey));
-            services.AddScoped<IInvoicesClient, InvoicesClient>(x => new InvoicesClient(mollieConfiguration.ApiKey));
+            
+            services.AddHttpClient<IPaymentClient, PaymentClient>(httpClient => new PaymentClient(mollieConfiguration.ApiKey, httpClient))
+                .AddPolicyHandler(GetDefaultRetryPolicy());
+            services.AddHttpClient<ICustomerClient, CustomerClient>(httpClient => new CustomerClient(mollieConfiguration.ApiKey, httpClient))
+                .AddPolicyHandler(GetDefaultRetryPolicy());
+            services.AddHttpClient<IRefundClient, RefundClient>(httpClient => new RefundClient(mollieConfiguration.ApiKey, httpClient))
+                .AddPolicyHandler(GetDefaultRetryPolicy());
+            services.AddHttpClient<IPaymentMethodClient, PaymentMethodClient>(httpClient => new PaymentMethodClient(mollieConfiguration.ApiKey, httpClient))
+                .AddPolicyHandler(GetDefaultRetryPolicy());
+            services.AddHttpClient<ISubscriptionClient, SubscriptionClient>(httpClient => new SubscriptionClient(mollieConfiguration.ApiKey, httpClient))
+                .AddPolicyHandler(GetDefaultRetryPolicy());
+            services.AddHttpClient<IMandateClient, MandateClient>(httpClient => new MandateClient(mollieConfiguration.ApiKey, httpClient))
+                .AddPolicyHandler(GetDefaultRetryPolicy());
+            services.AddHttpClient<IInvoicesClient, InvoicesClient>(httpClient => new InvoicesClient(mollieConfiguration.ApiKey, httpClient))
+                .AddPolicyHandler(GetDefaultRetryPolicy());
 
             return services;
+        }
+        
+        static IAsyncPolicy<HttpResponseMessage> GetDefaultRetryPolicy() {
+            return HttpPolicyExtensions
+                .HandleTransientHttpError()
+                .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2,
+                    retryAttempt)));
         }
     }
 }
