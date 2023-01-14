@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Mollie.Api.JsonConverters;
 using Newtonsoft.Json;
 
@@ -124,6 +125,13 @@ namespace Mollie.Api.Models.Payment.Response {
         /// The URL Mollie will call as soon an important status change takes place.
         /// </summary>
         public string WebhookUrl { get; set; }
+
+        /// <summary>
+        /// An optional routing configuration that you provided, which enables you to route a successful payment, or part of the payment, to one or more connected accounts.
+        /// Additionally, you can schedule (parts of) the payment to become available on the connected account on a future date.
+        /// </summary>
+        [JsonProperty("routing")]
+        public IList<PaymentRoutingResponse> Routings { get; set; }
 
         /// <summary>
         /// The payment method used for this payment, either forced on creation by specifying the method parameter, or chosen
