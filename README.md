@@ -130,6 +130,47 @@ PaymentRequest paymentRequest = new PaymentRequest() {
 ### Testing
 During the process of building your integration, it is important to properly test it. You can access the test mode of the Mollie API in two ways: by using the Test API key, or, if you are using organization access tokens or app tokens, by providing the testmode parameter in your API request. If you are using the Test API key, you do not have to set the testmode parameter anywhere. Any entity you create, retrieve, update or delete using a Test API key can only interact with the test system of Mollie, which is completely isolated from the production environment. 
 
+### Dependency injection
+If you'd like to add the Mollie API's to your application using dependency injection, an example is provided below:
+```c#
+// Retrieve a configuration object from the appsettings. The configuration object should contain the API key
+MollieConfiguration mollieConfiguration = configuration.GetSection("Mollie").Get<MollieConfiguration>();
+
+// Register the API clients that you would like to use in your application
+services.AddHttpClient<IPaymentClient, PaymentClient>(httpClient => new PaymentClient(mollieConfiguration.ApiKey, httpClient));
+services.AddHttpClient<ICustomerClient, CustomerClient>(httpClient => new CustomerClient(mollieConfiguration.ApiKey, httpClient));
+// ...etc
+```
+
+### Idempotency and retrying requests
+When issuing requests to an API, there is always a small chance of issues on either side of the connection. For example, the API may not respond to the request within a reasonable timeframe. Your server will then consider the request to have ‘timed out’. However, your request may still arrive at the API eventually and get executed, despite your server considering it a timeout.
+
+Mollie supports the Idempotency-Key industry standard. When sending a request to the Mollie API, you can send along a header with a unique value. If another request is made with the exact same header value within one hour, the Mollie API will return a cached version of the initial response. This way, your API requests become what we call idempotent. Read more on this in the [Mollie documentation on Idempotency](https://docs.mollie.com/overview/api-idempotency)
+
+The library automatically generates a unique GUID for each request and adds it to the Idempotency-Key header. Using a transient fault handling library such as [Polly](https://github.com/App-vNext/Polly), you are able to automatically retry requests in case of a timeout or 5xx status code error using the following example code:
+```c#
+using Polly;
+using Polly.Extensions.Http;
+
+public static class MollieApiClientServiceExtensions {
+        public static IServiceCollection AddMollieApi(this IServiceCollection services, IConfiguration configuration) {
+		MollieConfiguration mollieConfiguration = configuration.GetSection("Mollie").Get<MollieConfiguration>();
+            
+            	services.AddHttpClient<IPaymentClient, PaymentClient>(httpClient => new PaymentClient(mollieConfiguration.ApiKey, httpClient))
+                	.AddPolicyHandler(GetDefaultRetryPolicy());
+	}
+	
+	static IAsyncPolicy<HttpResponseMessage> GetDefaultRetryPolicy() {
+            return HttpPolicyExtensions
+	    	// Timeout errors or 5xx static code errors
+                .HandleTransientHttpError() 
+		// Requests are retried three times, with different intervals
+                .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2,
+                    retryAttempt)));
+        }
+}
+```
+
 ## 3. Payment API
 ### Creating a payment
 ```c#
