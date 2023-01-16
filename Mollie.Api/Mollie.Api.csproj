@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard1.2;net45</TargetFrameworks>
-    <Version>2.2.0.1</Version>
+    <Version>2.2.0.2</Version>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Authors>Vincent Kok</Authors>
     <Description>This is a wrapper for the Mollie REST webservice. All payment methods and webservice calls are supported.</Description>
@@ -10,10 +10,10 @@
     <Product>Mollie Payment API</Product>
     <PackageProjectUrl>https://github.com/Viincenttt/MollieApi</PackageProjectUrl>
     <PackageTags>Mollie</PackageTags>
-    <AssemblyVersion>2.2.0.1</AssemblyVersion>
-    <FileVersion>2.2.0.1</FileVersion>
+    <AssemblyVersion>2.2.0.2</AssemblyVersion>
+    <FileVersion>2.2.0.2</FileVersion>
     <PackageLicenseUrl>https://github.com/Viincenttt/MollieApi/blob/development/LICENSE</PackageLicenseUrl>
-    <PackageVersion>2.2.0.1</PackageVersion>
+    <PackageVersion>2.2.0.2</PackageVersion>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
