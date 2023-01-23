@@ -62,5 +62,20 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
         }
+        
+        [Test]
+        public async Task GetPaymentMethodListAsync_IncludeWalletsParameterIsSpecified_QueryStringContainsIncludeWalletsParameter() {
+            // Given: We make a request to retrieve a order without wanting any extra data
+            var includeWalletsValue = "includeWalletsValue";
+            var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}methods?includeWallets={includeWalletsValue}", defaultPaymentMethodJsonResponse);
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            PaymentMethodClient paymentMethodClient = new PaymentMethodClient("abcde", httpClient);
+
+            // When: We send the request
+            await paymentMethodClient.GetPaymentMethodListAsync(includeWallets: includeWalletsValue);
+
+            // Then
+            mockHttp.VerifyNoOutstandingExpectation();
+        }
     }
 }
