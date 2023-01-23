@@ -22,7 +22,7 @@ namespace Mollie.Tests.Unit.Client {
 
         [Test]
         public async Task GetAllPaymentMethodListAsync_NoAmountParameter_QueryStringIsEmpty() {
-            // Given: We make a request to retrieve a order without wanting any extra data
+            // Given: We make a request to retrieve all payment methods without any parameters
             var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}methods/all", defaultPaymentMethodJsonResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
             PaymentMethodClient paymentMethodClient = new PaymentMethodClient("abcde", httpClient);
@@ -36,7 +36,7 @@ namespace Mollie.Tests.Unit.Client {
 
         [Test]
         public async Task GetAllPaymentMethodListAsync_AmountParameterIsAdded_QueryStringContainsAmount() {
-            // Given: We make a request to retrieve a order without wanting any extra data
+            // Given: We make a request to retrieve all payment methods with a amount parameter
             var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}methods/all?amount[value]=100.00&amount[currency]=EUR", defaultPaymentMethodJsonResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
             PaymentMethodClient paymentMethodClient = new PaymentMethodClient("abcde", httpClient);
@@ -50,7 +50,7 @@ namespace Mollie.Tests.Unit.Client {
 
         [Test]
         public async Task GetAllPaymentMethodListAsync_ProfileIdParameterIsSpecified_QueryStringContainsProfileIdParameter() {
-            // Given: We make a request to retrieve a order without wanting any extra data
+            // Given: We make a request to retrieve all payment methods with a profile id parameter
             var profileId = "myProfileId";
             var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}methods/all?profileId={profileId}", defaultPaymentMethodJsonResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
@@ -65,7 +65,7 @@ namespace Mollie.Tests.Unit.Client {
         
         [Test]
         public async Task GetPaymentMethodListAsync_IncludeWalletsParameterIsSpecified_QueryStringContainsIncludeWalletsParameter() {
-            // Given: We make a request to retrieve a order without wanting any extra data
+            // Given: We make a request to retrieve the payment methods with a includeWallets parameter
             var includeWalletsValue = "includeWalletsValue";
             var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}methods?includeWallets={includeWalletsValue}", defaultPaymentMethodJsonResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
