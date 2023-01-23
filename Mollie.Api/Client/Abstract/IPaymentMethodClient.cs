@@ -7,9 +7,33 @@ using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client.Abstract {
     public interface IPaymentMethodClient {
-		Task<PaymentMethodResponse> GetPaymentMethodAsync(string paymentMethod, bool includeIssuers = false, string locale = null, bool includePricing = false, string profileId = null, bool testmode = false, string currency = null);
-        Task<ListResponse<PaymentMethodResponse>> GetAllPaymentMethodListAsync(string locale = null, Amount amount = null, bool includeIssuers = false, bool includePricing = false, string profileId = null);
-        Task<ListResponse<PaymentMethodResponse>> GetPaymentMethodListAsync(string sequenceType = null, string locale = null, Amount amount = null, bool includeIssuers = false, bool includePricing = false, string profileId = null, bool testmode = false, Resource? resource = null, string billingCountry = null);
+		Task<PaymentMethodResponse> GetPaymentMethodAsync(
+            string paymentMethod, 
+            bool includeIssuers = false, 
+            string locale = null, 
+            bool includePricing = false, 
+            string profileId = null, 
+            bool testmode = false, 
+            string currency = null);
+        
+        Task<ListResponse<PaymentMethodResponse>> GetAllPaymentMethodListAsync(
+            string locale = null, 
+            Amount amount = null, 
+            bool includeIssuers = false, 
+            bool includePricing = false, 
+            string profileId = null);
+        
+        Task<ListResponse<PaymentMethodResponse>> GetPaymentMethodListAsync(
+            string sequenceType = null, 
+            string locale = null, 
+            Amount amount = null, 
+            bool includeIssuers = false, 
+            bool includePricing = false, 
+            string profileId = null, 
+            bool testmode = false, 
+            Resource? resource = null, 
+            string billingCountry = null, 
+            string includeWallets = null);
         Task<PaymentMethodResponse> GetPaymentMethodAsync(UrlObjectLink<PaymentMethodResponse> url);
     }
 }

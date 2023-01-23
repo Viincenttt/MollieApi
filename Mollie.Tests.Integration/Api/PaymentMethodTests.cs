@@ -19,6 +19,16 @@ namespace Mollie.Tests.Integration.Api {
             Assert.IsNotNull(response);
             Assert.IsNotNull(response.Items);
         }
+        
+        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        public async Task CanRetrievePaymentMethodListIncludeWallets() {
+            // When: Retrieve payment list with default settings
+            ListResponse<PaymentMethodResponse> response = await this._paymentMethodClient.GetPaymentMethodListAsync(includeWallets: "applepay");
+
+            // Then: Make sure it can be retrieved
+            Assert.IsNotNull(response);
+            Assert.IsNotNull(response.Items);
+        }
 
         [TestCase(PaymentMethod.Bancontact)]
         [TestCase(PaymentMethod.Sofort)]
