@@ -6,6 +6,7 @@ using Mollie.Api.Extensions;
 using Mollie.Api.Models;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Order;
+using Mollie.Api.Models.Order.Request;
 using Mollie.Api.Models.Payment.Response;
 using Mollie.Api.Models.Refund;
 using Mollie.Api.Models.Url;
@@ -30,6 +31,10 @@ namespace Mollie.Api.Client {
 
         public async Task<OrderResponse> UpdateOrderLinesAsync(string orderId, string orderLineId, OrderLineUpdateRequest orderLineUpdateRequest) {
             return await this.PatchAsync<OrderResponse>($"orders/{orderId}/lines/{orderLineId}", orderLineUpdateRequest).ConfigureAwait(false);
+        }
+
+        public async Task<OrderResponse> ManageOrderLinesAsync(string orderId, ManageOrderLinesRequest manageOrderLinesRequest) {
+            return await this.PatchAsync<OrderResponse>($"orders/{orderId}/lines", manageOrderLinesRequest).ConfigureAwait(false);
         }
 
         public async Task CancelOrderAsync(string orderId, bool testmode = false) {

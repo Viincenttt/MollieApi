@@ -106,6 +106,7 @@ In the past, this library used enums that were decorated with the EnumMemberAttr
 - Mollie.Api.Models.Order.OrderLineDetailsType
 - Mollie.Api.Models.Order.OrderLineStatus
 - Mollie.Api.Models.Order.OrderStatus
+- Mollie.Api.Models.Order.OrderLineOperation
 - Mollie.Api.Models.Profile.CategoryCode
 - Mollie.Api.Models.Profile.ProfileStatus
 - Mollie.Api.Models.Refund.RefundStatus

@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Order;
+using Mollie.Api.Models.Order.Request;
 using Mollie.Api.Models.Payment.Response;
 using Mollie.Api.Models.Refund;
 using Mollie.Api.Models.Url;
@@ -11,6 +12,7 @@ namespace Mollie.Api.Client.Abstract {
         Task<OrderResponse> GetOrderAsync(string orderId, bool embedPayments = false, bool embedRefunds = false, bool embedShipments = false, bool testmode = false);
         Task<OrderResponse> UpdateOrderAsync(string orderId, OrderUpdateRequest orderUpdateRequest);
         Task<OrderResponse> UpdateOrderLinesAsync(string orderId, string orderLineId, OrderLineUpdateRequest orderLineUpdateRequest);
+        Task<OrderResponse> ManageOrderLinesAsync(string orderId, ManageOrderLinesRequest manageOrderLinesRequest);
         Task CancelOrderAsync(string orderId, bool testmode = false);
         Task<ListResponse<OrderResponse>> GetOrderListAsync(string from = null, int? limit = null, string profileId = null, bool testmode = false);
         Task<ListResponse<OrderResponse>> GetOrderListAsync(UrlObjectLink<ListResponse<OrderResponse>> url);

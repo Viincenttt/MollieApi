@@ -45,7 +45,7 @@ namespace Mollie.Api.Models.Order {
         /// Any discounts applied to the order line. For example, if you have a two-for-one sale, you should pass the 
         /// amount discounted as a positive amount.
         /// </summary>
-        public Amount DiscountPrice { get; set; }
+        public Amount DiscountAmount { get; set; }
 
         /// <summary>
         /// The total amount of the line, including VAT and discounts. Adding all totalAmount values together should 
