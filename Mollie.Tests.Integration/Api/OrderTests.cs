@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Mollie.Api.Models;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Order;
+using Mollie.Api.Models.Order.Request;
+using Mollie.Api.Models.Order.Request.ManageOrderLines;
 using Mollie.Api.Models.Order.Request.PaymentSpecificParameters;
 using Mollie.Api.Models.Payment;
 using Mollie.Tests.Integration.Framework;
@@ -172,6 +174,123 @@ namespace Mollie.Tests.Integration.Api {
 
             // Then: The name of the order line should be updated
             Assert.AreEqual(updateRequest.Name, updatedOrder.Lines.First().Name);
+        }
+        
+        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        public async Task ManageOrderLinesAsync_AddOperation_OrderLineIsAdded() {
+            // If: we create a new order
+            OrderRequest orderRequest = this.CreateOrder();
+            OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
+
+            // When: We use the manager order lines endpoint to add a order line
+            ManageOrderLinesAddOperationData newOrderLineRequest = new ManageOrderLinesAddOperationData {
+                Name = "LEGO Batman mobile",
+                Type = OrderLineDetailsType.Physical,
+                Category = OrderLineDetailsCategory.Gift,
+                Quantity = 1,
+                UnitPrice = new Amount(Currency.EUR, 100.00m),
+                TotalAmount = new Amount(Currency.EUR, 100.00m),
+                VatRate = "21.00",
+                VatAmount = new Amount(Currency.EUR, 17.36m),
+                ImageUrl = "http://www.google.com/legobatmanimage",
+                ProductUrl = "http://www.mollie.nl/legobatmanproduct",
+                Metadata = "{\"is_lego_awesome\":\"fo sho\"}",
+            };
+            ManageOrderLinesRequest manageOrderLinesRequest = new ManageOrderLinesRequest() {
+                Operations = new List<ManageOrderLinesOperation> {
+                    new ManageOrderLinesAddOperation {
+                        Data = newOrderLineRequest
+                    }
+                }
+            };
+            OrderResponse updatedOrder = await this._orderClient.ManageOrderLinesAsync(createdOrder.Id, manageOrderLinesRequest);
+
+            // Then: The order line should be added
+            Assert.AreEqual(2, updatedOrder.Lines.Count());
+            var addedOrderLineRequest = updatedOrder.Lines.SingleOrDefault(line => line.Name == newOrderLineRequest.Name);
+            Assert.IsNotNull(addedOrderLineRequest);
+            Assert.AreEqual(newOrderLineRequest.Type, newOrderLineRequest.Type);
+            Assert.AreEqual(newOrderLineRequest.Category, newOrderLineRequest.Category);
+            Assert.AreEqual(newOrderLineRequest.Quantity, newOrderLineRequest.Quantity);
+            Assert.AreEqual(newOrderLineRequest.UnitPrice, newOrderLineRequest.UnitPrice);
+            Assert.AreEqual(newOrderLineRequest.TotalAmount, newOrderLineRequest.TotalAmount);
+            Assert.AreEqual(newOrderLineRequest.VatRate, newOrderLineRequest.VatRate);
+            Assert.AreEqual(newOrderLineRequest.VatAmount, newOrderLineRequest.VatAmount);
+            Assert.AreEqual(newOrderLineRequest.ImageUrl, newOrderLineRequest.ImageUrl);
+            Assert.AreEqual(newOrderLineRequest.ProductUrl, newOrderLineRequest.ProductUrl);
+            Assert.AreEqual(newOrderLineRequest.Metadata, newOrderLineRequest.Metadata);
+        }
+        
+        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        public async Task ManageOrderLinesAsync_UpdateOperation_OrderLineIsUpdated() {
+            // If: we create a new order
+            OrderRequest orderRequest = this.CreateOrder();
+            OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
+
+            // When: We use the manager order lines endpoint to update a order line
+            ManageOrderLinesUpdateOperationData orderLineUpdateRequest = new ManageOrderLinesUpdateOperationData {
+                Id = createdOrder.Lines.First().Id,
+                Name = "LEGO Batman mobile",
+                Quantity = 1,
+                UnitPrice = new Amount(Currency.EUR, 100.00m),
+                TotalAmount = new Amount(Currency.EUR, 90.00m),
+                VatRate = "21.00",
+                VatAmount = new Amount(Currency.EUR, 15.62m),
+                ImageUrl = "http://www.google.com/legobatmanimage",
+                ProductUrl = "http://www.mollie.nl/legobatmanproduct",
+                Metadata = "{\"is_lego_awesome\":\"fo sho\"}",
+                Sku = "Sku",
+                DiscountAmount = new Amount(Currency.EUR, 10m)
+            };
+            ManageOrderLinesRequest manageOrderLinesRequest = new ManageOrderLinesRequest() {
+                Operations = new List<ManageOrderLinesOperation> {
+                    new ManageOrderLinesUpdateOperation {
+                        Data = orderLineUpdateRequest
+                    }
+                }
+            };
+            OrderResponse updatedOrder = await this._orderClient.ManageOrderLinesAsync(createdOrder.Id, manageOrderLinesRequest);
+
+            // Then: The order line should be updated
+            Assert.AreEqual(1, updatedOrder.Lines.Count());
+            var updatedOrderLineRequest = updatedOrder.Lines.SingleOrDefault(line => line.Name == orderLineUpdateRequest.Name);
+            Assert.IsNotNull(updatedOrderLineRequest);
+            Assert.AreEqual(orderLineUpdateRequest.Id, orderLineUpdateRequest.Id);
+            Assert.AreEqual(orderLineUpdateRequest.Name, orderLineUpdateRequest.Name);
+            Assert.AreEqual(orderLineUpdateRequest.Quantity, orderLineUpdateRequest.Quantity);
+            Assert.AreEqual(orderLineUpdateRequest.UnitPrice, orderLineUpdateRequest.UnitPrice);
+            Assert.AreEqual(orderLineUpdateRequest.TotalAmount, orderLineUpdateRequest.TotalAmount);
+            Assert.AreEqual(orderLineUpdateRequest.VatRate, orderLineUpdateRequest.VatRate);
+            Assert.AreEqual(orderLineUpdateRequest.VatAmount, orderLineUpdateRequest.VatAmount);
+            Assert.AreEqual(orderLineUpdateRequest.ImageUrl, orderLineUpdateRequest.ImageUrl);
+            Assert.AreEqual(orderLineUpdateRequest.ProductUrl, orderLineUpdateRequest.ProductUrl);
+            Assert.AreEqual(orderLineUpdateRequest.Metadata, orderLineUpdateRequest.Metadata);
+        }
+        
+        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        public async Task ManageOrderLinesAsync_CancelOperation_OrderLineIsCanceled() {
+            // If: we create a new order
+            OrderRequest orderRequest = this.CreateOrder();
+            OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
+
+            // When: We use the manager order lines endpoint to cancel a order line
+            ManagerOrderLinesCancelOperationData orderLineCancelRequest = new ManagerOrderLinesCancelOperationData {
+                Id = createdOrder.Lines.First().Id,
+                Quantity = 1
+            };
+            ManageOrderLinesRequest manageOrderLinesRequest = new ManageOrderLinesRequest() {
+                Operations = new List<ManageOrderLinesOperation> {
+                    new ManageOrderLinesCancelOperation {
+                        Data = orderLineCancelRequest
+                    }
+                }
+            };
+            OrderResponse updatedOrder = await this._orderClient.ManageOrderLinesAsync(createdOrder.Id, manageOrderLinesRequest);
+
+            // Then: The order line should be canceled
+            Assert.AreEqual(1, updatedOrder.Lines.Count());
+            var updatedOrderLineRequest = updatedOrder.Lines.Single();
+            Assert.AreEqual("canceled", updatedOrderLineRequest.Status);
         }
 
         [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
