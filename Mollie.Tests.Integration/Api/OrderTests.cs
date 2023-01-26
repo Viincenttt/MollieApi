@@ -15,7 +15,7 @@ namespace Mollie.Tests.Integration.Api {
     [TestFixture]
     public class OrderTests : BaseMollieApiTestClass {
         [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public async Task CanCreateOrderWithOnlyRequiredFields() {
+        public async Task CreateOrderAsync_OrderWithRequiredFields_OrderIsCreated() {
             // If: we create a order request with only the required parameters
             OrderRequest orderRequest = this.CreateOrder();
 
@@ -40,7 +40,7 @@ namespace Mollie.Tests.Integration.Api {
 
         [Test]
         [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public async Task CanCreateOrderWithMultiplePaymentMethods() {
+        public async Task CreateOrderAsync_WithMultiplePaymentMethods_OrderIsCreated() {
             // When: we create a order request and specify multiple payment methods
             OrderRequest orderRequest = this.CreateOrder();
             orderRequest.Methods = new List<string>() {
@@ -61,7 +61,7 @@ namespace Mollie.Tests.Integration.Api {
 
         [Test]
         [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public async Task CanCreateOrderWithSinglePaymentMethod() {
+        public async Task CreateOrderAsync_WithSinglePaymentMethod_OrderIsCreated() {
             // When: we create a order request and specify a single payment method
             OrderRequest orderRequest = this.CreateOrder();
             orderRequest.Method = PaymentMethod.CreditCard;
@@ -78,7 +78,7 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public async Task CanCreateOrderWithPaymentSpecificOptions() {
+        public async Task CreateOrderAsync_WithPaymentSpecificParameters_OrderIsCreated() {
             // If: we create a order request with payment specific parameters
             OrderRequest orderRequest = this.CreateOrder();
             orderRequest.Payment = new IDealSpecificParameters() {
@@ -96,7 +96,7 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public async Task CanRetrieveOrderAfterCreationOrder() {
+        public async Task GetOrderAsync_OrderIsCreated_OrderCanBeRetrieved() {
             // If: we create a new order
             OrderRequest orderRequest = this.CreateOrder();
             OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
@@ -110,7 +110,7 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public async Task CanRetrieveOrderAndIncludeEmbeddedData() {
+        public async Task GetOrderAsync_WithIncludeParameters_OrderIsRetrievedWithEmbeddedData() {
             // If: we create a new order
             OrderRequest orderRequest = this.CreateOrder();
             OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
@@ -128,7 +128,7 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public async Task CanUpdateExistingOrder() {
+        public async Task UpdateOrderAsync_OrderIsUpdated_OrderIsUpdated() {
             // If: we create a new order
             OrderRequest orderRequest = this.CreateOrder();
             OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
@@ -147,7 +147,7 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public async Task CanCancelCreatedOrder() {
+        public async Task CancelOrderAsync_OrderIsCanceled_OrderHasCanceledStatus() {
             // If: we create a new order
             OrderRequest orderRequest = this.CreateOrder();
             OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
@@ -161,7 +161,7 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public async Task CanUpdateOrderLine() {
+        public async Task UpdateOrderLinesAsync_WhenOrderLineIsUpdated_UpdatedPropertiesCanBeRetrieved() {
             // If: we create a new order
             OrderRequest orderRequest = this.CreateOrder();
             OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
@@ -294,7 +294,7 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public async Task CanRetrieveOrderList() {
+        public async Task GetOrderListAsync_NoParameters_OrderListIsRetrieved() {
             // When: Retrieve payment list with default settings
             ListResponse<OrderResponse> response = await this._orderClient.GetOrderListAsync();
 
@@ -304,7 +304,7 @@ namespace Mollie.Tests.Integration.Api {
         }
 
         [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public async Task ListOrdersNeverReturnsMorePaymentsThenTheNumberOfRequestedOrders() {
+        public async Task GetOrderListAsync_WithMaximumNumberOfItems_MaximumNumberOfOrdersIsReturned() {
             // If: Number of orders requested is 5
             int numberOfOrders = 5;
 
