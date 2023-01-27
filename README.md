@@ -644,6 +644,37 @@ OrderLineUpdateRequest updateRequest = new OrderLineUpdateRequest() {
 OrderResponse updatedOrder = await orderClient.UpdateOrderLinesAsync({orderId}, createdOrder.Lines.First().Id, updateRequest);
 ```
 
+### Manage order lines
+Use this endpoint to update, cancel, or add one or more order lines. This endpoint sends a single authorisation request that contains the final order lines and amount to the supplier.
+```c#
+IOrderClient orderClient = new OrderClient("{yourApiKey}");
+ManageOrderLinesRequest manageOrderLinesRequest = new ManageOrderLinesRequest() {
+	Operations = new List<ManageOrderLinesOperation> {
+		new ManageOrderLinesAddOperation() {
+			Data = new ManageOrderLinesAddOperationData {
+				Name = "new-order-line",
+				// Other properties of order line to add
+			}
+		},
+		new ManageOrderLinesUpdateOperation {
+			Data = new ManageOrderLinesUpdateOperationData {
+				Id = "{yourOrderLineIdToUpdate}",
+				Name = "updated-name"
+				// ... Other properties you'd like to update
+			}
+		},
+		new ManageOrderLinesCancelOperation {
+			Data = new ManagerOrderLinesCancelOperationData {
+				Id = "{yourOrderLineIdToCancel}",
+				Quantity = 1
+			}
+		}
+	}
+};
+OrderResponse updatedOrder = await this._orderClient.ManageOrderLinesAsync(createdOrder.Id, manageOrderLinesRequest);
+```
+
+
 ### Retrieve list of orders
 Retrieve all orders.
 ```c#
