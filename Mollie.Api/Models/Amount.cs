@@ -1,8 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 
 namespace Mollie.Api.Models {
     public class Amount {
+        private static readonly IDictionary<string, string> CurrenciesWithAlternativeDecimalPrecision =
+            new Dictionary<string, string>() {
+                { "JPY", "0" },
+                { "ISK", "0" },
+            };
+
         /// <summary>
         /// An ISO 4217 currency code. The currencies supported depend on the payment methods that are enabled on your account.
         /// </summary>
@@ -25,7 +32,7 @@ namespace Mollie.Api.Models {
         /// <param name="value"></param>
         public Amount(string currency, decimal value) {
             this.Currency = currency;
-            this.Value = value.ToString("0.00", CultureInfo.InvariantCulture);
+            this.Value = ConvertDecimalAmountToStringAmount(currency, value);
         }
 
         public Amount() { }
@@ -37,6 +44,15 @@ namespace Mollie.Api.Models {
         public static implicit operator decimal(Amount amount)
             => Decimal.TryParse(amount.Value, NumberStyles.Number, CultureInfo.InvariantCulture, out var a) ? a : throw new InvalidCastException($"Cannot convert {amount.Value} to decimal");
 
+        private static string ConvertDecimalAmountToStringAmount(string currency, decimal value) {
+            if (CurrenciesWithAlternativeDecimalPrecision.ContainsKey(currency)) {
+                string format = CurrenciesWithAlternativeDecimalPrecision[currency];
+                return value.ToString(format, CultureInfo.InvariantCulture);
+            }
+            
+            return value.ToString("0.00", CultureInfo.InvariantCulture);
+        }
+        
         public override string ToString() {
             return $"{this.Value} {this.Currency}";
         }
