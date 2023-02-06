@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using Mollie.Api.Models;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Payment;
 using Mollie.Api.Models.PaymentMethod;
@@ -120,6 +121,19 @@ namespace Mollie.Tests.Integration.Api {
             // Then: We should have one or multiple issuers
             Assert.IsTrue(paymentMethods.Items.Any(x => x.Issuers != null));
             Assert.IsTrue(paymentMethods.Items.Any(x => x.Pricing != null && x.Pricing.Any(y => y.Fixed.Value > 0)));
+        }
+        
+        [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [TestCase("JPY", 249)]
+        [TestCase("ISK", 50)]
+        [TestCase("EUR", 50.25)]
+        public async Task GetPaymentMethodListAsync_WithVariousCurrencies_ReturnsAvailablePaymentMethods(string currency, decimal value) {
+            // When: Retrieving the payment methods for a currency and amount
+            var amount = new Amount(currency, value);
+            var paymentMethods = await this._paymentMethodClient.GetPaymentMethodListAsync(amount: amount);
+            
+            // Then: We should have multiple payment methods
+            Assert.IsTrue(paymentMethods.Count > 0);
         }
     }
 }
