@@ -10,6 +10,7 @@ using NUnit.Framework;
 
 namespace Mollie.Tests.Integration.Api {
     [TestFixture]
+    [Category("AccessKeyIntegrationTest")]
     public class BalanceTests : BaseMollieApiTestClass {
         [Test][RetryOnApiRateLimitFailure(NumberOfRetries)]
         public async Task GetPrimaryBalanceAsync_IsParsedCorrectly() {
