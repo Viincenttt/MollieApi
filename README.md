@@ -13,29 +13,23 @@ Want to chat with other developers regarding the Mollie API? The official Mollie
 Have you spotted a bug or want to add a missing feature? All pull requests are welcome! Please provide a description of the bug or feature you have fixed/added. Make sure to target the latest development branch. 
 
 ## Table of contents
-[1. Mollie API v1 and V2](#1-mollie-api-v1-and-v2)  
-[2. Getting started](#2-getting-started)  
-[3. Payment API](#3-payment-api)  
-[4. Payment method API](#4-payment-method-api)  
-[5. Refund API](#5-refund-api)  
-[6. Customer API](#6-customer-api)  
-[7. Mandate API](#7-mandate-api)  
-[8. Subscription API](#8-subscription-api)  
-[9. Order API](#9-order-api)  
-[10. Organizations API](#10-organizations-api)  
-[11. Connect Api](#11-connect-api)  
-[12. Profile Api](#12-profile-api)  
-[13. Captures API](#13-captures-api)  
-[14. Onboarding Api](#14-onboarding-api)  
-[15. Payment link Api](#15-payment-link-api)  
-[16. Balances Api](#16-balances-api)  
+[1. Getting started](#2-getting-started)  
+[2. Payment API](#3-payment-api)  
+[3. Payment method API](#4-payment-method-api)  
+[4. Refund API](#5-refund-api)  
+[5. Customer API](#6-customer-api)  
+[6. Mandate API](#7-mandate-api)  
+[7. Subscription API](#8-subscription-api)  
+[8. Order API](#9-order-api)  
+[9. Organizations API](#10-organizations-api)  
+[10. Connect Api](#11-connect-api)  
+[11. Profile Api](#12-profile-api)  
+[12. Captures API](#13-captures-api)  
+[13. Onboarding Api](#14-onboarding-api)  
+[14. Payment link Api](#15-payment-link-api)  
+[15. Balances Api](#16-balances-api)  
 
-## 1. Mollie API v1 and v2
-In May 2018, Mollie launched version 2 of their API. Version 2 offers support for multicurrency, improved error messages and much more.  The current version of the Mollie API client supports all API version 2 features. If you want to keep using version 1, you can use version 1.5.2 of the Mollie API Nuget package. Version 2.0.0+ of the Mollie API client supports version 2 of the API.  
-
-Mollie API version 2 is not backwards compatible with version 1. This means some of the Mollie API client code has been changed and you will need to update your project if you want to use Mollie API client version 2.0.0+. Please take a look at the [Mollie migration guide](https://docs.mollie.com/payments/migrating-v1-to-v2) for assistence.
-
-## 2. Getting started
+## 1. Getting started
 
 ### Installing the library
 The easiest way to install the Mollie Api library is to use the [Nuget Package](https://www.nuget.org/packages/Mollie.Api).
@@ -172,7 +166,7 @@ public static class MollieApiClientServiceExtensions {
 }
 ```
 
-## 3. Payment API
+## 2. Payment API
 ### Creating a payment
 ```c#
 IPaymentClient paymentClient = new PaymentClient("{yourApiKey}");
@@ -310,7 +304,7 @@ ListResponse<PaymentResponse> response = await paymentClient.GetPaymentListAsync
 
 
 
-## 4. Payment method API
+## 3. Payment method API
 ### Retrieving a list of all payment methods
 Mollie allows you to set offset and count properties so you can paginate the list. The offset and count parameters are optional.
 ```c#
@@ -326,7 +320,7 @@ IPaymentMethodClient _paymentMethodClient = new PaymentMethodClient("{yourApiKey
 PaymentMethodResponse paymentMethodResponse = await paymentMethodClient.GetPaymentMethodAsync(PaymentMethod.Ideal);
 ```
 
-## 5. Refund API
+## 4. Refund API
 ### Create a new refund
 ```c#
 IRefundClient refundClient = new RefundClient("{yourApiKey}");
@@ -357,7 +351,7 @@ await refundClient.CancelRefundAsync("{paymentId}", "{refundId}");
 
 
 
-## 6. Customer API
+## 5. Customer API
 ### Creating a new customer
 Customers will appear in the Mollie Dashboard where you can manage their details, and also view their payments and subscriptions.
 ```c#
@@ -415,7 +409,7 @@ PaymentResponse result = await customerClient.CreateCustomerPayment({customerId}
 ```
 
 
-## 7. Mandate API
+## 6. Mandate API
 Mandates allow you to charge a customer’s credit card or bank account recurrently.
 
 ### Creating a new mandate
@@ -454,7 +448,7 @@ await mandateclient.RevokeMandate("{customerId}", "{mandateId}");
 
 
 
-## 8. Subscription API
+## 7. Subscription API
 With subscriptions, you can schedule recurring payments to take place at regular intervals. For example, by simply specifying an amount and an interval, you can create an endless subscription to charge a monthly fee, until the consumer cancels their subscription. Or, you could use the times parameter to only charge a limited number of times, for example to split a big transaction in multiple parts. You must create a mandate with the customers ID before a subscription can be made.
 
 ### Creating a new subscription
@@ -517,7 +511,7 @@ await subscriptionClient.UpdateSubscriptionAsync("{customerId}", "{subscriptionI
 
 
 
-## 9. Order API
+## 8. Order API
 The Orders API allows you to use Mollie for your order management. Pay after delivery payment methods, such as Klarna Pay later and Klarna Slice it require the Orders API and cannot be used with the Payments API.
 
 ### Creating a new order
@@ -737,7 +731,7 @@ IOrderClient orderClient = new OrderClient("{yourApiKey}");
 ListResponse<RefundResponse> result = await orderClient.GetOrderRefundListAsync({orderId});
 ```
 
-## 10. Organizations API
+## 9. Organizations API
 ### Get current organization
 Retrieve the currently authenticated organization.
 ```C#
@@ -751,7 +745,7 @@ IOrganizationsClient client = new OrganizationsClient("{yourApiKey}");
 OrganizationResponse result = await client.GetOrganizationAsync({organizationId});
 ```
 
-## 11. Connect Api
+## 10. Connect Api
 ### Creating a authorization URL
 The Authorize endpoint is the endpoint on Mollie web site where the merchant logs in, and grants authorization to your client application. E.g. when the merchant clicks on the Connect with Mollie button, you should redirect the merchant to the Authorize endpoint.
 ```C#
@@ -779,7 +773,7 @@ RevokeTokenRequest revokeTokenRequest = new RevokeTokenRequest() {
 TokenResponse result = client.RevokeTokenAsync(revokeTokenRequest);
 ```
 
-## 12. Profile Api
+## 11. Profile Api
 ### Create profile
 In order to process payments, you need to create a website profile. A website profile can easily be created via the Dashboard manually. However, the Mollie API also allows automatic profile creation via the Profiles API.
 ```C#
@@ -835,7 +829,7 @@ EnableGiftCardIssuerResponse paymentMethodResponse = await profileClient.EnableG
 await profileClient.DisableGiftCardIssuerAsync({profileId}, issuerToToggle);
 ```
 
-## 13. Captures API
+## 12. Captures API
 ### Get capture
 Retrieve a single capture by its ID. Note the original payment’s ID is needed as well.
 ```C#
@@ -850,7 +844,7 @@ CaptureClient captureClient = new CaptureClient({yourApiKey});
 ListResponse<CaptureResponse> result = await captureClient.GetCapturesListAsync({paymentId});
 ```
 
-## 14. Onboarding Api
+## 13. Onboarding Api
 ### Get onboarding status
 Get the status of onboarding of the authenticated organization.
 ```C#
@@ -876,7 +870,7 @@ OnboardingClient onboardingClient = new OnboardingClient({yourApiKey});
 await onboardingClient.SubmitOnboardingDataAsync(submitOnboardingDataRequest);
 ```
 
-## 15. Payment link Api
+## 14. Payment link Api
 ### Create payment link
 ```C#
 PaymentLinkRequest paymentLinkRequest = new PaymentLinkRequest() {
@@ -902,7 +896,7 @@ PaymentLinkClient client = new PaymentLinkClient({yourApiKey});
 ListResponse<PaymentLinkResponse> response = await this._paymentLinkClient.GetPaymentLinkListAsync();
 ```
 
-## 16. Balances Api
+## 15. Balances Api
 ### Get balance
 Retrieve a balance using a balance id string identifier. 
 ```C#
