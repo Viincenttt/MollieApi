@@ -13,7 +13,7 @@ Want to chat with other developers regarding the Mollie API? The official Mollie
 Have you spotted a bug or want to add a missing feature? All pull requests are welcome! Please provide a description of the bug or feature you have fixed/added. Make sure to target the latest development branch. 
 
 ## Table of contents
-[1. Getting started](#12-getting-started)  
+[1. Getting started](#1-getting-started)  
 [2. Payment API](#2-payment-api)  
 [3. Payment method API](#3-payment-method-api)  
 [4. Refund API](#4-refund-api)  
