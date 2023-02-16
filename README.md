@@ -13,21 +13,21 @@ Want to chat with other developers regarding the Mollie API? The official Mollie
 Have you spotted a bug or want to add a missing feature? All pull requests are welcome! Please provide a description of the bug or feature you have fixed/added. Make sure to target the latest development branch. 
 
 ## Table of contents
-[1. Getting started](#2-getting-started)  
-[2. Payment API](#3-payment-api)  
-[3. Payment method API](#4-payment-method-api)  
-[4. Refund API](#5-refund-api)  
-[5. Customer API](#6-customer-api)  
-[6. Mandate API](#7-mandate-api)  
-[7. Subscription API](#8-subscription-api)  
-[8. Order API](#9-order-api)  
-[9. Organizations API](#10-organizations-api)  
-[10. Connect Api](#11-connect-api)  
-[11. Profile Api](#12-profile-api)  
-[12. Captures API](#13-captures-api)  
-[13. Onboarding Api](#14-onboarding-api)  
-[14. Payment link Api](#15-payment-link-api)  
-[15. Balances Api](#16-balances-api)  
+[1. Getting started](#12-getting-started)  
+[2. Payment API](#2-payment-api)  
+[3. Payment method API](#3-payment-method-api)  
+[4. Refund API](#4-refund-api)  
+[5. Customer API](#5-customer-api)  
+[6. Mandate API](#6-mandate-api)  
+[7. Subscription API](#7-subscription-api)  
+[8. Order API](#8-order-api)  
+[9. Organizations API](#9-organizations-api)  
+[10. Connect Api](#10-connect-api)  
+[11. Profile Api](#11-profile-api)  
+[12. Captures API](#12-captures-api)  
+[13. Onboarding Api](#13-onboarding-api)  
+[14. Payment link Api](#14-payment-link-api)  
+[15. Balances Api](#15-balances-api)  
 
 ## 1. Getting started
 
