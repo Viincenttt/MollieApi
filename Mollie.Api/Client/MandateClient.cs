@@ -14,17 +14,21 @@ namespace Mollie.Api.Client {
         }
 
         public async Task<MandateResponse> GetMandateAsync(string customerId, string mandateId, bool testmode = false) {
+            this.ValidateRequiredUrlParameter(nameof(customerId), customerId);
+            this.ValidateRequiredUrlParameter(nameof(mandateId), mandateId);
             var queryParameters = this.BuildQueryParameters(testmode);
             return await this.GetAsync<MandateResponse>($"customers/{customerId}/mandates/{mandateId}{queryParameters.ToQueryString()}").ConfigureAwait(false);
         }
 
         public async Task<ListResponse<MandateResponse>> GetMandateListAsync(string customerId, string from = null, int? limit = null, bool testmode = false) {
+            this.ValidateRequiredUrlParameter(nameof(customerId), customerId);
             var queryParameters = this.BuildQueryParameters(testmode);
             return await this.GetListAsync<ListResponse<MandateResponse>>($"customers/{customerId}/mandates", from, limit, queryParameters)
                 .ConfigureAwait(false);
         }
 
         public async Task<MandateResponse> CreateMandateAsync(string customerId, MandateRequest request) {
+            this.ValidateRequiredUrlParameter(nameof(customerId), customerId);
             return await this.PostAsync<MandateResponse>($"customers/{customerId}/mandates", request).ConfigureAwait(false);
         }
 
