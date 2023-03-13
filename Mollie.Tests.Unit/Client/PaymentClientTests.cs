@@ -165,7 +165,6 @@ namespace Mollie.Tests.Unit.Client {
             Assert.IsNull(paymentResponse.Method);
         }
 
-
         [Test]
         public async Task CreatePaymentAsync_IncludeQrCode_QueryStringContainsIncludeQrCodeParameter() {
             // Given: We make a request to create a payment and include the QR code
@@ -199,6 +198,22 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
+        }
+        
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase(null)]
+        public void GetPaymentAsync_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string paymentId) {
+            // Arrange
+            var mockHttp = new MockHttpMessageHandler();
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
+
+            // When: We send the request
+            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await paymentClient.GetPaymentAsync(paymentId));
+
+            // Then
+            Assert.AreEqual($"Required URL argument 'paymentId' is null or empty", exception.Message); 
         }
 
         [Test]
@@ -321,6 +336,38 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
+        }
+        
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase(null)]
+        public void DeletePaymentAsync_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string paymentId) {
+            // Arrange
+            var mockHttp = new MockHttpMessageHandler();
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
+
+            // When: We send the request
+            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await paymentClient.DeletePaymentAsync(paymentId));
+
+            // Then
+            Assert.AreEqual($"Required URL argument 'paymentId' is null or empty", exception.Message); 
+        }
+        
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase(null)]
+        public void UpdatePaymentAsync_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string paymentId) {
+            // Arrange
+            var mockHttp = new MockHttpMessageHandler();
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
+
+            // When: We send the request
+            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await paymentClient.UpdatePaymentAsync(paymentId, new PaymentUpdateRequest()));
+
+            // Then
+            Assert.AreEqual($"Required URL argument 'paymentId' is null or empty", exception.Message); 
         }
 
         private void AssertPaymentIsEqual(PaymentRequest paymentRequest, PaymentResponse paymentResponse) {

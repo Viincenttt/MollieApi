@@ -30,6 +30,8 @@ namespace Mollie.Api.Client {
 	            this.ValidateApiKeyIsOauthAccesstoken();
             }
 
+            this.ValidateRequiredUrlParameter(nameof(paymentId), paymentId);
+
             var queryParameters = this.BuildQueryParameters(
                 testmode: testmode,
                 includeQrCode: includeQrCode,
@@ -41,6 +43,8 @@ namespace Mollie.Api.Client {
 		}
 
 		public async Task DeletePaymentAsync(string paymentId, bool testmode = false) {
+            this.ValidateRequiredUrlParameter(nameof(paymentId), paymentId);
+            
             var data = TestmodeModel.Create(testmode);
 		    await this.DeleteAsync($"payments/{paymentId}", data).ConfigureAwait(false);
 		}
@@ -69,6 +73,8 @@ namespace Mollie.Api.Client {
 		}
 
         public async Task<PaymentResponse> UpdatePaymentAsync(string paymentId, PaymentUpdateRequest paymentUpdateRequest) {
+            this.ValidateRequiredUrlParameter(nameof(paymentId), paymentId);
+            
             return await this.PatchAsync<PaymentResponse>($"payments/{paymentId}", paymentUpdateRequest).ConfigureAwait(false);
         }
 

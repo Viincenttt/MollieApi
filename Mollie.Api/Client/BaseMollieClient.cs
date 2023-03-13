@@ -148,5 +148,11 @@ namespace Mollie.Api.Client {
             string versionNumber = typeof(BaseMollieClient).GetTypeInfo().Assembly.GetName().Version.ToString();
             return $"{packageName}/{versionNumber}";
         }
+        
+        protected void ValidateRequiredUrlParameter(string parameterName, string parameterValue) {
+            if (string.IsNullOrWhiteSpace(parameterValue)) {
+                throw new ArgumentException($"Required URL argument '{parameterName}' is null or empty");
+            }
+        }
     }
 }
