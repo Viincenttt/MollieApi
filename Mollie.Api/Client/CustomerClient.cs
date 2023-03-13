@@ -20,15 +20,18 @@ namespace Mollie.Api.Client {
         }
 
         public async Task<CustomerResponse> UpdateCustomerAsync(string customerId, CustomerRequest request) {
+            this.ValidateRequiredUrlParameter(nameof(customerId), customerId);
             return await this.PostAsync<CustomerResponse>($"customers/{customerId}", request).ConfigureAwait(false);
         }
 
         public async Task DeleteCustomerAsync(string customerId, bool testmode = false) {
+            this.ValidateRequiredUrlParameter(nameof(customerId), customerId);
             var data = TestmodeModel.Create(testmode);
             await this.DeleteAsync($"customers/{customerId}", data).ConfigureAwait(false);
         }
 
         public async Task<CustomerResponse> GetCustomerAsync(string customerId, bool testmode = false) {
+            this.ValidateRequiredUrlParameter(nameof(customerId), customerId);
             var queryParameters = this.BuildQueryParameters(testmode);
             return await this.GetAsync<CustomerResponse>($"customers/{customerId}{queryParameters.ToQueryString()}").ConfigureAwait(false);
         }
@@ -48,11 +51,13 @@ namespace Mollie.Api.Client {
         }
 
         public async Task<ListResponse<PaymentResponse>> GetCustomerPaymentListAsync(string customerId, string from = null, int? limit = null, string profileId = null, bool testmode = false) {
+            this.ValidateRequiredUrlParameter(nameof(customerId), customerId);
             var queryParameters = this.BuildQueryParameters(profileId, testmode);
             return await this.GetListAsync<ListResponse<PaymentResponse>>($"customers/{customerId}/payments", from, limit, queryParameters).ConfigureAwait(false);
         }
 
         public async Task<PaymentResponse> CreateCustomerPayment(string customerId, PaymentRequest paymentRequest) {
+            this.ValidateRequiredUrlParameter(nameof(customerId), customerId);
             return await this.PostAsync<PaymentResponse>($"customers/{customerId}/payments", paymentRequest).ConfigureAwait(false);
         }
         

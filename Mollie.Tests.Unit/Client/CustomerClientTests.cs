@@ -1,7 +1,9 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client;
 using Mollie.Api.Models.Customer;
+using Mollie.Api.Models.Payment.Request;
 using NUnit.Framework;
 using RichardSzalay.MockHttp;
 
@@ -83,6 +85,86 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
+        }
+        
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase(null)]
+        public void UpdateCustomerAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string customerId) {
+            // Arrange
+            var mockHttp = new MockHttpMessageHandler();
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            CustomerClient customerClient = new CustomerClient("api-key", httpClient);
+
+            // When: We send the request
+            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await customerClient.UpdateCustomerAsync(customerId, new CustomerRequest()));
+
+            // Then
+            Assert.AreEqual($"Required URL argument 'customerId' is null or empty", exception.Message); 
+        }
+        
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase(null)]
+        public void DeleteCustomerAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string customerId) {
+            // Arrange
+            var mockHttp = new MockHttpMessageHandler();
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            CustomerClient customerClient = new CustomerClient("api-key", httpClient);
+
+            // When: We send the request
+            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await customerClient.DeleteCustomerAsync(customerId));
+
+            // Then
+            Assert.AreEqual($"Required URL argument 'customerId' is null or empty", exception.Message); 
+        }
+        
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase(null)]
+        public void GetCustomerAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string customerId) {
+            // Arrange
+            var mockHttp = new MockHttpMessageHandler();
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            CustomerClient customerClient = new CustomerClient("api-key", httpClient);
+
+            // When: We send the request
+            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await customerClient.GetCustomerAsync(customerId));
+
+            // Then
+            Assert.AreEqual($"Required URL argument 'customerId' is null or empty", exception.Message); 
+        }
+        
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase(null)]
+        public void GetCustomerPaymentListAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string customerId) {
+            // Arrange
+            var mockHttp = new MockHttpMessageHandler();
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            CustomerClient customerClient = new CustomerClient("api-key", httpClient);
+
+            // When: We send the request
+            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await customerClient.GetCustomerPaymentListAsync(customerId));
+
+            // Then
+            Assert.AreEqual($"Required URL argument 'customerId' is null or empty", exception.Message); 
+        }
+        
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase(null)]
+        public void CreateCustomerPayment_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string customerId) {
+            // Arrange
+            var mockHttp = new MockHttpMessageHandler();
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            CustomerClient customerClient = new CustomerClient("api-key", httpClient);
+
+            // When: We send the request
+            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await customerClient.CreateCustomerPayment(customerId, new PaymentRequest()));
+
+            // Then
+            Assert.AreEqual($"Required URL argument 'customerId' is null or empty", exception.Message); 
         }
 
         private const string DefaultCustomerJsonToReturn = @"{
