@@ -15,6 +15,7 @@ namespace Mollie.Api.Client {
         }
 
         public async Task<SettlementResponse> GetSettlementAsync(string settlementId) {
+            this.ValidateRequiredUrlParameter(nameof(settlementId), settlementId);
             return await this.GetAsync<SettlementResponse>($"settlements/{settlementId}").ConfigureAwait(false);
         }
 
@@ -32,14 +33,17 @@ namespace Mollie.Api.Client {
         }
 
         public async Task<ListResponse<PaymentResponse>> GetSettlementPaymentsListAsync(string settlementId, string offset = null, int? count = null) {
+            this.ValidateRequiredUrlParameter(nameof(settlementId), settlementId);
             return await this.GetListAsync<ListResponse<PaymentResponse>>($"settlements/{settlementId}/payments", offset, count).ConfigureAwait(false);
         }
 
         public async Task<ListResponse<RefundResponse>> GetSettlementRefundsListAsync(string settlementId, string offset = null, int? count = null) {
+            this.ValidateRequiredUrlParameter(nameof(settlementId), settlementId);
             return await this.GetListAsync<ListResponse<RefundResponse>>($"settlements/{settlementId}/refunds", offset, count).ConfigureAwait(false);
         }
 
         public async Task<ListResponse<ChargebackResponse>> GetSettlementChargebacksListAsync(string settlementId, string offset = null, int? count = null) {
+            this.ValidateRequiredUrlParameter(nameof(settlementId), settlementId);
             return await this.GetListAsync<ListResponse<ChargebackResponse>>($"settlements/{settlementId}/chargebacks", offset, count).ConfigureAwait(false);
         }
 
@@ -48,6 +52,7 @@ namespace Mollie.Api.Client {
         }
 
         public async Task<ListResponse<CaptureResponse>> ListSettlementCapturesAsync(string settlementId) {
+            this.ValidateRequiredUrlParameter(nameof(settlementId), settlementId);
             return await this.GetListAsync<ListResponse<CaptureResponse>>($"settlements/{settlementId}/captures", null, null).ConfigureAwait(false);
         }
     }

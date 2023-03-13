@@ -83,7 +83,7 @@ namespace Mollie.Tests.Unit.Client {
         [TestCase("")]
         [TestCase(" ")]
         [TestCase(null)]
-        public void GetPaymentMethodAsync_NoPaymentLinkIdIsGiven_ArgumentExceptionIsThrown(string paymentLinkId) {
+        public void GetPaymentMethodAsync_NoPaymentMethodIsGiven_ArgumentExceptionIsThrown(string paymentLinkId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();

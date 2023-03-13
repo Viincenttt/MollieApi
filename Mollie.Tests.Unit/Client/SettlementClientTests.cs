@@ -1,4 +1,5 @@
-﻿using Mollie.Api.Client;
+﻿using System;
+using Mollie.Api.Client;
 using Mollie.Api.Models.Capture;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Settlement;
@@ -6,6 +7,7 @@ using NUnit.Framework;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using RichardSzalay.MockHttp;
 
 namespace Mollie.Tests.Unit.Client {
     [TestFixture]
@@ -231,6 +233,86 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.VerifyNoOutstandingExpectation();
             Assert.IsNotNull(settlementResponse);
             Assert.AreEqual(0, settlementResponse.Periods.Count);
+        }
+        
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase(null)]
+        public void GetSettlementAsync_NoSettlementIdIsGiven_ArgumentExceptionIsThrown(string settlementId) {
+            // Arrange
+            var mockHttp = new MockHttpMessageHandler();
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            SettlementsClient settlementsClient = new SettlementsClient("api-key", httpClient);
+
+            // When: We send the request
+            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await settlementsClient.GetSettlementAsync(settlementId));
+
+            // Then
+            Assert.AreEqual($"Required URL argument 'settlementId' is null or empty", exception.Message); 
+        }
+        
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase(null)]
+        public void GetSettlementPaymentsListAsync_NoSettlementIdIsGiven_ArgumentExceptionIsThrown(string settlementId) {
+            // Arrange
+            var mockHttp = new MockHttpMessageHandler();
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            SettlementsClient settlementsClient = new SettlementsClient("api-key", httpClient);
+
+            // When: We send the request
+            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await settlementsClient.GetSettlementPaymentsListAsync(settlementId));
+
+            // Then
+            Assert.AreEqual($"Required URL argument 'settlementId' is null or empty", exception.Message); 
+        }
+        
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase(null)]
+        public void GetSettlementRefundsListAsync_NoSettlementIdIsGiven_ArgumentExceptionIsThrown(string settlementId) {
+            // Arrange
+            var mockHttp = new MockHttpMessageHandler();
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            SettlementsClient settlementsClient = new SettlementsClient("api-key", httpClient);
+
+            // When: We send the request
+            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await settlementsClient.GetSettlementRefundsListAsync(settlementId));
+
+            // Then
+            Assert.AreEqual($"Required URL argument 'settlementId' is null or empty", exception.Message); 
+        }
+        
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase(null)]
+        public void GetSettlementChargebacksListAsync_NoSettlementIdIsGiven_ArgumentExceptionIsThrown(string settlementId) {
+            // Arrange
+            var mockHttp = new MockHttpMessageHandler();
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            SettlementsClient settlementsClient = new SettlementsClient("api-key", httpClient);
+
+            // When: We send the request
+            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await settlementsClient.GetSettlementChargebacksListAsync(settlementId));
+
+            // Then
+            Assert.AreEqual($"Required URL argument 'settlementId' is null or empty", exception.Message); 
+        }
+        
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase(null)]
+        public void ListSettlementCapturesAsync_NoSettlementIdIsGiven_ArgumentExceptionIsThrown(string settlementId) {
+            // Arrange
+            var mockHttp = new MockHttpMessageHandler();
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            SettlementsClient settlementsClient = new SettlementsClient("api-key", httpClient);
+
+            // When: We send the request
+            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await settlementsClient.ListSettlementCapturesAsync(settlementId));
+
+            // Then
+            Assert.AreEqual($"Required URL argument 'settlementId' is null or empty", exception.Message); 
         }
     }    
 }
