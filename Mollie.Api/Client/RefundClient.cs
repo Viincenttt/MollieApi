@@ -13,6 +13,8 @@ namespace Mollie.Api.Client {
         }
 
         public async Task<RefundResponse> CreateRefundAsync(string paymentId, RefundRequest refundRequest) {
+            this.ValidateRequiredUrlParameter(nameof(paymentId), paymentId);
+            
             if (refundRequest.Testmode.HasValue)
             {
                 this.ValidateApiKeyIsOauthAccesstoken();
@@ -28,6 +30,7 @@ namespace Mollie.Api.Client {
         }
         
         public async Task<ListResponse<RefundResponse>> GetRefundListAsync(string paymentId, string from = null, int? limit = null, bool testmode = false) {
+            this.ValidateRequiredUrlParameter(nameof(paymentId), paymentId);
             var queryParameters = this.BuildQueryParameters(testmode: testmode);
 
             return await this.GetListAsync<ListResponse<RefundResponse>>($"payments/{paymentId}/refunds", from, limit, queryParameters).ConfigureAwait(false);
@@ -38,11 +41,15 @@ namespace Mollie.Api.Client {
         }
 
         public async Task<RefundResponse> GetRefundAsync(string paymentId, string refundId, bool testmode = false) {
+            this.ValidateRequiredUrlParameter(nameof(paymentId), paymentId);
+            this.ValidateRequiredUrlParameter(nameof(refundId), refundId);
             var queryParameters = this.BuildQueryParameters(testmode: testmode);
             return await this.GetAsync<RefundResponse>($"payments/{paymentId}/refunds/{refundId}{queryParameters.ToQueryString()}").ConfigureAwait(false);
         }
 
         public async Task CancelRefundAsync(string paymentId, string refundId, bool testmode = default) {
+            this.ValidateRequiredUrlParameter(nameof(paymentId), paymentId);
+            this.ValidateRequiredUrlParameter(nameof(refundId), refundId);
             var queryParameters = this.BuildQueryParameters(testmode: testmode);
             await this.DeleteAsync($"payments/{paymentId}/refunds/{refundId}{queryParameters.ToQueryString()}").ConfigureAwait(false);
         }

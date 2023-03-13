@@ -1,7 +1,10 @@
-﻿using Mollie.Api.Client;
+﻿using System;
+using Mollie.Api.Client;
 using NUnit.Framework;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Mollie.Api.Models.Refund;
+using RichardSzalay.MockHttp;
 
 namespace Mollie.Tests.Unit.Client {
     [TestFixture]
@@ -54,6 +57,102 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
             Assert.IsNotNull(refundResponse);
+        }
+        
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase(null)]
+        public void CreateRefundAsync_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string paymentId) {
+            // Arrange
+            var mockHttp = new MockHttpMessageHandler();
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            RefundClient refundClient = new RefundClient("api-key", httpClient);
+
+            // When: We send the request
+            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await refundClient.CreateRefundAsync(paymentId, new RefundRequest()));
+
+            // Then
+            Assert.AreEqual($"Required URL argument 'paymentId' is null or empty", exception.Message); 
+        }
+        
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase(null)]
+        public void GetRefundListAsync_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string paymentId) {
+            // Arrange
+            var mockHttp = new MockHttpMessageHandler();
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            RefundClient refundClient = new RefundClient("api-key", httpClient);
+
+            // When: We send the request
+            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await refundClient.GetRefundListAsync(paymentId: paymentId));
+
+            // Then
+            Assert.AreEqual($"Required URL argument 'paymentId' is null or empty", exception.Message); 
+        }
+        
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase(null)]
+        public void GetRefundAsync_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string paymentId) {
+            // Arrange
+            var mockHttp = new MockHttpMessageHandler();
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            RefundClient refundClient = new RefundClient("api-key", httpClient);
+
+            // When: We send the request
+            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await refundClient.GetRefundAsync(paymentId, "refund-id"));
+
+            // Then
+            Assert.AreEqual($"Required URL argument 'paymentId' is null or empty", exception.Message); 
+        }
+        
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase(null)]
+        public void GetRefundAsync_NoRefundIsGiven_ArgumentExceptionIsThrown(string refundId) {
+            // Arrange
+            var mockHttp = new MockHttpMessageHandler();
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            RefundClient refundClient = new RefundClient("api-key", httpClient);
+
+            // When: We send the request
+            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await refundClient.GetRefundAsync("payment-id", refundId));
+
+            // Then
+            Assert.AreEqual($"Required URL argument 'refundId' is null or empty", exception.Message); 
+        }
+        
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase(null)]
+        public void CancelRefundAsync_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string paymentId) {
+            // Arrange
+            var mockHttp = new MockHttpMessageHandler();
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            RefundClient refundClient = new RefundClient("api-key", httpClient);
+
+            // When: We send the request
+            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await refundClient.CancelRefundAsync(paymentId, "refund-id"));
+
+            // Then
+            Assert.AreEqual($"Required URL argument 'paymentId' is null or empty", exception.Message); 
+        }
+        
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase(null)]
+        public void CancelRefundAsync_NoRefundIsGiven_ArgumentExceptionIsThrown(string refundId) {
+            // Arrange
+            var mockHttp = new MockHttpMessageHandler();
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            RefundClient refundClient = new RefundClient("api-key", httpClient);
+
+            // When: We send the request
+            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await refundClient.CancelRefundAsync("payment-id", refundId));
+
+            // Then
+            Assert.AreEqual($"Required URL argument 'refundId' is null or empty", exception.Message); 
         }
     }
 }
