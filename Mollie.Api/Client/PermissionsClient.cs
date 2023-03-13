@@ -1,7 +1,6 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
-using Mollie.Api.Models;
 using Mollie.Api.Models.List;
 
 using Mollie.Api.Models.Permission;
@@ -13,6 +12,7 @@ namespace Mollie.Api.Client {
         }
 
         public async Task<PermissionResponse> GetPermissionAsync(string permissionId) {
+            this.ValidateRequiredUrlParameter(nameof(permissionId), permissionId);
             return await this.GetAsync<PermissionResponse>($"permissions/{permissionId}").ConfigureAwait(false);
         }
 
