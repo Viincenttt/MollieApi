@@ -9,7 +9,9 @@ using Mollie.Api.Models.Balance.Response.BalanceReport;
 using Mollie.Api.Models.Balance.Response.BalanceReport.Specific.StatusBalance;
 using Mollie.Api.Models.Balance.Response.BalanceReport.Specific.TransactionCategories;
 using Mollie.Api.Models.Balance.Response.BalanceTransaction.Specific;
+using Mollie.Api.Models.Payment.Request;
 using NUnit.Framework;
+using RichardSzalay.MockHttp;
 
 namespace Mollie.Tests.Unit.Client {
     public class BalanceClientTests : BaseClientTests {
@@ -45,6 +47,22 @@ namespace Mollie.Tests.Unit.Client {
           Assert.AreEqual(getBalanceResponseFactory.TransferDestination.Type, balanceResponse.TransferDestination.Type);
           Assert.AreEqual(getBalanceResponseFactory.TransferDestination.BankAccount, balanceResponse.TransferDestination.BankAccount);
           Assert.AreEqual(getBalanceResponseFactory.TransferDestination.BeneficiaryName, balanceResponse.TransferDestination.BeneficiaryName);
+      }
+      
+      [TestCase("")]
+      [TestCase(" ")]
+      [TestCase(null)]
+      public void GetBalanceAsync_NoBalanceIdIsGiven_ArgumentExceptionIsThrown(string balanceId) {
+          // Arrange
+          var mockHttp = new MockHttpMessageHandler();
+          HttpClient httpClient = mockHttp.ToHttpClient();
+          BalanceClient balanceClient = new BalanceClient("api-key", httpClient);
+
+          // When: We send the request
+          var exception = Assert.ThrowsAsync<ArgumentException>(async () => await balanceClient.GetBalanceAsync(balanceId));
+
+          // Then
+          Assert.AreEqual($"Required URL argument 'balanceId' is null or empty", exception.Message); 
       }
 
       [Test]
@@ -138,6 +156,24 @@ namespace Mollie.Tests.Unit.Client {
           Assert.AreEqual("ideal", childChildSubTotals.Method);
       }
       
+      [TestCase("")]
+      [TestCase(" ")]
+      [TestCase(null)]
+      public void GetBalanceReportAsync_NoBalanceIdIsGiven_ArgumentExceptionIsThrown(string balanceId) {
+          // Arrange
+          var mockHttp = new MockHttpMessageHandler();
+          HttpClient httpClient = mockHttp.ToHttpClient();
+          BalanceClient balanceClient = new BalanceClient("api-key", httpClient);
+          DateTime from = new DateTime(2022, 11, 1);
+          DateTime until = new DateTime(2022, 11, 30);
+
+          // When: We send the request
+          var exception = Assert.ThrowsAsync<ArgumentException>(async () => await balanceClient.GetBalanceReportAsync(balanceId, from, until));
+
+          // Then
+          Assert.AreEqual($"Required URL argument 'balanceId' is null or empty", exception.Message); 
+      }
+      
       [Test]
       public async Task GetBalanceReportAsync_StatusBalances_ResponseIsParsed() {
           // Given: We request a balance report
@@ -203,6 +239,22 @@ namespace Mollie.Tests.Unit.Client {
           var transactionContext = (SettlementBalanceTransaction)transaction;
           Assert.AreEqual("stl_ma2vu8", transactionContext.Context.SettlementId);
           Assert.AreEqual("trf_ma2vu8", transactionContext.Context.TransferId);
+      }
+      
+      [TestCase("")]
+      [TestCase(" ")]
+      [TestCase(null)]
+      public void ListBalanceTransactionsAsync_NoBalanceIdIsGiven_ArgumentExceptionIsThrown(string balanceId) {
+          // Arrange
+          var mockHttp = new MockHttpMessageHandler();
+          HttpClient httpClient = mockHttp.ToHttpClient();
+          BalanceClient balanceClient = new BalanceClient("api-key", httpClient);
+
+          // When: We send the request
+          var exception = Assert.ThrowsAsync<ArgumentException>(async () => await balanceClient.ListBalanceTransactionsAsync(balanceId));
+
+          // Then
+          Assert.AreEqual($"Required URL argument 'balanceId' is null or empty", exception.Message); 
       }
       
       [Test]

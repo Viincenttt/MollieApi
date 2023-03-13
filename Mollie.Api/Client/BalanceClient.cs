@@ -16,6 +16,7 @@ namespace Mollie.Api.Client {
         }
         
         public async Task<BalanceResponse> GetBalanceAsync(string balanceId) {
+            this.ValidateRequiredUrlParameter(nameof(balanceId), balanceId);
             return await this.GetAsync<BalanceResponse>($"balances/{balanceId}").ConfigureAwait(false);
         }
         
@@ -29,6 +30,7 @@ namespace Mollie.Api.Client {
         }
 
         public async Task<BalanceReportResponse> GetBalanceReportAsync(string balanceId, DateTime from, DateTime until, string grouping = null) {
+            this.ValidateRequiredUrlParameter(nameof(balanceId), balanceId);
             var queryParameters = BuildGetBalanceReportQueryParameters(from, until, grouping);
             return await this.GetAsync<BalanceReportResponse>($"balances/{balanceId}/report{queryParameters.ToQueryString()}").ConfigureAwait(false);
         }
@@ -39,6 +41,7 @@ namespace Mollie.Api.Client {
         }
 
         public async Task<BalanceTransactionResponse> ListBalanceTransactionsAsync(string balanceId, string from = null, int? limit = null) {
+            this.ValidateRequiredUrlParameter(nameof(balanceId), balanceId);
             var queryParameters = BuildListBalanceTransactionsQueryParameters(from, limit);
             return await this.GetAsync<BalanceTransactionResponse>($"balances/{balanceId}/transactions{queryParameters.ToQueryString()}").ConfigureAwait(false);
         }
