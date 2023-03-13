@@ -15,6 +15,7 @@ namespace Mollie.Api.Client {
         }
 
         public async Task<OrganizationResponse> GetOrganizationAsync(string organizationId) {
+            this.ValidateRequiredUrlParameter(nameof(organizationId), organizationId);
             return await this.GetAsync<OrganizationResponse>($"organizations/{organizationId}").ConfigureAwait(false);
         }
 
