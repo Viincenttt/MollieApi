@@ -12,12 +12,15 @@ namespace Mollie.Api.Client {
         }
 
         public async Task<ChargebackResponse> GetChargebackAsync(string paymentId, string chargebackId, bool testmode = false) {
+            this.ValidateRequiredUrlParameter(nameof(paymentId), paymentId);
+            this.ValidateRequiredUrlParameter(nameof(chargebackId), chargebackId);
             var queryParameters = this.BuildQueryParameters(testmode);
             return await this.GetAsync<ChargebackResponse>($"payments/{paymentId}/chargebacks/{chargebackId}{queryParameters.ToQueryString()}")
                 .ConfigureAwait(false);
         }
 
         public async Task<ListResponse<ChargebackResponse>> GetChargebacksListAsync(string paymentId, string from = null, int? limit = null, bool testmode = false) {
+            this.ValidateRequiredUrlParameter(nameof(paymentId), paymentId);
             var queryParameters = this.BuildQueryParameters(testmode);
             return await this
                 .GetListAsync<ListResponse<ChargebackResponse>>($"payments/{paymentId}/chargebacks", from, limit, queryParameters)

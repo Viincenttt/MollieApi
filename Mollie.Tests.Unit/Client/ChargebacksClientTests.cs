@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client;
 using Mollie.Api.Models.Chargeback;
@@ -121,6 +122,54 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then
             mockHttp.VerifyNoOutstandingRequest();
+        }
+        
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase(null)]
+        public void GetChargebackAsync_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string paymentId) {
+            // Arrange
+            var mockHttp = new MockHttpMessageHandler();
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            ChargebacksClient chargebacksClient = new ChargebacksClient("api-key", httpClient);
+
+            // When: We send the request
+            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await chargebacksClient.GetChargebackAsync(paymentId, "chargeback-id"));
+
+            // Then
+            Assert.AreEqual($"Required URL argument 'paymentId' is null or empty", exception.Message); 
+        }
+        
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase(null)]
+        public void GetChargebackAsync_NoChargeBackIdIsGiven_ArgumentExceptionIsThrown(string chargebackId) {
+            // Arrange
+            var mockHttp = new MockHttpMessageHandler();
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            ChargebacksClient chargebacksClient = new ChargebacksClient("api-key", httpClient);
+
+            // When: We send the request
+            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await chargebacksClient.GetChargebackAsync("payment-id", chargebackId));
+
+            // Then
+            Assert.AreEqual($"Required URL argument 'chargebackId' is null or empty", exception.Message); 
+        }
+        
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase(null)]
+        public void GetChargebacksListAsync_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string paymentId) {
+            // Arrange
+            var mockHttp = new MockHttpMessageHandler();
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            ChargebacksClient chargebacksClient = new ChargebacksClient("api-key", httpClient);
+
+            // When: We send the request
+            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await chargebacksClient.GetChargebacksListAsync(paymentId: paymentId));
+
+            // Then
+            Assert.AreEqual($"Required URL argument 'paymentId' is null or empty", exception.Message); 
         }
     }
 }
