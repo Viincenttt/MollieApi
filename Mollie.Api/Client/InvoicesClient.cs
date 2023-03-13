@@ -14,8 +14,8 @@ namespace Mollie.Api.Client {
         public InvoicesClient(string oauthAccessToken, HttpClient httpClient = null) : base(oauthAccessToken, httpClient) {
         }
 
-        public async Task<InvoiceResponse> GetInvoiceAsync(string invoiceId, bool includeLines = false,
-            bool includeSettlements = false) {
+        public async Task<InvoiceResponse> GetInvoiceAsync(string invoiceId, bool includeLines = false, bool includeSettlements = false) {
+            this.ValidateRequiredUrlParameter(nameof(invoiceId), invoiceId);
             var includes = this.BuildIncludeParameter(includeLines, includeSettlements);
             return await this.GetAsync<InvoiceResponse>($"invoices/{invoiceId}{includes.ToQueryString()}").ConfigureAwait(false);
         }
