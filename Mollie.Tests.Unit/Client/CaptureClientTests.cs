@@ -1,10 +1,13 @@
-﻿using Mollie.Api.Client;
+﻿using System;
+using Mollie.Api.Client;
 using Mollie.Api.Models.Capture;
 using Mollie.Api.Models.List;
 using NUnit.Framework;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Mollie.Api.Models.Payment.Request;
+using RichardSzalay.MockHttp;
 
 namespace Mollie.Tests.Unit.Client {
     public class CaptureClientTests : BaseClientTests {
@@ -133,6 +136,54 @@ namespace Mollie.Tests.Unit.Client {
             Assert.AreEqual(defaultSettlementId, captureResponse.SettlementId);
             Assert.AreEqual(defaultAmountValue, captureResponse.Amount.Value);
             Assert.AreEqual(defaultAmountCurrency, captureResponse.Amount.Currency);
+        }
+        
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase(null)]
+        public void GetCaptureAsync_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string paymentId) {
+            // Arrange
+            var mockHttp = new MockHttpMessageHandler();
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            CaptureClient captureClient = new CaptureClient("abcde", httpClient);
+
+            // When: We send the request
+            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await captureClient.GetCaptureAsync(paymentId, "capture-id"));
+
+            // Then
+            Assert.AreEqual($"Required URL argument 'paymentId' is null or empty", exception.Message); 
+        }
+        
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase(null)]
+        public void GetCaptureAsync_NoCaptureIdIsGiven_ArgumentExceptionIsThrown(string captureId) {
+            // Arrange
+            var mockHttp = new MockHttpMessageHandler();
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            CaptureClient captureClient = new CaptureClient("abcde", httpClient);
+
+            // When: We send the request
+            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await captureClient.GetCaptureAsync("payment-id", captureId));
+
+            // Then
+            Assert.AreEqual($"Required URL argument 'captureId' is null or empty", exception.Message); 
+        }
+        
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase(null)]
+        public void GetCapturesListAsync_NoCaptureIdIsGiven_ArgumentExceptionIsThrown(string paymentId) {
+            // Arrange
+            var mockHttp = new MockHttpMessageHandler();
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            CaptureClient captureClient = new CaptureClient("abcde", httpClient);
+
+            // When: We send the request
+            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await captureClient.GetCapturesListAsync(paymentId));
+
+            // Then
+            Assert.AreEqual($"Required URL argument 'paymentId' is null or empty", exception.Message); 
         }
     }
 }
