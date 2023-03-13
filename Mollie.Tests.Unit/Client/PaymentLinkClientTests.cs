@@ -91,6 +91,22 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.VerifyNoOutstandingExpectation();
             VerifyPaymentLinkResponse(response);
         }
+        
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase(null)]
+        public void GetPaymentLinkAsync_NoPaymentLinkIdIsGiven_ArgumentExceptionIsThrown(string paymentLinkId) {
+            // Arrange
+            var mockHttp = new MockHttpMessageHandler();
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            PaymentLinkClient paymentLinkClient = new PaymentLinkClient("api-key", httpClient);
+
+            // When: We send the request
+            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await paymentLinkClient.GetPaymentLinkAsync(paymentLinkId));
+
+            // Then
+            Assert.AreEqual($"Required URL argument 'paymentLinkId' is null or empty", exception.Message); 
+        }
 
         private void VerifyPaymentLinkResponse(PaymentLinkResponse response) {
             Assert.AreEqual(DefaultPaymentAmount.ToString(CultureInfo.InvariantCulture), response.Amount.Value);

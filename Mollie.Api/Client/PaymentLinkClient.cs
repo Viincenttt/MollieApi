@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
@@ -13,7 +12,6 @@ namespace Mollie.Api.Client
 {
     public class PaymentLinkClient : BaseMollieClient, IPaymentLinkClient
     {
-
         public PaymentLinkClient(string apiKey, HttpClient httpClient = null) : base(apiKey, httpClient) { }
 
         public async Task<PaymentLinkResponse> CreatePaymentLinkAsync(PaymentLinkRequest paymentLinkRequest)
@@ -27,6 +25,7 @@ namespace Mollie.Api.Client
 
         public async Task<PaymentLinkResponse> GetPaymentLinkAsync(string paymentLinkId, bool testmode = false)
         {
+            this.ValidateRequiredUrlParameter(nameof(paymentLinkId), paymentLinkId);
             if (testmode)
             {
                 this.ValidateApiKeyIsOauthAccesstoken();
