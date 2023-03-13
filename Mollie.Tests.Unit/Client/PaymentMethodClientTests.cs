@@ -1,8 +1,10 @@
-﻿using Mollie.Api.Client;
+﻿using System;
+using Mollie.Api.Client;
 using Mollie.Api.Models;
 using NUnit.Framework;
 using System.Net.Http;
 using System.Threading.Tasks;
+using RichardSzalay.MockHttp;
 
 namespace Mollie.Tests.Unit.Client {
     [TestFixture]
@@ -76,6 +78,22 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
+        }
+        
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase(null)]
+        public void GetPaymentMethodAsync_NoPaymentLinkIdIsGiven_ArgumentExceptionIsThrown(string paymentLinkId) {
+            // Arrange
+            var mockHttp = new MockHttpMessageHandler();
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            PaymentMethodClient paymentMethodClient = new PaymentMethodClient("api-key", httpClient);
+
+            // When: We send the request
+            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await paymentMethodClient.GetPaymentMethodAsync(paymentLinkId));
+
+            // Then
+            Assert.AreEqual($"Required URL argument 'paymentMethod' is null or empty", exception.Message); 
         }
     }
 }

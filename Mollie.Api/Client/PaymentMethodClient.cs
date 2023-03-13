@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
@@ -25,6 +24,8 @@ namespace Mollie.Api.Client
             string profileId = null, 
             bool testmode = false, 
             string currency = null) {
+            
+            this.ValidateRequiredUrlParameter(nameof(paymentMethod), paymentMethod);
             
             Dictionary<string, string> queryParameters = this.BuildQueryParameters(
                 locale: locale, 
