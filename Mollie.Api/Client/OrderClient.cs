@@ -22,23 +22,29 @@ namespace Mollie.Api.Client {
         }
 
         public async Task<OrderResponse> GetOrderAsync(string orderId, bool embedPayments = false, bool embedRefunds = false, bool embedShipments = false, bool testmode = false) {
+            this.ValidateRequiredUrlParameter(nameof(orderId), orderId);
             var queryParameters = this.BuildQueryParameters(embedPayments, embedRefunds, embedShipments, testmode);
             return await this.GetAsync<OrderResponse>($"orders/{orderId}{queryParameters.ToQueryString()}").ConfigureAwait(false);
         }
 
         public async Task<OrderResponse> UpdateOrderAsync(string orderId, OrderUpdateRequest orderUpdateRequest) {
+            this.ValidateRequiredUrlParameter(nameof(orderId), orderId);
             return await this.PatchAsync<OrderResponse>($"orders/{orderId}", orderUpdateRequest).ConfigureAwait(false); 
         }
 
         public async Task<OrderResponse> UpdateOrderLinesAsync(string orderId, string orderLineId, OrderLineUpdateRequest orderLineUpdateRequest) {
+            this.ValidateRequiredUrlParameter(nameof(orderId), orderId);
+            this.ValidateRequiredUrlParameter(nameof(orderLineId), orderLineId);
             return await this.PatchAsync<OrderResponse>($"orders/{orderId}/lines/{orderLineId}", orderLineUpdateRequest).ConfigureAwait(false);
         }
 
         public async Task<OrderResponse> ManageOrderLinesAsync(string orderId, ManageOrderLinesRequest manageOrderLinesRequest) {
+            this.ValidateRequiredUrlParameter(nameof(orderId), orderId);
             return await this.PatchAsync<OrderResponse>($"orders/{orderId}/lines", manageOrderLinesRequest).ConfigureAwait(false);
         }
 
         public async Task CancelOrderAsync(string orderId, bool testmode = false) {
+            this.ValidateRequiredUrlParameter(nameof(orderId), orderId);
             var data = TestmodeModel.Create(testmode);
             await this.DeleteAsync($"orders/{orderId}", data).ConfigureAwait(false);
         }
@@ -53,18 +59,22 @@ namespace Mollie.Api.Client {
         }
 
         public async Task CancelOrderLinesAsync(string orderId, OrderLineCancellationRequest cancelationRequest) {
+            this.ValidateRequiredUrlParameter(nameof(orderId), orderId);
             await this.DeleteAsync($"orders/{orderId}/lines", cancelationRequest).ConfigureAwait(false);
         }
 
         public async Task<PaymentResponse> CreateOrderPaymentAsync(string orderId, OrderPaymentRequest createOrderPaymentRequest) {
+            this.ValidateRequiredUrlParameter(nameof(orderId), orderId);
             return await this.PostAsync<PaymentResponse>($"orders/{orderId}/payments", createOrderPaymentRequest).ConfigureAwait(false);
         }
 
         public async Task<OrderRefundResponse> CreateOrderRefundAsync(string orderId, OrderRefundRequest createOrderRefundRequest) {
+            this.ValidateRequiredUrlParameter(nameof(orderId), orderId);
             return await this.PostAsync<OrderRefundResponse>($"orders/{orderId}/refunds", createOrderRefundRequest);
         }
 
         public async Task<ListResponse<RefundResponse>> GetOrderRefundListAsync(string orderId, string from = null, int? limit = null, bool testmode = false) {
+            this.ValidateRequiredUrlParameter(nameof(orderId), orderId);
             var queryParameters = BuildQueryParameters(null, testmode);
             return await this.GetListAsync<ListResponse<RefundResponse>>($"orders/{orderId}/refunds", from, limit, queryParameters).ConfigureAwait(false);
         }
