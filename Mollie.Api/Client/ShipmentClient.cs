@@ -13,23 +13,29 @@ namespace Mollie.Api.Client
         }
 
         public async Task<ShipmentResponse> CreateShipmentAsync(string orderId, ShipmentRequest shipmentRequest) {
+            this.ValidateRequiredUrlParameter(nameof(orderId), orderId);
             return await this.PostAsync<ShipmentResponse>($"orders/{orderId}/shipments", shipmentRequest)
                 .ConfigureAwait(false);
         }
 
         public async Task<ShipmentResponse> GetShipmentAsync(string orderId, string shipmentId, bool testmode = false) {
+            this.ValidateRequiredUrlParameter(nameof(orderId), orderId);
+            this.ValidateRequiredUrlParameter(nameof(shipmentId), shipmentId);
             var queryParameters = this.BuildQueryParameters(testmode);
             return await this.GetAsync<ShipmentResponse>($"orders/{orderId}/shipments/{shipmentId}{queryParameters.ToQueryString()}")
                 .ConfigureAwait(false);
         }
 
         public async Task<ListResponse<ShipmentResponse>> GetShipmentsListAsync(string orderId, bool testmode = false) {
+            this.ValidateRequiredUrlParameter(nameof(orderId), orderId);
             var queryParameters = this.BuildQueryParameters(testmode);
             return await this.GetAsync<ListResponse<ShipmentResponse>>($"orders/{orderId}/shipments{queryParameters.ToQueryString()}")
                 .ConfigureAwait(false);
         }
 
         public async Task<ShipmentResponse> UpdateShipmentAsync(string orderId, string shipmentId, ShipmentUpdateRequest shipmentUpdateRequest) {
+            this.ValidateRequiredUrlParameter(nameof(orderId), orderId);
+            this.ValidateRequiredUrlParameter(nameof(shipmentId), shipmentId);
             return await this.PatchAsync<ShipmentResponse>($"orders/{orderId}/shipments/{shipmentId}", shipmentUpdateRequest).ConfigureAwait(false); 
         }
         
