@@ -21,5 +21,6 @@
         public const string ApplePay = "applepay";
         public const string MealVoucher = "mealvoucher";
         public const string In3 = "in3";
+        public const string POS = "pointofsale";
     }
 }
