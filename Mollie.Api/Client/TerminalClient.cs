@@ -19,13 +19,7 @@ namespace Mollie.Api.Client
         /// <summary>
         /// retrieve the data for one specific terminal
         /// </summary>
-        /// <param name="paymentMethod"></param>
-        /// <param name="includeIssuers"></param>
-        /// <param name="locale"></param>
-        /// <param name="includePricing"></param>
-        /// <param name="profileId"></param>
-        /// <param name="testmode"></param>
-        /// <param name="currency"></param>
+        /// <param name="id">id of the specific terminal</param>
         /// <returns></returns>
         public async Task<TerminalResponse> GetTerminalAsync(string id) {
             return await this.GetAsync<TerminalResponse>($"terminals/{id}").ConfigureAwait(false);
@@ -33,10 +27,9 @@ namespace Mollie.Api.Client
         /// <summary>
         /// retrieve all data for all terminals
         /// </summary>
-        /// <param name="locale"></param>
-        /// <param name="amount"></param>
-        /// <param name="includeIssuers"></param>
-        /// <param name="includePricing"></param>
+        /// <param name="from">used for pagination</param>
+        /// <param name="limit">used for pagination</param>
+        /// <param name="profileId"> profile that requests the ListResponse element</param>
         /// <returns></returns>
         public async Task<ListResponse<TerminalResponse>> GetAllTerminalListAsync(string from = null, int? limit = null, string profileId = null) {
             var queryParameters = this.BuildQueryParameters(
