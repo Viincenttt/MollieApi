@@ -2,6 +2,9 @@
 
 namespace Mollie.Api.Models.Terminals
 {
+    /// <summary>
+    /// This Sublass is part of the TerminalResponse Class, Full documentation for this class can be found at https://docs.mollie.com/reference/v2/terminals-api/overview
+    /// </summary>
     public class TerminalResponseLinks
     {
         /// <summary>

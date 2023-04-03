@@ -8,6 +8,9 @@ using Newtonsoft.Json.Converters;
 
 namespace Mollie.Api.Models.Terminals
 {
+    /// <summary>
+    /// Full documentation for this class can be found at https://docs.mollie.com/reference/v2/terminals-api/overview
+    /// </summary>
     public class TerminalResponse : IResponseObject
     {
         /// <summary>
@@ -58,15 +61,15 @@ namespace Mollie.Api.Models.Terminals
         /// </summary>
         public string Locale { get; set; }
         /// <summary>
-        /// The payment's date and time of creation, in ISO 8601 format.
+        /// The Terminal's date and time of creation, in ISO 8601 format.
         /// </summary>
         public DateTime? CreatedAt { get; set; }
         /// <summary>
-        /// The payment's date and time of creation, in ISO 8601 format.
+        /// The Terminal's date and time of creation, in ISO 8601 format.
         /// </summary>
         public DateTime? UpdatedAt { get; set; }
         /// <summary>
-        /// The payment's date and time of creation, in ISO 8601 format.
+        /// The Terminal's date and time of creation, in ISO 8601 format.
         /// </summary>
         public DateTime? ActivatedAt { get; set; }
         /// <summary>

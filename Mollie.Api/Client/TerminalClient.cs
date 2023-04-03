@@ -12,7 +12,9 @@ using Mollie.Api.Models.Terminals;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client
-{
+{    /// <summary>
+     /// Calls in this class are documented in https://docs.mollie.com/reference/v2/terminals-api/overview
+     /// </summary>
     public class TerminalClient : BaseMollieClient, ITerminalClient
     {
         public TerminalClient(string apiKey, HttpClient httpClient = null) : base(apiKey, httpClient) { }
