@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net48</TargetFrameworks>
+    <TargetFrameworks>netstandard1.2;net45</TargetFrameworks>
     <Version>2.2.0.4</Version>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Authors>Vincent Kok</Authors>
