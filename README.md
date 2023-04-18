@@ -416,8 +416,7 @@ Mandates allow you to charge a customer’s credit card or bank account recurren
 Create a mandate for a specific customer.
 ```c#
 IMandateClient mandateclient = new MandateClient("{yourApiKey}");
-MandateRequest mandateRequest = new MandateRequest() {
-    Method = Api.Models.Payment.PaymentMethod.DirectDebit,
+MandateRequest mandateRequest = new SepaDirectDebitMandateRequest() { // Or PayPalMandateRequest
     ConsumerName = "John Smit",
     MandateReference = "My reference",
     SignatureDate = DateTime.Now
