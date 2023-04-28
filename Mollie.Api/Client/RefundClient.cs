@@ -36,6 +36,11 @@ namespace Mollie.Api.Client {
             return await this.GetListAsync<ListResponse<RefundResponse>>($"payments/{paymentId}/refunds", from, limit, queryParameters).ConfigureAwait(false);
         }
 
+        public async Task<ListResponse<RefundResponse>> GetRefundListAsync(UrlObjectLink<ListResponse<RefundResponse>> url)
+        {
+            return await this.GetAsync(url).ConfigureAwait(false);
+        }
+
         public async Task<RefundResponse> GetRefundAsync(UrlObjectLink<RefundResponse> url) {
             return await this.GetAsync(url).ConfigureAwait(false);
         }
