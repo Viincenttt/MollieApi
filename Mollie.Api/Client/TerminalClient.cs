@@ -8,7 +8,7 @@ using Mollie.Api.Models;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Payment;
 using Mollie.Api.Models.PaymentMethod;
-using Mollie.Api.Models.Terminals;
+using Mollie.Api.Models.Terminal;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client
@@ -21,10 +21,10 @@ namespace Mollie.Api.Client
         /// <summary>
         /// retrieve the data for one specific terminal
         /// </summary>
-        /// <param name="id">id of the specific terminal</param>
+        /// <param name="terminalId">id of the specific terminal</param>
         /// <returns></returns>
-        public async Task<TerminalResponse> GetTerminalAsync(string id) {
-            return await this.GetAsync<TerminalResponse>($"terminals/{id}").ConfigureAwait(false);
+        public async Task<TerminalResponse> GetTerminalAsync(string terminalId) {
+            return await this.GetAsync<TerminalResponse>($"terminals/{terminalId}").ConfigureAwait(false);
         }
         /// <summary>
         /// retrieve all data for all terminals

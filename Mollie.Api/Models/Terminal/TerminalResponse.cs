@@ -6,7 +6,7 @@ using Mollie.Api.Models.Payment.Request;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace Mollie.Api.Models.Terminals
+namespace Mollie.Api.Models.Terminal
 {
     /// <summary>
     /// Full documentation for this class can be found at https://docs.mollie.com/reference/v2/terminals-api/overview
