@@ -36,7 +36,7 @@ namespace Mollie.Api.Client
         public async Task<ListResponse<TerminalResponse>> GetAllTerminalListAsync(string from = null, int? limit = null, string profileId = null) {
             var queryParameters = this.BuildQueryParameters(
                 profileId: profileId);
-            return await this.GetListAsync<ListResponse<TerminalResponse>>("terminals/", from, limit, queryParameters).ConfigureAwait(false);
+            return await this.GetListAsync<ListResponse<TerminalResponse>>("terminals", from, limit, queryParameters).ConfigureAwait(false);
         }
         private Dictionary<string, string> BuildQueryParameters(string profileId = null)
         {
