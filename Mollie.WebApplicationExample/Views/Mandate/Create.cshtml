@@ -1,0 +1,28 @@
+﻿
+@{
+    ViewData["Title"] = "Create mandate";
+}
+
+
+<div class="container">
+    <h2>Create new mandate</h2>
+
+    <div class="alert alert-info">
+        <p>
+            A mandate is used to get started with recurring payments. A mandate is similar to a regular payment, but the customer is shown information about your organization,
+            and the customer needs to complete the payment with the account or card that will be used for recurring charges in the future.
+        </p>
+
+        <p>
+            After the first payment is completed succesfully, the customer’s account or card will immediately be chargeable on-demand, or periodically through subscriptions.
+        </p>
+        
+        <p>
+            Click the button below to create a new mandate for the client. You will be redirected to the Mollie checkout page. Complete the payment to create the mandate.
+        </p>
+    </div>
+    
+    <form method="post" asp-action="CreatePost" asp-route-customerId="@ViewBag.CustomerId">
+        <input type="submit" name="Save" value="Create new mandate" class="btn btn-primary"/>
+    </form>
+</div>

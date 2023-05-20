@@ -1,0 +1,43 @@
+﻿@model OverviewModel<CustomerResponse>
+
+@{
+    ViewData["Title"] = "List payments";
+}
+
+<div class="container">
+    <h2>List of customers</h2>
+
+    <div class="clearfix">
+        <a asp-action="Create" class="btn btn-primary float-right">Create new customer</a>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Date created</th>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Locale</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (CustomerResponse customer in Model.Items) {
+                <tr>
+                    <td>@customer.Id</td>
+                    <td>@customer.CreatedAt</td>
+                    <td>@customer.Name</td>
+                    <td><a href="mailto:@customer.Email">@customer.Email</a></td>
+                    <td>@customer.Locale</td>
+                    <td>
+                        <a asp-controller="Mandate" asp-action="Index" asp-route-customerId="@customer.Id" class="btn btn-outline-secondary">View mandates</a>
+                        <a asp-controller="Subscription" asp-action="Index" asp-route-customerId="@customer.Id" class="btn btn-outline-secondary">View subscriptions</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <partial name="_OverviewNavigation" model="Model.Navigation" />
+</div>

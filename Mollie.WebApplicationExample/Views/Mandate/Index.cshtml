@@ -1,0 +1,36 @@
+﻿@model OverviewModel<MandateResponse>
+
+@{
+    ViewData["Title"] = "List mandates";
+}
+
+<div class="container">
+    <h2>List of mandates</h2>
+
+    <div class="clearfix">
+        <a asp-action="Create" asp-route-customerId="@ViewBag.CustomerId" class="btn btn-primary float-right">Create new mandate</a>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Date created</th>
+                <th scope="col">Status</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (MandateResponse mandate in Model.Items) {
+                <tr>
+                    <td>@mandate.Id</td>
+                    <td>@mandate.CreatedAt</td>
+                    <td>@mandate.Status</td>
+                    <td>&nbsp;</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <partial name="_OverviewNavigation" model="Model.Navigation" />
+</div>

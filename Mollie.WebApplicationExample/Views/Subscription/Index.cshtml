@@ -1,0 +1,40 @@
+﻿@model OverviewModel<SubscriptionResponse>
+
+@{
+    ViewData["Title"] = "List subscriptions";
+}
+
+<div class="container">
+    <h2>List of subscriptions</h2>
+    
+    <div class="clearfix">
+        <a asp-action="Create" asp-route-customerId="@ViewBag.CustomerId" class="btn btn-primary float-right">Create new subscription</a>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Date created</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Mode</th>
+            <th scope="col">Status</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (SubscriptionResponse subscription in Model.Items) {
+            <tr>
+                <td>@subscription.Id</td>
+                <td>@subscription.CreatedAt</td>
+                <td>@subscription.Amount.ToString()</td>
+                <td>@subscription.Mode</td>
+                <td>@subscription.Status</td>
+                <td>&nbsp;</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    
+    <partial name="_OverviewNavigation" model="Model.Navigation"/>
+</div>
