@@ -1,6 +1,28 @@
+using Mollie.WebApplicationExample.Controllers;
+using Mollie.WebApplicationExample.Framework.Middleware;
+using Mollie.WebApplicationExample.Services.Customer;
+using Mollie.WebApplicationExample.Services.Mandate;
+using Mollie.WebApplicationExample.Services.Payment;
+using Mollie.WebApplicationExample.Services.Payment.Refund;
+using Mollie.WebApplicationExample.Services.PaymentMethod;
+using Mollie.WebApplicationExample.Services.Subscription;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddMollieApi(builder.Configuration);
+builder.Services.AddScoped<IPaymentOverviewClient, PaymentOverviewClient>();
+builder.Services.AddScoped<ICustomerOverviewClient, CustomerOverviewClient>();
+builder.Services.AddScoped<ISubscriptionOverviewClient, SubscriptionOverviewClient>();
+builder.Services.AddScoped<IMandateOverviewClient, MandateOverviewClient>();
+builder.Services.AddScoped<IPaymentMethodOverviewClient, PaymentMethodOverviewClient>();
+builder.Services.AddScoped<IPaymentStorageClient, PaymentStorageClient>();
+builder.Services.AddScoped<ICustomerStorageClient, CustomerStorageClient>();
+builder.Services.AddScoped<ISubscriptionStorageClient, SubscriptionStorageClient>();
+builder.Services.AddScoped<IMandateStorageClient, MandateStorageClient>();
+builder.Services.AddScoped<IRefundPaymentClient, RefundPaymentClient>();
+builder.Services.AddAutoMapper(typeof(HomeController));
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
