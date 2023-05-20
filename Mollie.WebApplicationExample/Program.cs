@@ -23,7 +23,8 @@ builder.Services.AddScoped<IMandateStorageClient, MandateStorageClient>();
 builder.Services.AddScoped<IRefundPaymentClient, RefundPaymentClient>();
 builder.Services.AddAutoMapper(typeof(HomeController));
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+
 
 var app = builder.Build();
 
