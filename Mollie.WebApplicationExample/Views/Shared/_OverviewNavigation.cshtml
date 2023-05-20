@@ -1,0 +1,11 @@
+﻿@model OverviewNavigationLinksModel 
+
+<div class="clearfix">
+    @if (Model.Previous != null) {
+        <a class="btn btn-primary" role="button" asp-action="ApiUrl" asp-route-url="@Model.Previous.Href">&lt;&lt; Previous</a>
+    }
+
+    @if (Model.Next != null) {
+        <a class="btn btn-primary float-right" role="button" asp-action="ApiUrl" asp-route-url="@Model.Next.Href">Next &gt;&gt;</a>
+    }
+</div>
