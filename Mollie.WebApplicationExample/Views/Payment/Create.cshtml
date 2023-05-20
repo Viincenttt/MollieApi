@@ -1,0 +1,34 @@
+﻿@model CreatePaymentModel
+
+@{
+    ViewData["Title"] = "Create payment";
+}
+
+<div class="container">
+    <h2>Create new payment</h2>
+
+    <form method="post">
+        <div asp-validation-summary="All"></div>
+        
+        <div class="row">
+            <div class="col-6">
+                <div class="form-group">
+                    <label asp-for="Amount"></label>
+                    <input class="form-control" asp-for="Amount" autocomplete="off" />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Currency"></label>
+                    <select class="form-control" asp-for="Currency" asp-items="@Html.GetStaticStringSelectList(typeof(Currency))"></select>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Description"></label>
+                    <textarea class="form-control" asp-for="Description" rows="4"></textarea>
+                </div>
+
+                <input type="submit" name="Save" value="Save" class="btn btn-primary" />
+            </div>
+        </div>
+    </form>
+</div>
