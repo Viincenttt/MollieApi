@@ -33,11 +33,16 @@
                     <td>@payment.Method</td>
                     <td>
                         @if (!String.IsNullOrEmpty(payment.Metadata)) {
-                            <button class="btn btn-outline-secondary" type="button" data-toggle="collapse" data-target="#metadata-payment-@payment.Id" aria-expanded="false" aria-controls="collapseExample">
+                            <button class="btn btn-outline-secondary" 
+                                    type="button" 
+                                    data-bs-toggle="collapse" 
+                                    href="#metadata-payment-@payment.Id" 
+                                    aria-expanded="false" 
+                                    aria-controls="collapseExample">
                                 Show metadata
                             </button>
 
-                            <div class="collapse" id="metadata-payment-@payment.Id">
+                            <div class="collapse mt-2" id="metadata-payment-@payment.Id">
                                 <div class="card card-body">
                                     @payment.Metadata
                                 </div>
