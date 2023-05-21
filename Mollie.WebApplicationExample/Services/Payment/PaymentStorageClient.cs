@@ -18,7 +18,6 @@ public class PaymentStorageClient : IPaymentStorageClient {
 
     public async Task Create(CreatePaymentModel model) {
         PaymentRequest paymentRequest = this._mapper.Map<PaymentRequest>(model);
-        paymentRequest.RedirectUrl = this._configuration["DefaultRedirectUrl"];
 
         await this._paymentClient.CreatePaymentAsync(paymentRequest);
     }

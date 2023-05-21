@@ -13,6 +13,10 @@ public class CreatePaymentModel {
     [Required]
     [StaticStringList(typeof(Currency))]
     public string Currency { get; set; }
+    
+    [Required]
+    [Url]
+    public string RedirectUrl { get; set; }
 
     [Required]
     public string Description { get; set; }

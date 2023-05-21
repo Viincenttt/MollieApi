@@ -31,7 +31,8 @@ public class PaymentController : Controller {
     public ViewResult Create() {
         CreatePaymentModel model = new CreatePaymentModel() {
             Amount = 10,
-            Currency = Currency.EUR
+            Currency = Currency.EUR,
+            RedirectUrl = "https://www.google.com"
         };
 
         return this.View(model);

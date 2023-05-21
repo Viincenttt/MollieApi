@@ -21,6 +21,11 @@
                     <label asp-for="Currency"></label>
                     <select class="form-control" asp-for="Currency" asp-items="@Html.GetStaticStringSelectList(typeof(Currency))"></select>
                 </div>
+                
+                <div class="form-group">
+                    <label asp-for="RedirectUrl"></label>
+                    <input class="form-control" asp-for="RedirectUrl" autocomplete="off" />
+                </div>
 
                 <div class="form-group">
                     <label asp-for="Description"></label>
