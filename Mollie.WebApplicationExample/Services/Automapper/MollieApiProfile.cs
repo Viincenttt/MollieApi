@@ -4,6 +4,7 @@ using Mollie.Api.Models;
 using Mollie.Api.Models.Customer;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Mandate;
+using Mollie.Api.Models.Order;
 using Mollie.Api.Models.Payment.Request;
 using Mollie.Api.Models.Payment.Response;
 using Mollie.Api.Models.PaymentMethod;
@@ -28,6 +29,7 @@ public class MollieApiProfile : Profile {
         this.CreateOverviewMap<SubscriptionResponse>();
         this.CreateOverviewMap<MandateResponse>();
         this.CreateOverviewMap<PaymentMethodResponse>();
+        this.CreateOverviewMap<OrderResponse>();
     }
 
     private void CreateOverviewMap<TResponseType>() where TResponseType : IResponseObject {

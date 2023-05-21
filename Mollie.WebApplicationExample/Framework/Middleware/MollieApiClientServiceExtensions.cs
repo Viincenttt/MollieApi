@@ -24,6 +24,8 @@ public static class MollieApiClientServiceExtensions {
             .AddPolicyHandler(GetDefaultRetryPolicy());
         services.AddHttpClient<IInvoicesClient, InvoicesClient>(httpClient => new InvoicesClient(mollieConfiguration.ApiKey, httpClient))
             .AddPolicyHandler(GetDefaultRetryPolicy());
+        services.AddHttpClient<IOrderClient, OrderClient>(httpClient => new OrderClient(mollieConfiguration.ApiKey, httpClient))
+            .AddPolicyHandler(GetDefaultRetryPolicy());
 
         return services;
     }

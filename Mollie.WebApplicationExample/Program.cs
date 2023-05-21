@@ -2,6 +2,7 @@ using Mollie.WebApplicationExample.Controllers;
 using Mollie.WebApplicationExample.Framework.Middleware;
 using Mollie.WebApplicationExample.Services.Customer;
 using Mollie.WebApplicationExample.Services.Mandate;
+using Mollie.WebApplicationExample.Services.Order;
 using Mollie.WebApplicationExample.Services.Payment;
 using Mollie.WebApplicationExample.Services.Payment.Refund;
 using Mollie.WebApplicationExample.Services.PaymentMethod;
@@ -16,10 +17,13 @@ builder.Services.AddScoped<ICustomerOverviewClient, CustomerOverviewClient>();
 builder.Services.AddScoped<ISubscriptionOverviewClient, SubscriptionOverviewClient>();
 builder.Services.AddScoped<IMandateOverviewClient, MandateOverviewClient>();
 builder.Services.AddScoped<IPaymentMethodOverviewClient, PaymentMethodOverviewClient>();
+builder.Services.AddScoped<IOrderOverviewClient, OrderOverviewClient>();
+
 builder.Services.AddScoped<IPaymentStorageClient, PaymentStorageClient>();
 builder.Services.AddScoped<ICustomerStorageClient, CustomerStorageClient>();
 builder.Services.AddScoped<ISubscriptionStorageClient, SubscriptionStorageClient>();
 builder.Services.AddScoped<IMandateStorageClient, MandateStorageClient>();
+builder.Services.AddScoped<IRefundPaymentClient, RefundPaymentClient>();
 builder.Services.AddScoped<IRefundPaymentClient, RefundPaymentClient>();
 builder.Services.AddAutoMapper(typeof(HomeController));
 
