@@ -23,10 +23,12 @@ builder.Services.AddScoped<IPaymentStorageClient, PaymentStorageClient>();
 builder.Services.AddScoped<ICustomerStorageClient, CustomerStorageClient>();
 builder.Services.AddScoped<ISubscriptionStorageClient, SubscriptionStorageClient>();
 builder.Services.AddScoped<IMandateStorageClient, MandateStorageClient>();
-builder.Services.AddScoped<IRefundPaymentClient, RefundPaymentClient>();
-builder.Services.AddScoped<IRefundPaymentClient, RefundPaymentClient>();
-builder.Services.AddAutoMapper(typeof(HomeController));
+builder.Services.AddScoped<IOrderStorageClient, OrderStorageClient>();
 
+builder.Services.AddScoped<IRefundPaymentClient, RefundPaymentClient>();
+builder.Services.AddScoped<IRefundPaymentClient, RefundPaymentClient>();
+
+builder.Services.AddAutoMapper(typeof(HomeController));
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
 

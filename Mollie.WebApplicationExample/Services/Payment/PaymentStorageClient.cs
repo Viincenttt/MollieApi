@@ -8,12 +8,10 @@ namespace Mollie.WebApplicationExample.Services.Payment;
 public class PaymentStorageClient : IPaymentStorageClient {
     private readonly IPaymentClient _paymentClient;
     private readonly IMapper _mapper;
-    private readonly IConfiguration _configuration;
 
-    public PaymentStorageClient(IPaymentClient paymentClient, IMapper mapper, IConfiguration configuration) {
+    public PaymentStorageClient(IPaymentClient paymentClient, IMapper mapper) {
         this._paymentClient = paymentClient;
         this._mapper = mapper;
-        this._configuration = configuration;
     }
 
     public async Task Create(CreatePaymentModel model) {

@@ -16,11 +16,25 @@ namespace Mollie.WebApplicationExample.Services.Automapper;
 public class MollieApiProfile : Profile {
     public MollieApiProfile() {
         this.CreateMap<CreatePaymentModel, PaymentRequest>()
-            .ForMember(x => x.Amount, m => m.MapFrom(x => new Amount(x.Currency, x.Amount.ToString(CultureInfo.InvariantCulture))));
+            .ForMember(x => x.Amount, m
+                => m.MapFrom(x => new Amount(x.Currency, x.Amount.ToString(CultureInfo.InvariantCulture))));
 
+        this.CreateMap<CreateOrderModel, OrderRequest>()
+            .ForMember(x => x.Amount, m
+                => m.MapFrom(x => new Amount(x.Currency, x.Amount.ToString(CultureInfo.InvariantCulture))));
+
+        this.CreateMap<CreateOrderLineModel, OrderLineRequest>()
+            .ForMember(x => x.UnitPrice, m => m.MapFrom(x => new Amount("EUR", x.UnitPrice)))
+            .ForMember(x => x.TotalAmount, m => m.MapFrom(x => new Amount("EUR", x.TotalAmount)))
+            .ForMember(x => x.VatAmount, m => m.MapFrom(x => new Amount("EUR", x.VatAmount)));
+
+        this.CreateMap<CreateOrderBillingAddressModel, OrderAddressDetails>();
+        
         this.CreateMap<CreateSubscriptionModel, SubscriptionRequest>()
-            .ForMember(x => x.Amount, m => m.MapFrom(x => new Amount(x.Currency, x.Amount.ToString(CultureInfo.InvariantCulture))))
-            .ForMember(x => x.Interval, m => m.MapFrom(x => $"{x.IntervalAmount} {x.IntervalPeriod.ToString().ToLower()}"));
+            .ForMember(x => x.Amount, m
+                => m.MapFrom(x => new Amount(x.Currency, x.Amount.ToString(CultureInfo.InvariantCulture))))
+            .ForMember(x => x.Interval, 
+                m => m.MapFrom(x => $"{x.IntervalAmount} {x.IntervalPeriod.ToString().ToLower()}"));
 
         this.CreateMap<CreateCustomerModel, CustomerRequest>();
 
