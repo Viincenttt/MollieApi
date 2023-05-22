@@ -40,6 +40,11 @@
                 </div>
 
                 <h3>Order lines</h3>
+                <div class="alert alert-info">
+                    <p>
+                        Normally, it is possible to create multiple order lines. In this simple example project, we only add one order line.
+                    </p>
+                </div>
                 @for (var i = 0; i < Model.Lines.Count(); i++) {
                     <div class="form-group">
                         <label asp-for="@Model.Lines[i].Name"></label>
