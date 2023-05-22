@@ -50,14 +50,8 @@
                         }
                     </td>
                     <td>
-                        @if (order.Status == PaymentStatus.Open) {
+                        @if (order.Status == OrderStatus.Created) {
                             <a href="@order.Links.Checkout.Href" class="btn btn-outline-secondary" target="_blank">Pay</a>
-                        }
-                        
-                        @if (order.Status == PaymentStatus.Paid) {
-                            <form method="post" asp-controller="Refund" asp-action="Refund" asp-route-paymentId="@order.Id">
-                                <input type="submit" name="Refund" value="Refund" class="btn btn-outline-secondary"/>
-                            </form>
                         }
                     </td>
                 </tr>
