@@ -1,0 +1,120 @@
+﻿@model CreateOrderModel
+
+@{
+    ViewData["Title"] = "Create order";
+}
+
+<div class="container">
+    <h2>Create new order</h2>
+
+    <form method="post">
+        <div asp-validation-summary="All"></div>
+        
+        <div class="row">
+            <div class="col-6">
+                <h3>Order</h3>
+                
+                <div class="form-group">
+                    <label asp-for="OrderNumber"></label>
+                    <input class="form-control" asp-for="OrderNumber" autocomplete="off"/>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Locale"></label>
+                    <input class="form-control" asp-for="Locale" autocomplete="off"/>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Amount"></label>
+                    <input class="form-control" asp-for="Amount" autocomplete="off"/>
+                </div>
+                
+                <div class="form-group">
+                    <label asp-for="RedirectUrl"></label>
+                    <input class="form-control" asp-for="RedirectUrl" autocomplete="off"/>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Currency"></label>
+                    <select class="form-control" asp-for="Currency" asp-items="@Html.GetStaticStringSelectList(typeof(Currency))"></select>
+                </div>
+
+                <h3>Order lines</h3>
+                <div class="alert alert-info">
+                    <p>
+                        Normally, it is possible to create multiple order lines. In this simple example project, we only add one order line.
+                    </p>
+                </div>
+                @for (var i = 0; i < Model.Lines.Count(); i++) {
+                    <div class="form-group">
+                        <label asp-for="@Model.Lines[i].Name"></label>
+                        <input class="form-control" asp-for="@Model.Lines[i].Name" autocomplete="off"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="@Model.Lines[i].Quantity"></label>
+                        <input class="form-control" asp-for="@Model.Lines[i].Quantity" autocomplete="off"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="@Model.Lines[i].UnitPrice"></label>
+                        <input class="form-control" asp-for="@Model.Lines[i].UnitPrice" autocomplete="off"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="@Model.Lines[i].VatRate"></label>
+                        <input class="form-control" asp-for="@Model.Lines[i].VatRate" autocomplete="off"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="@Model.Lines[i].VatAmount"></label>
+                        <input class="form-control" asp-for="@Model.Lines[i].VatAmount" autocomplete="off"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="@Model.Lines[i].TotalAmount"></label>
+                        <input class="form-control" asp-for="@Model.Lines[i].TotalAmount" autocomplete="off"/>
+                    </div>
+                }
+                
+                <h3>Billing address</h3>
+                <div class="form-group">
+                    <label asp-for="BillingAddress.GivenName"></label>
+                    <input class="form-control" asp-for="BillingAddress.GivenName" autocomplete="off"/>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="BillingAddress.FamilyName"></label>
+                    <input class="form-control" asp-for="BillingAddress.FamilyName" autocomplete="off"/>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="BillingAddress.Email"></label>
+                    <input class="form-control" asp-for="BillingAddress.Email" autocomplete="off"/>
+                </div>
+                
+                <div class="form-group">
+                    <label asp-for="BillingAddress.StreetAndNumber"></label>
+                    <input class="form-control" asp-for="BillingAddress.StreetAndNumber" autocomplete="off"/>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="BillingAddress.PostalCode"></label>
+                    <input class="form-control" asp-for="BillingAddress.PostalCode" autocomplete="off"/>
+                </div>
+                
+                <div class="form-group">
+                    <label asp-for="BillingAddress.City"></label>
+                    <input class="form-control" asp-for="BillingAddress.City" autocomplete="off"/>
+                </div>
+                
+                <div class="form-group">
+                    <label asp-for="BillingAddress.Country"></label>
+                    <input class="form-control" asp-for="BillingAddress.Country" autocomplete="off"/>
+                </div>
+
+                <input type="submit" name="Save" value="Save" class="btn btn-primary"/>
+            </div>
+        </div>
+    </form>
+</div>
