@@ -7,6 +7,7 @@ using Mollie.WebApplicationExample.Services.Payment;
 using Mollie.WebApplicationExample.Services.Payment.Refund;
 using Mollie.WebApplicationExample.Services.PaymentMethod;
 using Mollie.WebApplicationExample.Services.Subscription;
+using Mollie.WebApplicationExample.Services.Terminal;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,7 @@ builder.Services.AddScoped<ISubscriptionOverviewClient, SubscriptionOverviewClie
 builder.Services.AddScoped<IMandateOverviewClient, MandateOverviewClient>();
 builder.Services.AddScoped<IPaymentMethodOverviewClient, PaymentMethodOverviewClient>();
 builder.Services.AddScoped<IOrderOverviewClient, OrderOverviewClient>();
+builder.Services.AddScoped<ITerminalOverviewClient, TerminalOverviewClient>();
 
 builder.Services.AddScoped<IPaymentStorageClient, PaymentStorageClient>();
 builder.Services.AddScoped<ICustomerStorageClient, CustomerStorageClient>();

@@ -9,6 +9,7 @@ using Mollie.Api.Models.Payment.Request;
 using Mollie.Api.Models.Payment.Response;
 using Mollie.Api.Models.PaymentMethod;
 using Mollie.Api.Models.Subscription;
+using Mollie.Api.Models.Terminal;
 using Mollie.WebApplicationExample.Models;
 
 namespace Mollie.WebApplicationExample.Services.Automapper; 
@@ -44,6 +45,7 @@ public class MollieApiProfile : Profile {
         this.CreateOverviewMap<MandateResponse>();
         this.CreateOverviewMap<PaymentMethodResponse>();
         this.CreateOverviewMap<OrderResponse>();
+        this.CreateOverviewMap<TerminalResponse>();
     }
 
     private void CreateOverviewMap<TResponseType>() where TResponseType : IResponseObject {

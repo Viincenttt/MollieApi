@@ -11,6 +11,7 @@ namespace Mollie.Api.Client.Abstract
      /// </summary>
     public interface ITerminalClient {
         Task<TerminalResponse> GetTerminalAsync(string terminalId);
-        Task<ListResponse<TerminalResponse>> GetAllTerminalListAsync(string from = null, int? limit = null, string profileId = null);
-    }
+        Task<ListResponse<TerminalResponse>> GetTerminalListAsync(string from = null, int? limit = null, string profileId = null);
+        Task<ListResponse<TerminalResponse>> GetTerminalListAsync(UrlObjectLink<ListResponse<TerminalResponse>> url);
+     }
 }

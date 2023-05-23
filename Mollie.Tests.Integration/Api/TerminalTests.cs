@@ -13,7 +13,7 @@ namespace Mollie.Tests.Integration.Api {
             // Given
 
             // When: Retrieve terminal client list
-            ListResponse<TerminalResponse> response = await this._terminalClient.GetAllTerminalListAsync();
+            ListResponse<TerminalResponse> response = await this._terminalClient.GetTerminalListAsync();
 
             // Then
             Assert.IsNotNull(response);
@@ -24,7 +24,7 @@ namespace Mollie.Tests.Integration.Api {
         [Ignore("Does not work yet")]
         public async Task CanRetrieveSingleTerminal() {
             // Given
-            ListResponse<TerminalResponse> allTerminals = await this._terminalClient.GetAllTerminalListAsync();
+            ListResponse<TerminalResponse> allTerminals = await this._terminalClient.GetTerminalListAsync();
             if (allTerminals.Count == 0) {
                 Assert.Inconclusive("No terminals on this account to retrieve");
             }
