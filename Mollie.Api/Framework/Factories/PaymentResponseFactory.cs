@@ -34,6 +34,8 @@ namespace Mollie.Api.Framework.Factories {
                     return new GiftcardPaymentResponse();
                 case PaymentMethod.IngHomePay:
                     return new IngHomePayPaymentResponse();
+                case PaymentMethod.PointOfSale:
+                    return new PointOfSalePaymentResponse();
                 default:
                     return new PaymentResponse();
             }

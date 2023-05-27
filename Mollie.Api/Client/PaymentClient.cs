@@ -38,7 +38,7 @@ namespace Mollie.Api.Client {
                 includeRemainderDetails: includeRemainderDetails,
                 embedRefunds: embedRefunds,
                 embedChargebacks: embedChargebacks
-                );
+            );
 			return await this.GetAsync<PaymentResponse>($"payments/{paymentId}{queryParameters.ToQueryString()}").ConfigureAwait(false);
 		}
 

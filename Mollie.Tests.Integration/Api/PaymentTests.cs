@@ -8,6 +8,7 @@ using Mollie.Api.Models.Payment;
 using Mollie.Api.Models.Payment.Request;
 using Mollie.Api.Models.Payment.Response;
 using Mollie.Api.Models.Payment.Response.Specific;
+using Mollie.Api.Models.Terminal;
 using Mollie.Tests.Integration.Framework;
 using NUnit.Framework;
 
@@ -428,6 +429,34 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(initialAmount, resultAmount);
             Assert.AreEqual(paymentResponse.Description, result.Description);
             Assert.AreEqual(paymentResponse.RedirectUrl, result.RedirectUrl);
+        }
+
+        [Test]
+        [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        public async Task CanCreatePointOfSalePayment() {
+            // Given
+            ListResponse<TerminalResponse> terminals = await _terminalClient.GetTerminalListAsync();
+            if (terminals.Items.Count == 0) {
+                Assert.Inconclusive("No terminals to create point of sale payment");
+            }
+            string terminalId = terminals.Items.First().Id;
+            PaymentRequest paymentRequest = new PaymentRequest() {
+                Amount = new Amount(Currency.EUR, 10m),
+                Description = "Description",
+                Method = PaymentMethod.PointOfSale,
+                TerminalId = terminalId
+            };
+
+            // When
+            PaymentResponse response = await _paymentClient.CreatePaymentAsync(paymentRequest);
+
+            // Then
+            Assert.IsNotNull(response);
+            Assert.AreEqual(typeof(PointOfSalePaymentResponse), response.GetType());
+            PointOfSalePaymentResponse posResponse = (PointOfSalePaymentResponse)response;
+            Assert.AreEqual(paymentRequest.Description, posResponse.Description);
+            Assert.AreEqual(paymentRequest.Method, posResponse.Method);
+            Assert.AreEqual(paymentRequest.TerminalId, posResponse.Details.TerminalId);
         }
 
         private async Task<MandateResponse> GetFirstValidMandate() {

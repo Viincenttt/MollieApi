@@ -28,6 +28,7 @@ namespace Mollie.Tests.Unit.Framework.Factories {
         [TestCase(PaymentMethod.ApplePay, typeof(PaymentResponse))]
         [TestCase(PaymentMethod.MealVoucher, typeof(PaymentResponse))]
         [TestCase(PaymentMethod.In3, typeof(PaymentResponse))]
+        [TestCase(PaymentMethod.PointOfSale, typeof(PointOfSalePaymentResponse))]
         [TestCase("UnknownPaymentMethod", typeof(PaymentResponse))]
         public void Create_CreatesTypeBasedOnPaymentMethod(string paymentMethod, Type expectedType) {
             // Given
