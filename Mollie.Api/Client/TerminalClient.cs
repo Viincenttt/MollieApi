@@ -20,6 +20,7 @@ namespace Mollie.Api.Client
         /// <param name="terminalId">id of the specific terminal</param>
         /// <returns></returns>
         public async Task<TerminalResponse> GetTerminalAsync(string terminalId) {
+            this.ValidateRequiredUrlParameter(nameof(terminalId), terminalId);
             return await this.GetAsync<TerminalResponse>($"terminals/{terminalId}").ConfigureAwait(false);
         }
         /// <summary>
@@ -30,8 +31,7 @@ namespace Mollie.Api.Client
         /// <param name="profileId"> profile that requests the ListResponse element</param>
         /// <returns></returns>
         public async Task<ListResponse<TerminalResponse>> GetTerminalListAsync(string from = null, int? limit = null, string profileId = null) {
-            var queryParameters = this.BuildQueryParameters(
-                profileId: profileId);
+            var queryParameters = this.BuildQueryParameters(profileId);
             return await this.GetListAsync<ListResponse<TerminalResponse>>("terminals", from, limit, queryParameters).ConfigureAwait(false);
         }
         
@@ -39,8 +39,7 @@ namespace Mollie.Api.Client
             return await this.GetAsync(url).ConfigureAwait(false);
         }
         
-        private Dictionary<string, string> BuildQueryParameters(string profileId = null)
-        {
+        private Dictionary<string, string> BuildQueryParameters(string profileId = null) {
             var result = new Dictionary<string, string>();
             result.AddValueIfNotNullOrEmpty(nameof(profileId), profileId);
             return result;
