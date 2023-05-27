@@ -258,6 +258,7 @@ The full list of payment specific response classes is:
 - PaySafeCardPaymentResponse
 - SepaDirectDebitResponse
 - SofortPaymentResponse
+- PointOfSalePaymentResponse
 
 ### Updating a payment
 Some properties of a payment can be updated after the payment has been created. 
