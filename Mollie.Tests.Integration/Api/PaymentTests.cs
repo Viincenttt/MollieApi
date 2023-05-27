@@ -460,6 +460,31 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(paymentRequest.Method, posResponse.Method);
             Assert.AreEqual(paymentRequest.TerminalId, posResponse.Details.TerminalId);
         }
+
+        [Test]
+        [Ignore("We can only test this in debug mode, because we have to set the payment status to authorized")]
+        [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        public async Task CanCreatePaymentWithManualCaptureMode() {
+            // Given
+            PaymentRequest paymentRequest = new PaymentRequest() {
+                Amount = new Amount(Currency.EUR, 10m),
+                Description = "Description",
+                RedirectUrl = this.DefaultRedirectUrl,
+                Method = PaymentMethod.CreditCard,
+                CaptureMode = CaptureMode.Manual
+            };
+            
+            // When
+            PaymentResponse paymentResponse = await _paymentClient.CreatePaymentAsync(paymentRequest);
+            CaptureResponse captureResponse = await _captureClient.CreateCapture(paymentResponse.Id, new CaptureRequest {
+                Amount = new Amount(Currency.EUR, 10m),
+                Description = "capture"
+            });
+
+            // Then
+            Assert.AreEqual(PaymentStatus.Authorized, paymentResponse.Status);
+            Assert.AreEqual(paymentResponse.Id, captureResponse.Id);
+        }
         
         [Test]
         [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]

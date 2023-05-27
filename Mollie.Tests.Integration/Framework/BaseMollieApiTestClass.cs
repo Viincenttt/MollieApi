@@ -30,6 +30,7 @@ namespace Mollie.Tests.Integration.Framework {
         protected IShipmentClient _shipmentClient;
         protected IBalanceClient _balanceClient;
         protected ITerminalClient _terminalClient;
+        protected ICaptureClient _captureClient;
 
         [OneTimeSetUp]
         public void InitClass() {
@@ -47,6 +48,7 @@ namespace Mollie.Tests.Integration.Framework {
             this._shipmentClient = new ShipmentClient(this.ApiKey);
             this._balanceClient = new BalanceClient(this.AccessKey);
             this._terminalClient = new TerminalClient(this.ApiKey);
+            this._captureClient = new CaptureClient(this.ApiKey);
         }
 
         [SetUp]

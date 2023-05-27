@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
 using Mollie.Api.Models.Capture;
+using Mollie.Api.Models.Capture.Request;
 using Mollie.Api.Models.List;
 
 namespace Mollie.Api.Client
@@ -16,13 +17,22 @@ namespace Mollie.Api.Client
             this.ValidateRequiredUrlParameter(nameof(paymentId), paymentId);
             this.ValidateRequiredUrlParameter(nameof(captureId), captureId);
             var queryParameters = BuildQueryParameters(testmode);
-            return await this.GetAsync<CaptureResponse>($"payments/{paymentId}/captures/{captureId}{queryParameters.ToQueryString()}").ConfigureAwait(false);
+            return await this.GetAsync<CaptureResponse>($"payments/{paymentId}/captures/{captureId}{queryParameters.ToQueryString()}")
+                .ConfigureAwait(false);
         }
 
         public async Task<ListResponse<CaptureResponse>> GetCapturesListAsync(string paymentId, bool testmode = false) {
             this.ValidateRequiredUrlParameter(nameof(paymentId), paymentId);
             var queryParameters = BuildQueryParameters(testmode);
-            return await this.GetAsync<ListResponse<CaptureResponse>>($"payments/{paymentId}/captures{queryParameters.ToQueryString()}").ConfigureAwait(false);
+            return await this.GetAsync<ListResponse<CaptureResponse>>($"payments/{paymentId}/captures{queryParameters.ToQueryString()}")
+                .ConfigureAwait(false);
+        }
+
+        public async Task<CaptureResponse> CreateCapture(string paymentId, CaptureRequest captureRequest, bool testmode = false) {
+            this.ValidateRequiredUrlParameter(nameof(paymentId), paymentId);
+            var queryParameters = BuildQueryParameters(testmode);
+            return await this.PostAsync<CaptureResponse>($"payments/{paymentId}/captures{queryParameters.ToQueryString()}", captureRequest)
+                .ConfigureAwait(false);
         }
         
         private Dictionary<string, string> BuildQueryParameters(bool testmode) {

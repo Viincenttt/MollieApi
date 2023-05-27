@@ -6,7 +6,8 @@ using NUnit.Framework;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Mollie.Api.Models.Payment.Request;
+using Mollie.Api.Models;
+using Mollie.Api.Models.Capture.Request;
 using RichardSzalay.MockHttp;
 
 namespace Mollie.Tests.Unit.Client {
@@ -173,7 +174,7 @@ namespace Mollie.Tests.Unit.Client {
         [TestCase("")]
         [TestCase(" ")]
         [TestCase(null)]
-        public void GetCapturesListAsync_NoCaptureIdIsGiven_ArgumentExceptionIsThrown(string paymentId) {
+        public void GetCapturesListAsync_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string paymentId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
@@ -181,6 +182,26 @@ namespace Mollie.Tests.Unit.Client {
 
             // When: We send the request
             var exception = Assert.ThrowsAsync<ArgumentException>(async () => await captureClient.GetCapturesListAsync(paymentId));
+
+            // Then
+            Assert.AreEqual($"Required URL argument 'paymentId' is null or empty", exception.Message); 
+        }
+        
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase(null)]
+        public void CreateCapture_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string paymentId) {
+            // Arrange
+            var captureRequest = new CaptureRequest {
+                Amount = new Amount(Currency.EUR, 10m),
+                Description = "capture-description"
+            };
+            var mockHttp = new MockHttpMessageHandler();
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            CaptureClient captureClient = new CaptureClient("abcde", httpClient);
+
+            // When: We send the request
+            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await captureClient.CreateCapture(paymentId, captureRequest));
 
             // Then
             Assert.AreEqual($"Required URL argument 'paymentId' is null or empty", exception.Message); 
