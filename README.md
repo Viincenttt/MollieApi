@@ -28,6 +28,7 @@ Have you spotted a bug or want to add a missing feature? All pull requests are w
 [13. Onboarding Api](#13-onboarding-api)  
 [14. Payment link Api](#14-payment-link-api)  
 [15. Balances Api](#15-balances-api)  
+[16. Terminal Api](#16-terminal-api)  
 
 ## 1. Getting started
 
@@ -73,6 +74,7 @@ This library currently supports the following API's:
 - Captures API
 - Onboarding API
 - Balances API
+- Terminal API
 
 ### Creating a API client object
 Every API has it's own API client class. For example: PaymentClient, PaymentMethodClient, CustomerClient, MandateClient, SubscriptionClient, IssuerClient and RefundClient classes. All of these API client classes also have their own interface. 
@@ -950,3 +952,18 @@ With the List primary balance transactions endpoint you can retrieve a list of a
 BalanceClient client = new BalanceClient({yourApiKey});
 BalanceTransactionResponse balanceTransactions = await this._balanceClient.ListPrimaryBalanceTransactionsAsync();
 ```
+
+## 16. Terminal Api
+### List terminals
+Retrieve all point-of-sale terminal devices linked to your organization or profile, ordered from newest to oldest. 
+```C#
+ITerminalClient client = new TerminalClient({yourApiKey});
+ListResponse<TerminalResponse> response = await client.GetTerminalListAsync();
+```
+
+### Get terminal by id
+```C#
+ITerminalClient client = new TerminalClient({yourApiKey});
+TerminalResponse response = await client.GetTerminalAsync({yourTerminalId});
+```
+
