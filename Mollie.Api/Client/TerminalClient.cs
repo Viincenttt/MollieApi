@@ -29,9 +29,10 @@ namespace Mollie.Api.Client
         /// <param name="from">used for pagination</param>
         /// <param name="limit">used for pagination</param>
         /// <param name="profileId"> profile that requests the ListResponse element</param>
+        /// <param name="testmode"> Set this to true to only retrieve terminals made in test mode. By default, only live terminals are returned.</param>
         /// <returns></returns>
-        public async Task<ListResponse<TerminalResponse>> GetTerminalListAsync(string from = null, int? limit = null, string profileId = null) {
-            var queryParameters = this.BuildQueryParameters(profileId);
+        public async Task<ListResponse<TerminalResponse>> GetTerminalListAsync(string from = null, int? limit = null, string profileId = null, bool testmode = false) {
+            var queryParameters = this.BuildQueryParameters(profileId, testmode);
             return await this.GetListAsync<ListResponse<TerminalResponse>>("terminals", from, limit, queryParameters).ConfigureAwait(false);
         }
         
@@ -39,9 +40,10 @@ namespace Mollie.Api.Client
             return await this.GetAsync(url).ConfigureAwait(false);
         }
         
-        private Dictionary<string, string> BuildQueryParameters(string profileId = null) {
+        private Dictionary<string, string> BuildQueryParameters(string profileId, bool testmode) {
             var result = new Dictionary<string, string>();
-            result.AddValueIfNotNullOrEmpty(nameof(profileId), profileId);
+            result.AddValueIfNotNullOrEmpty("profileId", profileId);
+            result.AddValueIfTrue("testmode", testmode);
             return result;
         }
     }
