@@ -3,6 +3,8 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client;
 using Mollie.Api.Models;
+using Mollie.Api.Models.Capture;
+using Mollie.Api.Models.Capture.Request;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Payment;
 using Mollie.Api.Models.Payment.Request;
@@ -457,6 +459,26 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(paymentRequest.Description, posResponse.Description);
             Assert.AreEqual(paymentRequest.Method, posResponse.Method);
             Assert.AreEqual(paymentRequest.TerminalId, posResponse.Details.TerminalId);
+        }
+        
+        [Test]
+        [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [Ignore("Nothing to test yet, because paymentresponse doesn't contain capturedelay yet")]
+        public async Task CanCreatePaymentWithCaptureDelay() {
+            // Given
+            PaymentRequest paymentRequest = new PaymentRequest() {
+                Amount = new Amount(Currency.EUR, 10m),
+                Description = "Description",
+                RedirectUrl = this.DefaultRedirectUrl,
+                Method = PaymentMethod.CreditCard,
+                CaptureDelay = "2 days"
+            };
+            
+            // When
+            PaymentResponse paymentResponse = await _paymentClient.CreatePaymentAsync(paymentRequest);
+
+            // Then
+            // TODO: Verify that response contains capture delay
         }
 
         private async Task<MandateResponse> GetFirstValidMandate() {

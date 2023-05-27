@@ -147,6 +147,21 @@ namespace Mollie.Api.Models.Payment.Request {
         /// be offered, but only cards from the allowed country are accepted.
         /// </summary>
         public string RestrictPaymentMethodsToCountry { get; set; }
+        
+        /// <summary>
+        /// Indicates whether the capture will be scheduled automatically or not. Set to manual to capture the payment manually using the
+        /// Create capture endpoint. Set to automatic by default, which indicates the payment will be captured automatically, without
+        /// having to separately request it. Setting automatic without a captureDelay will result in a regular payment.
+        /// See the Mollie.Api.Models.Capture.CaptureMode class for a full list of known values.
+        /// </summary>
+        public string CaptureMode { get; set; }
+        
+        /// <summary>
+        /// Interval to wait before the payment is captured, for example 8 hours or 2 days. In order to schedule an automatic capture,
+        /// the captureMode must be set to either automatic or be omitted.
+        /// Possible values: ... hours ... days
+        /// </summary>
+        public string CaptureDelay { get; set; }
 
         public void SetMetadata(object metadataObj, JsonSerializerSettings jsonSerializerSettings = null) {
             this.Metadata = JsonConvert.SerializeObject(metadataObj, jsonSerializerSettings);
