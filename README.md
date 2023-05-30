@@ -832,6 +832,28 @@ await profileClient.DisableGiftCardIssuerAsync({profileId}, issuerToToggle);
 ```
 
 ## 12. Captures API
+### Create capture
+Some payment methods allow you to first collect a consumer’s authorization, and capture the amount at a later point. 
+By default, Mollie captures payments automatically. If however you configured your payment with captureMode: manual, you can capture the payment using this endpoint after having collected the consumer’s authorization.
+```C#
+PaymentRequest paymentRequest = new PaymentRequest() {
+	Amount = new Amount(Currency.EUR, 10m),
+	Description = "Description",
+	RedirectUrl = RedirectUrl = "http://www.google.nl",
+	Method = PaymentMethod.CreditCard,
+	CaptureMode = CaptureMode.Manual
+};
+IPaymentClient paymentClient = new PaymentClient({yourApiKey});
+var paymentResponse = await paymentClient.GetPaymentAsync(paymentResponse.Id);
+
+CaptureResponse captureResponse = await _captureClient.CreateCapture(paymentResponse.Id, new CaptureRequest {
+	Amount = new Amount(Currency.EUR, 10m),
+	Description = "capture"
+});
+ICaptureClient captureClient = new CaptureClient({yourApiKey});
+CaptureResponse result = await captureClient.GetCaptureAsync({paymentId}, {captureId});
+```
+
 ### Get capture
 Retrieve a single capture by its ID. Note the original payment’s ID is needed as well.
 ```C#
