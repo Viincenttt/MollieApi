@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Mollie.Api.JsonConverters;
+using Mollie.Api.Models.Capture;
 using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Payment.Response {
@@ -206,6 +207,25 @@ namespace Mollie.Api.Models.Payment.Response {
         /// The application fee, if the payment was created with one.
         /// </summary>
         public ApplicationFee ApplicationFee { get; set; }
+        
+        /// <summary>
+        /// Indicates whether the capture will be scheduled automatically or not. Set to manual for payments that can be captured
+        /// manually using the Create capture endpoint. Set to automatic by default, which indicates the payment will be captured
+        /// automatically, without having to separately request it.
+        /// </summary>
+        public string CaptureMode { get; set; }
+        
+        /// <summary>
+        /// Indicates the interval to wait before the payment is captured, for example 8 hours or 2 days. The capture delay will be
+        /// added to the date and time the payment became authorized.
+        /// </summary>
+        public string CaptureDelay { get; set; }
+        
+        /// <summary>
+        /// Indicates the datetime on which the merchant has to have captured the payment, before we can no longer guarantee a
+        /// successful capture, in ISO 8601 format. This parameter is omitted if the payment is not authorized (yet).
+        /// </summary>
+        public DateTime? CaptureBefore { get; set; }
 
         [JsonProperty("_embedded")]
         public PaymentEmbeddedResponse Embedded { get; set; }
