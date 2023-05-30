@@ -485,7 +485,6 @@ namespace Mollie.Tests.Integration.Api {
 
             // Then
             Assert.AreEqual(PaymentStatus.Authorized, paymentResponse.Status);
-            Assert.AreEqual(paymentResponse.Id, captureResponse.Id);
             Assert.AreEqual(CaptureMode.Manual, paymentResponse.CaptureMode);
             Assert.NotNull(paymentResponse.CaptureBefore);
         }

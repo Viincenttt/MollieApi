@@ -21,7 +21,7 @@ namespace Mollie.Tests.Unit.Client {
 
         private string defaultCaptureJsonResponse = $@"{{
     ""resource"": ""capture"",
-    ""id"": ""cpt_4qqhO89gsT"",
+    ""id"": ""{defaultCaptureId}"",
     ""mode"": ""live"",
     ""amount"": {{
         ""value"": ""{defaultAmountValue}"",
@@ -143,7 +143,7 @@ namespace Mollie.Tests.Unit.Client {
         [TestCase(" ")]
         [TestCase(null)]
         public void GetCaptureAsync_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string paymentId) {
-            // Arrange
+            // Given
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             CaptureClient captureClient = new CaptureClient("abcde", httpClient);
@@ -159,7 +159,7 @@ namespace Mollie.Tests.Unit.Client {
         [TestCase(" ")]
         [TestCase(null)]
         public void GetCaptureAsync_NoCaptureIdIsGiven_ArgumentExceptionIsThrown(string captureId) {
-            // Arrange
+            // Given
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             CaptureClient captureClient = new CaptureClient("abcde", httpClient);
@@ -175,7 +175,7 @@ namespace Mollie.Tests.Unit.Client {
         [TestCase(" ")]
         [TestCase(null)]
         public void GetCapturesListAsync_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string paymentId) {
-            // Arrange
+            // Given
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             CaptureClient captureClient = new CaptureClient("abcde", httpClient);
@@ -191,7 +191,7 @@ namespace Mollie.Tests.Unit.Client {
         [TestCase(" ")]
         [TestCase(null)]
         public void CreateCapture_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string paymentId) {
-            // Arrange
+            // Given
             var captureRequest = new CaptureRequest {
                 Amount = new Amount(Currency.EUR, 10m),
                 Description = "capture-description"
@@ -205,6 +205,29 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then
             Assert.AreEqual($"Required URL argument 'paymentId' is null or empty", exception.Message); 
+        }
+
+        [Test]
+        public async Task CreateCapture_CaptureIsCreated_CaptureIsDeserialized() {
+            // Given
+            var captureRequest = new CaptureRequest {
+                Amount = new Amount(defaultAmountCurrency, defaultAmountValue),
+                Description = "capture-description"
+            };
+            var mockHttp = this.CreateMockHttpMessageHandler(
+                HttpMethod.Post, 
+                $"{BaseMollieClient.ApiEndPoint}payments/{defaultPaymentId}/captures", 
+                defaultCaptureJsonResponse);
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            CaptureClient captureClient = new CaptureClient("abcde", httpClient);
+            
+            // When
+            CaptureResponse response = await captureClient.CreateCapture(defaultPaymentId, captureRequest);
+
+            // Then
+            mockHttp.VerifyNoOutstandingRequest();
+            Assert.AreEqual(defaultCaptureId, response.Id);
+            Assert.AreEqual(defaultPaymentId, response.PaymentId);
         }
     }
 }
