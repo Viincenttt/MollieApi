@@ -476,6 +476,8 @@ namespace Mollie.Tests.Integration.Api {
             
             // When
             PaymentResponse paymentResponse = await _paymentClient.CreatePaymentAsync(paymentRequest);
+            // Perform payment before API call
+            paymentResponse = await _paymentClient.GetPaymentAsync(paymentResponse.Id);
             CaptureResponse captureResponse = await _captureClient.CreateCapture(paymentResponse.Id, new CaptureRequest {
                 Amount = new Amount(Currency.EUR, 10m),
                 Description = "capture"
@@ -484,11 +486,12 @@ namespace Mollie.Tests.Integration.Api {
             // Then
             Assert.AreEqual(PaymentStatus.Authorized, paymentResponse.Status);
             Assert.AreEqual(paymentResponse.Id, captureResponse.Id);
+            Assert.AreEqual(CaptureMode.Manual, paymentResponse.CaptureMode);
+            Assert.NotNull(paymentResponse.CaptureBefore);
         }
         
         [Test]
         [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        [Ignore("Nothing to test yet, because paymentresponse doesn't contain capturedelay yet")]
         public async Task CanCreatePaymentWithCaptureDelay() {
             // Given
             PaymentRequest paymentRequest = new PaymentRequest() {
@@ -503,7 +506,7 @@ namespace Mollie.Tests.Integration.Api {
             PaymentResponse paymentResponse = await _paymentClient.CreatePaymentAsync(paymentRequest);
 
             // Then
-            // TODO: Verify that response contains capture delay
+            Assert.AreEqual(paymentRequest.CaptureDelay, paymentResponse.CaptureDelay);
         }
 
         private async Task<MandateResponse> GetFirstValidMandate() {
