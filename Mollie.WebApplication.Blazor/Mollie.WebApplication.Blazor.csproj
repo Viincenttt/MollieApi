@@ -6,4 +6,8 @@
         <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Mollie.Api\Mollie.Api.csproj" />
+    </ItemGroup>
+
 </Project>
