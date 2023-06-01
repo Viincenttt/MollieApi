@@ -1,8 +1,11 @@
+using Mollie.WebApplication.Blazor.Framework.Extensions;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+builder.Services.AddMollieApi(builder.Configuration);
 
 var app = builder.Build();
 
