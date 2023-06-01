@@ -45,13 +45,10 @@ else {
         </tbody>
     </table>
     
-    @if (_payments.Links.Previous != null) {
-        <a class="btn btn-primary" href="/payment/overview?Url=@_payments.Links.Previous.Href">&lt;&lt; Previous</a>
-    }
-
-    @if (_payments.Links.Next != null) {
-        <a class="btn btn-primary" href="/payment/overview?Url=@_payments.Links.Next.Href">Next &gt;&gt;</a>
-    }
+    <OverviewNavigation
+        Previous="_payments.Links.Previous"
+        Next="_payments.Links.Next">
+    </OverviewNavigation>
 }
 
 @code {
