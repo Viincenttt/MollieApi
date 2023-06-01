@@ -8,6 +8,10 @@
     <p>Loading...</p>
 }
 else {
+    <div class="clearfix">
+        <a href="/customer/@CustomerId/subscription/create" class="btn btn-primary float-right">Create new subscription</a>
+    </div>
+    
     <table class="table table-striped">
         <thead>
         <tr>
@@ -26,7 +30,6 @@ else {
                 <td>@subscription.Amount.ToString()</td>
                 <td>@subscription.Mode</td>
                 <td>@subscription.Status</td>
-                <td>&nbsp;</td>
             </tr>
         }
         </tbody>
