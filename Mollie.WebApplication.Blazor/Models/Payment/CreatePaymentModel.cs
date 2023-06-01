@@ -2,7 +2,7 @@
 using Mollie.Api.Models;
 using Mollie.WebApplication.Blazor.Framework.Validators;
 
-namespace Mollie.WebApplication.Blazor.Models; 
+namespace Mollie.WebApplication.Blazor.Models.Payment; 
 
 public class CreatePaymentModel {
     [Required]
