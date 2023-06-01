@@ -61,10 +61,6 @@ else {
     
     private ListResponse<PaymentResponse> _payments = null;
 
-    protected override async Task OnInitializedAsync() {
-        await LoadData();
-    }
-
     protected override async Task OnParametersSetAsync() {
         await LoadData();
     }
