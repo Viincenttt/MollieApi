@@ -1,0 +1,65 @@
+﻿@page "/customer/overview"
+
+@inject ICustomerClient CustomerClient
+
+<h3>Customers</h3>
+
+@if (_customers == null) {
+    <p>Loading...</p>
+}
+else {
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Date created</th>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Locale</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (CustomerResponse customer in _customers.Items) {
+            <tr>
+                <td>@customer.Id</td>
+                <td>@customer.CreatedAt</td>
+                <td>@customer.Name</td>
+                <td><a href="mailto:@customer.Email">@customer.Email</a></td>
+                <td>@customer.Locale</td>
+                <td>
+                    TODO
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    
+    <OverviewNavigation
+        Previous="_customers.Links.Previous"
+        Next="_customers.Links.Next">
+    </OverviewNavigation>
+}
+
+@code {
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string Url { get; set; }
+    
+    private ListResponse<CustomerResponse> _customers = null;
+
+    protected override async Task OnParametersSetAsync() {
+        await LoadData();
+    }
+
+    private async Task LoadData() {
+        if (string.IsNullOrEmpty(Url)) {
+            _customers = await CustomerClient.GetCustomerListAsync();
+        }
+        else {
+            _customers = await CustomerClient.GetCustomerListAsync(new UrlObjectLink<ListResponse<CustomerResponse>>() {
+                Href = Url
+            });
+        }
+    }
+}
