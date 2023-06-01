@@ -8,7 +8,7 @@
 
 <h3>Create new payment</h3>
 
-<EditForm Model="model" OnValidSubmit="@OnSave">
+<EditForm Model="model" OnValidSubmit="@OnSave" class="col-md-6">
     <DataAnnotationsValidator />
     <ValidationSummary />
     
@@ -51,7 +51,7 @@
         </InputText>
     </div>
 
-    <input type="submit" name="Save" value="Save" class="btn btn-primary"/>
+    <input type="submit" name="Save" value="Save" class="btn btn-primary mt-2"/>
 </EditForm>
 
 @code {
