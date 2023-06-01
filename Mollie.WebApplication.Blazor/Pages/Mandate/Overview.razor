@@ -1,4 +1,4 @@
-﻿@page "/customer/{customerId}/mandate"
+﻿@page "/customer/{customerId}/mandate/overview"
 
 @inject IMandateClient MandateClient
 
@@ -8,6 +8,10 @@
     <p>Loading...</p>
 }
 else {
+    <div class="clearfix">
+        <a href="/customer/@CustomerId/mandate/create" class="btn btn-primary float-right">Create new mandate</a>
+    </div>
+    
     <table class="table table-striped">
         <thead>
         <tr>
