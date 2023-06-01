@@ -4,6 +4,7 @@
 @using Mollie.Api.Models.List
 @using Mollie.Api.Models.Payment
 @using Mollie.Api.Models.Payment.Response
+@using Mollie.Api.Models.Url
 
 @inject IPaymentClient PaymentClient
 
@@ -26,29 +27,56 @@ else {
         </tr>
         </thead>
         <tbody>
-            @foreach (PaymentResponse payment in _payments.Items) {
-                <tr>
-                    <td>@payment.Id</td>
-                    <td>@payment.CreatedAt</td>
-                    <td>@payment.Amount.ToString()</td>
-                    <td>@payment.Status</td>
-                    <td>@payment.Method</td>
-                    <td> @payment.Metadata</td>
-                    <td>
-                        @if (payment.Status == PaymentStatus.Open) {
-                            <a href="@payment.Links.Checkout.Href" class="btn btn-outline-secondary" target="_blank">Pay</a>
-                        }
-                    </td>
-                </tr>
-            }
+        @foreach (PaymentResponse payment in _payments.Items) {
+            <tr>
+                <td>@payment.Id</td>
+                <td>@payment.CreatedAt</td>
+                <td>@payment.Amount.ToString()</td>
+                <td>@payment.Status</td>
+                <td>@payment.Method</td>
+                <td> @payment.Metadata</td>
+                <td>
+                    @if (payment.Status == PaymentStatus.Open) {
+                        <a href="@payment.Links.Checkout.Href" class="btn btn-outline-secondary" target="_blank">Pay</a>
+                    }
+                </td>
+            </tr>
+        }
         </tbody>
     </table>
+    
+    @if (_payments.Links.Previous != null) {
+        <a class="btn btn-primary" href="/payment/overview?Url=@_payments.Links.Previous.Href">&lt;&lt; Previous</a>
+    }
+
+    @if (_payments.Links.Next != null) {
+        <a class="btn btn-primary" href="/payment/overview?Url=@_payments.Links.Next.Href">Next &gt;&gt;</a>
+    }
 }
 
 @code {
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string Url { get; set; }
+    
     private ListResponse<PaymentResponse> _payments = null;
 
     protected override async Task OnInitializedAsync() {
-        _payments = await PaymentClient.GetPaymentListAsync();
+        await LoadData();
+    }
+
+    protected override async Task OnParametersSetAsync() {
+        await LoadData();
+    }
+
+    private async Task LoadData() {
+        if (string.IsNullOrEmpty(Url)) {
+            _payments = await PaymentClient.GetPaymentListAsync();
+        }
+        else {
+            _payments = await PaymentClient.GetPaymentListAsync(new UrlObjectLink<ListResponse<PaymentResponse>>() {
+                Href = Url
+            });
+        }
     }
 }
