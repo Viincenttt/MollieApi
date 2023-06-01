@@ -1,0 +1,65 @@
+﻿@page "/customer/{customerId}/subscription"
+
+@inject ISubscriptionClient SubscriptionClient
+
+<h3>Subscriptions</h3>
+
+@if (subscriptions == null) {
+    <p>Loading...</p>
+}
+else {
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Date created</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Mode</th>
+            <th scope="col">Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (SubscriptionResponse subscription in subscriptions.Items) {
+            <tr>
+                <td>@subscription.Id</td>
+                <td>@subscription.CreatedAt</td>
+                <td>@subscription.Amount.ToString()</td>
+                <td>@subscription.Mode</td>
+                <td>@subscription.Status</td>
+                <td>&nbsp;</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    
+    <OverviewNavigation
+        Previous="subscriptions.Links.Previous"
+        Next="subscriptions.Links.Next">
+    </OverviewNavigation>
+}
+
+@code {
+    [Parameter]
+    public string CustomerId { get; set; }
+    
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string Url { get; set; }
+    
+    private ListResponse<SubscriptionResponse> subscriptions = null;
+
+    protected override async Task OnParametersSetAsync() {
+        await LoadData();
+    }
+
+    private async Task LoadData() {
+        if (string.IsNullOrEmpty(Url)) {
+            subscriptions = await SubscriptionClient.GetSubscriptionListAsync(CustomerId);
+        }
+        else {
+            subscriptions = await SubscriptionClient.GetSubscriptionListAsync(new UrlObjectLink<ListResponse<SubscriptionResponse>>() {
+                Href = Url
+            });
+        }
+    }
+}
