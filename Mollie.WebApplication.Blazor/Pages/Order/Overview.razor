@@ -1,10 +1,10 @@
-﻿@page "/payment/overview"
+﻿@page "/order/overview"
 
-@inject IPaymentClient PaymentClient
+@inject IOrderClient OrderClient
 
-<h3>Payment overview</h3>
+<h3>Order overview</h3>
 
-@if (_payments == null) {
+@if (_orders == null) {
     <p>Loading...</p>
 }
 else {
@@ -21,17 +21,17 @@ else {
         </tr>
         </thead>
         <tbody>
-        @foreach (PaymentResponse payment in _payments.Items) {
+        @foreach (OrderResponse order in _orders.Items) {
             <tr>
-                <td>@payment.Id</td>
-                <td>@payment.CreatedAt</td>
-                <td>@payment.Amount.ToString()</td>
-                <td>@payment.Status</td>
-                <td>@payment.Method</td>
-                <td>@payment.Metadata</td>
+                <td>@order.Id</td>
+                <td>@order.CreatedAt</td>
+                <td>@order.Amount.ToString()</td>
+                <td>@order.Status</td>
+                <td>@order.Method</td>
+                <td>@order.Metadata</td>
                 <td>
-                    @if (payment.Status == PaymentStatus.Open) {
-                        <a href="@payment.Links.Checkout.Href" class="btn btn-outline-secondary" target="_blank">Pay</a>
+                    @if (order.Status == OrderStatus.Created) {
+                        <a href="@order.Links.Checkout.Href" class="btn btn-outline-secondary" target="_blank">Pay</a>
                     }
                 </td>
             </tr>
@@ -40,8 +40,8 @@ else {
     </table>
     
     <OverviewNavigation
-        Previous="_payments.Links.Previous"
-        Next="_payments.Links.Next">
+        Previous="_orders.Links.Previous"
+        Next="_orders.Links.Next">
     </OverviewNavigation>
 }
 
@@ -50,7 +50,7 @@ else {
     [SupplyParameterFromQuery]
     public string Url { get; set; }
     
-    private ListResponse<PaymentResponse> _payments = null;
+    private ListResponse<OrderResponse> _orders = null;
 
     protected override async Task OnParametersSetAsync() {
         await LoadData();
@@ -58,10 +58,10 @@ else {
 
     private async Task LoadData() {
         if (string.IsNullOrEmpty(Url)) {
-            _payments = await PaymentClient.GetPaymentListAsync();
+            _orders = await OrderClient.GetOrderListAsync();
         }
         else {
-            _payments = await PaymentClient.GetPaymentListAsync(new UrlObjectLink<ListResponse<PaymentResponse>>() {
+            _orders = await OrderClient.GetOrderListAsync(new UrlObjectLink<ListResponse<OrderResponse>>() {
                 Href = Url
             });
         }
