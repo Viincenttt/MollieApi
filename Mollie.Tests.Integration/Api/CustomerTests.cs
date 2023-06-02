@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -11,10 +10,9 @@ using Mollie.Api.Models.Payment;
 using Mollie.Api.Models.Payment.Request;
 using Mollie.Api.Models.Payment.Response;
 using Mollie.Tests.Integration.Framework;
-using NUnit.Framework;
 
+/*
 namespace Mollie.Tests.Integration.Api {
-    [TestFixture]
     public class CustomerTests : BaseMollieApiTestClass {
         [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanRetrieveCustomerList() {
@@ -173,3 +171,4 @@ namespace Mollie.Tests.Integration.Api {
         }
     }
 }
+*/

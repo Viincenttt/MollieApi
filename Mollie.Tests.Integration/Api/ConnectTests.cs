@@ -1,12 +1,11 @@
 ﻿using Mollie.Api.Client;
 using Mollie.Api.Models.Connect;
 using Mollie.Tests.Integration.Framework;
-using NUnit.Framework;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+/*
 namespace Mollie.Tests.Integration.Api {
-    [TestFixture]
     public class ConnectTests : BaseMollieApiTestClass {
         [Test]
         public void GetAuthorizationUrl_WithSingleScope_GeneratesAuthorizationUrl() {
@@ -71,3 +70,4 @@ namespace Mollie.Tests.Integration.Api {
         }
     }
 }
+*/

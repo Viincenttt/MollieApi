@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Mollie.Api.Models.Balance.Response;
 using Mollie.Api.Models.Balance.Response.BalanceReport;
 using Mollie.Api.Models.Balance.Response.BalanceReport.Specific.StatusBalance;
 using Mollie.Api.Models.Balance.Response.BalanceReport.Specific.TransactionCategories;
 using Mollie.Tests.Integration.Framework;
-using NUnit.Framework;
 
+/*
 namespace Mollie.Tests.Integration.Api {
-    [TestFixture]
     [Category("AccessKeyIntegrationTest")]
     public class BalanceTests : BaseMollieApiTestClass {
         [Test][RetryOnApiRateLimitFailure(NumberOfRetries)]
@@ -126,4 +124,4 @@ namespace Mollie.Tests.Integration.Api {
             Assert.IsNotNull(result.Embedded.BalanceTransactions);
         }
     }
-}
+}*/

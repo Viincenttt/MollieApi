@@ -1,10 +1,7 @@
-﻿using NUnit.Framework;
-using NUnit.Framework.Interfaces;
-using NUnit.Framework.Internal;
-using NUnit.Framework.Internal.Commands;
-using System;
+﻿using System;
 using System.Threading;
 
+/*
 namespace Mollie.Tests.Integration.Framework {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
     public class RetryOnApiRateLimitFailureAttribute : PropertyAttribute, IWrapSetUpTearDown {
@@ -75,4 +72,4 @@ namespace Mollie.Tests.Integration.Framework {
             }
         }
     }
-}
+}*/

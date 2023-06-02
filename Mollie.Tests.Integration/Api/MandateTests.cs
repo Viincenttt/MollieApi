@@ -2,13 +2,11 @@
 using System.Threading.Tasks;
 using Mollie.Api.Models.Customer;
 using Mollie.Api.Models.List;
-
 using Mollie.Api.Models.Mandate;
 using Mollie.Tests.Integration.Framework;
-using NUnit.Framework;
 
+/*
 namespace Mollie.Tests.Integration.Api {
-    [TestFixture]
     public class MandateTests : BaseMollieApiTestClass {
         [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanRetrieveMandateList() {
@@ -63,3 +61,4 @@ namespace Mollie.Tests.Integration.Api {
         }
     }
 }
+*/

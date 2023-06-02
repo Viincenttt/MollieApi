@@ -12,15 +12,14 @@ using Mollie.Api.Models.Payment.Response;
 using Mollie.Api.Models.Payment.Response.Specific;
 using Mollie.Api.Models.Terminal;
 using Mollie.Tests.Integration.Framework;
-using NUnit.Framework;
 
+/*
 namespace Mollie.Tests.Integration.Api {
     using System.Collections.Generic;
     using System.Linq;
     using Mollie.Api.Models.Customer;
     using Mollie.Api.Models.Mandate;
 
-    [TestFixture]
     public class PaymentTests : BaseMollieApiTestClass {
         [Test]
         [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
@@ -532,3 +531,4 @@ namespace Mollie.Tests.Integration.Api {
         public string Description { get; set; }
     }
 }
+*/

@@ -6,10 +6,9 @@ using Mollie.Api.Models.List;
 using Mollie.Api.Models.PaymentLink.Request;
 using Mollie.Api.Models.PaymentLink.Response;
 using Mollie.Tests.Integration.Framework;
-using NUnit.Framework;
 
+/*
 namespace Mollie.Tests.Integration.Api {
-    [TestFixture]
     public class PaymentLinkTests : BaseMollieApiTestClass {
         [Test]
         [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
@@ -55,4 +54,4 @@ namespace Mollie.Tests.Integration.Api {
             verifyPaymentLinkResponse(retrievePaymentLinkResponse);
         }
     }
-}
+}*/

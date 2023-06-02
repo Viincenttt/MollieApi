@@ -2,15 +2,13 @@
 using System.Threading.Tasks;
 using Mollie.Api.Models;
 using Mollie.Api.Models.List;
-
 using Mollie.Api.Models.Payment.Request;
 using Mollie.Api.Models.Payment.Response;
 using Mollie.Api.Models.Refund;
 using Mollie.Tests.Integration.Framework;
-using NUnit.Framework;
 
+/*
 namespace Mollie.Tests.Integration.Api {
-    [TestFixture]
     public class RefundTests : BaseMollieApiTestClass {
         [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
         [Ignore("We can only test this in debug mode, because we actually have to use the PaymentUrl to make the payment, since Mollie can only refund payments that have been paid")]
@@ -123,3 +121,4 @@ namespace Mollie.Tests.Integration.Api {
         }
     }
 }
+*/

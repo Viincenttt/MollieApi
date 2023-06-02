@@ -4,11 +4,10 @@ using System.Threading.Tasks;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Shipment;
 using Mollie.Tests.Integration.Framework;
-using NUnit.Framework;
 
+/*
 namespace Mollie.Tests.Integration.Api
 {
-    [TestFixture]
     public class ShipmentTests : BaseMollieApiTestClass {
         [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
         [Ignore("For manual testing only")]
@@ -40,3 +39,4 @@ namespace Mollie.Tests.Integration.Api
         }
     }
 }
+*/

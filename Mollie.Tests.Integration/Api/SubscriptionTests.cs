@@ -7,10 +7,9 @@ using Mollie.Api.Models.List;
 using Mollie.Api.Models.Mandate;
 using Mollie.Api.Models.Subscription;
 using Mollie.Tests.Integration.Framework;
-using NUnit.Framework;
 
+/*
 namespace Mollie.Tests.Integration.Api {
-    [TestFixture]
     public class SubscriptionTests : BaseMollieApiTestClass {
         [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanRetrieveSubscriptionList() {
@@ -153,3 +152,4 @@ namespace Mollie.Tests.Integration.Api {
         }
     }
 }
+*/

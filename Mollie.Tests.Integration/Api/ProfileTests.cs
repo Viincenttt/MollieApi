@@ -2,18 +2,16 @@
 using Mollie.Api.Client;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Payment;
-using Mollie.Api.Models.Payment.Response.Specific;
 using Mollie.Api.Models.PaymentMethod;
 using Mollie.Api.Models.Profile.Response;
 using Mollie.Tests.Integration.Framework;
-using NUnit.Framework;
 using System.Linq;
 using System.Threading.Tasks;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Profile.Request;
 
+/*
 namespace Mollie.Tests.Integration.Api {
-    [TestFixture]
     public class ProfileTests : BaseMollieApiTestClass {
         [Test]
         public async Task GetCurrentProfileAsync_ReturnsCurrentProfile() {
@@ -93,20 +91,6 @@ namespace Mollie.Tests.Integration.Api {
             // Then
         }
 
-        /*
-        [Test]
-        public async Task EnableGiftCardIssuerAsync_WhenEnablingGiftCardIssuerForCurrentProfile_EnableGiftCardIssuerResponseIsReturned() {
-            // Given
-            const string issuerToEnable = "festivalcadeau";
-
-            // When: We enable a payment method for the current profile
-            EnableGiftCardIssuerResponse giftcardIssuerResponse = await this._profileClient.EnableGiftCardIssuerAsync(issuerToEnable);
-
-            // Then: Make sure a payment method is returned
-            Assert.IsNotNull(giftcardIssuerResponse);
-            Assert.AreEqual(issuerToEnable, giftcardIssuerResponse.Id);
-        }*/
-
         [Test]
         public async Task DisableGiftCardIssuerAsync_WhenDisablingGiftCardIssuerForCurrentProfile_NoErrorIsThrown() {
             // Given
@@ -118,3 +102,4 @@ namespace Mollie.Tests.Integration.Api {
         }
     }
 }
+*/

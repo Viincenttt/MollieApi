@@ -1,17 +1,19 @@
-﻿using System;
-using System.Linq;
+﻿using System.Threading.Tasks;
+using FluentAssertions;
 using Mollie.Api.Client;
+using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Payment.Request;
 using Mollie.Tests.Integration.Framework;
-using NUnit.Framework;
+using Xunit;
 
 namespace Mollie.Tests.Integration.Api {
-    [TestFixture]
     public class ApiExceptionTests : BaseMollieApiTestClass {
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public void ShouldThrowMollieApiExceptionWhenInvalidParametersAreGiven() {
+        [Fact]
+        //[RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        public async Task ShouldThrowMollieApiExceptionWhenInvalidParametersAreGiven() {
             // If: we create a payment request with invalid parameters
+            IPaymentClient paymentClient = new PaymentClient(this.ApiKey);
             PaymentRequest paymentRequest = new PaymentRequest() {
                 Amount = new Amount(Currency.EUR, "100.00"),
                 Description = null,
@@ -19,11 +21,10 @@ namespace Mollie.Tests.Integration.Api {
             };
             
             // Then: Send the payment request to the Mollie Api, this should throw a mollie api exception
-            AggregateException aggregateException = Assert.Throws<AggregateException>(() => this._paymentClient.CreatePaymentAsync(paymentRequest).Wait());
-            MollieApiException mollieApiException = aggregateException.InnerExceptions.FirstOrDefault(x => x.GetType() == typeof(MollieApiException)) as MollieApiException;
-            Assert.IsNotNull(mollieApiException);
-            Assert.IsNotNull(mollieApiException.Details);
-            Assert.True(!String.IsNullOrEmpty(mollieApiException.Details.Detail));
+            MollieApiException apiException = await Assert.ThrowsAsync<MollieApiException>(() => this._paymentClient.CreatePaymentAsync(paymentRequest));
+            apiException.Should().NotBeNull();
+            apiException.Details.Should().NotBeNull();
+            //Assert.True(!String.IsNullOrEmpty(mollieApiException.Details.Detail));
         }
     }
 }

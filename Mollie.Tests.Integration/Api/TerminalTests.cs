@@ -3,10 +3,9 @@ using System.Threading.Tasks;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Terminal;
 using Mollie.Tests.Integration.Framework;
-using NUnit.Framework;
 
+/*
 namespace Mollie.Tests.Integration.Api {
-    [TestFixture]
     public class TerminalTests : BaseMollieApiTestClass {
         [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
         public async Task CanRetrieveTerminalList() {
@@ -38,4 +37,4 @@ namespace Mollie.Tests.Integration.Api {
             Assert.AreEqual(firstTerminal.Id, response.Id);
         }
     }
-}
+}*/

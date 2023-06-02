@@ -4,7 +4,6 @@ using System.Threading;
 using Microsoft.Extensions.Configuration;
 using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
-using NUnit.Framework;
 
 namespace Mollie.Tests.Integration.Framework {
     public abstract class BaseMollieApiTestClass {
@@ -19,6 +18,7 @@ namespace Mollie.Tests.Integration.Framework {
         protected string AccessKey => this.Configuration.AccessKey ?? "access-key";
 
         protected IPaymentClient _paymentClient;
+        /*
         protected IPaymentLinkClient _paymentLinkClient;
         protected IPaymentMethodClient _paymentMethodClient;
         protected IRefundClient _refundClient;
@@ -30,8 +30,18 @@ namespace Mollie.Tests.Integration.Framework {
         protected IShipmentClient _shipmentClient;
         protected IBalanceClient _balanceClient;
         protected ITerminalClient _terminalClient;
-        protected ICaptureClient _captureClient;
+        protected ICaptureClient _captureClient;*/
 
+        protected BaseMollieApiTestClass() {
+            this.EnsureTestApiKey(this.ApiKey);
+            
+            // Mollie returns a 429 response code (Too many requests) if we send a lot of requests in a short timespan. 
+            // In order to avoid hitting their rate limit, we add a small delay between each tests. 
+            TimeSpan timeBetweenTests = TimeSpan.FromMilliseconds(1000);
+            Thread.Sleep(timeBetweenTests);
+        }
+        
+        /*
         [OneTimeSetUp]
         public void InitClass() {
             this.EnsureTestApiKey(this.ApiKey);
@@ -49,15 +59,7 @@ namespace Mollie.Tests.Integration.Framework {
             this._balanceClient = new BalanceClient(this.AccessKey);
             this._terminalClient = new TerminalClient(this.ApiKey);
             this._captureClient = new CaptureClient(this.ApiKey);
-        }
-
-        [SetUp]
-        public void Init() {
-            // Mollie returns a 429 response code (Too many requests) if we send a lot of requests in a short timespan. 
-            // In order to avoid hitting their rate limit, we add a small delay between each tests. 
-            TimeSpan timeBetweenTests = TimeSpan.FromMilliseconds(1000);
-            Thread.Sleep(timeBetweenTests);
-        }        
+        } */
 
         private void EnsureTestApiKey(string apiKey) {
             if (String.IsNullOrEmpty(apiKey)) {

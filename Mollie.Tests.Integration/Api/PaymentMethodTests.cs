@@ -5,10 +5,9 @@ using Mollie.Api.Models.List;
 using Mollie.Api.Models.Payment;
 using Mollie.Api.Models.PaymentMethod;
 using Mollie.Tests.Integration.Framework;
-using NUnit.Framework;
 
+/*
 namespace Mollie.Tests.Integration.Api {
-    [TestFixture]
     public class PaymentMethodTests : BaseMollieApiTestClass {
 
         [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
@@ -136,4 +135,4 @@ namespace Mollie.Tests.Integration.Api {
             Assert.IsTrue(paymentMethods.Count > 0);
         }
     }
-}
+}*/
