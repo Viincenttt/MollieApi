@@ -1,0 +1,12 @@
+﻿@using Mollie.Api.Client
+
+@if (Exception != null) {
+    <div class="alert alert-danger" role="alert">
+        A Mollie API exception has occured: StatusCode=@Exception.Details.Status Title=@Exception.Details.Title Detail=@Exception.Details.Detail
+    </div>
+}
+
+@code {
+    [Parameter, EditorRequired]
+    public MollieApiException Exception { get; set; }
+}
