@@ -1,0 +1,69 @@
+﻿@using Mollie.WebApplication.Blazor.Models.Order
+
+<div class="form-group">
+    <label for="given-name">Given name</label>
+    <InputText
+        id="given-name"
+        class="form-control"
+        @bind-Value="Address.GivenName">
+    </InputText>
+</div>
+
+<div class="form-group">
+    <label for="family-name">Family name</label>
+    <InputText
+        id="family-name"
+        class="form-control"
+        @bind-Value="Address.FamilyName">
+    </InputText>
+</div>
+
+<div class="form-group">
+    <label for="email">E-mail</label>
+    <InputText
+        id="email"
+        class="form-control"
+        @bind-Value="Address.Email">
+    </InputText>
+</div>
+
+<div class="form-group">
+    <label for="street-and-number">Street and number</label>
+    <InputText
+        id="street-and-number"
+        class="form-control"
+        @bind-Value="Address.StreetAndNumber">
+    </InputText>
+</div>
+
+<div class="form-group">
+    <label for="postal-code">Postal code</label>
+    <InputText
+        id="postal-code"
+        class="form-control"
+        @bind-Value="Address.PostalCode">
+    </InputText>
+</div>
+
+<div class="form-group">
+    <label for="city">City</label>
+    <InputText
+        id="city"
+        class="form-control"
+        @bind-Value="Address.City">
+    </InputText>
+</div>
+
+<div class="form-group">
+    <label for="country">Country</label>
+    <InputText
+        id="country"
+        class="form-control"
+        @bind-Value="Address.Country">
+    </InputText>
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public CreateOrderBillingAddressModel Address { get; set; }
+}

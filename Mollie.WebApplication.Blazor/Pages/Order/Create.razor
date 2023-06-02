@@ -2,6 +2,7 @@
 
 @using Mollie.WebApplication.Blazor.Pages.Order.Components
 @using Mollie.WebApplication.Blazor.Models.Order
+@using System.Globalization
 
 @inject IOrderClient OrderClient
 @inject NavigationManager NavigationManager
@@ -63,8 +64,10 @@
         </InputText>
     </div>
     
-    <h5 class="mt-3">Order lines</h5>
+    <h5 class="mt-3">Billing address</h5>
+    <OrderAddressEditor Address="model.BillingAddress"></OrderAddressEditor>
     
+    <h5 class="mt-3">Order lines</h5>
     <OrderLineEditor OrderLines="model.Lines"></OrderLineEditor>
 
     <input type="submit" name="Save" value="Save" class="btn btn-primary mt-2"/>
@@ -74,7 +77,7 @@
     private CreateOrderModel model = new() {
         OrderNumber = "Order number",
         Locale = Locale.nl_NL,
-        Amount = 10.00m,
+        Amount = 100.00m,
         Currency = "EUR",
         RedirectUrl = "https://www.mollie.com/",
         Lines = new List<CreateOrderLineModel> {
@@ -86,13 +89,41 @@
                 VatRate = 21.00m,
                 VatAmount = 17.36m
             }
+        },
+        BillingAddress = new CreateOrderBillingAddressModel {
+            City = "Amsterdam",
+            Country = "NL",
+            Email = "customer@customer.customer",
+            FamilyName = "Mollie",
+            GivenName = "Mollie",
+            PostalCode = "1015 CW",
+            StreetAndNumber = "Keizersgracht 126"
         }
     };
     
     private async Task OnSave() {
         await OrderClient.CreateOrderAsync(new OrderRequest {
+            OrderNumber = model.OrderNumber,
+            Locale = model.Locale,
             Amount = new Amount(model.Currency, model.Amount),
-            RedirectUrl = model.RedirectUrl
+            RedirectUrl = model.RedirectUrl,
+            BillingAddress = new OrderAddressDetails {
+                GivenName = model.BillingAddress.GivenName,
+                FamilyName = model.BillingAddress.FamilyName,
+                Email = model.BillingAddress.Email,
+                StreetAndNumber = model.BillingAddress.StreetAndNumber,
+                PostalCode = model.BillingAddress.PostalCode,
+                City = model.BillingAddress.City,
+                Country = model.BillingAddress.Country
+            },
+            Lines = model.Lines.Select(line => new OrderLineRequest {
+                Name = line.Name,
+                Quantity = line.Quantity,
+                UnitPrice = new Amount(model.Currency,line.UnitPrice),
+                TotalAmount = new Amount(model.Currency, line.TotalAmount),
+                VatRate = line.VatRate.ToString(CultureInfo.InvariantCulture),
+                VatAmount = new Amount(model.Currency, line.VatAmount)
+            })
         });
         
         NavigationManager.NavigateTo("/order/overview");

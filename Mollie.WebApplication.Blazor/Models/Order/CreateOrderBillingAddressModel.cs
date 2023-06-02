@@ -20,6 +20,7 @@ public class CreateOrderBillingAddressModel {
     public string City { get; set; }
     
     [Required]
+    [MaxLength(2)]
     public string Country { get; set; }
     
     [Required]
