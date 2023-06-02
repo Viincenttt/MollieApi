@@ -12,341 +12,341 @@ using Mollie.Api.Models.Order.Request.PaymentSpecificParameters;
 using Mollie.Api.Models.Payment;
 using Mollie.Tests.Integration.Framework;
 
-namespace Mollie.Tests.Integration.Api {
-    public class OrderTests : BaseMollieApiTestClass {
-        private readonly IOrderClient _orderClient;
+namespace Mollie.Tests.Integration.Api; 
 
-        public OrderTests() {
-            _orderClient = new OrderClient(this.ApiKey);
-        }
+public class OrderTests : BaseMollieApiTestClass {
+    private readonly IOrderClient _orderClient;
+
+    public OrderTests() {
+        _orderClient = new OrderClient(this.ApiKey);
+    }
         
-        [DefaultRetryFact]
-        public async Task CreateOrderAsync_OrderWithRequiredFields_OrderIsCreated() {
-            // If: we create a order request with only the required parameters
-            OrderRequest orderRequest = this.CreateOrder();
+    [DefaultRetryFact]
+    public async Task CreateOrderAsync_OrderWithRequiredFields_OrderIsCreated() {
+        // If: we create a order request with only the required parameters
+        OrderRequest orderRequest = this.CreateOrder();
 
-            // When: We send the order request to Mollie
-            OrderResponse result = await this._orderClient.CreateOrderAsync(orderRequest);
+        // When: We send the order request to Mollie
+        OrderResponse result = await this._orderClient.CreateOrderAsync(orderRequest);
 
-            // Then: Make sure we get a valid response
-            result.Should().NotBeNull();
-            result.Amount.Should().Be(orderRequest.Amount);
-            result.OrderNumber.Should().Be(orderRequest.OrderNumber);
-            result.Lines.Should().HaveCount(orderRequest.Lines.Count());
-            result.Links.Should().NotBeNull();
-            OrderLineRequest orderLineRequest = orderRequest.Lines.First();
-            OrderLineResponse orderResponseLine = result.Lines.First();
-            orderResponseLine.Type.Should().Be(orderLineRequest.Type);
-            orderResponseLine.Links.ImageUrl.Href.Should().Be(orderLineRequest.ImageUrl);
-            orderResponseLine.Links.ProductUrl.Href.Should().Be(orderLineRequest.ProductUrl);
-            var expectedMetadataString = result.Lines.First().Metadata;
-            orderResponseLine.Metadata.Should().Be(expectedMetadataString);
-        }
+        // Then: Make sure we get a valid response
+        result.Should().NotBeNull();
+        result.Amount.Should().Be(orderRequest.Amount);
+        result.OrderNumber.Should().Be(orderRequest.OrderNumber);
+        result.Lines.Should().HaveCount(orderRequest.Lines.Count());
+        result.Links.Should().NotBeNull();
+        OrderLineRequest orderLineRequest = orderRequest.Lines.First();
+        OrderLineResponse orderResponseLine = result.Lines.First();
+        orderResponseLine.Type.Should().Be(orderLineRequest.Type);
+        orderResponseLine.Links.ImageUrl.Href.Should().Be(orderLineRequest.ImageUrl);
+        orderResponseLine.Links.ProductUrl.Href.Should().Be(orderLineRequest.ProductUrl);
+        var expectedMetadataString = result.Lines.First().Metadata;
+        orderResponseLine.Metadata.Should().Be(expectedMetadataString);
+    }
 
-        [DefaultRetryFact]
-        public async Task CreateOrderAsync_WithMultiplePaymentMethods_OrderIsCreated() {
-            // When: we create a order request and specify multiple payment methods
-            OrderRequest orderRequest = this.CreateOrder();
-            orderRequest.Methods = new List<string>() {
-                PaymentMethod.Ideal,
-                PaymentMethod.CreditCard,
-                PaymentMethod.DirectDebit
-            };
+    [DefaultRetryFact]
+    public async Task CreateOrderAsync_WithMultiplePaymentMethods_OrderIsCreated() {
+        // When: we create a order request and specify multiple payment methods
+        OrderRequest orderRequest = this.CreateOrder();
+        orderRequest.Methods = new List<string>() {
+            PaymentMethod.Ideal,
+            PaymentMethod.CreditCard,
+            PaymentMethod.DirectDebit
+        };
 
-            // When: We send the order request to Mollie
-            OrderResponse result = await this._orderClient.CreateOrderAsync(orderRequest);
+        // When: We send the order request to Mollie
+        OrderResponse result = await this._orderClient.CreateOrderAsync(orderRequest);
 
-            // Then: Make sure we get a valid response
-            result.Should().NotBeNull();
-            result.Amount.Should().Be(orderRequest.Amount);
-            result.OrderNumber.Should().Be(orderRequest.OrderNumber);
-        }
+        // Then: Make sure we get a valid response
+        result.Should().NotBeNull();
+        result.Amount.Should().Be(orderRequest.Amount);
+        result.OrderNumber.Should().Be(orderRequest.OrderNumber);
+    }
 
-        [DefaultRetryFact]
-        public async Task CreateOrderAsync_WithSinglePaymentMethod_OrderIsCreated() {
-            // When: we create a order request and specify a single payment method
-            OrderRequest orderRequest = this.CreateOrder();
-            orderRequest.Method = PaymentMethod.CreditCard;
+    [DefaultRetryFact]
+    public async Task CreateOrderAsync_WithSinglePaymentMethod_OrderIsCreated() {
+        // When: we create a order request and specify a single payment method
+        OrderRequest orderRequest = this.CreateOrder();
+        orderRequest.Method = PaymentMethod.CreditCard;
 
-            // When: We send the order request to Mollie
-            OrderResponse result = await this._orderClient.CreateOrderAsync(orderRequest);
+        // When: We send the order request to Mollie
+        OrderResponse result = await this._orderClient.CreateOrderAsync(orderRequest);
 
-            // Then: Make sure we get a valid response
-            orderRequest.Method.Should().Be(PaymentMethod.CreditCard);
-            orderRequest.Methods.First().Should().Be(PaymentMethod.CreditCard);
-            result.Should().NotBeNull();
-            result.Amount.Should().Be(orderRequest.Amount);
-            result.OrderNumber.Should().Be(orderRequest.OrderNumber);
-        }
+        // Then: Make sure we get a valid response
+        orderRequest.Method.Should().Be(PaymentMethod.CreditCard);
+        orderRequest.Methods.First().Should().Be(PaymentMethod.CreditCard);
+        result.Should().NotBeNull();
+        result.Amount.Should().Be(orderRequest.Amount);
+        result.OrderNumber.Should().Be(orderRequest.OrderNumber);
+    }
 
-        [DefaultRetryFact]
-        public async Task CreateOrderAsync_WithPaymentSpecificParameters_OrderIsCreated() {
-            // If: we create a order request with payment specific parameters
-            OrderRequest orderRequest = this.CreateOrder();
-            orderRequest.Payment = new IDealSpecificParameters() {
-                Issuer = "ideal_INGBNL2A"
-            };
+    [DefaultRetryFact]
+    public async Task CreateOrderAsync_WithPaymentSpecificParameters_OrderIsCreated() {
+        // If: we create a order request with payment specific parameters
+        OrderRequest orderRequest = this.CreateOrder();
+        orderRequest.Payment = new IDealSpecificParameters() {
+            Issuer = "ideal_INGBNL2A"
+        };
 
-            // When: We send the order request to Mollie
-            OrderResponse result = await this._orderClient.CreateOrderAsync(orderRequest);
+        // When: We send the order request to Mollie
+        OrderResponse result = await this._orderClient.CreateOrderAsync(orderRequest);
 
-            // Then: Make sure we get a valid response
-            result.Should().NotBeNull();
-            result.Amount.Should().Be(orderRequest.Amount);
-            result.OrderNumber.Should().Be(orderRequest.OrderNumber);
-        }
+        // Then: Make sure we get a valid response
+        result.Should().NotBeNull();
+        result.Amount.Should().Be(orderRequest.Amount);
+        result.OrderNumber.Should().Be(orderRequest.OrderNumber);
+    }
 
-        [DefaultRetryFact]
-        public async Task GetOrderAsync_OrderIsCreated_OrderCanBeRetrieved() {
-            // If: we create a new order
-            OrderRequest orderRequest = this.CreateOrder();
-            OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
+    [DefaultRetryFact]
+    public async Task GetOrderAsync_OrderIsCreated_OrderCanBeRetrieved() {
+        // If: we create a new order
+        OrderRequest orderRequest = this.CreateOrder();
+        OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
 
-            // When: We attempt to retrieve the order
-            OrderResponse retrievedOrder = await this._orderClient.GetOrderAsync(createdOrder.Id);
+        // When: We attempt to retrieve the order
+        OrderResponse retrievedOrder = await this._orderClient.GetOrderAsync(createdOrder.Id);
 
-            // Then: Make sure we get a valid response
-            retrievedOrder.Should().NotBeNull();
-            retrievedOrder.Id.Should().Be(createdOrder.Id);
-        }
+        // Then: Make sure we get a valid response
+        retrievedOrder.Should().NotBeNull();
+        retrievedOrder.Id.Should().Be(createdOrder.Id);
+    }
 
-        [DefaultRetryFact]
-        public async Task GetOrderAsync_WithIncludeParameters_OrderIsRetrievedWithEmbeddedData() {
-            // If: we create a new order
-            OrderRequest orderRequest = this.CreateOrder();
-            OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
+    [DefaultRetryFact]
+    public async Task GetOrderAsync_WithIncludeParameters_OrderIsRetrievedWithEmbeddedData() {
+        // If: we create a new order
+        OrderRequest orderRequest = this.CreateOrder();
+        OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
 
-            // When: We attempt to retrieve the order and add the include parameters
-            OrderResponse retrievedOrder = await this._orderClient.GetOrderAsync(createdOrder.Id, embedPayments: true, embedShipments: true, embedRefunds: true);
+        // When: We attempt to retrieve the order and add the include parameters
+        OrderResponse retrievedOrder = await this._orderClient.GetOrderAsync(createdOrder.Id, embedPayments: true, embedShipments: true, embedRefunds: true);
 
-            // Then: Make sure we get a valid response
-            retrievedOrder.Should().NotBeNull();
-            retrievedOrder.Id.Should().Be(createdOrder.Id);
-            retrievedOrder.Embedded.Should().NotBeNull();
-            retrievedOrder.Embedded.Payments.Should().NotBeNull();
-            retrievedOrder.Embedded.Shipments.Should().NotBeNull();
-            retrievedOrder.Embedded.Refunds.Should().NotBeNull();
-        }
+        // Then: Make sure we get a valid response
+        retrievedOrder.Should().NotBeNull();
+        retrievedOrder.Id.Should().Be(createdOrder.Id);
+        retrievedOrder.Embedded.Should().NotBeNull();
+        retrievedOrder.Embedded.Payments.Should().NotBeNull();
+        retrievedOrder.Embedded.Shipments.Should().NotBeNull();
+        retrievedOrder.Embedded.Refunds.Should().NotBeNull();
+    }
 
-        [DefaultRetryFact]
-        public async Task UpdateOrderAsync_OrderIsUpdated_OrderIsUpdated() {
-            // If: we create a new order
-            OrderRequest orderRequest = this.CreateOrder();
-            OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
+    [DefaultRetryFact]
+    public async Task UpdateOrderAsync_OrderIsUpdated_OrderIsUpdated() {
+        // If: we create a new order
+        OrderRequest orderRequest = this.CreateOrder();
+        OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
 
-            // When: We attempt to update the order
-            OrderUpdateRequest orderUpdateRequest = new OrderUpdateRequest() {
-                OrderNumber = "1337",
-                BillingAddress = createdOrder.BillingAddress
-            };
-            orderUpdateRequest.BillingAddress.City = "Den Haag";
-            OrderResponse updatedOrder = await this._orderClient.UpdateOrderAsync(createdOrder.Id, orderUpdateRequest);
+        // When: We attempt to update the order
+        OrderUpdateRequest orderUpdateRequest = new OrderUpdateRequest() {
+            OrderNumber = "1337",
+            BillingAddress = createdOrder.BillingAddress
+        };
+        orderUpdateRequest.BillingAddress.City = "Den Haag";
+        OrderResponse updatedOrder = await this._orderClient.UpdateOrderAsync(createdOrder.Id, orderUpdateRequest);
 
-            // Then: Make sure the order is updated
-            updatedOrder.OrderNumber.Should().Be(orderUpdateRequest.OrderNumber);
-            updatedOrder.BillingAddress.City.Should().Be(orderUpdateRequest.BillingAddress.City);
-        }
+        // Then: Make sure the order is updated
+        updatedOrder.OrderNumber.Should().Be(orderUpdateRequest.OrderNumber);
+        updatedOrder.BillingAddress.City.Should().Be(orderUpdateRequest.BillingAddress.City);
+    }
         
-        [DefaultRetryFact(Skip = "This integration test is now failing consistently. Investigating this issue together with Mollie.")]
-        public async Task CancelOrderAsync_OrderIsCanceled_OrderHasCanceledStatus() {
-            // If: we create a new order
-            OrderRequest orderRequest = this.CreateOrder();
-            OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
+    [DefaultRetryFact(Skip = "This integration test is now failing consistently. Investigating this issue together with Mollie.")]
+    public async Task CancelOrderAsync_OrderIsCanceled_OrderHasCanceledStatus() {
+        // If: we create a new order
+        OrderRequest orderRequest = this.CreateOrder();
+        OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
 
-            // When: We attempt to cancel the order and then retrieve it
-            await this._orderClient.CancelOrderAsync(createdOrder.Id);
-            OrderResponse canceledOrder = await this._orderClient.GetOrderAsync(createdOrder.Id);
+        // When: We attempt to cancel the order and then retrieve it
+        await this._orderClient.CancelOrderAsync(createdOrder.Id);
+        OrderResponse canceledOrder = await this._orderClient.GetOrderAsync(createdOrder.Id);
 
-            // Then: The order status should be cancelled
-            canceledOrder.Status.Should().Be(OrderStatus.Canceled);
-        }
+        // Then: The order status should be cancelled
+        canceledOrder.Status.Should().Be(OrderStatus.Canceled);
+    }
 
-        [DefaultRetryFact]
-        public async Task UpdateOrderLinesAsync_WhenOrderLineIsUpdated_UpdatedPropertiesCanBeRetrieved() {
-            // If: we create a new order
-            OrderRequest orderRequest = this.CreateOrder();
-            OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
+    [DefaultRetryFact]
+    public async Task UpdateOrderLinesAsync_WhenOrderLineIsUpdated_UpdatedPropertiesCanBeRetrieved() {
+        // If: we create a new order
+        OrderRequest orderRequest = this.CreateOrder();
+        OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
 
-            // When: We update the order line
-            OrderLineUpdateRequest updateRequest = new OrderLineUpdateRequest() {
-                Name = "A fluffy bear"
-            };
-            OrderResponse updatedOrder = await this._orderClient.UpdateOrderLinesAsync(createdOrder.Id, createdOrder.Lines.First().Id, updateRequest);
+        // When: We update the order line
+        OrderLineUpdateRequest updateRequest = new OrderLineUpdateRequest() {
+            Name = "A fluffy bear"
+        };
+        OrderResponse updatedOrder = await this._orderClient.UpdateOrderLinesAsync(createdOrder.Id, createdOrder.Lines.First().Id, updateRequest);
 
-            // Then: The name of the order line should be updated
-            updatedOrder.Lines.First().Name.Should().Be(updateRequest.Name);
-        }
+        // Then: The name of the order line should be updated
+        updatedOrder.Lines.First().Name.Should().Be(updateRequest.Name);
+    }
         
-        [DefaultRetryFact]
-        public async Task ManageOrderLinesAsync_AddOperation_OrderLineIsAdded() {
-            // If: we create a new order
-            OrderRequest orderRequest = this.CreateOrder();
-            OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
+    [DefaultRetryFact]
+    public async Task ManageOrderLinesAsync_AddOperation_OrderLineIsAdded() {
+        // If: we create a new order
+        OrderRequest orderRequest = this.CreateOrder();
+        OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
 
-            // When: We use the manager order lines endpoint to add a order line
-            ManageOrderLinesAddOperationData newOrderLineRequest = new ManageOrderLinesAddOperationData {
-                Name = "LEGO Batman mobile",
-                Type = OrderLineDetailsType.Physical,
-                Category = OrderLineDetailsCategory.Gift,
-                Quantity = 1,
-                UnitPrice = new Amount(Currency.EUR, 100.00m),
-                TotalAmount = new Amount(Currency.EUR, 100.00m),
-                VatRate = "21.00",
-                VatAmount = new Amount(Currency.EUR, 17.36m),
-                ImageUrl = "http://www.google.com/legobatmanimage",
-                ProductUrl = "http://www.mollie.nl/legobatmanproduct",
-                Metadata = "{\"is_lego_awesome\":\"fosho\"}",
-            };
-            ManageOrderLinesRequest manageOrderLinesRequest = new ManageOrderLinesRequest() {
-                Operations = new List<ManageOrderLinesOperation> {
-                    new ManageOrderLinesAddOperation {
-                        Data = newOrderLineRequest
-                    }
+        // When: We use the manager order lines endpoint to add a order line
+        ManageOrderLinesAddOperationData newOrderLineRequest = new ManageOrderLinesAddOperationData {
+            Name = "LEGO Batman mobile",
+            Type = OrderLineDetailsType.Physical,
+            Category = OrderLineDetailsCategory.Gift,
+            Quantity = 1,
+            UnitPrice = new Amount(Currency.EUR, 100.00m),
+            TotalAmount = new Amount(Currency.EUR, 100.00m),
+            VatRate = "21.00",
+            VatAmount = new Amount(Currency.EUR, 17.36m),
+            ImageUrl = "http://www.google.com/legobatmanimage",
+            ProductUrl = "http://www.mollie.nl/legobatmanproduct",
+            Metadata = "{\"is_lego_awesome\":\"fosho\"}",
+        };
+        ManageOrderLinesRequest manageOrderLinesRequest = new ManageOrderLinesRequest() {
+            Operations = new List<ManageOrderLinesOperation> {
+                new ManageOrderLinesAddOperation {
+                    Data = newOrderLineRequest
                 }
-            };
-            OrderResponse updatedOrder = await this._orderClient.ManageOrderLinesAsync(createdOrder.Id, manageOrderLinesRequest);
+            }
+        };
+        OrderResponse updatedOrder = await this._orderClient.ManageOrderLinesAsync(createdOrder.Id, manageOrderLinesRequest);
 
-            // Then: The order line should be added
-            updatedOrder.Lines.Should().HaveCount(2);
-            var addedOrderLineRequest = updatedOrder.Lines.SingleOrDefault(line => line.Name == newOrderLineRequest.Name);
-            addedOrderLineRequest.Should().NotBeNull();
-            addedOrderLineRequest.Type.Should().Be(newOrderLineRequest.Type);
-            addedOrderLineRequest.Quantity.Should().Be(newOrderLineRequest.Quantity);
-            addedOrderLineRequest.UnitPrice.Should().Be(newOrderLineRequest.UnitPrice);
-            addedOrderLineRequest.TotalAmount.Should().Be(newOrderLineRequest.TotalAmount);
-            addedOrderLineRequest.VatRate.Should().Be(newOrderLineRequest.VatRate);
-            addedOrderLineRequest.VatAmount.Should().Be(newOrderLineRequest.VatAmount);
-            var newMetaData = addedOrderLineRequest.Metadata
-                .Replace(System.Environment.NewLine, "")
-                .Replace(" ", "");
-            newMetaData.Should().Be(newOrderLineRequest.Metadata);
-        }
+        // Then: The order line should be added
+        updatedOrder.Lines.Should().HaveCount(2);
+        var addedOrderLineRequest = updatedOrder.Lines.SingleOrDefault(line => line.Name == newOrderLineRequest.Name);
+        addedOrderLineRequest.Should().NotBeNull();
+        addedOrderLineRequest.Type.Should().Be(newOrderLineRequest.Type);
+        addedOrderLineRequest.Quantity.Should().Be(newOrderLineRequest.Quantity);
+        addedOrderLineRequest.UnitPrice.Should().Be(newOrderLineRequest.UnitPrice);
+        addedOrderLineRequest.TotalAmount.Should().Be(newOrderLineRequest.TotalAmount);
+        addedOrderLineRequest.VatRate.Should().Be(newOrderLineRequest.VatRate);
+        addedOrderLineRequest.VatAmount.Should().Be(newOrderLineRequest.VatAmount);
+        var newMetaData = addedOrderLineRequest.Metadata
+            .Replace(System.Environment.NewLine, "")
+            .Replace(" ", "");
+        newMetaData.Should().Be(newOrderLineRequest.Metadata);
+    }
         
-        [DefaultRetryFact]
-        public async Task ManageOrderLinesAsync_UpdateOperation_OrderLineIsUpdated() {
-            // If: we create a new order
-            OrderRequest orderRequest = this.CreateOrder();
-            OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
+    [DefaultRetryFact]
+    public async Task ManageOrderLinesAsync_UpdateOperation_OrderLineIsUpdated() {
+        // If: we create a new order
+        OrderRequest orderRequest = this.CreateOrder();
+        OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
 
-            // When: We use the manager order lines endpoint to update a order line
-            ManageOrderLinesUpdateOperationData orderLineUpdateRequest = new ManageOrderLinesUpdateOperationData {
-                Id = createdOrder.Lines.First().Id,
-                Name = "LEGO Batman mobile",
-                Quantity = 1,
-                UnitPrice = new Amount(Currency.EUR, 100.00m),
-                TotalAmount = new Amount(Currency.EUR, 90.00m),
-                VatRate = "21.00",
-                VatAmount = new Amount(Currency.EUR, 15.62m),
-                ImageUrl = "http://www.google.com/legobatmanimage",
-                ProductUrl = "http://www.mollie.nl/legobatmanproduct",
-                Metadata = "{\"is_lego_awesome\":\"fosho\"}",
-                Sku = "Sku",
-                DiscountAmount = new Amount(Currency.EUR, 10m)
-            };
-            ManageOrderLinesRequest manageOrderLinesRequest = new ManageOrderLinesRequest() {
-                Operations = new List<ManageOrderLinesOperation> {
-                    new ManageOrderLinesUpdateOperation {
-                        Data = orderLineUpdateRequest
-                    }
+        // When: We use the manager order lines endpoint to update a order line
+        ManageOrderLinesUpdateOperationData orderLineUpdateRequest = new ManageOrderLinesUpdateOperationData {
+            Id = createdOrder.Lines.First().Id,
+            Name = "LEGO Batman mobile",
+            Quantity = 1,
+            UnitPrice = new Amount(Currency.EUR, 100.00m),
+            TotalAmount = new Amount(Currency.EUR, 90.00m),
+            VatRate = "21.00",
+            VatAmount = new Amount(Currency.EUR, 15.62m),
+            ImageUrl = "http://www.google.com/legobatmanimage",
+            ProductUrl = "http://www.mollie.nl/legobatmanproduct",
+            Metadata = "{\"is_lego_awesome\":\"fosho\"}",
+            Sku = "Sku",
+            DiscountAmount = new Amount(Currency.EUR, 10m)
+        };
+        ManageOrderLinesRequest manageOrderLinesRequest = new ManageOrderLinesRequest() {
+            Operations = new List<ManageOrderLinesOperation> {
+                new ManageOrderLinesUpdateOperation {
+                    Data = orderLineUpdateRequest
                 }
-            };
-            OrderResponse updatedOrder = await this._orderClient.ManageOrderLinesAsync(createdOrder.Id, manageOrderLinesRequest);
+            }
+        };
+        OrderResponse updatedOrder = await this._orderClient.ManageOrderLinesAsync(createdOrder.Id, manageOrderLinesRequest);
 
-            // Then: The order line should be updated
-            updatedOrder.Lines.Should().HaveCount(1);
-            var addedOrderLineRequest = updatedOrder.Lines.SingleOrDefault(line => line.Name == orderLineUpdateRequest.Name);
-            addedOrderLineRequest.Should().NotBeNull();
-            addedOrderLineRequest.Quantity.Should().Be(orderLineUpdateRequest.Quantity);
-            addedOrderLineRequest.UnitPrice.Should().Be(orderLineUpdateRequest.UnitPrice);
-            addedOrderLineRequest.TotalAmount.Should().Be(orderLineUpdateRequest.TotalAmount);
-            addedOrderLineRequest.VatRate.Should().Be(orderLineUpdateRequest.VatRate);
-            addedOrderLineRequest.VatAmount.Should().Be(orderLineUpdateRequest.VatAmount);
-            addedOrderLineRequest.Metadata
-                .Replace(System.Environment.NewLine, "")
-                .Replace(" ", "")
-                .Should().Be(orderLineUpdateRequest.Metadata);
-        }
+        // Then: The order line should be updated
+        updatedOrder.Lines.Should().HaveCount(1);
+        var addedOrderLineRequest = updatedOrder.Lines.SingleOrDefault(line => line.Name == orderLineUpdateRequest.Name);
+        addedOrderLineRequest.Should().NotBeNull();
+        addedOrderLineRequest.Quantity.Should().Be(orderLineUpdateRequest.Quantity);
+        addedOrderLineRequest.UnitPrice.Should().Be(orderLineUpdateRequest.UnitPrice);
+        addedOrderLineRequest.TotalAmount.Should().Be(orderLineUpdateRequest.TotalAmount);
+        addedOrderLineRequest.VatRate.Should().Be(orderLineUpdateRequest.VatRate);
+        addedOrderLineRequest.VatAmount.Should().Be(orderLineUpdateRequest.VatAmount);
+        addedOrderLineRequest.Metadata
+            .Replace(System.Environment.NewLine, "")
+            .Replace(" ", "")
+            .Should().Be(orderLineUpdateRequest.Metadata);
+    }
         
-        [DefaultRetryFact]
-        public async Task ManageOrderLinesAsync_CancelOperation_OrderLineIsCanceled() {
-            // If: we create a new order
-            OrderRequest orderRequest = this.CreateOrder();
-            OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
+    [DefaultRetryFact]
+    public async Task ManageOrderLinesAsync_CancelOperation_OrderLineIsCanceled() {
+        // If: we create a new order
+        OrderRequest orderRequest = this.CreateOrder();
+        OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
 
-            // When: We use the manager order lines endpoint to cancel a order line
-            ManagerOrderLinesCancelOperationData orderLineCancelRequest = new ManagerOrderLinesCancelOperationData {
-                Id = createdOrder.Lines.First().Id,
-                Quantity = 1
-            };
-            ManageOrderLinesRequest manageOrderLinesRequest = new ManageOrderLinesRequest() {
-                Operations = new List<ManageOrderLinesOperation> {
-                    new ManageOrderLinesCancelOperation {
-                        Data = orderLineCancelRequest
-                    }
+        // When: We use the manager order lines endpoint to cancel a order line
+        ManagerOrderLinesCancelOperationData orderLineCancelRequest = new ManagerOrderLinesCancelOperationData {
+            Id = createdOrder.Lines.First().Id,
+            Quantity = 1
+        };
+        ManageOrderLinesRequest manageOrderLinesRequest = new ManageOrderLinesRequest() {
+            Operations = new List<ManageOrderLinesOperation> {
+                new ManageOrderLinesCancelOperation {
+                    Data = orderLineCancelRequest
                 }
-            };
-            OrderResponse updatedOrder = await this._orderClient.ManageOrderLinesAsync(createdOrder.Id, manageOrderLinesRequest);
+            }
+        };
+        OrderResponse updatedOrder = await this._orderClient.ManageOrderLinesAsync(createdOrder.Id, manageOrderLinesRequest);
 
-            // Then: The order line should be canceled
-            updatedOrder.Lines.Should().HaveCount(1);
-            var updatedOrderLineRequest = updatedOrder.Lines.Single();
-            updatedOrderLineRequest.Status.Should().Be(OrderStatus.Canceled);
-        }
+        // Then: The order line should be canceled
+        updatedOrder.Lines.Should().HaveCount(1);
+        var updatedOrderLineRequest = updatedOrder.Lines.Single();
+        updatedOrderLineRequest.Status.Should().Be(OrderStatus.Canceled);
+    }
 
-        [DefaultRetryFact]
-        public async Task GetOrderListAsync_NoParameters_OrderListIsRetrieved() {
-            // When: Retrieve payment list with default settings
-            ListResponse<OrderResponse> response = await this._orderClient.GetOrderListAsync();
+    [DefaultRetryFact]
+    public async Task GetOrderListAsync_NoParameters_OrderListIsRetrieved() {
+        // When: Retrieve payment list with default settings
+        ListResponse<OrderResponse> response = await this._orderClient.GetOrderListAsync();
 
-            // Then
-            response.Should().NotBeNull();
-            response.Items.Should().NotBeNull();
-        }
+        // Then
+        response.Should().NotBeNull();
+        response.Items.Should().NotBeNull();
+    }
 
-        [DefaultRetryFact]
-        public async Task GetOrderListAsync_WithMaximumNumberOfItems_MaximumNumberOfOrdersIsReturned() {
-            // If: Number of orders requested is 5
-            int numberOfOrders = 5;
+    [DefaultRetryFact]
+    public async Task GetOrderListAsync_WithMaximumNumberOfItems_MaximumNumberOfOrdersIsReturned() {
+        // If: Number of orders requested is 5
+        int numberOfOrders = 5;
 
-            // When: Retrieve 5 orders
-            ListResponse<OrderResponse> response = await this._orderClient.GetOrderListAsync(null, numberOfOrders);
+        // When: Retrieve 5 orders
+        ListResponse<OrderResponse> response = await this._orderClient.GetOrderListAsync(null, numberOfOrders);
 
-            // Then
-            response.Items.Should().HaveCountLessThanOrEqualTo(numberOfOrders);
-        }
+        // Then
+        response.Items.Should().HaveCountLessThanOrEqualTo(numberOfOrders);
+    }
         
-        private OrderRequest CreateOrder() {
-            return new OrderRequest() {
-                Amount = new Amount(Currency.EUR, "100.00"),
-                OrderNumber = "16738",
-                Lines = new List<OrderLineRequest>() {
-                    new OrderLineRequest() {
-                        Name = "A box of chocolates",
-                        Type = OrderLineDetailsType.Physical,
-                        Category = OrderLineDetailsCategory.Gift,
-                        Quantity = 1,
-                        UnitPrice = new Amount(Currency.EUR, "100.00"),
-                        TotalAmount = new Amount(Currency.EUR, "100.00"),
-                        VatRate = "21.00",
-                        VatAmount = new Amount(Currency.EUR, "17.36"),
-                        ImageUrl = "http://www.google.com/",
-                        ProductUrl = "http://www.mollie.nl/",
-                        Metadata =  "{\"order_id\":\"4.40\"}",
-                    }
-                },
-                BillingAddress = new OrderAddressDetails() {
-                    GivenName = "John",
-                    FamilyName = "Smit",
-                    Email = "johnsmit@gmail.com",
-                    City = "Rotterdam",
-                    Country = "NL",
-                    PostalCode = "0000AA",
-                    Region = "Zuid-Holland",
-                    StreetAndNumber = "Coolsingel 1"
-                },
-                RedirectUrl = "http://www.google.nl",
-                Locale = Locale.nl_NL
-            };
-        }
+    private OrderRequest CreateOrder() {
+        return new OrderRequest() {
+            Amount = new Amount(Currency.EUR, "100.00"),
+            OrderNumber = "16738",
+            Lines = new List<OrderLineRequest>() {
+                new OrderLineRequest() {
+                    Name = "A box of chocolates",
+                    Type = OrderLineDetailsType.Physical,
+                    Category = OrderLineDetailsCategory.Gift,
+                    Quantity = 1,
+                    UnitPrice = new Amount(Currency.EUR, "100.00"),
+                    TotalAmount = new Amount(Currency.EUR, "100.00"),
+                    VatRate = "21.00",
+                    VatAmount = new Amount(Currency.EUR, "17.36"),
+                    ImageUrl = "http://www.google.com/",
+                    ProductUrl = "http://www.mollie.nl/",
+                    Metadata =  "{\"order_id\":\"4.40\"}",
+                }
+            },
+            BillingAddress = new OrderAddressDetails() {
+                GivenName = "John",
+                FamilyName = "Smit",
+                Email = "johnsmit@gmail.com",
+                City = "Rotterdam",
+                Country = "NL",
+                PostalCode = "0000AA",
+                Region = "Zuid-Holland",
+                StreetAndNumber = "Coolsingel 1"
+            },
+            RedirectUrl = "http://www.google.nl",
+            Locale = Locale.nl_NL
+        };
     }
 }
