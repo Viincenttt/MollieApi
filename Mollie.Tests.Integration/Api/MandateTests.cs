@@ -1,14 +1,24 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using FluentAssertions;
+using Mollie.Api.Client;
+using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models.Customer;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Mandate;
 using Mollie.Tests.Integration.Framework;
 
-/*
 namespace Mollie.Tests.Integration.Api {
     public class MandateTests : BaseMollieApiTestClass {
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        private readonly IMandateClient _mandateClient;
+        private readonly ICustomerClient _customerClient;
+
+        public MandateTests() {
+            _mandateClient = new MandateClient(this.ApiKey);
+            _customerClient = new CustomerClient(this.ApiKey);
+        }
+        
+        [DefaultRetryFact]
         public async Task CanRetrieveMandateList() {
             // We can only test this if there are customers
             ListResponse<CustomerResponse> customers = await this._customerClient.GetCustomerListAsync();
@@ -18,12 +28,12 @@ namespace Mollie.Tests.Integration.Api {
                 ListResponse<MandateResponse> response = await this._mandateClient.GetMandateListAsync(customers.Items.First().Id);
 
                 // Then
-                Assert.IsNotNull(response);
-                Assert.IsNotNull(response.Items);
+                response.Should().NotBeNull();
+                response.Items.Should().NotBeNull();
             }
         }
 
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [DefaultRetryFact]
         public async Task ListMandatesNeverReturnsMoreCustomersThenTheNumberOfRequestedMandates() {
             // We can only test this if there are customers
             ListResponse<CustomerResponse> customers = await this._customerClient.GetCustomerListAsync();
@@ -36,11 +46,11 @@ namespace Mollie.Tests.Integration.Api {
                 ListResponse<MandateResponse> response = await this._mandateClient.GetMandateListAsync(customers.Items.First().Id, null, numberOfMandates);
 
                 // Then
-                Assert.IsTrue(response.Items.Count <= numberOfMandates);
+                numberOfMandates.Should().BeGreaterOrEqualTo(response.Items.Count);
             }
         }
 
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [DefaultRetryFact]
         public async Task CanCreateMandate() {
             // We can only test this if there are customers
             ListResponse<CustomerResponse> customers = await this._customerClient.GetCustomerListAsync();
@@ -55,10 +65,9 @@ namespace Mollie.Tests.Integration.Api {
                 MandateResponse mandateResponse = await this._mandateClient.CreateMandateAsync(customers.Items.First().Id, mandateRequest);
 
                 // Then: Make sure we created a new mandate
-                Assert.AreEqual(mandateRequest.ConsumerAccount, mandateResponse.Details.ConsumerAccount);
-                Assert.AreEqual(mandateRequest.ConsumerName, mandateResponse.Details.ConsumerName);
+                mandateResponse.Details.ConsumerAccount.Should().Be(mandateRequest.ConsumerAccount);
+                mandateResponse.Details.ConsumerName.Should().Be(mandateRequest.ConsumerName);
             }
         }
     }
 }
-*/
