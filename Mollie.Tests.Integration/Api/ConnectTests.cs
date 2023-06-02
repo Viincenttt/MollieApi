@@ -3,11 +3,11 @@ using Mollie.Api.Models.Connect;
 using Mollie.Tests.Integration.Framework;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using FluentAssertions;
 
-/*
 namespace Mollie.Tests.Integration.Api {
     public class ConnectTests : BaseMollieApiTestClass {
-        [Test]
+        [DefaultRetryFact]
         public void GetAuthorizationUrl_WithSingleScope_GeneratesAuthorizationUrl() {
             // Given: We create a new connect client
             ConnectClient connectClient = new ConnectClient(this.ClientId, this.ClientSecret);
@@ -17,10 +17,10 @@ namespace Mollie.Tests.Integration.Api {
 
             // Then: 
             string expectedUrl = $"https://www.mollie.com/oauth2/authorize?client_id={this.ClientId}&state=abcde&scope=payments.read&response_type=code&approval_prompt=auto";
-            Assert.AreEqual(expectedUrl, authorizationUrl);
+            authorizationUrl.Should().Be(expectedUrl);
         }
 
-        [Test]
+        [DefaultRetryFact]
         public void GetAuthorizationUrl_WithMultipleScopes_GeneratesAuthorizationUrl() {
             // Given: We create a new connect client
             ConnectClient connectClient = new ConnectClient(this.ClientId, this.ClientSecret);
@@ -36,11 +36,10 @@ namespace Mollie.Tests.Integration.Api {
             // Then: 
             string expectedUrl = $"https://www.mollie.com/oauth2/authorize?client_id={this.ClientId}" +
                                  $"&state=abcdef&scope=payments.read+payments.write+profiles.read+profiles.write&response_type=code&approval_prompt=auto";
-            Assert.AreEqual(expectedUrl, authorizationUrl);
+            authorizationUrl.Should().Be(expectedUrl);
         }
         
-        [Test]
-        [Ignore("We can only test this in debug mode, because we login to the mollie dashboard and login to get the auth token")]
+        [DefaultRetryFact(Skip = "We can only test this in debug mode, because we login to the mollie dashboard and login to get the auth token")]
         public async Task GetAccessTokenAsync_WithValidTokenRequest_ReturnsAccessToken() {
             // Given: We fetch create a token request
             string authCode = "abcde"; // Set a valid access token here
@@ -51,11 +50,10 @@ namespace Mollie.Tests.Integration.Api {
             TokenResponse tokenResponse = await connectClient.GetAccessTokenAsync(tokenRequest);
 
             // Then: The access token should not be null
-            Assert.IsFalse(string.IsNullOrEmpty(tokenResponse.AccessToken));
+            tokenResponse.AccessToken.Should().NotBeNullOrEmpty();
         }
 
-        [Test]
-        [Ignore("We can only test this in debug mode, because we need a valid access token")]
+        [DefaultRetryFact(Skip = "We can only test this in debug mode, because we need a valid access token")]
         public async Task RevokeAccessTokenAsync_WithValidToken_DoesNotThrowError() {
             // Given: We create a revoke token request
             string accessToken = "abcde";
@@ -70,4 +68,3 @@ namespace Mollie.Tests.Integration.Api {
         }
     }
 }
-*/
