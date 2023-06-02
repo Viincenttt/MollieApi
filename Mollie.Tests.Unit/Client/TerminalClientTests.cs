@@ -1,32 +1,34 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Mollie.Api.Client;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Terminal;
 using RichardSzalay.MockHttp;
+using Xunit;
 
 namespace Mollie.Tests.Unit.Client; 
 
-/*
 public class TerminalClientTests : BaseClientTests {
-    [TestCase("")]
-    [TestCase(" ")]
-    [TestCase(null)]
-    public void GetTerminalAsync_NoTerminalIdIsGiven_ArgumentExceptionIsThrown(string terminalId) {
+    [Theory]
+    [InlineData("")]
+    [InlineData(" ")]
+    [InlineData(null)]
+    public async Task GetTerminalAsync_NoTerminalIdIsGiven_ArgumentExceptionIsThrown(string terminalId) {
         // Given
         var mockHttp = new MockHttpMessageHandler();
         HttpClient httpClient = mockHttp.ToHttpClient();
         var terminalClient = new TerminalClient("api-key", httpClient);
 
         // When
-        var exception = Assert.ThrowsAsync<ArgumentException>(async () => await terminalClient.GetTerminalAsync(terminalId));
+        var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await terminalClient.GetTerminalAsync(terminalId));
 
         // Then
-        Assert.AreEqual($"Required URL argument 'terminalId' is null or empty", exception.Message);
+        exception.Message.Should().Be("Required URL argument 'terminalId' is null or empty");
     }
 
-    [Test]
+    [Fact]
     public async Task GetTerminalAsync_WithTerminalId_ResponseIsDeserializedInExpectedFormat() {
         // Given
         const string terminalId = "terminal-id";
@@ -47,22 +49,23 @@ public class TerminalClientTests : BaseClientTests {
         
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
-        Assert.AreEqual(terminalId, response.Id);
-        Assert.AreEqual(description, response.Description);
-        Assert.AreEqual(serialNumber, response.SerialNumber);
-        Assert.AreEqual(brand, response.Brand);
-        Assert.AreEqual(model, response.Model);
-        Assert.NotNull(response.Links);
-        Assert.NotNull(response.Links.Self);
-        Assert.AreEqual($"https://api.mollie.com/v2/terminals/{terminalId}", response.Links.Self.Href);
-        Assert.NotNull(response.Links.Documentation);
+        response.Id.Should().Be(terminalId);
+        response.Description.Should().Be(description);
+        response.SerialNumber.Should().Be(serialNumber);
+        response.Brand.Should().Be(brand);
+        response.Model.Should().Be(model);
+        response.Links.Should().NotBeNull();
+        response.Links.Self.Should().NotBeNull();
+        response.Links.Self.Href.Should().Be($"https://api.mollie.com/v2/terminals/{terminalId}");
+        response.Links.Documentation.Should().NotBeNull();
     }
     
-    [TestCase(null, null, null, false, "")]
-    [TestCase("from", null, null, false, "?from=from")]
-    [TestCase("from", 50, null, false, "?from=from&limit=50")]
-    [TestCase(null, null, "profile-id", false, "?profileId=profile-id")]
-    [TestCase(null, null, "profile-id", true, "?profileId=profile-id&testmode=true")]
+    [Theory]
+    [InlineData(null, null, null, false, "")]
+    [InlineData("from", null, null, false, "?from=from")]
+    [InlineData("from", 50, null, false, "?from=from&limit=50")]
+    [InlineData(null, null, "profile-id", false, "?profileId=profile-id")]
+    [InlineData(null, null, "profile-id", true, "?profileId=profile-id&testmode=true")]
     public async Task GetTerminalListAsync_QueryParameterOptions_CorrectParametersAreAdded(string from, int? limit, string profileId, bool testmode, string expectedQueryString) {
         // Given
         string jsonToReturnInMockResponse = CreateTerminalListJsonResponse();
@@ -80,7 +83,7 @@ public class TerminalClientTests : BaseClientTests {
         mockHttp.VerifyNoOutstandingRequest();
     }
 
-    [Test]
+    [Fact]
     public async Task GetTerminalListAsync_ResponseIsDeserializedInExpectedFormat() {
         // Given
         string jsonToReturnInMockResponse = CreateTerminalListJsonResponse();
@@ -95,10 +98,10 @@ public class TerminalClientTests : BaseClientTests {
         ListResponse<TerminalResponse> response = await terminalClient.GetTerminalListAsync();
         
         // Then
-        Assert.AreEqual(1, response.Count);
-        Assert.AreEqual(response.Count, response.Items.Count);
-        Assert.NotNull(response.Links);
-        Assert.NotNull(response.Links.Self.Href);
+        response.Count.Should().Be(1);
+        response.Items.Count.Should().Be(response.Count);
+        response.Links.Should().NotBeNull();
+        response.Links.Self.Href.Should().NotBeNull();
     }
 
     private string CreateTerminalListJsonResponse() {
@@ -154,4 +157,4 @@ public class TerminalClientTests : BaseClientTests {
     }}
 }}";
     }
-}*/
+}
