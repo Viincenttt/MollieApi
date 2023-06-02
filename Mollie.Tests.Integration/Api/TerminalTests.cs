@@ -1,41 +1,46 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using FluentAssertions;
+using Mollie.Api.Client;
+using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Terminal;
 using Mollie.Tests.Integration.Framework;
-using NUnit.Framework;
 
-namespace Mollie.Tests.Integration.Api {
-    [TestFixture]
-    public class TerminalTests : BaseMollieApiTestClass {
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public async Task CanRetrieveTerminalList() {
-            // Given
+namespace Mollie.Tests.Integration.Api; 
 
-            // When: Retrieve terminal client list
-            ListResponse<TerminalResponse> response = await this._terminalClient.GetTerminalListAsync();
+public class TerminalTests : BaseMollieApiTestClass {
+    private readonly ITerminalClient _terminalClient;
 
-            // Then
-            Assert.IsNotNull(response);
-            Assert.IsNotNull(response.Items);
-        }
+    public TerminalTests() {
+        _terminalClient = new TerminalClient(this.ApiKey);
+    }
+    
+    [DefaultRetryFact]
+    public async Task CanRetrieveTerminalList() {
+        // Given
 
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        [Ignore("Does not work yet")]
-        public async Task CanRetrieveSingleTerminal() {
-            // Given
-            ListResponse<TerminalResponse> allTerminals = await this._terminalClient.GetTerminalListAsync();
-            if (allTerminals.Count == 0) {
-                Assert.Inconclusive("No terminals on this account to retrieve");
-            }
+        // When: Retrieve terminal client list
+        ListResponse<TerminalResponse> response = await this._terminalClient.GetTerminalListAsync();
+
+        // Then
+        response.Should().NotBeNull();
+        response.Items.Should().NotBeNull();
+    }
+
+    [DefaultRetryFact(Skip = "Not implemented by Mollie yet")]
+    public async Task CanRetrieveSingleTerminal() {
+        // Given
+        ListResponse<TerminalResponse> allTerminals = await this._terminalClient.GetTerminalListAsync();
+        if (allTerminals.Count > 0) {
             TerminalResponse firstTerminal = allTerminals.Items.First();
 
             // When: Retrieve terminal client list
             TerminalResponse response = await this._terminalClient.GetTerminalAsync(firstTerminal.Id);
 
             // Then
-            Assert.IsNotNull(response);
-            Assert.AreEqual(firstTerminal.Id, response.Id);
+            response.Should().NotBeNull();
+            response.Id.Should().Be(firstTerminal.Id);
         }
     }
 }

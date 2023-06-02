@@ -61,7 +61,7 @@ namespace Mollie.Api.Models.Payment.Request {
         [JsonIgnore]
         public string Method { 
             get {
-                return this.Methods.FirstOrDefault();
+                return this.Methods == null ? null : this.Methods.FirstOrDefault();
             }
             set {
                 if (value == null) {

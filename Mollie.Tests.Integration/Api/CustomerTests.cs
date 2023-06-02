@@ -1,9 +1,10 @@
 ﻿using System;
-using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Mollie.Api.Client;
+using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Customer;
 using Mollie.Api.Models.List;
@@ -11,165 +12,162 @@ using Mollie.Api.Models.Payment;
 using Mollie.Api.Models.Payment.Request;
 using Mollie.Api.Models.Payment.Response;
 using Mollie.Tests.Integration.Framework;
-using NUnit.Framework;
+using Xunit;
 
-namespace Mollie.Tests.Integration.Api {
-    [TestFixture]
-    public class CustomerTests : BaseMollieApiTestClass {
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public async Task CanRetrieveCustomerList() {
-            // When: Retrieve customer list with default settings
-            ListResponse<CustomerResponse> response = await this._customerClient.GetCustomerListAsync();
+namespace Mollie.Tests.Integration.Api; 
 
-            // Then
-            Assert.IsNotNull(response);
-            Assert.IsNotNull(response.Items);
-        }
+public class CustomerTests : BaseMollieApiTestClass {
+    private readonly ICustomerClient _customerClient;
+        
+    public CustomerTests() {
+        _customerClient = new CustomerClient(this.ApiKey);
+    }
+        
+    [DefaultRetryFact]
+    public async Task CanRetrieveCustomerList() {
+        // When: Retrieve customer list with default settings
+        ListResponse<CustomerResponse> response = await this._customerClient.GetCustomerListAsync();
 
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public async Task ListCustomersNeverReturnsMoreCustomersThenTheNumberOfRequestedCustomers() {
-            // If: Number of customers requested is 5
-            int numberOfCustomers = 5;
+        // Then
+        response.Should().NotBeNull();
+        response.Items.Should().NotBeNull();
+    }
 
-            // When: Retrieve 5 customers
-            ListResponse<CustomerResponse> response = await this._customerClient.GetCustomerListAsync(null, numberOfCustomers);
+    [DefaultRetryFact]
+    public async Task ListCustomersNeverReturnsMoreCustomersThenTheNumberOfRequestedCustomers() {
+        // If: Number of customers requested is 5
+        int numberOfCustomers = 5;
 
-            // Then
-            Assert.IsTrue(response.Items.Count <= numberOfCustomers);
-        }
+        // When: Retrieve 5 customers
+        ListResponse<CustomerResponse> response = await this._customerClient.GetCustomerListAsync(null, numberOfCustomers);
 
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public async Task CanCreateNewCustomer() {
-            // If: We create a customer request with only the required parameters
-            string name = "Smit";
-            string email = "johnsmit@mollie.com";
+        // Then
+        numberOfCustomers.Should().Be(response.Items.Count);
+    }
 
-            // When: We send the customer request to Mollie
-            CustomerResponse result = await this.CreateCustomer(name, email);
+    [DefaultRetryFact]
+    public async Task CanCreateNewCustomer() {
+        // If: We create a customer request with only the required parameters
+        string name = "Smit";
+        string email = "johnsmit@mollie.com";
 
-            // Then: Make sure the requested parameters match the response parameter values
-            Assert.IsNotNull(result);
-            Assert.AreEqual(name, result.Name);
-            Assert.AreEqual(email, result.Email);
-        }
+        // When: We send the customer request to Mollie
+        CustomerResponse result = await this.CreateCustomer(name, email);
 
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public async Task CanUpdateCustomer() {
-            // If: We retrieve the customer list
-            ListResponse<CustomerResponse> response = await this._customerClient.GetCustomerListAsync();
-            if (response.Items.Count == 0) {
-                Assert.Inconclusive("No customers found. Unable to test updating customers");
-            }
+        // Then: Make sure the requested parameters match the response parameter values
+        result.Should().NotBeNull();
+        result.Name.Should().Be(name);
+        result.Email.Should().Be(email);
+    }
 
-            // When: We update one of the customers in the list
-            string customerIdToUpdate = response.Items.First().Id;
-            string newCustomerName = DateTime.Now.ToShortTimeString();
-            CustomerRequest updateParameters = new CustomerRequest() {
-                Name = newCustomerName
-            };
-            CustomerResponse result = await this._customerClient.UpdateCustomerAsync(customerIdToUpdate, updateParameters);
+    [DefaultRetryFact]
+    public async Task CanUpdateCustomer() {
+        // If: We retrieve the customer list
+        ListResponse<CustomerResponse> response = await this._customerClient.GetCustomerListAsync();
 
-            // Then: Make sure the new name is updated
-            Assert.IsNotNull(result);
-            Assert.AreEqual(newCustomerName, result.Name);
-        }
+        // When: We update one of the customers in the list
+        string customerIdToUpdate = response.Items.First().Id;
+        string newCustomerName = DateTime.Now.ToShortTimeString();
+        CustomerRequest updateParameters = new CustomerRequest() {
+            Name = newCustomerName
+        };
+        CustomerResponse result = await this._customerClient.UpdateCustomerAsync(customerIdToUpdate, updateParameters);
 
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public async Task CanDeleteCustomer() {
-            // If: We retrieve the customer list
-            ListResponse<CustomerResponse> response = await this._customerClient.GetCustomerListAsync();
-            if (response.Items.Count == 0) {
-                Assert.Inconclusive("No customers found. Unable to test deleting customers");
-            }
+        // Then: Make sure the new name is updated
+        result.Should().NotBeNull();
+        result.Name.Should().Be(newCustomerName);
+    }
 
-            // When: We delete one of the customers in the list
-            string customerIdToDelete = response.Items.First().Id;
-            await this._customerClient.DeleteCustomerAsync(customerIdToDelete);
+    [DefaultRetryFact]
+    public async Task CanDeleteCustomer() {
+        // If: We retrieve the customer list
+        ListResponse<CustomerResponse> response = await this._customerClient.GetCustomerListAsync();
 
-            // Then: Make sure its deleted
-            AggregateException aggregateException = Assert.Throws<AggregateException>(() => this._customerClient.GetCustomerAsync(customerIdToDelete).Wait());
-            MollieApiException mollieApiException = aggregateException.InnerExceptions.FirstOrDefault(x => x.GetType() == typeof(MollieApiException)) as MollieApiException;
-            Assert.AreEqual((int)HttpStatusCode.Gone, mollieApiException.Details.Status);
-        }
+        // When: We delete one of the customers in the list
+        string customerIdToDelete = response.Items.First().Id;
+        await this._customerClient.DeleteCustomerAsync(customerIdToDelete);
 
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public async Task CanGetCustomerByUrlObject() {
-            // If: We create a customer request with only the required parameters
-            string name = "Smit";
-            string email = "johnsmit@mollie.com";
-            CustomerResponse createdCustomer = await this.CreateCustomer(name, email);
+        // Then: Make sure its deleted
+        MollieApiException apiException = await Assert.ThrowsAsync<MollieApiException>(() => this._customerClient.GetCustomerAsync(customerIdToDelete));
+        apiException.Details.Status.Should().Be((int)HttpStatusCode.Gone);
+    }
 
-            // When: We try to retrieve the customer by Url object
-            CustomerResponse retrievedCustomer = await this._customerClient.GetCustomerAsync(createdCustomer.Links.Self);
+    [DefaultRetryFact]
+    public async Task CanGetCustomerByUrlObject() {
+        // If: We create a customer request with only the required parameters
+        string name = "Smit";
+        string email = "johnsmit@mollie.com";
+        CustomerResponse createdCustomer = await this.CreateCustomer(name, email);
 
-            // Then: Make sure it's retrieved
-            Assert.AreEqual(createdCustomer.Name, retrievedCustomer.Name);
-            Assert.AreEqual(createdCustomer.Email, retrievedCustomer.Email);
-        }
+        // When: We try to retrieve the customer by Url object
+        CustomerResponse retrievedCustomer = await this._customerClient.GetCustomerAsync(createdCustomer.Links.Self);
 
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public async Task CanCreateCustomerWithJsonMetadata() {
-            // If: We create a customer request with json metadata
-            CustomerRequest customerRequest = new CustomerRequest() {
-                Email =  "johnsmit@mollie.com",
-                Name = "Smit",
-                Metadata =  "{\"order_id\":\"4.40\"}",
-                Locale = Locale.nl_NL
-            };
+        // Then: Make sure it's retrieved
+        retrievedCustomer.Name.Should().Be(createdCustomer.Name);
+        retrievedCustomer.Email.Should().Be(createdCustomer.Email);
+    }
 
-            // When: We try to retrieve the customer by Url object
-            CustomerResponse retrievedCustomer = await this._customerClient.CreateCustomerAsync(customerRequest);
+    [DefaultRetryFact]
+    public async Task CanCreateCustomerWithJsonMetadata() {
+        // If: We create a customer request with json metadata
+        CustomerRequest customerRequest = new CustomerRequest() {
+            Email =  "johnsmit@mollie.com",
+            Name = "Smit",
+            Metadata =  "{\"order_id\":\"4.40\"}",
+            Locale = Locale.nl_NL
+        };
 
-            // Then: Make sure it's retrieved
-            Assert.IsTrue(this.IsJsonResultEqual(customerRequest.Metadata, retrievedCustomer.Metadata));
-        }
+        // When: We try to retrieve the customer by Url object
+        CustomerResponse retrievedCustomer = await this._customerClient.CreateCustomerAsync(customerRequest);
 
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public async Task CanCreateCustomerWithStringMetadata() {
-            // If: We create a customer request with string metadata
-            CustomerRequest customerRequest = new CustomerRequest() {
-                Email = "johnsmit@mollie.com",
-                Name = "Smit",
-                Metadata = "This is my metadata",
-                Locale = Locale.nl_NL
-            };
+        // Then: Make sure it's retrieved
+        IsJsonResultEqual(customerRequest.Metadata, retrievedCustomer.Metadata).Should().BeTrue();
+    }
 
-            // When: We try to retrieve the customer by Url object
-            CustomerResponse retrievedCustomer = await this._customerClient.CreateCustomerAsync(customerRequest);
+    [DefaultRetryFact]
+    public async Task CanCreateCustomerWithStringMetadata() {
+        // If: We create a customer request with string metadata
+        CustomerRequest customerRequest = new CustomerRequest() {
+            Email = "johnsmit@mollie.com",
+            Name = "Smit",
+            Metadata = "This is my metadata",
+            Locale = Locale.nl_NL
+        };
 
-            // Then: Make sure it's retrieved
-            Assert.AreEqual(customerRequest.Metadata, retrievedCustomer.Metadata);
-        }
+        // When: We try to retrieve the customer by Url object
+        CustomerResponse retrievedCustomer = await this._customerClient.CreateCustomerAsync(customerRequest);
 
-        [Test]
-        [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public async Task CanCreateNewCustomerPayment() {
-            // If: We create a customer request with only the required parameters
-            string name = "Smit";
-            string email = "johnsmit@mollie.com";
-            CustomerResponse customer = await this.CreateCustomer(name, email);
-            PaymentRequest paymentRequest = new PaymentRequest() {
-                Amount = new Amount(Currency.EUR, "100.00"),
-                Description = "Description",
-                RedirectUrl = this.DefaultRedirectUrl
-            };
+        // Then: Make sure it's retrieved
+        retrievedCustomer.Metadata.Should().Be(customerRequest.Metadata);
+    }
 
-            // When: We create a payment request for this customer to Mollie
-            PaymentResponse paymentResponse = await this._customerClient.CreateCustomerPayment(customer.Id, paymentRequest);
+    [DefaultRetryFact]
+    public async Task CanCreateNewCustomerPayment() {
+        // If: We create a customer request with only the required parameters
+        string name = "Smit";
+        string email = "johnsmit@mollie.com";
+        CustomerResponse customer = await this.CreateCustomer(name, email);
+        PaymentRequest paymentRequest = new PaymentRequest() {
+            Amount = new Amount(Currency.EUR, "100.00"),
+            Description = "Description",
+            RedirectUrl = this.DefaultRedirectUrl
+        };
 
-            // Then: Make sure the requested parameters match the response parameter values
-            Assert.IsNotNull(paymentResponse);
-            Assert.AreEqual(customer.Id, paymentResponse.CustomerId);
-        }
+        // When: We create a payment request for this customer to Mollie
+        PaymentResponse paymentResponse = await this._customerClient.CreateCustomerPayment(customer.Id, paymentRequest);
 
-        private async Task<CustomerResponse> CreateCustomer(string name, string email) {
-            CustomerRequest customerRequest = new CustomerRequest() {
-                Email = email,
-                Name = name,
-                Locale = Locale.nl_NL
-            };
+        // Then: Make sure the requested parameters match the response parameter values
+        paymentResponse.Should().NotBeNull();
+        paymentResponse.CustomerId.Should().Be(customer.Id);
+    }
 
-            return await this._customerClient.CreateCustomerAsync(customerRequest);
-        }
+    private async Task<CustomerResponse> CreateCustomer(string name, string email) {
+        CustomerRequest customerRequest = new CustomerRequest() {
+            Email = email,
+            Name = name,
+            Locale = Locale.nl_NL
+        };
+
+        return await this._customerClient.CreateCustomerAsync(customerRequest);
     }
 }
