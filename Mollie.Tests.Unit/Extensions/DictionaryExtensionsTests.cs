@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using FluentAssertions;
 using Mollie.Api.Extensions;
-using NUnit.Framework;
+using Xunit;
 
 namespace Mollie.Tests.Unit.Extensions
 {
-    [TestFixture]
     public class DictionaryExtensionsTests
     {
-        [Test]
+        [Fact]
         public void ToQueryString_WhenMultipleKeyValuePairsAreAdded_MultipleParametersAreAddedToQueryString()
         {
             // Arrange
@@ -23,10 +23,10 @@ namespace Mollie.Tests.Unit.Extensions
             var result = parameters.ToQueryString();
 
             // Assert
-            Assert.AreEqual(expected, result);
+            result.Should().Be(expected);
         }
 
-        [Test]
+        [Fact]
         public void ToQueryString_WhenDictionaryIsEmpty_QueryStringIsEmpty()
         {
             // Arrange
@@ -37,10 +37,10 @@ namespace Mollie.Tests.Unit.Extensions
             var result = parameters.ToQueryString();
 
             // Assert
-            Assert.AreEqual(expected, result);
+            result.Should().Be(expected);
         }
 
-        [Test]
+        [Fact]
         public void AddValueIfNotNullOrEmpty_ValueIsNotNull_ValueIsAdded()
         {
             // Arrange
@@ -52,11 +52,11 @@ namespace Mollie.Tests.Unit.Extensions
             parameters.AddValueIfNotNullOrEmpty(parameterName, parameterValue);
 
             // Assert
-            Assert.IsTrue(parameters.Any());
-            Assert.AreEqual(parameterValue, parameters[parameterName]);
+            parameters.Should().NotBeEmpty();
+            parameters[parameterName].Should().Be(parameterValue);
         }
 
-        [Test]
+        [Fact]
         public void AddValueIfNotNullOrEmpty_ValueIsEmpty_ValueIsNotAdded()
         {
             // Arrange
@@ -66,7 +66,7 @@ namespace Mollie.Tests.Unit.Extensions
             parameters.AddValueIfNotNullOrEmpty("include", "");
 
             // Assert
-            Assert.IsFalse(parameters.Any());
+            parameters.Should().BeEmpty();
         }
     }
 }

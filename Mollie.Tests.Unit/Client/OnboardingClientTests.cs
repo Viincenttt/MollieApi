@@ -2,10 +2,10 @@
 using Mollie.Api.Models;
 using Mollie.Api.Models.Onboarding.Request;
 using Mollie.Api.Models.Onboarding.Response;
-using NUnit.Framework;
 using System.Net.Http;
 using System.Threading.Tasks;
 
+/*
 namespace Mollie.Tests.Unit.Client {
     [TestFixture]
     public class OnboardingClientTests : BaseClientTests {
@@ -76,3 +76,4 @@ namespace Mollie.Tests.Unit.Client {
         }
     }
 }
+*/

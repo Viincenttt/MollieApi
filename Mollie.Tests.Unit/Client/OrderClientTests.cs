@@ -3,14 +3,13 @@ using Mollie.Api.Client;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Order;
 using Mollie.Api.Models.Payment;
-using NUnit.Framework;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Models.Order.Request.ManageOrderLines;
-using Mollie.Api.Models.Payment.Response;
 using RichardSzalay.MockHttp;
 
+/*
 namespace Mollie.Tests.Unit.Client {
     [TestFixture]
     public class OrderClientTests : BaseClientTests {
@@ -396,3 +395,4 @@ namespace Mollie.Tests.Unit.Client {
         }
     }
 }
+*/

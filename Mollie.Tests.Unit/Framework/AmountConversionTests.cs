@@ -1,12 +1,10 @@
 ﻿using Mollie.Api.Models;
-using NUnit.Framework;
 using System;
+using Xunit;
 
 namespace Mollie.Tests.Unit.Framework {
-
-    [TestFixture]
     public class AmountConversionTests {
-        [Test]
+        [Fact]
         public void InvalidAmountValueWillThrowInvalidCastException() {
 
             // Initiate Amount with invalid decimal value

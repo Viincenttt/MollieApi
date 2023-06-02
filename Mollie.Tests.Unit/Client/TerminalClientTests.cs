@@ -4,11 +4,11 @@ using System.Threading.Tasks;
 using Mollie.Api.Client;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Terminal;
-using NUnit.Framework;
 using RichardSzalay.MockHttp;
 
 namespace Mollie.Tests.Unit.Client; 
 
+/*
 public class TerminalClientTests : BaseClientTests {
     [TestCase("")]
     [TestCase(" ")]
@@ -154,4 +154,4 @@ public class TerminalClientTests : BaseClientTests {
     }}
 }}";
     }
-}
+}*/

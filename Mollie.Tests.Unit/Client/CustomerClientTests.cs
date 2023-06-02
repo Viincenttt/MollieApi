@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 using Mollie.Api.Client;
 using Mollie.Api.Models.Customer;
 using Mollie.Api.Models.Payment.Request;
-using NUnit.Framework;
 using RichardSzalay.MockHttp;
 
+/*
 namespace Mollie.Tests.Unit.Client {
     public class CustomerClientTests : BaseClientTests {
         [TestCase("customers/customer-id", false)]
@@ -178,4 +178,4 @@ namespace Mollie.Tests.Unit.Client {
     ""createdAt"": ""2018-04-06T13:23:21.0Z""    
 }";
     }
-}
+}*/

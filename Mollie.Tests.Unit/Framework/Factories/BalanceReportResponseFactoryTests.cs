@@ -1,16 +1,17 @@
 ﻿using System;
+using FluentAssertions;
 using Mollie.Api.Framework.Factories;
 using Mollie.Api.Models.Balance.Response.BalanceReport;
 using Mollie.Api.Models.Balance.Response.BalanceReport.Specific.StatusBalance;
 using Mollie.Api.Models.Balance.Response.BalanceReport.Specific.TransactionCategories;
-using NUnit.Framework;
+using Xunit;
 
 namespace Mollie.Tests.Unit.Framework.Factories {
-    [TestFixture]
     public class BalanceReportResponseFactoryTests {
-        [TestCase(ReportGrouping.StatusBalances, typeof(StatusBalanceReportResponse))]
-        [TestCase(ReportGrouping.TransactionCategories, typeof(TransactionCategoriesReportResponse))]
-        [TestCase("unknown grouping", typeof(BalanceReportResponse))]
+        [Theory]
+        [InlineData(ReportGrouping.StatusBalances, typeof(StatusBalanceReportResponse))]
+        [InlineData(ReportGrouping.TransactionCategories, typeof(TransactionCategoriesReportResponse))]
+        [InlineData("unknown", typeof(BalanceReportResponse))]
         public void Create_CreatesExpectedType(string grouping, Type expectedType) {
             // Given
             var factory = new BalanceReportResponseFactory();
@@ -19,7 +20,7 @@ namespace Mollie.Tests.Unit.Framework.Factories {
             var result = factory.Create(grouping);
 
             // Then
-            Assert.AreEqual(expectedType, result.GetType());
+            result.Should().BeOfType(expectedType);
         }
     }
 }

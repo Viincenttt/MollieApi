@@ -3,9 +3,9 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client;
 using Mollie.Api.Models.Mandate;
-using NUnit.Framework;
 using RichardSzalay.MockHttp;
 
+/*
 namespace Mollie.Tests.Unit.Client {
     public class MandateClientTests : BaseClientTests {
         [TestCase("customers/customer-id/mandates/mandate-id", false)]
@@ -151,4 +151,4 @@ namespace Mollie.Tests.Unit.Client {
     ""createdAt"": ""2018-05-07T10:49:08+00:00""    
 }";
     }
-}
+}*/

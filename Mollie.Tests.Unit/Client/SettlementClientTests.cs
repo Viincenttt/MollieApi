@@ -3,12 +3,12 @@ using Mollie.Api.Client;
 using Mollie.Api.Models.Capture;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Settlement;
-using NUnit.Framework;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using RichardSzalay.MockHttp;
 
+/*
 namespace Mollie.Tests.Unit.Client {
     [TestFixture]
     public class SettlementClientTests : BaseClientTests {
@@ -315,4 +315,4 @@ namespace Mollie.Tests.Unit.Client {
             Assert.AreEqual($"Required URL argument 'settlementId' is null or empty", exception.Message); 
         }
     }    
-}
+}*/

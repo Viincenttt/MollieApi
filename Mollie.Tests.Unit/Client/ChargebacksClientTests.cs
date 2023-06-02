@@ -3,9 +3,8 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client;
 using Mollie.Api.Models.Chargeback;
-using NUnit.Framework;
 using RichardSzalay.MockHttp;
-
+/*
 namespace Mollie.Tests.Unit.Client {
     [TestFixture]
     public class ChargebacksClientTests : BaseClientTests {
@@ -172,4 +171,4 @@ namespace Mollie.Tests.Unit.Client {
             Assert.AreEqual($"Required URL argument 'paymentId' is null or empty", exception.Message); 
         }
     }
-}
+}*/

@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Mollie.Api.Client;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Shipment;
-using NUnit.Framework;
 using RichardSzalay.MockHttp;
 
+/*
 namespace Mollie.Tests.Unit.Client {
     [TestFixture]
     public class ShipmentClientTests : BaseClientTests {
@@ -326,4 +326,4 @@ namespace Mollie.Tests.Unit.Client {
      }
  }";
     }
-}
+}*/

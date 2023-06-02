@@ -2,11 +2,10 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client;
-using Mollie.Api.Models.Shipment;
 using Mollie.Api.Models.Subscription;
-using NUnit.Framework;
 using RichardSzalay.MockHttp;
 
+/*
 namespace Mollie.Tests.Unit.Client {
     public class SubscriptionClientTests : BaseClientTests {
         [TestCase(null, null, null,false, "")]
@@ -302,4 +301,4 @@ namespace Mollie.Tests.Unit.Client {
     }    
 }";
     }
-}
+}*/

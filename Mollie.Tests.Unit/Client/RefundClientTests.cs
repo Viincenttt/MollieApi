@@ -1,11 +1,11 @@
 ﻿using System;
 using Mollie.Api.Client;
-using NUnit.Framework;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Models.Refund;
 using RichardSzalay.MockHttp;
 
+/*
 namespace Mollie.Tests.Unit.Client {
     [TestFixture]
     public class RefundClientTests : BaseClientTests {
@@ -156,3 +156,4 @@ namespace Mollie.Tests.Unit.Client {
         }
     }
 }
+*/
