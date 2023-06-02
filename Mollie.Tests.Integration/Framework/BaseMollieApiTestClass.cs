@@ -37,7 +37,7 @@ namespace Mollie.Tests.Integration.Framework {
             
             // Mollie returns a 429 response code (Too many requests) if we send a lot of requests in a short timespan. 
             // In order to avoid hitting their rate limit, we add a small delay between each tests. 
-            TimeSpan timeBetweenTests = TimeSpan.FromMilliseconds(1000);
+            TimeSpan timeBetweenTests = TimeSpan.FromMilliseconds(1500);
             Thread.Sleep(timeBetweenTests);
         }
         

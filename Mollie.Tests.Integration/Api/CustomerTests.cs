@@ -2,7 +2,9 @@
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Mollie.Api.Client;
+using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Customer;
 using Mollie.Api.Models.List;
@@ -10,21 +12,27 @@ using Mollie.Api.Models.Payment;
 using Mollie.Api.Models.Payment.Request;
 using Mollie.Api.Models.Payment.Response;
 using Mollie.Tests.Integration.Framework;
+using Xunit;
 
-/*
 namespace Mollie.Tests.Integration.Api {
     public class CustomerTests : BaseMollieApiTestClass {
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        private readonly ICustomerClient _customerClient;
+        
+        public CustomerTests() {
+            _customerClient = new CustomerClient(this.ApiKey);
+        }
+        
+        [DefaultRetryFact]
         public async Task CanRetrieveCustomerList() {
             // When: Retrieve customer list with default settings
             ListResponse<CustomerResponse> response = await this._customerClient.GetCustomerListAsync();
 
             // Then
-            Assert.IsNotNull(response);
-            Assert.IsNotNull(response.Items);
+            response.Should().NotBeNull();
+            response.Items.Should().NotBeNull();
         }
 
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [DefaultRetryFact]
         public async Task ListCustomersNeverReturnsMoreCustomersThenTheNumberOfRequestedCustomers() {
             // If: Number of customers requested is 5
             int numberOfCustomers = 5;
@@ -33,10 +41,10 @@ namespace Mollie.Tests.Integration.Api {
             ListResponse<CustomerResponse> response = await this._customerClient.GetCustomerListAsync(null, numberOfCustomers);
 
             // Then
-            Assert.IsTrue(response.Items.Count <= numberOfCustomers);
+            numberOfCustomers.Should().Be(response.Items.Count);
         }
 
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [DefaultRetryFact]
         public async Task CanCreateNewCustomer() {
             // If: We create a customer request with only the required parameters
             string name = "Smit";
@@ -46,18 +54,15 @@ namespace Mollie.Tests.Integration.Api {
             CustomerResponse result = await this.CreateCustomer(name, email);
 
             // Then: Make sure the requested parameters match the response parameter values
-            Assert.IsNotNull(result);
-            Assert.AreEqual(name, result.Name);
-            Assert.AreEqual(email, result.Email);
+            result.Should().NotBeNull();
+            result.Name.Should().Be(name);
+            result.Email.Should().Be(email);
         }
 
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [DefaultRetryFact]
         public async Task CanUpdateCustomer() {
             // If: We retrieve the customer list
             ListResponse<CustomerResponse> response = await this._customerClient.GetCustomerListAsync();
-            if (response.Items.Count == 0) {
-                Assert.Inconclusive("No customers found. Unable to test updating customers");
-            }
 
             // When: We update one of the customers in the list
             string customerIdToUpdate = response.Items.First().Id;
@@ -68,29 +73,25 @@ namespace Mollie.Tests.Integration.Api {
             CustomerResponse result = await this._customerClient.UpdateCustomerAsync(customerIdToUpdate, updateParameters);
 
             // Then: Make sure the new name is updated
-            Assert.IsNotNull(result);
-            Assert.AreEqual(newCustomerName, result.Name);
+            result.Should().NotBeNull();
+            result.Name.Should().Be(newCustomerName);
         }
 
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [DefaultRetryFact]
         public async Task CanDeleteCustomer() {
             // If: We retrieve the customer list
             ListResponse<CustomerResponse> response = await this._customerClient.GetCustomerListAsync();
-            if (response.Items.Count == 0) {
-                Assert.Inconclusive("No customers found. Unable to test deleting customers");
-            }
 
             // When: We delete one of the customers in the list
             string customerIdToDelete = response.Items.First().Id;
             await this._customerClient.DeleteCustomerAsync(customerIdToDelete);
 
             // Then: Make sure its deleted
-            AggregateException aggregateException = Assert.Throws<AggregateException>(() => this._customerClient.GetCustomerAsync(customerIdToDelete).Wait());
-            MollieApiException mollieApiException = aggregateException.InnerExceptions.FirstOrDefault(x => x.GetType() == typeof(MollieApiException)) as MollieApiException;
-            Assert.AreEqual((int)HttpStatusCode.Gone, mollieApiException.Details.Status);
+            MollieApiException apiException = await Assert.ThrowsAsync<MollieApiException>(() => this._customerClient.GetCustomerAsync(customerIdToDelete));
+            apiException.Details.Status.Should().Be((int)HttpStatusCode.Gone);
         }
 
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [DefaultRetryFact]
         public async Task CanGetCustomerByUrlObject() {
             // If: We create a customer request with only the required parameters
             string name = "Smit";
@@ -101,11 +102,11 @@ namespace Mollie.Tests.Integration.Api {
             CustomerResponse retrievedCustomer = await this._customerClient.GetCustomerAsync(createdCustomer.Links.Self);
 
             // Then: Make sure it's retrieved
-            Assert.AreEqual(createdCustomer.Name, retrievedCustomer.Name);
-            Assert.AreEqual(createdCustomer.Email, retrievedCustomer.Email);
+            retrievedCustomer.Name.Should().Be(createdCustomer.Name);
+            retrievedCustomer.Email.Should().Be(createdCustomer.Email);
         }
 
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [DefaultRetryFact]
         public async Task CanCreateCustomerWithJsonMetadata() {
             // If: We create a customer request with json metadata
             CustomerRequest customerRequest = new CustomerRequest() {
@@ -119,10 +120,10 @@ namespace Mollie.Tests.Integration.Api {
             CustomerResponse retrievedCustomer = await this._customerClient.CreateCustomerAsync(customerRequest);
 
             // Then: Make sure it's retrieved
-            Assert.IsTrue(this.IsJsonResultEqual(customerRequest.Metadata, retrievedCustomer.Metadata));
+            IsJsonResultEqual(customerRequest.Metadata, retrievedCustomer.Metadata).Should().BeTrue();
         }
 
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [DefaultRetryFact]
         public async Task CanCreateCustomerWithStringMetadata() {
             // If: We create a customer request with string metadata
             CustomerRequest customerRequest = new CustomerRequest() {
@@ -136,11 +137,10 @@ namespace Mollie.Tests.Integration.Api {
             CustomerResponse retrievedCustomer = await this._customerClient.CreateCustomerAsync(customerRequest);
 
             // Then: Make sure it's retrieved
-            Assert.AreEqual(customerRequest.Metadata, retrievedCustomer.Metadata);
+            retrievedCustomer.Metadata.Should().Be(customerRequest.Metadata);
         }
 
-        [Test]
-        [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [DefaultRetryFact]
         public async Task CanCreateNewCustomerPayment() {
             // If: We create a customer request with only the required parameters
             string name = "Smit";
@@ -156,8 +156,8 @@ namespace Mollie.Tests.Integration.Api {
             PaymentResponse paymentResponse = await this._customerClient.CreateCustomerPayment(customer.Id, paymentRequest);
 
             // Then: Make sure the requested parameters match the response parameter values
-            Assert.IsNotNull(paymentResponse);
-            Assert.AreEqual(customer.Id, paymentResponse.CustomerId);
+            paymentResponse.Should().NotBeNull();
+            paymentResponse.CustomerId.Should().Be(customer.Id);
         }
 
         private async Task<CustomerResponse> CreateCustomer(string name, string email) {
@@ -171,4 +171,3 @@ namespace Mollie.Tests.Integration.Api {
         }
     }
 }
-*/
