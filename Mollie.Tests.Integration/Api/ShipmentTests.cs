@@ -8,40 +8,39 @@ using Mollie.Api.Models.List;
 using Mollie.Api.Models.Shipment;
 using Mollie.Tests.Integration.Framework;
 
-namespace Mollie.Tests.Integration.Api
-{
-    public class ShipmentTests : BaseMollieApiTestClass {
-        private readonly IShipmentClient _shipmentClient;
+namespace Mollie.Tests.Integration.Api; 
 
-        public ShipmentTests() {
-            _shipmentClient = new ShipmentClient(this.ApiKey);
-        }
+public class ShipmentTests : BaseMollieApiTestClass {
+    private readonly IShipmentClient _shipmentClient;
+
+    public ShipmentTests() {
+        _shipmentClient = new ShipmentClient(this.ApiKey);
+    }
         
-        [DefaultRetryFact(Skip = "For manual testing only")]
-        public async Task CanCreateShipmentWithOnlyRequiredFields() {
-            // the order needs to be autorized to do a shipment on. this can only be done by waiting.
-            string validOrderId = "XXXXX";
-            ShipmentRequest shipmentRequest = this.CreateShipmentWithOnlyRequiredFields();
-            ShipmentResponse result = await this._shipmentClient.CreateShipmentAsync(validOrderId, shipmentRequest);
+    [DefaultRetryFact(Skip = "For manual testing only")]
+    public async Task CanCreateShipmentWithOnlyRequiredFields() {
+        // the order needs to be autorized to do a shipment on. this can only be done by waiting.
+        string validOrderId = "XXXXX";
+        ShipmentRequest shipmentRequest = this.CreateShipmentWithOnlyRequiredFields();
+        ShipmentResponse result = await this._shipmentClient.CreateShipmentAsync(validOrderId, shipmentRequest);
             
-            // Then: Make sure we get a valid shipment response
-            result.Should().NotBeNull();
-            result.CreatedAt.Should().BeAfter(DateTime.Now);
-        }
+        // Then: Make sure we get a valid shipment response
+        result.Should().NotBeNull();
+        result.CreatedAt.Should().BeAfter(DateTime.Now);
+    }
 
-        [DefaultRetryFact(Skip = "For manual testing only")]
-        public async Task CanListShipmentsForOrder(){
-            string validOrderId = "XXXXX";
-            ListResponse<ShipmentResponse> result = await this._shipmentClient.GetShipmentsListAsync(validOrderId);
+    [DefaultRetryFact(Skip = "For manual testing only")]
+    public async Task CanListShipmentsForOrder(){
+        string validOrderId = "XXXXX";
+        ListResponse<ShipmentResponse> result = await this._shipmentClient.GetShipmentsListAsync(validOrderId);
 
-            result.Should().NotBeNull();
-            result.Count.Should().BeGreaterThan(0);
-        }
+        result.Should().NotBeNull();
+        result.Count.Should().BeGreaterThan(0);
+    }
         
-        private ShipmentRequest CreateShipmentWithOnlyRequiredFields() {
-            return new ShipmentRequest() {
-                Lines = new List<ShipmentLineRequest>()
-            };
-        }
+    private ShipmentRequest CreateShipmentWithOnlyRequiredFields() {
+        return new ShipmentRequest() {
+            Lines = new List<ShipmentLineRequest>()
+        };
     }
 }

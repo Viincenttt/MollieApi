@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using FluentAssertions;
+using Mollie.Api.Client;
+using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Customer;
 using Mollie.Api.Models.List;
@@ -8,119 +11,125 @@ using Mollie.Api.Models.Mandate;
 using Mollie.Api.Models.Subscription;
 using Mollie.Tests.Integration.Framework;
 
-/*
-namespace Mollie.Tests.Integration.Api {
-    public class SubscriptionTests : BaseMollieApiTestClass {
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public async Task CanRetrieveSubscriptionList() {
-            // Given
-            string customerId = await this.GetFirstCustomerWithValidMandate();
+namespace Mollie.Tests.Integration.Api; 
 
-            // When: Retrieve subscription list with default settings
-            ListResponse<SubscriptionResponse> response = await this._subscriptionClient.GetSubscriptionListAsync(customerId);
+public class SubscriptionTests : BaseMollieApiTestClass {
+    private readonly ISubscriptionClient _subscriptionClient;
+    private readonly ICustomerClient _customerClient;
+    private readonly IMandateClient _mandateClient;
+
+    public SubscriptionTests() {
+        _subscriptionClient = new SubscriptionClient(this.ApiKey);
+        _customerClient = new CustomerClient(this.ApiKey);
+        _mandateClient = new MandateClient(this.ApiKey);
+    }
+    
+    [DefaultRetryFact]
+    public async Task CanRetrieveSubscriptionList() {
+        // Given
+        string customerId = await this.GetFirstCustomerWithValidMandate();
+
+        // When: Retrieve subscription list with default settings
+        ListResponse<SubscriptionResponse> response = await this._subscriptionClient.GetSubscriptionListAsync(customerId);
+
+        // Then
+        response.Should().NotBeNull();
+        response.Items.Should().NotBeNull();
+    }
+
+    [DefaultRetryFact]
+    public async Task CanRetrieveAllSubscriptionList() {
+        // Given
+
+        // When: Retrieve subscription list with default settings
+        ListResponse<SubscriptionResponse> response = await this._subscriptionClient.GetAllSubscriptionList();
+
+        // Then
+        response.Should().NotBeNull();
+        response.Items.Should().NotBeNull();
+    }
+
+    [DefaultRetryFact]
+    public async Task ListSubscriptionsNeverReturnsMoreCustomersThenTheNumberOfRequestedSubscriptions() {
+        // Given: Number of customers requested is 5
+        string customerId = await this.GetFirstCustomerWithValidMandate();
+        int numberOfSubscriptions = 5;
+
+        // When: Retrieve 5 subscriptions
+        ListResponse<SubscriptionResponse> response = await this._subscriptionClient.GetSubscriptionListAsync(customerId, null, numberOfSubscriptions);
+
+        // Then
+        response.Items.Count.Should().BeLessOrEqualTo(numberOfSubscriptions);
+    }
+
+    [DefaultRetryFact]
+    public async Task CanCreateSubscription() {
+        // Given
+        string customerId = await this.GetFirstCustomerWithValidMandate();
+        SubscriptionRequest subscriptionRequest = new SubscriptionRequest();
+        subscriptionRequest.Amount = new Amount(Currency.EUR, "100.00");
+        subscriptionRequest.Times = 5;
+        subscriptionRequest.Interval = "1 month";
+        subscriptionRequest.Description = $"Subscription {Guid.NewGuid()}"; // Subscriptions must have a unique name
+        subscriptionRequest.WebhookUrl = "http://www.google.nl";
+        subscriptionRequest.StartDate = DateTime.Now.AddDays(1);
+
+        // When
+        SubscriptionResponse subscriptionResponse = await this._subscriptionClient.CreateSubscriptionAsync(customerId, subscriptionRequest);
+
+        // Then
+        subscriptionResponse.Amount.Should().Be(subscriptionRequest.Amount);
+        subscriptionResponse.Times.Should().Be(subscriptionRequest.Times);
+        subscriptionResponse.Interval.Should().Be(subscriptionRequest.Interval);
+        subscriptionResponse.Description.Should().Be(subscriptionRequest.Description);
+        subscriptionResponse.WebhookUrl.Should().Be(subscriptionRequest.WebhookUrl);
+        subscriptionResponse.StartDate.Should().Be(subscriptionRequest.StartDate.Value.Date);
+    }
+
+    [DefaultRetryFact]
+    public async Task CanCancelSubscription() {
+        // Given
+        string customerId = await this.GetFirstCustomerWithValidMandate();
+        ListResponse<SubscriptionResponse> subscriptions = await this._subscriptionClient.GetSubscriptionListAsync(customerId);
+
+        // When
+        SubscriptionResponse subscriptionToCancel = subscriptions.Items
+            .FirstOrDefault(s => s.Status != SubscriptionStatus.Canceled);
+        if (subscriptionToCancel != null) {
+            await this._subscriptionClient.CancelSubscriptionAsync(customerId, subscriptionToCancel.Id);
+            SubscriptionResponse cancelledSubscription = await this._subscriptionClient.GetSubscriptionAsync(customerId, subscriptionToCancel.Id);
 
             // Then
-            Assert.IsNotNull(response);
-            Assert.IsNotNull(response.Items);
+            cancelledSubscription.Status.Should().Be(SubscriptionStatus.Canceled);
         }
+    }
 
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public async Task CanRetrieveAllSubscriptionList() {
-            // Given
+    [DefaultRetryFact]
+    public async Task CanUpdateSubscription() {
+        // Given 
+        string customerId = await this.GetFirstCustomerWithValidMandate();
+        ListResponse<SubscriptionResponse> subscriptions = await this._subscriptionClient.GetSubscriptionListAsync(customerId);
 
-            // When: Retrieve subscription list with default settings
-            ListResponse<SubscriptionResponse> response = await this._subscriptionClient.GetAllSubscriptionList();
+        // When
+        SubscriptionResponse subscriptionToUpdate = subscriptions.Items
+            .FirstOrDefault(s => s.Status != SubscriptionStatus.Canceled);
+        if (subscriptionToUpdate != null) {
+            SubscriptionUpdateRequest request = new SubscriptionUpdateRequest() {
+                Description = $"Updated subscription {Guid.NewGuid()}"
+            };
+            SubscriptionResponse response = await this._subscriptionClient.UpdateSubscriptionAsync(customerId, subscriptionToUpdate.Id, request);
 
             // Then
-            Assert.IsNotNull(response);
-            Assert.IsNotNull(response.Items);
+            response.Description.Should().Be(request.Description);
         }
+    }
 
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public async Task ListSubscriptionsNeverReturnsMoreCustomersThenTheNumberOfRequestedSubscriptions() {
-            // Given: Number of customers requested is 5
-            string customerId = await this.GetFirstCustomerWithValidMandate();
-            int numberOfSubscriptions = 5;
-
-            // When: Retrieve 5 subscriptions
-            ListResponse<SubscriptionResponse> response = await this._subscriptionClient.GetSubscriptionListAsync(customerId, null, numberOfSubscriptions);
-
-            // Then
-            Assert.IsTrue(response.Items.Count <= numberOfSubscriptions);
-        }
-
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public async Task CanCreateSubscription() {
-            // Given
-            string customerId = await this.GetFirstCustomerWithValidMandate();
-            SubscriptionRequest subscriptionRequest = new SubscriptionRequest();
-            subscriptionRequest.Amount = new Amount(Currency.EUR, "100.00");
-            subscriptionRequest.Times = 5;
-            subscriptionRequest.Interval = "1 month";
-            subscriptionRequest.Description = $"Subscription {Guid.NewGuid()}"; // Subscriptions must have a unique name
-            subscriptionRequest.WebhookUrl = "http://www.google.nl";
-            subscriptionRequest.StartDate = DateTime.Now.AddDays(1);
-
-            // When
-            SubscriptionResponse subscriptionResponse = await this._subscriptionClient.CreateSubscriptionAsync(customerId, subscriptionRequest);
-
-            // Then
-            Assert.AreEqual(subscriptionRequest.Amount.Value, subscriptionResponse.Amount.Value);
-            Assert.AreEqual(subscriptionRequest.Amount.Currency, subscriptionResponse.Amount.Currency);
-            Assert.AreEqual(subscriptionRequest.Times, subscriptionResponse.Times);
-            Assert.AreEqual(subscriptionRequest.Interval, subscriptionResponse.Interval);
-            Assert.AreEqual(subscriptionRequest.Description, subscriptionResponse.Description);
-            Assert.AreEqual(subscriptionRequest.WebhookUrl, subscriptionResponse.WebhookUrl);
-            Assert.AreEqual(subscriptionRequest.StartDate.Value.Date, subscriptionResponse.StartDate);
-        }
-
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public async Task CanCancelSubscription() {
-            // Given
-            string customerId = await this.GetFirstCustomerWithValidMandate();
-            ListResponse<SubscriptionResponse> subscriptions = await this._subscriptionClient.GetSubscriptionListAsync(customerId);
-
-            // When
-            if (subscriptions.Count > 0) {
-                string subscriptionId = subscriptions.Items.First().Id;
-                await this._subscriptionClient.CancelSubscriptionAsync(customerId, subscriptionId);
-                SubscriptionResponse cancelledSubscription = await this._subscriptionClient.GetSubscriptionAsync(customerId, subscriptionId);
-
-                // Then
-                Assert.AreEqual(cancelledSubscription.Status, SubscriptionStatus.Canceled);
-            }
-            else {
-                Assert.Inconclusive("No subscriptions found that could be cancelled");
-            }
-        }
-
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public async Task CanUpdateSubscription() {
-            // Given 
-            string customerId = await this.GetFirstCustomerWithValidMandate();
-            ListResponse<SubscriptionResponse> subscriptions = await this._subscriptionClient.GetSubscriptionListAsync(customerId);
-
-            // When
-            if (subscriptions.Count > 0) {
-                string subscriptionId = subscriptions.Items.First().Id;
-                SubscriptionUpdateRequest request = new SubscriptionUpdateRequest() {
-                    Description = $"Updated subscription {Guid.NewGuid()}"
-                };
-                SubscriptionResponse response = await this._subscriptionClient.UpdateSubscriptionAsync(customerId, subscriptionId, request);
-
-                // Then
-                Assert.AreEqual(request.Description, response.Description);
-            }
-            else {
-                Assert.Inconclusive("No subscriptions found that could be cancelled");
-            }
-        }
-
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public async Task CanCreateSubscriptionWithMetaData() {
-            // If: We create a subscription with meta data
-            string json = "{\"order_id\":\"4.40\"}";
-            string customerId = await this.GetFirstCustomerWithValidMandate();
+    [DefaultRetryFact]
+    public async Task CanCreateSubscriptionWithMetaData() {
+        // If: We create a subscription with meta data
+        string json = "{\"order_id\":\"4.40\"}";
+        string customerId = await this.GetFirstCustomerWithValidMandate();
+        if (customerId != null) {
             SubscriptionRequest subscriptionRequest = new SubscriptionRequest();
             subscriptionRequest.Amount = new Amount(Currency.EUR, "100.00");
             subscriptionRequest.Times = 5;
@@ -134,22 +143,20 @@ namespace Mollie.Tests.Integration.Api {
             SubscriptionResponse result = await this._subscriptionClient.CreateSubscriptionAsync(customerId, subscriptionRequest);
 
             // Then: Make sure we get the same json result as metadata
-            Assert.IsTrue(this.IsJsonResultEqual(json, result.Metadata));
-        }
-
-        public async Task<string> GetFirstCustomerWithValidMandate() {
-            ListResponse<CustomerResponse> customers = await this._customerClient.GetCustomerListAsync();
-            
-            foreach (CustomerResponse customer in customers.Items) {
-                ListResponse<MandateResponse> mandates = await this._mandateClient.GetMandateListAsync(customer.Id);
-                if (mandates.Items.Any(x => x.Status == MandateStatus.Valid)) {
-                    return customer.Id;
-                }
-            }
-
-            Assert.Inconclusive("No customers with valid mandate found. Unable to test subscription API");
-            return null;
+            IsJsonResultEqual(result.Metadata, json).Should().BeTrue();
         }
     }
+
+    private async Task<string> GetFirstCustomerWithValidMandate() {
+        ListResponse<CustomerResponse> customers = await this._customerClient.GetCustomerListAsync();
+            
+        foreach (CustomerResponse customer in customers.Items) {
+            ListResponse<MandateResponse> mandates = await this._mandateClient.GetMandateListAsync(customer.Id);
+            if (mandates.Items.Any(x => x.Status == MandateStatus.Valid)) {
+                return customer.Id;
+            }
+        }
+
+        return null;
+    }
 }
-*/
