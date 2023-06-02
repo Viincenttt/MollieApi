@@ -12,7 +12,7 @@ using Xunit;
 
 namespace Mollie.Tests.Integration.Api; 
 
-[Trait("Category", "AccessKeyIntegrationTest")]
+[Trait("TestCategory", "AccessKeyIntegrationTest")]
 public class BalanceTests : BaseMollieApiTestClass {
     private readonly IBalanceClient _balanceClient;
 
