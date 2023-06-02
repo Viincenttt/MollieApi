@@ -1,5 +1,6 @@
 ﻿@page "/customer/{customerId}/mandate/create"
 @using Mollie.WebApplication.Blazor.Models.Mandate
+@using Mollie.Api.Client
 
 @inject IMandateClient MandateClient
 @inject NavigationManager NavigationManager
@@ -16,7 +17,9 @@
     </p>
 </div>
 
-<EditForm Model="model" OnValidSubmit="@OnSave" class="col-md-6">
+<ApiExceptionDisplay Exception="_apiException"></ApiExceptionDisplay>
+
+<EditForm Model="_mandate" OnValidSubmit="@OnSave" class="col-md-6">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
@@ -25,7 +28,7 @@
         <InputText
             id="consumer-name"
             class="form-control"
-            @bind-Value="model.ConsumerName">
+            @bind-Value="_mandate.ConsumerName">
         </InputText>
     </div>
 
@@ -34,7 +37,7 @@
         <InputText
             id="consumer-account"
             class="form-control"
-            @bind-Value="model.ConsumerAccount">
+            @bind-Value="_mandate.ConsumerAccount">
         </InputText>
     </div>
 
@@ -42,21 +45,30 @@
 </EditForm>
 
 @code {
+    private MollieApiException _apiException = null;
+    
     [Parameter]
     public string CustomerId { get; set; }
     
-    private CreateMandateModel model = new() {
+    private CreateMandateModel _mandate = new() {
         ConsumerName = "Consumer name",
         ConsumerAccount = ""
     };
 
     private async Task OnSave() {
-        await MandateClient.CreateMandateAsync(CustomerId, new SepaDirectDebitMandateRequest {
-            Method = PaymentMethod.DirectDebit,
-            ConsumerName = model.ConsumerName,
-            ConsumerAccount = model.ConsumerAccount
-        });
-        
-        NavigationManager.NavigateTo($"/customer/{CustomerId}/mandate/overview");
+        try {
+            _apiException = null;
+            
+            await MandateClient.CreateMandateAsync(CustomerId, new SepaDirectDebitMandateRequest {
+                Method = PaymentMethod.DirectDebit,
+                ConsumerName = _mandate.ConsumerName,
+                ConsumerAccount = _mandate.ConsumerAccount
+            });
+
+            NavigationManager.NavigateTo($"/customer/{CustomerId}/mandate/overview");
+        }
+        catch (MollieApiException e) {
+            _apiException = e;
+        }
     }
 }

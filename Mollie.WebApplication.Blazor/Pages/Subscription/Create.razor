@@ -1,11 +1,14 @@
 ﻿@page "/customer/{customerId}/subscription/create"
 
 @using Mollie.WebApplication.Blazor.Models.Subscription
+@using Mollie.Api.Client
 
 @inject ISubscriptionClient SubscriptionClient
 @inject NavigationManager NavigationManager
 
 <h3>Create new subscription</h3>
+
+<ApiExceptionDisplay Exception="_apiException"></ApiExceptionDisplay>
 
 <EditForm Model="model" OnValidSubmit="@OnSave" class="col-md-6">
     <DataAnnotationsValidator />
@@ -66,6 +69,8 @@
 </EditForm>
 
 @code {
+    private MollieApiException _apiException = null;
+    
     [Parameter]
     public string CustomerId { get; set; }
     
@@ -79,13 +84,20 @@
     };
     
     private async Task OnSave() {
-        await SubscriptionClient.CreateSubscriptionAsync(CustomerId, new SubscriptionRequest {
-            Amount = new Amount(model.Currency, model.Amount),
-            Interval = $"{model.IntervalAmount} {model.IntervalPeriod.ToString().ToLower()}",
-            Times = model.Times,
-            Description = model.Description
-        });
-        
-        NavigationManager.NavigateTo($"/customer/{CustomerId}/subscription/overview");
+        try {
+            _apiException = null;
+            
+            await SubscriptionClient.CreateSubscriptionAsync(CustomerId, new SubscriptionRequest {
+                Amount = new Amount(model.Currency, model.Amount),
+                Interval = $"{model.IntervalAmount} {model.IntervalPeriod.ToString().ToLower()}",
+                Times = model.Times,
+                Description = model.Description
+            });
+
+            NavigationManager.NavigateTo($"/customer/{CustomerId}/subscription/overview");
+        }
+        catch (MollieApiException e) {
+            _apiException = e;
+        }
     }
 }
