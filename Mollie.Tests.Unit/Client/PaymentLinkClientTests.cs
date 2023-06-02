@@ -2,16 +2,15 @@
 using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Mollie.Api.Client;
 using Mollie.Api.Models;
-using Mollie.Api.Models.List;
 using Mollie.Api.Models.PaymentLink.Request;
 using Mollie.Api.Models.PaymentLink.Response;
-using NUnit.Framework;
 using RichardSzalay.MockHttp;
+using Xunit;
 
 namespace Mollie.Tests.Unit.Client {
-    [TestFixture]
     public class PaymentLinkClientTests : BaseClientTests {
         private const decimal DefaultPaymentAmount = 50;
         private const string DefaultPaymentLinkId = "pl_4Y0eZitmBnQ6IDoMqZQKh";
@@ -51,7 +50,7 @@ namespace Mollie.Tests.Unit.Client {
     }}
 }}";
 
-        [Test]
+        [Fact]
         public async Task CreatePaymentLinkAsync_PaymentLinkWithRequiredParameters_ResponseIsDeserializedInExpectedFormat() {
             // Given: we create a payment link request with only the required parameters
             PaymentLinkRequest paymentLinkRequest = new PaymentLinkRequest() {
@@ -75,7 +74,7 @@ namespace Mollie.Tests.Unit.Client {
             VerifyPaymentLinkResponse(response);
         }
 
-        [Test]
+        [Fact]
         public async Task GetPaymentLinkAsync_ResponseIsDeserializedInExpectedFormat() {
             // Given: we retrieve a payment link
             var mockHttp = new MockHttpMessageHandler();
@@ -92,28 +91,29 @@ namespace Mollie.Tests.Unit.Client {
             VerifyPaymentLinkResponse(response);
         }
         
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase(null)]
-        public void GetPaymentLinkAsync_NoPaymentLinkIdIsGiven_ArgumentExceptionIsThrown(string paymentLinkId) {
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        public async Task GetPaymentLinkAsync_NoPaymentLinkIdIsGiven_ArgumentExceptionIsThrown(string paymentLinkId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             PaymentLinkClient paymentLinkClient = new PaymentLinkClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await paymentLinkClient.GetPaymentLinkAsync(paymentLinkId));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await paymentLinkClient.GetPaymentLinkAsync(paymentLinkId));
 
             // Then
-            Assert.AreEqual($"Required URL argument 'paymentLinkId' is null or empty", exception.Message); 
+            exception.Message.Should().Be("Required URL argument 'paymentLinkId' is null or empty");
         }
 
         private void VerifyPaymentLinkResponse(PaymentLinkResponse response) {
-            Assert.AreEqual(DefaultPaymentAmount.ToString(CultureInfo.InvariantCulture), response.Amount.Value);
-            Assert.AreEqual(DefaultDescription, response.Description);
-            Assert.AreEqual(DefaultPaymentLinkId, response.Id);
-            Assert.AreEqual(DefaultRedirectUrl, response.RedirectUrl);
-            Assert.AreEqual(DefaultWebhookUrl, response.WebhookUrl);
+            response.Amount.Value.Should().Be(DefaultPaymentAmount.ToString(CultureInfo.InvariantCulture));
+            response.Description.Should().Be(DefaultDescription);
+            response.Id.Should().Be(DefaultPaymentLinkId);
+            response.RedirectUrl.Should().Be(DefaultRedirectUrl);
+            response.WebhookUrl.Should().Be(DefaultWebhookUrl);
         }
     }
 }

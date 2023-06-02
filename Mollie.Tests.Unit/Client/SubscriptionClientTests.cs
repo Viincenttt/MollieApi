@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Mollie.Api.Client;
-using Mollie.Api.Models.Shipment;
 using Mollie.Api.Models.Subscription;
-using NUnit.Framework;
 using RichardSzalay.MockHttp;
+using Xunit;
 
 namespace Mollie.Tests.Unit.Client {
     public class SubscriptionClientTests : BaseClientTests {
-        [TestCase(null, null, null,false, "")]
-        [TestCase("from", null, null, false, "?from=from")]
-        [TestCase("from", 50, null, false, "?from=from&limit=50")]
-        [TestCase(null, null,null, true, "?testmode=true")]
-        [TestCase(null, null,"profile-id", true, "?profileId=profile-id")]
+        [Theory]
+        [InlineData(null, null, null,false, "")]
+        [InlineData("from", null, null, false, "?from=from")]
+        [InlineData("from", 50, null, false, "?from=from&limit=50")]
+        [InlineData(null, null,null, true, "?testmode=true")]
+        [InlineData(null, null,"profile-id", true, "?profileId=profile-id")]
         public async Task GetSubscriptionListAsync_TestModeParameterCase_QueryStringOnlyContainsTestModeParameterIfTrue(string from, int? limit, string profileId, bool testmode, string expectedQueryString) {
             // Given: We retrieve a list of subscriptions
             const string customerId = "customer-id";
@@ -29,14 +30,15 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
-            Assert.IsNotNull(result);
+            result.Should().NotBeNull();
         }
         
-        [TestCase(null, null, null,false, "")]
-        [TestCase("from", null, null, false, "?from=from")]
-        [TestCase("from", 50, null, false, "?from=from&limit=50")]
-        [TestCase(null, null,null, true, "?testmode=true")]
-        [TestCase(null, null,"profile-id", true, "?profileId=profile-id")]
+        [Theory]
+        [InlineData(null, null, null,false, "")]
+        [InlineData("from", null, null, false, "?from=from")]
+        [InlineData("from", 50, null, false, "?from=from&limit=50")]
+        [InlineData(null, null,null, true, "?testmode=true")]
+        [InlineData(null, null,"profile-id", true, "?profileId=profile-id")]
         public async Task GetAllSubscriptionList_TestModeParameterCase_QueryStringOnlyContainsTestModeParameterIfTrue(string from, int? limit, string profileId, bool testmode, string expectedQueryString) {
             // Given: We retrieve a list of subscriptions
             var mockHttp = new MockHttpMessageHandler();
@@ -50,11 +52,12 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
-            Assert.IsNotNull(result);
+            result.Should().NotBeNull();
         }
         
-        [TestCase("customers/customer-id/subscriptions/subscription-id", false)]
-        [TestCase("customers/customer-id/subscriptions/subscription-id?testmode=true", true)]
+        [Theory]
+        [InlineData("customers/customer-id/subscriptions/subscription-id", false)]
+        [InlineData("customers/customer-id/subscriptions/subscription-id?testmode=true", true)]
         public async Task GetSubscriptionAsync_TestModeParameterCase_QueryStringOnlyContainsTestModeParameterIfTrue(string expectedUrl, bool testModeParameter) {
             // Given: We retrieve a subscriptions
             const string customerId = "customer-id";
@@ -71,10 +74,10 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
-            Assert.IsNotNull(result);
+            result.Should().NotBeNull();
         }
         
-        [Test]
+        [Fact]
         public async Task RevokeMandate_TestmodeIsTrue_RequestContainsTestmodeModel() {
             // Given: We make a request to retrieve a payment with embedded refunds
             const string customerId = "customer-id";
@@ -96,10 +99,11 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.VerifyNoOutstandingExpectation();
         }
         
-        [TestCase(null, null, false, "")]
-        [TestCase("from", null, false, "?from=from")]
-        [TestCase("from", 50, false, "?from=from&limit=50")]
-        [TestCase(null, null,true, "?testmode=true")]
+        [Theory]
+        [InlineData(null, null, false, "")]
+        [InlineData("from", null, false, "?from=from")]
+        [InlineData("from", 50, false, "?from=from&limit=50")]
+        [InlineData(null, null,true, "?testmode=true")]
         public async Task GetSubscriptionPaymentListAsync_TestModeParameterCase_QueryStringOnlyContainsTestModeParameterIfTrue(string from, int? limit, bool testmode, string expectedQueryString) {
             // Given: We retrieve a list of subscriptions
             const string customerId = "customer-id";
@@ -115,167 +119,177 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
-            Assert.IsNotNull(result);
+            result.Should().NotBeNull();
         }
         
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase(null)]
-        public void GetSubscriptionListAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string customerId) {
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        public async Task GetSubscriptionListAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string customerId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             SubscriptionClient subscriptionClient = new SubscriptionClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await subscriptionClient.GetSubscriptionListAsync(customerId));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await subscriptionClient.GetSubscriptionListAsync(customerId));
 
             // Then
-            Assert.AreEqual($"Required URL argument 'customerId' is null or empty", exception.Message); 
+            exception.Message.Should().Be("Required URL argument 'customerId' is null or empty");
         }
         
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase(null)]
-        public void GetSubscriptionAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string customerId) {
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        public async Task GetSubscriptionAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string customerId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             SubscriptionClient subscriptionClient = new SubscriptionClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await subscriptionClient.GetSubscriptionAsync(customerId, "subscription-id"));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await subscriptionClient.GetSubscriptionAsync(customerId, "subscription-id"));
 
             // Then
-            Assert.AreEqual($"Required URL argument 'customerId' is null or empty", exception.Message); 
+            exception.Message.Should().Be("Required URL argument 'customerId' is null or empty");
         }
         
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase(null)]
-        public void GetSubscriptionAsync_NoSubscriptionIdIsGiven_ArgumentExceptionIsThrown(string subscriptionId) {
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        public async Task GetSubscriptionAsync_NoSubscriptionIdIsGiven_ArgumentExceptionIsThrown(string subscriptionId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             SubscriptionClient subscriptionClient = new SubscriptionClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await subscriptionClient.GetSubscriptionAsync("customer-Id", subscriptionId));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await subscriptionClient.GetSubscriptionAsync("customer-Id", subscriptionId));
 
             // Then
-            Assert.AreEqual($"Required URL argument 'subscriptionId' is null or empty", exception.Message); 
+            exception.Message.Should().Be("Required URL argument 'subscriptionId' is null or empty");
         }
         
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase(null)]
-        public void CreateSubscriptionAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string customerId) {
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        public async Task CreateSubscriptionAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string customerId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             SubscriptionClient subscriptionClient = new SubscriptionClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await subscriptionClient.CreateSubscriptionAsync(customerId, new SubscriptionRequest()));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await subscriptionClient.CreateSubscriptionAsync(customerId, new SubscriptionRequest()));
 
             // Then
-            Assert.AreEqual($"Required URL argument 'customerId' is null or empty", exception.Message); 
+            exception.Message.Should().Be("Required URL argument 'customerId' is null or empty");
         }
         
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase(null)]
-        public void CancelSubscriptionAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string customerId) {
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        public async Task CancelSubscriptionAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string customerId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             SubscriptionClient subscriptionClient = new SubscriptionClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await subscriptionClient.CancelSubscriptionAsync(customerId, "subscription-id"));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await subscriptionClient.CancelSubscriptionAsync(customerId, "subscription-id"));
 
             // Then
-            Assert.AreEqual($"Required URL argument 'customerId' is null or empty", exception.Message); 
+            exception.Message.Should().Be("Required URL argument 'customerId' is null or empty");
         }
         
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase(null)]
-        public void CancelSubscriptionAsync_NoSubscriptionIdIsGiven_ArgumentExceptionIsThrown(string subscriptionId) {
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        public async Task CancelSubscriptionAsync_NoSubscriptionIdIsGiven_ArgumentExceptionIsThrown(string subscriptionId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             SubscriptionClient subscriptionClient = new SubscriptionClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await subscriptionClient.CancelSubscriptionAsync("customer-Id", subscriptionId));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await subscriptionClient.CancelSubscriptionAsync("customer-Id", subscriptionId));
 
             // Then
-            Assert.AreEqual($"Required URL argument 'subscriptionId' is null or empty", exception.Message); 
+            exception.Message.Should().Be("Required URL argument 'subscriptionId' is null or empty");
         }
         
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase(null)]
-        public void UpdateSubscriptionAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string customerId) {
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        public async Task UpdateSubscriptionAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string customerId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             SubscriptionClient subscriptionClient = new SubscriptionClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await subscriptionClient.UpdateSubscriptionAsync(customerId, "subscription-id", new SubscriptionUpdateRequest()));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await subscriptionClient.UpdateSubscriptionAsync(customerId, "subscription-id", new SubscriptionUpdateRequest()));
 
             // Then
-            Assert.AreEqual($"Required URL argument 'customerId' is null or empty", exception.Message); 
+            exception.Message.Should().Be("Required URL argument 'customerId' is null or empty");
         }
         
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase(null)]
-        public void UpdateSubscriptionAsync_NoSubscriptionIdIsGiven_ArgumentExceptionIsThrown(string subscriptionId) {
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        public async Task UpdateSubscriptionAsync_NoSubscriptionIdIsGiven_ArgumentExceptionIsThrown(string subscriptionId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             SubscriptionClient subscriptionClient = new SubscriptionClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await subscriptionClient.UpdateSubscriptionAsync("customer-Id", subscriptionId, new SubscriptionUpdateRequest()));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await subscriptionClient.UpdateSubscriptionAsync("customer-Id", subscriptionId, new SubscriptionUpdateRequest()));
 
             // Then
-            Assert.AreEqual($"Required URL argument 'subscriptionId' is null or empty", exception.Message); 
+            exception.Message.Should().Be("Required URL argument 'subscriptionId' is null or empty");
         }
         
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase(null)]
-        public void UGetSubscriptionPaymentListAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string customerId) {
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        public async Task GetSubscriptionPaymentListAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string customerId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             SubscriptionClient subscriptionClient = new SubscriptionClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await subscriptionClient.GetSubscriptionPaymentListAsync(customerId, "subscription-id"));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await subscriptionClient.GetSubscriptionPaymentListAsync(customerId, "subscription-id"));
 
             // Then
-            Assert.AreEqual($"Required URL argument 'customerId' is null or empty", exception.Message); 
+            exception.Message.Should().Be("Required URL argument 'customerId' is null or empty");
         }
         
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase(null)]
-        public void GetSubscriptionPaymentListAsync_NoSubscriptionIdIsGiven_ArgumentExceptionIsThrown(string subscriptionId) {
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        public async Task GetSubscriptionPaymentListAsync_NoSubscriptionIdIsGiven_ArgumentExceptionIsThrown(string subscriptionId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             SubscriptionClient subscriptionClient = new SubscriptionClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await subscriptionClient.GetSubscriptionPaymentListAsync("customer-Id", subscriptionId));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await subscriptionClient.GetSubscriptionPaymentListAsync("customer-Id", subscriptionId));
 
             // Then
-            Assert.AreEqual($"Required URL argument 'subscriptionId' is null or empty", exception.Message); 
+            exception.Message.Should().Be("Required URL argument 'subscriptionId' is null or empty");
         }
         
         private const string DefaultSubscriptionJsonToReturn = @"{

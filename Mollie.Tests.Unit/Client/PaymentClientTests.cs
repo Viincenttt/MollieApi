@@ -4,14 +4,15 @@ using Mollie.Api.Models;
 using Mollie.Api.Models.Payment;
 using Mollie.Api.Models.Payment.Request;
 using Mollie.Api.Models.Payment.Response;
-using NUnit.Framework;
 using RichardSzalay.MockHttp;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using FluentAssertions;
+using Xunit;
+
 
 namespace Mollie.Tests.Unit.Client {
-    [TestFixture]
     public class PaymentClientTests : BaseClientTests {
         private const string defaultPaymentJsonResponse = @"{
             ""amount"":{
@@ -21,7 +22,7 @@ namespace Mollie.Tests.Unit.Client {
             ""description"":""Description"",
             ""redirectUrl"":""http://www.mollie.com""}";
 
-        [Test]
+        [Fact]
         public async Task CreatePaymentAsync_PaymentWithRequiredParameters_ResponseIsDeserializedInExpectedFormat() {
             // Given: we create a payment request with only the required parameters
             PaymentRequest paymentRequest = new PaymentRequest() {
@@ -45,7 +46,7 @@ namespace Mollie.Tests.Unit.Client {
             this.AssertPaymentIsEqual(paymentRequest, paymentResponse);
         }
 
-        [Test]
+        [Fact]
         public async Task CreatePaymentAsync_PaymentWithSinglePaymentMethod_RequestIsSerializedInExpectedFormat() {
             // Given: We create a payment request with a single payment method
             PaymentRequest paymentRequest = new PaymentRequest() {
@@ -73,10 +74,10 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
             this.AssertPaymentIsEqual(paymentRequest, paymentResponse);
-            Assert.AreEqual(paymentRequest.Method, paymentResponse.Method);
+            paymentResponse.Method.Should().Be(paymentRequest.Method);
         }
 
-        [Test]
+        [Fact]
         public async Task CreatePaymentAsync_PaymentWithMultiplePaymentMethods_RequestIsSerializedInExpectedFormat() {
             // Given: We create a payment request with multiple payment methods
             PaymentRequest paymentRequest = new PaymentRequest() {
@@ -108,11 +109,10 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
             this.AssertPaymentIsEqual(paymentRequest, paymentResponse);
-            Assert.IsNull(paymentResponse.Method);
+            paymentResponse.Method.Should().BeNull();
         }
         
-        
-        [Test]
+        [Fact]
         public async Task CreatePayment_WithRoutingInformation_RequestIsSerializedInExpectedFormat() {
             // Given: We create a payment request with the routing request
             PaymentRoutingRequest routingRequest = new PaymentRoutingRequest {
@@ -162,10 +162,10 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
             this.AssertPaymentIsEqual(paymentRequest, paymentResponse);
-            Assert.IsNull(paymentResponse.Method);
+            paymentResponse.Method.Should().BeNull();
         }
 
-        [Test]
+        [Fact]
         public async Task CreatePaymentAsync_IncludeQrCode_QueryStringContainsIncludeQrCodeParameter() {
             // Given: We make a request to create a payment and include the QR code
             PaymentRequest paymentRequest = new PaymentRequest() {
@@ -185,7 +185,7 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.VerifyNoOutstandingExpectation();
         }
 
-        [Test]
+        [Fact]
         public async Task GetPaymentAsync_NoIncludeParameters_QueryStringIsEmpty() {
             // Given: We make a request to retrieve a payment without wanting any extra data
             const string paymentId = "abcde";
@@ -200,23 +200,24 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.VerifyNoOutstandingExpectation();
         }
         
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase(null)]
-        public void GetPaymentAsync_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string paymentId) {
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        public async Task GetPaymentAsync_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string paymentId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
 
             // When: We send the request
-            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await paymentClient.GetPaymentAsync(paymentId));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await paymentClient.GetPaymentAsync(paymentId));
 
             // Then
-            Assert.AreEqual($"Required URL argument 'paymentId' is null or empty", exception.Message); 
+            exception.Message.Should().Be("Required URL argument 'paymentId' is null or empty");
         }
 
-        [Test]
+        [Fact]
         public async Task GetPaymentAsync_IncludeQrCode_QueryStringContainsIncludeQrCodeParameter() {
             // Given: We make a request to retrieve a payment without wanting any extra data
             const string paymentId = "abcde";
@@ -231,7 +232,7 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.VerifyNoOutstandingExpectation();
         }
 
-        [Test]
+        [Fact]
         public async Task GetPaymentAsync_IncludeRemainderDetails_QueryStringContainsIncludeRemainderDetailsParameter() {
             // Given: We make a request to retrieve a payment without wanting any extra data
             const string paymentId = "abcde";
@@ -246,7 +247,7 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.VerifyNoOutstandingExpectation();
         }
 
-        [Test]
+        [Fact]
         public async Task GetPaymentListAsync_IncludeQrCode_QueryStringContainsIncludeQrCodeParameter() {
             // Given: We make a request to retrieve a payment without wanting any extra data
             var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments?include=details.qrCode", defaultPaymentJsonResponse);
@@ -260,7 +261,7 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.VerifyNoOutstandingExpectation();
         }
 
-        [Test]
+        [Fact]
         public async Task GetPaymentAsync_EmbedRefunds_QueryStringContainsEmbedRefundsParameter()
         {
             // Given: We make a request to retrieve a payment with embedded refunds
@@ -276,7 +277,7 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.VerifyNoOutstandingExpectation();
         }
 
-        [Test]
+        [Fact]
         public async Task GetPaymentListAsync_EmbedRefunds_QueryStringContainsEmbedRefundsParameter()
         {
             // Given: We make a request to retrieve a payment with embedded refunds
@@ -291,7 +292,7 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.VerifyNoOutstandingExpectation();
         }
 
-        [Test]
+        [Fact]
         public async Task GetPaymentAsync_EmbedChargebacks_QueryStringContainsEmbedChargebacksParameter()
         {
             // Given: We make a request to retrieve a payment with embedded refunds
@@ -307,7 +308,7 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.VerifyNoOutstandingExpectation();
         }
 
-        [Test]
+        [Fact]
         public async Task GetPaymentListAsync_EmbedChargebacks_QueryStringContainsEmbedChargebacksParameter()
         {
             // Given: We make a request to retrieve a payment with embedded refunds
@@ -322,7 +323,7 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.VerifyNoOutstandingExpectation();
         }
 
-        [Test]
+        [Fact]
         public async Task DeletePaymentAsync_TestmodeIsTrue_RequestContainsTestmodeModel() {
             // Given: We make a request to retrieve a payment with embedded refunds
             const string paymentId = "payment-id";
@@ -338,51 +339,53 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.VerifyNoOutstandingExpectation();
         }
         
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase(null)]
-        public void DeletePaymentAsync_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string paymentId) {
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        public async Task DeletePaymentAsync_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string paymentId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
 
             // When: We send the request
-            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await paymentClient.DeletePaymentAsync(paymentId));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await paymentClient.DeletePaymentAsync(paymentId));
 
             // Then
-            Assert.AreEqual($"Required URL argument 'paymentId' is null or empty", exception.Message); 
+            exception.Message.Should().Be("Required URL argument 'paymentId' is null or empty");
         }
         
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase(null)]
-        public void UpdatePaymentAsync_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string paymentId) {
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        public async Task UpdatePaymentAsync_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string paymentId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
 
             // When: We send the request
-            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await paymentClient.UpdatePaymentAsync(paymentId, new PaymentUpdateRequest()));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await paymentClient.UpdatePaymentAsync(paymentId, new PaymentUpdateRequest()));
 
             // Then
-            Assert.AreEqual($"Required URL argument 'paymentId' is null or empty", exception.Message); 
+            exception.Message.Should().Be("Required URL argument 'paymentId' is null or empty");
         }
 
         private void AssertPaymentIsEqual(PaymentRequest paymentRequest, PaymentResponse paymentResponse) {
-            Assert.AreEqual(paymentRequest.Amount.Value, paymentResponse.Amount.Value);
-            Assert.AreEqual(paymentRequest.Amount.Currency, paymentResponse.Amount.Currency);
-            Assert.AreEqual(paymentRequest.Description, paymentResponse.Description);
+            paymentResponse.Amount.Value.Should().Be(paymentRequest.Amount.Value);
+            paymentResponse.Amount.Currency.Should().Be(paymentRequest.Amount.Currency);
+            paymentResponse.Description.Should().Be(paymentRequest.Description);
             if (paymentRequest.Routings != null) {
-                Assert.AreEqual(paymentRequest.Routings.Count, paymentResponse.Routings.Count);
+                paymentResponse.Routings.Count.Should().Be(paymentRequest.Routings.Count);
                 for (int i = 0; i < paymentRequest.Routings.Count; i++) {
                     var paymentRequestRouting = paymentRequest.Routings[i];
                     var paymentResponseRouting = paymentResponse.Routings[i];
-                    Assert.AreEqual(paymentRequestRouting.Amount, paymentResponseRouting.Amount);
-                    Assert.AreEqual(paymentRequestRouting.Destination.Type, paymentResponseRouting.Destination.Type);
-                    Assert.AreEqual(paymentRequestRouting.Destination.OrganizationId, paymentResponseRouting.Destination.OrganizationId);
-                    Assert.AreEqual(paymentRequestRouting.ReleaseDate, paymentResponseRouting.ReleaseDate);
+                    paymentResponseRouting.Amount.Should().Be(paymentRequestRouting.Amount);
+                    paymentResponseRouting.Destination.Type.Should().Be(paymentRequestRouting.Destination.Type);
+                    paymentResponseRouting.Destination.OrganizationId.Should().Be(paymentRequestRouting.Destination.OrganizationId);
+                    paymentResponseRouting.ReleaseDate.Should().Be(paymentRequestRouting.ReleaseDate);
                 }
             }
         }

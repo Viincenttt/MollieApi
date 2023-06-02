@@ -1,13 +1,13 @@
-﻿using Mollie.Api.Framework;
+﻿using FluentAssertions;
+using Mollie.Api.Framework;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Payment.Request;
 using Mollie.Api.Models.Payment.Response;
-using NUnit.Framework;
+using Xunit;
 
 namespace Mollie.Tests.Unit.Framework {
-    [TestFixture]
     public class JsonConverterServiceTests {
-        [Test]
+        [Fact]
         public void Serialize_JsonData_IsSerialized() {
             // Given: A JSON metadata value
             JsonConverterService jsonConverterService = new JsonConverterService();
@@ -23,10 +23,10 @@ namespace Mollie.Tests.Unit.Framework {
             string jsonValue = jsonConverterService.Serialize(paymentRequest);
 
             // Then:            
-            Assert.AreEqual(expectedJsonValue, jsonValue);
+            jsonValue.Should().Be(expectedJsonValue);
         }
 
-        [Test]
+        [Fact]
         public void Deserialize_JsonData_IsDeserialized() {
             // Given: A JSON metadata value
             JsonConverterService jsonConverterService = new JsonConverterService();
@@ -41,10 +41,10 @@ namespace Mollie.Tests.Unit.Framework {
             PaymentResponse payments = jsonConverterService.Deserialize<PaymentResponse>(paymentJson);
 
             // Then: 
-            Assert.AreEqual(metadataJson, payments.Metadata);
+            payments.Metadata.Should().Be(metadataJson);
         }
 
-        [Test]
+        [Fact]
         public void Deserialize_StringData_IsDeserialized() {
             // Given: A JSON metadata value
             JsonConverterService jsonConverterService = new JsonConverterService();
@@ -55,10 +55,10 @@ namespace Mollie.Tests.Unit.Framework {
             PaymentResponse payments = jsonConverterService.Deserialize<PaymentResponse>(paymentJson);
 
             // Then: 
-            Assert.AreEqual(metadataJson, payments.Metadata);
+            payments.Metadata.Should().Be(metadataJson);
         }
 
-        [Test]
+        [Fact]
         public void Deserialize_JsonDataWithNullValues_IsDeserialized() {
             // Given: A JSON metadata value
             JsonConverterService jsonConverterService = new JsonConverterService();
@@ -69,7 +69,7 @@ namespace Mollie.Tests.Unit.Framework {
             PaymentResponse payments = jsonConverterService.Deserialize<PaymentResponse>(paymentJson);
 
             // Then: 
-            Assert.AreEqual(null, payments.Metadata);
+            payments.Metadata.Should().BeNull();
         }
     }
 }

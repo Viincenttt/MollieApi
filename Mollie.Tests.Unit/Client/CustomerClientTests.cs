@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Mollie.Api.Client;
 using Mollie.Api.Models.Customer;
 using Mollie.Api.Models.Payment.Request;
-using NUnit.Framework;
 using RichardSzalay.MockHttp;
+using Xunit;
 
 namespace Mollie.Tests.Unit.Client {
     public class CustomerClientTests : BaseClientTests {
-        [TestCase("customers/customer-id", false)]
-        [TestCase("customers/customer-id?testmode=true", true)]
+        [Theory]
+        [InlineData("customers/customer-id", false)]
+        [InlineData("customers/customer-id?testmode=true", true)]
         public async Task GetCustomerAsync_TestModeParameterCase_QueryStringOnlyContainsTestModeParameterIfTrue(string expectedUrl, bool testModeParameter) {
             // Given: We retrieve a customer
             const string customerId = "customer-id";
@@ -26,13 +28,14 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
-            Assert.IsNotNull(customerResponse);
+            customerResponse.Should().NotBeNull();
         }
         
-        [TestCase(null, null, false, "")]
-        [TestCase("from", null, false, "?from=from")]
-        [TestCase("from", 50, false, "?from=from&limit=50")]
-        [TestCase(null, null, true, "?testmode=true")]
+        [Theory]
+        [InlineData(null, null, false, "")]
+        [InlineData("from", null, false, "?from=from")]
+        [InlineData("from", 50, false, "?from=from&limit=50")]
+        [InlineData(null, null, true, "?testmode=true")]
         public async Task GetCustomerListAsync_TestModeParameterCase_QueryStringOnlyContainsTestModeParameterIfTrue(string from, int? limit, bool testmode, string expectedQueryString) {
             // Given: We retrieve a list of customers
             var mockHttp = new MockHttpMessageHandler();
@@ -46,14 +49,15 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
-            Assert.IsNotNull(result);
+            result.Should().NotBeNull();
         }
         
-        [TestCase(null, null, null, false, "")]
-        [TestCase("from", null, null, false, "?from=from")]
-        [TestCase("from", 50, null, false, "?from=from&limit=50")]
-        [TestCase(null, null, null, true, "?testmode=true")]
-        [TestCase(null, null, "profile-id", true, "?profileId=profile-id")]
+        [Theory]
+        [InlineData(null, null, null, false, "")]
+        [InlineData("from", null, null, false, "?from=from")]
+        [InlineData("from", 50, null, false, "?from=from&limit=50")]
+        [InlineData(null, null, null, true, "?testmode=true")]
+        [InlineData(null, null, "profile-id", true, "?profileId=profile-id")]
         public async Task GetCustomerPaymentListAsync_TestModeParameterCase_QueryStringOnlyContainsTestModeParameterIfTrue(string from, int? limit, string profileId, bool testmode, string expectedQueryString) {
             // Given: We retrieve a list of customers
             const string customerId = "customer-id";
@@ -68,10 +72,10 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
-            Assert.IsNotNull(result);
+            result.Should().NotBeNull();
         }
         
-        [Test]
+        [Fact]
         public async Task DeleteCustomerAsync_TestmodeIsTrue_RequestContainsTestmodeModel() {
             // Given: We make a request to retrieve a payment with embedded refunds
             const string customerId = "customer-id";
@@ -87,84 +91,89 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.VerifyNoOutstandingExpectation();
         }
         
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase(null)]
-        public void UpdateCustomerAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string customerId) {
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        public async Task UpdateCustomerAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string customerId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             CustomerClient customerClient = new CustomerClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await customerClient.UpdateCustomerAsync(customerId, new CustomerRequest()));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await customerClient.UpdateCustomerAsync(customerId, new CustomerRequest()));
 
             // Then
-            Assert.AreEqual($"Required URL argument 'customerId' is null or empty", exception.Message); 
+            exception.Message.Should().Be("Required URL argument 'customerId' is null or empty");
         }
         
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase(null)]
-        public void DeleteCustomerAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string customerId) {
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        public async Task DeleteCustomerAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string customerId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             CustomerClient customerClient = new CustomerClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await customerClient.DeleteCustomerAsync(customerId));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await customerClient.DeleteCustomerAsync(customerId));
 
             // Then
-            Assert.AreEqual($"Required URL argument 'customerId' is null or empty", exception.Message); 
+            exception.Message.Should().Be("Required URL argument 'customerId' is null or empty");
         }
         
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase(null)]
-        public void GetCustomerAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string customerId) {
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        public async Task GetCustomerAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string customerId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             CustomerClient customerClient = new CustomerClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await customerClient.GetCustomerAsync(customerId));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await customerClient.GetCustomerAsync(customerId));
 
             // Then
-            Assert.AreEqual($"Required URL argument 'customerId' is null or empty", exception.Message); 
+            exception.Message.Should().Be("Required URL argument 'customerId' is null or empty");
         }
         
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase(null)]
-        public void GetCustomerPaymentListAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string customerId) {
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        public async Task GetCustomerPaymentListAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string customerId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             CustomerClient customerClient = new CustomerClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await customerClient.GetCustomerPaymentListAsync(customerId));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await customerClient.GetCustomerPaymentListAsync(customerId));
 
             // Then
-            Assert.AreEqual($"Required URL argument 'customerId' is null or empty", exception.Message); 
+            exception.Message.Should().Be("Required URL argument 'customerId' is null or empty");
         }
         
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase(null)]
-        public void CreateCustomerPayment_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string customerId) {
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        public async Task CreateCustomerPayment_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string customerId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             CustomerClient customerClient = new CustomerClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await customerClient.CreateCustomerPayment(customerId, new PaymentRequest()));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await customerClient.CreateCustomerPayment(customerId, new PaymentRequest()));
 
             // Then
-            Assert.AreEqual($"Required URL argument 'customerId' is null or empty", exception.Message); 
+            exception.Message.Should().Be("Required URL argument 'customerId' is null or empty");
         }
 
         private const string DefaultCustomerJsonToReturn = @"{

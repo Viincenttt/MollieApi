@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Mollie.Api.Client;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Shipment;
-using NUnit.Framework;
 using RichardSzalay.MockHttp;
+using Xunit;
 
 namespace Mollie.Tests.Unit.Client {
-    [TestFixture]
     public class ShipmentClientTests : BaseClientTests {
-        [Test]
+        [Fact]
         public async Task CreateShipmentAsync_ValidShipment_ResponseIsDeserializedInExpectedFormat() {
             // Given: We create a shipment
             var shipmentRequest = new ShipmentRequest {
@@ -44,15 +44,16 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
-            Assert.IsNotNull(shipmentResponse);
-            Assert.AreEqual(orderId, shipmentResponse.OrderId);
-            Assert.AreEqual(shipmentRequest.Tracking.Carrier, shipmentResponse.Tracking.Carrier);
-            Assert.AreEqual(shipmentRequest.Tracking.Code, shipmentResponse.Tracking.Code);
-            Assert.AreEqual(shipmentRequest.Tracking.Url, shipmentResponse.Tracking.Url);
+            shipmentResponse.Should().NotBeNull();
+            shipmentResponse.OrderId.Should().Be(orderId);
+            shipmentResponse.Tracking.Carrier.Should().Be(shipmentRequest.Tracking.Carrier);
+            shipmentResponse.Tracking.Code.Should().Be(shipmentRequest.Tracking.Code);
+            shipmentResponse.Tracking.Url.Should().Be(shipmentRequest.Tracking.Url);
         }
         
-        [TestCase("orders/order-id/shipments/shipment-id", false)]
-        [TestCase("orders/order-id/shipments/shipment-id?testmode=true", true)]
+        [Theory]
+        [InlineData("orders/order-id/shipments/shipment-id", false)]
+        [InlineData("orders/order-id/shipments/shipment-id?testmode=true", true)]
         public async Task GetShipmentAsync_TestModeParameterCase_QueryStringOnlyContainsTestModeParameterIfTrue(string expectedUrl, bool testModeParameter) {
             // Given: We retrieve a shipment
             const string orderId = "order-id";
@@ -69,11 +70,12 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
-            Assert.IsNotNull(shipmentResponse);
+            shipmentResponse.Should().NotBeNull();
         }
         
-        [TestCase("orders/order-id/shipments", false)]
-        [TestCase("orders/order-id/shipments?testmode=true", true)]
+        [Theory]
+        [InlineData("orders/order-id/shipments", false)]
+        [InlineData("orders/order-id/shipments?testmode=true", true)]
         public async Task GetShipmentsListAsync_TestModeParameterCase_QueryStringOnlyContainsTestModeParameterIfTrue(string expectedUrl, bool testModeParameter) {
             // Given: We retrieve the list of shipments
             const string orderId = "order-id";
@@ -89,10 +91,10 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
-            Assert.IsNotNull(shipmentListResponse);
+            shipmentListResponse.Should().NotBeNull();
         }
         
-        [Test]
+        [Fact]
         public async Task UpdateShipmentAsync_ValidUpdateShipmentRequest_ResponseIsDeserializedInExpectedFormat() {
             // Given: We create a shipment
             var updateShipmentRequest = new ShipmentUpdateRequest {
@@ -119,107 +121,113 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
-            Assert.IsNotNull(shipmentResponse);
-            Assert.AreEqual(orderId, shipmentResponse.OrderId);
-            Assert.AreEqual(updateShipmentRequest.Tracking.Carrier, shipmentResponse.Tracking.Carrier);
-            Assert.AreEqual(updateShipmentRequest.Tracking.Code, shipmentResponse.Tracking.Code);
-            Assert.AreEqual(updateShipmentRequest.Tracking.Url, shipmentResponse.Tracking.Url);
+            shipmentResponse.Should().NotBeNull();
+            shipmentResponse.OrderId.Should().Be(orderId);
+            shipmentResponse.Tracking.Carrier.Should().Be(updateShipmentRequest.Tracking.Carrier);
+            shipmentResponse.Tracking.Code.Should().Be(updateShipmentRequest.Tracking.Code);
+            shipmentResponse.Tracking.Url.Should().Be(updateShipmentRequest.Tracking.Url);
         }
         
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase(null)]
-        public void CreateShipmentAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string orderId) {
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        public async Task CreateShipmentAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string orderId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             ShipmentClient shipmentClient = new ShipmentClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await shipmentClient.CreateShipmentAsync(orderId, new ShipmentRequest()));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await shipmentClient.CreateShipmentAsync(orderId, new ShipmentRequest()));
 
             // Then
-            Assert.AreEqual($"Required URL argument 'orderId' is null or empty", exception.Message); 
+            exception.Message.Should().Be("Required URL argument 'orderId' is null or empty");
         }
         
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase(null)]
-        public void GetShipmentAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string orderId) {
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        public async Task GetShipmentAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string orderId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             ShipmentClient shipmentClient = new ShipmentClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await shipmentClient.GetShipmentAsync(orderId, "shipment-id"));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await shipmentClient.GetShipmentAsync(orderId, "shipment-id"));
 
             // Then
-            Assert.AreEqual($"Required URL argument 'orderId' is null or empty", exception.Message); 
+            exception.Message.Should().Be("Required URL argument 'orderId' is null or empty");
         }
         
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase(null)]
-        public void GetShipmentAsync_NoShipmentIdIsGiven_ArgumentExceptionIsThrown(string shipmentId) {
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        public async Task GetShipmentAsync_NoShipmentIdIsGiven_ArgumentExceptionIsThrown(string shipmentId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             ShipmentClient shipmentClient = new ShipmentClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await shipmentClient.GetShipmentAsync("order-id", shipmentId));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await shipmentClient.GetShipmentAsync("order-id", shipmentId));
 
             // Then
-            Assert.AreEqual($"Required URL argument 'shipmentId' is null or empty", exception.Message); 
+            exception.Message.Should().Be("Required URL argument 'shipmentId' is null or empty");
         }
         
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase(null)]
-        public void GGetShipmentsListAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string orderId) {
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        public async Task GetShipmentsListAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string orderId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             ShipmentClient shipmentClient = new ShipmentClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await shipmentClient.GetShipmentsListAsync(orderId));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await shipmentClient.GetShipmentsListAsync(orderId));
 
             // Then
-            Assert.AreEqual($"Required URL argument 'orderId' is null or empty", exception.Message); 
+            exception.Message.Should().Be("Required URL argument 'orderId' is null or empty");
         }
         
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase(null)]
-        public void UpdateShipmentAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string orderId) {
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        public async Task UpdateShipmentAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string orderId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             ShipmentClient shipmentClient = new ShipmentClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await shipmentClient.UpdateShipmentAsync(orderId, "shipment-id", new ShipmentUpdateRequest()));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await shipmentClient.UpdateShipmentAsync(orderId, "shipment-id", new ShipmentUpdateRequest()));
 
             // Then
-            Assert.AreEqual($"Required URL argument 'orderId' is null or empty", exception.Message); 
+            exception.Message.Should().Be("Required URL argument 'orderId' is null or empty");
         }
         
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase(null)]
-        public void UpdateShipmentAsync_NoShipmentIdIsGiven_ArgumentExceptionIsThrown(string shipmentId) {
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        public async Task UpdateShipmentAsync_NoShipmentIdIsGiven_ArgumentExceptionIsThrown(string shipmentId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             ShipmentClient shipmentClient = new ShipmentClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await shipmentClient.UpdateShipmentAsync("order-id", shipmentId, new ShipmentUpdateRequest()));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await shipmentClient.UpdateShipmentAsync("order-id", shipmentId, new ShipmentUpdateRequest()));
 
             // Then
-            Assert.AreEqual($"Required URL argument 'shipmentId' is null or empty", exception.Message); 
+            exception.Message.Should().Be("Required URL argument 'shipmentId' is null or empty");
         }
 
         private const string DefaultShipmentJsonToReturn = @"{
