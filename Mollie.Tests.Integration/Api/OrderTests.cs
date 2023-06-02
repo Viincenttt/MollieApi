@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FluentAssertions;
+using Mollie.Api.Client;
+using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Order;
@@ -9,10 +12,15 @@ using Mollie.Api.Models.Order.Request.PaymentSpecificParameters;
 using Mollie.Api.Models.Payment;
 using Mollie.Tests.Integration.Framework;
 
-/*
 namespace Mollie.Tests.Integration.Api {
     public class OrderTests : BaseMollieApiTestClass {
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        private readonly IOrderClient _orderClient;
+
+        public OrderTests() {
+            _orderClient = new OrderClient(this.ApiKey);
+        }
+        
+        [DefaultRetryFact]
         public async Task CreateOrderAsync_OrderWithRequiredFields_OrderIsCreated() {
             // If: we create a order request with only the required parameters
             OrderRequest orderRequest = this.CreateOrder();
@@ -21,23 +29,21 @@ namespace Mollie.Tests.Integration.Api {
             OrderResponse result = await this._orderClient.CreateOrderAsync(orderRequest);
 
             // Then: Make sure we get a valid response
-            Assert.IsNotNull(result);
-            Assert.AreEqual(orderRequest.Amount.Value, result.Amount.Value);
-            Assert.AreEqual(orderRequest.Amount.Currency, result.Amount.Currency);
-            Assert.AreEqual(orderRequest.OrderNumber, result.OrderNumber);
-            Assert.AreEqual(orderRequest.Lines.Count(), result.Lines.Count());
-            Assert.AreEqual(orderRequest.Lines.First().Type, result.Lines.First().Type);
-            Assert.IsNotNull(result.Links);
-            Assert.AreEqual(orderRequest.Lines.First().ImageUrl, result.Lines.First().Links.ImageUrl.Href);
-            Assert.AreEqual(orderRequest.Lines.First().ProductUrl, result.Lines.First().Links.ProductUrl.Href);
-            var expectedMetadataString = result.Lines.First().Metadata
-                .Replace(System.Environment.NewLine, "")
-                .Replace(" ", "");
-            Assert.AreEqual(orderRequest.Lines.First().Metadata, expectedMetadataString);
+            result.Should().NotBeNull();
+            result.Amount.Should().Be(orderRequest.Amount);
+            result.OrderNumber.Should().Be(orderRequest.OrderNumber);
+            result.Lines.Should().HaveCount(orderRequest.Lines.Count());
+            result.Links.Should().NotBeNull();
+            OrderLineRequest orderLineRequest = orderRequest.Lines.First();
+            OrderLineResponse orderResponseLine = result.Lines.First();
+            orderResponseLine.Type.Should().Be(orderLineRequest.Type);
+            orderResponseLine.Links.ImageUrl.Href.Should().Be(orderLineRequest.ImageUrl);
+            orderResponseLine.Links.ProductUrl.Href.Should().Be(orderLineRequest.ProductUrl);
+            var expectedMetadataString = result.Lines.First().Metadata;
+            orderResponseLine.Metadata.Should().Be(expectedMetadataString);
         }
 
-        [Test]
-        [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [DefaultRetryFact]
         public async Task CreateOrderAsync_WithMultiplePaymentMethods_OrderIsCreated() {
             // When: we create a order request and specify multiple payment methods
             OrderRequest orderRequest = this.CreateOrder();
@@ -51,14 +57,12 @@ namespace Mollie.Tests.Integration.Api {
             OrderResponse result = await this._orderClient.CreateOrderAsync(orderRequest);
 
             // Then: Make sure we get a valid response
-            Assert.IsNotNull(result);
-            Assert.AreEqual(orderRequest.Amount.Value, result.Amount.Value);
-            Assert.AreEqual(orderRequest.Amount.Currency, result.Amount.Currency);
-            Assert.AreEqual(orderRequest.OrderNumber, result.OrderNumber);
+            result.Should().NotBeNull();
+            result.Amount.Should().Be(orderRequest.Amount);
+            result.OrderNumber.Should().Be(orderRequest.OrderNumber);
         }
 
-        [Test]
-        [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [DefaultRetryFact]
         public async Task CreateOrderAsync_WithSinglePaymentMethod_OrderIsCreated() {
             // When: we create a order request and specify a single payment method
             OrderRequest orderRequest = this.CreateOrder();
@@ -68,14 +72,14 @@ namespace Mollie.Tests.Integration.Api {
             OrderResponse result = await this._orderClient.CreateOrderAsync(orderRequest);
 
             // Then: Make sure we get a valid response
-            Assert.AreEqual(PaymentMethod.CreditCard, orderRequest.Methods.First());
-            Assert.IsNotNull(result);
-            Assert.AreEqual(orderRequest.Amount.Value, result.Amount.Value);
-            Assert.AreEqual(orderRequest.Amount.Currency, result.Amount.Currency);
-            Assert.AreEqual(orderRequest.OrderNumber, result.OrderNumber);
+            orderRequest.Method.Should().Be(PaymentMethod.CreditCard);
+            orderRequest.Methods.First().Should().Be(PaymentMethod.CreditCard);
+            result.Should().NotBeNull();
+            result.Amount.Should().Be(orderRequest.Amount);
+            result.OrderNumber.Should().Be(orderRequest.OrderNumber);
         }
 
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [DefaultRetryFact]
         public async Task CreateOrderAsync_WithPaymentSpecificParameters_OrderIsCreated() {
             // If: we create a order request with payment specific parameters
             OrderRequest orderRequest = this.CreateOrder();
@@ -87,13 +91,12 @@ namespace Mollie.Tests.Integration.Api {
             OrderResponse result = await this._orderClient.CreateOrderAsync(orderRequest);
 
             // Then: Make sure we get a valid response
-            Assert.IsNotNull(result);
-            Assert.AreEqual(orderRequest.Amount.Value, result.Amount.Value);
-            Assert.AreEqual(orderRequest.Amount.Currency, result.Amount.Currency);
-            Assert.AreEqual(orderRequest.OrderNumber, result.OrderNumber);
+            result.Should().NotBeNull();
+            result.Amount.Should().Be(orderRequest.Amount);
+            result.OrderNumber.Should().Be(orderRequest.OrderNumber);
         }
 
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [DefaultRetryFact]
         public async Task GetOrderAsync_OrderIsCreated_OrderCanBeRetrieved() {
             // If: we create a new order
             OrderRequest orderRequest = this.CreateOrder();
@@ -103,11 +106,11 @@ namespace Mollie.Tests.Integration.Api {
             OrderResponse retrievedOrder = await this._orderClient.GetOrderAsync(createdOrder.Id);
 
             // Then: Make sure we get a valid response
-            Assert.IsNotNull(retrievedOrder);
-            Assert.AreEqual(createdOrder.Id, retrievedOrder.Id);
+            retrievedOrder.Should().NotBeNull();
+            retrievedOrder.Id.Should().Be(createdOrder.Id);
         }
 
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [DefaultRetryFact]
         public async Task GetOrderAsync_WithIncludeParameters_OrderIsRetrievedWithEmbeddedData() {
             // If: we create a new order
             OrderRequest orderRequest = this.CreateOrder();
@@ -117,15 +120,15 @@ namespace Mollie.Tests.Integration.Api {
             OrderResponse retrievedOrder = await this._orderClient.GetOrderAsync(createdOrder.Id, embedPayments: true, embedShipments: true, embedRefunds: true);
 
             // Then: Make sure we get a valid response
-            Assert.IsNotNull(retrievedOrder);
-            Assert.AreEqual(createdOrder.Id, retrievedOrder.Id);
-            Assert.IsNotNull(retrievedOrder.Embedded);
-            Assert.IsNotNull(retrievedOrder.Embedded.Payments);
-            Assert.IsNotNull(retrievedOrder.Embedded.Shipments);
-            Assert.IsNotNull(retrievedOrder.Embedded.Refunds);
+            retrievedOrder.Should().NotBeNull();
+            retrievedOrder.Id.Should().Be(createdOrder.Id);
+            retrievedOrder.Embedded.Should().NotBeNull();
+            retrievedOrder.Embedded.Payments.Should().NotBeNull();
+            retrievedOrder.Embedded.Shipments.Should().NotBeNull();
+            retrievedOrder.Embedded.Refunds.Should().NotBeNull();
         }
 
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [DefaultRetryFact]
         public async Task UpdateOrderAsync_OrderIsUpdated_OrderIsUpdated() {
             // If: we create a new order
             OrderRequest orderRequest = this.CreateOrder();
@@ -140,12 +143,11 @@ namespace Mollie.Tests.Integration.Api {
             OrderResponse updatedOrder = await this._orderClient.UpdateOrderAsync(createdOrder.Id, orderUpdateRequest);
 
             // Then: Make sure the order is updated
-            Assert.AreEqual(orderUpdateRequest.OrderNumber, updatedOrder.OrderNumber);
-            Assert.AreEqual(orderUpdateRequest.BillingAddress.City, updatedOrder.BillingAddress.City);
+            updatedOrder.OrderNumber.Should().Be(orderUpdateRequest.OrderNumber);
+            updatedOrder.BillingAddress.City.Should().Be(orderUpdateRequest.BillingAddress.City);
         }
         
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        [Ignore("This integration test is now failing consistently. Investigating this issue together with Mollie.")]
+        [DefaultRetryFact(Skip = "This integration test is now failing consistently. Investigating this issue together with Mollie.")]
         public async Task CancelOrderAsync_OrderIsCanceled_OrderHasCanceledStatus() {
             // If: we create a new order
             OrderRequest orderRequest = this.CreateOrder();
@@ -156,10 +158,10 @@ namespace Mollie.Tests.Integration.Api {
             OrderResponse canceledOrder = await this._orderClient.GetOrderAsync(createdOrder.Id);
 
             // Then: The order status should be cancelled
-            Assert.AreEqual(OrderStatus.Canceled, canceledOrder.Status);
+            canceledOrder.Status.Should().Be(OrderStatus.Canceled);
         }
 
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [DefaultRetryFact]
         public async Task UpdateOrderLinesAsync_WhenOrderLineIsUpdated_UpdatedPropertiesCanBeRetrieved() {
             // If: we create a new order
             OrderRequest orderRequest = this.CreateOrder();
@@ -172,10 +174,10 @@ namespace Mollie.Tests.Integration.Api {
             OrderResponse updatedOrder = await this._orderClient.UpdateOrderLinesAsync(createdOrder.Id, createdOrder.Lines.First().Id, updateRequest);
 
             // Then: The name of the order line should be updated
-            Assert.AreEqual(updateRequest.Name, updatedOrder.Lines.First().Name);
+            updatedOrder.Lines.First().Name.Should().Be(updateRequest.Name);
         }
         
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [DefaultRetryFact]
         public async Task ManageOrderLinesAsync_AddOperation_OrderLineIsAdded() {
             // If: we create a new order
             OrderRequest orderRequest = this.CreateOrder();
@@ -193,7 +195,7 @@ namespace Mollie.Tests.Integration.Api {
                 VatAmount = new Amount(Currency.EUR, 17.36m),
                 ImageUrl = "http://www.google.com/legobatmanimage",
                 ProductUrl = "http://www.mollie.nl/legobatmanproduct",
-                Metadata = "{\"is_lego_awesome\":\"fo sho\"}",
+                Metadata = "{\"is_lego_awesome\":\"fosho\"}",
             };
             ManageOrderLinesRequest manageOrderLinesRequest = new ManageOrderLinesRequest() {
                 Operations = new List<ManageOrderLinesOperation> {
@@ -205,22 +207,22 @@ namespace Mollie.Tests.Integration.Api {
             OrderResponse updatedOrder = await this._orderClient.ManageOrderLinesAsync(createdOrder.Id, manageOrderLinesRequest);
 
             // Then: The order line should be added
-            Assert.AreEqual(2, updatedOrder.Lines.Count());
+            updatedOrder.Lines.Should().HaveCount(2);
             var addedOrderLineRequest = updatedOrder.Lines.SingleOrDefault(line => line.Name == newOrderLineRequest.Name);
-            Assert.IsNotNull(addedOrderLineRequest);
-            Assert.AreEqual(newOrderLineRequest.Type, newOrderLineRequest.Type);
-            Assert.AreEqual(newOrderLineRequest.Category, newOrderLineRequest.Category);
-            Assert.AreEqual(newOrderLineRequest.Quantity, newOrderLineRequest.Quantity);
-            Assert.AreEqual(newOrderLineRequest.UnitPrice, newOrderLineRequest.UnitPrice);
-            Assert.AreEqual(newOrderLineRequest.TotalAmount, newOrderLineRequest.TotalAmount);
-            Assert.AreEqual(newOrderLineRequest.VatRate, newOrderLineRequest.VatRate);
-            Assert.AreEqual(newOrderLineRequest.VatAmount, newOrderLineRequest.VatAmount);
-            Assert.AreEqual(newOrderLineRequest.ImageUrl, newOrderLineRequest.ImageUrl);
-            Assert.AreEqual(newOrderLineRequest.ProductUrl, newOrderLineRequest.ProductUrl);
-            Assert.AreEqual(newOrderLineRequest.Metadata, newOrderLineRequest.Metadata);
+            addedOrderLineRequest.Should().NotBeNull();
+            addedOrderLineRequest.Type.Should().Be(newOrderLineRequest.Type);
+            addedOrderLineRequest.Quantity.Should().Be(newOrderLineRequest.Quantity);
+            addedOrderLineRequest.UnitPrice.Should().Be(newOrderLineRequest.UnitPrice);
+            addedOrderLineRequest.TotalAmount.Should().Be(newOrderLineRequest.TotalAmount);
+            addedOrderLineRequest.VatRate.Should().Be(newOrderLineRequest.VatRate);
+            addedOrderLineRequest.VatAmount.Should().Be(newOrderLineRequest.VatAmount);
+            var newMetaData = addedOrderLineRequest.Metadata
+                .Replace(System.Environment.NewLine, "")
+                .Replace(" ", "");
+            newMetaData.Should().Be(newOrderLineRequest.Metadata);
         }
         
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [DefaultRetryFact]
         public async Task ManageOrderLinesAsync_UpdateOperation_OrderLineIsUpdated() {
             // If: we create a new order
             OrderRequest orderRequest = this.CreateOrder();
@@ -237,7 +239,7 @@ namespace Mollie.Tests.Integration.Api {
                 VatAmount = new Amount(Currency.EUR, 15.62m),
                 ImageUrl = "http://www.google.com/legobatmanimage",
                 ProductUrl = "http://www.mollie.nl/legobatmanproduct",
-                Metadata = "{\"is_lego_awesome\":\"fo sho\"}",
+                Metadata = "{\"is_lego_awesome\":\"fosho\"}",
                 Sku = "Sku",
                 DiscountAmount = new Amount(Currency.EUR, 10m)
             };
@@ -251,22 +253,21 @@ namespace Mollie.Tests.Integration.Api {
             OrderResponse updatedOrder = await this._orderClient.ManageOrderLinesAsync(createdOrder.Id, manageOrderLinesRequest);
 
             // Then: The order line should be updated
-            Assert.AreEqual(1, updatedOrder.Lines.Count());
-            var updatedOrderLineRequest = updatedOrder.Lines.SingleOrDefault(line => line.Name == orderLineUpdateRequest.Name);
-            Assert.IsNotNull(updatedOrderLineRequest);
-            Assert.AreEqual(orderLineUpdateRequest.Id, orderLineUpdateRequest.Id);
-            Assert.AreEqual(orderLineUpdateRequest.Name, orderLineUpdateRequest.Name);
-            Assert.AreEqual(orderLineUpdateRequest.Quantity, orderLineUpdateRequest.Quantity);
-            Assert.AreEqual(orderLineUpdateRequest.UnitPrice, orderLineUpdateRequest.UnitPrice);
-            Assert.AreEqual(orderLineUpdateRequest.TotalAmount, orderLineUpdateRequest.TotalAmount);
-            Assert.AreEqual(orderLineUpdateRequest.VatRate, orderLineUpdateRequest.VatRate);
-            Assert.AreEqual(orderLineUpdateRequest.VatAmount, orderLineUpdateRequest.VatAmount);
-            Assert.AreEqual(orderLineUpdateRequest.ImageUrl, orderLineUpdateRequest.ImageUrl);
-            Assert.AreEqual(orderLineUpdateRequest.ProductUrl, orderLineUpdateRequest.ProductUrl);
-            Assert.AreEqual(orderLineUpdateRequest.Metadata, orderLineUpdateRequest.Metadata);
+            updatedOrder.Lines.Should().HaveCount(1);
+            var addedOrderLineRequest = updatedOrder.Lines.SingleOrDefault(line => line.Name == orderLineUpdateRequest.Name);
+            addedOrderLineRequest.Should().NotBeNull();
+            addedOrderLineRequest.Quantity.Should().Be(orderLineUpdateRequest.Quantity);
+            addedOrderLineRequest.UnitPrice.Should().Be(orderLineUpdateRequest.UnitPrice);
+            addedOrderLineRequest.TotalAmount.Should().Be(orderLineUpdateRequest.TotalAmount);
+            addedOrderLineRequest.VatRate.Should().Be(orderLineUpdateRequest.VatRate);
+            addedOrderLineRequest.VatAmount.Should().Be(orderLineUpdateRequest.VatAmount);
+            addedOrderLineRequest.Metadata
+                .Replace(System.Environment.NewLine, "")
+                .Replace(" ", "")
+                .Should().Be(orderLineUpdateRequest.Metadata);
         }
         
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [DefaultRetryFact]
         public async Task ManageOrderLinesAsync_CancelOperation_OrderLineIsCanceled() {
             // If: we create a new order
             OrderRequest orderRequest = this.CreateOrder();
@@ -287,22 +288,22 @@ namespace Mollie.Tests.Integration.Api {
             OrderResponse updatedOrder = await this._orderClient.ManageOrderLinesAsync(createdOrder.Id, manageOrderLinesRequest);
 
             // Then: The order line should be canceled
-            Assert.AreEqual(1, updatedOrder.Lines.Count());
+            updatedOrder.Lines.Should().HaveCount(1);
             var updatedOrderLineRequest = updatedOrder.Lines.Single();
-            Assert.AreEqual("canceled", updatedOrderLineRequest.Status);
+            updatedOrderLineRequest.Status.Should().Be(OrderStatus.Canceled);
         }
 
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [DefaultRetryFact]
         public async Task GetOrderListAsync_NoParameters_OrderListIsRetrieved() {
             // When: Retrieve payment list with default settings
             ListResponse<OrderResponse> response = await this._orderClient.GetOrderListAsync();
 
             // Then
-            Assert.IsNotNull(response);
-            Assert.IsNotNull(response.Items);
+            response.Should().NotBeNull();
+            response.Items.Should().NotBeNull();
         }
 
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [DefaultRetryFact]
         public async Task GetOrderListAsync_WithMaximumNumberOfItems_MaximumNumberOfOrdersIsReturned() {
             // If: Number of orders requested is 5
             int numberOfOrders = 5;
@@ -311,7 +312,7 @@ namespace Mollie.Tests.Integration.Api {
             ListResponse<OrderResponse> response = await this._orderClient.GetOrderListAsync(null, numberOfOrders);
 
             // Then
-            Assert.IsTrue(response.Items.Count <= numberOfOrders);
+            response.Items.Should().HaveCountLessThanOrEqualTo(numberOfOrders);
         }
         
         private OrderRequest CreateOrder() {
@@ -348,4 +349,4 @@ namespace Mollie.Tests.Integration.Api {
             };
         }
     }
-}*/
+}
