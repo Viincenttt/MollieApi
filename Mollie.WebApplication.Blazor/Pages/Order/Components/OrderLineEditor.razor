@@ -1,0 +1,89 @@
+﻿@using Mollie.WebApplication.Blazor.Models.Order
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Unit price</th>
+            <th scope="col">Total amount</th>
+            <th scope="col">Vat rate</th>
+            <th scope="col">Vat amount</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (CreateOrderLineModel orderLine in OrderLines) {
+            <tr>
+                <td>@orderLine.Name</td>
+                <td>@orderLine.Quantity</td>
+                <td>€ @orderLine.UnitPrice</td>
+                <td>€ @orderLine.TotalAmount</td>
+                <td>@orderLine.VatRate %</td>
+                <td>€ @orderLine.VatAmount</td>
+                <td>
+                    <button class="btn btn-outline-secondary" type="button">Remove</button>
+                </td>
+            </tr>
+        }
+        <tr>
+            <td>
+                <InputText
+                    id="new-order-line-name"
+                    class="form-control"
+                    placeholder="Name"
+                    @bind-Value="_newOrderLineModel.Name">
+                </InputText>
+            </td>
+            <td>
+                <InputNumber
+                    id="new-order-line-quantity"
+                    class="form-control"
+                    placeholder="quantity"
+                    @bind-Value="_newOrderLineModel.Quantity">
+                </InputNumber>
+            </td>
+            <td>
+                <InputNumber
+                    id="new-order-line-unit-price"
+                    class="form-control"
+                    placeholder="Unit price"
+                    @bind-Value="_newOrderLineModel.UnitPrice">
+                </InputNumber>
+            </td>
+            <td>
+                <InputNumber
+                    id="new-order-line-total-amount"
+                    class="form-control"
+                    placeholder="Total amount"
+                    @bind-Value="_newOrderLineModel.TotalAmount">
+                </InputNumber>
+            </td>
+            <td>
+                <InputNumber
+                    id="new-order-line-vat-rate"
+                    class="form-control"
+                    placeholder="Vat rate"
+                    @bind-Value="_newOrderLineModel.VatRate">
+                </InputNumber>
+            </td>
+            <td>
+                <InputNumber
+                    id="new-order-line-vat-amount"
+                    class="form-control"
+                    placeholder="Vat amount"
+                    @bind-Value="_newOrderLineModel.VatAmount">
+                </InputNumber>
+            </td>
+            <td>
+                <button class="btn btn-outline-secondary" type="button">Add</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+@code {
+    [Parameter, EditorRequired]
+    public IEnumerable<CreateOrderLineModel> OrderLines { get; set; }
+
+    private CreateOrderLineModel _newOrderLineModel = new CreateOrderLineModel();
+}
