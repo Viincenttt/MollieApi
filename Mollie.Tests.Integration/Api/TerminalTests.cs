@@ -6,8 +6,6 @@ using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Terminal;
 using Mollie.Tests.Integration.Framework;
-using xRetry;
-
 
 namespace Mollie.Tests.Integration.Api; 
 
