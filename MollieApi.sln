@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mollie.Tests.Integration", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mollie.Tests.Unit", "Mollie.Tests.Unit\Mollie.Tests.Unit.csproj", "{EA502BEF-EA42-45D0-BCC8-F0C28C7A4C41}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mollie.WebApplicationExample", "Mollie.WebApplicationExample\Mollie.WebApplicationExample.csproj", "{692C86E8-D27A-4B58-B6AA-F3A645A5C010}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mollie.WebApplication.Blazor", "Mollie.WebApplication.Blazor\Mollie.WebApplication.Blazor.csproj", "{1F973898-64BC-4272-AB29-6E974AA83375}"
 EndProject
 Global
@@ -31,10 +29,6 @@ Global
 		{EA502BEF-EA42-45D0-BCC8-F0C28C7A4C41}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA502BEF-EA42-45D0-BCC8-F0C28C7A4C41}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA502BEF-EA42-45D0-BCC8-F0C28C7A4C41}.Release|Any CPU.Build.0 = Release|Any CPU
-		{692C86E8-D27A-4B58-B6AA-F3A645A5C010}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{692C86E8-D27A-4B58-B6AA-F3A645A5C010}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{692C86E8-D27A-4B58-B6AA-F3A645A5C010}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{692C86E8-D27A-4B58-B6AA-F3A645A5C010}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1F973898-64BC-4272-AB29-6E974AA83375}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1F973898-64BC-4272-AB29-6E974AA83375}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1F973898-64BC-4272-AB29-6E974AA83375}.Release|Any CPU.ActiveCfg = Release|Any CPU
