@@ -1,0 +1,66 @@
+﻿@page "/customer/{customerId}/mandate/overview"
+
+@inject IMandateClient MandateClient
+
+<h3>Mandates</h3>
+
+@if (_mandates == null) {
+    <p>Loading...</p>
+}
+else {
+    <div class="clearfix">
+        <a href="/customer/@CustomerId/mandate/create" class="btn btn-primary float-right">Create new mandate</a>
+    </div>
+    
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Date created</th>
+            <th scope="col">Status</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (MandateResponse mandate in _mandates.Items) {
+            <tr>
+                <td>@mandate.Id</td>
+                <td>@mandate.CreatedAt</td>
+                <td>@mandate.Status</td>
+                <td>&nbsp;</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    
+    <OverviewNavigation
+        Previous="_mandates.Links.Previous"
+        Next="_mandates.Links.Next">
+    </OverviewNavigation>
+}
+
+@code {
+    [Parameter]
+    public string CustomerId { get; set; }
+    
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string Url { get; set; }
+    
+    private ListResponse<MandateResponse> _mandates = null;
+
+    protected override async Task OnParametersSetAsync() {
+        await LoadData();
+    }
+
+    private async Task LoadData() {
+        if (string.IsNullOrEmpty(Url)) {
+            _mandates = await MandateClient.GetMandateListAsync(CustomerId);
+        }
+        else {
+            _mandates = await MandateClient.GetMandateListAsync(new UrlObjectLink<ListResponse<MandateResponse>>() {
+                Href = Url
+            });
+        }
+    }
+}

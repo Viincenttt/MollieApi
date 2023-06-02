@@ -1,0 +1,40 @@
+﻿@page "/payment-method/overview"
+
+@inject IPaymentMethodClient PaymentMethodClient
+
+<h3>Payment methods</h3>
+
+@if (_paymentMethods == null) {
+    <p>Loading...</p>
+}
+else {
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Description</th>
+            <th scope="col">Size1x</th>
+            <th scope="col">Size2x</th>
+            <th scope="col">Svg</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (PaymentMethodResponse paymentMethod in _paymentMethods.Items) {
+            <tr>
+                <td>@paymentMethod.Description</td>
+                <td><img src="@paymentMethod.Image.Size1x" alt="@paymentMethod.Description" /></td>
+                <td><img src="@paymentMethod.Image.Size2x" alt="@paymentMethod.Description" /></td>
+                <td><img src="@paymentMethod.Image.Svg" alt="@paymentMethod.Description" /></td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+
+@code {
+    private ListResponse<PaymentMethodResponse> _paymentMethods = null;
+
+    protected override async Task OnInitializedAsync() {
+        _paymentMethods = await PaymentMethodClient.GetPaymentMethodListAsync();
+    }
+}

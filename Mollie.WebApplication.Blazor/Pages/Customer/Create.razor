@@ -1,0 +1,61 @@
+﻿@page "/customer/create"
+
+@using Mollie.WebApplication.Blazor.Models.Customer
+@using Mollie.Api.Client
+
+@inject ICustomerClient CustomerClient
+@inject NavigationManager NavigationManager
+
+<h3>Create new customer</h3>
+
+<ApiExceptionDisplay Exception="_apiException"></ApiExceptionDisplay>
+
+<EditForm Model="_customer" OnValidSubmit="@OnSave" class="col-md-6">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="name">Name</label>
+        <InputText
+            id="name"
+            class="form-control"
+            @bind-Value="_customer.Name">
+        </InputText>
+    </div>
+
+    <div class="form-group">
+        <label for="email">E-mail</label>
+        <InputText
+            id="email"
+            class="form-control"
+            @bind-Value="_customer.Email">
+        </InputText>
+    </div>
+
+    <input type="submit" name="Save" value="Save" class="btn btn-primary mt-2"/>
+</EditForm>
+
+@code {
+    private MollieApiException _apiException = null;
+    
+    private CreateCustomerModel _customer = new() {
+        Name = "Customer name",
+        Email = "customer@customer.customer"
+    };
+    
+    private async Task OnSave() {
+        try {
+            _apiException = null;
+            
+            await CustomerClient.CreateCustomerAsync(new CustomerRequest() {
+                Name = _customer.Name,
+                Email = _customer.Email
+            });
+
+            NavigationManager.NavigateTo("/customer/overview");
+        }
+        catch (MollieApiException e) {
+            _apiException = e;
+        }
+    }
+}

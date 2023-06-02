@@ -1,0 +1,103 @@
+﻿@page "/customer/{customerId}/subscription/create"
+
+@using Mollie.WebApplication.Blazor.Models.Subscription
+@using Mollie.Api.Client
+
+@inject ISubscriptionClient SubscriptionClient
+@inject NavigationManager NavigationManager
+
+<h3>Create new subscription</h3>
+
+<ApiExceptionDisplay Exception="_apiException"></ApiExceptionDisplay>
+
+<EditForm Model="model" OnValidSubmit="@OnSave" class="col-md-6">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="amount">Amount</label>
+        <InputNumber
+            id="amount"
+            class="form-control"
+            @bind-Value="model.Amount">
+        </InputNumber>
+    </div>
+
+    <div class="form-group">
+        <label for="currency">Currency</label>
+        <InputSelect
+            id="currency"
+            class="form-control"
+            @bind-Value="model.Currency">
+            @foreach (string currency in StaticStringListBuilder.GetStaticStringList(typeof(Currency))) {
+                <option value="@currency">@currency</option>
+            }
+        </InputSelect>
+    </div>
+    
+    <div class="form-group">
+        <label for="times">Times</label>
+        <InputNumber
+            id="times"
+            class="form-control"
+            @bind-Value="model.Times">
+        </InputNumber>
+    </div>
+    
+    <div class="form-group">
+        <label for="interval-amount">Interval amount</label>
+        <InputNumber
+            id="interval-amount"
+            class="form-control"
+            @bind-Value="model.IntervalAmount">
+        </InputNumber>
+    </div>
+    
+    <div class="form-group">
+        <label for="interval-period">Interval period</label>
+        <InputSelect
+            id="interval-period"
+            class="form-control"
+            @bind-Value="model.IntervalPeriod">
+            @foreach (string intervalPeriod in Enum.GetNames(typeof(IntervalPeriod))) {
+                <option value="@intervalPeriod">@intervalPeriod</option>
+            }
+        </InputSelect>
+    </div>
+    
+    <input type="submit" name="Save" value="Save" class="btn btn-primary mt-2"/>
+</EditForm>
+
+@code {
+    private MollieApiException _apiException = null;
+    
+    [Parameter]
+    public string CustomerId { get; set; }
+    
+    private CreateSubscriptionModel model = new() {
+        Amount = 10.00m,
+        Currency = Currency.EUR,
+        IntervalPeriod = IntervalPeriod.Days,
+        Times = 5,
+        IntervalAmount = 2,
+        Description = "A subscription created by the example application"
+    };
+    
+    private async Task OnSave() {
+        try {
+            _apiException = null;
+            
+            await SubscriptionClient.CreateSubscriptionAsync(CustomerId, new SubscriptionRequest {
+                Amount = new Amount(model.Currency, model.Amount),
+                Interval = $"{model.IntervalAmount} {model.IntervalPeriod.ToString().ToLower()}",
+                Times = model.Times,
+                Description = model.Description
+            });
+
+            NavigationManager.NavigateTo($"/customer/{CustomerId}/subscription/overview");
+        }
+        catch (MollieApiException e) {
+            _apiException = e;
+        }
+    }
+}

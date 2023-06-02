@@ -1,0 +1,67 @@
+﻿@page "/terminal/overview"
+
+@inject ITerminalClient TerminalClient
+
+<h3>Terminals</h3>
+
+@if (_terminals == null) {
+    <p>Loading...</p>
+}
+else {
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Date created</th>
+            <th scope="col">Status</th>
+            <th scope="col">Brand</th>
+            <th scope="col">Model</th>
+            <th scope="col">Serialnumber</th>
+            <th scope="col">Currency</th>
+            <th scope="col">Locale</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (TerminalResponse terminal in _terminals.Items) {
+            <tr>
+                <td>@terminal.Id</td>
+                <td>@terminal.CreatedAt</td>
+                <td>@terminal.Status</td>
+                <td>@terminal.Brand</td>
+                <td>@terminal.Model</td>
+                <td>@terminal.SerialNumber</td>
+                <td>@terminal.Currency</td>
+                <td>@terminal.Locale</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    
+    <OverviewNavigation
+        Previous="_terminals.Links.Previous"
+        Next="_terminals.Links.Next">
+    </OverviewNavigation>
+}
+
+@code {
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string Url { get; set; }
+    
+    private ListResponse<TerminalResponse> _terminals = null;
+
+    protected override async Task OnParametersSetAsync() {
+        await LoadData();
+    }
+
+    private async Task LoadData() {
+        if (string.IsNullOrEmpty(Url)) {
+            _terminals = await TerminalClient.GetTerminalListAsync();
+        }
+        else {
+            _terminals = await TerminalClient.GetTerminalListAsync(new UrlObjectLink<ListResponse<TerminalResponse>>() {
+                Href = Url
+            });
+        }
+    }
+}

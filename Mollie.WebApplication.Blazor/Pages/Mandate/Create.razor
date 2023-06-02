@@ -1,0 +1,74 @@
+﻿@page "/customer/{customerId}/mandate/create"
+@using Mollie.WebApplication.Blazor.Models.Mandate
+@using Mollie.Api.Client
+
+@inject IMandateClient MandateClient
+@inject NavigationManager NavigationManager
+
+<h3>Create new mandate</h3>
+
+<div class="alert alert-info">
+    <p>
+        A mandate is used to get started with recurring payments. A mandate is similar to a regular payment, but the customer is shown information about your organization,
+        and the customer needs to complete the payment with the account or card that will be used for recurring charges in the future.
+    </p>
+    <p>
+        After the first payment is completed succesfully, the customer’s account or card will immediately be chargeable on-demand, or periodically through subscriptions.
+    </p>
+</div>
+
+<ApiExceptionDisplay Exception="_apiException"></ApiExceptionDisplay>
+
+<EditForm Model="_mandate" OnValidSubmit="@OnSave" class="col-md-6">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="consumer-name">Consumer name</label>
+        <InputText
+            id="consumer-name"
+            class="form-control"
+            @bind-Value="_mandate.ConsumerName">
+        </InputText>
+    </div>
+
+    <div class="form-group">
+        <label for="consumer-account">Consumer account</label>
+        <InputText
+            id="consumer-account"
+            class="form-control"
+            @bind-Value="_mandate.ConsumerAccount">
+        </InputText>
+    </div>
+
+    <input type="submit" name="Save" value="Save" class="btn btn-primary mt-2"/>
+</EditForm>
+
+@code {
+    private MollieApiException _apiException = null;
+    
+    [Parameter]
+    public string CustomerId { get; set; }
+    
+    private CreateMandateModel _mandate = new() {
+        ConsumerName = "Consumer name",
+        ConsumerAccount = ""
+    };
+
+    private async Task OnSave() {
+        try {
+            _apiException = null;
+            
+            await MandateClient.CreateMandateAsync(CustomerId, new SepaDirectDebitMandateRequest {
+                Method = PaymentMethod.DirectDebit,
+                ConsumerName = _mandate.ConsumerName,
+                ConsumerAccount = _mandate.ConsumerAccount
+            });
+
+            NavigationManager.NavigateTo($"/customer/{CustomerId}/mandate/overview");
+        }
+        catch (MollieApiException e) {
+            _apiException = e;
+        }
+    }
+}

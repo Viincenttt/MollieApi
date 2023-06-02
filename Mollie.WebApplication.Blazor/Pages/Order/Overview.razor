@@ -1,0 +1,73 @@
+﻿@page "/order/overview"
+
+@inject IOrderClient OrderClient
+
+<h3>Orders</h3>
+
+@if (_orders == null) {
+    <p>Loading...</p>
+}
+else {
+    <div class="clearfix">
+        <a href="/order/create" class="btn btn-primary float-right">Create new order</a>
+    </div>
+    
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Date created</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Status</th>
+            <th scope="col">Method</th>
+            <th scope="col">Metadata</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (OrderResponse order in _orders.Items) {
+            <tr>
+                <td>@order.Id</td>
+                <td>@order.CreatedAt</td>
+                <td>@order.Amount.ToString()</td>
+                <td>@order.Status</td>
+                <td>@order.Method</td>
+                <td>@order.Metadata</td>
+                <td>
+                    @if (order.Status == OrderStatus.Created) {
+                        <a href="@order.Links.Checkout.Href" class="btn btn-outline-secondary" target="_blank">Pay</a>
+                    }
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    
+    <OverviewNavigation
+        Previous="_orders.Links.Previous"
+        Next="_orders.Links.Next">
+    </OverviewNavigation>
+}
+
+@code {
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string Url { get; set; }
+    
+    private ListResponse<OrderResponse> _orders = null;
+
+    protected override async Task OnParametersSetAsync() {
+        await LoadData();
+    }
+
+    private async Task LoadData() {
+        if (string.IsNullOrEmpty(Url)) {
+            _orders = await OrderClient.GetOrderListAsync();
+        }
+        else {
+            _orders = await OrderClient.GetOrderListAsync(new UrlObjectLink<ListResponse<OrderResponse>>() {
+                Href = Url
+            });
+        }
+    }
+}

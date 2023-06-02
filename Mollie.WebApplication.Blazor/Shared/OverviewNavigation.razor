@@ -1,0 +1,21 @@
+﻿@using Mollie.Api.Models.Url
+
+@inject NavigationManager NavManager 
+
+@if (Previous != null) {
+    <a class="btn btn-primary" href="@GetCurrentUrlWithoutQueryParameters?Url=@Previous.Href">&lt;&lt; Previous</a>
+}
+
+@if (Next != null) {
+    <a class="btn btn-primary" href="@GetCurrentUrlWithoutQueryParameters?Url=@Next.Href">Next &gt;&gt;</a>
+}
+
+@code {
+    [Parameter, EditorRequired]
+    public UrlLink Previous { get; set; }
+    
+    [Parameter, EditorRequired]
+    public UrlLink Next { get; set; }
+
+    private string GetCurrentUrlWithoutQueryParameters => NavManager.Uri.Split('?')[0];
+}

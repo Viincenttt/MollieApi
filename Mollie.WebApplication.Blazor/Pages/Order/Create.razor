@@ -1,0 +1,133 @@
+﻿@page "/order/create"
+
+@using Mollie.WebApplication.Blazor.Pages.Order.Components
+@using Mollie.WebApplication.Blazor.Models.Order
+@using System.Globalization
+@using Mollie.Api.Client
+
+@inject IOrderClient OrderClient
+@inject NavigationManager NavigationManager
+
+<h3>Create new order</h3>
+
+<ApiExceptionDisplay Exception="_apiException"></ApiExceptionDisplay>
+
+<EditForm Model="_order" OnValidSubmit="@OnSave" class="col-md-6">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    
+    <div class="form-group">
+        <label for="order-number">Order number</label>
+        <InputText
+            id="order-number"
+            class="form-control"
+            @bind-Value="_order.OrderNumber">
+        </InputText>
+    </div>
+    
+    <div class="form-group">
+        <label for="locale">Locale</label>
+        <InputSelect
+            id="locale"
+            class="form-control"
+            @bind-Value="_order.Locale">
+            @foreach (string locale in StaticStringListBuilder.GetStaticStringList(typeof(Locale))) {
+                <option value="@locale">@locale</option>
+            }
+        </InputSelect>
+    </div>
+
+    <div class="form-group">
+        <label for="currency">Currency</label>
+        <InputSelect
+            id="currency"
+            class="form-control"
+            @bind-Value="_order.Currency">
+            @foreach (string currency in StaticStringListBuilder.GetStaticStringList(typeof(Currency))) {
+                <option value="@currency">@currency</option>
+            }
+        </InputSelect>
+    </div>
+
+    <div class="form-group">
+        <label for="redirect-url">Redirect url</label>
+        <InputText
+            id="redirect-url"
+            class="form-control"
+            @bind-Value="_order.RedirectUrl">
+        </InputText>
+    </div>
+    
+    <h5 class="mt-3">Billing address</h5>
+    <OrderAddressEditor Address="_order.BillingAddress"></OrderAddressEditor>
+    
+    <h5 class="mt-3">Order lines</h5>
+    <OrderLineEditor OrderLines="_order.Lines"></OrderLineEditor>
+
+    <input type="submit" name="Save" value="Save" class="btn btn-primary mt-2"/>
+</EditForm>
+
+@code {
+    private MollieApiException _apiException = null;
+    
+    private CreateOrderModel _order = new() {
+        OrderNumber = "Order number",
+        Locale = Locale.nl_NL,
+        Currency = "EUR",
+        RedirectUrl = "https://www.mollie.com/",
+        Lines = new List<CreateOrderLineModel> {
+            new CreateOrderLineModel {
+                Name = "Chocolates",
+                UnitPrice = 100.00m,
+                Quantity = 1,
+                TotalAmount = 100.00m,
+                VatRate = 21.00m,
+                VatAmount = 17.36m
+            }
+        },
+        BillingAddress = new CreateOrderBillingAddressModel {
+            City = "Amsterdam",
+            Country = "NL",
+            Email = "customer@customer.customer",
+            FamilyName = "Mollie",
+            GivenName = "Mollie",
+            PostalCode = "1015 CW",
+            StreetAndNumber = "Keizersgracht 126"
+        }
+    };
+    
+    private async Task OnSave() {
+        try {
+            _apiException = null;
+            
+            await OrderClient.CreateOrderAsync(new OrderRequest {
+                OrderNumber = _order.OrderNumber,
+                Locale = _order.Locale,
+                Amount = new Amount(_order.Currency, _order.Lines.Sum(lines => lines.TotalAmount)),
+                RedirectUrl = _order.RedirectUrl,
+                BillingAddress = new OrderAddressDetails {
+                    GivenName = _order.BillingAddress.GivenName,
+                    FamilyName = _order.BillingAddress.FamilyName,
+                    Email = _order.BillingAddress.Email,
+                    StreetAndNumber = _order.BillingAddress.StreetAndNumber,
+                    PostalCode = _order.BillingAddress.PostalCode,
+                    City = _order.BillingAddress.City,
+                    Country = _order.BillingAddress.Country
+                },
+                Lines = _order.Lines.Select(line => new OrderLineRequest {
+                    Name = line.Name,
+                    Quantity = line.Quantity,
+                    UnitPrice = new Amount(_order.Currency, line.UnitPrice),
+                    TotalAmount = new Amount(_order.Currency, line.TotalAmount),
+                    VatRate = line.VatRate.ToString(CultureInfo.InvariantCulture),
+                    VatAmount = new Amount(_order.Currency, line.VatAmount)
+                })
+            });
+
+            NavigationManager.NavigateTo("/order/overview");
+        }
+        catch (MollieApiException e) {
+            _apiException = e;
+        }
+    }
+}
