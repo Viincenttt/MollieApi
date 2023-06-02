@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
+using FluentAssertions;
+using Mollie.Api.Client;
+using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
 using Mollie.Api.Models;
 using Mollie.Api.Models.List;
@@ -7,22 +10,25 @@ using Mollie.Api.Models.PaymentLink.Request;
 using Mollie.Api.Models.PaymentLink.Response;
 using Mollie.Tests.Integration.Framework;
 
-/*
 namespace Mollie.Tests.Integration.Api {
     public class PaymentLinkTests : BaseMollieApiTestClass {
-        [Test]
-        [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        private readonly IPaymentLinkClient _paymentLinkClient;
+
+        public PaymentLinkTests() {
+            _paymentLinkClient = new PaymentLinkClient(this.ApiKey);
+        }
+        
+        [DefaultRetryFact]
         public async Task CanRetrievePaymentlinkList() {
             // When: Retrieve payment list with default settings
             ListResponse<PaymentLinkResponse> response = await this._paymentLinkClient.GetPaymentLinkListAsync();
 
             // Then
-            Assert.IsNotNull(response);
-            Assert.IsNotNull(response.Items);
+            response.Should().NotBeNull();
+            response.Items.Should().NotBeNull();
         }
 
-        [Test]
-        [RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
+        [DefaultRetryFact]
         public async Task CanCreatePaymentLinkAndRetrieveIt() {
             // Given: We create a new payment 
             PaymentLinkRequest paymentLinkRequest = new PaymentLinkRequest() {
@@ -40,18 +46,15 @@ namespace Mollie.Tests.Integration.Api {
             // Then: We expect a list with a single ideal payment     
             var verifyPaymentLinkResponse = new Action<PaymentLinkResponse>(response => {
                 var expiresAtWithoutMs = paymentLinkRequest.ExpiresAt.Value.Truncate(TimeSpan.FromSeconds(1));
-                
-                Assert.AreEqual(paymentLinkRequest.Amount.Currency, response.Amount.Currency);
-                Assert.AreEqual(paymentLinkRequest.Amount.Value, response.Amount.Value);
-                Assert.AreEqual(expiresAtWithoutMs, response.ExpiresAt);
-                Assert.AreEqual(paymentLinkRequest.Description, response.Description);
-                Assert.AreEqual(paymentLinkRequest.RedirectUrl, response.RedirectUrl);
-                // Commented this out: For some reason the payment link is now returned here instead of the webhook url
-                // Assert.AreEqual(paymentLinkRequest.WebhookUrl, response.WebhookUrl);
+
+                response.Amount.Should().Be(paymentLinkRequest.Amount);
+                response.ExpiresAt.Should().Be(expiresAtWithoutMs);
+                response.Description.Should().Be(paymentLinkRequest.Description);
+                response.RedirectUrl.Should().Be(paymentLinkRequest.RedirectUrl);
             });
 
             verifyPaymentLinkResponse(createdPaymentLinkResponse);
             verifyPaymentLinkResponse(retrievePaymentLinkResponse);
         }
     }
-}*/
+}
