@@ -21,10 +21,12 @@ namespace Mollie.Tests.Integration.Api {
             };
             
             // Then: Send the payment request to the Mollie Api, this should throw a mollie api exception
-            MollieApiException apiException = await Assert.ThrowsAsync<MollieApiException>(() => this._paymentClient.CreatePaymentAsync(paymentRequest));
+            MollieApiException apiException = await Assert.ThrowsAsync<MollieApiException>(() => paymentClient.CreatePaymentAsync(paymentRequest));
             apiException.Should().NotBeNull();
             apiException.Details.Should().NotBeNull();
-            //Assert.True(!String.IsNullOrEmpty(mollieApiException.Details.Detail));
+            apiException.Details.Status.Should().Be(422);
+            apiException.Details.Title.Should().Be("Unprocessable Entity");
+            apiException.Details.Detail.Should().Be("The description is invalid");
         }
     }
 }
