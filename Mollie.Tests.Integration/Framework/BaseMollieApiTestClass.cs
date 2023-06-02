@@ -2,13 +2,9 @@
 using System.Globalization;
 using System.Threading;
 using Microsoft.Extensions.Configuration;
-using Mollie.Api.Client;
-using Mollie.Api.Client.Abstract;
 
 namespace Mollie.Tests.Integration.Framework {
     public abstract class BaseMollieApiTestClass {
-        public const int NumberOfRetries = 3;
-
         protected readonly string DefaultRedirectUrl = "http://mysite.com";
         protected readonly string DefaultWebhookUrl = "http://mysite.com/webhook";
         protected readonly MollieIntegationTestConfiguration Configuration = ConfigurationFactory.GetConfiguration().GetSection("Mollie").Get<MollieIntegationTestConfiguration>();
@@ -26,26 +22,6 @@ namespace Mollie.Tests.Integration.Framework {
             Thread.Sleep(timeBetweenTests);
         }
         
-        /*
-        [OneTimeSetUp]
-        public void InitClass() {
-            this.EnsureTestApiKey(this.ApiKey);
-
-            this._paymentClient = new PaymentClient(this.ApiKey);
-            this._paymentLinkClient = new PaymentLinkClient(this.ApiKey);
-            this._paymentMethodClient = new PaymentMethodClient(this.ApiKey);
-            this._refundClient = new RefundClient(this.ApiKey);
-            this._subscriptionClient = new SubscriptionClient(this.ApiKey);
-            this._mandateClient = new MandateClient(this.ApiKey);
-            this._customerClient = new CustomerClient(this.ApiKey);
-            this._profileClient = new ProfileClient(this.ApiKey);
-            this._orderClient = new OrderClient(this.ApiKey);
-            this._shipmentClient = new ShipmentClient(this.ApiKey);
-            this._balanceClient = new BalanceClient(this.AccessKey);
-            this._terminalClient = new TerminalClient(this.ApiKey);
-            this._captureClient = new CaptureClient(this.ApiKey);
-        } */
-
         private void EnsureTestApiKey(string apiKey) {
             if (String.IsNullOrEmpty(apiKey)) {
                 throw new ArgumentException("Please enter you API key in the BaseMollieApiTestClass class");

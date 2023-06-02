@@ -1,5 +1,4 @@
-﻿using Mollie.Api.Client;
-using xRetry;
+﻿using xRetry;
 
 namespace Mollie.Tests.Integration.Framework; 
 
