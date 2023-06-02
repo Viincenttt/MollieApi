@@ -17,21 +17,6 @@ namespace Mollie.Tests.Integration.Framework {
         protected string ClientSecret => this.Configuration.ClientSecret ?? "client-secret";
         protected string AccessKey => this.Configuration.AccessKey ?? "access-key";
 
-        protected IPaymentClient _paymentClient;
-        /*
-        protected IPaymentLinkClient _paymentLinkClient;
-        protected IPaymentMethodClient _paymentMethodClient;
-        protected IRefundClient _refundClient;
-        protected ISubscriptionClient _subscriptionClient;
-        protected IMandateClient _mandateClient;
-        protected ICustomerClient _customerClient;
-        protected IProfileClient _profileClient;
-        protected IOrderClient _orderClient;
-        protected IShipmentClient _shipmentClient;
-        protected IBalanceClient _balanceClient;
-        protected ITerminalClient _terminalClient;
-        protected ICaptureClient _captureClient;*/
-
         protected BaseMollieApiTestClass() {
             this.EnsureTestApiKey(this.ApiKey);
             

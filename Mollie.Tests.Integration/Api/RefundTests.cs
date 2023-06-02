@@ -1,5 +1,8 @@
 ﻿using System.Diagnostics;
 using System.Threading.Tasks;
+using FluentAssertions;
+using Mollie.Api.Client;
+using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Payment.Request;
@@ -7,118 +10,119 @@ using Mollie.Api.Models.Payment.Response;
 using Mollie.Api.Models.Refund;
 using Mollie.Tests.Integration.Framework;
 
-/*
-namespace Mollie.Tests.Integration.Api {
-    public class RefundTests : BaseMollieApiTestClass {
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        [Ignore("We can only test this in debug mode, because we actually have to use the PaymentUrl to make the payment, since Mollie can only refund payments that have been paid")]
-        public async Task CanCreateRefund() {
-            // If: We create a payment
-            string amount = "100.00";
-            PaymentResponse payment = await this.CreatePayment(amount);
+namespace Mollie.Tests.Integration.Api; 
 
-            // We can only test this if you make the payment using the payment.Links.Checkout property. 
-            // If you don't do this, this test will fail because we can only refund payments that have been paid
-            Debugger.Break(); 
+public class RefundTests : BaseMollieApiTestClass {
+    private readonly IRefundClient _refundClient;
+    private readonly IPaymentClient _paymentClient;
 
-            // When: We attempt to refund this payment
-            RefundRequest refundRequest = new RefundRequest() {
-                Amount = new Amount(Currency.EUR, amount)
-            };
-            RefundResponse refundResponse = await this._refundClient.CreateRefundAsync(payment.Id, refundRequest);
+    public RefundTests() {
+        _refundClient = new RefundClient(this.ApiKey);
+        _paymentClient = new PaymentClient(this.ApiKey);
+    }
+        
+    [DefaultRetryFact(Skip = "We can only test this in debug mode, because we actually have to use the PaymentUrl to make the payment, since Mollie can only refund payments that have been paid")]
+    public async Task CanCreateRefund() {
+        // If: We create a payment
+        string amount = "100.00";
+        PaymentResponse payment = await this.CreatePayment(amount);
 
-            // Then
-            Assert.IsNotNull(refundResponse);
-        }
+        // We can only test this if you make the payment using the payment.Links.Checkout property. 
+        // If you don't do this, this test will fail because we can only refund payments that have been paid
+        Debugger.Break(); 
 
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        [Ignore("We can only test this in debug mode, because we actually have to use the PaymentUrl to make the payment, since Mollie can only refund payments that have been paid")]
-        public async Task CanCreatePartialRefund() {
-            // If: We create a payment of 250 euro
-            PaymentResponse payment = await this.CreatePayment("250.00");
+        // When: We attempt to refund this payment
+        RefundRequest refundRequest = new RefundRequest() {
+            Amount = new Amount(Currency.EUR, amount)
+        };
+        RefundResponse refundResponse = await this._refundClient.CreateRefundAsync(payment.Id, refundRequest);
 
-            // We can only test this if you make the payment using the payment.Links.PaymentUrl property. 
-            // If you don't do this, this test will fail because we can only refund payments that have been paid
-            Debugger.Break();
+        // Then
+        refundResponse.Should().NotBeNull();
+    }
 
-            // When: We attempt to refund 50 euro
-            RefundRequest refundRequest = new RefundRequest() {
-                Amount = new Amount(Currency.EUR, "50.00")
-            };
-            RefundResponse refundResponse = await this._refundClient.CreateRefundAsync(payment.Id, refundRequest);
+    [DefaultRetryFact(Skip = "We can only test this in debug mode, because we actually have to use the PaymentUrl to make the payment, since Mollie can only refund payments that have been paid")]
+    public async Task CanCreatePartialRefund() {
+        // If: We create a payment of 250 euro
+        PaymentResponse payment = await this.CreatePayment("250.00");
 
-            // Then
-            Assert.AreEqual("50.00", refundResponse.Amount.Value);
-        }
+        // We can only test this if you make the payment using the payment.Links.PaymentUrl property. 
+        // If you don't do this, this test will fail because we can only refund payments that have been paid
+        Debugger.Break();
 
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        [Ignore("We can only test this in debug mode, because we actually have to use the PaymentUrl to make the payment, since Mollie can only refund payments that have been paid")]
-        public async Task CanRetrieveSingleRefund() {
-            // If: We create a payment
-            PaymentResponse payment = await this.CreatePayment();
-            // We can only test this if you make the payment using the payment.Links.PaymentUrl property. 
-            // If you don't do this, this test will fail because we can only refund payments that have been paid
-            Debugger.Break();
+        // When: We attempt to refund 50 euro
+        RefundRequest refundRequest = new RefundRequest() {
+            Amount = new Amount(Currency.EUR, "50.00")
+        };
+        RefundResponse refundResponse = await this._refundClient.CreateRefundAsync(payment.Id, refundRequest);
 
-            RefundRequest refundRequest = new RefundRequest() {
-                Amount = new Amount(Currency.EUR, "50.00")
-            };
-            RefundResponse refundResponse = await this._refundClient.CreateRefundAsync(payment.Id, refundRequest);
+        // Then
+        refundResponse.Amount.Should().Be(refundRequest.Amount);
+    }
 
-            // When: We attempt to retrieve this refund
-            RefundResponse result = await this._refundClient.GetRefundAsync(payment.Id, refundResponse.Id);
+    [DefaultRetryFact(Skip = "We can only test this in debug mode, because we actually have to use the PaymentUrl to make the payment, since Mollie can only refund payments that have been paid")]
+    public async Task CanRetrieveSingleRefund() {
+        // If: We create a payment
+        PaymentResponse payment = await this.CreatePayment();
+        // We can only test this if you make the payment using the payment.Links.PaymentUrl property. 
+        // If you don't do this, this test will fail because we can only refund payments that have been paid
+        Debugger.Break();
 
-            // Then
-            Assert.IsNotNull(result);
-            Assert.AreEqual(refundResponse.Id, result.Id);
-            Assert.AreEqual(refundResponse.Amount.Value, result.Amount.Value);
-            Assert.AreEqual(refundResponse.Amount.Currency, result.Amount.Currency);
-        }
+        RefundRequest refundRequest = new RefundRequest() {
+            Amount = new Amount(Currency.EUR, "50.00")
+        };
+        RefundResponse refundResponse = await this._refundClient.CreateRefundAsync(payment.Id, refundRequest);
 
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        public async Task CanRetrieveRefundList() {
-            // If: We create a payment
-            PaymentResponse payment = await this.CreatePayment();
+        // When: We attempt to retrieve this refund
+        RefundResponse result = await this._refundClient.GetRefundAsync(payment.Id, refundResponse.Id);
 
-            // When: Retrieve refund list for this payment
-            ListResponse<RefundResponse> refundList = await this._refundClient.GetRefundListAsync(payment.Id);
+        // Then
+        result.Should().NotBeNull();
+        result.Id.Should().Be(refundResponse.Id);
+        refundResponse.Amount.Should().Be(refundRequest.Amount);
+    }
 
-            // Then
-            Assert.IsNotNull(refundList);
-            Assert.IsNotNull(refundList.Items);
-        }
+    [DefaultRetryFact]
+    public async Task CanRetrieveRefundList() {
+        // If: We create a payment
+        PaymentResponse payment = await this.CreatePayment();
 
-        private async Task<PaymentResponse> CreatePayment(string amount = "100.00") {
-            PaymentRequest paymentRequest = new PayPalPaymentRequest();
-            paymentRequest.Amount = new Amount(Currency.EUR, amount);
-            paymentRequest.Description = "Description";
-            paymentRequest.RedirectUrl = this.DefaultRedirectUrl;
+        // When: Retrieve refund list for this payment
+        ListResponse<RefundResponse> refundList = await this._refundClient.GetRefundListAsync(payment.Id);
 
-            return await this._paymentClient.CreatePaymentAsync(paymentRequest);
-        }
+        // Then
+        refundList.Should().NotBeNull();
+        refundList.Items.Should().NotBeNull();
+    }
 
-        [Test][RetryOnApiRateLimitFailure(BaseMollieApiTestClass.NumberOfRetries)]
-        [Ignore("We can only test this in debug mode, because we actually have to use the PaymentUrl to make the payment, since Mollie can only refund payments that have been paid")]
-        public async Task CanCreateRefundWithMetaData() {
-            // If: We create a payment
-            string amount = "100.00";
-            PaymentResponse payment = await this.CreatePayment(amount);
+    [DefaultRetryFact(Skip = "We can only test this in debug mode, because we actually have to use the PaymentUrl to make the payment, since Mollie can only refund payments that have been paid")]
+    public async Task CanCreateRefundWithMetaData() {
+        // If: We create a payment
+        string amount = "100.00";
+        PaymentResponse payment = await this.CreatePayment(amount);
 
-            // We can only test this if you make the payment using the payment.Links.Checkout property. 
-            // If you don't do this, this test will fail because we can only refund payments that have been paid
-            Debugger.Break(); 
+        // We can only test this if you make the payment using the payment.Links.Checkout property. 
+        // If you don't do this, this test will fail because we can only refund payments that have been paid
+        Debugger.Break(); 
 
-            // When: We attempt to refund this payment with meta data.
-            var metadata = "this is my metadata";
-            RefundRequest refundRequest = new RefundRequest() {
-                Amount = new Amount(Currency.EUR, amount),
-                Metadata = metadata
-            };
-            RefundResponse refundResponse = await this._refundClient.CreateRefundAsync(payment.Id, refundRequest);
+        // When: We attempt to refund this payment with meta data.
+        var metadata = "this is my metadata";
+        RefundRequest refundRequest = new RefundRequest() {
+            Amount = new Amount(Currency.EUR, amount),
+            Metadata = metadata
+        };
+        RefundResponse refundResponse = await this._refundClient.CreateRefundAsync(payment.Id, refundRequest);
 
-            // Then: Make sure we get the same json result as metadata
-            Assert.AreEqual(metadata, refundResponse.Metadata);
-        }
+        // Then: Make sure we get the same json result as metadata
+        refundResponse.Metadata.Should().Be(metadata);
+    }
+        
+    private async Task<PaymentResponse> CreatePayment(string amount = "100.00") {
+        PaymentRequest paymentRequest = new PayPalPaymentRequest();
+        paymentRequest.Amount = new Amount(Currency.EUR, amount);
+        paymentRequest.Description = "Description";
+        paymentRequest.RedirectUrl = this.DefaultRedirectUrl;
+
+        return await this._paymentClient.CreatePaymentAsync(paymentRequest);
     }
 }
-*/
