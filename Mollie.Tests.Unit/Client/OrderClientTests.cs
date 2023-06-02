@@ -6,12 +6,12 @@ using Mollie.Api.Models.Payment;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Mollie.Api.Models.Order.Request.ManageOrderLines;
 using RichardSzalay.MockHttp;
+using Xunit;
 
-/*
 namespace Mollie.Tests.Unit.Client {
-    [TestFixture]
     public class OrderClientTests : BaseClientTests {
         private const string defaultOrderJsonResponse = @"{
             ""resource"": ""order"",
@@ -32,7 +32,7 @@ namespace Mollie.Tests.Unit.Client {
             ""description"":""Description"",
             ""redirectUrl"":""http://www.mollie.com""}";
 
-        [Test]
+        [Fact]
         public async Task GetOrderAsync_NoEmbedParameters_QueryStringIsEmpty() {
             // Given: We make a request to retrieve a order without wanting any extra data
             const string orderId = "abcde";
@@ -47,7 +47,7 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.VerifyNoOutstandingExpectation();
         }
 
-        [Test]
+        [Fact]
         public async Task GetOrderAsync_SingleEmbedParameters_QueryStringContainsEmbedParameter() {
             // Given: We make a request to retrieve a order with a single embed parameter
             const string orderId = "abcde";
@@ -62,7 +62,7 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.VerifyNoOutstandingExpectation();
         }
 
-        [Test]
+        [Fact]
         public async Task GetOrderAsync_MultipleEmbedParameters_QueryStringContainsMultipleParameters() {
             // Given: We make a request to retrieve a order with a single embed parameter
             const string orderId = "abcde";
@@ -77,7 +77,7 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.VerifyNoOutstandingExpectation();
         }
         
-        [Test]
+        [Fact]
         public async Task GetOrderAsync_WithTestModeParameter_QueryStringContainsTestModeParameter() {
             // Given: We make a request to retrieve a order with a single embed parameter
             const string orderId = "abcde";
@@ -92,11 +92,12 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.VerifyNoOutstandingExpectation();
         }
         
-        [TestCase(null, null, null, false, "")]
-        [TestCase("from", null, null, false, "?from=from")]
-        [TestCase("from", 50, null, false, "?from=from&limit=50")]
-        [TestCase(null, null, "profile-id", false, "?profileId=profile-id")]
-        [TestCase(null, null, "profile-id", true, "?profileId=profile-id&testmode=true")]
+        [Theory]
+        [InlineData(null, null, null, false, "")]
+        [InlineData("from", null, null, false, "?from=from")]
+        [InlineData("from", 50, null, false, "?from=from&limit=50")]
+        [InlineData(null, null, "profile-id", false, "?profileId=profile-id")]
+        [InlineData(null, null, "profile-id", true, "?profileId=profile-id&testmode=true")]
         public async Task GetOrderListAsync_QueryParameterOptions_CorrectParametersAreAdded(string from, int? limit, string profileId, bool testmode, string expectedQueryString) {
             // Given: We make a request to retrieve the list of orders
             var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}orders{expectedQueryString}", defaultOrderJsonResponse);
@@ -110,10 +111,11 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.VerifyNoOutstandingRequest();
         }
         
-        [TestCase(null, null, false, "")]
-        [TestCase("from", null, false, "?from=from")]
-        [TestCase("from", 50, false, "?from=from&limit=50")]
-        [TestCase(null, null, true, "?testmode=true")]
+        [Theory]
+        [InlineData(null, null, false, "")]
+        [InlineData("from", null, false, "?from=from")]
+        [InlineData("from", 50, false, "?from=from&limit=50")]
+        [InlineData(null, null, true, "?testmode=true")]
         public async Task GetOrderRefundListAsync_QueryParameterOptions_CorrectParametersAreAdded(string from, int? limit, bool testmode, string expectedQueryString) {
             // Given: We make a request to retrieve the list of orders
             const string orderId = "abcde";
@@ -128,7 +130,7 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.VerifyNoOutstandingRequest();
         }
 
-        [Test]
+        [Fact]
         public async Task CreateOrderAsync_SinglePaymentMethod_RequestIsSerializedInExpectedFormat() {
             // Given: we create a order with a single payment method
             OrderRequest orderRequest = this.CreateOrderRequestWithOnlyRequiredFields();
@@ -144,10 +146,10 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then            
             mockHttp.VerifyNoOutstandingExpectation();
-            Assert.AreEqual(orderRequest.Method, orderResponse.Method);
+            orderResponse.Method.Should().Be(orderRequest.Method);
         }
 
-        [Test]
+        [Fact]
         public async Task CreateOrderAsync_MultiplePaymentMethods_RequestIsSerializedInExpectedFormat() {
             // Given: we create a order with a single payment method
             OrderRequest orderRequest = this.CreateOrderRequestWithOnlyRequiredFields();
@@ -169,7 +171,7 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.VerifyNoOutstandingExpectation();
         }
         
-        [Test]
+        [Fact]
         public async Task CreateOrderPaymentAsync_PaymentWithSinglePaymentMethod_RequestIsSerializedInExpectedFormat() {
             // Given: We create a payment request with multiple payment methods
             OrderPaymentRequest orderPaymentRequest = new OrderPaymentRequest() {
@@ -194,7 +196,7 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.VerifyNoOutstandingExpectation();
         }
         
-        [Test]
+        [Fact]
         public async Task CreateOrderPaymentAsync_PaymentWithMultiplePaymentMethods_RequestIsSerializedInExpectedFormat() {
             // Given: We create a payment request with multiple payment methods
             OrderPaymentRequest orderPaymentRequest = new OrderPaymentRequest() {
@@ -221,148 +223,157 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.VerifyNoOutstandingExpectation();
         }
         
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase(null)]
-        public void GetOrderAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string orderId) {
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        public async Task GetOrderAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string orderId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             OrderClient orderClient = new OrderClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await orderClient.GetOrderAsync(orderId));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await orderClient.GetOrderAsync(orderId));
 
             // Then
-            Assert.AreEqual($"Required URL argument 'orderId' is null or empty", exception.Message); 
+            exception.Message.Should().Be("Required URL argument 'orderId' is null or empty");
         }
         
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase(null)]
-        public void UpdateOrderAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string orderId) {
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        public async Task UpdateOrderAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string orderId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             OrderClient orderClient = new OrderClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await orderClient.UpdateOrderAsync(orderId, new OrderUpdateRequest()));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await orderClient.UpdateOrderAsync(orderId, new OrderUpdateRequest()));
 
             // Then
-            Assert.AreEqual($"Required URL argument 'orderId' is null or empty", exception.Message); 
+            exception.Message.Should().Be("Required URL argument 'orderId' is null or empty");
         }
         
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase(null)]
-        public void UpdateOrderLinesAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string orderId) {
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        public async Task UpdateOrderLinesAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string orderId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             OrderClient orderClient = new OrderClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await orderClient.UpdateOrderLinesAsync(orderId, "order-line-id", new OrderLineUpdateRequest()));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await orderClient.UpdateOrderLinesAsync(orderId, "order-line-id", new OrderLineUpdateRequest()));
 
             // Then
-            Assert.AreEqual($"Required URL argument 'orderId' is null or empty", exception.Message); 
+            exception.Message.Should().Be("Required URL argument 'orderId' is null or empty");
         }
         
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase(null)]
-        public void UpdateOrderLinesAsync_NoOrderLineIdIsGiven_ArgumentExceptionIsThrown(string orderLineId) {
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        public async Task UpdateOrderLinesAsync_NoOrderLineIdIsGiven_ArgumentExceptionIsThrown(string orderLineId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             OrderClient orderClient = new OrderClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await orderClient.UpdateOrderLinesAsync("order-id", orderLineId, new OrderLineUpdateRequest()));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await orderClient.UpdateOrderLinesAsync("order-id", orderLineId, new OrderLineUpdateRequest()));
 
             // Then
-            Assert.AreEqual($"Required URL argument 'orderLineId' is null or empty", exception.Message); 
+            exception.Message.Should().Be("Required URL argument 'orderLineId' is null or empty");
         }
         
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase(null)]
-        public void ManageOrderLinesAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string orderId) {
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        public async Task ManageOrderLinesAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string orderId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             OrderClient orderClient = new OrderClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await orderClient.ManageOrderLinesAsync(orderId, new ManageOrderLinesRequest()));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await orderClient.ManageOrderLinesAsync(orderId, new ManageOrderLinesRequest()));
 
             // Then
-            Assert.AreEqual($"Required URL argument 'orderId' is null or empty", exception.Message); 
+            exception.Message.Should().Be("Required URL argument 'orderId' is null or empty");
         }
         
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase(null)]
-        public void CancelOrderAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string orderId) {
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        public async Task CancelOrderAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string orderId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             OrderClient orderClient = new OrderClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await orderClient.CancelOrderAsync(orderId));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await orderClient.CancelOrderAsync(orderId));
 
             // Then
-            Assert.AreEqual($"Required URL argument 'orderId' is null or empty", exception.Message); 
+            exception.Message.Should().Be("Required URL argument 'orderId' is null or empty");
         }
         
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase(null)]
-        public void CreateOrderPaymentAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string orderId) {
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        public async Task CreateOrderPaymentAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string orderId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             OrderClient orderClient = new OrderClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await orderClient.CreateOrderPaymentAsync(orderId, new OrderPaymentRequest()));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await orderClient.CreateOrderPaymentAsync(orderId, new OrderPaymentRequest()));
 
             // Then
-            Assert.AreEqual($"Required URL argument 'orderId' is null or empty", exception.Message); 
+            exception.Message.Should().Be("Required URL argument 'orderId' is null or empty");
         }
         
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase(null)]
-        public void CreateOrderRefundAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string orderId) {
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        public async Task CreateOrderRefundAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string orderId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             OrderClient orderClient = new OrderClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await orderClient.CreateOrderRefundAsync(orderId, new OrderRefundRequest()));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await orderClient.CreateOrderRefundAsync(orderId, new OrderRefundRequest()));
 
             // Then
-            Assert.AreEqual($"Required URL argument 'orderId' is null or empty", exception.Message); 
+            exception.Message.Should().Be("Required URL argument 'orderId' is null or empty");
         }
         
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase(null)]
-        public void GetOrderRefundListAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string orderId) {
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        public async Task GetOrderRefundListAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string orderId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             OrderClient orderClient = new OrderClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = Assert.ThrowsAsync<ArgumentException>(async () => await orderClient.GetOrderRefundListAsync(orderId));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await orderClient.GetOrderRefundListAsync(orderId));
 
             // Then
-            Assert.AreEqual($"Required URL argument 'orderId' is null or empty", exception.Message); 
+            exception.Message.Should().Be("Required URL argument 'orderId' is null or empty");
         }
 
         private OrderRequest CreateOrderRequestWithOnlyRequiredFields() {
@@ -395,4 +406,3 @@ namespace Mollie.Tests.Unit.Client {
         }
     }
 }
-*/
