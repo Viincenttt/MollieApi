@@ -60,14 +60,7 @@
                         @bind-Value="_newOrderLineModel.UnitPrice">
                     </InputNumber>
                 </td>
-                <td>
-                    <InputNumber
-                        id="new-order-line-total-amount"
-                        class="form-control"
-                        placeholder="Total amount"
-                        @bind-Value="_newOrderLineModel.TotalAmount">
-                    </InputNumber>
-                </td>
+                <td></td>
                 <td>
                     <InputNumber
                         id="new-order-line-vat-rate"
@@ -76,14 +69,7 @@
                         @bind-Value="_newOrderLineModel.VatRate">
                     </InputNumber>
                 </td>
-                <td>
-                    <InputNumber
-                        id="new-order-line-vat-amount"
-                        class="form-control"
-                        placeholder="Vat amount"
-                        @bind-Value="_newOrderLineModel.VatAmount">
-                    </InputNumber>
-                </td>
+                <td></td>
                 <td>
                     <button name="add-order-line" class="btn btn-outline-secondary" type="submit">Add</button>
                 </td>
@@ -100,6 +86,10 @@
     private CreateOrderLineModel _newOrderLineModel = new CreateOrderLineModel();
 
     private void OnAddOrderLine() {
+        decimal totalAmount = _newOrderLineModel.Quantity * _newOrderLineModel.UnitPrice;
+        decimal vatAmount = (_newOrderLineModel.VatRate / (100 + _newOrderLineModel.VatRate)) * totalAmount;
+        _newOrderLineModel.VatAmount = Math.Round(vatAmount, 2);
+        _newOrderLineModel.TotalAmount = totalAmount;
         OrderLines.Add(_newOrderLineModel);
 
         _newOrderLineModel = new CreateOrderLineModel();
