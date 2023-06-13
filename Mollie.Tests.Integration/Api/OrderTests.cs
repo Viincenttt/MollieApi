@@ -96,6 +96,23 @@ public class OrderTests : BaseMollieApiTestClass {
         result.Amount.Should().Be(orderRequest.Amount);
         result.OrderNumber.Should().Be(orderRequest.OrderNumber);
     }
+    
+    [DefaultRetryFact]
+    public async Task CreateOrderAsync_WithBilliePaymentMethod_OrderIsCreated() {
+        // When: we create a order request and specify a single payment method
+        OrderRequest orderRequest = this.CreateOrder();
+        orderRequest.Method = PaymentMethod.Billie;
+
+        // When: We send the order request to Mollie
+        OrderResponse result = await this._orderClient.CreateOrderAsync(orderRequest);
+
+        // Then: Make sure we get a valid response
+        orderRequest.Method.Should().Be(PaymentMethod.Billie);
+        orderRequest.Methods.First().Should().Be(PaymentMethod.Billie);
+        result.Should().NotBeNull();
+        result.Amount.Should().Be(orderRequest.Amount);
+        result.OrderNumber.Should().Be(orderRequest.OrderNumber);
+    }
 
     [DefaultRetryFact]
     public async Task GetOrderAsync_OrderIsCreated_OrderCanBeRetrieved() {
@@ -315,7 +332,7 @@ public class OrderTests : BaseMollieApiTestClass {
         // Then
         response.Items.Should().HaveCountLessThanOrEqualTo(numberOfOrders);
     }
-        
+
     private OrderRequest CreateOrder() {
         return new OrderRequest() {
             Amount = new Amount(Currency.EUR, "100.00"),
