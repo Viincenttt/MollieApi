@@ -104,6 +104,13 @@ public class OrderTests : BaseMollieApiTestClass {
         orderRequest.Method = PaymentMethod.Billie;
         orderRequest.BillingAddress.Country = "DE"; // Billie only works in Germany
         orderRequest.BillingAddress.OrganizationName = "Mollie"; // Billie requires a organization name
+        orderRequest.Payment = new BillieSpecificParameters {
+            Company = new CompanyObject {
+                EntityType = "limited-company",
+                RegistrationNumber = "registration-number",
+                VatNumber = "vat-number"
+            }
+        };
 
         // When: We send the order request to Mollie
         OrderResponse result = await this._orderClient.CreateOrderAsync(orderRequest);
