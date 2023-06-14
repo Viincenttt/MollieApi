@@ -102,6 +102,8 @@ public class OrderTests : BaseMollieApiTestClass {
         // When: we create a order request and specify a single payment method
         OrderRequest orderRequest = this.CreateOrder();
         orderRequest.Method = PaymentMethod.Billie;
+        orderRequest.BillingAddress.Country = "DE"; // Billie only works in Germany
+        orderRequest.BillingAddress.OrganizationName = "Mollie"; // Billie requires a organization name
 
         // When: We send the order request to Mollie
         OrderResponse result = await this._orderClient.CreateOrderAsync(orderRequest);
