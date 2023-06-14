@@ -108,12 +108,13 @@ In the past, this library used enums that were decorated with the EnumMemberAttr
 - Mollie.Api.Models.Refund.RefundStatus
 - Mollie.Api.Models.Settlement.SettlementStatus
 - Mollie.Api.Models.Subscription.SubscriptionStatus
-- Mollie.Api.Models.Payment.Locale
-- Mollie.Api.Models.Currency
 - Mollie.Api.Models.Connect.AppPermissions
 - Mollie.Api.Models.Onboarding.Response.OnboardingStatus
 - Mollie.Api.Models.Balance.Response.BalanceReport.ReportGrouping
 - Mollie.Api.Models.Balance.Response.BalanceTransaction.BalanceTransactionContextType
+- Mollie.Api.Models.Payment.Locale
+- Mollie.Api.Models.Currency
+- Mollie.Api.Models.CompanyEntityType
 
 You can use these classes similar to how you use enums. For example, when creating a new payment, you can do the following:
 ```c#
@@ -563,6 +564,7 @@ The full list of payment specific parameters classes is:
 - PaySafeCardSpecificParameters
 - Przelewy24SpecificParameters
 - SepaDirectDebitSpecificParameters
+- BillieSpecificParameters
 
 For example, if you'd want to create a order with bank transfer payment:
 ```c#
