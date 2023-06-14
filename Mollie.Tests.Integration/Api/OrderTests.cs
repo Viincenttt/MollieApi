@@ -106,7 +106,7 @@ public class OrderTests : BaseMollieApiTestClass {
         orderRequest.BillingAddress.OrganizationName = "Mollie"; // Billie requires a organization name
         orderRequest.Payment = new BillieSpecificParameters {
             Company = new CompanyObject {
-                EntityType = "limited-company",
+                EntityType = CompanyEntityType.LimitedCompany,
                 RegistrationNumber = "registration-number",
                 VatNumber = "vat-number"
             }
