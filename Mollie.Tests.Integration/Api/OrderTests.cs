@@ -85,6 +85,18 @@ public class OrderTests : BaseMollieApiTestClass {
         new List<object[]>
         {
             new object[] { 
+                new KlarnaSpecificParameters<object> {
+                    ExtraMerchantData = new {
+                        payment_history_simple = new[] {
+                            new {
+                                unique_account_identifier = "Adam Adamsson",
+                                paid_before = true
+                            }
+                        }
+                    }
+                }
+            },
+            new object[] { 
                 new BillieSpecificParameters {
                     Company = new CompanyObject {
                         EntityType = CompanyEntityType.LimitedCompany,
@@ -92,7 +104,7 @@ public class OrderTests : BaseMollieApiTestClass {
                         VatNumber = "vat-number"
                     }
                 }
-            },
+            },            
             new object[] { 
                 new GiftcardSpecificParameters() {
                     Issuer = "boekenbon",
@@ -119,7 +131,7 @@ public class OrderTests : BaseMollieApiTestClass {
                 new SepaDirectDebitSpecificParameters {
                     ConsumerAccount = "Consumer account"
                 }
-            },
+            }
         };
     
     [DefaultRetryTheory]
