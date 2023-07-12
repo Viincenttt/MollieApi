@@ -554,17 +554,15 @@ If you want to create a order with a specific payment parameters you can provide
 
 The full list of payment specific parameters classes is:
 - ApplePaySpecificParameters
-- BankTransferSpecificParameters
-- BitcoinSpecificParameters
+- BillieSpecificParameters
 - CreditCardSpecificParameters
 - GiftcardSpecificParameters
 - IDealSpecificParameters
 - KbcSpecificParameters
-- PayPalSpecificParameters
+- KlarnaSpecificParameters
 - PaySafeCardSpecificParameters
-- Przelewy24SpecificParameters
 - SepaDirectDebitSpecificParameters
-- BillieSpecificParameters
+
 
 For example, if you'd want to create a order with bank transfer payment:
 ```c#
