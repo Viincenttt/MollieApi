@@ -11,6 +11,7 @@ using Mollie.Api.Models.Order.Request.ManageOrderLines;
 using Mollie.Api.Models.Order.Request.PaymentSpecificParameters;
 using Mollie.Api.Models.Payment;
 using Mollie.Tests.Integration.Framework;
+using Xunit;
 
 namespace Mollie.Tests.Integration.Api; 
 
@@ -80,13 +81,57 @@ public class OrderTests : BaseMollieApiTestClass {
         result.OrderNumber.Should().Be(orderRequest.OrderNumber);
     }
 
-    [DefaultRetryFact]
-    public async Task CreateOrderAsync_WithPaymentSpecificParameters_OrderIsCreated() {
+    public static IEnumerable<object[]> PaymentSpecificParameters =>
+        new List<object[]>
+        {
+            new object[] { 
+                new BillieSpecificParameters {
+                    Company = new CompanyObject {
+                        EntityType = CompanyEntityType.LimitedCompany,
+                        RegistrationNumber = "registration-number",
+                        VatNumber = "vat-number"
+                    }
+                }
+            },
+            new object[] { 
+                new GiftcardSpecificParameters() {
+                    Issuer = "boekenbon",
+                    VoucherNumber = "voucher-number",
+                    VoucherPin = "1234"
+                }
+            },
+            new object[] { 
+                new IDealSpecificParameters {
+                    Issuer = "ideal_INGBNL2A"
+                }
+            },
+            new object[] { 
+                new KbcSpecificParameters {
+                    Issuer = "ideal_INGBNL2A"
+                }
+            },
+            new object[] { 
+                new PaySafeCardSpecificParameters {
+                    CustomerReference = "customer-reference"
+                }
+            },
+            new object[] { 
+                new SepaDirectDebitSpecificParameters {
+                    ConsumerAccount = "Consumer account"
+                }
+            },
+        };
+    
+    [DefaultRetryTheory]
+    [MemberData(nameof(PaymentSpecificParameters))]
+    public async Task CreateOrderAsync_WithPaymentSpecificParameters_OrderIsCreated(
+        PaymentSpecificParameters paymentSpecificParameters) {
+        
         // If: we create a order request with payment specific parameters
         OrderRequest orderRequest = this.CreateOrder();
-        orderRequest.Payment = new IDealSpecificParameters() {
-            Issuer = "ideal_INGBNL2A"
-        };
+        orderRequest.BillingAddress.Country = "DE"; // Billie only works in Germany
+        orderRequest.BillingAddress.OrganizationName = "Mollie"; // Billie requires a organization name
+        orderRequest.Payment = paymentSpecificParameters;
 
         // When: We send the order request to Mollie
         OrderResponse result = await this._orderClient.CreateOrderAsync(orderRequest);
@@ -97,32 +142,6 @@ public class OrderTests : BaseMollieApiTestClass {
         result.OrderNumber.Should().Be(orderRequest.OrderNumber);
     }
     
-    [DefaultRetryFact]
-    public async Task CreateOrderAsync_WithBilliePaymentMethod_OrderIsCreated() {
-        // When: we create a order request and specify a single payment method
-        OrderRequest orderRequest = this.CreateOrder();
-        orderRequest.Method = PaymentMethod.Billie;
-        orderRequest.BillingAddress.Country = "DE"; // Billie only works in Germany
-        orderRequest.BillingAddress.OrganizationName = "Mollie"; // Billie requires a organization name
-        orderRequest.Payment = new BillieSpecificParameters {
-            Company = new CompanyObject {
-                EntityType = CompanyEntityType.LimitedCompany,
-                RegistrationNumber = "registration-number",
-                VatNumber = "vat-number"
-            }
-        };
-
-        // When: We send the order request to Mollie
-        OrderResponse result = await this._orderClient.CreateOrderAsync(orderRequest);
-
-        // Then: Make sure we get a valid response
-        orderRequest.Method.Should().Be(PaymentMethod.Billie);
-        orderRequest.Methods.First().Should().Be(PaymentMethod.Billie);
-        result.Should().NotBeNull();
-        result.Amount.Should().Be(orderRequest.Amount);
-        result.OrderNumber.Should().Be(orderRequest.OrderNumber);
-    }
-
     [DefaultRetryFact]
     public async Task GetOrderAsync_OrderIsCreated_OrderCanBeRetrieved() {
         // If: we create a new order
