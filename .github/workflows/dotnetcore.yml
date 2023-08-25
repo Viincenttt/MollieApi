@@ -16,13 +16,13 @@ jobs:
     - name: Install dependencies
       run: dotnet restore
     - name: Build unit test project
-      run: dotnet build Mollie.Tests.Unit --configuration Release --no-restore
+      run: dotnet build tests/Mollie.Tests.Unit --configuration Release --no-restore
     - name: Run unit tests
-      run: dotnet test Mollie.Tests.Unit --no-restore --verbosity normal
+      run: dotnet test tests/Mollie.Tests.Unit --no-restore --verbosity normal
     - name: Build integration test project
-      run: dotnet build Mollie.Tests.Integration --configuration Release --no-restore
+      run: dotnet build tests/Mollie.Tests.Integration --configuration Release --no-restore
     - name: Run integration tests
-      run: dotnet test Mollie.Tests.Integration --filter "TestCategory!=AccessKeyIntegrationTest" --no-restore --verbosity normal 
+      run: dotnet test tests/Mollie.Tests.Integration --filter "TestCategory!=AccessKeyIntegrationTest" --no-restore --verbosity normal 
       env:
         Mollie__ApiKey: ${{ secrets.Mollie__ApiKey }}
         Mollie__AccessKey: ${{ secrets.Mollie__AccessKey }}
