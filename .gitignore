@@ -279,7 +279,6 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
-Mollie.Api/Client/ProfileClient.cs
-bundles
-Mollie.Tests.Integration/secrets.json
-.idea/*
+
+# Custom
+**/.idea/

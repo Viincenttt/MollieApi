@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Mollie.Api\Mollie.Api.csproj" />
+    <ProjectReference Include="..\..\src\Mollie.Api\Mollie.Api.csproj" />
   </ItemGroup>
 
 </Project>

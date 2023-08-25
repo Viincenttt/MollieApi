@@ -3,13 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29920.165
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mollie.Api", "Mollie.Api\Mollie.Api.csproj", "{DBA9DC3A-D562-4D15-A7FB-B0A1DC3E517B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mollie.Api", "src/Mollie.Api\Mollie.Api.csproj", "{DBA9DC3A-D562-4D15-A7FB-B0A1DC3E517B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mollie.Tests.Integration", "Mollie.Tests.Integration\Mollie.Tests.Integration.csproj", "{27DA8118-1976-4B2D-B578-BC3EB91FC39F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mollie.Tests.Integration", "tests/Mollie.Tests.Integration\Mollie.Tests.Integration.csproj", "{27DA8118-1976-4B2D-B578-BC3EB91FC39F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mollie.Tests.Unit", "Mollie.Tests.Unit\Mollie.Tests.Unit.csproj", "{EA502BEF-EA42-45D0-BCC8-F0C28C7A4C41}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mollie.Tests.Unit", "tests/Mollie.Tests.Unit\Mollie.Tests.Unit.csproj", "{EA502BEF-EA42-45D0-BCC8-F0C28C7A4C41}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mollie.WebApplication.Blazor", "Mollie.WebApplication.Blazor\Mollie.WebApplication.Blazor.csproj", "{1F973898-64BC-4272-AB29-6E974AA83375}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mollie.WebApplication.Blazor", "samples\Mollie.WebApplication.Blazor\Mollie.WebApplication.Blazor.csproj", "{ECE7EA04-09CA-44A4-8CD4-622A4631BF85}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{17397A2E-2BA0-418C-928E-D4E8511A3C67}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{6E02EF59-F625-492C-9950-B8AEF7852D65}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,15 +33,20 @@ Global
 		{EA502BEF-EA42-45D0-BCC8-F0C28C7A4C41}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA502BEF-EA42-45D0-BCC8-F0C28C7A4C41}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA502BEF-EA42-45D0-BCC8-F0C28C7A4C41}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1F973898-64BC-4272-AB29-6E974AA83375}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1F973898-64BC-4272-AB29-6E974AA83375}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1F973898-64BC-4272-AB29-6E974AA83375}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1F973898-64BC-4272-AB29-6E974AA83375}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECE7EA04-09CA-44A4-8CD4-622A4631BF85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECE7EA04-09CA-44A4-8CD4-622A4631BF85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECE7EA04-09CA-44A4-8CD4-622A4631BF85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECE7EA04-09CA-44A4-8CD4-622A4631BF85}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EA1EE69B-285E-4518-8936-DB1278A71882}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{27DA8118-1976-4B2D-B578-BC3EB91FC39F} = {17397A2E-2BA0-418C-928E-D4E8511A3C67}
+		{EA502BEF-EA42-45D0-BCC8-F0C28C7A4C41} = {17397A2E-2BA0-418C-928E-D4E8511A3C67}
+		{ECE7EA04-09CA-44A4-8CD4-622A4631BF85} = {6E02EF59-F625-492C-9950-B8AEF7852D65}
 	EndGlobalSection
 EndGlobal
