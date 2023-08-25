@@ -39,18 +39,18 @@ Install-Package Mollie.Api
 ```
 
 ### Supported .NET versions
-This library is built using .NET standard 1.2. This means that the package supports the following .NET implementations:
+This library is built using .NET standard 2.0. This means that the package supports the following .NET implementations:
 | .NET implementation  | Version support |
 | ------------- | ------------- |
-| .NET and .NET Core  | 1.0, 1.1, 2.0, 2.1, 2.2, 3.0, 3.1, 5.0, 6.0, 7.0  |
-| .NET Framework  | 4.5.1, 4.5.2, 4.6, 4.6.1, 4.6.2, 4.7, 4.7.1, 4.7.2, 4.8  |
-| Mono | 4.6, 5.4, 6.4  |
-| Universal Windows Platform | 8.1, 10.0, 10.0.16299 |
-| Xamarin.iOS | 10.0, 10.14, 12.16  |
-| Xamarin.Mac | 3.0, 3.8, 5.16  |
-| Xamarin.Android | 7.0, 8.0, 10.0  |
+| .NET and .NET Core | 2.0, 2.1, 2.2, 3.0, 3.1, 5.0, 6.0, 7.0  |
+| .NET Framework  | 4.6.1, 4.6.2, 4.7, 4.7.1, 4.7.2, 4.8, 4.8.1  |
+| Mono | 5.4, 6.4  |
+| Universal Windows Platform | 10.0.16299, TBD |
+| Xamarin.iOS | 10.14, 12.16 |
+| Xamarin.Mac | 3.8, 5.16 |
+| Xamarin.Android | 8.0, 10.0 |
 
-Source: https://docs.microsoft.com/en-us/dotnet/standard/net-standard?tabs=net-standard-2-1
+Source: https://docs.microsoft.com/en-us/dotnet/standard/net-standard?tabs=net-standard-2-0
 
 ### Example projects
 An example ASP.NET Core web application project is included. In order to use this project you have to set your Mollie API key in the appsettings.json file. The example project demonstrates the Payment API, Mandate API, Customer API and Subscription API. 
