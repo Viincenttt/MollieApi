@@ -7,7 +7,7 @@ namespace Mollie.Tests.Integration.Framework {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")
-                .AddJsonFile("secrets.json", true)
+                .AddUserSecrets(typeof(ConfigurationFactory).Assembly)
                 .AddEnvironmentVariables();
 
             var configuration = builder.Build();
