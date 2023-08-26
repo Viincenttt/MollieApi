@@ -204,21 +204,7 @@ public class OrderTests : BaseMollieApiTestClass {
         updatedOrder.OrderNumber.Should().Be(orderUpdateRequest.OrderNumber);
         updatedOrder.BillingAddress.City.Should().Be(orderUpdateRequest.BillingAddress.City);
     }
-        
-    [DefaultRetryFact(Skip = "This integration test is now failing consistently. Investigating this issue together with Mollie.")]
-    public async Task CancelOrderAsync_OrderIsCanceled_OrderHasCanceledStatus() {
-        // If: we create a new order
-        OrderRequest orderRequest = this.CreateOrder();
-        OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
-
-        // When: We attempt to cancel the order and then retrieve it
-        await this._orderClient.CancelOrderAsync(createdOrder.Id);
-        OrderResponse canceledOrder = await this._orderClient.GetOrderAsync(createdOrder.Id);
-
-        // Then: The order status should be cancelled
-        canceledOrder.Status.Should().Be(OrderStatus.Canceled);
-    }
-
+      
     [DefaultRetryFact]
     public async Task UpdateOrderLinesAsync_WhenOrderLineIsUpdated_UpdatedPropertiesCanBeRetrieved() {
         // If: we create a new order
