@@ -1,12 +1,15 @@
 using Mollie.Api;
-using Mollie.Api.Options;
+using Mollie.Api.Framework;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddMollieApi(builder.Configuration.GetSection("Mollie").Get<MollieOptions>());
+builder.Services.AddMollieApi(options => {
+    options.ApiKey = builder.Configuration["Mollie:ApiKey"];
+    options.RetryPolicy = MollieHttpRetryPolicies.TransientHttpErrorRetryPolicy();
+});
 
 var app = builder.Build();
 

@@ -5,14 +5,16 @@ using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Options;
 using Polly;
-using Polly.Extensions.Http;
 
 namespace Mollie.Api {
     public static class DependencyInjection {
         public static IServiceCollection AddMollieApi(
             this IServiceCollection services, 
-            MollieOptions mollieOptions, 
+            Action<MollieOptions> mollieOptionsDelegate,
             IAsyncPolicy<HttpResponseMessage> retryPolicy = null) {
+
+            MollieOptions mollieOptions = new MollieOptions();
+            mollieOptionsDelegate.Invoke(mollieOptions);
             
             RegisterMollieApiClient<IBalanceClient, BalanceClient>(services, httpClient => 
                 new BalanceClient(mollieOptions.ApiKey, httpClient), retryPolicy);
