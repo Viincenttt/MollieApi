@@ -2,16 +2,16 @@
 using System.Globalization;
 using System.Threading;
 using Microsoft.Extensions.Configuration;
+using Mollie.Api.Options;
 
 namespace Mollie.Tests.Integration.Framework {
     public abstract class BaseMollieApiTestClass {
         protected readonly string DefaultRedirectUrl = "http://mysite.com";
         protected readonly string DefaultWebhookUrl = "http://mysite.com/webhook";
-        protected readonly MollieIntegationTestConfiguration Configuration = ConfigurationFactory.GetConfiguration().GetSection("Mollie").Get<MollieIntegationTestConfiguration>();
+        protected readonly MollieOptions Configuration = ConfigurationFactory.GetConfiguration().GetSection("Mollie").Get<MollieOptions>();
         protected string ApiKey => this.Configuration.ApiKey;
         protected string ClientId => this.Configuration.ClientId ?? "client-id";
         protected string ClientSecret => this.Configuration.ClientSecret ?? "client-secret";
-        protected string AccessKey => this.Configuration.AccessKey ?? "access-key";
 
         protected BaseMollieApiTestClass() {
             this.EnsureTestApiKey(this.ApiKey);

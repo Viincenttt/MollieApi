@@ -38,19 +38,22 @@ The easiest way to install the Mollie Api library is to use the [Nuget Package](
 Install-Package Mollie.Api
 ```
 
-### Supported .NET versions
-This library is built using .NET standard 2.0. This means that the package supports the following .NET implementations:
-| .NET implementation  | Version support |
-| ------------- | ------------- |
-| .NET and .NET Core | 2.0, 2.1, 2.2, 3.0, 3.1, 5.0, 6.0, 7.0  |
-| .NET Framework  | 4.6.1, 4.6.2, 4.7, 4.7.1, 4.7.2, 4.8, 4.8.1  |
-| Mono | 5.4, 6.4  |
-| Universal Windows Platform | 10.0.16299, TBD |
-| Xamarin.iOS | 10.14, 12.16 |
-| Xamarin.Mac | 3.8, 5.16 |
-| Xamarin.Android | 8.0, 10.0 |
+### Creating a API client object
+Every API has it's own API client class. For example: PaymentClient, PaymentMethodClient, CustomerClient, MandateClient, SubscriptionClient, IssuerClient and RefundClient classes. All of these API client classes also have their own interface. 
 
-Source: https://docs.microsoft.com/en-us/dotnet/standard/net-standard?tabs=net-standard-2-0
+These client API classes allow you to send and receive requests to the Mollie REST webservice. To create a API client class, you simple instantiate a new object for the API you require. For example, if you want to create new payments, you can use the PaymentClient class. 
+```c#
+IPaymentClient paymentClient = new PaymentClient("{yourApiKey}");
+```
+
+### Dependency injection
+If you'd like to add the Mollie API's to your application using dependency injection, the project has a extension method you can use to register all the Mollie API clients, so you can inject them. 
+```c#
+builder.Services.AddMollieApi(options => {
+    options.ApiKey = builder.Configuration["Mollie:ApiKey"];
+    options.RetryPolicy = MollieHttpRetryPolicies.TransientHttpErrorRetryPolicy();
+});
+```
 
 ### Example projects
 An example ASP.NET Core web application project is included. In order to use this project you have to set your Mollie API key in the appsettings.json file. The example project demonstrates the Payment API, Mandate API, Customer API and Subscription API. 
@@ -76,13 +79,19 @@ This library currently supports the following API's:
 - Balances API
 - Terminal API
 
-### Creating a API client object
-Every API has it's own API client class. For example: PaymentClient, PaymentMethodClient, CustomerClient, MandateClient, SubscriptionClient, IssuerClient and RefundClient classes. All of these API client classes also have their own interface. 
+### Supported .NET versions
+This library is built using .NET standard 2.0. This means that the package supports the following .NET implementations:
+| .NET implementation  | Version support |
+| ------------- | ------------- |
+| .NET and .NET Core | 2.0, 2.1, 2.2, 3.0, 3.1, 5.0, 6.0, 7.0  |
+| .NET Framework  | 4.6.1, 4.6.2, 4.7, 4.7.1, 4.7.2, 4.8, 4.8.1  |
+| Mono | 5.4, 6.4  |
+| Universal Windows Platform | 10.0.16299, TBD |
+| Xamarin.iOS | 10.14, 12.16 |
+| Xamarin.Mac | 3.8, 5.16 |
+| Xamarin.Android | 8.0, 10.0 |
 
-These client API classes allow you to send and receive requests to the Mollie REST webservice. To create a API client class, you simple instantiate a new object for the API you require. For example, if you want to create new payments, you can use the PaymentClient class. 
-```c#
-IPaymentClient paymentClient = new PaymentClient("{yourApiKey}");
-```
+Source: https://docs.microsoft.com/en-us/dotnet/standard/net-standard?tabs=net-standard-2-0
 
 ### List of constant value strings
 In the past, this library used enums that were decorated with the EnumMemberAttribute for static values that were defined in the Mollie documentation. We have now moved away from this idea and are using constant strings everywhere. The reason for this is that enum values often broke when Mollie added new values to their API. This means that I had to release a new version every time when Mollie added a new value and all library consumers had to update their version. The following static classes are available with const string values that you can use to set and compare values in your code:
@@ -127,18 +136,6 @@ PaymentRequest paymentRequest = new PaymentRequest() {
 ```
 ### Testing
 During the process of building your integration, it is important to properly test it. You can access the test mode of the Mollie API in two ways: by using the Test API key, or, if you are using organization access tokens or app tokens, by providing the testmode parameter in your API request. If you are using the Test API key, you do not have to set the testmode parameter anywhere. Any entity you create, retrieve, update or delete using a Test API key can only interact with the test system of Mollie, which is completely isolated from the production environment. 
-
-### Dependency injection
-If you'd like to add the Mollie API's to your application using dependency injection, an example is provided below:
-```c#
-// Retrieve a configuration object from the appsettings. The configuration object should contain the API key
-MollieConfiguration mollieConfiguration = configuration.GetSection("Mollie").Get<MollieConfiguration>();
-
-// Register the API clients that you would like to use in your application
-services.AddHttpClient<IPaymentClient, PaymentClient>(httpClient => new PaymentClient(mollieConfiguration.ApiKey, httpClient));
-services.AddHttpClient<ICustomerClient, CustomerClient>(httpClient => new CustomerClient(mollieConfiguration.ApiKey, httpClient));
-// ...etc
-```
 
 ### Idempotency and retrying requests
 When issuing requests to an API, there is always a small chance of issues on either side of the connection. For example, the API may not respond to the request within a reasonable timeframe. Your server will then consider the request to have ‘timed out’. However, your request may still arrive at the API eventually and get executed, despite your server considering it a timeout.
