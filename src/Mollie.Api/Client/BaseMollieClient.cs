@@ -11,12 +11,14 @@ using Mollie.Api.Framework;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client {
-    public abstract class BaseMollieClient {
+    public abstract class BaseMollieClient : IDisposable {
         public const string ApiEndPoint = "https://api.mollie.com/v2/";
         private readonly string _apiEndpoint = ApiEndPoint;
         private readonly string _apiKey;
         private readonly HttpClient _httpClient;
         private readonly JsonConverterService _jsonConverterService;
+
+        private readonly bool _createdHttpClient = false;
 
         protected BaseMollieClient(string apiKey, HttpClient httpClient = null) {
             if (string.IsNullOrWhiteSpace(apiKey)) {
@@ -24,6 +26,7 @@ namespace Mollie.Api.Client {
             }
 
             this._jsonConverterService = new JsonConverterService();
+            this._createdHttpClient = httpClient == null;
             this._httpClient = httpClient ?? new HttpClient();
             this._apiKey = apiKey;
         }
@@ -31,6 +34,7 @@ namespace Mollie.Api.Client {
         protected BaseMollieClient(HttpClient httpClient = null, string apiEndpoint = ApiEndPoint) {
             this._apiEndpoint = apiEndpoint;
             this._jsonConverterService = new JsonConverterService();
+            this._createdHttpClient = httpClient == null;
             this._httpClient = httpClient ?? new HttpClient();
         }
 
@@ -152,6 +156,13 @@ namespace Mollie.Api.Client {
         protected void ValidateRequiredUrlParameter(string parameterName, string parameterValue) {
             if (string.IsNullOrWhiteSpace(parameterValue)) {
                 throw new ArgumentException($"Required URL argument '{parameterName}' is null or empty");
+            }
+        }
+
+        public void Dispose()
+        {
+            if (this._createdHttpClient) {
+                _httpClient.Dispose();
             }
         }
     }
