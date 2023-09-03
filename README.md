@@ -38,21 +38,18 @@ The easiest way to install the Mollie Api library is to use the [Nuget Package](
 Install-Package Mollie.Api
 ```
 
-### Creating a API client object
-Every API has it's own API client class. For example: PaymentClient, PaymentMethodClient, CustomerClient, MandateClient, SubscriptionClient, IssuerClient and RefundClient classes. All of these API client classes also have their own interface. 
-
-These client API classes allow you to send and receive requests to the Mollie REST webservice. To create a API client class, you simple instantiate a new object for the API you require. For example, if you want to create new payments, you can use the PaymentClient class. 
-```c#
-IPaymentClient paymentClient = new PaymentClient("{yourApiKey}");
-```
-
-### Dependency injection
-If you'd like to add the Mollie API's to your application using dependency injection, the project has a extension method you can use to register all the Mollie API clients, so you can inject them. 
+### Creating a API client
+Every API has it's own API client class. For example: PaymentClient, PaymentMethodClient, CustomerClient, MandateClient, SubscriptionClient, IssuerClient and RefundClient classes. All of these API client classes also have their own interface. The recommended way to instantiate API clients, is to use the built in dependency injection extension method:
 ```c#
 builder.Services.AddMollieApi(options => {
     options.ApiKey = builder.Configuration["Mollie:ApiKey"];
     options.RetryPolicy = MollieHttpRetryPolicies.TransientHttpErrorRetryPolicy();
 });
+```
+
+Alternatively, you can create the API client manually using the constructor. All API clients require a api/oauth key in the constructor and you can also pass in an optional `HttpClient` object. If you do not pass a `HttpClient` object, one will be created and disposed for you.
+```c#
+using IPaymentClient paymentClient = new PaymentClient("{yourApiKey}", new HttpClient());
 ```
 
 ### Example projects
@@ -169,7 +166,7 @@ public static class MollieApiClientServiceExtensions {
 ## 2. Payment API
 ### Creating a payment
 ```c#
-IPaymentClient paymentClient = new PaymentClient("{yourApiKey}");
+using IPaymentClient paymentClient = new PaymentClient("{yourApiKey}");
 PaymentRequest paymentRequest = new PaymentRequest() {
     Amount = new Amount(Currency.EUR, 100.00m),
     Description = "Test payment of the example project",
@@ -195,7 +192,7 @@ The full list of payment specific request classes is:
 
 For example, if you'd want to create a bank transfer payment, you can instantiate a new BankTransferPaymentRequest:
 ```c#
-IPaymentClient paymentClient = new PaymentClient("{yourApiKey}");
+using IPaymentClient paymentClient = new PaymentClient("{yourApiKey}");
 BankTransferPaymentRequest paymentRequest = new BankTransferPaymentRequest();
 // Set bank transfer specific BillingEmail property
 paymentRequest.BillingEmail = "{billingEmail}";
@@ -211,7 +208,7 @@ PaymentRequest paymentRequest = new PaymentRequest() {
 	RedirectUrl = "http://www.mollie.com",
 	Method = PaymentMethod.Ideal
 };
-IPaymentClient paymentClient = new PaymentClient("{yourApiKey}");
+using IPaymentClient paymentClient = new PaymentClient("{yourApiKey}");
 PaymentResponse result = await this._paymentClient.CreatePaymentAsync(paymentRequest, includeQrCode: true);
 IdealPaymentResponse idealPaymentResult = result as IdealPaymentResponse;
 IdealPaymentResponseDetails idealPaymentDetails = idealPaymentResult.Details;
@@ -235,7 +232,7 @@ PaymentRequest paymentRequest = new PaymentRequest() {
 
 ### Retrieving a payment by id
 ```c#
-IPaymentClient paymentClient = new PaymentClient("{yourApiKey}");
+using IPaymentClient paymentClient = new PaymentClient("{yourApiKey}");
 PaymentResponse result = await paymentClient.GetPaymentAsync({paymentId});
 ```
 
@@ -261,7 +258,7 @@ The full list of payment specific response classes is:
 ### Updating a payment
 Some properties of a payment can be updated after the payment has been created. 
 ```c#
-IPaymentClient paymentClient = new PaymentClient("{yourApiKey}");
+using IPaymentClient paymentClient = new PaymentClient("{yourApiKey}");
 PaymentUpdateRequest paymentUpdateRequest = new PaymentUpdateRequest() {
 	Description = "Updated description",
 	Metadata = "My metadata"
@@ -291,7 +288,7 @@ PaymentRequest paymentRequest = new PaymentRequest() {
 paymentRequest.SetMetadata(metadataRequest);
 
 // When we retrieve the payment response, we can convert our metadata back to our custom class
-IPaymentClient paymentClient = new PaymentClient("{yourApiKey}");
+using IPaymentClient paymentClient = new PaymentClient("{yourApiKey}");
 PaymentResponse result = await paymentClient.CreatePaymentAsync(paymentRequest);
 CustomMetadataClass metadataResponse = result.GetMetadata<CustomMetadataClass>();
 ```
@@ -299,7 +296,7 @@ CustomMetadataClass metadataResponse = result.GetMetadata<CustomMetadataClass>()
 ### Retrieving a list of payments
 Mollie allows you to set offset and count properties so you can paginate the list. The offset and count parameters are optional. The maximum number of payments you can request in a single roundtrip is 250. 
 ```c#
-IPaymentClient paymentClient = new PaymentClient("{yourApiKey}");
+using IPaymentClient paymentClient = new PaymentClient("{yourApiKey}");
 ListResponse<PaymentResponse> response = await paymentClient.GetPaymentListAsync("{offset}", "{count}");
 ```
 
@@ -309,7 +306,7 @@ ListResponse<PaymentResponse> response = await paymentClient.GetPaymentListAsync
 ### Retrieving a list of all payment methods
 Mollie allows you to set offset and count properties so you can paginate the list. The offset and count parameters are optional.
 ```c#
-IPaymentMethodClient _paymentMethodClient = new PaymentMethodClient("{yourApiKey}");
+using IPaymentMethodClient _paymentMethodClient = new PaymentMethodClient("{yourApiKey}");
 ListResponse<PaymentMethodListData> paymentMethodList = await this._paymentMethodClient.GetPaymentMethodListAsync();
 foreach (PaymentMethodResponse paymentMethod in paymentMethodList.Items) {
 	// Your code here
@@ -317,14 +314,14 @@ foreach (PaymentMethodResponse paymentMethod in paymentMethodList.Items) {
 ```
 ### Retrieving a single payment method
 ```c#
-IPaymentMethodClient _paymentMethodClient = new PaymentMethodClient("{yourApiKey}");
+using IPaymentMethodClient _paymentMethodClient = new PaymentMethodClient("{yourApiKey}");
 PaymentMethodResponse paymentMethodResponse = await paymentMethodClient.GetPaymentMethodAsync(PaymentMethod.Ideal);
 ```
 
 ## 4. Refund API
 ### Create a new refund
 ```c#
-IRefundClient refundClient = new RefundClient("{yourApiKey}");
+using IRefundClient refundClient = new RefundClient("{yourApiKey}");
 RefundResponse refundResponse = await this._refundClient.CreateRefundAsync("{paymentId}", new RefundRequest() {
 	Amount = new Amount(Currency.EUR, "100"),
 	Description = "{description}"
@@ -333,20 +330,20 @@ RefundResponse refundResponse = await this._refundClient.CreateRefundAsync("{pay
 
 ### Retrieve a refund by payment and refund id
 ```c#
-IRefundClient refundClient = new RefundClient("{yourApiKey}");
+using IRefundClient refundClient = new RefundClient("{yourApiKey}");
 RefundResponse refundResponse = await this._refundClient.GetRefundAsync("{paymentId}", "{refundId}");
 ```
 
 ### Retrieve refund list
 Mollie allows you to set offset and count properties so you can paginate the list. The offset and count parameters are optional.
 ```c#
-IRefundClient refundClient = new RefundClient("{yourApiKey}");
+using IRefundClient refundClient = new RefundClient("{yourApiKey}");
 ListResponse<RefundListData> refundList = await this._refundClient.GetRefundListAsync("{paymentId}", "{offset}", "{count}");
 ```
 
 ### Cancel a refund
 ```c#
-IRefundClient refundClient = new RefundClient("{yourApiKey}");
+using IRefundClient refundClient = new RefundClient("{yourApiKey}");
 await refundClient.CancelRefundAsync("{paymentId}", "{refundId}");
 ```
 
@@ -362,28 +359,28 @@ CustomerRequest customerRequest = new CustomerRequest() {
 	Locale = Locale.nl_NL
 };
 
-ICustomerClient customerClient = new CustomerClient("{yourApiKey}");
+using ICustomerClient customerClient = new CustomerClient("{yourApiKey}");
 CustomerResponse customerResponse = await customerClient.CreateCustomerAsync(customerRequest);
 ```
 
 ### Retrieve a customer by id
 Retrieve a single customer by its ID.
 ```c#
-ICustomerClient customerClient = new CustomerClient("{yourApiKey}");
+using ICustomerClient customerClient = new CustomerClient("{yourApiKey}");
 CustomerResponse customerResponse = await customerClient.GetCustomerAsync(customerId);
 ```
 
 ### Retrieve customer list
 Mollie allows you to set offset and count properties so you can paginate the list. The offset and count parameters are optional.
 ```c#
-ICustomerClient customerClient = new CustomerClient("{yourApiKey}");
+using ICustomerClient customerClient = new CustomerClient("{yourApiKey}");
 ListResponse<CustomerResponse> response = await customerClient.GetCustomerListAsync();
 ```
 
 ### Updating a customer
 Update an existing customer.
 ```c#
-ICustomerClient customerClient = new CustomerClient("{yourApiKey}");
+using ICustomerClient customerClient = new CustomerClient("{yourApiKey}");
 CustomerRequest updateParameters = new CustomerRequest() {
 	Name = "{customerName}"
 };
@@ -393,7 +390,7 @@ CustomerResponse result = await customerClient.UpdateCustomerAsync("{customerIdT
 ### Deleting a customer
 Delete a customer. All mandates and subscriptions created for this customer will be canceled as well.
 ```c#
-ICustomerClient customerClient = new CustomerClient("{yourApiKey}");
+using ICustomerClient customerClient = new CustomerClient("{yourApiKey}");
 await customerClient.DeleteCustomerAsync("{customerIdToDelete}");
 ```
 
@@ -405,7 +402,7 @@ PaymentRequest paymentRequest = new PaymentRequest() {
     Description = "{description}",
     RedirectUrl = this.DefaultRedirectUrl,
 };
-ICustomerClient customerClient = new CustomerClient("{yourApiKey}");
+using ICustomerClient customerClient = new CustomerClient("{yourApiKey}");
 PaymentResponse result = await customerClient.CreateCustomerPayment({customerId}, paymentRequest);
 ```
 
@@ -416,7 +413,7 @@ Mandates allow you to charge a customer’s credit card or bank account recurren
 ### Creating a new mandate
 Create a mandate for a specific customer.
 ```c#
-IMandateClient mandateclient = new MandateClient("{yourApiKey}");
+using IMandateClient mandateclient = new MandateClient("{yourApiKey}");
 MandateRequest mandateRequest = new SepaDirectDebitMandateRequest() { // Or PayPalMandateRequest
     ConsumerName = "John Smit",
     MandateReference = "My reference",
@@ -428,21 +425,21 @@ MandateResponse mandateResponse = await this._mandateClient.CreateMandateAsync("
 ### Retrieve a mandate by id
 Retrieve a mandate by its ID and its customer’s ID. The mandate will either contain IBAN or credit card details, depending on the type of mandate.
 ```c#
-IMandateClient mandateclient = new MandateClient("{yourApiKey}");
+using IMandateClient mandateclient = new MandateClient("{yourApiKey}");
 MandateResponse mandateResponse = await mandateclient.GetMandateAsync("{customerId}", "{mandateId}");
 ```
 
 ### Retrieve mandate list
 Retrieve all mandates for the given customerId, ordered from newest to oldest. Mollie allows you to set offset and count properties so you can paginate the list. The offset and count parameters are optional.
 ```c#
-IMandateClient mandateclient = new MandateClient("{yourApiKey}");
+using IMandateClient mandateclient = new MandateClient("{yourApiKey}");
 ListResponse<MandateResponse> response = await mandateclient.GetMandateListAsync("{customerId}");
 ```
 
 ### Revoking a mandate
 Revoke a customer’s mandate. You will no longer be able to charge the consumer’s bank account or credit card with this mandate.
 ```c#
-IMandateClient mandateclient = new MandateClient("{yourApiKey}");
+using IMandateClient mandateclient = new MandateClient("{yourApiKey}");
 await mandateclient.RevokeMandate("{customerId}", "{mandateId}");
 ```
 
@@ -454,7 +451,7 @@ With subscriptions, you can schedule recurring payments to take place at regular
 ### Creating a new subscription
 Create a subscription for a specific customer.
 ```c#
-ISubscriptionClient subscriptionClient = new SubscriptionClient("{yourApiKey}");
+using ISubscriptionClient subscriptionClient = new SubscriptionClient("{yourApiKey}");
 SubscriptionRequest subscriptionRequest = new SubscriptionRequest() {
 	Amount = new Amount(Currency.EUR, 100.00m),
 	Times = 5,
@@ -467,42 +464,42 @@ SubscriptionResponse subscriptionResponse = await subscriptionClient.CreateSubsc
 ### Retrieve a subscription by id
 Retrieve a subscription by its ID and its customer’s ID.
 ```c#
-ISubscriptionClient subscriptionClient = new SubscriptionClient("{yourApiKey}");
+using ISubscriptionClient subscriptionClient = new SubscriptionClient("{yourApiKey}");
 SubscriptionResponse subscriptionResponse = await subscriptionClient.GetSubscriptionAsync("{customerId}", "{subscriptionId}");
 ```
 
 ### Cancelling a subscription
 A subscription can be canceled any time by calling DELETE on the resource endpoint.
 ```c#
-ISubscriptionClient subscriptionClient = new SubscriptionClient("{yourApiKey}");
+using ISubscriptionClient subscriptionClient = new SubscriptionClient("{yourApiKey}");
 await subscriptionClient.CancelSubscriptionAsync("{customerId}", "{subscriptionId}");
 ```
 
 ### Retrieve customer subscription list
 Retrieve all subscriptions of a customer.
 ```c#
-ISubscriptionClient subscriptionClient = new SubscriptionClient("{yourApiKey}");
+using ISubscriptionClient subscriptionClient = new SubscriptionClient("{yourApiKey}");
 ListResponse<SubscriptionResponse> response = await subscriptionClient.GetSubscriptionListAsync("{customerId}", null, {numberOfSubscriptions});
 ```
 
 ### Retrieve all subscription list
 Retrieve all subscriptions
 ```c#
-ISubscriptionClient subscriptionClient = new SubscriptionClient("{yourApiKey}");
+using ISubscriptionClient subscriptionClient = new SubscriptionClient("{yourApiKey}");
 ListResponse<SubscriptionResponse> response = await subscriptionClient.GetAllSubscriptionList();
 ```
 
 ### List subscription payments
 Retrieve all payments of a specific subscriptions of a customer.
 ```c#
-ISubscriptionClient subscriptionClient = new SubscriptionClient("{yourApiKey}");
+using ISubscriptionClient subscriptionClient = new SubscriptionClient("{yourApiKey}");
 ListResponse<PaymentResponse> response = await subscriptionClient.GetSubscriptionPaymentListAsync({customerId}, {subscriptionId});
 ```
 
 ### Updating a subscription
 Some fields of a subscription can be updated by calling PATCH on the resource endpoint. Each field is optional. You cannot update a canceled subscription.
 ```c#
-ISubscriptionClient subscriptionClient = new SubscriptionClient("{yourApiKey}");
+using ISubscriptionClient subscriptionClient = new SubscriptionClient("{yourApiKey}");
 SubscriptionUpdateRequest updatedSubscriptionRequest = new SubscriptionUpdateRequest() {
 	Description = $"Updated subscription {DateTime.Now}"
 };
@@ -516,7 +513,7 @@ The Orders API allows you to use Mollie for your order management. Pay after del
 
 ### Creating a new order
 ```c#
-IOrderClient orderClient = new OrderClient("{yourApiKey}");
+using IOrderClient orderClient = new OrderClient("{yourApiKey}");
 OrderRequest orderRequest = new OrderRequest() {
 	Amount = new Amount(Currency.EUR, 100.00m),
 	OrderNumber = "16738",
@@ -563,7 +560,7 @@ The full list of payment specific parameters classes is:
 
 For example, if you'd want to create a order with bank transfer payment:
 ```c#
-IOrderClient orderClient = new OrderClient("{yourApiKey}");
+using IOrderClient orderClient = new OrderClient("{yourApiKey}");
 OrderRequest orderRequest = new OrderRequest() {
 	Amount = new Amount(Currency.EUR, 100.00m),
 	OrderNumber = "16738",
@@ -613,14 +610,14 @@ OrderRequest orderRequest = new OrderRequest() {
 ### Retrieve a order by id
 Retrieve a single order by its ID.
 ```c#
-IOrderClient orderClient = new OrderClient("{yourApiKey}");
+using IOrderClient orderClient = new OrderClient("{yourApiKey}");
 OrderResponse retrievedOrder = await orderClient.GetOrderAsync({orderId});
 ```
 
 ### Update existing order
 This endpoint can be used to update the billing and/or shipping address of an order.
 ```c#
-IOrderClient orderClient = new OrderClient("{yourApiKey}");
+using IOrderClient orderClient = new OrderClient("{yourApiKey}");
 OrderUpdateRequest orderUpdateRequest = new OrderUpdateRequest() {
 	OrderNumber = "1337" 
 };
@@ -630,7 +627,7 @@ OrderResponse updatedOrder = await orderClient.UpdateOrderAsync({orderId}, order
 ### Update order line
 This endpoint can be used to update an order line. Only the lines that belong to an order with status created, pending or authorized can be updated.
 ```c#
-IOrderClient orderClient = new OrderClient("{yourApiKey}");
+using IOrderClient orderClient = new OrderClient("{yourApiKey}");
 OrderLineUpdateRequest updateRequest = new OrderLineUpdateRequest() {
 	Name = "A fluffy bear"
 };
@@ -640,7 +637,7 @@ OrderResponse updatedOrder = await orderClient.UpdateOrderLinesAsync({orderId}, 
 ### Manage order lines
 Use this endpoint to update, cancel, or add one or more order lines. This endpoint sends a single authorisation request that contains the final order lines and amount to the supplier.
 ```c#
-IOrderClient orderClient = new OrderClient("{yourApiKey}");
+using IOrderClient orderClient = new OrderClient("{yourApiKey}");
 ManageOrderLinesRequest manageOrderLinesRequest = new ManageOrderLinesRequest() {
 	Operations = new List<ManageOrderLinesOperation> {
 		new ManageOrderLinesAddOperation() {
@@ -671,14 +668,14 @@ OrderResponse updatedOrder = await this._orderClient.ManageOrderLinesAsync(creat
 ### Retrieve list of orders
 Retrieve all orders.
 ```c#
-IOrderClient orderClient = new OrderClient("{yourApiKey}");
+using IOrderClient orderClient = new OrderClient("{yourApiKey}");
 ListResponse<OrderResponse> response = await orderClient.GetOrderListAsync();
 ```
 
 ### Cancel existing order
 Cancels an existing order. Take a look at the documentation on this endpoint to see which conditions need to apply before an order can be canceled.
 ```c#
-IOrderClient orderClient = new OrderClient("{yourApiKey}");
+using IOrderClient orderClient = new OrderClient("{yourApiKey}");
  OrderResponse canceledOrder = await orderClient.GetOrderAsync({orderId});
 ```
 
@@ -692,7 +689,7 @@ OrderLineCancellationRequest cancellationRequest = new OrderLineCancellationRequ
 		Amount = new Amount("EUR", 5)
 	}
 };
-IOrderClient orderClient = new OrderClient("{yourApiKey}");
+using IOrderClient orderClient = new OrderClient("{yourApiKey}");
 OrderResponse result = await orderClient.CancelOrderLinesAsync({orderId}, cancellationRequest);
 ```
 
@@ -704,7 +701,7 @@ OrderPaymentRequest orderPaymentRequest = new OrderPaymentRequest() {
 	CustomerId = {customerId},
 	MandateId = {mandateId}
 };
-IOrderClient orderClient = new OrderClient("{yourApiKey}");
+using IOrderClient orderClient = new OrderClient("{yourApiKey}");
 OrderResponse result = await orderClient.CreateOrderPaymentAsync({orderId}, orderPaymentRequest);
 ```
 
@@ -719,14 +716,14 @@ OrderRefundRequest orderRefundRequest = new OrderRefundRequest() {
 	},
 	Description = ""
 };
-IOrderClient orderClient = new OrderClient("{yourApiKey}");
+using IOrderClient orderClient = new OrderClient("{yourApiKey}");
 OrderResponse result = await orderClient.CreateOrderRefundAsync({orderId}, orderRefundRequest);
 ```
 
 ### List order refunds
 Retrieve all order refunds.
 ```C#
-IOrderClient orderClient = new OrderClient("{yourApiKey}");
+using IOrderClient orderClient = new OrderClient("{yourApiKey}");
 ListResponse<RefundResponse> result = await orderClient.GetOrderRefundListAsync({orderId});
 ```
 
@@ -734,13 +731,13 @@ ListResponse<RefundResponse> result = await orderClient.GetOrderRefundListAsync(
 ### Get current organization
 Retrieve the currently authenticated organization.
 ```C#
-IOrganizationsClient client = new OrganizationsClient("{yourApiKey}");
+using IOrganizationsClient client = new OrganizationsClient("{yourApiKey}");
 OrganizationResponse result = await client.GetCurrentOrganizationAsync();
 ```
 
 ### Get organization
 ```C#
-IOrganizationsClient client = new OrganizationsClient("{yourApiKey}");
+using IOrganizationsClient client = new OrganizationsClient("{yourApiKey}");
 OrganizationResponse result = await client.GetOrganizationAsync({organizationId});
 ```
 
@@ -748,7 +745,7 @@ OrganizationResponse result = await client.GetOrganizationAsync({organizationId}
 ### Creating a authorization URL
 The Authorize endpoint is the endpoint on Mollie web site where the merchant logs in, and grants authorization to your client application. E.g. when the merchant clicks on the Connect with Mollie button, you should redirect the merchant to the Authorize endpoint.
 ```C#
-IConnectClient client = new ConnectClient({clientId}, {clientSecret});
+using IConnectClient client = new ConnectClient({clientId}, {clientSecret});
 List<string> scopes = new List<string>() { AppPermissions.PaymentsRead };
 string authorizationUrl = client.GetAuthorizationUrl({state}, scopes);
 ```
@@ -756,7 +753,7 @@ string authorizationUrl = client.GetAuthorizationUrl({state}, scopes);
 ### Generate token
 Exchange the auth code received at the Authorize endpoint for an actual access token, with which you can communicate with the Mollie API.
 ```C#
-IConnectClient client = new ConnectClient({clientId}, {clientSecret});
+using IConnectClient client = new ConnectClient({clientId}, {clientSecret});
 TokenRequest request = new TokenRequest({authCode}, {redirectUrl});
 TokenResponse result = client.GetAccessTokenAsync(request);
 ```
@@ -764,7 +761,7 @@ TokenResponse result = client.GetAccessTokenAsync(request);
 ### Revoke token
 Revoke an access- or a refresh token. Once revoked the token can not be used anymore.
 ```C#
-IConnectClient client = new ConnectClient({clientId}, {clientSecret});
+using IConnectClient client = new ConnectClient({clientId}, {clientSecret});
 RevokeTokenRequest revokeTokenRequest = new RevokeTokenRequest() {
 	TokenTypeHint = TokenType.AccessToken,
 	Token = {accessToken}
@@ -781,21 +778,21 @@ ProfileRequest profileRequest = new ProfileRequest() {
 	Website = {website},
 	...
 };
-IProfileClient client = new ProfileClient({yourApiKey});
+using IProfileClient client = new ProfileClient({yourApiKey});
 ProfileResponse response = client.CreateProfileAsync(profileRequest);
 ```
 
 ### Get profile
 Retrieve details of a profile, using the profile’s identifier.
 ```C#
-IProfileClient client = new ProfileClient({yourApiKey});
+using IProfileClient client = new ProfileClient({yourApiKey});
 ProfileResponse profileResponse = await client.GetProfileAsync({profileId});
 ```
 
 ### Get current profile
 Use this API if you are creating a plugin or SaaS application that allows users to enter a Mollie API key, and you want to give a confirmation of the website profile that will be used in your plugin or application.
 ```C#
-IProfileClient client = new ProfileClient({yourApiKey});
+using IProfileClient client = new ProfileClient({yourApiKey});
 ProfileResponse profileResponse = await client.GetCurrentProfileAsync();
 ```
 
@@ -807,14 +804,14 @@ ProfileRequest profileRequest = new ProfileRequest() {
 	Website = {website},
 	...
 };
-IProfileClient client = new ProfileClient({yourApiKey});
+using IProfileClient client = new ProfileClient({yourApiKey});
 ProfileResponse profileResponse = await client.UpdateProfileAsync({profileId}, profileRequest);
 ```
 
 ### Enable or disable payment method
 Enable or disable a payment method on a specific or authenticated profile to use it with payments.
 ```C#
-IProfileClient client = new ProfileClient({yourApiKey});
+using IProfileClient client = new ProfileClient({yourApiKey});
 PaymentMethodResponse paymentMethodResponse = await profileClient.EnablePaymentMethodAsync({profileId}, PaymentMethod.Ideal);
 await profileClient.DisablePaymentMethodAsync({profileId}, PaymentMethod.Ideal);
 ```
@@ -822,7 +819,7 @@ await profileClient.DisablePaymentMethodAsync({profileId}, PaymentMethod.Ideal);
 ### Enable or disable gift card issuer
 Enable or disable a gift card issuer on a specific or authenticated profile to use it with payments.
 ```C#
-IProfileClient client = new ProfileClient({yourApiKey});
+using IProfileClient client = new ProfileClient({yourApiKey});
 const string issuerToToggle = "festivalcadeau";
 EnableGiftCardIssuerResponse paymentMethodResponse = await profileClient.EnableGiftCardIssuerAsync({profileId}, issuerToToggle);
 await profileClient.DisableGiftCardIssuerAsync({profileId}, issuerToToggle);
@@ -840,28 +837,28 @@ PaymentRequest paymentRequest = new PaymentRequest() {
 	Method = PaymentMethod.CreditCard,
 	CaptureMode = CaptureMode.Manual
 };
-IPaymentClient paymentClient = new PaymentClient({yourApiKey});
+using IPaymentClient paymentClient = new PaymentClient({yourApiKey});
 var paymentResponse = await paymentClient.GetPaymentAsync(paymentResponse.Id);
 
 CaptureResponse captureResponse = await _captureClient.CreateCapture(paymentResponse.Id, new CaptureRequest {
 	Amount = new Amount(Currency.EUR, 10m),
 	Description = "capture"
 });
-ICaptureClient captureClient = new CaptureClient({yourApiKey});
+using ICaptureClient captureClient = new CaptureClient({yourApiKey});
 CaptureResponse result = await captureClient.GetCaptureAsync({paymentId}, {captureId});
 ```
 
 ### Get capture
 Retrieve a single capture by its ID. Note the original payment’s ID is needed as well.
 ```C#
-CaptureClient captureClient = new CaptureClient({yourApiKey});
+using ICaptureClient captureClient = new CaptureClient({yourApiKey});
 CaptureResponse result = await captureClient.GetCaptureAsync({paymentId}, {captureId});
 ```
 
 ### List captures
 Retrieve all captures for a certain payment.
 ```C#
-CaptureClient captureClient = new CaptureClient({yourApiKey});
+using ICaptureClient captureClient = new CaptureClient({yourApiKey});
 ListResponse<CaptureResponse> result = await captureClient.GetCapturesListAsync({paymentId});
 ```
 
@@ -869,7 +866,7 @@ ListResponse<CaptureResponse> result = await captureClient.GetCapturesListAsync(
 ### Get onboarding status
 Get the status of onboarding of the authenticated organization.
 ```C#
-OnboardingClient onboardingClient = new OnboardingClient({yourApiKey});
+using IOnboardingClient onboardingClient = new OnboardingClient({yourApiKey});
 OnboardingStatusResponse onboardingResponse = await onboardingClient.GetOnboardingStatusAsync();
 ```
 
@@ -887,7 +884,7 @@ SubmitOnboardingDataRequest submitOnboardingDataRequest = new SubmitOnboardingDa
 		Name = {name}
 	}
 };
-OnboardingClient onboardingClient = new OnboardingClient({yourApiKey});
+using IOnboardingClient onboardingClient = new OnboardingClient({yourApiKey});
 await onboardingClient.SubmitOnboardingDataAsync(submitOnboardingDataRequest);
 ```
 
@@ -901,19 +898,19 @@ PaymentLinkRequest paymentLinkRequest = new PaymentLinkRequest() {
 	RedirectUrl = this.DefaultRedirectUrl,
 	ExpiresAt = DateTime.Now.AddDays(1)
 };
-PaymentLinkClient client = new PaymentLinkClient({yourApiKey});
+using IPaymentLinkClient client = new PaymentLinkClient({yourApiKey});
 await this._paymentLinkClient.CreatePaymentLinkAsync(paymentLinkRequest);
 ```
 
 ### Get payment link
 ```C#
-PaymentLinkClient client = new PaymentLinkClient({yourApiKey});
+using IPaymentLinkClient client = new PaymentLinkClient({yourApiKey});
 await this._paymentLinkClient.GetPaymentLinkAsync({yourPaymentLinkId});
 ```
 
 ### List payment links
 ```C#
-PaymentLinkClient client = new PaymentLinkClient({yourApiKey});
+using IPaymentLinkClient client = new PaymentLinkClient({yourApiKey});
 ListResponse<PaymentLinkResponse> response = await this._paymentLinkClient.GetPaymentLinkListAsync();
 ```
 
@@ -921,21 +918,21 @@ ListResponse<PaymentLinkResponse> response = await this._paymentLinkClient.GetPa
 ### Get balance
 Retrieve a balance using a balance id string identifier. 
 ```C#
-BalanceClient client = new BalanceClient({yourApiKey});
+using IBalanceClient client = new BalanceClient({yourApiKey});
 BalanceResponse balanceResponse = await this._balanceClient.GetBalanceAsync({yourBalanceId});
 ```
 
 ### Get primary balance
 Retrieve the primary balance. This is the balance of your account’s primary currency, where all payments are settled to by default.
 ```C#
-BalanceClient client = new BalanceClient({yourApiKey});
+using IBalanceClient client = new BalanceClient({yourApiKey});
 BalanceResponse balanceResponse = await this._balanceClient.GetPrimaryBalanceAsync();
 ```
 
 ### List balances
 Retrieve all the organization’s balances, including the primary balance, ordered from newest to oldest.
 ```C#
-BalanceClient client = new BalanceClient({yourApiKey});
+using IBalanceClient client = new BalanceClient({yourApiKey});
 ListResponse<BalanceResponse> balanceList = await this._balanceClient.ListBalancesAsync();
 ```
 
@@ -944,7 +941,7 @@ You can retrieve reports in two different formats. With the status-balances form
 
 This applies to both the "Get balance report" method as well as the "Get primary balance report" method. 
 ```C#
-BalanceClient client = new BalanceClient({yourApiKey});
+using IBalanceClient client = new BalanceClient({yourApiKey});
 string reportGrouping = ReportGrouping.TransactionCategories;
 BalanceReportResponse balanceReport = await this._balanceClient.GetBalanceReportAsync({yourBalanceId}, grouping: reportGrouping);
 ```
@@ -952,7 +949,7 @@ BalanceReportResponse balanceReport = await this._balanceClient.GetBalanceReport
 ### Get primary balance report
 With the Get primary balance report endpoint you can retrieve a summarized report for all movements on your primary balance within a given timeframe.
 ```C#
-BalanceClient client = new BalanceClient({yourApiKey});
+using IBalanceClient client = new BalanceClient({yourApiKey});
 string reportGrouping = ReportGrouping.StatusBalances;
 BalanceReportResponse balanceReport = await this._balanceClient.GetPrimaryBalanceReportAsync(grouping: reportGrouping);
 ```
@@ -960,7 +957,7 @@ BalanceReportResponse balanceReport = await this._balanceClient.GetPrimaryBalanc
 ### List balance transactions
 With the List balance transactions endpoint you can retrieve a list of all the movements on your balance. This includes payments, refunds, chargebacks, and settlements.
 ```C#
-BalanceClient client = new BalanceClient({yourApiKey});
+using IBalanceClient client = new BalanceClient({yourApiKey});
 BalanceTransactionResponse balanceTransactions = await this._balanceClient.ListBalanceTransactionsAsync({yourBalanceId});
 ```
 
@@ -969,7 +966,7 @@ Each transaction in the list of transactions, has a context. The context propert
 ### List primary balance transactions
 With the List primary balance transactions endpoint you can retrieve a list of all the movements on your primary balance. This includes payments, refunds, chargebacks, and settlements.
 ```C#
-BalanceClient client = new BalanceClient({yourApiKey});
+using IBalanceClient client = new BalanceClient({yourApiKey});
 BalanceTransactionResponse balanceTransactions = await this._balanceClient.ListPrimaryBalanceTransactionsAsync();
 ```
 
@@ -977,13 +974,13 @@ BalanceTransactionResponse balanceTransactions = await this._balanceClient.ListP
 ### List terminals
 Retrieve all point-of-sale terminal devices linked to your organization or profile, ordered from newest to oldest. 
 ```C#
-ITerminalClient client = new TerminalClient({yourApiKey});
+using ITerminalClient client = new TerminalClient({yourApiKey});
 ListResponse<TerminalResponse> response = await client.GetTerminalListAsync();
 ```
 
 ### Get terminal by id
 ```C#
-ITerminalClient client = new TerminalClient({yourApiKey});
+using ITerminalClient client = new TerminalClient({yourApiKey});
 TerminalResponse response = await client.GetTerminalAsync({yourTerminalId});
 ```
 
