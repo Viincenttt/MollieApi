@@ -22,7 +22,7 @@ using Xunit;
 
 namespace Mollie.Tests.Integration.Api;
 
-public class PaymentTests : BaseMollieApiTestClass {
+public class PaymentTests : BaseMollieApiTestClass, IDisposable {
     private readonly IPaymentClient _paymentClient;
     private readonly ICustomerClient _customerClient;
     private readonly IMandateClient _mandateClient;
@@ -496,6 +496,15 @@ public class PaymentTests : BaseMollieApiTestClass {
         }
 
         return null;
+    }
+
+    public void Dispose()
+    {
+        _paymentClient?.Dispose();
+        _customerClient?.Dispose();
+        _mandateClient?.Dispose();
+        _terminalClient?.Dispose();
+        _captureClient?.Dispose();
     }
 }
 

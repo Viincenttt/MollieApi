@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Mollie.Api.Client;
@@ -12,7 +13,7 @@ using Mollie.Tests.Integration.Framework;
 
 namespace Mollie.Tests.Integration.Api; 
 
-public class RefundTests : BaseMollieApiTestClass {
+public class RefundTests : BaseMollieApiTestClass, IDisposable {
     private readonly IRefundClient _refundClient;
     private readonly IPaymentClient _paymentClient;
 
@@ -124,5 +125,11 @@ public class RefundTests : BaseMollieApiTestClass {
         paymentRequest.RedirectUrl = this.DefaultRedirectUrl;
 
         return await this._paymentClient.CreatePaymentAsync(paymentRequest);
+    }
+
+    public void Dispose()
+    {
+        _refundClient?.Dispose();
+        _paymentClient?.Dispose();
     }
 }

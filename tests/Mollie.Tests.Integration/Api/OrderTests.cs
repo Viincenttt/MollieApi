@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -15,7 +16,7 @@ using Xunit;
 
 namespace Mollie.Tests.Integration.Api; 
 
-public class OrderTests : BaseMollieApiTestClass {
+public class OrderTests : BaseMollieApiTestClass, IDisposable {
     private readonly IOrderClient _orderClient;
 
     public OrderTests() {
@@ -391,5 +392,10 @@ public class OrderTests : BaseMollieApiTestClass {
             RedirectUrl = "http://www.google.nl",
             Locale = Locale.nl_NL
         };
+    }
+
+    public void Dispose()
+    {
+        _orderClient?.Dispose();
     }
 }

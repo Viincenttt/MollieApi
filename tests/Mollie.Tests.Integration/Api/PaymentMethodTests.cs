@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Mollie.Api.Client;
@@ -12,7 +13,7 @@ using Xunit;
 
 namespace Mollie.Tests.Integration.Api; 
 
-public class PaymentMethodTests : BaseMollieApiTestClass {
+public class PaymentMethodTests : BaseMollieApiTestClass, IDisposable {
     private readonly IPaymentMethodClient _paymentMethodClient;
 
     public PaymentMethodTests() {
@@ -142,5 +143,10 @@ public class PaymentMethodTests : BaseMollieApiTestClass {
             
         // Then: We should have multiple payment methods
         paymentMethods.Count.Should().BeGreaterThan(0);
+    }
+
+    public void Dispose()
+    {
+        _paymentMethodClient?.Dispose();
     }
 }
