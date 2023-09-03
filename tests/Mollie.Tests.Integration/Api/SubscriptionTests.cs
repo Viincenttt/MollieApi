@@ -13,7 +13,7 @@ using Mollie.Tests.Integration.Framework;
 
 namespace Mollie.Tests.Integration.Api; 
 
-public class SubscriptionTests : BaseMollieApiTestClass {
+public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
     private readonly ISubscriptionClient _subscriptionClient;
     private readonly ICustomerClient _customerClient;
     private readonly IMandateClient _mandateClient;
@@ -158,5 +158,12 @@ public class SubscriptionTests : BaseMollieApiTestClass {
         }
 
         return null;
+    }
+
+    public void Dispose()
+    {
+        _subscriptionClient?.Dispose();
+        _customerClient?.Dispose();
+        _mandateClient?.Dispose();
     }
 }

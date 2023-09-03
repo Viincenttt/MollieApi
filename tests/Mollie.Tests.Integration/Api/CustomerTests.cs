@@ -16,7 +16,7 @@ using Xunit;
 
 namespace Mollie.Tests.Integration.Api; 
 
-public class CustomerTests : BaseMollieApiTestClass {
+public class CustomerTests : BaseMollieApiTestClass, IDisposable {
     private readonly ICustomerClient _customerClient;
         
     public CustomerTests() {
@@ -169,5 +169,10 @@ public class CustomerTests : BaseMollieApiTestClass {
         };
 
         return await this._customerClient.CreateCustomerAsync(customerRequest);
+    }
+
+    public void Dispose()
+    {
+        _customerClient?.Dispose();
     }
 }

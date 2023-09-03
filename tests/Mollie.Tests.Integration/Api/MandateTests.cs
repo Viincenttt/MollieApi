@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Mollie.Api.Client;
@@ -10,7 +11,7 @@ using Mollie.Tests.Integration.Framework;
 
 namespace Mollie.Tests.Integration.Api; 
 
-public class MandateTests : BaseMollieApiTestClass {
+public class MandateTests : BaseMollieApiTestClass, IDisposable {
     private readonly IMandateClient _mandateClient;
     private readonly ICustomerClient _customerClient;
 
@@ -69,5 +70,11 @@ public class MandateTests : BaseMollieApiTestClass {
             mandateResponse.Details.ConsumerAccount.Should().Be(mandateRequest.ConsumerAccount);
             mandateResponse.Details.ConsumerName.Should().Be(mandateRequest.ConsumerName);
         }
+    }
+
+    public void Dispose()
+    {
+        _mandateClient?.Dispose();
+        _customerClient?.Dispose();
     }
 }

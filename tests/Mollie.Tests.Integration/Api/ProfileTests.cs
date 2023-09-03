@@ -1,4 +1,5 @@
 ﻿
+using System;
 using Mollie.Api.Client;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Payment;
@@ -14,7 +15,7 @@ using Mollie.Api.Models.Profile.Request;
 
 namespace Mollie.Tests.Integration.Api; 
 
-public class ProfileTests : BaseMollieApiTestClass {
+public class ProfileTests : BaseMollieApiTestClass, IDisposable {
     private readonly IProfileClient _profileClient;
 
     public ProfileTests() {
@@ -102,5 +103,10 @@ public class ProfileTests : BaseMollieApiTestClass {
         await this._profileClient.DisableGiftCardIssuerAsync("festivalcadeau");
 
         // Then
+    }
+
+    public void Dispose()
+    {
+        _profileClient?.Dispose();
     }
 }

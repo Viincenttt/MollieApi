@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Mollie.Api.Client;
@@ -9,7 +10,7 @@ using Mollie.Tests.Integration.Framework;
 
 namespace Mollie.Tests.Integration.Api; 
 
-public class TerminalTests : BaseMollieApiTestClass {
+public class TerminalTests : BaseMollieApiTestClass, IDisposable {
     private readonly ITerminalClient _terminalClient;
 
     public TerminalTests() {
@@ -42,5 +43,10 @@ public class TerminalTests : BaseMollieApiTestClass {
             response.Should().NotBeNull();
             response.Id.Should().Be(firstTerminal.Id);
         }
+    }
+
+    public void Dispose()
+    {
+        _terminalClient?.Dispose();
     }
 }

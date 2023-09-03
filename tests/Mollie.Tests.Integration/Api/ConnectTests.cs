@@ -11,7 +11,7 @@ public class ConnectTests : BaseMollieApiTestClass {
     [DefaultRetryFact]
     public void GetAuthorizationUrl_WithSingleScope_GeneratesAuthorizationUrl() {
         // Given: We create a new connect client
-        ConnectClient connectClient = new ConnectClient(this.ClientId, this.ClientSecret);
+        using ConnectClient connectClient = new ConnectClient(this.ClientId, this.ClientSecret);
 
         // When: We get the authorization URL
         string authorizationUrl = connectClient.GetAuthorizationUrl("abcde", new List<string>() { AppPermissions.PaymentsRead });
@@ -24,7 +24,7 @@ public class ConnectTests : BaseMollieApiTestClass {
     [DefaultRetryFact]
     public void GetAuthorizationUrl_WithMultipleScopes_GeneratesAuthorizationUrl() {
         // Given: We create a new connect client
-        ConnectClient connectClient = new ConnectClient(this.ClientId, this.ClientSecret);
+        using ConnectClient connectClient = new ConnectClient(this.ClientId, this.ClientSecret);
 
         // When: We get the authorization URL
         string authorizationUrl = connectClient.GetAuthorizationUrl("abcdef", new List<string>() {
@@ -44,7 +44,7 @@ public class ConnectTests : BaseMollieApiTestClass {
     public async Task GetAccessTokenAsync_WithValidTokenRequest_ReturnsAccessToken() {
         // Given: We fetch create a token request
         string authCode = "abcde"; // Set a valid access token here
-        ConnectClient connectClient = new ConnectClient(this.ClientId, this.ClientSecret);
+        using ConnectClient connectClient = new ConnectClient(this.ClientId, this.ClientSecret);
         TokenRequest tokenRequest = new TokenRequest(authCode, DefaultRedirectUrl);
 
         // When: We request the auth code
@@ -58,7 +58,7 @@ public class ConnectTests : BaseMollieApiTestClass {
     public async Task RevokeAccessTokenAsync_WithValidToken_DoesNotThrowError() {
         // Given: We create a revoke token request
         string accessToken = "abcde";
-        ConnectClient connectClient = new ConnectClient(this.ClientId, this.ClientSecret);
+        using ConnectClient connectClient = new ConnectClient(this.ClientId, this.ClientSecret);
         RevokeTokenRequest revokeTokenRequest = new RevokeTokenRequest() {
             TokenTypeHint = TokenType.AccessToken,
             Token = accessToken

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Order;
 using Mollie.Api.Models.Order.Request.ManageOrderLines;
@@ -7,7 +8,7 @@ using Mollie.Api.Models.Refund;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client.Abstract {
-    public interface IOrderClient {
+    public interface IOrderClient : IDisposable {
         Task<OrderResponse> CreateOrderAsync(OrderRequest orderRequest);
         Task<OrderResponse> GetOrderAsync(string orderId, bool embedPayments = false, bool embedRefunds = false, bool embedShipments = false, bool testmode = false);
         Task<OrderResponse> UpdateOrderAsync(string orderId, OrderUpdateRequest orderUpdateRequest);

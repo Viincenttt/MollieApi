@@ -12,7 +12,7 @@ using Mollie.Tests.Integration.Framework;
 
 namespace Mollie.Tests.Integration.Api; 
 
-public class PaymentLinkTests : BaseMollieApiTestClass {
+public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
     private readonly IPaymentLinkClient _paymentLinkClient;
 
     public PaymentLinkTests() {
@@ -56,5 +56,10 @@ public class PaymentLinkTests : BaseMollieApiTestClass {
 
         verifyPaymentLinkResponse(createdPaymentLinkResponse);
         verifyPaymentLinkResponse(retrievePaymentLinkResponse);
+    }
+
+    public void Dispose()
+    {
+        _paymentLinkClient?.Dispose();
     }
 }

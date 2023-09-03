@@ -13,7 +13,7 @@ using Xunit;
 namespace Mollie.Tests.Integration.Api; 
 
 [Trait("TestCategory", "AccessKeyIntegrationTest")]
-public class BalanceTests : BaseMollieApiTestClass {
+public class BalanceTests : BaseMollieApiTestClass, IDisposable {
     private readonly IBalanceClient _balanceClient;
 
     public BalanceTests() {
@@ -131,5 +131,10 @@ public class BalanceTests : BaseMollieApiTestClass {
         result.Should().NotBeNull();
         result.Embedded.Should().NotBeNull();
         result.Embedded.BalanceTransactions.Should().NotBeNull();
+    }
+
+    public void Dispose()
+    {
+        _balanceClient?.Dispose();
     }
 }

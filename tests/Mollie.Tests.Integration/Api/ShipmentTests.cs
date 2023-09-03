@@ -10,7 +10,7 @@ using Mollie.Tests.Integration.Framework;
 
 namespace Mollie.Tests.Integration.Api; 
 
-public class ShipmentTests : BaseMollieApiTestClass {
+public class ShipmentTests : BaseMollieApiTestClass, IDisposable {
     private readonly IShipmentClient _shipmentClient;
 
     public ShipmentTests() {
@@ -42,5 +42,10 @@ public class ShipmentTests : BaseMollieApiTestClass {
         return new ShipmentRequest() {
             Lines = new List<ShipmentLineRequest>()
         };
+    }
+
+    public void Dispose()
+    {
+        _shipmentClient?.Dispose();
     }
 }
