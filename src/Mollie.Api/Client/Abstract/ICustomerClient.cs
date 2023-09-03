@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Mollie.Api.Models.Customer;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Payment.Request;
@@ -6,7 +7,7 @@ using Mollie.Api.Models.Payment.Response;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client.Abstract {
-    public interface ICustomerClient {
+    public interface ICustomerClient : IDisposable {
         Task<CustomerResponse> CreateCustomerAsync(CustomerRequest request);
         Task<CustomerResponse> UpdateCustomerAsync(string customerId, CustomerRequest request);
         Task DeleteCustomerAsync(string customerId, bool testmode = false);

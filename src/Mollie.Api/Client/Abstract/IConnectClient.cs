@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Mollie.Api.Models.Connect;
 
 namespace Mollie.Api.Client.Abstract {
-    public interface IConnectClient {
+    public interface IConnectClient : IDisposable {
         /// <summary>
         ///     Constructs the Authorize URL for the Authorize endpoint from the parameters
         /// </summary>

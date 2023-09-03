@@ -13,7 +13,7 @@ public class ApiExceptionTests : BaseMollieApiTestClass {
     [DefaultRetryFact]
     public async Task ShouldThrowMollieApiExceptionWhenInvalidParametersAreGiven() {
         // If: we create a payment request with invalid parameters
-        IPaymentClient paymentClient = new PaymentClient(this.ApiKey);
+        PaymentClient paymentClient = new PaymentClient(this.ApiKey);
         PaymentRequest paymentRequest = new PaymentRequest() {
             Amount = new Amount(Currency.EUR, "100.00"),
             Description = null,

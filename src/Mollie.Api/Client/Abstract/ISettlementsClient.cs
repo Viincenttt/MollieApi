@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Mollie.Api.Models.Capture;
 using Mollie.Api.Models.Chargeback;
 using Mollie.Api.Models.List;
@@ -8,7 +9,7 @@ using Mollie.Api.Models.Settlement;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client.Abstract {
-    public interface ISettlementsClient {
+    public interface ISettlementsClient : IDisposable {
         Task<SettlementResponse> GetSettlementAsync(string settlementId);
         Task<SettlementResponse> GetNextSettlement();
         Task<SettlementResponse> GetOpenSettlement();

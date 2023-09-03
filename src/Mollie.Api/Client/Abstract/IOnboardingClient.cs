@@ -1,9 +1,10 @@
-﻿using Mollie.Api.Models.Onboarding.Request;
+﻿using System;
+using Mollie.Api.Models.Onboarding.Request;
 using Mollie.Api.Models.Onboarding.Response;
 using System.Threading.Tasks;
 
 namespace Mollie.Api.Client.Abstract {
-    public interface IOnboardingClient {
+    public interface IOnboardingClient : IDisposable {
         /// <summary>
         /// Get the status of onboarding of the authenticated organization.
         /// </summary>

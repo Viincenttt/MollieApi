@@ -1,11 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Payment.Response;
 using Mollie.Api.Models.Subscription;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client.Abstract {
-    public interface ISubscriptionClient {
+    public interface ISubscriptionClient : IDisposable {
         Task CancelSubscriptionAsync(string customerId, string subscriptionId, bool testmode = false);
         Task<SubscriptionResponse> CreateSubscriptionAsync(string customerId, SubscriptionRequest request);
         Task<SubscriptionResponse> GetSubscriptionAsync(string customerId, string subscriptionId, bool testmode = false);
