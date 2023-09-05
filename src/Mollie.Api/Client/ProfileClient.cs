@@ -5,6 +5,7 @@ using Mollie.Api.Models.List;
 using Mollie.Api.Models.PaymentMethod;
 using Mollie.Api.Models.Profile.Request;
 using Mollie.Api.Models.Profile.Response;
+using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client {
     public class ProfileClient : BaseMollieClient, IProfileClient {
@@ -19,6 +20,10 @@ namespace Mollie.Api.Client {
             this.ValidateRequiredUrlParameter(nameof(profileId), profileId);
             return await this.GetAsync<ProfileResponse>($"profiles/{profileId}").ConfigureAwait(false);
         }
+        
+        public async Task<ProfileResponse> GetProfileAsync(UrlObjectLink<ProfileResponse> url) {
+            return await this.GetAsync(url).ConfigureAwait(false);
+        }
 
         public async Task<ProfileResponse> GetCurrentProfileAsync() {
             return await this.GetAsync<ProfileResponse>("profiles/me").ConfigureAwait(false);
@@ -26,6 +31,10 @@ namespace Mollie.Api.Client {
 
         public async Task<ListResponse<ProfileResponse>> GetProfileListAsync(string from = null, int? limit = null) {
             return await this.GetListAsync<ListResponse<ProfileResponse>>("profiles", from, limit).ConfigureAwait(false);
+        }
+        
+        public async Task<ListResponse<ProfileResponse>> GetProfileListAsync(UrlObjectLink<ListResponse<ProfileResponse>> url) {
+            return await this.GetAsync(url).ConfigureAwait(false);
         }
 
         public async Task<ProfileResponse> UpdateProfileAsync(string profileId, ProfileRequest request) {
