@@ -9,6 +9,7 @@ using Mollie.Api.Models.Balance.Response;
 using Mollie.Api.Models.Balance.Response.BalanceReport;
 using Mollie.Api.Models.Balance.Response.BalanceTransaction;
 using Mollie.Api.Models.List;
+using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client {
     public class BalanceClient : BaseMollieClient, IBalanceClient {
@@ -20,6 +21,10 @@ namespace Mollie.Api.Client {
             return await this.GetAsync<BalanceResponse>($"balances/{balanceId}").ConfigureAwait(false);
         }
         
+        public async Task<BalanceResponse> GetBalanceAsync(UrlObjectLink<BalanceResponse> url) {
+            return await this.GetAsync(url).ConfigureAwait(false);
+        }
+        
         public async Task<BalanceResponse> GetPrimaryBalanceAsync() {
             return await this.GetAsync<BalanceResponse>("balances/primary").ConfigureAwait(false);
         }
@@ -27,6 +32,10 @@ namespace Mollie.Api.Client {
         public async Task<ListResponse<BalanceResponse>> ListBalancesAsync(string from = null, int? limit = null, string currency = null) {
             var queryParameters = BuildListBalanceQueryParameters(currency);
             return await this.GetListAsync<ListResponse<BalanceResponse>>($"balances", from, limit, queryParameters).ConfigureAwait(false);
+        }
+        
+        public async Task<ListResponse<BalanceResponse>> ListBalancesAsync(UrlObjectLink<ListResponse<BalanceResponse>> url) {
+            return await this.GetAsync(url).ConfigureAwait(false);
         }
 
         public async Task<BalanceReportResponse> GetBalanceReportAsync(string balanceId, DateTime from, DateTime until, string grouping = null) {
