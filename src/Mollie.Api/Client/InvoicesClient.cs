@@ -31,6 +31,10 @@ namespace Mollie.Api.Client {
 
             return await this.GetListAsync<ListResponse<InvoiceResponse>>($"invoices", from, limit, parameters).ConfigureAwait(false);
         }
+        
+        public async Task<ListResponse<InvoiceResponse>> GetInvoiceListAsync(UrlObjectLink<ListResponse<InvoiceResponse>> url) {
+            return await this.GetAsync(url).ConfigureAwait(false);
+        }
 
         private Dictionary<string, string> BuildIncludeParameter(bool includeLines = false, bool includeSettlements = false) {
             var result = new Dictionary<string, string>();
