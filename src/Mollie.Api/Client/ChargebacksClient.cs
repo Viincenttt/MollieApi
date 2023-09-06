@@ -5,6 +5,7 @@ using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
 using Mollie.Api.Models.Chargeback;
 using Mollie.Api.Models.List;
+using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client {
     public class ChargebacksClient : BaseMollieClient, IChargebacksClient {
@@ -30,6 +31,10 @@ namespace Mollie.Api.Client {
         public async Task<ListResponse<ChargebackResponse>> GetChargebacksListAsync(string profileId = null, bool testmode = false) {
             var queryParameters = this.BuildQueryParameters(profileId, testmode);
             return await this.GetListAsync<ListResponse<ChargebackResponse>>($"chargebacks", null, null, queryParameters).ConfigureAwait(false);
+        }
+        
+        public async Task<ListResponse<ChargebackResponse>> GetChargebacksListAsync(UrlObjectLink<ListResponse<ChargebackResponse>> url) {
+            return await this.GetAsync(url).ConfigureAwait(false);
         }
         
         private Dictionary<string, string> BuildQueryParameters(string profileId, bool testmode) {

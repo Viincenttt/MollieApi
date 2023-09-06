@@ -9,6 +9,7 @@ namespace Mollie.Api.Client.Abstract {
         Task<OrganizationResponse> GetCurrentOrganizationAsync();
         Task<OrganizationResponse> GetOrganizationAsync(string organizationId);
         Task<ListResponse<OrganizationResponse>> GetOrganizationsListAsync(string from = null, int? limit = null);
+        Task<ListResponse<OrganizationResponse>> GetOrganizationsListAsync(UrlObjectLink<ListResponse<OrganizationResponse>> url);
         Task<OrganizationResponse> GetOrganizationAsync(UrlObjectLink<OrganizationResponse> url);
     }
 }
