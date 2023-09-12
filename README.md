@@ -28,8 +28,8 @@ Have you spotted a bug or want to add a missing feature? All pull requests are w
 [13. Onboarding Api](#13-onboarding-api)  
 [14. Payment link Api](#14-payment-link-api)  
 [15. Balances Api](#15-balances-api)  
-[16. Terminal Api](#16-terminal-api)
-[17. Client Link Api](#17-client-link-api)
+[16. Terminal Api](#16-terminal-api)  
+[17. Client Link Api](#17-client-link-api)  
 
 ## 1. Getting started
 
