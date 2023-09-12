@@ -29,6 +29,7 @@ Have you spotted a bug or want to add a missing feature? All pull requests are w
 [14. Payment link Api](#14-payment-link-api)  
 [15. Balances Api](#15-balances-api)  
 [16. Terminal Api](#16-terminal-api)  
+[17. Client Link Api](#17-client-link-api)  
 
 ## 1. Getting started
 
@@ -75,6 +76,7 @@ This library currently supports the following API's:
 - Onboarding API
 - Balances API
 - Terminal API
+- ClientLink API
 
 ### Supported .NET versions
 This library is built using .NET standard 2.0. This means that the package supports the following .NET implementations:
@@ -982,5 +984,42 @@ ListResponse<TerminalResponse> response = await client.GetTerminalListAsync();
 ```C#
 using ITerminalClient client = new TerminalClient({yourApiKey});
 TerminalResponse response = await client.GetTerminalAsync({yourTerminalId});
+```
+
+## 17. Client Link Api
+### Create a client link
+Link a new organization to your OAuth application, in effect creating a new client. 
+```C#
+var request = new ClientLinkRequest
+{
+	Owner = new ClientLinkOwner
+	{
+		Email = "norris@chucknorrisfacts.net",
+		GivenName = "Chuck",
+		FamilyName = "Norris",
+		Locale = "en_US"
+	},
+	Address = new AddressObject()
+	{
+		StreetAndNumber = "Keizersgracht 126",
+		PostalCode = "1015 CW",
+		City = "Amsterdam",
+		Country = "NL"
+	},
+	Name = "Mollie B.V.",
+	RegistrationNumber = "30204462",
+	VatNumber = "NL815839091B01"
+};
+using IClientLinkClient client = new ClientLinkClient({yourClientId}, {yourClientSecret});
+ClientLinkResponse response = await clientLinkClient.CreateClientLinkAsync(request);
+```
+
+### Generate the client link URL
+To the ClientLink link you created through the API, you can then add the OAuth details of your application, the client_id, scope you want to request
+```C#
+using IClientLinkClient client = new ClientLinkClient({yourClientId}, {yourClientSecret});
+ClientLinkResponse response = await clientLinkClient.CreateClientLinkAsync(request);
+var clientLinkUrl = response.Links.ClientLink;
+string result = clientLinkClient.GenerateClientLinkWithParameters(clientLinkUrl, {yourState}, {yourScope}, {forceApprovalPrompt});
 ```
 
