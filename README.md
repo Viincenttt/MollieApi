@@ -11,7 +11,7 @@ Want to chat with other developers regarding the Mollie API? The official Mollie
 ## Contributions
 
 Have you spotted a bug or want to add a missing feature? All pull requests are welcome! Please provide a description of the bug or feature you have fixed/added. Make sure to target the latest development branch. 
-
+one will be created and disposed f
 ## Table of contents
 [1. Getting started](#1-getting-started)  
 [2. Payment API](#2-payment-api)  
@@ -48,7 +48,7 @@ builder.Services.AddMollieApi(options => {
 });
 ```
 
-Alternatively, you can create the API client manually using the constructor. All API clients require a api/oauth key in the constructor and you can also pass in an optional `HttpClient` object. If you do not pass a `HttpClient` object, one will be created and disposed for you.
+Alternatively, you can create the API client manually using the constructor. All API clients require a api/oauth key in the constructor and you can also pass in an optional `HttpClient` object. If you do not pass a `HttpClient` object, one will be created automatically. In the latter case, you are responsible for disposing the API client by calling the `Dispose()` method on the API client object or by using a `using` statement. 
 ```c#
 using IPaymentClient paymentClient = new PaymentClient("{yourApiKey}", new HttpClient());
 ```
@@ -176,6 +176,7 @@ PaymentRequest paymentRequest = new PaymentRequest() {
 };
 
 PaymentResponse paymentResponse = await paymentClient.CreatePaymentAsync(paymentRequest);
+string checkoutUrl = paymentResponse.Links.Checkout.Href;
 ```
 
 If you want to create a payment with a specific paymentmethod, there are seperate classes that allow you to set paymentmethod specific parameters. For example, a bank transfer payment allows you to set the billing e-mail and due date. Have a look at the [Mollie create payment documentation](https://www.mollie.com/nl/docs/reference/payments/create) for more information. 
@@ -199,6 +200,20 @@ BankTransferPaymentRequest paymentRequest = new BankTransferPaymentRequest();
 // Set bank transfer specific BillingEmail property
 paymentRequest.BillingEmail = "{billingEmail}";
 BankTransferPaymentResponse response = (BankTransferPaymentResponse)await paymentClient.CreatePaymentAsync(paymentRequest);
+```
+
+#### Redirecting a customer to the checkout link
+Once you have created a payment, you can redirect the customer to the checkout link where he can do the actual payment. The `PaymentResponse` object contains a `Links` property that contains the checkout link. 
+```c#
+using IPaymentClient paymentClient = new PaymentClient("{yourApiKey}");
+PaymentRequest paymentRequest = new PaymentRequest() {
+    Amount = new Amount(Currency.EUR, 100.00m),
+    Description = "Test payment of the example project",
+    RedirectUrl = "http://google.com"
+};
+
+PaymentResponse paymentResponse = await paymentClient.CreatePaymentAsync(paymentRequest);
+string checkoutUrl = paymentResponse.Links.Checkout.Href;
 ```
 
 #### QR codes
