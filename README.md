@@ -11,7 +11,6 @@ Want to chat with other developers regarding the Mollie API? The official Mollie
 ## Contributions
 
 Have you spotted a bug or want to add a missing feature? All pull requests are welcome! Please provide a description of the bug or feature you have fixed/added. Make sure to target the latest development branch. 
-one will be created and disposed f
 ## Table of contents
 [1. Getting started](#1-getting-started)  
 [2. Payment API](#2-payment-api)  
