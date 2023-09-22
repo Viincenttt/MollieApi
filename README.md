@@ -29,6 +29,7 @@ Have you spotted a bug or want to add a missing feature? All pull requests are w
 [15. Balances Api](#15-balances-api)  
 [16. Terminal Api](#16-terminal-api)  
 [17. Client Link Api](#17-client-link-api)  
+[18. Wallet Api](#18-wallet-api)  
 
 ## 1. Getting started
 
@@ -76,6 +77,7 @@ This library currently supports the following API's:
 - Balances API
 - Terminal API
 - ClientLink API
+- Wallet API
 
 ### Supported .NET versions
 This library is built using .NET standard 2.0. This means that the package supports the following .NET implementations:
@@ -1037,3 +1039,15 @@ var clientLinkUrl = response.Links.ClientLink;
 string result = clientLinkClient.GenerateClientLinkWithParameters(clientLinkUrl, {yourState}, {yourScope}, {forceApprovalPrompt});
 ```
 
+## 18. Wallet Api
+## Request Apple Pay Payment Session
+For integrating Apple Pay in your own checkout on the web, you need to provide merchant validation. For more information on this topic, read the [Mollie documentation on Apple Pay Payment sessions](https://docs.mollie.com/reference/v2/wallets-api/request-apple-pay-payment-session). 
+
+```
+var request = new ApplePayPaymentSessionRequest() {
+	Domain = "pay.mywebshop.com",
+	ValidationUrl = "https://apple-pay-gateway-cert.apple.com/paymentservices/paymentSession"
+};
+using var walletClient = new WalletClient({yourApiClient});
+ApplePayPaymentSessionResponse response = await walletClient.RequestApplePayPaymentSessionAsync(request);
+```

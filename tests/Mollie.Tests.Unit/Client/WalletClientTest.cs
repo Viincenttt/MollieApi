@@ -31,7 +31,7 @@ public class WalletClientTest : BaseClientTests {
             HttpMethod.Post, 
             $"{BaseMollieClient.ApiEndPoint}wallets/applepay/sessions", 
             defaultApplePayPaymentSessionResponse);
-        var walletClient = new WalletClient("abcde", mockHttp.ToHttpClient());
+        using var walletClient = new WalletClient("abcde", mockHttp.ToHttpClient());
 
         // Act
         var response = await walletClient.RequestApplePayPaymentSessionAsync(request);
