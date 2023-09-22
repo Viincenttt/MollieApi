@@ -1,7 +1,13 @@
-﻿namespace Mollie.Api.Models.Wallet.Response {
+﻿using System;
+using Mollie.Api.JsonConverters;
+using Newtonsoft.Json;
+
+namespace Mollie.Api.Models.Wallet.Response {
     public class ApplePayPaymentSessionResponse {
-        public long EpochTimestamp { get; set; }
-        public long ExpiresAt { get; set; }
+        [JsonConverter(typeof(MicrosecondEpochConverter))]
+        public DateTime EpochTimestamp { get; set; }
+        [JsonConverter(typeof(MicrosecondEpochConverter))]
+        public DateTime ExpiresAt { get; set; }
         public string MerchantSessionIdentifier { get; set; }
         public string Nonce { get; set; }
         public string MerchantIdentifier { get; set; }

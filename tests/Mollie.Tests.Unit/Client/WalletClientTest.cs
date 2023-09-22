@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Mollie.Api.Client;
@@ -36,8 +37,8 @@ public class WalletClientTest : BaseClientTests {
         var response = await walletClient.RequestApplePayPaymentSessionAsync(request);
 
         // Assert
-        response.EpochTimestamp.Should().Be(1555507053169);
-        response.ExpiresAt.Should().Be(1555510653169);
+        response.EpochTimestamp.Should().Be(DateTimeOffset.FromUnixTimeMilliseconds(1555507053169).UtcDateTime);
+        response.ExpiresAt.Should().Be(DateTimeOffset.FromUnixTimeMilliseconds(1555510653169).UtcDateTime);
         response.MerchantSessionIdentifier.Should().Be("SSH2EAF8AFAEAA94DEEA898162A5DAFD36E_916523AAED1343F5BC5815E12BEE9250AFFDC1A17C46B0DE5A943F0F94927C24");
         response.Nonce.Should().Be("0206b8db");
         response.MerchantIdentifier.Should().Be("BD62FEB196874511C22DB28A9E14A89E3534C93194F73EA417EC566368D391EB");
