@@ -1042,8 +1042,7 @@ string result = clientLinkClient.GenerateClientLinkWithParameters(clientLinkUrl,
 ## 18. Wallet Api
 ## Request Apple Pay Payment Session
 For integrating Apple Pay in your own checkout on the web, you need to provide merchant validation. For more information on this topic, read the [Mollie documentation on Apple Pay Payment sessions](https://docs.mollie.com/reference/v2/wallets-api/request-apple-pay-payment-session). 
-
-```
+```C#
 var request = new ApplePayPaymentSessionRequest() {
 	Domain = "pay.mywebshop.com",
 	ValidationUrl = "https://apple-pay-gateway-cert.apple.com/paymentservices/paymentSession"
