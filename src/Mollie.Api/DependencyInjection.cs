@@ -58,6 +58,8 @@ namespace Mollie.Api {
                 new TerminalClient(mollieOptions.ApiKey, httpClient), retryPolicy);
             RegisterMollieApiClient<IClientLinkClient, ClientLinkClient>(services, httpClient => 
                 new ClientLinkClient(mollieOptions.ClientId, mollieOptions.ApiKey, httpClient), retryPolicy);
+            RegisterMollieApiClient<IWalletClient, WalletClient>(services, httpClient => 
+                new WalletClient(mollieOptions.ApiKey, httpClient), retryPolicy);
             
             return services;
         }
