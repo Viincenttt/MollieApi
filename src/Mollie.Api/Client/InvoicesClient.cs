@@ -28,8 +28,6 @@ namespace Mollie.Api.Client {
             var parameters = new Dictionary<string, string>();
             parameters.AddValueIfNotNullOrEmpty(nameof(reference), reference);
             parameters.AddValueIfNotNullOrEmpty(nameof(year), Convert.ToString(year));
-            parameters.AddValueIfNotNullOrEmpty(nameof(from), from);
-            parameters.AddValueIfNotNullOrEmpty(nameof(from), Convert.ToString(limit));
 
             return await this.GetListAsync<ListResponse<InvoiceResponse>>($"invoices", from, limit, parameters)
                 .ConfigureAwait(false);
