@@ -17,6 +17,7 @@
         public const string Refund = "refund";
         public const string KlarnaPayLater = "klarnapaylater";
         public const string KlarnaSliceIt = "klarnasliceit";
+        public const string KlarnaOne = "klarna";
         public const string Przelewy24 = "przelewy24";
         public const string ApplePay = "applepay";
         public const string MealVoucher = "mealvoucher";
