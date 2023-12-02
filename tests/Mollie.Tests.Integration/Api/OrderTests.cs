@@ -206,7 +206,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         updatedOrder.BillingAddress.City.Should().Be(orderUpdateRequest.BillingAddress.City);
     }
       
-    [DefaultRetryFact(Skip = "Broken on Mollie side")]
+    [DefaultRetryFact(Skip = "Broken - Reported to Mollie: https://discordapp.com/channels/1037712581407817839/1180467187677401198/1180467187677401198")]
     public async Task UpdateOrderLinesAsync_WhenOrderLineIsUpdated_UpdatedPropertiesCanBeRetrieved() {
         // If: we create a new order
         OrderRequest orderRequest = this.CreateOrder();
