@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Mollie.Api.Client;
@@ -26,7 +27,7 @@ public class CaptureTests : BaseMollieApiTestClass, IDisposable {
     public async Task CanCreateCaptureForPaymentWithManualCaptureMode() {
         // Given: We create a payment with captureMode set to manual
         PaymentRequest paymentRequest = new PaymentRequest() {
-            Amount = new Amount(Currency.EUR, "100.00"),
+            Amount = new Amount(Currency.EUR, 1000.00m),
             Description = "Description",
             RedirectUrl = this.DefaultRedirectUrl,
             Method = PaymentMethod.CreditCard,
@@ -35,16 +36,52 @@ public class CaptureTests : BaseMollieApiTestClass, IDisposable {
         var payment = await _paymentClient.CreatePaymentAsync(paymentRequest);
         
         // When: We create a capture for the payment
-        var capture = await _captureClient.CreateCapture(payment.Id, new CaptureRequest
+        var captureRequest = new CaptureRequest
         {
-            Amount = paymentRequest.Amount,
-            Description = "my capture"
-        });
+            Amount = new Amount(Currency.EUR, 0.01m),
+            Description = "my capture",
+            Metadata = "my-metadata string"
+        };
+        var capture = await _captureClient.CreateCapture(payment.Id, captureRequest);
 
         // Then: The capture should be created
         capture.Status.Should().Be("pending");
         capture.PaymentId.Should().Be(payment.Id);
         capture.Resource.Should().Be("capture");
+        capture.Metadata.Should().Be(captureRequest.Metadata);
+    }
+
+    [DefaultRetryFact(Skip = "We can only test this in debug mode, because we actually have to use the PaymentUrl" +
+                             " to make the payment, since Mollie can only capture payments that have been authorized")]
+    public async Task CanRetrieveCaptureListForPayment()
+    {
+        // Given: we create a payment and capture
+        PaymentRequest paymentRequest = new PaymentRequest() {
+            Amount = new Amount(Currency.EUR, 1000.00m),
+            Description = "Description",
+            RedirectUrl = this.DefaultRedirectUrl,
+            Method = PaymentMethod.CreditCard,
+            CaptureMode = CaptureMode.Manual
+        };
+        var payment = await _paymentClient.CreatePaymentAsync(paymentRequest);
+        var captureRequest = new CaptureRequest
+        {
+            Amount = new Amount(Currency.EUR, 0.01m),
+            Description = "my capture",
+            Metadata = "my-metadata string"
+        };
+        await _captureClient.CreateCapture(payment.Id, captureRequest);
+        
+        // When: we retrieve the captures of the payment
+        var captureList = await _captureClient.GetCapturesListAsync(payment.Id);
+        
+        // Then
+        captureList.Count.Should().Be(1);
+        var capture = captureList.Items.Single();
+        capture.Status.Should().Be("succeeded");
+        capture.PaymentId.Should().Be(payment.Id);
+        capture.Resource.Should().Be("capture");
+        capture.Metadata.Should().Be(captureRequest.Metadata);
     }
     
     public void Dispose()
