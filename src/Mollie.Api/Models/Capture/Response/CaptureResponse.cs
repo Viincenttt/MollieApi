@@ -25,6 +25,11 @@ namespace Mollie.Api.Models.Capture
         /// The amount captured.
         /// </summary>
         public Amount Amount { get; set; }
+        
+        /// <summary>
+        /// The capture’s status.
+        /// </summary>
+        public string Status { get; set; }
 
         /// <summary>
         /// This optional field will contain the amount that will be settled to your account, converted to the currency your account is settled in. It follows the same syntax as the amount property.
@@ -50,9 +55,15 @@ namespace Mollie.Api.Models.Capture
         /// The capture’s date and time of creation, in ISO 8601 format.
         /// </summary>
         public DateTime CreatedAt { get; set; }
+        
+        /// <summary>
+        /// The optional metadata you provided upon payment creation. Metadata can be used to link an order to a payment.
+        /// </summary>
+        [JsonConverter(typeof(RawJsonConverter))]
+        public string Metadata { get; set; }
 
         /// <summary>
-        /// An object with several URL objects relevant to the order. Every URL object will contain an href and a type field.
+        /// The optional metadata you provided upon capture creation. Metadata can for example be used to link an bookkeeping ID to a capture.
         /// </summary>
         [JsonProperty("_links")]
         public CaptureResponseLinks Links { get; set; }
