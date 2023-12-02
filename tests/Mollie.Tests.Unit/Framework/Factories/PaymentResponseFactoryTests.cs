@@ -26,6 +26,7 @@ namespace Mollie.Tests.Unit.Framework.Factories {
         [InlineData(PaymentMethod.Refund, typeof(PaymentResponse))]
         [InlineData(PaymentMethod.KlarnaPayLater, typeof(PaymentResponse))]
         [InlineData(PaymentMethod.KlarnaSliceIt, typeof(PaymentResponse))]
+        [InlineData(PaymentMethod.KlarnaOne, typeof(PaymentResponse))]
         [InlineData(PaymentMethod.Przelewy24, typeof(PaymentResponse))]
         [InlineData(PaymentMethod.ApplePay, typeof(PaymentResponse))]
         [InlineData(PaymentMethod.MealVoucher, typeof(PaymentResponse))]
