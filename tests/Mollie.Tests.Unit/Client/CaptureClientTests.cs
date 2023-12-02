@@ -19,6 +19,7 @@ namespace Mollie.Tests.Unit.Client {
         private const string defaultSettlementId = "settlementId";
         private const string defaultAmountValue = "1027.99";
         private const string defaultAmountCurrency = "EUR";
+        private const string defaultStatus = "succeeded";
 
         private string defaultCaptureJsonResponse = $@"{{
     ""resource"": ""capture"",
@@ -35,6 +36,7 @@ namespace Mollie.Tests.Unit.Client {
     ""paymentId"": ""{defaultPaymentId}"",
     ""shipmentId"": ""{defaultShipmentId}"",
     ""settlementId"": ""{defaultSettlementId}"",
+    ""status"": ""{defaultStatus}"",
     ""createdAt"": ""2018-08-02T09:29:56+00:00"",
 }}";
 
@@ -56,6 +58,7 @@ namespace Mollie.Tests.Unit.Client {
                 ""paymentId"": ""{defaultPaymentId}"",
                 ""shipmentId"": ""{defaultShipmentId}"",
                 ""settlementId"": ""{defaultSettlementId}"",
+                ""status"": ""{defaultStatus}"",
                 ""createdAt"": ""2018-08-02T09:29:56+00:00""
             }}
         ]
@@ -117,6 +120,7 @@ namespace Mollie.Tests.Unit.Client {
             captureResponse.SettlementId.Should().Be(defaultSettlementId);
             captureResponse.Amount.Value.Should().Be(defaultAmountValue);
             captureResponse.Amount.Currency.Should().Be(defaultAmountCurrency);
+            captureResponse.Status.Should().Be(defaultStatus);
         }
 
         [Fact]
@@ -140,6 +144,7 @@ namespace Mollie.Tests.Unit.Client {
             captureResponse.SettlementId.Should().Be(defaultSettlementId);
             captureResponse.Amount.Value.Should().Be(defaultAmountValue);
             captureResponse.Amount.Currency.Should().Be(defaultAmountCurrency);
+            captureResponse.Status.Should().Be(defaultStatus);
         }
         
         [Theory]
