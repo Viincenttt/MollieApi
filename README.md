@@ -83,7 +83,7 @@ This library currently supports the following API's:
 This library is built using .NET standard 2.0. This means that the package supports the following .NET implementations:
 | .NET implementation  | Version support |
 | ------------- | ------------- |
-| .NET and .NET Core | 2.0, 2.1, 2.2, 3.0, 3.1, 5.0, 6.0, 7.0  |
+| .NET and .NET Core | 2.0, 2.1, 2.2, 3.0, 3.1, 5.0, 6.0, 7.0, 8.0  |
 | .NET Framework  | 4.6.1, 4.6.2, 4.7, 4.7.1, 4.7.2, 4.8, 4.8.1  |
 | Mono | 5.4, 6.4  |
 | Universal Windows Platform | 10.0.16299, TBD |
