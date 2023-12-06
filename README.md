@@ -15,7 +15,7 @@ Have you spotted a bug or want to add a missing feature? All pull requests are w
 The library is easy and simple to use. Take a look at the [getting started guide](https://github.com/Viincenttt/MollieApi/wiki/01.-Getting-started) and create your first payment using the Mollie API in no time. For the full documentation of all library functions, please take a look at the [documentation on the Wiki](https://github.com/Viincenttt/MollieApi/wiki/). There is also a [.NET Blazor example project](https://github.com/Viincenttt/MollieApi/tree/development/samples/Mollie.WebApplication.Blazor) available that displays various features of the library. 
 
 ### Creating a payment in under a minute
-Install the NuGet package
+Install the [NuGet package](https://www.nuget.org/packages/Mollie.Api)
 ```
 Install-Package Mollie.Api
 ```
