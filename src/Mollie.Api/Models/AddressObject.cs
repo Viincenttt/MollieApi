@@ -6,6 +6,11 @@
         public string StreetAndNumber { get; set; }
 
         /// <summary>
+        /// Any additional addressing details, for example an apartment number.
+        /// </summary>
+        public string StreetAdditional { get; set; }
+
+        /// <summary>
         /// The card holder’s postal code.
         /// </summary>
         public string PostalCode { get; set; }
