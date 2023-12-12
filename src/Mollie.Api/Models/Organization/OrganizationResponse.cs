@@ -16,6 +16,11 @@ namespace Mollie.Api.Models.Organization {
         /// The organization's official name.
         /// </summary>
         public string Name { get; set; }
+        
+        /// <summary>
+        /// The organization's email.
+        /// </summary>
+        public string Email { get; set; }
 
         /// <summary>
         /// The preferred locale of the merchant which has been set in Mollie Dashboard.
