@@ -45,12 +45,6 @@ namespace Mollie.Api.Models.Profile.Response {
         /// for more information on which values are accepted.
         /// </summary>
         public string BusinessCategory { get; set; }
-        
-        /// <summary>
-        /// The industry associated with the profile's tradename or brand. 
-        /// </summary>
-        [Obsolete("This parameter is deprecated and will be removed in 2022. Please use the businessCategory parameter instead.")]
-        public int CategoryCode { get; set; }
 
         /// <summary>
         /// The profile status determines whether the payment profile is able to receive live payments. See the 
