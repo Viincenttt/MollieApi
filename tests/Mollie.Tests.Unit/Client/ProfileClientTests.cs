@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Mollie.Api.Client;
 using Mollie.Api.Models;
+using Mollie.Api.Models.Payment;
 using Mollie.Api.Models.Profile;
 using Mollie.Api.Models.Profile.Request;
 using Mollie.Api.Models.Profile.Response;
@@ -29,7 +30,7 @@ public class ProfileClientTests : BaseClientTests
         var mockHttp = new MockHttpMessageHandler();
         mockHttp.When($"{BaseMollieClient.ApiEndPoint}profiles")
             .With(request => request.Headers.Contains("Idempotency-Key"))
-            .Respond("application/json", defaultPaymentMethodJsonResponse);
+            .Respond("application/json", defaultProfileJsonResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
         using var profileClient = new ProfileClient("abcde", httpClient);
         
@@ -48,7 +49,7 @@ public class ProfileClientTests : BaseClientTests
         var mockHttp = new MockHttpMessageHandler();
         mockHttp.When($"{BaseMollieClient.ApiEndPoint}profiles/{profileId}")
             .With(request => request.Headers.Contains("Idempotency-Key"))
-            .Respond("application/json", defaultPaymentMethodJsonResponse);
+            .Respond("application/json", defaultProfileJsonResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
         using var profileClient = new ProfileClient("abcde", httpClient);
         
@@ -66,7 +67,7 @@ public class ProfileClientTests : BaseClientTests
         var mockHttp = new MockHttpMessageHandler();
         mockHttp.When($"{BaseMollieClient.ApiEndPoint}profiles/me")
             .With(request => request.Headers.Contains("Idempotency-Key"))
-            .Respond("application/json", defaultPaymentMethodJsonResponse);
+            .Respond("application/json", defaultProfileJsonResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
         using var profileClient = new ProfileClient("abcde", httpClient);
         
@@ -93,7 +94,7 @@ public class ProfileClientTests : BaseClientTests
         var mockHttp = new MockHttpMessageHandler();
         mockHttp.When($"{BaseMollieClient.ApiEndPoint}profiles/{profileId}")
             .With(request => request.Headers.Contains("Idempotency-Key"))
-            .Respond("application/json", defaultPaymentMethodJsonResponse);
+            .Respond("application/json", defaultProfileJsonResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
         using var profileClient = new ProfileClient("abcde", httpClient);
         
@@ -120,6 +121,42 @@ public class ProfileClientTests : BaseClientTests
         exception.Message.Should().Be($"Required URL argument '{nameof(profileId)}' is null or empty");
     }
 
+    [Fact]
+    public async Task EnablePaymentMethodAsync_ForCurrentProfile_ResponseIsDeserializedInExpectedFormat()
+    {
+        // Arrange
+        const string paymentMethod = PaymentMethod.Ideal;
+        var mockHttp = new MockHttpMessageHandler();
+        mockHttp.When($"{BaseMollieClient.ApiEndPoint}profiles/me/methods/{paymentMethod}")
+            .With(request => request.Headers.Contains("Idempotency-Key"))
+            .Respond("application/json", defaultPaymentMethodResponse);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        using var profileClient = new ProfileClient("abcde", httpClient);
+        
+        // Act
+        var result = await profileClient.EnablePaymentMethodAsync(paymentMethod);
+
+        // Assert
+        result.Resource.Should().Be("method");
+        result.Id.Should().Be(paymentMethod);
+    }
+    
+    [Fact]
+    public async Task EnablePaymentMethodAsync_ForCurrentProfileWithMissingPaymentMethodParameter_ThrowsArgumentException()
+    {
+        // Arrange
+        const string paymentMethod = PaymentMethod.Ideal;
+        var mockHttp = new MockHttpMessageHandler();
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        using var profileClient = new ProfileClient("abcde", httpClient);
+        
+        // Act
+        var exception = await Assert.ThrowsAsync<ArgumentException>(() => profileClient.EnablePaymentMethodAsync(string.Empty));
+
+        // Assert
+        exception.Message.Should().Be($"Required URL argument '{nameof(paymentMethod)}' is null or empty");
+    }
+
     private void AssertDefaultProfileResponse(ProfileResponse result)
     {
         result.Resource.Should().Be("profile");
@@ -132,8 +169,38 @@ public class ProfileClientTests : BaseClientTests
         result.BusinessCategory.Should().Be("OTHER_MERCHANDISE");
         result.Status.Should().Be(ProfileStatus.Unverified);
     }
+
+    private const string defaultPaymentMethodResponse = @"{
+     ""resource"": ""method"",
+     ""id"": ""ideal"",
+     ""description"": ""iDEAL"",
+     ""minimumAmount"": {
+         ""value"": ""0.01"",
+         ""currency"": ""EUR""
+     },
+     ""maximumAmount"": {
+         ""value"": ""50000.00"",
+         ""currency"": ""EUR""
+     },
+     ""image"": {
+         ""size1x"": ""https://www.mollie.com/external/icons/payment-methods/ideal.png"",
+         ""size2x"": ""https://www.mollie.com/external/icons/payment-methods/ideal%402x.png"",
+         ""svg"": ""https://www.mollie.com/external/icons/payment-methods/ideal.svg""
+     },
+     ""status"": ""activated"",
+     ""_links"": {
+         ""self"": {
+             ""href"": ""https://api.mollie.com/v2/methods/ideal"",
+             ""type"": ""application/hal+json""
+         },
+         ""documentation"": {
+             ""href"": ""https://docs.mollie.com/reference/v2/profiles-api/enable-method"",
+             ""type"": ""text/html""
+         }
+     }
+ }";
     
-    private const string defaultPaymentMethodJsonResponse = @"{
+    private const string defaultProfileJsonResponse = @"{
     ""resource"": ""profile"",
     ""id"": ""pfl_v9hTwCvYqw"",
     ""mode"": ""test"",
