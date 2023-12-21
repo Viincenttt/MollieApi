@@ -96,7 +96,7 @@ public class ProfileClientTests : BaseClientTests
             BusinessCategory = "OTHER_MERCHANDISE"
         };
         var mockHttp = new MockHttpMessageHandler();
-        mockHttp.Expect($"{BaseMollieClient.ApiEndPoint}profiles/{profileId}")
+        mockHttp.Expect(HttpMethod.Patch, $"{BaseMollieClient.ApiEndPoint}profiles/{profileId}")
             .With(request => request.Headers.Contains("Idempotency-Key"))
             .Respond("application/json", defaultProfileJsonResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
