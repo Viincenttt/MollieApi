@@ -162,6 +162,44 @@ public class ProfileClientTests : BaseClientTests
         // Assert
         exception.Message.Should().Be($"Required URL argument '{nameof(paymentMethod)}' is null or empty");
     }
+    
+    [Fact]
+    public async Task DisablePaymentMethodAsync_ForCurrentProfile_ResponseIsDeserializedInExpectedFormat()
+    {
+        // Arrange
+        const string paymentMethod = PaymentMethod.Ideal;
+        var mockHttp = new MockHttpMessageHandler();
+        mockHttp.Expect(HttpMethod.Delete, $"{BaseMollieClient.ApiEndPoint}profiles/me/methods/{paymentMethod}")
+            .With(request => request.Headers.Contains("Idempotency-Key"))
+            .Respond(HttpStatusCode.NoContent);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        using var profileClient = new ProfileClient("abcde", httpClient);
+        
+        // Act
+        await profileClient.DisablePaymentMethodAsync(paymentMethod);
+
+        // Assert
+        mockHttp.VerifyNoOutstandingExpectation();
+    }
+    
+    [Fact]
+    public async Task DisablePaymentMethodAsync_ForCurrentProfileWithMissingPaymentMethodParameter_ThrowsArgumentException()
+    {
+        // Arrange
+        const string paymentMethod = PaymentMethod.Ideal;
+        var mockHttp = new MockHttpMessageHandler();
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        using var profileClient = new ProfileClient("abcde", httpClient);
+        
+        // Act
+        var exception = await Assert.ThrowsAsync<ArgumentException>(() => profileClient.DisablePaymentMethodAsync(string.Empty));
+
+        // Assert
+        exception.Message.Should().Be($"Required URL argument '{nameof(paymentMethod)}' is null or empty");
+    }
+    
+    //[Fact]
+    //public async Task 
 
     private void AssertDefaultProfileResponse(ProfileResponse result)
     {
