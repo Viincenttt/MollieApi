@@ -231,6 +231,44 @@ public class ProfileClientTests : BaseClientTests
         exception.Message.Should().Be($"Required URL argument 'profileId' is null or empty");
     }
 
+    [Fact]
+    public async Task EnableGiftCardIssuerAsync_ForCurrentProfile_ResponseIsDeserializedInExpectedFormat()
+    {
+        // Arrange
+        const string issuer = "festivalcadeau";
+        var mockHttp = new MockHttpMessageHandler();
+        mockHttp.Expect(HttpMethod.Post,$"{BaseMollieClient.ApiEndPoint}profiles/me/methods/giftcard/issuers/{issuer}")
+            .With(request => request.Headers.Contains("Idempotency-Key"))
+            .Respond("application/json", defaultEnableGiftcardIssuerResponse);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        using var profileClient = new ProfileClient("abcde", httpClient);
+        
+        // Act
+        var result = await profileClient.EnableGiftCardIssuerAsync(issuer);
+
+        // Assert
+        mockHttp.VerifyNoOutstandingRequest();
+        result.Resource.Should().Be("issuer");
+        result.Id.Should().Be(issuer);
+        result.Description.Should().Be("FestivalCadeau Giftcard");
+        result.Status.Should().Be("pending-issuer");
+    }
+
+    [Fact]
+    public async Task EnableGiftCardIssuerAsync_ForCurrentProfileWithMissingIssuerParameter_ThrowsArgumentException()
+    {
+        // Arrange
+        var mockHttp = new MockHttpMessageHandler();
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        using var profileClient = new ProfileClient("abcde", httpClient);
+        
+        // Act
+        var exception = await Assert.ThrowsAsync<ArgumentException>(() => profileClient.EnableGiftCardIssuerAsync(string.Empty));
+
+        // Assert
+        exception.Message.Should().Be($"Required URL argument 'issuer' is null or empty");
+    }
+
     private void AssertDefaultProfileResponse(ProfileResponse result)
     {
         result.Resource.Should().Be("profile");
@@ -243,6 +281,23 @@ public class ProfileClientTests : BaseClientTests
         result.BusinessCategory.Should().Be("OTHER_MERCHANDISE");
         result.Status.Should().Be(ProfileStatus.Unverified);
     }
+
+    private const string defaultEnableGiftcardIssuerResponse = @"{
+     ""resource"": ""issuer"",
+     ""id"": ""festivalcadeau"",
+     ""description"": ""FestivalCadeau Giftcard"",
+     ""status"": ""pending-issuer"",
+     ""_links"": {
+         ""self"": {
+             ""href"": ""https://api.mollie.com/v2/issuers/festivalcadeau"",
+             ""type"": ""application/hal+json""
+         },
+         ""documentation"": {
+             ""href"": ""https://docs.mollie.com/reference/v2/profiles-api/enable-giftcard-issuer"",
+             ""type"": ""text/html""
+         }
+     }
+ }";
 
     private const string defaultPaymentMethodResponse = @"{
      ""resource"": ""method"",
