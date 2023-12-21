@@ -164,7 +164,7 @@ public class ProfileClientTests : BaseClientTests
     }
     
     [Fact]
-    public async Task DisablePaymentMethodAsync_ForCurrentProfile_ResponseIsDeserializedInExpectedFormat()
+    public async Task DisablePaymentMethodAsync_ForCurrentProfile_SendsRequest()
     {
         // Arrange
         const string paymentMethod = PaymentMethod.Ideal;
@@ -186,7 +186,6 @@ public class ProfileClientTests : BaseClientTests
     public async Task DisablePaymentMethodAsync_ForCurrentProfileWithMissingPaymentMethodParameter_ThrowsArgumentException()
     {
         // Arrange
-        const string paymentMethod = PaymentMethod.Ideal;
         var mockHttp = new MockHttpMessageHandler();
         HttpClient httpClient = mockHttp.ToHttpClient();
         using var profileClient = new ProfileClient("abcde", httpClient);
@@ -195,11 +194,42 @@ public class ProfileClientTests : BaseClientTests
         var exception = await Assert.ThrowsAsync<ArgumentException>(() => profileClient.DisablePaymentMethodAsync(string.Empty));
 
         // Assert
-        exception.Message.Should().Be($"Required URL argument '{nameof(paymentMethod)}' is null or empty");
+        exception.Message.Should().Be($"Required URL argument 'paymentMethod' is null or empty");
+    }
+
+    [Fact]
+    public async Task DeleteProfileAsync_ForGivenProfileId_SendsRequest()
+    {
+        // Arrange
+        const string profileId = "profile-id";
+        var mockHttp = new MockHttpMessageHandler();
+        mockHttp.Expect(HttpMethod.Delete, $"{BaseMollieClient.ApiEndPoint}profiles/{profileId}")
+            .With(request => request.Headers.Contains("Idempotency-Key"))
+            .Respond(HttpStatusCode.NoContent);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        using var profileClient = new ProfileClient("abcde", httpClient);
+        
+        // Act
+        await profileClient.DeleteProfileAsync(profileId);
+
+        // Assert
+        mockHttp.VerifyNoOutstandingExpectation();
     }
     
-    //[Fact]
-    //public async Task 
+    [Fact]
+    public async Task DeleteProfileAsync_WithMissingProfileIdParameter_ThrowsArgumentException()
+    {
+        // Arrange
+        var mockHttp = new MockHttpMessageHandler();
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        using var profileClient = new ProfileClient("abcde", httpClient);
+        
+        // Act
+        var exception = await Assert.ThrowsAsync<ArgumentException>(() => profileClient.DeleteProfileAsync(string.Empty));
+
+        // Assert
+        exception.Message.Should().Be($"Required URL argument 'profileId' is null or empty");
+    }
 
     private void AssertDefaultProfileResponse(ProfileResponse result)
     {
