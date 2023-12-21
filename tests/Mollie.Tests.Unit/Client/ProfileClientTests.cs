@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -28,7 +29,7 @@ public class ProfileClientTests : BaseClientTests
             BusinessCategory = "OTHER_MERCHANDISE"
         };
         var mockHttp = new MockHttpMessageHandler();
-        mockHttp.When($"{BaseMollieClient.ApiEndPoint}profiles")
+        mockHttp.Expect(HttpMethod.Post, $"{BaseMollieClient.ApiEndPoint}profiles")
             .With(request => request.Headers.Contains("Idempotency-Key"))
             .Respond("application/json", defaultProfileJsonResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
@@ -38,6 +39,7 @@ public class ProfileClientTests : BaseClientTests
         var result = await profileClient.CreateProfileAsync(profileRequest);
 
         // Assert
+        mockHttp.VerifyNoOutstandingRequest();
         AssertDefaultProfileResponse(result);
     }
     
@@ -47,7 +49,7 @@ public class ProfileClientTests : BaseClientTests
         // Arrange
         const string profileId = "profile-id";
         var mockHttp = new MockHttpMessageHandler();
-        mockHttp.When($"{BaseMollieClient.ApiEndPoint}profiles/{profileId}")
+        mockHttp.Expect(HttpMethod.Get,$"{BaseMollieClient.ApiEndPoint}profiles/{profileId}")
             .With(request => request.Headers.Contains("Idempotency-Key"))
             .Respond("application/json", defaultProfileJsonResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
@@ -57,6 +59,7 @@ public class ProfileClientTests : BaseClientTests
         var result = await profileClient.GetProfileAsync(profileId);
 
         // Assert
+        mockHttp.VerifyNoOutstandingRequest();
         AssertDefaultProfileResponse(result);
     }
 
@@ -65,7 +68,7 @@ public class ProfileClientTests : BaseClientTests
     {
         // Arrange
         var mockHttp = new MockHttpMessageHandler();
-        mockHttp.When($"{BaseMollieClient.ApiEndPoint}profiles/me")
+        mockHttp.Expect(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}profiles/me")
             .With(request => request.Headers.Contains("Idempotency-Key"))
             .Respond("application/json", defaultProfileJsonResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
@@ -75,6 +78,7 @@ public class ProfileClientTests : BaseClientTests
         var result = await profileClient.GetCurrentProfileAsync();
 
         // Assert
+        mockHttp.VerifyNoOutstandingRequest();
         AssertDefaultProfileResponse(result);
     }
 
@@ -92,7 +96,7 @@ public class ProfileClientTests : BaseClientTests
             BusinessCategory = "OTHER_MERCHANDISE"
         };
         var mockHttp = new MockHttpMessageHandler();
-        mockHttp.When($"{BaseMollieClient.ApiEndPoint}profiles/{profileId}")
+        mockHttp.Expect($"{BaseMollieClient.ApiEndPoint}profiles/{profileId}")
             .With(request => request.Headers.Contains("Idempotency-Key"))
             .Respond("application/json", defaultProfileJsonResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
@@ -102,6 +106,7 @@ public class ProfileClientTests : BaseClientTests
         var result = await profileClient.UpdateProfileAsync(profileId, profileRequest);
 
         // Assert
+        mockHttp.VerifyNoOutstandingRequest();
         AssertDefaultProfileResponse(result);
     }
     
@@ -127,7 +132,7 @@ public class ProfileClientTests : BaseClientTests
         // Arrange
         const string paymentMethod = PaymentMethod.Ideal;
         var mockHttp = new MockHttpMessageHandler();
-        mockHttp.When($"{BaseMollieClient.ApiEndPoint}profiles/me/methods/{paymentMethod}")
+        mockHttp.Expect(HttpMethod.Post,$"{BaseMollieClient.ApiEndPoint}profiles/me/methods/{paymentMethod}")
             .With(request => request.Headers.Contains("Idempotency-Key"))
             .Respond("application/json", defaultPaymentMethodResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
@@ -137,6 +142,7 @@ public class ProfileClientTests : BaseClientTests
         var result = await profileClient.EnablePaymentMethodAsync(paymentMethod);
 
         // Assert
+        mockHttp.VerifyNoOutstandingRequest();
         result.Resource.Should().Be("method");
         result.Id.Should().Be(paymentMethod);
     }
