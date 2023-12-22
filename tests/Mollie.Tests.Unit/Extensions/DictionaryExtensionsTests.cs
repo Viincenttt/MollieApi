@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using FluentAssertions;
 using Mollie.Api.Extensions;
 using Xunit;
@@ -64,6 +63,34 @@ namespace Mollie.Tests.Unit.Extensions
 
             // Act
             parameters.AddValueIfNotNullOrEmpty("include", "");
+
+            // Assert
+            parameters.Should().BeEmpty();
+        }
+        
+        [Fact]
+        public void AddValueIfTrue_ValueIsTrue_ValueIsAdded()
+        {
+            // Arrange
+            var parameters = new Dictionary<string, string>();
+            var parameterName = "testmode";
+
+            // Act
+            parameters.AddValueIfTrue(parameterName, true);
+
+            // Assert
+            parameters.Should().NotBeEmpty();
+            parameters[parameterName].Should().Be(bool.TrueString.ToLower());
+        }
+
+        [Fact]
+        public void AddValueIfTrue_ValueIsFalse_ValueIsNotAdded()
+        {
+            // Arrange
+            var parameters = new Dictionary<string, string>();
+
+            // Act
+            parameters.AddValueIfTrue("testmode", false);
 
             // Assert
             parameters.Should().BeEmpty();
