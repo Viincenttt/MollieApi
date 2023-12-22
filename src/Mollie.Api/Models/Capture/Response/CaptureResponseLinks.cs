@@ -1,18 +1,30 @@
-﻿using Mollie.Api.Models.Url;
+﻿using Mollie.Api.Models.Payment.Response;
+using Mollie.Api.Models.Settlement;
+using Mollie.Api.Models.Shipment;
+using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Models.Capture {
     public class CaptureResponseLinks {
         /// <summary>
-        /// The API resource URL of the order itself.
+        /// The API resource URL of the capture itself.
         /// </summary>
         public UrlObjectLink<CaptureResponse> Self { get; set; }
 
         /// <summary>
-        /// The URL your customer should visit to make the payment for the order.
-        /// This is where you should redirect the customer to after creating the order.
+        /// The API resource URL of the payment the capture belongs to.
         /// </summary>
-        public UrlLink Checkout { get; set; }
+        public UrlObjectLink<PaymentResponse> Payment { get; set; }
 
+        /// <summary>
+        /// The API resource URL of the shipment that triggered the capture to be created.
+        /// </summary>
+        public UrlObjectLink<ShipmentResponse> Shipment { get; set; }
+        
+        /// <summary>
+        /// The API resource URL of the settlement this capture has been settled with. Not present if not yet settled.
+        /// </summary>
+        public UrlObjectLink<SettlementResponse> Settlement { get; set; }
+        
         /// <summary>
         /// The URL to the order retrieval endpoint documentation.
         /// </summary>
