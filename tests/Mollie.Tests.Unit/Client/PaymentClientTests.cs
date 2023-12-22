@@ -10,6 +10,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
 using FluentAssertions.Extensions;
+using Mollie.Api.Models.Payment.Response.Specific;
 using Xunit;
 
 namespace Mollie.Tests.Unit.Client;
@@ -217,7 +218,186 @@ public class PaymentClientTests : BaseClientTests {
     }
 
     [Fact]
-    public async Task GetPaymentAsync_ForCreditCardPayment_CreditCardDetailsAreDeserialized()
+    public async Task GetPaymentAsync_ForBanContactPayment_DetailsAreDeserialized()
+    {
+        // Given: We make a request to retrieve a bancontact payment
+        const string paymentId = "tr_WDqYK6vllg";
+        const string jsonResponse = @"{
+            ""resource"": ""payment"",
+            ""id"": ""tr_WDqYK6vllg"",
+            ""mode"": ""test"",
+            ""createdAt"": ""2018-03-20T13:13:37+00:00"",
+            ""amount"":{
+                ""currency"":""EUR"",
+                ""value"":""100.00""
+            },
+            ""description"":""Description"",
+            ""method"": ""bancontact"",
+            ""expiresAt"": ""2018-03-20T13:28:37+00:00"",
+            ""details"": {
+                ""cardNumber"": ""1234567890123456"",
+                ""cardFingerprint"": ""fingerprint"",
+                ""qrCode"":{
+                    ""height"": 5,
+                    ""width"": 10,
+                    ""src"": ""https://www.mollie.com/qr/12345678.png""
+                },
+                ""consumerName"": ""consumer-name"",
+                ""consumerAccount"": ""consumer-account"",
+                ""consumerBic"": ""consumer-bic"",
+                ""failureReason"": ""failure-reason""
+            }
+        }";
+        var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}", jsonResponse);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
+        
+        // When: We send the request
+        var result = await paymentClient.GetPaymentAsync(paymentId);
+        
+        // Then
+        result.Should().BeOfType<BancontactPaymentResponse>();
+        var banContactPayment = result as BancontactPaymentResponse;
+        banContactPayment.Details.CardNumber.Should().Be("1234567890123456");
+        banContactPayment.Details.CardFingerprint.Should().Be("fingerprint");
+        banContactPayment.Details.QrCode.Should().NotBeNull();
+        banContactPayment.Details.QrCode.Height.Should().Be(5);
+        banContactPayment.Details.QrCode.Width.Should().Be(10);
+        banContactPayment.Details.QrCode.Src.Should().Be("https://www.mollie.com/qr/12345678.png");
+        banContactPayment.Details.ConsumerName.Should().Be("consumer-name");
+        banContactPayment.Details.ConsumerAccount.Should().Be("consumer-account");
+        banContactPayment.Details.ConsumerBic.Should().Be("consumer-bic");
+        banContactPayment.Details.FailureReason.Should().Be("failure-reason");
+    }
+
+    [Fact]
+    public async Task GetPaymentAsync_ForSepaDirectPayment_DetailsAreDeserialized()
+    {
+        // Given: We make a request to retrieve a sepa direct payment
+        const string paymentId = "tr_WDqYK6vllg";
+        const string jsonResponse = @"{
+            ""resource"": ""payment"",
+            ""id"": ""tr_WDqYK6vllg"",
+            ""mode"": ""test"",
+            ""createdAt"": ""2018-03-20T13:13:37+00:00"",
+            ""amount"":{
+                ""currency"":""EUR"",
+                ""value"":""100.00""
+            },
+            ""description"":""Description"",
+            ""method"": ""directdebit"",
+            ""expiresAt"": ""2018-03-20T13:28:37+00:00"",
+            ""details"": {
+                ""consumerName"": ""consumer-name"",
+                ""consumerAccount"": ""consumer-account"",
+                ""consumerBic"": ""consumer-bic"",
+                ""transferReference"": ""transfer-reference"",
+                ""bankReasonCode"": ""bank-reason-code"",
+                ""bankReason"": ""bank-reason"",
+                ""batchReference"": ""batch-reference"",
+                ""mandateReference"": ""mandate-reference"",
+                ""creditorIdentifier"": ""creditor-identifier"",
+                ""dueDate"": ""2018-03-20"",
+                ""signatureDate"": ""2018-03-20"",
+                ""endToEndIdentifier"": ""end-to-end-identifier"",
+                ""batchReference"": ""batch-reference"",
+                ""fileReference"": ""file-reference""                
+            }
+        }";
+        var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get,
+            $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}", jsonResponse);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
+
+        // When: We send the request
+        var result = await paymentClient.GetPaymentAsync(paymentId);
+
+        // Then
+        result.Should().BeOfType<SepaDirectDebitResponse>();
+        var sepaDirectDebitPayment = result as SepaDirectDebitResponse;
+        sepaDirectDebitPayment.Details.ConsumerName.Should().Be("consumer-name");
+        sepaDirectDebitPayment.Details.ConsumerAccount.Should().Be("consumer-account");
+        sepaDirectDebitPayment.Details.ConsumerBic.Should().Be("consumer-bic");
+        sepaDirectDebitPayment.Details.TransferReference.Should().Be("transfer-reference");
+        sepaDirectDebitPayment.Details.BankReasonCode.Should().Be("bank-reason-code");
+        sepaDirectDebitPayment.Details.BankReason.Should().Be("bank-reason");
+        sepaDirectDebitPayment.Details.BatchReference.Should().Be("batch-reference");
+        sepaDirectDebitPayment.Details.MandateReference.Should().Be("mandate-reference");
+        sepaDirectDebitPayment.Details.CreditorIdentifier.Should().Be("creditor-identifier");
+        sepaDirectDebitPayment.Details.DueDate.Should().Be("03/20/2018 00:00:00");
+        sepaDirectDebitPayment.Details.SignatureDate.Should().Be("03/20/2018 00:00:00");
+        sepaDirectDebitPayment.Details.EndToEndIdentifier.Should().Be("end-to-end-identifier");
+        sepaDirectDebitPayment.Details.BatchReference.Should().Be("batch-reference");
+        sepaDirectDebitPayment.Details.FileReference.Should().Be("file-reference");
+    }
+
+    [Fact]
+    public async Task GetPaymentAsync_ForPayPalPayment_DetailsAreDeserialized()
+    {
+        // Given: We make a request to retrieve a paypal payment
+        const string paymentId = "tr_WDqYK6vllg";
+        const string jsonResponse = @"{
+            ""resource"": ""payment"",
+            ""id"": ""tr_WDqYK6vllg"",
+            ""mode"": ""test"",
+            ""createdAt"": ""2018-03-20T13:13:37+00:00"",
+            ""amount"":{
+                ""currency"":""EUR"",
+                ""value"":""100.00""
+            },
+            ""description"":""Description"",
+            ""method"": ""paypal"",
+            ""expiresAt"": ""2018-03-20T13:28:37+00:00"",
+            ""details"": {
+                ""consumerName"": ""consumer-name"",
+                ""consumerAccount"": ""consumer-account"",
+                ""paypalReference"": ""paypal-ref"",
+                ""paypalPayerId"": ""paypal-payer-id"",
+                ""sellerProtection"": ""Eligible"",
+                ""shippingAddress"": {
+                    ""streetAndNumber"": ""street-and-number"",
+                    ""streetAdditional"": ""street-additional"",
+                    ""postalCode"": ""postal-code"",
+                    ""city"": ""city"",
+                    ""region"": ""region"",
+                    ""country"": ""country""
+                },
+                ""paypalFee"": {
+                    ""currency"": ""EUR"",
+                    ""value"": ""100.00""
+                }           
+            }
+        }";
+        var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get,
+            $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}", jsonResponse);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
+
+        // When: We send the request
+        var result = await paymentClient.GetPaymentAsync(paymentId);
+
+        // Then
+        result.Should().BeOfType<PayPalPaymentResponse>();
+        var payPalPayment = result as PayPalPaymentResponse;
+        payPalPayment.Details.ConsumerName.Should().Be("consumer-name");
+        payPalPayment.Details.ConsumerAccount.Should().Be("consumer-account");
+        payPalPayment.Details.PayPalReference.Should().Be("paypal-ref");
+        payPalPayment.Details.PaypalPayerId.Should().Be("paypal-payer-id");
+        payPalPayment.Details.SellerProtection.Should().Be("Eligible");
+        payPalPayment.Details.ShippingAddress.Should().NotBeNull();
+        payPalPayment.Details.ShippingAddress.StreetAndNumber.Should().Be("street-and-number");
+        payPalPayment.Details.ShippingAddress.StreetAdditional.Should().Be("street-additional");
+        payPalPayment.Details.ShippingAddress.PostalCode.Should().Be("postal-code");
+        payPalPayment.Details.ShippingAddress.City.Should().Be("city");
+        payPalPayment.Details.ShippingAddress.Region.Should().Be("region");
+        payPalPayment.Details.ShippingAddress.Country.Should().Be("country");
+        payPalPayment.Details.PaypalFee.Should().NotBeNull();
+        payPalPayment.Details.PaypalFee.Currency.Should().Be("EUR");
+        payPalPayment.Details.PaypalFee.Value.Should().Be("100.00");
+    }
+
+    [Fact]
+    public async Task GetPaymentAsync_ForCreditCardPayment_DetailsAreDeserialized()
     {
         // Given: We make a request to retrieve a credit card payment
         const string paymentId = "tr_WDqYK6vllg";
