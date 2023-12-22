@@ -39,7 +39,7 @@ namespace Mollie.Api.Client {
 
         public async Task<ProfileResponse> UpdateProfileAsync(string profileId, ProfileRequest request) {
             this.ValidateRequiredUrlParameter(nameof(profileId), profileId);
-            return await this.PostAsync<ProfileResponse>($"profiles/{profileId}", request).ConfigureAwait(false);
+            return await this.PatchAsync<ProfileResponse>($"profiles/{profileId}", request).ConfigureAwait(false);
         }
 
         public async Task<PaymentMethodResponse> EnablePaymentMethodAsync(string profileId, string paymentMethod) {
