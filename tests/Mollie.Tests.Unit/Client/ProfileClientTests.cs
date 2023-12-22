@@ -81,6 +81,54 @@ public class ProfileClientTests : BaseClientTests
         mockHttp.VerifyNoOutstandingRequest();
         AssertDefaultProfileResponse(result);
     }
+    
+    [Fact]
+    public async Task GetProfileListAsync_WithNoParameters_ResponseIsDeserializedInExpectedFormat()
+    {
+        // Arrange
+        var mockHttp = new MockHttpMessageHandler();
+        mockHttp.Expect(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}profiles")
+            .With(request => request.Headers.Contains("Idempotency-Key"))
+            .Respond("application/json", defaultGetProfileListJsonResponse);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        using var profileClient = new ProfileClient("abcde", httpClient);
+        
+        // Act
+        var result = await profileClient.GetProfileListAsync();
+
+        // Assert
+        mockHttp.VerifyNoOutstandingRequest();
+        result.Count.Should().Be(1);
+        var profile = result.Items[0];
+        profile.Resource.Should().Be("profiles");
+        profile.Id.Should().Be("pfl_v9hTwCvYqw");
+        profile.Mode.Should().Be(Mode.Live);
+        profile.Name.Should().Be("My website name");
+        profile.Email.Should().Be("info@mywebsite.com");
+        profile.Website.Should().Be("https://www.mywebsite.com");
+        profile.Phone.Should().Be("+31208202070");
+        profile.BusinessCategory.Should().Be("OTHER_MERCHANDISE");
+        profile.Status.Should().Be(ProfileStatus.Verified);
+        profile.Review.Status.Should().Be(ReviewStatus.Pending);
+        profile.CreatedAt.Should().Be(DateTime.Parse("2018-03-20T09:28:37+00:00"));
+        profile.Links.Should().NotBeNull();
+        profile.Links.Self.Href.Should().Be("https://api.mollie.com/v2/profiles/pfl_v9hTwCvYqw");
+        profile.Links.Self.Type.Should().Be("application/hal+json");
+        profile.Links.Dashboard.Href.Should().Be("https://www.mollie.com/dashboard/org_123456789/settings/profiles/pfl_v9hTwCvYqw");
+        profile.Links.Dashboard.Type.Should().Be("text/html");
+        profile.Links.Chargebacks.Href.Should().Be("https://api.mollie.com/v2/chargebacks?profileId=pfl_v9hTwCvYqw");
+        profile.Links.Chargebacks.Type.Should().Be("application/hal+json");
+        profile.Links.Methods.Href.Should().Be("https://api.mollie.com/v2/methods?profileId=pfl_v9hTwCvYqw");
+        profile.Links.Methods.Type.Should().Be("application/hal+json");
+        profile.Links.Payments.Href.Should().Be("https://api.mollie.com/v2/payments?profileId=pfl_v9hTwCvYqw");
+        profile.Links.Payments.Type.Should().Be("application/hal+json");
+        profile.Links.Refunds.Href.Should().Be("https://api.mollie.com/v2/refunds?profileId=pfl_v9hTwCvYqw");
+        profile.Links.Refunds.Type.Should().Be("application/hal+json");
+        profile.Links.CheckoutPreviewUrl.Href.Should().Be("https://www.mollie.com/payscreen/preview/pfl_v9hTwCvYqw");
+        profile.Links.CheckoutPreviewUrl.Type.Should().Be("text/html");
+        profile.Links.Documentation.Href.Should().Be("https://docs.mollie.com/reference/v2/profiles-api/create-profile");
+        profile.Links.Documentation.Type.Should().Be("text/html");
+    }
 
     [Fact]
     public async Task UpdateProfileAsync_WithRequiredParameters_ResponseIsDeserializedInExpectedFormat()
@@ -407,6 +455,79 @@ public class ProfileClientTests : BaseClientTests
         ""documentation"": {
             ""href"": ""https://docs.mollie.com/reference/v2/profiles-api/create-profile"",
             ""type"": ""text/html""
+        }
+    }
+}";
+
+    private const string defaultGetProfileListJsonResponse = @"{
+    ""_embedded"": {
+        ""profiles"": [
+            {
+                ""resource"": ""profiles"",
+                ""id"": ""pfl_v9hTwCvYqw"",
+                ""mode"": ""live"",
+                ""name"": ""My website name"",
+                ""website"": ""https://www.mywebsite.com"",
+                ""email"": ""info@mywebsite.com"",
+                ""phone"": ""+31208202070"",
+                ""businessCategory"": ""OTHER_MERCHANDISE"",
+                ""categoryCode"": 5399,
+                ""status"": ""verified"",
+                ""review"": {
+                    ""status"": ""pending""
+                },
+                ""createdAt"": ""2018-03-20T09:28:37+00:00"",
+                ""_links"": {
+                    ""self"": {
+                        ""href"": ""https://api.mollie.com/v2/profiles/pfl_v9hTwCvYqw"",
+                        ""type"": ""application/hal+json""
+                    },
+                    ""dashboard"": {
+                        ""href"": ""https://www.mollie.com/dashboard/org_123456789/settings/profiles/pfl_v9hTwCvYqw"",
+                        ""type"": ""text/html""
+                    },
+                    ""chargebacks"": {
+                        ""href"": ""https://api.mollie.com/v2/chargebacks?profileId=pfl_v9hTwCvYqw"",
+                        ""type"": ""application/hal+json""
+                    },
+                    ""methods"": {
+                        ""href"": ""https://api.mollie.com/v2/methods?profileId=pfl_v9hTwCvYqw"",
+                        ""type"": ""application/hal+json""
+                    },
+                    ""payments"": {
+                        ""href"": ""https://api.mollie.com/v2/payments?profileId=pfl_v9hTwCvYqw"",
+                        ""type"": ""application/hal+json""
+                    },
+                    ""refunds"": {
+                        ""href"": ""https://api.mollie.com/v2/refunds?profileId=pfl_v9hTwCvYqw"",
+                        ""type"": ""application/hal+json""
+                    },
+                    ""checkoutPreviewUrl"": {
+                        ""href"": ""https://www.mollie.com/payscreen/preview/pfl_v9hTwCvYqw"",
+                        ""type"": ""text/html""
+                    },
+                    ""documentation"": {
+                        ""href"": ""https://docs.mollie.com/reference/v2/profiles-api/create-profile"",
+                        ""type"": ""text/html""
+                    }
+                }
+            }
+        ]
+    },
+    ""count"": 1,
+    ""_links"": {
+        ""documentation"": {
+            ""href"": ""https://docs.mollie.com/reference/v2/profiles-api/list-profiles"",
+            ""type"": ""text/html""
+        },
+        ""self"": {
+            ""href"": ""https://api.mollie.com/v2/profiles?limit=5"",
+            ""type"": ""application/hal+json""
+        },
+        ""previous"": null,
+        ""next"": {
+            ""href"": ""https://api.mollie.com/v2/profiles?from=pfl_3RkSN1zuPE&limit=5"",
+            ""type"": ""application/hal+json""
         }
     }
 }";
