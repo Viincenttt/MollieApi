@@ -36,12 +36,5 @@ namespace Mollie.Api.Client {
         public async Task<ListResponse<InvoiceResponse>> GetInvoiceListAsync(UrlObjectLink<ListResponse<InvoiceResponse>> url) {
             return await this.GetAsync(url).ConfigureAwait(false);
         }
-        
-        private Dictionary<string, string> BuildQueryParameters(string profileId, bool testmode) {
-            var result = new Dictionary<string, string>();
-            result.AddValueIfNotNullOrEmpty("profileId", profileId);
-            result.AddValueIfTrue("testmode", testmode);
-            return result;
-        }
     }
 }
