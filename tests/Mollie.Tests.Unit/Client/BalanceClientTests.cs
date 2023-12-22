@@ -47,6 +47,11 @@ namespace Mollie.Tests.Unit.Client {
           balanceResponse.TransferDestination.Type.Should().Be(getBalanceResponseFactory.TransferDestination.Type);
           balanceResponse.TransferDestination.BankAccount.Should().Be(getBalanceResponseFactory.TransferDestination.BankAccount);
           balanceResponse.TransferDestination.BeneficiaryName.Should().Be(getBalanceResponseFactory.TransferDestination.BeneficiaryName);
+          balanceResponse.Links.Should().NotBeNull();
+          balanceResponse.Links.Self.Href.Should().Be($"https://api.mollie.com/v2/balances/{getBalanceResponseFactory.BalanceId}");
+          balanceResponse.Links.Self.Type.Should().Be("application/hal+json");
+          balanceResponse.Links.Documentation.Href.Should().Be($"https://docs.mollie.com/reference/v2/balances-api/get-balance");
+          balanceResponse.Links.Documentation.Type.Should().Be("text/html");
       }
       
       [Theory]
