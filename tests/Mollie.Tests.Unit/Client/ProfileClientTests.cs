@@ -268,6 +268,40 @@ public class ProfileClientTests : BaseClientTests
         // Assert
         exception.Message.Should().Be($"Required URL argument 'issuer' is null or empty");
     }
+    
+    [Fact]
+    public async Task DisableGiftCardIssuerAsync_ForCurrentProfile_SendsRequest()
+    {
+        // Arrange
+        const string issuer = "festivalcadeau";
+        var mockHttp = new MockHttpMessageHandler();
+        mockHttp.Expect(HttpMethod.Delete, $"{BaseMollieClient.ApiEndPoint}profiles/me/methods/giftcard/issuers/{issuer}")
+            .With(request => request.Headers.Contains("Idempotency-Key"))
+            .Respond(HttpStatusCode.NoContent);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        using var profileClient = new ProfileClient("abcde", httpClient);
+        
+        // Act
+        await profileClient.DisableGiftCardIssuerAsync(issuer);
+
+        // Assert
+        mockHttp.VerifyNoOutstandingExpectation();
+    }
+
+    [Fact]
+    public async Task DisableGiftCardIssuerAsync_ForCurrentProfileWithMissingIssuerParameter_ThrowsArgumentException()
+    {
+        // Arrange
+        var mockHttp = new MockHttpMessageHandler();
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        using var profileClient = new ProfileClient("abcde", httpClient);
+        
+        // Act
+        var exception = await Assert.ThrowsAsync<ArgumentException>(() => profileClient.DisableGiftCardIssuerAsync(string.Empty));
+
+        // Assert
+        exception.Message.Should().Be($"Required URL argument 'issuer' is null or empty");
+    }
 
     private void AssertDefaultProfileResponse(ProfileResponse result)
     {
