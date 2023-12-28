@@ -604,7 +604,209 @@ public class PaymentClientTests : BaseClientTests {
         giftcardPayment.Details.RemainderAmount.Currency.Should().Be("EUR");
         giftcardPayment.Details.RemainderAmount.Value.Should().Be("100.00");
         giftcardPayment.Details.RemainderMethod.Should().Be("ideal");
+    }
+
+    [Fact]
+    public async Task GetPaymentAsync_ForBelfiusPayment_DetailsAreDeserialized()
+    {
+        // Given: We make a request to retrieve a belfius payment
+        const string paymentId = "tr_WDqYK6vllg";
+        const string jsonResponse = @"{
+            ""resource"": ""payment"",
+            ""id"": ""tr_WDqYK6vllg"",
+            ""mode"": ""test"",
+            ""createdAt"": ""2018-03-20T13:13:37+00:00"",
+            ""amount"":{
+                ""currency"":""EUR"",
+                ""value"":""100.00""
+            },
+            ""description"":""Description"",
+            ""method"": ""belfius"",
+            ""expiresAt"": ""2018-03-20T13:28:37+00:00"",
+            ""details"": {
+                ""consumerName"": ""consumer-name"",
+                ""consumerAccount"": ""consumer-account"",
+                ""consumerBic"": ""consumer-bic""
+            }
+        }";
+        var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}", jsonResponse);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
         
+        // When: We send the request
+        var result = await paymentClient.GetPaymentAsync(paymentId);
+        
+        // Then
+        result.Should().BeOfType<BelfiusPaymentResponse>();
+        var belfiusPayment = result as BelfiusPaymentResponse;
+        belfiusPayment!.Details.ConsumerName.Should().Be("consumer-name");
+        belfiusPayment.Details.ConsumerAccount.Should().Be("consumer-account");
+        belfiusPayment.Details.ConsumerBic.Should().Be("consumer-bic");
+    }
+
+    [Fact]
+    public async Task GetPaymentAsync_ForIngHomePay_DetailsAreDeserialized()
+    {
+        // Given: We make a request to retrieve a ing home pay payment
+        const string paymentId = "tr_WDqYK6vllg";
+        const string jsonResponse = @"{
+            ""resource"": ""payment"",
+            ""id"": ""tr_WDqYK6vllg"",
+            ""mode"": ""test"",
+            ""createdAt"": ""2018-03-20T13:13:37+00:00"",
+            ""amount"":{
+                ""currency"":""EUR"",
+                ""value"":""100.00""
+            },
+            ""description"":""Description"",
+            ""method"": ""inghomepay"",
+            ""expiresAt"": ""2018-03-20T13:28:37+00:00"",
+            ""details"": {
+                ""consumerName"": ""consumer-name"",
+                ""consumerAccount"": ""consumer-account"",
+                ""consumerBic"": ""consumer-bic""
+            }
+        }";
+        
+        var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}", jsonResponse);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
+        
+        // When: We send the request
+        var result = await paymentClient.GetPaymentAsync(paymentId);
+        
+        // Then
+        result.Should().BeOfType<IngHomePayPaymentResponse>();
+        var ingHomePayPayment = result as IngHomePayPaymentResponse;
+        ingHomePayPayment!.Details.ConsumerName.Should().Be("consumer-name");
+        ingHomePayPayment.Details.ConsumerAccount.Should().Be("consumer-account");
+        ingHomePayPayment.Details.ConsumerBic.Should().Be("consumer-bic");
+    }
+    
+    [Fact]
+    public async Task GetPaymentAsync_ForKbcPayment_DetailsAreDeserialized()
+    {
+        // Given: We make a request to retrieve a ing home pay payment
+        const string paymentId = "tr_WDqYK6vllg";
+        const string jsonResponse = @"{
+            ""resource"": ""payment"",
+            ""id"": ""tr_WDqYK6vllg"",
+            ""mode"": ""test"",
+            ""createdAt"": ""2018-03-20T13:13:37+00:00"",
+            ""amount"":{
+                ""currency"":""EUR"",
+                ""value"":""100.00""
+            },
+            ""description"":""Description"",
+            ""method"": ""kbc"",
+            ""expiresAt"": ""2018-03-20T13:28:37+00:00"",
+            ""details"": {
+                ""consumerName"": ""consumer-name"",
+                ""consumerAccount"": ""consumer-account"",
+                ""consumerBic"": ""consumer-bic""
+            }
+        }";
+        
+        var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}", jsonResponse);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
+        
+        // When: We send the request
+        var result = await paymentClient.GetPaymentAsync(paymentId);
+        
+        // Then
+        result.Should().BeOfType<KbcPaymentResponse>();
+        var kbcPayment = result as KbcPaymentResponse;
+        kbcPayment!.Details.ConsumerName.Should().Be("consumer-name");
+        kbcPayment.Details.ConsumerAccount.Should().Be("consumer-account");
+        kbcPayment.Details.ConsumerBic.Should().Be("consumer-bic");
+    }
+
+    [Fact]
+    public async Task GetPaymentAsync_ForIdealPayment_DetailsAreDeserialized()
+    {
+        // Given: We make a request to retrieve a ideal payment
+        const string paymentId = "tr_WDqYK6vllg";
+        const string jsonResponse = @"{
+            ""resource"": ""payment"",
+            ""id"": ""tr_WDqYK6vllg"",
+            ""mode"": ""test"",
+            ""createdAt"": ""2018-03-20T13:13:37+00:00"",
+            ""amount"":{
+                ""currency"":""EUR"",
+                ""value"":""100.00""
+            },
+            ""description"":""Description"",
+            ""method"": ""ideal"",
+            ""expiresAt"": ""2018-03-20T13:28:37+00:00"",
+            ""details"": {
+                ""consumerName"": ""consumer-name"",
+                ""consumerAccount"": ""consumer-account"",
+                ""consumerBic"": ""consumer-bic"",
+                ""qrCode"": {
+                    ""height"": 5,
+                    ""width"": 10,
+                    ""src"": ""https://www.mollie.com/qr/12345678.png""
+                }
+            }
+        }";
+        var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}", jsonResponse);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
+        
+        // When: We send the request
+        var result = await paymentClient.GetPaymentAsync(paymentId);
+        
+        // Then
+        result.Should().BeOfType<IdealPaymentResponse>();
+        var idealPaymentResponse = result as IdealPaymentResponse;
+        idealPaymentResponse!.Details.ConsumerName.Should().Be("consumer-name");
+        idealPaymentResponse.Details.ConsumerAccount.Should().Be("consumer-account");
+        idealPaymentResponse.Details.ConsumerBic.Should().Be("consumer-bic");
+        idealPaymentResponse.Details.QrCode.Should().NotBeNull();
+        idealPaymentResponse.Details.QrCode.Height.Should().Be(5);
+        idealPaymentResponse.Details.QrCode.Width.Should().Be(10);
+        idealPaymentResponse.Details.QrCode.Src.Should().Be("https://www.mollie.com/qr/12345678.png");
+    }
+    
+    
+    [Fact]
+    public async Task GetPaymentAsync_ForSofortPayment_DetailsAreDeserialized()
+    {
+        // Given: We make a request to retrieve a ing home pay payment
+        const string paymentId = "tr_WDqYK6vllg";
+        const string jsonResponse = @"{
+            ""resource"": ""payment"",
+            ""id"": ""tr_WDqYK6vllg"",
+            ""mode"": ""test"",
+            ""createdAt"": ""2018-03-20T13:13:37+00:00"",
+            ""amount"":{
+                ""currency"":""EUR"",
+                ""value"":""100.00""
+            },
+            ""description"":""Description"",
+            ""method"": ""sofort"",
+            ""expiresAt"": ""2018-03-20T13:28:37+00:00"",
+            ""details"": {
+                ""consumerName"": ""consumer-name"",
+                ""consumerAccount"": ""consumer-account"",
+                ""consumerBic"": ""consumer-bic""
+            }
+        }";
+        
+        var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}", jsonResponse);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
+        
+        // When: We send the request
+        var result = await paymentClient.GetPaymentAsync(paymentId);
+        
+        // Then
+        result.Should().BeOfType<SofortPaymentResponse>();
+        var sofortPayment = result as SofortPaymentResponse;
+        sofortPayment!.Details.ConsumerName.Should().Be("consumer-name");
+        sofortPayment.Details.ConsumerAccount.Should().Be("consumer-account");
+        sofortPayment.Details.ConsumerBic.Should().Be("consumer-bic");
     }
         
     [Theory]
