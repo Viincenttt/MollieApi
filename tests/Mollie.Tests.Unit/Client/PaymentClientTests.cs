@@ -218,6 +218,81 @@ public class PaymentClientTests : BaseClientTests {
     }
 
     [Fact]
+    public async Task GetPaymentAsync_ForBankTransferPayment_DetailsAreDeserialized()
+    {
+        // Given: We make a request to retrieve a bank transfer payment
+        const string paymentId = "tr_WDqYK6vllg";
+        const string jsonResponse = @"{
+            ""resource"": ""payment"",
+            ""id"": ""tr_WDqYK6vllg"",
+            ""mode"": ""test"",
+            ""createdAt"": ""2018-03-20T13:13:37+00:00"",
+            ""amount"":{
+                ""currency"":""EUR"",
+                ""value"":""100.00""
+            },
+            ""description"":""Description"",
+            ""method"": ""banktransfer"",
+            ""expiresAt"": ""2018-03-20T13:28:37+00:00"",
+            ""details"": {
+                ""bankName"": ""bank-name"",
+                ""bankAccount"": ""bank-account"",
+                ""bankBic"": ""bank-bic"",
+                ""transferReference"": ""transfer-reference"",
+                ""consumerName"": ""consumer-name"",
+                ""consumerAccount"": ""consumer-account"",
+                ""consumerBic"": ""consumer-bic"",
+                ""billingEmail"": ""billing-email"",
+                ""qrCode"":{
+                    ""height"": 5,
+                    ""width"": 10,
+                    ""src"": ""https://www.mollie.com/qr/12345678.png""
+                }       
+            },
+            ""_links"": { 
+                ""status"": {
+                    ""href"": ""https://api.mollie.com/v2/payments/tr_WDqYK6vllg"",
+                    ""type"": ""application/hal+json""
+                },
+                ""payOnline"": {
+                    ""href"": ""https://www.mollie.com/payscreen/select-method/WDqYK6vllg"",
+                    ""type"": ""text/html""
+                }
+            }
+        }";
+        
+        var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}", jsonResponse);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
+
+        // When: We send the request
+        var payment = await paymentClient.GetPaymentAsync(paymentId);
+        
+        // Then
+        payment.Should().BeOfType<BankTransferPaymentResponse>();
+        var bankTransferPayment = payment as BankTransferPaymentResponse;
+        bankTransferPayment.Details.BankName.Should().Be("bank-name");
+        bankTransferPayment.Details.BankAccount.Should().Be("bank-account");
+        bankTransferPayment.Details.BankBic.Should().Be("bank-bic");
+        bankTransferPayment.Details.TransferReference.Should().Be("transfer-reference");
+        bankTransferPayment.Details.ConsumerName.Should().Be("consumer-name");
+        bankTransferPayment.Details.ConsumerAccount.Should().Be("consumer-account");
+        bankTransferPayment.Details.ConsumerBic.Should().Be("consumer-bic");
+        bankTransferPayment.Details.BillingEmail.Should().Be("billing-email");
+        bankTransferPayment.Details.QrCode.Should().NotBeNull();
+        bankTransferPayment.Details.QrCode.Height.Should().Be(5);
+        bankTransferPayment.Details.QrCode.Width.Should().Be(10);
+        bankTransferPayment.Details.QrCode.Src.Should().Be("https://www.mollie.com/qr/12345678.png");
+        bankTransferPayment.Links.Should().NotBeNull();
+        bankTransferPayment.Links.Status.Should().NotBeNull();
+        bankTransferPayment.Links.Status.Href.Should().Be("https://api.mollie.com/v2/payments/tr_WDqYK6vllg");
+        bankTransferPayment.Links.Status.Type.Should().Be("application/hal+json");
+        bankTransferPayment.Links.PayOnline.Should().NotBeNull();
+        bankTransferPayment.Links.PayOnline.Href.Should().Be("https://www.mollie.com/payscreen/select-method/WDqYK6vllg");
+        bankTransferPayment.Links.PayOnline.Type.Should().Be("text/html");
+    }
+    
+    [Fact]
     public async Task GetPaymentAsync_ForBanContactPayment_DetailsAreDeserialized()
     {
         // Given: We make a request to retrieve a bancontact payment
@@ -449,6 +524,8 @@ public class PaymentClientTests : BaseClientTests {
         creditCardPayment.Details.FailureMessage.Should().Be("faulure-message");
         creditCardPayment.Details.Wallet.Should().Be("applepay");
     }
+    
+    
         
     [Theory]
     [InlineData("")]
