@@ -7,31 +7,13 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
+using FluentAssertions.Extensions;
 using Mollie.Api.Models.Order.Request.ManageOrderLines;
 using RichardSzalay.MockHttp;
 using Xunit;
 
 namespace Mollie.Tests.Unit.Client {
     public class OrderClientTests : BaseClientTests {
-        private const string defaultOrderJsonResponse = @"{
-            ""resource"": ""order"",
-            ""id"": ""ord_kEn1PlbGa"",
-            ""profileId"": ""pfl_URR55HPMGx"",
-            ""method"": ""ideal"",
-            ""amount"": {
-                ""value"": ""1027.99"",
-                ""currency"": ""EUR""
-            },
-        }";
-        
-        private const string defaultPaymentJsonResponse = @"{
-            ""amount"":{
-                ""currency"":""EUR"",
-                ""value"":""100.00""
-            },
-            ""description"":""Description"",
-            ""redirectUrl"":""http://www.mollie.com""}";
-
         [Fact]
         public async Task GetOrderAsync_NoEmbedParameters_QueryStringIsEmpty() {
             // Given: We make a request to retrieve a order without wanting any extra data
@@ -222,6 +204,45 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
         }
+
+        [Fact]
+        public async Task CreateOrderRefundAsync_WithRequiredParameters_ResponseIsDeserializedInExpectedFormat()
+        {
+            // Given: We create a refund request with only the required parameters
+            const string orderId = "ord_stTC2WHAuS";
+            OrderRefundRequest orderRefundRequest = new OrderRefundRequest()
+            {
+                Description = "description",
+                Lines = new[]
+                {
+                    new OrderLineDetails()
+                    {
+                        Id = "odl_dgtxyl",
+                        Quantity = 1,
+                        Amount = new Amount(Currency.EUR, "399.00")
+                    }
+                },
+                Metadata = "my-metadata"
+            };
+            string url = $"{BaseMollieClient.ApiEndPoint}orders/{orderId}/refunds";
+            var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Post, url, defaultOrderRefundJsonResponse);
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            OrderClient orderClient = new OrderClient("abcde", httpClient);
+            
+            // When: We send the request
+            var response = await orderClient.CreateOrderRefundAsync(orderId, orderRefundRequest);
+            
+            // Then
+            mockHttp.VerifyNoOutstandingExpectation();
+            response.Resource.Should().Be("refund");
+            response.Id.Should().Be("re_4qqhO89gsT");
+            response.Description.Should().Be("description");
+            response.Status.Should().Be("pending");
+            response.CreatedAt!.Value.ToUniversalTime().Should().Be(DateTime.SpecifyKind(14.March(2018).At(17, 09, 02), DateTimeKind.Utc));
+            response.PaymentId.Should().Be("tr_WDqYK6vllg");
+            response.OrderId.Should().Be(orderId);
+            response.Lines.Should().HaveCount(1);
+        }
         
         [Theory]
         [InlineData("")]
@@ -404,5 +425,101 @@ namespace Mollie.Tests.Unit.Client {
                 Locale = Locale.nl_NL
             };
         }
+
+        private const string defaultOrderRefundJsonResponse = @"{
+    ""resource"": ""refund"",
+    ""id"": ""re_4qqhO89gsT"",
+    ""amount"": {
+        ""currency"": ""EUR"",
+        ""value"": ""698.00""
+    },
+    ""status"": ""pending"",
+    ""createdAt"": ""2018-03-14T17:09:02.0Z"",
+    ""description"": ""description"",
+    ""metadata"": {
+         ""bookkeeping_id"": 12345
+    },
+    ""paymentId"": ""tr_WDqYK6vllg"",
+    ""orderId"": ""ord_stTC2WHAuS"",
+    ""lines"": [
+        {
+            ""resource"": ""orderline"",
+            ""id"": ""odl_dgtxyl"",
+            ""orderId"": ""ord_stTC2WHAuS"",
+            ""name"": ""LEGO 42083 Bugatti Chiron"",
+            ""sku"": ""5702016116977"",
+            ""type"": ""physical"",
+            ""status"": ""paid"",
+            ""metadata"": null,
+            ""quantity"": 1,
+            ""unitPrice"": {
+                ""value"": ""399.00"",
+                ""currency"": ""EUR""
+            },
+            ""vatRate"": ""21.00"",
+            ""vatAmount"": {
+                ""value"": ""51.89"",
+                ""currency"": ""EUR""
+            },
+            ""discountAmount"": {
+                ""value"": ""100.00"",
+                ""currency"": ""EUR""
+            },
+            ""totalAmount"": {
+                ""value"": ""299.00"",
+                ""currency"": ""EUR""
+            },
+            ""createdAt"": ""2018-08-02T09:29:56+00:00"",
+            ""_links"": {
+                ""productUrl"": {
+                    ""href"": ""https://shop.lego.com/nl-NL/Bugatti-Chiron-42083"",
+                    ""type"": ""text/html""
+                },
+                ""imageUrl"": {
+                    ""href"": ""https://sh-s7-live-s.legocdn.com/is/image//LEGO/42083_alt1?$main$"",
+                    ""type"": ""text/html""
+                }
+            }
+        }
+    ],
+    ""_links"": {
+        ""self"": {
+            ""href"": ""https://api.mollie.com/v2/payments/tr_WDqYK6vllg/refunds/re_4qqhO89gsT"",
+            ""type"": ""application/hal+json""
+        },
+        ""payment"": {
+            ""href"": ""https://api.mollie.com/v2/payments/tr_WDqYK6vllg"",
+            ""type"": ""application/hal+json""
+        },
+        ""order"": {
+            ""href"": ""https://api.mollie.com/v2/orders/ord_stTC2WHAuS"",
+            ""type"": ""application/hal+json""
+        },
+        ""documentation"": {
+            ""href"": ""https://docs.mollie.com/reference/v2/refunds-api/create-order-refund"",
+            ""type"": ""text/html""
+        }
+    }
+}";
+        
+        private const string defaultOrderJsonResponse = @"{
+            ""resource"": ""order"",
+            ""id"": ""ord_kEn1PlbGa"",
+            ""profileId"": ""pfl_URR55HPMGx"",
+            ""method"": ""ideal"",
+            ""amount"": {
+                ""value"": ""1027.99"",
+                ""currency"": ""EUR""
+            },
+        }";
+        
+        private const string defaultPaymentJsonResponse = @"{
+            ""amount"":{
+                ""currency"":""EUR"",
+                ""value"":""100.00""
+            },
+            ""description"":""Description"",
+            ""redirectUrl"":""http://www.mollie.com""}";
+
     }
 }
