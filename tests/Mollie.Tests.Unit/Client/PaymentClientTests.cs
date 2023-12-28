@@ -524,8 +524,67 @@ public class PaymentClientTests : BaseClientTests {
         creditCardPayment.Details.FailureMessage.Should().Be("faulure-message");
         creditCardPayment.Details.Wallet.Should().Be("applepay");
     }
-    
-    
+
+    [Fact]
+    public async Task GetPaymentAsync_ForGiftcardPayment_DetailsAreDeserialized()
+    {
+        // Given: We make a request to retrieve a gift card payment
+        const string paymentId = "tr_WDqYK6vllg";
+        const string jsonResponse = @"{
+            ""resource"": ""payment"",
+            ""id"": ""tr_WDqYK6vllg"",
+            ""mode"": ""test"",
+            ""createdAt"": ""2018-03-20T13:13:37+00:00"",
+            ""amount"":{
+                ""currency"":""EUR"",
+                ""value"":""100.00""
+            },
+            ""description"":""Description"",
+            ""method"": ""giftcard"",
+            ""expiresAt"": ""2018-03-20T13:28:37+00:00"",
+            ""details"": {
+                ""voucherNumber"": ""voucher-number"",
+                ""giftcards"": [
+                    {
+                        ""issuer"": ""issuer"",
+                        ""amount"": {
+                            ""currency"": ""EUR"",
+                            ""value"": ""100.00""
+                        },
+                        ""voucherNumber"": ""voucher-number""
+                    }
+                ],
+                ""RemainderAmount"": {
+                    ""currency"": ""EUR"",
+                    ""value"": ""100.00""
+                },
+                ""RemainderMethod"": ""ideal""
+            }
+        }";
+        var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}", jsonResponse);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
+        
+        // When: We send the request
+        var result = await paymentClient.GetPaymentAsync(paymentId);
+        
+        // Then
+        result.Should().BeOfType<GiftcardPaymentResponse>();
+        var giftcardPayment = result as GiftcardPaymentResponse;
+        giftcardPayment.Details.VoucherNumber.Should().Be("voucher-number");
+        giftcardPayment.Details.Giftcards.Should().NotBeNull();
+        giftcardPayment.Details.Giftcards.Count.Should().Be(1);
+        giftcardPayment.Details.Giftcards[0].Issuer.Should().Be("issuer");
+        giftcardPayment.Details.Giftcards[0].Amount.Should().NotBeNull();
+        giftcardPayment.Details.Giftcards[0].Amount.Currency.Should().Be("EUR");
+        giftcardPayment.Details.Giftcards[0].Amount.Value.Should().Be("100.00");
+        giftcardPayment.Details.Giftcards[0].VoucherNumber.Should().Be("voucher-number");
+        giftcardPayment.Details.RemainderAmount.Should().NotBeNull();
+        giftcardPayment.Details.RemainderAmount.Currency.Should().Be("EUR");
+        giftcardPayment.Details.RemainderAmount.Value.Should().Be("100.00");
+        giftcardPayment.Details.RemainderMethod.Should().Be("ideal");
+        
+    }
         
     [Theory]
     [InlineData("")]
