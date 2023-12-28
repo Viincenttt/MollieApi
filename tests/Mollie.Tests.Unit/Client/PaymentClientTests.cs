@@ -365,12 +365,35 @@ public class PaymentClientTests : BaseClientTests {
         banContactPayment.Details.ConsumerBic.Should().Be("consumer-bic");
         banContactPayment.Details.FailureReason.Should().Be("failure-reason");
     }
-
+    
     [Fact]
-    public async Task GetPaymentAsync_ForSepaDirectPayment_DetailsAreDeserialized()
+    public async Task CreatePaymentAsync_SepaDirectDebit_RequestAndResponseAreConvertedToExpectedJsonFormat()
     {
-        // Given: We make a request to retrieve a sepa direct payment
-        const string paymentId = "tr_WDqYK6vllg";
+        // Given we create a creditcard specific payment request
+        var paymentRequest = new SepaDirectDebitRequest()
+        {
+            Amount = new Amount() { Currency = Currency.EUR, Value = "100.00" },
+            Description = "Description",
+            Method = PaymentMethod.Ideal,
+            RedirectUrl = "http://www.mollie.com",
+            WebhookUrl = "http://www.mollie.com/webhook",
+            ConsumerName = "consumer-name",
+            ConsumerAccount = "consumer-account"
+        };
+        const string jsonRequest = @"{
+  ""consumerName"": ""consumer-name"",
+  ""consumerAccount"": ""consumer-account"",
+  ""amount"": {
+    ""currency"": ""EUR"",
+    ""value"": ""100.00""
+  },
+  ""description"": ""Description"",
+  ""redirectUrl"": ""http://www.mollie.com"",
+  ""webhookUrl"": ""http://www.mollie.com/webhook"",
+  ""method"": [
+    ""ideal""
+  ]
+}";
         const string jsonResponse = @"{
             ""resource"": ""payment"",
             ""id"": ""tr_WDqYK6vllg"",
@@ -400,33 +423,33 @@ public class PaymentClientTests : BaseClientTests {
                 ""fileReference"": ""file-reference""                
             }
         }";
-        var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get,
-            $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}", jsonResponse);
+        var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Post, $"{BaseMollieClient.ApiEndPoint}payments", jsonResponse, jsonRequest);
         HttpClient httpClient = mockHttp.ToHttpClient();
         PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
-
+        
         // When: We send the request
-        var result = await paymentClient.GetPaymentAsync(paymentId);
-
+        var result = await paymentClient.CreatePaymentAsync(paymentRequest);
+        
         // Then
-        result.Should().BeOfType<SepaDirectDebitResponse>();
-        var sepaDirectDebitPayment = result as SepaDirectDebitResponse;
-        sepaDirectDebitPayment.Details.ConsumerName.Should().Be("consumer-name");
-        sepaDirectDebitPayment.Details.ConsumerAccount.Should().Be("consumer-account");
-        sepaDirectDebitPayment.Details.ConsumerBic.Should().Be("consumer-bic");
-        sepaDirectDebitPayment.Details.TransferReference.Should().Be("transfer-reference");
-        sepaDirectDebitPayment.Details.BankReasonCode.Should().Be("bank-reason-code");
-        sepaDirectDebitPayment.Details.BankReason.Should().Be("bank-reason");
-        sepaDirectDebitPayment.Details.BatchReference.Should().Be("batch-reference");
-        sepaDirectDebitPayment.Details.MandateReference.Should().Be("mandate-reference");
-        sepaDirectDebitPayment.Details.CreditorIdentifier.Should().Be("creditor-identifier");
-        sepaDirectDebitPayment.Details.DueDate.Should().Be("03/20/2018 00:00:00");
-        sepaDirectDebitPayment.Details.SignatureDate.Should().Be("03/20/2018 00:00:00");
-        sepaDirectDebitPayment.Details.EndToEndIdentifier.Should().Be("end-to-end-identifier");
-        sepaDirectDebitPayment.Details.BatchReference.Should().Be("batch-reference");
-        sepaDirectDebitPayment.Details.FileReference.Should().Be("file-reference");
+        mockHttp.VerifyNoOutstandingExpectation();
+        var specificPaymentResponse = result as SepaDirectDebitResponse;
+        specificPaymentResponse.Should().NotBeNull();
+        specificPaymentResponse.Details.ConsumerName.Should().Be("consumer-name");
+        specificPaymentResponse.Details.ConsumerAccount.Should().Be("consumer-account");
+        specificPaymentResponse.Details.ConsumerBic.Should().Be("consumer-bic");
+        specificPaymentResponse.Details.TransferReference.Should().Be("transfer-reference");
+        specificPaymentResponse.Details.BankReasonCode.Should().Be("bank-reason-code");
+        specificPaymentResponse.Details.BankReason.Should().Be("bank-reason");
+        specificPaymentResponse.Details.BatchReference.Should().Be("batch-reference");
+        specificPaymentResponse.Details.MandateReference.Should().Be("mandate-reference");
+        specificPaymentResponse.Details.CreditorIdentifier.Should().Be("creditor-identifier");
+        specificPaymentResponse.Details.DueDate.Should().Be("03/20/2018 00:00:00");
+        specificPaymentResponse.Details.SignatureDate.Should().Be("03/20/2018 00:00:00");
+        specificPaymentResponse.Details.EndToEndIdentifier.Should().Be("end-to-end-identifier");
+        specificPaymentResponse.Details.BatchReference.Should().Be("batch-reference");
+        specificPaymentResponse.Details.FileReference.Should().Be("file-reference");
     }
-
+    
     [Fact]
     public async Task GetPaymentAsync_ForPayPalPayment_DetailsAreDeserialized()
     {
@@ -491,12 +514,63 @@ public class PaymentClientTests : BaseClientTests {
         payPalPayment.Details.PaypalFee.Currency.Should().Be("EUR");
         payPalPayment.Details.PaypalFee.Value.Should().Be("100.00");
     }
-
+    
     [Fact]
-    public async Task GetPaymentAsync_ForCreditCardPayment_DetailsAreDeserialized()
+    public async Task CreatePaymentAsync_CreditcardPayment_RequestAndResponseAreConvertedToExpectedJsonFormat()
     {
-        // Given: We make a request to retrieve a credit card payment
-        const string paymentId = "tr_WDqYK6vllg";
+        // Given we create a creditcard specific payment request
+        var paymentRequest = new CreditCardPaymentRequest()
+        {
+            Amount = new Amount() { Currency = Currency.EUR, Value = "100.00" },
+            Description = "Description",
+            Method = PaymentMethod.Ideal,
+            RedirectUrl = "http://www.mollie.com",
+            WebhookUrl = "http://www.mollie.com/webhook",
+            BillingAddress = new AddressObject()
+            {
+                City = "Amsterdam",
+                Country = "NL",
+                PostalCode = "1000AA",
+                Region = "Noord-Holland",
+                StreetAndNumber = "Keizersgracht 313"
+            },
+            ShippingAddress = new AddressObject()
+            {
+                City = "Amsterdam",
+                Country = "NL",
+                PostalCode = "1000AA",
+                Region = "Noord-Holland",
+                StreetAndNumber = "Keizersgracht 313"
+            },
+            CardToken = "card-token"
+        };
+        const string jsonRequest = @"{
+  ""billingAddress"": {
+    ""streetAndNumber"": ""Keizersgracht 313"",
+    ""postalCode"": ""1000AA"",
+    ""city"": ""Amsterdam"",
+    ""region"": ""Noord-Holland"",
+    ""country"": ""NL""
+  },
+  ""shippingAddress"": {
+    ""streetAndNumber"": ""Keizersgracht 313"",
+    ""postalCode"": ""1000AA"",
+    ""city"": ""Amsterdam"",
+    ""region"": ""Noord-Holland"",
+    ""country"": ""NL""
+  },
+  ""cardToken"": ""card-token"",
+  ""amount"": {
+    ""currency"": ""EUR"",
+    ""value"": ""100.00""
+  },
+  ""description"": ""Description"",
+  ""redirectUrl"": ""http://www.mollie.com"",
+  ""webhookUrl"": ""http://www.mollie.com/webhook"",
+  ""method"": [
+    ""ideal""
+  ]
+}";
         const string jsonResponse = @"{
             ""resource"": ""payment"",
             ""id"": ""tr_WDqYK6vllg"",
@@ -523,34 +597,60 @@ public class PaymentClientTests : BaseClientTests {
                 ""wallet"": ""applepay""
             }
         }";
-        var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}", jsonResponse);
+        var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Post, $"{BaseMollieClient.ApiEndPoint}payments", jsonResponse, jsonRequest);
         HttpClient httpClient = mockHttp.ToHttpClient();
         PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
         
         // When: We send the request
-        var result = await paymentClient.GetPaymentAsync(paymentId);
+        var result = await paymentClient.CreatePaymentAsync(paymentRequest);
         
         // Then
-        result.Should().BeOfType<CreditCardPaymentResponse>();
-        var creditCardPayment = result as CreditCardPaymentResponse;
-        creditCardPayment.Details.CardNumber.Should().Be("1234567890123456");
-        creditCardPayment.Details.CardHolder.Should().Be("John Doe");
-        creditCardPayment.Details.CardFingerprint.Should().Be("fingerprint");
-        creditCardPayment.Details.CardAudience.Should().Be("audience");
-        creditCardPayment.Details.CardLabel.Should().Be("American Express");
-        creditCardPayment.Details.CardCountryCode.Should().Be("NL");
-        creditCardPayment.Details.CardSecurity.Should().Be("security");
-        creditCardPayment.Details.FeeRegion.Should().Be("american-express");
-        creditCardPayment.Details.FailureReason.Should().Be("unknown_reason");
-        creditCardPayment.Details.FailureMessage.Should().Be("faulure-message");
-        creditCardPayment.Details.Wallet.Should().Be("applepay");
+        mockHttp.VerifyNoOutstandingExpectation();
+        var specificPaymentResponse = result as CreditCardPaymentResponse;
+        specificPaymentResponse.Should().NotBeNull();
+        specificPaymentResponse.Details.CardNumber.Should().Be("1234567890123456");
+        specificPaymentResponse.Details.CardHolder.Should().Be("John Doe");
+        specificPaymentResponse.Details.CardFingerprint.Should().Be("fingerprint");
+        specificPaymentResponse.Details.CardAudience.Should().Be("audience");
+        specificPaymentResponse.Details.CardLabel.Should().Be("American Express");
+        specificPaymentResponse.Details.CardCountryCode.Should().Be("NL");
+        specificPaymentResponse.Details.CardSecurity.Should().Be("security");
+        specificPaymentResponse.Details.FeeRegion.Should().Be("american-express");
+        specificPaymentResponse.Details.FailureReason.Should().Be("unknown_reason");
+        specificPaymentResponse.Details.FailureMessage.Should().Be("faulure-message");
+        specificPaymentResponse.Details.Wallet.Should().Be("applepay");
     }
-
+    
     [Fact]
-    public async Task GetPaymentAsync_ForGiftcardPayment_DetailsAreDeserialized()
+    public async Task CreatePaymentAsync_GiftcardPayment_RequestAndResponseAreConvertedToExpectedJsonFormat()
     {
-        // Given: We make a request to retrieve a gift card payment
-        const string paymentId = "tr_WDqYK6vllg";
+        // Given we create a giftcard specific payment request
+        var paymentRequest = new GiftcardPaymentRequest()
+        {
+            Amount = new Amount() { Currency = Currency.EUR, Value = "100.00" },
+            Description = "Description",
+            Method = PaymentMethod.Ideal,
+            RedirectUrl = "http://www.mollie.com",
+            WebhookUrl = "http://www.mollie.com/webhook",
+            Issuer = "issuer",
+            VoucherNumber = "voucher-number",
+            VoucherPin = "voucher-pin"
+        };
+        const string jsonRequest = @"{
+  ""issuer"": ""issuer"",
+  ""voucherNumber"": ""voucher-number"",
+  ""voucherPin"": ""voucher-pin"",
+  ""amount"": {
+    ""currency"": ""EUR"",
+    ""value"": ""100.00""
+  },
+  ""description"": ""Description"",
+  ""redirectUrl"": ""http://www.mollie.com"",
+  ""webhookUrl"": ""http://www.mollie.com/webhook"",
+  ""method"": [
+    ""ideal""
+  ]
+}";
         const string jsonResponse = @"{
             ""resource"": ""payment"",
             ""id"": ""tr_WDqYK6vllg"",
@@ -582,28 +682,29 @@ public class PaymentClientTests : BaseClientTests {
                 ""RemainderMethod"": ""ideal""
             }
         }";
-        var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}", jsonResponse);
+        var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Post, $"{BaseMollieClient.ApiEndPoint}payments", jsonResponse, jsonRequest);
         HttpClient httpClient = mockHttp.ToHttpClient();
         PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
         
         // When: We send the request
-        var result = await paymentClient.GetPaymentAsync(paymentId);
+        var result = await paymentClient.CreatePaymentAsync(paymentRequest);
         
         // Then
-        result.Should().BeOfType<GiftcardPaymentResponse>();
-        var giftcardPayment = result as GiftcardPaymentResponse;
-        giftcardPayment.Details.VoucherNumber.Should().Be("voucher-number");
-        giftcardPayment.Details.Giftcards.Should().NotBeNull();
-        giftcardPayment.Details.Giftcards.Count.Should().Be(1);
-        giftcardPayment.Details.Giftcards[0].Issuer.Should().Be("issuer");
-        giftcardPayment.Details.Giftcards[0].Amount.Should().NotBeNull();
-        giftcardPayment.Details.Giftcards[0].Amount.Currency.Should().Be("EUR");
-        giftcardPayment.Details.Giftcards[0].Amount.Value.Should().Be("100.00");
-        giftcardPayment.Details.Giftcards[0].VoucherNumber.Should().Be("voucher-number");
-        giftcardPayment.Details.RemainderAmount.Should().NotBeNull();
-        giftcardPayment.Details.RemainderAmount.Currency.Should().Be("EUR");
-        giftcardPayment.Details.RemainderAmount.Value.Should().Be("100.00");
-        giftcardPayment.Details.RemainderMethod.Should().Be("ideal");
+        mockHttp.VerifyNoOutstandingExpectation();
+        var specificPaymentResponse = result as GiftcardPaymentResponse;
+        specificPaymentResponse.Should().NotBeNull();
+        specificPaymentResponse.Details.VoucherNumber.Should().Be("voucher-number");
+        specificPaymentResponse.Details.Giftcards.Should().NotBeNull();
+        specificPaymentResponse.Details.Giftcards.Count.Should().Be(1);
+        specificPaymentResponse.Details.Giftcards[0].Issuer.Should().Be("issuer");
+        specificPaymentResponse.Details.Giftcards[0].Amount.Should().NotBeNull();
+        specificPaymentResponse.Details.Giftcards[0].Amount.Currency.Should().Be("EUR");
+        specificPaymentResponse.Details.Giftcards[0].Amount.Value.Should().Be("100.00");
+        specificPaymentResponse.Details.Giftcards[0].VoucherNumber.Should().Be("voucher-number");
+        specificPaymentResponse.Details.RemainderAmount.Should().NotBeNull();
+        specificPaymentResponse.Details.RemainderAmount.Currency.Should().Be("EUR");
+        specificPaymentResponse.Details.RemainderAmount.Value.Should().Be("100.00");
+        specificPaymentResponse.Details.RemainderMethod.Should().Be("ideal");
     }
 
     [Fact]
@@ -723,10 +824,31 @@ public class PaymentClientTests : BaseClientTests {
     }
 
     [Fact]
-    public async Task GetPaymentAsync_ForIdealPayment_DetailsAreDeserialized()
+    public async Task CreatePaymentAsync_IdealPayment_RequestAndResponseAreConvertedToExpectedJsonFormat()
     {
-        // Given: We make a request to retrieve a ideal payment
-        const string paymentId = "tr_WDqYK6vllg";
+        // Given we create a ideal specific payment request
+        var paymentRequest = new IdealPaymentRequest()
+        {
+            Amount = new Amount() { Currency = Currency.EUR, Value = "100.00" },
+            Description = "Description",
+            Method = PaymentMethod.Ideal,
+            RedirectUrl = "http://www.mollie.com",
+            WebhookUrl = "http://www.mollie.com/webhook",
+            Issuer = "ideal_INGBNL2A"
+        };
+        const string jsonRequest = @"{
+  ""issuer"": ""ideal_INGBNL2A"",
+  ""amount"": {
+    ""currency"": ""EUR"",
+    ""value"": ""100.00""
+  },
+  ""description"": ""Description"",
+  ""redirectUrl"": ""http://www.mollie.com"",
+  ""webhookUrl"": ""http://www.mollie.com/webhook"",
+  ""method"": [
+    ""ideal""
+  ]
+}";
         const string jsonResponse = @"{
             ""resource"": ""payment"",
             ""id"": ""tr_WDqYK6vllg"",
@@ -750,25 +872,24 @@ public class PaymentClientTests : BaseClientTests {
                 }
             }
         }";
-        var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}", jsonResponse);
+        var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Post, $"{BaseMollieClient.ApiEndPoint}payments", jsonResponse, jsonRequest);
         HttpClient httpClient = mockHttp.ToHttpClient();
         PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
         
         // When: We send the request
-        var result = await paymentClient.GetPaymentAsync(paymentId);
+        var result = await paymentClient.CreatePaymentAsync(paymentRequest);
         
         // Then
-        result.Should().BeOfType<IdealPaymentResponse>();
-        var idealPaymentResponse = result as IdealPaymentResponse;
-        idealPaymentResponse!.Details.ConsumerName.Should().Be("consumer-name");
-        idealPaymentResponse.Details.ConsumerAccount.Should().Be("consumer-account");
-        idealPaymentResponse.Details.ConsumerBic.Should().Be("consumer-bic");
-        idealPaymentResponse.Details.QrCode.Should().NotBeNull();
-        idealPaymentResponse.Details.QrCode.Height.Should().Be(5);
-        idealPaymentResponse.Details.QrCode.Width.Should().Be(10);
-        idealPaymentResponse.Details.QrCode.Src.Should().Be("https://www.mollie.com/qr/12345678.png");
+        mockHttp.VerifyNoOutstandingExpectation();
+        var specificPaymentResponse = result as IdealPaymentResponse;
+        specificPaymentResponse!.Details.ConsumerName.Should().Be("consumer-name");
+        specificPaymentResponse.Details.ConsumerAccount.Should().Be("consumer-account");
+        specificPaymentResponse.Details.ConsumerBic.Should().Be("consumer-bic");
+        specificPaymentResponse.Details.QrCode.Should().NotBeNull();
+        specificPaymentResponse.Details.QrCode.Height.Should().Be(5);
+        specificPaymentResponse.Details.QrCode.Width.Should().Be(10);
+        specificPaymentResponse.Details.QrCode.Src.Should().Be("https://www.mollie.com/qr/12345678.png");
     }
-    
     
     [Fact]
     public async Task GetPaymentAsync_ForSofortPayment_DetailsAreDeserialized()
