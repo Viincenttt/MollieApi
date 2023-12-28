@@ -1,4 +1,5 @@
 using Mollie.Api.Models.Url;
+using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Payment.Response.Specific {
     public class BankTransferPaymentResponse : PaymentResponse {
@@ -7,6 +8,7 @@ namespace Mollie.Api.Models.Payment.Response.Specific {
         /// <summary>
         /// For bank transfer payments, the _links object will contain some additional URL objects relevant to the payment.
         /// </summary>
+        [JsonProperty("_links")]
         public new BankTransferPaymentResponseLinks Links { get; set; }
     }
 
@@ -33,23 +35,23 @@ namespace Mollie.Api.Models.Payment.Response.Specific {
         public string TransferReference { get; set; }
 
         /// <summary>
-        /// Only available if the payment has been completed – The consumer's name.
+        /// Only available if the payment has been completed ï¿½ The consumer's name.
         /// </summary>
         public string ConsumerName { get; set; }
 
         /// <summary>
-        /// Only available if the payment has been completed – The consumer's bank account. This may be an IBAN, or it may be a
+        /// Only available if the payment has been completed ï¿½ The consumer's bank account. This may be an IBAN, or it may be a
         /// domestic account number.
         /// </summary>
         public string ConsumerAccount { get; set; }
 
         /// <summary>
-        /// Only available if the payment has been completed – The consumer's bank's BIC / SWIFT code.
+        /// Only available if the payment has been completed ï¿½ The consumer's bank's BIC / SWIFT code.
         /// </summary>
         public string ConsumerBic { get; set; }
 
         /// <summary>
-        /// Only available if filled out in the API or by the consumer – The email address which the consumer asked the payment 
+        /// Only available if filled out in the API or by the consumer ï¿½ The email address which the consumer asked the payment 
         /// instructions to be sent to.
         /// </summary>
         public string BillingEmail { get; set; }
