@@ -32,6 +32,11 @@ namespace Mollie.Api.Models.Payment.Response {
         public string SellerProtection { get; set; }
 
         /// <summary>
+        /// The shipping address details.
+        /// </summary>
+        public AddressObject ShippingAddress { get; set; }
+        
+        /// <summary>
         /// The amount of fee PayPal will charge for this transaction. This field is omitted if PayPal will not charge a fee 
         /// for this transaction.
         /// </summary>

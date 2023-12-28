@@ -1,6 +1,5 @@
 ﻿using System;
 using Mollie.Api.Framework.Factories;
-using Mollie.Api.Models.Balance.Response;
 using Mollie.Api.Models.Balance.Response.BalanceReport;
 using Newtonsoft.Json.Linq;
 
