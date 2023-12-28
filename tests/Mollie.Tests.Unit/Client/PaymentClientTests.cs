@@ -38,6 +38,27 @@ public class PaymentClientTests : BaseClientTests {
 
         // Then
         this.AssertPaymentIsEqual(paymentRequest, paymentResponse);
+        paymentResponse.AuthorizedAt!.Value.ToUniversalTime().Should().Be(DateTime.SpecifyKind(19.March(2018).At(13, 28, 37), DateTimeKind.Utc));
+        paymentResponse.CreatedAt!.Value.ToUniversalTime().Should().Be(DateTime.SpecifyKind(20.March(2018).At(13, 13, 37), DateTimeKind.Utc));
+        paymentResponse.PaidAt!.Value.ToUniversalTime().Should().Be(DateTime.SpecifyKind(21.March(2018).At(13, 28, 37), DateTimeKind.Utc));
+        paymentResponse.CanceledAt!.Value.ToUniversalTime().Should().Be(DateTime.SpecifyKind(22.March(2018).At(13, 28, 37), DateTimeKind.Utc));
+        paymentResponse.ExpiredAt!.Value.ToUniversalTime().Should().Be(DateTime.SpecifyKind(23.March(2018).At(13, 28, 37), DateTimeKind.Utc));
+        paymentResponse.FailedAt!.Value.ToUniversalTime().Should().Be(DateTime.SpecifyKind(24.March(2018).At(13, 28, 37), DateTimeKind.Utc));
+        paymentResponse.CaptureBefore!.Value.ToUniversalTime().Should().Be(DateTime.SpecifyKind(25.March(2018).At(13, 28, 37), DateTimeKind.Utc));
+        paymentResponse.AmountRefunded.Value.Should().Be("10.00");
+        paymentResponse.AmountRefunded.Currency.Should().Be(Currency.EUR);
+        paymentResponse.AmountRemaining.Value.Should().Be("90.00");
+        paymentResponse.AmountRemaining.Currency.Should().Be(Currency.EUR);
+        paymentResponse.AmountChargedBack.Value.Should().Be("10.00");
+        paymentResponse.AmountChargedBack.Currency.Should().Be(Currency.EUR);
+        paymentResponse.CancelUrl.Should().Be("https://webshop.example.org/order/12345/cancel");
+        paymentResponse.CountryCode.Should().Be("NL");
+        paymentResponse.SettlementId.Should().Be("stl_jDk30akdN");
+        paymentResponse.SubscriptionId.Should().Be("sub_rVKGtNd6s3");
+        paymentResponse.ApplicationFee.Should().NotBeNull();
+        paymentResponse.ApplicationFee.Amount.Value.Should().Be("1.00");
+        paymentResponse.ApplicationFee.Amount.Currency.Should().Be(Currency.EUR);
+        paymentResponse.ApplicationFee.Description.Should().Be("description");
     }
 
     [Fact]
@@ -826,6 +847,35 @@ public class PaymentClientTests : BaseClientTests {
     ""sequenceType"": ""oneoff"",
     ""redirectUrl"": ""https://webshop.example.org/order/12345/"",
     ""webhookUrl"": ""https://webshop.example.org/payments/webhook/"", 
+    ""authorizedAt"": ""2018-03-19T13:28:37+00:00"",
+    ""paidAt"": ""2018-03-21T13:28:37+00:00"",
+    ""canceledAt"": ""2018-03-22T13:28:37+00:00"",
+    ""expiredAt"": ""2018-03-23T13:28:37+00:00"",
+    ""failedAt"": ""2018-03-24T13:28:37+00:00"",
+    ""captureBefore"": ""2018-03-25T13:28:37+00:00"",
+    ""amountRefunded"": {
+        ""currency"": ""EUR"",
+        ""value"": ""10.00""
+    },
+    ""amountRemaining"": {
+        ""currency"": ""EUR"",
+        ""value"": ""90.00""
+    },
+    ""amountChargedBack"": {
+        ""currency"": ""EUR"",
+        ""value"": ""10.00""
+    },
+    ""cancelUrl"": ""https://webshop.example.org/order/12345/cancel"",
+    ""countryCode"": ""NL"",
+    ""settlementId"": ""stl_jDk30akdN"",
+    ""subscriptionId"": ""sub_rVKGtNd6s3"",
+    ""applicationFee"": {
+        ""amount"": {
+            ""currency"": ""EUR"",
+            ""value"": ""1.00""
+        },
+        ""description"": ""description""
+    },
     ""_links"": {
         ""self"": {
             ""href"": ""https://api.mollie.com/v2/payments/tr_WDqYK6vllg"",
