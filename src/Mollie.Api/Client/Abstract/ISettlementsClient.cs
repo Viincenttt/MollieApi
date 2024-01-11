@@ -21,7 +21,8 @@ namespace Mollie.Api.Client.Abstract {
         Task<ListResponse<RefundResponse>> GetSettlementRefundsListAsync(UrlObjectLink<ListResponse<RefundResponse>> url);
         Task<ListResponse<ChargebackResponse>> GetSettlementChargebacksListAsync(string settlementId, string from = null, int? limit = null);
         Task<ListResponse<ChargebackResponse>> GetSettlementChargebacksListAsync(UrlObjectLink<ListResponse<ChargebackResponse>> url);
+        Task<ListResponse<CaptureResponse>> GetSettlementCapturesListAsync(string settlementId, string offset = null, int? count = null);
+        Task<ListResponse<CaptureResponse>> GetSettlementCapturesListAsync(UrlObjectLink<ListResponse<CaptureResponse>> url);
         Task<SettlementResponse> GetSettlementAsync(UrlObjectLink<SettlementResponse> url);
-        Task<ListResponse<CaptureResponse>> ListSettlementCapturesAsync(string settlementId);
     }
 }
