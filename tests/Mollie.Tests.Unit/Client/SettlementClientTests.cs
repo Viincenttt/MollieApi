@@ -21,7 +21,7 @@ namespace Mollie.Tests.Unit.Client {
             SettlementsClient settlementsClient = new SettlementsClient("api-key", httpClient);
 
             // When: We make the request
-            ListResponse<CaptureResponse> listCaptureResponse = await settlementsClient.ListSettlementCapturesAsync(defaultSettlementId);
+            ListResponse<CaptureResponse> listCaptureResponse = await settlementsClient.GetSettlementCapturesListAsync(defaultSettlementId);
 
             // Then: Response should be parsed
             mockHttp.VerifyNoOutstandingExpectation();
@@ -206,14 +206,14 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task ListSettlementCapturesAsync_NoSettlementIdIsGiven_ArgumentExceptionIsThrown(string settlementId) {
+        public async Task GetSettlementCapturesListAsync_NoSettlementIdIsGiven_ArgumentExceptionIsThrown(string settlementId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             SettlementsClient settlementsClient = new SettlementsClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await settlementsClient.ListSettlementCapturesAsync(settlementId));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await settlementsClient.GetSettlementCapturesListAsync(settlementId));
 
             // Then
             exception.Message.Should().Be("Required URL argument 'settlementId' is null or empty");
