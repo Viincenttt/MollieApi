@@ -67,13 +67,19 @@ namespace Mollie.Api.Client {
             return await this.GetAsync(url).ConfigureAwait(false);
         }
 
-        public async Task<SettlementResponse> GetSettlementAsync(UrlObjectLink<SettlementResponse> url) {
+        public async Task<ListResponse<CaptureResponse>> GetSettlementCapturesListAsync(string settlementId, string offset = null, int? count = null)
+        {
+            this.ValidateRequiredUrlParameter(nameof(settlementId), settlementId);
+            return await this.GetListAsync<ListResponse<CaptureResponse>>($"settlements/{settlementId}/captures", offset, count).ConfigureAwait(false);
+        }
+
+        public async Task<ListResponse<CaptureResponse>> GetSettlementCapturesListAsync(UrlObjectLink<ListResponse<CaptureResponse>> url)
+        {
             return await this.GetAsync(url).ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<CaptureResponse>> ListSettlementCapturesAsync(string settlementId) {
-            this.ValidateRequiredUrlParameter(nameof(settlementId), settlementId);
-            return await this.GetListAsync<ListResponse<CaptureResponse>>($"settlements/{settlementId}/captures", null, null).ConfigureAwait(false);
+        public async Task<SettlementResponse> GetSettlementAsync(UrlObjectLink<SettlementResponse> url) {
+            return await this.GetAsync(url).ConfigureAwait(false);
         }
     }
 }
