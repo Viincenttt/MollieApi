@@ -43,6 +43,11 @@ namespace Mollie.Api.Models.Subscription {
         public int? Times { get; set; }
 
         /// <summary>
+        /// Number of charges left for the subscription to complete.
+        /// </summary>
+        public int? TimesRemaining { get; set; }
+
+        /// <summary>
         /// Interval to wait between charges like 1 month(s) or 14 days.
         /// </summary>
         public string Interval { get; set; }
