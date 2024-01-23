@@ -24,5 +24,8 @@ namespace Mollie.Api.Client.Abstract {
         Task<ListResponse<CaptureResponse>> GetSettlementCapturesListAsync(string settlementId, string offset = null, int? count = null);
         Task<ListResponse<CaptureResponse>> GetSettlementCapturesListAsync(UrlObjectLink<ListResponse<CaptureResponse>> url);
         Task<SettlementResponse> GetSettlementAsync(UrlObjectLink<SettlementResponse> url);
+        
+        [Obsolete("Use GetSettlementCapturesListAsync instead")]
+        Task<ListResponse<CaptureResponse>> ListSettlementCapturesAsync(string settlementId);
     }
 }

@@ -81,5 +81,10 @@ namespace Mollie.Api.Client {
         public async Task<SettlementResponse> GetSettlementAsync(UrlObjectLink<SettlementResponse> url) {
             return await this.GetAsync(url).ConfigureAwait(false);
         }
+
+        public async Task<ListResponse<CaptureResponse>> ListSettlementCapturesAsync(string settlementId)
+        {
+            return await GetSettlementCapturesListAsync(settlementId);
+        }
     }
 }
