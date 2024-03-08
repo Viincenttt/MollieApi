@@ -48,8 +48,9 @@ namespace Mollie.Api.Client {
             await this.DeleteAsync($"orders/{orderId}", data).ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<OrderResponse>> GetOrderListAsync(string from = null, int? limit = null, string profileId = null, bool testmode = false) {
-            var queryParameters = BuildQueryParameters(profileId, testmode);
+        public async Task<ListResponse<OrderResponse>> GetOrderListAsync(
+            string from = null, int? limit = null, string profileId = null, bool testmode = false, SortDirection? sort = null) {
+            var queryParameters = BuildQueryParameters(profileId, testmode, sort);
             return await this.GetListAsync<ListResponse<OrderResponse>>($"orders", from, limit, queryParameters).ConfigureAwait(false);
         }
 
@@ -78,10 +79,11 @@ namespace Mollie.Api.Client {
             return await this.GetListAsync<ListResponse<RefundResponse>>($"orders/{orderId}/refunds", from, limit, queryParameters).ConfigureAwait(false);
         }
 
-        private Dictionary<string, string> BuildQueryParameters(string profileId, bool testmode) {
+        private Dictionary<string, string> BuildQueryParameters(string profileId = null, bool testmode = false, SortDirection? sort = null) {
             var result = new Dictionary<string, string>();
-            result.AddValueIfNotNullOrEmpty("profileId", profileId);
-            result.AddValueIfTrue("testmode", testmode);
+            result.AddValueIfNotNullOrEmpty(nameof(profileId), profileId);
+            result.AddValueIfTrue(nameof(testmode), testmode);
+            result.AddValueIfNotNullOrEmpty(nameof(sort), sort?.ToString()?.ToLowerInvariant());
             return result;
         }
         

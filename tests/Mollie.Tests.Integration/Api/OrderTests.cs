@@ -22,6 +22,45 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
     public OrderTests() {
         _orderClient = new OrderClient(this.ApiKey);
     }
+
+    [DefaultRetryFact]
+    public async Task GetOrderListAsync_WithoutSortOrder_ReturnsOrdersInDescendingOrder()
+    {
+        // Act
+        var orders = await _orderClient.GetOrderListAsync();
+        
+        // Assert
+        if (orders.Items.Any())
+        {
+            orders.Items.Should().BeInDescendingOrder(x => x.CreatedAt);
+        }
+    }
+    
+    [DefaultRetryFact]
+    public async Task GetOrderListAsync_InDescendingOrder_ReturnsOrdersInDescendingOrder()
+    {
+        // Act
+        var orders = await _orderClient.GetOrderListAsync(sort: SortDirection.Desc);
+        
+        // Assert
+        if (orders.Items.Any())
+        {
+            orders.Items.Should().BeInDescendingOrder(x => x.CreatedAt);
+        }
+    }
+    
+    [DefaultRetryFact]
+    public async Task GetOrderListAsync_InAscendingOrder_ReturnsOrdersInAscendingOrder()
+    {
+        // Act
+        var orders = await _orderClient.GetOrderListAsync(sort: SortDirection.Asc);
+        
+        // Assert
+        if (orders.Items.Any())
+        {
+            orders.Items.Should().BeInAscendingOrder(x => x.CreatedAt);
+        }
+    }
         
     [DefaultRetryFact]
     public async Task CreateOrderAsync_OrderWithRequiredFields_OrderIsCreated() {

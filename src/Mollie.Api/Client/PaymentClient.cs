@@ -109,7 +109,7 @@ namespace Mollie.Api.Client {
             result.AddValueIfNotNullOrEmpty(nameof(profileId), profileId);
             result.AddValueIfNotNullOrEmpty("include", this.BuildIncludeParameter(includeQrCode, includeRemainderDetails));
             result.AddValueIfNotNullOrEmpty("embed", this.BuildEmbedParameter(embedRefunds, embedChargebacks));
-            result.AddValueIfNotNullOrEmpty(nameof(sort), sort.ToString().ToLowerInvariant());
+            result.AddValueIfNotNullOrEmpty(nameof(sort), sort?.ToString()?.ToLowerInvariant());
             return result;
         }
 
