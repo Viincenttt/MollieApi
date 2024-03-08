@@ -25,7 +25,14 @@ namespace Mollie.Api.Client {
             return await this.PostAsync<PaymentResponse>($"payments{queryParameters.ToQueryString()}", paymentRequest).ConfigureAwait(false);
         }
 
-        public async Task<PaymentResponse> GetPaymentAsync(string paymentId, bool testmode = false, bool includeQrCode = false, bool includeRemainderDetails = false, bool embedRefunds = false, bool embedChargebacks = false) {
+        public async Task<PaymentResponse> GetPaymentAsync(
+            string paymentId, 
+            bool testmode = false, 
+            bool includeQrCode = false, 
+            bool includeRemainderDetails = false, 
+            bool embedRefunds = false, 
+            bool embedChargebacks = false) {
+            
 	        if (testmode) {
 	            this.ValidateApiKeyIsOauthAccesstoken();
             }
@@ -57,7 +64,16 @@ namespace Mollie.Api.Client {
             return await this.GetAsync(url).ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<PaymentResponse>> GetPaymentListAsync(string from = null, int? limit = null, string profileId = null, bool testmode = false, bool includeQrCode = false, bool embedRefunds = false, bool embedChargebacks = false) {
+        public async Task<ListResponse<PaymentResponse>> GetPaymentListAsync(
+            string from = null, 
+            int? limit = null,
+            string profileId = null, 
+            bool testmode = false, 
+            bool includeQrCode = false, 
+            bool embedRefunds = false, 
+            bool embedChargebacks = false,
+            SortDirection? sort = null) {
+            
 	        if (!string.IsNullOrWhiteSpace(profileId) || testmode) {
 	            this.ValidateApiKeyIsOauthAccesstoken();
             }
@@ -67,7 +83,8 @@ namespace Mollie.Api.Client {
                 testmode: testmode,
                 includeQrCode: includeQrCode,
                 embedRefunds: embedRefunds,
-                embedChargebacks: embedChargebacks);
+                embedChargebacks: embedChargebacks,
+                sort: sort);
 
             return await this.GetListAsync<ListResponse<PaymentResponse>>($"payments", from, limit, queryParameters).ConfigureAwait(false);
 		}
@@ -78,12 +95,21 @@ namespace Mollie.Api.Client {
             return await this.PatchAsync<PaymentResponse>($"payments/{paymentId}", paymentUpdateRequest).ConfigureAwait(false);
         }
 
-        private Dictionary<string, string> BuildQueryParameters(string profileId = null, bool testmode = false, bool includeQrCode = false, bool includeRemainderDetails = false, bool embedRefunds = false, bool embedChargebacks = false) {
+        private Dictionary<string, string> BuildQueryParameters(
+            string profileId = null, 
+            bool testmode = false, 
+            bool includeQrCode = false, 
+            bool includeRemainderDetails = false, 
+            bool embedRefunds = false, 
+            bool embedChargebacks = false,
+            SortDirection? sort = null) {
+            
             var result = new Dictionary<string, string>();
             result.AddValueIfTrue(nameof(testmode), testmode);
             result.AddValueIfNotNullOrEmpty(nameof(profileId), profileId);
             result.AddValueIfNotNullOrEmpty("include", this.BuildIncludeParameter(includeQrCode, includeRemainderDetails));
             result.AddValueIfNotNullOrEmpty("embed", this.BuildEmbedParameter(embedRefunds, embedChargebacks));
+            result.AddValueIfNotNullOrEmpty(nameof(sort), sort.ToString().ToLowerInvariant());
             return result;
         }
 

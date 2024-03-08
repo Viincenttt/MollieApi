@@ -45,6 +45,31 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         // Then
         response.Should().NotBeNull();
         response.Items.Should().NotBeNull();
+        response.Items.Should().BeInDescendingOrder(x => x.CreatedAt);
+    }
+    
+    [DefaultRetryFact]
+    public async Task CanRetrievePaymentListInDescendingOrder()
+    {
+        // When: Retrieve payment list in ascending order
+        ListResponse<PaymentResponse> response = await this._paymentClient.GetPaymentListAsync(sort: SortDirection.Desc);
+
+        // Then
+        response.Should().NotBeNull();
+        response.Items.Should().NotBeNull();
+        response.Items.Should().BeInDescendingOrder(x => x.CreatedAt);
+    }
+
+    [DefaultRetryFact]
+    public async Task CanRetrievePaymentListInAscendingOrder()
+    {
+        // When: Retrieve payment list in ascending order
+        ListResponse<PaymentResponse> response = await this._paymentClient.GetPaymentListAsync(sort: SortDirection.Asc);
+
+        // Then
+        response.Should().NotBeNull();
+        response.Items.Should().NotBeNull();
+        response.Items.Should().BeInAscendingOrder(x => x.CreatedAt);
     }
 
     [DefaultRetryFact]
