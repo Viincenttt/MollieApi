@@ -75,19 +75,27 @@ namespace Mollie.Tests.Unit.Client {
         }
         
         [Theory]
-        [InlineData(null, null, null, false, "")]
-        [InlineData("from", null, null, false, "?from=from")]
-        [InlineData("from", 50, null, false, "?from=from&limit=50")]
-        [InlineData(null, null, "profile-id", false, "?profileId=profile-id")]
-        [InlineData(null, null, "profile-id", true, "?profileId=profile-id&testmode=true")]
-        public async Task GetOrderListAsync_QueryParameterOptions_CorrectParametersAreAdded(string from, int? limit, string profileId, bool testmode, string expectedQueryString) {
+        [InlineData(null, null, null, false, null, "")]
+        [InlineData("from", null, null, false, null, "?from=from")]
+        [InlineData("from", 50, null, false, null, "?from=from&limit=50")]
+        [InlineData(null, null, "profile-id", false, null, "?profileId=profile-id")]
+        [InlineData(null, null, "profile-id", true, null, "?profileId=profile-id&testmode=true")]
+        [InlineData(null, null, "profile-id", true, SortDirection.Desc, "?profileId=profile-id&testmode=true&sort=desc")]
+        [InlineData(null, null, "profile-id", true, SortDirection.Asc, "?profileId=profile-id&testmode=true&sort=asc")]
+        public async Task GetOrderListAsync_QueryParameterOptions_CorrectParametersAreAdded(
+            string from, 
+            int? limit, 
+            string profileId, 
+            bool testmode, 
+            SortDirection? sortDirection,
+            string expectedQueryString) {
             // Given: We make a request to retrieve the list of orders
             var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}orders{expectedQueryString}", defaultOrderJsonResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
             OrderClient orderClient = new OrderClient("abcde", httpClient);
 
             // When: We send the request
-            await orderClient.GetOrderListAsync(from, limit, profileId, testmode);
+            await orderClient.GetOrderListAsync(from, limit, profileId, testmode, sortDirection);
 
             // Then
             mockHttp.VerifyNoOutstandingRequest();

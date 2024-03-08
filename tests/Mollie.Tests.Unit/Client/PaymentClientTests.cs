@@ -1077,6 +1077,24 @@ public class PaymentClientTests : BaseClientTests {
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
     }
+    
+    [Theory]
+    [InlineData(null, "")]
+    [InlineData(SortDirection.Desc, "?sort=desc")]
+    [InlineData(SortDirection.Asc, "?sort=asc")]
+    public async Task GetPaymentListAsync_AddSortDirection_QueryStringContainsSortDirection(SortDirection? sortDirection, string expectedQueryString)
+    {
+        // Given: We make a request to retrieve a payment with embedded refunds
+        var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments{expectedQueryString}", defaultPaymentJsonResponse);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
+
+        // When: We send the request
+        await paymentClient.GetPaymentListAsync(embedChargebacks: true, sort: sortDirection);
+
+        // Then
+        mockHttp.VerifyNoOutstandingExpectation();
+    }
 
     [Fact]
     public async Task DeletePaymentAsync_TestmodeIsTrue_RequestContainsTestmodeModel() {
