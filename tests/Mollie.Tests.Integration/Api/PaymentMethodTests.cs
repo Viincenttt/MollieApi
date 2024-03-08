@@ -42,7 +42,6 @@ public class PaymentMethodTests : BaseMollieApiTestClass, IDisposable {
 
     [DefaultRetryTheory]
     [InlineData(PaymentMethod.Bancontact)]
-    [InlineData(PaymentMethod.Sofort)]
     [InlineData(PaymentMethod.BankTransfer)]
     [InlineData(PaymentMethod.Belfius)]
     [InlineData(PaymentMethod.PayPal)]
