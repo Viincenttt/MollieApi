@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Profile.Response {
@@ -29,6 +30,16 @@ namespace Mollie.Api.Models.Profile.Response {
         /// The URL to the profile's website or application.
         /// </summary>
         public string Website { get; set; }
+        
+        /// <summary>
+        /// The products or services that the profile’s website offers.
+        /// </summary>
+        public string Description { get; set; }
+        
+        /// <summary>
+        /// The list of countries where you expect that the majority of the profile’s customers will live, in ISO 3166-1 alpha-2 format.
+        /// </summary>
+        public IEnumerable<string> CountriesOfActivity { get; set; }
 
         /// <summary>
         /// The email address associated with the profile's tradename or brand.
