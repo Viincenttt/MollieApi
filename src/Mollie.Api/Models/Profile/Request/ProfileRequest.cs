@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Mollie.Api.Models.Profile.Request {
     public class ProfileRequest {
@@ -21,6 +22,16 @@ namespace Mollie.Api.Models.Profile.Request {
         /// The phone number associated with the profile's tradename or brand.
         /// </summary>
         public string Phone { get; set; }
+        
+        /// <summary>
+        /// The products or services that the profile’s website offers.
+        /// </summary>
+        public string Description { get; set; }
+        
+        /// <summary>
+        /// The list of countries where you expect that the majority of the profile’s customers will live, in ISO 3166-1 alpha-2 format.
+        /// </summary>
+        public IEnumerable<string> CountriesOfActivity { get; set; }
 
         /// <summary>
         /// The industry associated with the profile’s trade name or brand. Please refer to the documentation of the business category

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -26,6 +27,8 @@ public class ProfileClientTests : BaseClientTests
             Mode = Mode.Test,
             Phone = "+31208202070",
             Website = "https://www.mywebsite.com",
+            Description = "Description",
+            CountriesOfActivity = new List<string>() { "NL" },
             BusinessCategory = "OTHER_MERCHANDISE"
         };
         var mockHttp = new MockHttpMessageHandler();
@@ -41,6 +44,8 @@ public class ProfileClientTests : BaseClientTests
         // Assert
         mockHttp.VerifyNoOutstandingRequest();
         AssertDefaultProfileResponse(result);
+        result.Description.Should().Be(profileRequest.Description);
+        result.CountriesOfActivity.Should().Equal(profileRequest.CountriesOfActivity);
     }
     
     [Fact]
@@ -419,6 +424,8 @@ public class ProfileClientTests : BaseClientTests
     ""website"": ""https://www.mywebsite.com"",
     ""email"": ""info@mywebsite.com"",
     ""phone"": ""+31208202070"",
+    ""description"": ""Description"",
+    ""countriesOfActivity"": [""NL""],
     ""businessCategory"": ""OTHER_MERCHANDISE"",
     ""categoryCode"": 5399,
     ""status"": ""unverified"",
