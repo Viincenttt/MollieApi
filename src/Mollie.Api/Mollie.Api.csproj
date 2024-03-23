@@ -15,6 +15,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <LangVersion>12</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
