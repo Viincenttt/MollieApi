@@ -9,7 +9,7 @@ using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client {
     public class ProfileClient : BaseMollieClient, IProfileClient {
-        public ProfileClient(string apiKey, HttpClient httpClient = null) : base(apiKey, httpClient) {
+        public ProfileClient(string apiKey, HttpClient? httpClient = null) : base(apiKey, httpClient) {
         }
 
         public async Task<ProfileResponse> CreateProfileAsync(ProfileRequest request) {
@@ -29,7 +29,7 @@ namespace Mollie.Api.Client {
             return await this.GetAsync<ProfileResponse>("profiles/me").ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<ProfileResponse>> GetProfileListAsync(string from = null, int? limit = null) {
+        public async Task<ListResponse<ProfileResponse>> GetProfileListAsync(string? from = null, int? limit = null) {
             return await this.GetListAsync<ListResponse<ProfileResponse>>("profiles", from, limit).ConfigureAwait(false);
         }
         

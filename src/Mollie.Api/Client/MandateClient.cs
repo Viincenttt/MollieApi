@@ -10,7 +10,7 @@ using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client {
     public class MandateClient : BaseMollieClient, IMandateClient {
-        public MandateClient(string apiKey, HttpClient httpClient = null) : base(apiKey, httpClient) {
+        public MandateClient(string apiKey, HttpClient? httpClient = null) : base(apiKey, httpClient) {
         }
 
         public async Task<MandateResponse> GetMandateAsync(string customerId, string mandateId, bool testmode = false) {
@@ -20,7 +20,7 @@ namespace Mollie.Api.Client {
             return await this.GetAsync<MandateResponse>($"customers/{customerId}/mandates/{mandateId}{queryParameters.ToQueryString()}").ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<MandateResponse>> GetMandateListAsync(string customerId, string from = null, int? limit = null, bool testmode = false) {
+        public async Task<ListResponse<MandateResponse>> GetMandateListAsync(string customerId, string? from = null, int? limit = null, bool testmode = false) {
             this.ValidateRequiredUrlParameter(nameof(customerId), customerId);
             var queryParameters = this.BuildQueryParameters(testmode);
             return await this.GetListAsync<ListResponse<MandateResponse>>($"customers/{customerId}/mandates", from, limit, queryParameters)

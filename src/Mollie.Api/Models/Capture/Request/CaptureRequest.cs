@@ -21,8 +21,8 @@ namespace Mollie.Api.Models.Capture.Request {
         [JsonConverter(typeof(RawJsonConverter))]
         public string Metadata { get; set; }
         
-        public void SetMetadata(object metadataObj, JsonSerializerSettings jsonSerializerSettings = null) {
-            this.Metadata = JsonConvert.SerializeObject(metadataObj, jsonSerializerSettings);
+        public void SetMetadata(object metadataObj, JsonSerializerSettings? jsonSerializerSettings = null) {
+            Metadata = JsonConvert.SerializeObject(metadataObj, jsonSerializerSettings);
         }
         
         public override string ToString() {

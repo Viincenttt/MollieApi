@@ -11,17 +11,17 @@ using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client {
     public class SubscriptionClient : BaseMollieClient, ISubscriptionClient {
-        public SubscriptionClient(string apiKey, HttpClient httpClient = null) : base(apiKey, httpClient) {
+        public SubscriptionClient(string apiKey, HttpClient? httpClient = null) : base(apiKey, httpClient) {
         }
 
-        public async Task<ListResponse<SubscriptionResponse>> GetSubscriptionListAsync(string customerId, string from = null, int? limit = null, string profileId = null, bool testmode = false) {
+        public async Task<ListResponse<SubscriptionResponse>> GetSubscriptionListAsync(string customerId, string? from = null, int? limit = null, string? profileId = null, bool testmode = false) {
             this.ValidateRequiredUrlParameter(nameof(customerId), customerId);
             var queryParameters = this.BuildQueryParameters(profileId, testmode);
             return await this.GetListAsync<ListResponse<SubscriptionResponse>>($"customers/{customerId}/subscriptions", from, limit, queryParameters)
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<SubscriptionResponse>> GetAllSubscriptionList(string from = null, int? limit = null, string profileId = null, bool testmode = false) {
+        public async Task<ListResponse<SubscriptionResponse>> GetAllSubscriptionList(string? from = null, int? limit = null, string? profileId = null, bool testmode = false) {
             var queryParameters = this.BuildQueryParameters(profileId, testmode);
             return await this.GetListAsync<ListResponse<SubscriptionResponse>>($"subscriptions", from, limit, queryParameters)
                 .ConfigureAwait(false);
@@ -62,7 +62,7 @@ namespace Mollie.Api.Client {
             return await this.PatchAsync<SubscriptionResponse>($"customers/{customerId}/subscriptions/{subscriptionId}", request).ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<PaymentResponse>> GetSubscriptionPaymentListAsync(string customerId, string subscriptionId, string from = null, int? limit = null, bool testmode = false) {
+        public async Task<ListResponse<PaymentResponse>> GetSubscriptionPaymentListAsync(string customerId, string subscriptionId, string? from = null, int? limit = null, bool testmode = false) {
             this.ValidateRequiredUrlParameter(nameof(customerId), customerId);
             this.ValidateRequiredUrlParameter(nameof(subscriptionId), subscriptionId);
             var queryParameters = this.BuildQueryParameters(testmode);

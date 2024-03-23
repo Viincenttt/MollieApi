@@ -11,7 +11,7 @@ using Mollie.Api.Models.Url;
 namespace Mollie.Api.Client
 {
     public class CaptureClient : BaseMollieClient, ICaptureClient {
-        public CaptureClient(string apiKey, HttpClient httpClient = null) : base(apiKey, httpClient) {
+        public CaptureClient(string apiKey, HttpClient? httpClient = null) : base(apiKey, httpClient) {
         }
 
         public async Task<CaptureResponse> GetCaptureAsync(string paymentId, string captureId, bool testmode = false) {

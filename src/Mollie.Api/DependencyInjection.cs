@@ -11,7 +11,7 @@ namespace Mollie.Api {
         public static IServiceCollection AddMollieApi(
             this IServiceCollection services, 
             Action<MollieOptions> mollieOptionsDelegate,
-            IAsyncPolicy<HttpResponseMessage> retryPolicy = null) {
+            IAsyncPolicy<HttpResponseMessage>? retryPolicy = null) {
 
             MollieOptions mollieOptions = new MollieOptions();
             mollieOptionsDelegate.Invoke(mollieOptions);
@@ -67,7 +67,7 @@ namespace Mollie.Api {
         static void RegisterMollieApiClient<TInterface, TImplementation>(
             IServiceCollection services,
             Func<HttpClient, TImplementation> factory,
-            IAsyncPolicy<HttpResponseMessage> retryPolicy = null) 
+            IAsyncPolicy<HttpResponseMessage>? retryPolicy = null) 
             where TInterface : class
             where TImplementation : class, TInterface {
             

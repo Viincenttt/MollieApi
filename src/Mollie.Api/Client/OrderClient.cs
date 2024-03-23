@@ -13,7 +13,7 @@ using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client {
     public class OrderClient : BaseMollieClient, IOrderClient {
-        public OrderClient(string apiKey, HttpClient httpClient = null) : base(apiKey, httpClient) {
+        public OrderClient(string apiKey, HttpClient? httpClient = null) : base(apiKey, httpClient) {
         }
 
         public async Task<OrderResponse> CreateOrderAsync(OrderRequest orderRequest) {
@@ -49,7 +49,7 @@ namespace Mollie.Api.Client {
         }
 
         public async Task<ListResponse<OrderResponse>> GetOrderListAsync(
-            string from = null, int? limit = null, string profileId = null, bool testmode = false, SortDirection? sort = null) {
+            string? from = null, int? limit = null, string? profileId = null, bool testmode = false, SortDirection? sort = null) {
             var queryParameters = BuildQueryParameters(profileId, testmode, sort);
             return await this.GetListAsync<ListResponse<OrderResponse>>($"orders", from, limit, queryParameters).ConfigureAwait(false);
         }
@@ -73,13 +73,13 @@ namespace Mollie.Api.Client {
             return await this.PostAsync<OrderRefundResponse>($"orders/{orderId}/refunds", createOrderRefundRequest);
         }
 
-        public async Task<ListResponse<RefundResponse>> GetOrderRefundListAsync(string orderId, string from = null, int? limit = null, bool testmode = false) {
+        public async Task<ListResponse<RefundResponse>> GetOrderRefundListAsync(string orderId, string? from = null, int? limit = null, bool testmode = false) {
             this.ValidateRequiredUrlParameter(nameof(orderId), orderId);
             var queryParameters = BuildQueryParameters(null, testmode);
             return await this.GetListAsync<ListResponse<RefundResponse>>($"orders/{orderId}/refunds", from, limit, queryParameters).ConfigureAwait(false);
         }
 
-        private Dictionary<string, string> BuildQueryParameters(string profileId = null, bool testmode = false, SortDirection? sort = null) {
+        private Dictionary<string, string> BuildQueryParameters(string? profileId = null, bool testmode = false, SortDirection? sort = null) {
             var result = new Dictionary<string, string>();
             result.AddValueIfNotNullOrEmpty(nameof(profileId), profileId);
             result.AddValueIfTrue(nameof(testmode), testmode);

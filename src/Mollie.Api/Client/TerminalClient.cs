@@ -10,7 +10,7 @@ using Mollie.Api.Models.Url;
 namespace Mollie.Api.Client {
     public class TerminalClient : BaseMollieClient, ITerminalClient
     {
-        public TerminalClient(string apiKey, HttpClient httpClient = null) : base(apiKey, httpClient) { }
+        public TerminalClient(string apiKey, HttpClient? httpClient = null) : base(apiKey, httpClient) { }
         
         public async Task<TerminalResponse> GetTerminalAsync(string terminalId) {
             this.ValidateRequiredUrlParameter(nameof(terminalId), terminalId);
@@ -21,7 +21,7 @@ namespace Mollie.Api.Client {
             return await this.GetAsync(url).ConfigureAwait(false);
         }
         
-        public async Task<ListResponse<TerminalResponse>> GetTerminalListAsync(string from = null, int? limit = null, string profileId = null, bool testmode = false) {
+        public async Task<ListResponse<TerminalResponse>> GetTerminalListAsync(string? from = null, int? limit = null, string? profileId = null, bool testmode = false) {
             var queryParameters = this.BuildQueryParameters(profileId, testmode);
             return await this.GetListAsync<ListResponse<TerminalResponse>>("terminals", from, limit, queryParameters).ConfigureAwait(false);
         }

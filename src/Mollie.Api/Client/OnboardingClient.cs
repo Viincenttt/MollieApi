@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Mollie.Api.Client {
     public class OnboardingClient : BaseMollieClient, IOnboardingClient {
-        public OnboardingClient(string apiKey, HttpClient httpClient = null) : base(apiKey, httpClient) {
+        public OnboardingClient(string apiKey, HttpClient? httpClient = null) : base(apiKey, httpClient) {
         }
 
         public async Task<OnboardingStatusResponse> GetOnboardingStatusAsync() {
