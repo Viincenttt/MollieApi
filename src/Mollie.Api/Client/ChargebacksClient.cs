@@ -9,7 +9,7 @@ using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client {
     public class ChargebacksClient : BaseMollieClient, IChargebacksClient {
-        public ChargebacksClient(string apiKey, HttpClient httpClient = null) : base(apiKey, httpClient) {
+        public ChargebacksClient(string apiKey, HttpClient? httpClient = null) : base(apiKey, httpClient) {
         }
 
         public async Task<ChargebackResponse> GetChargebackAsync(string paymentId, string chargebackId, bool testmode = false) {
@@ -20,7 +20,7 @@ namespace Mollie.Api.Client {
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<ChargebackResponse>> GetChargebacksListAsync(string paymentId, string from = null, int? limit = null, bool testmode = false) {
+        public async Task<ListResponse<ChargebackResponse>> GetChargebacksListAsync(string paymentId, string? from = null, int? limit = null, bool testmode = false) {
             this.ValidateRequiredUrlParameter(nameof(paymentId), paymentId);
             var queryParameters = this.BuildQueryParameters(testmode);
             return await this
@@ -28,7 +28,7 @@ namespace Mollie.Api.Client {
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<ChargebackResponse>> GetChargebacksListAsync(string profileId = null, bool testmode = false) {
+        public async Task<ListResponse<ChargebackResponse>> GetChargebacksListAsync(string? profileId = null, bool testmode = false) {
             var queryParameters = this.BuildQueryParameters(profileId, testmode);
             return await this.GetListAsync<ListResponse<ChargebackResponse>>($"chargebacks", null, null, queryParameters).ConfigureAwait(false);
         }
@@ -37,7 +37,7 @@ namespace Mollie.Api.Client {
             return await this.GetAsync(url).ConfigureAwait(false);
         }
         
-        private Dictionary<string, string> BuildQueryParameters(string profileId, bool testmode) {
+        private Dictionary<string, string> BuildQueryParameters(string? profileId, bool testmode) {
             var result = new Dictionary<string, string>();
             result.AddValueIfNotNullOrEmpty(nameof(profileId), profileId);
             result.AddValueIfTrue(nameof(testmode), testmode);

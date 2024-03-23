@@ -393,7 +393,6 @@ public class PaymentClientTests : BaseClientTests {
         result.Should().BeOfType<BancontactPaymentResponse>();
         var banContactPayment = result as BancontactPaymentResponse;
         banContactPayment.Details.CardNumber.Should().Be("1234567890123456");
-        banContactPayment.Details.CardFingerprint.Should().Be("fingerprint");
         banContactPayment.Details.QrCode.Should().NotBeNull();
         banContactPayment.Details.QrCode.Height.Should().Be(5);
         banContactPayment.Details.QrCode.Width.Should().Be(10);

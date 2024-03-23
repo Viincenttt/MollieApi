@@ -39,9 +39,9 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="testmode"></param>
         /// <returns></returns>
 		Task<ListResponse<PaymentResponse>> GetPaymentListAsync(
-            string from = null, 
+            string? from = null, 
             int? limit = null, 
-            string profileId = null,
+            string? profileId = null,
             bool testmode = false, 
             bool includeQrCode = false, 
             bool embedRefunds = false, 

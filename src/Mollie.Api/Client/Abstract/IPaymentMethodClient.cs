@@ -10,30 +10,31 @@ namespace Mollie.Api.Client.Abstract {
 		Task<PaymentMethodResponse> GetPaymentMethodAsync(
             string paymentMethod, 
             bool includeIssuers = false, 
-            string locale = null, 
+            string? locale = null, 
             bool includePricing = false, 
-            string profileId = null, 
+            string? profileId = null, 
             bool testmode = false, 
-            string currency = null);
+            string? currency = null);
         
         Task<ListResponse<PaymentMethodResponse>> GetAllPaymentMethodListAsync(
-            string locale = null, 
-            Amount amount = null, 
+            string? locale = null, 
+            Amount? amount = null, 
             bool includeIssuers = false, 
             bool includePricing = false, 
-            string profileId = null);
+            string? profileId = null);
         
         Task<ListResponse<PaymentMethodResponse>> GetPaymentMethodListAsync(
-            string sequenceType = null, 
-            string locale = null, 
-            Amount amount = null, 
+            string? sequenceType = null, 
+            string? locale = null, 
+            Amount? amount = null, 
             bool includeIssuers = false, 
             bool includePricing = false, 
-            string profileId = null, 
+            string? profileId = null, 
             bool testmode = false, 
             Resource? resource = null, 
-            string billingCountry = null, 
-            string includeWallets = null);
+            string? billingCountry = null, 
+            string? includeWallets = null);
+        
         Task<PaymentMethodResponse> GetPaymentMethodAsync(UrlObjectLink<PaymentMethodResponse> url);
     }
 }

@@ -2,12 +2,12 @@
 using Polly;
 
 namespace Mollie.Api.Options {
-    public class MollieOptions {
+    public record MollieOptions {
         /// <summary>
         /// Your API-key or OAuth token
         /// </summary>
-        public string ApiKey { get; set; }
-        
+        public string ApiKey { get; set; } = null!;
+
         /// <summary>
         /// (Optional) ClientId used by Connect API
         /// </summary>

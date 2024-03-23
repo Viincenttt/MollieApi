@@ -7,7 +7,7 @@ using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client {
     public class OrganizationsClient : OauthBaseMollieClient, IOrganizationsClient {
-        public OrganizationsClient(string oauthAccessToken, HttpClient httpClient = null) : base(oauthAccessToken, httpClient) {
+        public OrganizationsClient(string oauthAccessToken, HttpClient? httpClient = null) : base(oauthAccessToken, httpClient) {
         }
 
         public async Task<OrganizationResponse> GetCurrentOrganizationAsync() {
@@ -23,7 +23,7 @@ namespace Mollie.Api.Client {
             return await this.GetAsync(url).ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<OrganizationResponse>> GetOrganizationsListAsync(string from = null, int? limit = null) {
+        public async Task<ListResponse<OrganizationResponse>> GetOrganizationsListAsync(string? from = null, int? limit = null) {
             return await this.GetListAsync<ListResponse<OrganizationResponse>>("organizations", from, limit, null).ConfigureAwait(false);
         }
         
