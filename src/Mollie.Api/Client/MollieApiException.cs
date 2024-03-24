@@ -11,7 +11,7 @@ namespace Mollie.Api.Client {
         }
 
         private static MollieErrorMessage ParseErrorMessage(string json) {
-            return JsonConvert.DeserializeObject<MollieErrorMessage>(json);
+            return JsonConvert.DeserializeObject<MollieErrorMessage>(json)!;
         }
     }
 }

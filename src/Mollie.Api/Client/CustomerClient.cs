@@ -52,13 +52,13 @@ namespace Mollie.Api.Client {
 
         public async Task<ListResponse<PaymentResponse>> GetCustomerPaymentListAsync(string customerId, string? from = null, int? limit = null, string? profileId = null, bool testmode = false) {
             this.ValidateRequiredUrlParameter(nameof(customerId), customerId);
-            var queryParameters = this.BuildQueryParameters(profileId, testmode);
+            var queryParameters = BuildQueryParameters(profileId, testmode);
             return await this.GetListAsync<ListResponse<PaymentResponse>>($"customers/{customerId}/payments", from, limit, queryParameters).ConfigureAwait(false);
         }
 
         public async Task<PaymentResponse> CreateCustomerPayment(string customerId, PaymentRequest paymentRequest) {
             this.ValidateRequiredUrlParameter(nameof(customerId), customerId);
-            return await this.PostAsync<PaymentResponse>($"customers/{customerId}/payments", paymentRequest).ConfigureAwait(false);
+            return await PostAsync<PaymentResponse>($"customers/{customerId}/payments", paymentRequest).ConfigureAwait(false);
         }
         
         private Dictionary<string, string> BuildQueryParameters(bool testmode = false) {
@@ -67,7 +67,7 @@ namespace Mollie.Api.Client {
             return result;
         }
         
-        private Dictionary<string, string> BuildQueryParameters(string profileId, bool testmode) {
+        private Dictionary<string, string> BuildQueryParameters(string? profileId, bool testmode) {
             var result = new Dictionary<string, string>();
             result.AddValueIfNotNullOrEmpty("profileId", profileId);
             result.AddValueIfTrue("testmode", testmode);

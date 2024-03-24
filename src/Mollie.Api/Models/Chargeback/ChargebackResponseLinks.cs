@@ -22,6 +22,6 @@ namespace Mollie.Api.Models.Chargeback {
         /// <summary>
         /// The URL to the chargeback retrieval endpoint documentation.
         /// </summary>
-        public UrlLink Documentation { get; set; }
+        public required UrlLink Documentation { get; init; }
     }
 }

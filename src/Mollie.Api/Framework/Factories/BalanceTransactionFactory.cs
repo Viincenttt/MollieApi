@@ -4,7 +4,11 @@ using Mollie.Api.Models.Balance.Response.BalanceTransaction.Specific;
 
 namespace Mollie.Api.Framework.Factories {
     internal class BalanceTransactionFactory {
-        public BalanceTransaction Create(string type) {
+        public BalanceTransaction Create(string? type) {
+            if (string.IsNullOrEmpty(type)) {
+                return Activator.CreateInstance<BalanceTransaction>();
+            }
+            
             switch (type) {
                 case BalanceTransactionContextType.Payment:
                 case BalanceTransactionContextType.UnauthorizedDirectDebit:

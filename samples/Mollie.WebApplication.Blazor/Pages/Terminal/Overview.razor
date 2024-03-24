@@ -58,7 +58,8 @@ else {
         }
         else {
             _terminals = await TerminalClient.GetTerminalListAsync(new UrlObjectLink<ListResponse<TerminalResponse>>() {
-                Href = Url
+                Href = Url,
+                Type = "application/json"
             });
         }
     }

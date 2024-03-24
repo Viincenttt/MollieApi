@@ -11,17 +11,15 @@ namespace Mollie.Api.Models.Order {
         /// See the Mollie.Api.Models.Payment.PaymentMethod class for a full list of known values.
         /// </summary>
         [JsonIgnore]
-        public string Method { 
-            get {
-                return this.Methods.FirstOrDefault();
-            }
+        public string? Method { 
+            get => Methods?.FirstOrDefault();
             set {
                 if (value == null) {
-                    this.Methods = null;
+                    Methods = null;
                 }
                 else {
-                    this.Methods = new List<string>();
-                    this.Methods.Add(value);
+                    Methods = new List<string>();
+                    Methods.Add(value);
                 }
             }
         }
@@ -35,7 +33,7 @@ namespace Mollie.Api.Models.Order {
         /// from a specific country to your customer.
         /// </summary>
         [JsonProperty("method")]
-        public IList<string> Methods { get; set; }
+        public IList<string>? Methods { get; set; }
 
         /// <summary>
         /// The ID of the Customer for whom the payment is being created. This is used for recurring payments

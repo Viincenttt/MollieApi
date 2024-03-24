@@ -22,7 +22,7 @@ namespace Mollie.Api.Extensions {
         }
 
         private static Uri CreateUri(string uri) {
-            return string.IsNullOrEmpty(uri) ? null : new Uri(uri, UriKind.RelativeOrAbsolute);
+            return new Uri(uri, UriKind.RelativeOrAbsolute);
         }
     }
 }

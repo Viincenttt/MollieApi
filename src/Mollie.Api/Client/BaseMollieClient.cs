@@ -84,11 +84,11 @@ namespace Mollie.Api.Client {
             await this.SendHttpRequest<object>(HttpMethod.Delete, relativeUri, data).ConfigureAwait(false);
         }
 
-        private async Task<T> ProcessHttpResponseMessage<T>(HttpResponseMessage response) {
+        private async Task<T?> ProcessHttpResponseMessage<T>(HttpResponseMessage response) {
             var resultContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode) {
-                return this._jsonConverterService.Deserialize<T>(resultContent);
+                return _jsonConverterService.Deserialize<T?>(resultContent);
             }
 
             switch (response.StatusCode) {
@@ -125,15 +125,15 @@ namespace Mollie.Api.Client {
             }
 
             // Don't execute any requests that don't point to the Mollie API URL for security reasons
-            if (!urlObject.Href.Contains(this._apiEndpoint)) {
+            if (!urlObject.Href.Contains(_apiEndpoint)) {
                 throw new ArgumentException($"Url does not point to the Mollie API: {urlObject.Href}");
             }
         }
 
         protected virtual HttpRequestMessage CreateHttpRequest(HttpMethod method, string relativeUri, HttpContent? content = null) {
-            HttpRequestMessage httpRequest = new HttpRequestMessage(method, new Uri(new Uri(this._apiEndpoint), relativeUri));
+            HttpRequestMessage httpRequest = new HttpRequestMessage(method, new Uri(new Uri(_apiEndpoint), relativeUri));
             httpRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", this._apiKey);
+            httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _apiKey);
             httpRequest.Headers.Add("User-Agent", this.GetUserAgent());
             var idemPotencyKey = _idempotencyKey.Value ?? Guid.NewGuid().ToString();
             httpRequest.Headers.Add("Idempotency-Key", idemPotencyKey);
