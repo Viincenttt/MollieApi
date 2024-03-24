@@ -22,7 +22,7 @@ public class TerminalTests : BaseMollieApiTestClass, IDisposable {
         // Given
 
         // When: Retrieve terminal client list
-        ListResponse<TerminalResponse> response = await this._terminalClient.GetTerminalListAsync();
+        ListResponse<TerminalResponse> response = await _terminalClient.GetTerminalListAsync();
 
         // Then
         response.Should().NotBeNull();
@@ -32,12 +32,12 @@ public class TerminalTests : BaseMollieApiTestClass, IDisposable {
     [DefaultRetryFact(Skip = "Not implemented by Mollie yet")]
     public async Task CanRetrieveSingleTerminal() {
         // Given
-        ListResponse<TerminalResponse> allTerminals = await this._terminalClient.GetTerminalListAsync();
+        ListResponse<TerminalResponse> allTerminals = await _terminalClient.GetTerminalListAsync();
         if (allTerminals.Count > 0) {
             TerminalResponse firstTerminal = allTerminals.Items.First();
 
             // When: Retrieve terminal client list
-            TerminalResponse response = await this._terminalClient.GetTerminalAsync(firstTerminal.Id);
+            TerminalResponse response = await _terminalClient.GetTerminalAsync(firstTerminal.Id);
 
             // Then
             response.Should().NotBeNull();

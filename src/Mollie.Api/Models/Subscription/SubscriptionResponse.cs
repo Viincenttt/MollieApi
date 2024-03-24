@@ -24,7 +24,7 @@ namespace Mollie.Api.Models.Subscription {
         /// <summary>
         ///  The subscription's date and time of creation, in ISO 8601 format.
         /// </summary>
-        public DateTime CreatedAt { get; set; }
+        public required DateTime CreatedAt { get; init; }
 
         /// <summary>
         /// The subscription's current status, depends on whether the customer has a pending, valid or invalid mandate.
@@ -111,7 +111,7 @@ namespace Mollie.Api.Models.Subscription {
         public ApplicationFee ApplicationFee { get; set; }
 
         public T? GetMetadata<T>(JsonSerializerSettings? jsonSerializerSettings = null) {
-            return JsonConvert.DeserializeObject<T>(this.Metadata, jsonSerializerSettings);
+            return Metadata != null ? JsonConvert.DeserializeObject<T>(this.Metadata, jsonSerializerSettings) : default;
         }
     }
 }

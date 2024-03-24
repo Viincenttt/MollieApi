@@ -24,7 +24,7 @@ namespace Mollie.Api.Models.Settlement {
 		/// The date on which the settlement was created.
 		/// When requesting the next settlement the returned date signifies the expected settlement date.
 		/// </summary>
-		public DateTime CreatedAt { get; set; }
+		public required DateTime CreatedAt { get; init; }
 
 		/// <summary>
 		/// The date on which the settlement was settled.
