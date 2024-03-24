@@ -5,17 +5,17 @@
         /// <summary>
         /// The email address of your customer.
         /// </summary>
-        public string Email { get; set; }
+        public required string Email { get; init; }
         
         /// <summary>
         /// The given name (first name) of your customer.
         /// </summary>
-        public string GivenName { get; set; }
+        public required string GivenName { get; init; }
         
         /// <summary>
         /// The family name (surname) of your customer.
         /// </summary>
-        public string FamilyName { get; set; }
+        public required string FamilyName { get; init; }
         
         /// <summary>
         /// Allows you to preset the language to be used in the login / authorize flow. When this parameter is
@@ -23,6 +23,6 @@
         /// but the authorize flow currently only supports the following languages:
         /// en_US nl_NL nl_BE fr_FR fr_BE de_DE es_ES it_IT
         /// </summary>
-        public string Locale { get; set; }
+        public string? Locale { get; set; }
     }
 }

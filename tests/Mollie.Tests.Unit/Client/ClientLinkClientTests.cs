@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Mollie.Api.Client;
+using Mollie.Api.Models;
 using Mollie.Api.Models.Chargeback;
 using Mollie.Api.Models.ClientLink.Request;
 using Mollie.Api.Models.ClientLink.Response;
@@ -24,10 +25,19 @@ public class ClientLinkClientTests : BaseClientTests
         mockHttp.When( HttpMethod.Post, $"{BaseMollieClient.ApiEndPoint}client-links")
             .Respond("application/json", clientLinkResponseJson);
         HttpClient httpClient = mockHttp.ToHttpClient();
-        ClientLinkClient clientLinkClient = new ClientLinkClient("clientId", "access_1234", httpClient); 
+        ClientLinkClient clientLinkClient = new ClientLinkClient("clientId", "access_1234", httpClient);
+        var request = new ClientLinkRequest {
+            Owner = new ClientLinkOwner {
+                Email = "email",
+                GivenName = "gicen-name",
+                FamilyName = "family-name"
+            },
+            Address = new AddressObject(),
+            Name = "name"
+        };
 
         // When: We send the request
-        ClientLinkResponse response = await clientLinkClient.CreateClientLinkAsync(new ClientLinkRequest());
+        ClientLinkResponse response = await clientLinkClient.CreateClientLinkAsync(request);
 
         // Then
         response.Id.Should().Be(clientLinkId);
