@@ -205,9 +205,16 @@ namespace Mollie.Tests.Unit.Client {
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             ShipmentClient shipmentClient = new ShipmentClient("api-key", httpClient);
+            var updateRequest = new ShipmentUpdateRequest {
+                Tracking = new TrackingObject {
+                    Carrier = "carrier",
+                    Code = "code"
+                }
+            };
 
             // When: We send the request
-            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await shipmentClient.UpdateShipmentAsync(orderId, "shipment-id", new ShipmentUpdateRequest()));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () =>
+                await shipmentClient.UpdateShipmentAsync(orderId, "shipment-id", updateRequest));
 
             // Then
             exception.Message.Should().Be("Required URL argument 'orderId' is null or empty");
@@ -222,9 +229,16 @@ namespace Mollie.Tests.Unit.Client {
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             ShipmentClient shipmentClient = new ShipmentClient("api-key", httpClient);
+            var updateRequest = new ShipmentUpdateRequest {
+                Tracking = new TrackingObject {
+                    Carrier = "carrier",
+                    Code = "code"
+                }
+            };
 
             // When: We send the request
-            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await shipmentClient.UpdateShipmentAsync("order-id", shipmentId, new ShipmentUpdateRequest()));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () =>
+                await shipmentClient.UpdateShipmentAsync("order-id", shipmentId, updateRequest));
 
             // Then
             exception.Message.Should().Be("Required URL argument 'shipmentId' is null or empty");

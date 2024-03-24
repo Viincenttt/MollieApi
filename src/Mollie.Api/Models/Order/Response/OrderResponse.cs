@@ -117,7 +117,7 @@ namespace Mollie.Api.Models.Order {
         /// <summary>
         /// The order’s date and time of creation, in ISO 8601 format.
         /// </summary>
-        public DateTime CreatedAt { get; set; }
+        public required DateTime CreatedAt { get; init; }
 
         /// <summary>
         /// The date and time the order will expire, in ISO 8601 format. Note that you have until this date to fully ship the
@@ -162,7 +162,7 @@ namespace Mollie.Api.Models.Order {
         public OrderResponseLinks Links { get; set; }
 
         public T? GetMetadata<T>(JsonSerializerSettings? jsonSerializerSettings = null) {
-            return JsonConvert.DeserializeObject<T>(this.Metadata, jsonSerializerSettings);
+            return Metadata != null ? JsonConvert.DeserializeObject<T>(this.Metadata, jsonSerializerSettings) : default;
         }
     }
 }

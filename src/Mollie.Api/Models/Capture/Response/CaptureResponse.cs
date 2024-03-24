@@ -54,7 +54,7 @@ namespace Mollie.Api.Models.Capture
         /// <summary>
         /// The capture’s date and time of creation, in ISO 8601 format.
         /// </summary>
-        public DateTime CreatedAt { get; set; }
+        public required DateTime CreatedAt { get; init; }
         
         /// <summary>
         /// The optional metadata you provided upon payment creation. Metadata can be used to link an order to a payment.

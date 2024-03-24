@@ -124,7 +124,7 @@ namespace Mollie.Api.Models.Order {
         /// <summary>
         /// The order line’s date and time of creation
         /// </summary>
-        public DateTime CreatedAt { get; set; }
+        public required DateTime CreatedAt { get; init; }
         
         /// <summary>
         /// An object with several URL objects relevant to the order line. Every URL object will contain an href and a type field.

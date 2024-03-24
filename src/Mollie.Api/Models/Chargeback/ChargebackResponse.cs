@@ -22,7 +22,7 @@ namespace Mollie.Api.Models.Chargeback {
         /// <summary>
         /// The date and time the chargeback was issued, in ISO 8601 format.
         /// </summary>
-        public DateTime CreatedAt { get; set; }
+        public required DateTime CreatedAt { get; init; }
         
         /// <summary>
         /// The date and time the chargeback was reversed, in ISO 8601 format.
