@@ -64,7 +64,7 @@ namespace Mollie.Api.Models.Customer {
         public CustomerResponseLinks Links { get; set; }
 
         public T? GetMetadata<T>(JsonSerializerSettings? jsonSerializerSettings = null) {
-            return JsonConvert.DeserializeObject<T>(Metadata, jsonSerializerSettings);
+            return Metadata != null ? JsonConvert.DeserializeObject<T>(Metadata, jsonSerializerSettings) : default;
         }
     }
 }

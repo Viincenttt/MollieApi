@@ -6,7 +6,7 @@ namespace Mollie.Api.Models.Chargeback {
 	/// <summary>
 	/// The chargeback's unique identifier, for example chb_n9z0tp.
 	/// </summary>
-	public string Id { get; set; }
+	public required string Id { get; init; }
 
         /// <summary>
         /// The amount charged back.
