@@ -34,10 +34,7 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
         // Given: We create a new payment 
         PaymentLinkRequest paymentLinkRequest = new PaymentLinkRequest() {
             Description = "Test",
-            Amount = new Amount(Currency.EUR, 50),
-            WebhookUrl = this.DefaultWebhookUrl,
-            RedirectUrl = this.DefaultRedirectUrl,
-            ExpiresAt = DateTime.Now.AddDays(1)
+            Amount = new Amount(Currency.EUR, 50)
         };
         var createdPaymentLinkResponse = await this._paymentLinkClient.CreatePaymentLinkAsync(paymentLinkRequest);
 

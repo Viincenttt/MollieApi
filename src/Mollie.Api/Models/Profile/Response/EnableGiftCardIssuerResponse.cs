@@ -15,17 +15,17 @@ namespace Mollie.Api.Models.Profile.Response {
         /// <summary>
         /// The full name of the gift card issuer.
         /// </summary>
-        public string Description { get; set; }
+        public required string Description { get; init; }
 
         /// <summary>
         /// The status that the issuer is in. Possible values: pending-issuer or activated.
         /// </summary>
-        public string Status { get; set; }
+        public required string Status { get; init; }
 
         /// <summary>
         /// An object with several URL objects relevant to the order. Every URL object will contain an href and a type field.
         /// </summary>
         [JsonProperty("_links")]
-        public EnableGiftCardIssuerResponseLinks Links { get; set; }
+        public required EnableGiftCardIssuerResponseLinks Links { get; init; }
     }
 }

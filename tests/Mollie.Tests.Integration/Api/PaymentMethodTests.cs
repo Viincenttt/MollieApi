@@ -23,7 +23,7 @@ public class PaymentMethodTests : BaseMollieApiTestClass, IDisposable {
     [DefaultRetryFact]
     public async Task CanRetrievePaymentMethodList() {
         // When: Retrieve payment list with default settings
-        ListResponse<PaymentMethodResponse> response = await this._paymentMethodClient.GetPaymentMethodListAsync();
+        ListResponse<PaymentMethodResponse> response = await this._paymentMethodClient.GetPaymentMethodListAsync(includePricing: true);
 
         // Then: Make sure it can be retrieved
         response.Should().NotBeNull();

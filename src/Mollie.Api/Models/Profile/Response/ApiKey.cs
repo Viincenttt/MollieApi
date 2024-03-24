@@ -16,7 +16,7 @@ namespace Mollie.Api.Models.Profile.Response {
         ///     The actual API key, which you'll use when creating payments or when otherwise communicating with the API. Never
         ///     share the API key with anyone.
         /// </summary>
-        public string Key { get; set; }
+        public required string Key { get; init; }
 
         /// <summary>
         ///     The API key's date and time of creation.

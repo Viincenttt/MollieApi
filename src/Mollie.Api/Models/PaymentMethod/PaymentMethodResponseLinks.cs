@@ -5,11 +5,11 @@ namespace Mollie.Api.Models.PaymentMethod {
         /// <summary>
         /// The API resource URL of the payment method itself.
         /// </summary>
-        public UrlObjectLink<PaymentMethodResponse> Self { get; set; }
+        public required UrlObjectLink<PaymentMethodResponse> Self { get; init; }
 
         /// <summary>
         /// The URL to the payment method retrieval endpoint documentation.
         /// </summary>
-        public UrlLink Documentation { get; set; }
+        public required UrlLink Documentation { get; init; }
     }
 }

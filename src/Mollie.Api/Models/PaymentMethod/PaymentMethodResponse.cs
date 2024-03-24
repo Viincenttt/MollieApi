@@ -18,41 +18,41 @@ namespace Mollie.Api.Models.PaymentMethod {
         /// <summary>
         /// The full name of the payment method.
         /// </summary>
-        public string Description { get; set; }
+        public required string Description { get; init; }
 
         /// <summary>
         /// Minimum payment amount required to use this payment method.
         /// </summary>
-        public Amount MinimumAmount { get; set; }
+        public required Amount MinimumAmount { get; init; }
 
         /// <summary>
         /// Maximum payment amount allowed when using this payment method. (Could be null)
         /// </summary>
-        public Amount MaximumAmount { get; set; }
+        public required Amount MaximumAmount { get; init; }
 
         /// <summary>
         /// URLs of images representing the payment method.
         /// </summary>
-        public PaymentMethodResponseImage Image { get; set; }
+        public required PaymentMethodResponseImage Image { get; init; }
 
 		/// <summary>
 		///	List of Issuers
 		/// </summary>
-		public List<IssuerResponse> Issuers { get; set; }
+		public List<IssuerResponse>? Issuers { get; set; }
 
         /// <summary>
         /// Pricing set of the payment method what will be include if you add the parameter.
         /// </summary>
-        public List<PricingResponse> Pricing { get; set; }
+        public List<PricingResponse>? Pricing { get; set; }
 
 		/// <summary>
 		/// An object with several URL objects relevant to the payment method. Every URL object will contain an href and a type field.
 		/// </summary>
 		[JsonProperty("_links")]
-        public PaymentMethodResponseLinks Links { get; set; }
+        public required PaymentMethodResponseLinks Links { get; init; }
 
         public override string ToString() {
-            return this.Description;
+            return Description;
         }
     }
 }
