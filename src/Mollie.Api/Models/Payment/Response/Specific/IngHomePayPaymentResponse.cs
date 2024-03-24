@@ -3,7 +3,7 @@
         /// <summary>
         /// An object with payment details.
         /// </summary>
-        public IngHomePayPaymentResponseDetails Details { get; set; }
+        public required IngHomePayPaymentResponseDetails Details { get; init; }
     }
 
     public class IngHomePayPaymentResponseDetails {

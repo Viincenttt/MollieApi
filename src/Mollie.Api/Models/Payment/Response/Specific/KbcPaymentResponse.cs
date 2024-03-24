@@ -1,6 +1,6 @@
 ﻿namespace Mollie.Api.Models.Payment.Response.Specific {
     public class KbcPaymentResponse : PaymentResponse {
-        public KbcPaymentResponseDetails Details { get; set; }
+        public required KbcPaymentResponseDetails Details { get; init; }
     }
 
     public class KbcPaymentResponseDetails {

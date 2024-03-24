@@ -2,7 +2,7 @@
 
 namespace Mollie.Api.Models.Payment.Response.Specific {
     public class BancontactPaymentResponse : PaymentResponse {
-        public BancontactPaymentResponseDetails Details { get; set; }
+        public required BancontactPaymentResponseDetails Details { get; init; }
     }
 
     public class BancontactPaymentResponseDetails {

@@ -19,12 +19,12 @@ namespace Mollie.Api.Models.Payment.Response
         /// <summary>
         /// If more than one routing object is given, the routing objects must indicate what portion of the total payment amount is being routed.
         /// </summary>
-        public Amount Amount { get; set; }
+        public required Amount Amount { get; init; }
 
         /// <summary>
         /// The destination of this portion of the payment.
         /// </summary>
-        public RoutingDestination Destination { get; set; }
+        public required RoutingDestination Destination { get; init; }
 
         /// <summary>
         /// Optional property you provided to schedule this portion of the payment to be transferred to its destination on a later date.
