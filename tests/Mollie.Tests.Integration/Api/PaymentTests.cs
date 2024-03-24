@@ -259,6 +259,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         PaymentRequest paymentRequest = new PaymentRequest() {
             Amount = new Amount(Currency.EUR, "100.00"),
             Description = "Description",
+            Method = PaymentMethod.DirectDebit,
             RedirectUrl = this.DefaultRedirectUrl,
             Locale = Locale.de_DE
         };

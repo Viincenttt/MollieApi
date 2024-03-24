@@ -13,12 +13,12 @@ namespace Mollie.Api.Models.Payment.Response.Specific {
         /// The voucher number, with the last four digits masked. When multiple gift cards are used, this is the first voucher 
         /// number. Example: 606436353088147****.
         /// </summary>
-        public string VoucherNumber { get; set; }
+        public string? VoucherNumber { get; set; }
 
         /// <summary>
         /// A list of details of all giftcards that are used for this payment. Each object will contain the following properties.
         /// </summary>
-        public List<Giftcard> Giftcards { get; set; }
+        public List<Giftcard>? Giftcards { get; set; }
 
         /// <summary>
         /// Only available if another payment method was used to pay the remainder amount – The amount that was paid with 

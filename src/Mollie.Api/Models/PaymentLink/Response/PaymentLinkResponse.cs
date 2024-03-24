@@ -1,8 +1,5 @@
 ﻿using System;
-using Mollie.Api.JsonConverters;
-using Mollie.Api.Models.Payment.Request;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 
 namespace Mollie.Api.Models.PaymentLink.Response
 {
@@ -23,7 +20,7 @@ namespace Mollie.Api.Models.PaymentLink.Response
         ///A short description of the payment link. The description is visible in the Dashboard and will be shown on the 
         ///customer’s bank or card statement when possible. This description will eventual been used as payment description.
         /// </summary>
-        public string Description { get; set; }
+        public required string Description { get; init; }
 
         /// <summary>
         /// The mode used to create this payment link. Mode determines whether a payment link is real (live mode) or a test payment link.
@@ -33,12 +30,12 @@ namespace Mollie.Api.Models.PaymentLink.Response
         /// <summary>
         /// The identifier referring to the profile this payment link was created on. For example, pfl_QkEhN94Ba.
         /// </summary>
-        public string ProfileId { get; set; }
+        public string? ProfileId { get; set; }
 
         /// <summary>
         /// The amount of the payment link, e.g. {"currency":"EUR", "value":"100.00"} for a €100.00 payment link.
         /// </summary>
-        public Amount Amount { get; set; }
+        public required Amount Amount { get; init; }
 
         /// <summary>
         /// The URL your customer will be redirected to after completing the payment process.
@@ -75,11 +72,11 @@ namespace Mollie.Api.Models.PaymentLink.Response
         /// An object with several URL objects relevant to the payment. Every URL object will contain an href and a type field.
         /// </summary>
         [JsonProperty("_links")]
-        public PaymentLinkResponseLinks Links { get; set; }
+        public required PaymentLinkResponseLinks Links { get; init; }
          
         public override string ToString()
         {
-            return $"Id: {this.Id} - Description: {this.Description} - Amount: {this.Amount}";
+            return $"Id: {Id} - Description: {Description} - Amount: {Amount}";
         }
     }
 }

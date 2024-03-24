@@ -7,13 +7,13 @@
         /// <summary>
         /// Transfer reference used by Mollie to identify this payment.
         /// </summary>
-        public string TransferReference { get; set; }
+        public string? TransferReference { get; set; }
 
         /// <summary>
         /// The creditor identifier indicates who is authorized to execute the payment. In this case, it is a reference to
         /// Mollie.
         /// </summary>
-        public string CreditorIdentifier { get; set; }
+        public string? CreditorIdentifier { get; set; }
 
         /// <summary>
         /// Optional – The consumer's name.
@@ -34,7 +34,7 @@
         /// <summary>
         /// Estimated date the payment is debited from the consumer's bank account, in YYYY-MM-DD format.
         /// </summary>
-        public string DueDate { get; set; }
+        public string? DueDate { get; set; }
 
         /// <summary>
         /// Only available if the payment has been verified – Date the payment has been signed by the consumer, in YYYY-MM-DD format.

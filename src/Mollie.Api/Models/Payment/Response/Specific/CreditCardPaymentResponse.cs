@@ -3,7 +3,7 @@
         /// <summary>
         /// An object with credit card details.
         /// </summary>
-        public CreditCardPaymentResponseDetails Details { get; set; }
+        public required CreditCardPaymentResponseDetails Details { get; init; }
     }
 
     public class CreditCardPaymentResponseDetails {

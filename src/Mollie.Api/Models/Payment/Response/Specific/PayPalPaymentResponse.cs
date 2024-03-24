@@ -1,6 +1,6 @@
 namespace Mollie.Api.Models.Payment.Response {
     public class PayPalPaymentResponse : PaymentResponse {
-        public required PayPalPaymentResponseDetails Details { get; init; }
+        public PayPalPaymentResponseDetails? Details { get; set; }
     }
 
     public class PayPalPaymentResponseDetails {
@@ -17,12 +17,12 @@ namespace Mollie.Api.Models.Payment.Response {
         /// <summary>
         /// PayPal’s reference for the transaction, for instance 9AL35361CF606152E.
         /// </summary>
-        public string PayPalReference { get; set; }
+        public string? PayPalReference { get; set; }
 
         /// <summary>
         /// ID for the consumer's PayPal account, for instance WDJJHEBZ4X2LY.
         /// </summary>
-        public string PaypalPayerId { get; set; }
+        public string? PaypalPayerId { get; set; }
 
         /// <summary>
         /// Indicates if the payment is eligible for PayPal's Seller Protection. This parameter is omitted if we did not 

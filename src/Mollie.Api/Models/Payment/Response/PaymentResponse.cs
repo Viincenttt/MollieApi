@@ -167,7 +167,7 @@ namespace Mollie.Api.Models.Payment.Response {
         /// This optional field will contain the amount that will be settled to your account, converted to the currency your
         /// account is settled in. It follows the same syntax as the amount property.
         /// </summary>
-        public Amount SettlementAmount { get; set; }
+        public Amount? SettlementAmount { get; set; }
 
         /// <summary>
         /// The identifier referring to the settlement this payment belongs to. For example, stl_BkEjN2eBb.
@@ -184,7 +184,7 @@ namespace Mollie.Api.Models.Payment.Response {
         /// to automatic recurring charges taking place on their account in the future. Set to recurring for payments where the customer’s card
         /// is charged automatically. See the Mollie.Api.Models.Payment.SequenceType class for a full list of known values.
         /// </summary>
-        public string? SequenceType { get; set; }
+        public required string SequenceType { get; init; }
 
         /// <summary>
         /// Only available for recurring payments – If the payment is a recurring payment, this field will hold the ID of the
