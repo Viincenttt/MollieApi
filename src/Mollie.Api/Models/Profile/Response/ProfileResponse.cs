@@ -24,38 +24,38 @@ namespace Mollie.Api.Models.Profile.Response {
         /// The payment profile's name, this will usually reflect the tradename or brand name of the profile's website or
         /// application.
         /// </summary>
-        public string Name { get; set; }
+        public required string Name { get; init; }
 
         /// <summary>
         /// The URL to the profile's website or application.
         /// </summary>
-        public string Website { get; set; }
+        public required string Website { get; init; }
         
         /// <summary>
         /// The products or services that the profile’s website offers.
         /// </summary>
-        public string Description { get; set; }
+        public string? Description { get; set; }
         
         /// <summary>
         /// The list of countries where you expect that the majority of the profile’s customers will live, in ISO 3166-1 alpha-2 format.
         /// </summary>
-        public IEnumerable<string> CountriesOfActivity { get; set; }
+        public IEnumerable<string>? CountriesOfActivity { get; set; }
 
         /// <summary>
         /// The email address associated with the profile's tradename or brand.
         /// </summary>
-        public string Email { get; set; }
+        public required string Email { get; init; }
 
         /// <summary>
         /// The phone number associated with the profile's tradename or brand.
         /// </summary>
-        public string Phone { get; set; }
+        public required string Phone { get; init; }
 
         /// <summary>
         /// The industry associated with the profile’s trade name or brand. Please refer to the documentation of the business category
         /// for more information on which values are accepted.
         /// </summary>
-        public string BusinessCategory { get; set; }
+        public string? BusinessCategory { get; set; }
         
         /// <summary>
         /// The industry associated with the profile's tradename or brand. 
@@ -67,25 +67,25 @@ namespace Mollie.Api.Models.Profile.Response {
         /// The profile status determines whether the payment profile is able to receive live payments. See the 
         /// Mollie.Api.Models.Profile.ProfileStatus class for a full list of known values.
         /// </summary>
-        public string Status { get; set; }
+        public required string Status { get; init; }
 
         /// <summary>
         /// The presence of a review object indicates changes have been made that have not yet been approved by Mollie.
         /// Changes to test profiles are approved automatically, unless a switch to a live profile has been requested.
         /// The review object will therefore usually be null in test mode.
         /// </summary>
-        public Review Review { get; set; }
+        public Review? Review { get; set; }
 
         /// <summary>
         /// The payment profile's date and time of creation.
         /// </summary>
-        public DateTime CreatedAt { get; set; }
+        public required DateTime CreatedAt { get; init; }
 
         /// <summary>
         /// Useful URLs to related resources.
         /// </summary>
         [JsonProperty("_links")]
-        public ProfileResponseLinks Links { get; set; }
+        public required ProfileResponseLinks Links { get; init; }
     }
 
     public class Review {
@@ -93,6 +93,6 @@ namespace Mollie.Api.Models.Profile.Response {
         /// The status of the requested profile changes. See the Mollie.Api.Models.Profile.ReviewStatus 
         /// class for a full list of known values.
         /// </summary>
-        public string Status { get; set; }
+        public required string Status { get; init; }
     }
 }

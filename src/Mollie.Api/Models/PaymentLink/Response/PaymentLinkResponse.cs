@@ -40,12 +40,12 @@ namespace Mollie.Api.Models.PaymentLink.Response
         /// <summary>
         /// The URL your customer will be redirected to after completing the payment process.
         /// </summary>
-        public string RedirectUrl { get; set; }
+        public string? RedirectUrl { get; set; }
 
         /// <summary>
         /// The URL Mollie will call as soon an important status change takes place.
         /// </summary>
-        public string WebhookUrl { get; set; }
+        public string? WebhookUrl { get; set; }
 
         /// <summary>
         /// The payment link’s date and time of creation, in ISO 8601 format.
@@ -61,7 +61,6 @@ namespace Mollie.Api.Models.PaymentLink.Response
         /// The date and time the payment link last status change, in ISO 8601 format.
         /// </summary>
         public DateTime? UpdatedAt { get; set; }
-
 
         /// <summary>
         /// The expiry date and time of the payment link, in ISO 8601 format.
