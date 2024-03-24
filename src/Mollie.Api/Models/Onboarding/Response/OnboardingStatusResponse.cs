@@ -6,7 +6,7 @@ namespace Mollie.Api.Models.Onboarding.Response {
         /// <summary>
         /// Indicates the response contains an onboarding object. Will always contain onboarding for this endpoint.
         /// </summary>
-        public string Resource { get; set; }
+        public required string Resource { get; init; }
 
         /// <summary>
         /// The name of the organization.

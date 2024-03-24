@@ -8,12 +8,12 @@ namespace Mollie.Api.Models.Capture
         /// <summary>
         /// Indicates the response contains a capture object. Will always contain capture for this endpoint.
         /// </summary>
-        public string Resource { get; set; }
+        public required string Resource { get; init; }
 
         /// <summary>
         /// The capture’s unique identifier, for example cpt_4qqhO89gsT.
         /// </summary>
-        public string Id { get; set; }
+        public required string Id { get; init; }
 
         /// <summary>
         /// The mode used to create this capture.

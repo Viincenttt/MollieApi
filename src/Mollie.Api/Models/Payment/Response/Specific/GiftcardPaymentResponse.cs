@@ -5,7 +5,7 @@ namespace Mollie.Api.Models.Payment.Response.Specific {
         /// <summary>
         /// An object with payment details.
         /// </summary>
-        public GiftcardPaymentResponseDetails Details { get; set; }
+        public required GiftcardPaymentResponseDetails Details { get; init; }
     }
 
     public class GiftcardPaymentResponseDetails {
@@ -24,29 +24,29 @@ namespace Mollie.Api.Models.Payment.Response.Specific {
         /// Only available if another payment method was used to pay the remainder amount – The amount that was paid with 
         /// another payment method for the remainder amount.
         /// </summary>
-        public Amount RemainderAmount { get; set; }
+        public Amount? RemainderAmount { get; set; }
 
         /// <summary>
         /// Only available if another payment method was used to pay the remainder amount – The payment method that was used to 
         /// pay the remainder amount.
         /// </summary>
-        public string RemainderMethod { get; set; }
+        public string? RemainderMethod { get; set; }
     }
 
     public class Giftcard {
         /// <summary>
         /// The ID of the gift card brand that was used during the payment.
         /// </summary>
-        public string Issuer { get; set; }
+        public required string Issuer { get; init; }
 
         /// <summary>
         /// The amount in EUR that was paid with this gift card.
         /// </summary>
-        public Amount Amount { get; set; }
+        public required Amount Amount { get; init; }
 
         /// <summary>
         /// The voucher number, with the last four digits masked. Example: 606436353088147****
         /// </summary>
-        public string VoucherNumber { get; set; }
+        public required string VoucherNumber { get; init; }
     }
 }

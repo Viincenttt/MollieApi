@@ -119,10 +119,12 @@ public class RefundTests : BaseMollieApiTestClass, IDisposable {
     }
         
     private async Task<PaymentResponse> CreatePayment(string amount = "100.00") {
-        PaymentRequest paymentRequest = new PayPalPaymentRequest();
-        paymentRequest.Amount = new Amount(Currency.EUR, amount);
-        paymentRequest.Description = "Description";
-        paymentRequest.RedirectUrl = this.DefaultRedirectUrl;
+        PaymentRequest paymentRequest = new PayPalPaymentRequest
+        {
+            Amount = new Amount(Currency.EUR, amount),
+            Description = "Description",
+            RedirectUrl = DefaultRedirectUrl
+        };
 
         return await this._paymentClient.CreatePaymentAsync(paymentRequest);
     }

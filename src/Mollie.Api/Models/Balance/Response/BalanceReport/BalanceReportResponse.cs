@@ -6,7 +6,7 @@ namespace Mollie.Api.Models.Balance.Response.BalanceReport {
         /// <summary>
         /// Indicates the response contains a balance report object. Will always contain balance-report for this endpoint.
         /// </summary>
-        public string Resource { get; set; }
+        public required string Resource { get; init; }
         
         /// <summary>
         /// The ID of a Balance this report is generated for.

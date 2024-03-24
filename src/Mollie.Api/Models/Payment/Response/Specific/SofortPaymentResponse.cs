@@ -5,18 +5,18 @@ namespace Mollie.Api.Models.Payment.Response {
 
     public class SofortPaymentResponseDetails {
         /// <summary>
-        /// Only available if the payment has been completed – The consumer's name.
+        /// Only available if the payment has been completed ï¿½ The consumer's name.
         /// </summary>
-        public string ConsumerName { get; set; }
+        public string? ConsumerName { get; set; }
 
         /// <summary>
-        /// Only available if the payment has been completed – The consumer's IBAN.
+        /// Only available if the payment has been completed ï¿½ The consumer's IBAN.
         /// </summary>
-        public string ConsumerAccount { get; set; }
+        public string? ConsumerAccount { get; set; }
 
         /// <summary>
-        /// Only available if the payment has been completed – The consumer's bank's BIC.
+        /// Only available if the payment has been completed ï¿½ The consumer's bank's BIC.
         /// </summary>
-        public string ConsumerBic { get; set; }
+        public string? ConsumerBic { get; set; }
     }
 }

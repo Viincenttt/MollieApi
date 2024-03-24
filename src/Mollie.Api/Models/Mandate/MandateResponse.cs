@@ -7,12 +7,12 @@ namespace Mollie.Api.Models.Mandate {
         /// <summary>
         /// Indicates the response contains a mandate object. Will always contain mandate for this endpoint.
         /// </summary>
-        public string Resource { get; set; }
+        public required string Resource { get; init; }
 
         /// <summary>
         /// Unique identifier of you mandate.
         /// </summary>
-        public string Id { get; set; }
+        public required string Id { get; init; }
 
         /// <summary>
         /// Current status of mandate - See the Mollie.Api.Models.Mandate.MandateStatus class for a full 

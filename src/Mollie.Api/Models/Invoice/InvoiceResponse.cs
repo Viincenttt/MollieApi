@@ -7,7 +7,7 @@ namespace Mollie.Api.Models.Invoice {
         /// <summary>
         /// Indicates the response contains an invoice object. Will always contain invoice for this endpoint.
         /// </summary>
-        public string Resource { get; set; }
+        public required string Resource { get; init; }
 
 		/// <summary>
 		/// The invoice's unique identifier, for example inv_FrvewDA3Pr.

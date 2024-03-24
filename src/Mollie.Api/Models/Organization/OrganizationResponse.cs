@@ -5,12 +5,12 @@ namespace Mollie.Api.Models.Organization {
         /// <summary>
         /// Indicates the response contains a organization object.
         /// </summary>
-        public string Resource { get; set; }
+        public required string Resource { get; init; }
 
         /// <summary>
         ///     The organization's identifier, for example org_1234567.
         /// </summary>
-        public string Id { get; set; }
+        public required string Id { get; init; }
 
         /// <summary>
         /// The organization's official name.

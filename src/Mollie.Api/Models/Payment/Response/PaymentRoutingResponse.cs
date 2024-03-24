@@ -8,13 +8,13 @@ namespace Mollie.Api.Models.Payment.Response
         /// <summary>
         /// Indicates the response contains a routing object. Will always contain route for this endpoint.
         /// </summary>
-        public string Resource { get; set; }
+        public required string Resource { get; init; }
 
         /// <summary>
         /// The identifier uniquely referring to this route. Mollie assigns this identifier randomly at payment creation
         /// time. For example rt_k6cjd01h. Its ID will always be used by Mollie to refer to a certain route.
         /// </summary>
-        public string Id { get; set; }
+        public required string Id { get; init; }
 
         /// <summary>
         /// If more than one routing object is given, the routing objects must indicate what portion of the total payment amount is being routed.

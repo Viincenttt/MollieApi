@@ -8,7 +8,7 @@ namespace Mollie.Api.Models.Settlement {
         /// <summary>
         /// Indicates the response contains a settlement object. Will always contain settlement for this endpoint.
         /// </summary>
-        public string Resource { get; set; }
+        public required string Resource { get; init; }
 
 		/// <summary>
 		/// The settlement's identifier, for example stl_jDk30akdN.

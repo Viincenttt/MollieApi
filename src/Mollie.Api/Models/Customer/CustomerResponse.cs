@@ -10,13 +10,13 @@ namespace Mollie.Api.Models.Customer {
         /// <summary>
         /// Indicates the response contains a customer object. Will always contain customer for this endpoint.
         /// </summary>
-        public string Resource { get; set; }
+        public required string Resource { get; init; }
 
         /// <summary>
         /// The customer's unique identifier, for example cst_4pmbK7CqtT.
         /// Store this identifier for later recurring payments.
         /// </summary>
-        public string Id { get; set; }
+        public required string Id { get; init; }
 
         /// <summary>
         /// The mode used to create this payment. Mode determines whether a payment is real or a test payment.
@@ -63,8 +63,8 @@ namespace Mollie.Api.Models.Customer {
         [JsonProperty("_links")]
         public CustomerResponseLinks Links { get; set; }
 
-        public T GetMetadata<T>(JsonSerializerSettings jsonSerializerSettings = null) {
-            return JsonConvert.DeserializeObject<T>(this.Metadata, jsonSerializerSettings);
+        public T? GetMetadata<T>(JsonSerializerSettings? jsonSerializerSettings = null) {
+            return JsonConvert.DeserializeObject<T>(Metadata, jsonSerializerSettings);
         }
     }
 }

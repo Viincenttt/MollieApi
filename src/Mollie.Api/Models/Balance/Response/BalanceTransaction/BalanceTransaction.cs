@@ -6,13 +6,13 @@ namespace Mollie.Api.Models.Balance.Response.BalanceTransaction {
         /// Indicates the response contains a balance transaction object. Will always contain balance_transaction
         /// for this endpoint.
         /// </summary>
-        public string Resource { get; set; }
+        public required string Resource { get; init; }
         
         /// <summary>
         /// The identifier uniquely referring to this balance transaction. Mollie assigns this identifier at
         /// transaction creation time. For example baltr_QM24QwzUWR4ev4Xfgyt29d.
         /// </summary>
-        public string Id { get; set; }
+        public required string Id { get; init; }
         
         /// <summary>
         /// The type of movement, for example payment or refund. See Mollie docs for a full list of values

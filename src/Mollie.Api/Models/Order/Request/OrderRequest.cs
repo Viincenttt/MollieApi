@@ -141,7 +141,7 @@ namespace Mollie.Api.Models.Order {
         /// </summary>
         public bool? Testmode { get; set; }
 
-        public void SetMetadata(object metadataObj, JsonSerializerSettings jsonSerializerSettings = null) {
+        public void SetMetadata(object metadataObj, JsonSerializerSettings? jsonSerializerSettings = null) {
             this.Metadata = JsonConvert.SerializeObject(metadataObj, jsonSerializerSettings);
         }
     }

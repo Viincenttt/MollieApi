@@ -8,12 +8,12 @@ namespace Mollie.Api.Models.Subscription {
         /// <summary>
         /// Indicates the response contains a subscription object.
         /// </summary>
-        public string Resource { get; set; }
+        public required string Resource { get; init; }
 
         /// <summary>
         /// The subscription's unique identifier, for example sub_rVKGtNd6s3.
         /// </summary>
-        public string Id { get; set; }
+        public required string Id { get; init; }
 
         /// <summary>
         /// The mode used to create this subscription. Mode determines whether the payments are real or test payments.
@@ -110,7 +110,7 @@ namespace Mollie.Api.Models.Subscription {
         /// </summary>
         public ApplicationFee ApplicationFee { get; set; }
 
-        public T GetMetadata<T>(JsonSerializerSettings jsonSerializerSettings = null) {
+        public T? GetMetadata<T>(JsonSerializerSettings? jsonSerializerSettings = null) {
             return JsonConvert.DeserializeObject<T>(this.Metadata, jsonSerializerSettings);
         }
     }

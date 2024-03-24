@@ -11,13 +11,13 @@ namespace Mollie.Api.Models.PaymentLink.Response
         /// <summary>
         /// Indicates the response contains a payment object. Will always contain payment-link for this endpoint.
         /// </summary>
-        public string Resource { get; set; }
+        public required string Resource { get; init; }
 
         /// <summary>
         /// The identifier uniquely referring to this payment link. Mollie assigns this identifier at creation time. 
         /// For example pl_4Y0eZitmBnQ6IDoMqZQKh. Its ID will always be used by Mollie to refer to a certain payment link.
         /// </summary>
-        public string Id { get; set; }
+        public required string Id { get; init; }
 
         /// <summary>
         ///A short description of the payment link. The description is visible in the Dashboard and will be shown on the 

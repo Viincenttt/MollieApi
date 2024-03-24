@@ -9,12 +9,12 @@ namespace Mollie.Api.Models.Refund {
         /// <summary>
         /// Indicates the response contains a refund object. Will always contain refund for this endpoint.
         /// </summary>
-        public string Resource { get; set; }
+        public required string Resource { get; init; }
 
         /// <summary>
         /// The refund's unique identifier, for example re_4qqhO89gsT.
         /// </summary>
-        public string Id { get; set; }
+        public required string Id { get; init; }
 
         /// <summary>
         /// The amount refunded to the consumer with this refund.
@@ -70,7 +70,7 @@ namespace Mollie.Api.Models.Refund {
         [JsonProperty("_links")]
         public RefundResponseLinks Links { get; set; }
 
-        public T GetMetadata<T>(JsonSerializerSettings jsonSerializerSettings = null) {
+        public T? GetMetadata<T>(JsonSerializerSettings? jsonSerializerSettings = null) {
             return JsonConvert.DeserializeObject<T>(this.Metadata, jsonSerializerSettings);
         }
 
