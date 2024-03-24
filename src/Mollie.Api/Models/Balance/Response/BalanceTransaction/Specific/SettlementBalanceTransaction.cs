@@ -1,10 +1,10 @@
 ﻿namespace Mollie.Api.Models.Balance.Response.BalanceTransaction.Specific {
     public class SettlementBalanceTransaction : BalanceTransaction {
-        public SettlementTransactionContext Context { get; set; }
+        public required SettlementTransactionContext Context { get; init; }
     }
     
     public class SettlementTransactionContext {
-        public string TransferId { get; set; }
-        public string SettlementId { get; set; }
+        public required string TransferId { get; init; }
+        public required string SettlementId { get; init; }
     }
 }

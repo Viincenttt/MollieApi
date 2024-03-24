@@ -1,10 +1,10 @@
 ﻿namespace Mollie.Api.Models.Balance.Response.BalanceTransaction.Specific {
     public class ChargebackBalanceTransaction : BalanceTransaction {
-        public ChargebackTransactionContext Context { get; set; }
+        public required ChargebackTransactionContext Context { get; init; }
     }
     
     public class ChargebackTransactionContext {
-        public string PaymentId { get; set; }
-        public string ChargebackId { get; set; }
+        public required string PaymentId { get; init; }
+        public required string ChargebackId { get; init; }
     }
 }

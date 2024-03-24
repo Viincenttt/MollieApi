@@ -17,20 +17,20 @@ namespace Mollie.Api.Models.Balance.Response.BalanceTransaction {
         /// <summary>
         /// The type of movement, for example payment or refund. See Mollie docs for a full list of values
         /// </summary>
-        public string Type { get; set; }
+        public required string Type { get; init; }
         
         /// <summary>
         /// The final amount that was moved to or from the balance, e.g. {"currency":"EUR", "value":"100.00"}.
         /// If the transaction moves funds away from the balance, for example when it concerns a refund, the
         /// amount will be negative.
         /// </summary>
-        public Amount ResultAmount { get; set; }
+        public required Amount ResultAmount { get; init; }
         
         /// <summary>
         /// The amount that was to be moved to or from the balance, excluding deductions. If the transaction
         /// moves funds away from the balance, for example when it concerns a refund, the amount will be negative.
         /// </summary>
-        public Amount InitialAmount { get; set; }
+        public required Amount InitialAmount { get; init; }
         
         /// <summary>
         /// The total amount of deductions withheld from the movement. For example, if a €10,00 payment comes in
@@ -38,7 +38,7 @@ namespace Mollie.Api.Models.Balance.Response.BalanceTransaction {
         /// to a balance, we always round the deduction to a ‘real’ amount. Any differences between these realtime
         /// rounded amounts and the final invoice will be compensated when the invoice is generated.
         /// </summary>
-        public Amount Deductions { get; set; }
+        public required Amount Deductions { get; init; }
         
         /// <summary>
         /// The date and time of the movement, in ISO 8601 format.

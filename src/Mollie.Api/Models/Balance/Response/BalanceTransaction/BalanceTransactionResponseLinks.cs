@@ -5,17 +5,17 @@ namespace Mollie.Api.Models.Balance.Response.BalanceTransaction {
         /// <summary>
         /// The URL to the current set of balance transactions.
         /// </summary>
-        public UrlObjectLink<BalanceTransactionResponse> Self { get; set; }
+        public required UrlObjectLink<BalanceTransactionResponse> Self { get; init; }
         
         /// <summary>
         /// The previous set of balance transactions, if available.
         /// </summary>
-        public UrlLink Previous { get; set; }
+        public required UrlLink Previous { get; init; }
         
         /// <summary>
         /// The next set of balance transactions, if available.
         /// </summary>
-        public UrlLink Next { get; set; }
+        public required UrlLink Next { get; init; }
         
         /// <summary>
         /// The URL to the balance transactions list endpoint documentation.
