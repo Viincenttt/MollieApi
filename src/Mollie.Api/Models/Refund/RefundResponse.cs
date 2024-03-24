@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using Mollie.Api.JsonConverters;
-using Mollie.Api.Models.Order;
 using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Refund {
@@ -19,13 +17,13 @@ namespace Mollie.Api.Models.Refund {
         /// <summary>
         /// The amount refunded to the consumer with this refund.
         /// </summary>
-        public Amount Amount { get; set; }
+        public required Amount Amount { get; init; }
         
         /// <summary>
         /// The identifier referring to the settlement this payment was settled with. For example, stl_BkEjN2eBb.
         /// This field is omitted if the refund is not settled (yet).
         /// </summary>
-        public string SettlementId { get; set; }
+        public string? SettlementId { get; set; }
 
         /// <summary>
         /// This optional field will contain the amount that will be deducted from your account balance, converted 
@@ -33,18 +31,18 @@ namespace Mollie.Api.Models.Refund {
         /// for refunds, the value key of settlementAmount will be negative. Any amounts not settled by Mollie will 
         /// not be reflected in this amount, e.g. PayPal refunds.
         /// </summary>
-        public Amount SettlementAmount { get; set; }
+        public Amount? SettlementAmount { get; set; }
 
         /// <summary>
         /// The description of the refund that may be shown to the consumer, depending on the payment method used.
         /// </summary>
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         /// <summary>
         /// Since refunds may be delayed for certain payment methods, the refund carries a status field. See the 
         /// Mollie.Api.Models.Refund.RefundStatus class for a full list of known values.
         /// </summary>
-        public string Status { get; set; }
+        public required string Status { get; init; }
 
         /// <summary>
         /// The date and time the refund was issued, in ISO 8601 format.
@@ -55,27 +53,27 @@ namespace Mollie.Api.Models.Refund {
         /// The unique identifier of the payment this refund was created for. For example: tr_7UhSN1zuXS. The full 
         /// payment object can be retrieved via the payment URL in the _links object.
         /// </summary>
-        public string PaymentId { get; set; }
+        public required string PaymentId { get; init; }
 
         /// <summary>
         /// Provide any data you like, for example a string or a JSON object. We will save the data alongside the refund. Whenever 
         /// you fetch the refund with our API, we’ll also include the metadata. You can use up to approximately 1kB.
         /// </summary>
         [JsonConverter(typeof(RawJsonConverter))]
-        public string Metadata { get; set; }
+        public string? Metadata { get; set; }
 
         /// <summary>
         /// An object with several URL objects relevant to the refund. Every URL object will contain an href and a type field.
         /// </summary>
         [JsonProperty("_links")]
-        public RefundResponseLinks Links { get; set; }
+        public required RefundResponseLinks Links { get; init; }
 
         public T? GetMetadata<T>(JsonSerializerSettings? jsonSerializerSettings = null) {
-            return JsonConvert.DeserializeObject<T>(this.Metadata, jsonSerializerSettings);
+            return Metadata != null ? JsonConvert.DeserializeObject<T>(Metadata, jsonSerializerSettings) : default;
         }
 
         public override string ToString() {
-            return $"Id: {this.Id} - PaymentId: {this.PaymentId}";
+            return $"Id: {Id} - PaymentId: {PaymentId}";
         }
     }
 }

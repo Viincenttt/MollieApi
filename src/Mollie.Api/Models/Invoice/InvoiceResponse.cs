@@ -12,7 +12,7 @@ namespace Mollie.Api.Models.Invoice {
 		/// <summary>
 		/// The invoice's unique identifier, for example inv_FrvewDA3Pr.
 		/// </summary>
-		public string Id { get; set; }
+		public required string Id { get; init; }
 
 		/// <summary>
 		/// The reference number of the invoice. An example value would be: 2016.10000.

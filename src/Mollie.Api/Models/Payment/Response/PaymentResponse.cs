@@ -236,8 +236,8 @@ namespace Mollie.Api.Models.Payment.Response {
         [JsonProperty("_links")]
         public PaymentResponseLinks Links { get; set; } = null!;
 
-        public T? GetMetadata<T>(JsonSerializerSettings? jsonSerializerSettings = null) {
-            return JsonConvert.DeserializeObject<T>(Metadata, jsonSerializerSettings);
+        public T? GetMetadata<T>(JsonSerializerSettings? jsonSerializerSettings = null)  {
+            return Metadata != null ? JsonConvert.DeserializeObject<T>(Metadata, jsonSerializerSettings) : default;
         }
 
         public override string ToString() {
