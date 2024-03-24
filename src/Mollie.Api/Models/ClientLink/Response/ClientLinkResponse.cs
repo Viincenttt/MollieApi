@@ -1,14 +1,12 @@
 ﻿using Newtonsoft.Json;
 
-namespace Mollie.Api.Models.ClientLink.Response
-{
-    public class ClientLinkResponse
-    {
+namespace Mollie.Api.Models.ClientLink.Response {
+    public class ClientLinkResponse {
         public required string Id { get; init; }
         
         public required string Resource { get; init; }
         
         [JsonProperty("_links")]
-        public ClientLinkResponseLinks Links { get; set; }
+        public required ClientLinkResponseLinks Links { get; init; }
     }
 }

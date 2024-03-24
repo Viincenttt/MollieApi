@@ -164,7 +164,7 @@ namespace Mollie.Api.Models.Payment.Request {
         }
 
         public override string ToString() {
-            return $"Method: {this.Method} - Amount: {this.Amount}";
+            return $"Method: {Method} - Amount: {this.Amount}";
         }
     }
 }

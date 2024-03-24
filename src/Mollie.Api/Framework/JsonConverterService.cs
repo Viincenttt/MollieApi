@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Mollie.Api.Extensions;
 using Mollie.Api.Framework.Factories;
 using Mollie.Api.JsonConverters;
 using Newtonsoft.Json;
@@ -23,8 +22,8 @@ namespace Mollie.Api.Framework {
                 });
         }
 
-        public T Deserialize<T>(string json) {
-            return JsonConvert.DeserializeObject<T>(json, this._defaultJsonDeserializerSettings);
+        public T? Deserialize<T>(string json) {
+            return JsonConvert.DeserializeObject<T>(json, _defaultJsonDeserializerSettings);
         }
 
         /// <summary>

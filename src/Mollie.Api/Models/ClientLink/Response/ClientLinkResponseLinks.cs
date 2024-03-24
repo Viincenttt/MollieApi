@@ -5,6 +5,6 @@ namespace Mollie.Api.Models.ClientLink.Response
     public class ClientLinkResponseLinks
     {
         public UrlLink ClientLink { get; set; }
-        public UrlLink Documentation { get; set; }
+        public required UrlLink Documentation { get; init; }
     }
 }

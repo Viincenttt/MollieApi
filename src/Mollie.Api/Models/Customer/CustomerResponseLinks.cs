@@ -23,6 +23,6 @@ namespace Mollie.Api.Models.Customer {
         /// <summary>
         /// The URL to the customer retrieval endpoint documentation.
         /// </summary>
-        public UrlLink Documentation { get; set; }
+        public required UrlLink Documentation { get; init; }
     }
 }

@@ -8,7 +8,7 @@ namespace Mollie.Api.Models.Capture {
         /// <summary>
         /// The API resource URL of the capture itself.
         /// </summary>
-        public UrlObjectLink<CaptureResponse> Self { get; set; }
+        public required UrlObjectLink<CaptureResponse> Self { get; init; }
 
         /// <summary>
         /// The API resource URL of the payment the capture belongs to.
@@ -28,6 +28,6 @@ namespace Mollie.Api.Models.Capture {
         /// <summary>
         /// The URL to the order retrieval endpoint documentation.
         /// </summary>
-        public UrlLink Documentation { get; set; }
+        public required UrlLink Documentation { get; init; }
     }
 }

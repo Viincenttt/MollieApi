@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using Newtonsoft.Json;
 
@@ -14,17 +15,18 @@ namespace Mollie.Api.Models {
         /// <summary>
         /// An ISO 4217 currency code. The currencies supported depend on the payment methods that are enabled on your account.
         /// </summary>
-        public string Currency { get; set; }
+        public required string Currency { get; init; }
 
         /// <summary>
         /// An ISO 4217 currency code. The currencies supported depend on the payment methods that are enabled on your account.
         /// </summary>
-        public string Value { get; set; }
+        public required string Value { get; init; }
 
         [JsonConstructor]
+        [SetsRequiredMembers]
         public Amount(string currency, string value) {
-            this.Currency = currency;
-            this.Value = value;
+            Currency = currency;
+            Value = value;
         }
 
         /// <summary>
@@ -32,9 +34,10 @@ namespace Mollie.Api.Models {
         /// </summary>
         /// <param name="currency"></param>
         /// <param name="value"></param>
+        [SetsRequiredMembers]
         public Amount(string currency, decimal value) {
-            this.Currency = currency;
-            this.Value = ConvertDecimalAmountToStringAmount(currency, value);
+            Currency = currency;
+            Value = ConvertDecimalAmountToStringAmount(currency, value);
         }
 
         /// <summary>

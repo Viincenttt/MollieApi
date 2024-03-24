@@ -16,7 +16,7 @@ namespace Mollie.Api.Client {
 
         public async Task<ListResponse<SubscriptionResponse>> GetSubscriptionListAsync(string customerId, string? from = null, int? limit = null, string? profileId = null, bool testmode = false) {
             this.ValidateRequiredUrlParameter(nameof(customerId), customerId);
-            var queryParameters = this.BuildQueryParameters(profileId, testmode);
+            var queryParameters = BuildQueryParameters(profileId, testmode);
             return await this.GetListAsync<ListResponse<SubscriptionResponse>>($"customers/{customerId}/subscriptions", from, limit, queryParameters)
                 .ConfigureAwait(false);
         }
@@ -76,7 +76,7 @@ namespace Mollie.Api.Client {
             return result;
         }
         
-        private Dictionary<string, string> BuildQueryParameters(string profileId, bool testmode) {
+        private Dictionary<string, string> BuildQueryParameters(string? profileId, bool testmode) {
             var result = new Dictionary<string, string>();
             result.AddValueIfNotNullOrEmpty("profileId", profileId);
             result.AddValueIfTrue("testmode", testmode);

@@ -66,6 +66,6 @@ namespace Mollie.Api.Models.Balance.Response {
         /// An object with several URL objects relevant to the balance. Every URL object will contain an href and a type field.
         /// </summary>
         [JsonProperty("_links")]
-        public BalanceResponseLinks Links { get; set; }
+        public required BalanceResponseLinks Links { get; init; }
     }
 }

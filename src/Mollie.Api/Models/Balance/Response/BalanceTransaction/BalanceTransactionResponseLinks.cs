@@ -20,6 +20,6 @@ namespace Mollie.Api.Models.Balance.Response.BalanceTransaction {
         /// <summary>
         /// The URL to the balance transactions list endpoint documentation.
         /// </summary>
-        public UrlLink Documentation { get; set; }
+        public required UrlLink Documentation { get; init; }
     }
 }
