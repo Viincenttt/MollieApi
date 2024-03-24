@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using Newtonsoft.Json;
 
 namespace Mollie.Api.Models {
     public class Amount {
@@ -20,6 +21,7 @@ namespace Mollie.Api.Models {
         /// </summary>
         public string Value { get; set; }
 
+        [JsonConstructor]
         public Amount(string currency, string value) {
             this.Currency = currency;
             this.Value = value;
@@ -34,8 +36,6 @@ namespace Mollie.Api.Models {
             this.Currency = currency;
             this.Value = ConvertDecimalAmountToStringAmount(currency, value);
         }
-
-        public Amount() { }
 
         /// <summary>
         /// Implicit cast operator from Amount to decimal.
@@ -54,12 +54,12 @@ namespace Mollie.Api.Models {
         }
         
         public override string ToString() {
-            return $"{this.Value} {this.Currency}";
+            return $"{Value} {Currency}";
         }
 
-        public override bool Equals(object obj) {
+        public override bool Equals(object? obj) {
             if (obj is Amount amount) {
-                return this.Currency == amount.Currency && this.Value == amount.Value;
+                return Currency == amount.Currency && Value == amount.Value;
             }
 
             return false;
@@ -67,7 +67,7 @@ namespace Mollie.Api.Models {
 
         public override int GetHashCode() {
             unchecked {
-                return ((Currency != null ? Currency.GetHashCode() : 0) * 397) ^ (Value != null ? Value.GetHashCode() : 0);
+                return (Currency.GetHashCode() * 397) ^ Value.GetHashCode();
             }
         }
     }

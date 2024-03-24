@@ -3,14 +3,14 @@
         /// <summary>
         /// An object with payment details.
         /// </summary>
-        public PointOfSalePaymentResponseDetails Details { get; set; }
+        public required PointOfSalePaymentResponseDetails Details { get; set; }
     }
     
     public class PointOfSalePaymentResponseDetails {
         /// <summary>
         /// The identifier referring to the terminal this payment was created for. For example, term_utGtYu756h.
         /// </summary>
-        public string TerminalId { get; set; }
+        public required string TerminalId { get; set; }
         
         /// <summary>
         /// Only available if the payment has been completed - The last four digits of the card number.

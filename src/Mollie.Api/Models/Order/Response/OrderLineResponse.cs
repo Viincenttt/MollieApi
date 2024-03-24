@@ -7,7 +7,7 @@ namespace Mollie.Api.Models.Order {
         /// <summary>
         /// The order line’s unique identifier, for example odl_dgtxyl.
         /// </summary>
-        public string Id { get; set; }
+        public required string Id { get; init; }
         
         /// <summary>
         /// The ID of the order the line belongs too, for example ord_kEn1PlbGa.

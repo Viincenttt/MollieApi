@@ -7,12 +7,12 @@ namespace Mollie.Api.Models.Profile.Response {
         /// <summary>
         /// Indicates the response contains a profile object. Will always contain profile for this endpoint.
         /// </summary>
-        public string Resource { get; set; }
+        public required string Resource { get; init; }
 
         /// <summary>
         /// The identifier uniquely referring to this profile, for example pfl_v9hTwCvYqw.
         /// </summary>
-        public string Id { get; set; }
+        public required string Id { get; init; }
 
         /// <summary>
         /// Indicates whether the payment profile is in test or production mode.

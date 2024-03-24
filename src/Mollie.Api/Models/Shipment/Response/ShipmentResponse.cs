@@ -12,12 +12,12 @@ namespace Mollie.Api.Models.Shipment
         /// <summary>
         /// Indicates the response contains a shipment object. Will always contain shipment for this endpoint.
         /// </summary>
-        public string Resource { get; set; }
+        public required string Resource { get; init; }
 
         /// <summary>
         /// The shipment’s unique identifier, for example shp_3wmsgCJN4U.
         /// </summary>
-        public string Id { get; set; }
+        public required string Id { get; init; }
 
         /// <summary>
         /// The order this shipment was created on, for example ord_8wmqcHMN4U.
@@ -52,7 +52,7 @@ namespace Mollie.Api.Models.Shipment
         [JsonProperty("_links")]
         public ShipmentResponseLinks Links { get; set; }
 
-        public T GetMetadata<T>(JsonSerializerSettings jsonSerializerSettings = null) {
+        public T? GetMetadata<T>(JsonSerializerSettings? jsonSerializerSettings = null) {
             return JsonConvert.DeserializeObject<T>(this.Metadata, jsonSerializerSettings);
         }
     }

@@ -1,5 +1,5 @@
 ﻿namespace Mollie.Api.Models.Payment.Request {
-    public class KbcPaymentRequest : PaymentRequest {
+    public record KbcPaymentRequest : PaymentRequest {
         public KbcPaymentRequest() {
             this.Method = PaymentMethod.Kbc;
         }
@@ -9,6 +9,6 @@
         /// but can be retrieved by using the issuers include in the Methods API. See the Mollie.Api.Models.Payment.Request.KbcIssuer 
         /// class for a full list of known values.
         /// </summary>
-        public string Issuer { get; set; }
+        public string? Issuer { get; set; }
     }
 }

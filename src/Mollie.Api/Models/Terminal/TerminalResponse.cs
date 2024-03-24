@@ -17,7 +17,7 @@ namespace Mollie.Api.Models.Terminal
         /// The unique identifier used for referring to a terminal. Mollie assigns this identifier at terminal creation time. 
         /// For example term_7MgL4wea46qkRcoTZjWEH. This ID will be used by Mollie to refer to a certain terminal and will be used for assigning a payment to a specific terminal.
         /// </summary>
-        public string Id { get; set; }
+        public required string Id { get; init; }
         /// <summary>
         /// The identifier used for referring to the profile the terminal was created on. For example, pfl_QkEhN94Ba.
         /// </summary>

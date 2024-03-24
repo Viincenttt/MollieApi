@@ -11,7 +11,7 @@ namespace Mollie.Api.Models.Payment.Response {
         /// <summary>
         /// The API resource URL of the payment itself.
         /// </summary>
-        public UrlObjectLink<PaymentResponse> Self { get; set; }
+        public required UrlObjectLink<PaymentResponse> Self { get; init; }
 
         /// <summary>
         /// The URL your customer should visit to make the payment. This is where you should redirect the consumer to.
@@ -26,7 +26,7 @@ namespace Mollie.Api.Models.Payment.Response {
         /// <summary>
         /// Direct link to the payment in the Mollie Dashboard.
         /// </summary>
-        public UrlLink Dashboard { get; set; }
+        public required UrlLink Dashboard { get; init; }
 
         /// <summary>
         /// The API resource URL of the refunds that belong to this payment.

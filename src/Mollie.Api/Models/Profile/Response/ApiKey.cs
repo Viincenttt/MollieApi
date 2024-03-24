@@ -5,12 +5,12 @@ namespace Mollie.Api.Models.Profile.Response {
         /// <summary>
         ///     Indicates the response contains an API key object.
         /// </summary>
-        public string Resource { get; set; }
+        public required string Resource { get; init; }
 
         /// <summary>
         ///     The API key's identifier.
         /// </summary>
-        public string Id { get; set; }
+        public required string Id { get; init; }
 
         /// <summary>
         ///     The actual API key, which you'll use when creating payments or when otherwise communicating with the API. Never

@@ -10,12 +10,12 @@ namespace Mollie.Api.Models.Order {
         /// <summary>
         /// Indicates the response contains an order object. Will always contain order for this endpoint.
         /// </summary>
-        public string Resource { get; set; }
+        public required string Resource { get; init; }
 
         /// <summary>
         /// The order’s unique identifier, for example ord_vsKJpSsabw.
         /// </summary>
-        public string Id { get; set; }
+        public required string Id { get; init; }
 
         /// <summary>
         /// The profile the order was created on, for example pfl_v9hTwCvYqw.
@@ -161,7 +161,7 @@ namespace Mollie.Api.Models.Order {
         [JsonProperty("_links")]
         public OrderResponseLinks Links { get; set; }
 
-        public T GetMetadata<T>(JsonSerializerSettings jsonSerializerSettings = null) {
+        public T? GetMetadata<T>(JsonSerializerSettings? jsonSerializerSettings = null) {
             return JsonConvert.DeserializeObject<T>(this.Metadata, jsonSerializerSettings);
         }
     }

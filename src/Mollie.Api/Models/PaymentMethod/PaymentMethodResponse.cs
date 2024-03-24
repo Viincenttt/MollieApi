@@ -8,12 +8,12 @@ namespace Mollie.Api.Models.PaymentMethod {
         /// <summary>
         /// Indicates the response contains a method object. Will always contain method for this endpoint.
         /// </summary>
-        public string Resource { get; set; }
+        public required string Resource { get; init; }
 
         /// <summary>
         /// The unique identifier of the payment method. When used during payment creation, the payment method selection screen will be skipped.
         /// </summary>
-        public string Id { get; set; }
+        public required string Id { get; init; }
 
         /// <summary>
         /// The full name of the payment method.

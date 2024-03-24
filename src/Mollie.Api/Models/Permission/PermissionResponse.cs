@@ -6,12 +6,12 @@ namespace Mollie.Api.Models.Permission {
         /// Indicates the response contains a permission object.
         /// Possible values: permission
         /// </summary>
-        public string Resource { get; set; }
+        public required string Resource { get; init; }
 
         /// <summary>
         /// The permission's identifier. See OAuth: Permissions for more details about the available permissions.
         /// </summary>
-        public string Id { get; set; }
+        public required string Id { get; init; }
 
         /// <summary>
         /// A short description of what the permission allows.

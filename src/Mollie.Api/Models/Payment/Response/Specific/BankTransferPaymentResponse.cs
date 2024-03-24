@@ -3,13 +3,13 @@ using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Payment.Response.Specific {
     public class BankTransferPaymentResponse : PaymentResponse {
-        public BankTransferPaymentResponseDetails Details { get; set; }
+        public required BankTransferPaymentResponseDetails Details { get; init; }
 
         /// <summary>
         /// For bank transfer payments, the _links object will contain some additional URL objects relevant to the payment.
         /// </summary>
         [JsonProperty("_links")]
-        public new BankTransferPaymentResponseLinks Links { get; set; }
+        public new required BankTransferPaymentResponseLinks Links { get; init; }
     }
 
     public class BankTransferPaymentResponseDetails {

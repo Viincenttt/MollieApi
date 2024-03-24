@@ -7,12 +7,12 @@ namespace Mollie.Api.Models.Balance.Response {
         /// <summary>
         /// Indicates the response contains a balance object. Will always contain balance for this endpoint.
         /// </summary>
-        public string Resource { get; set; }
+        public required string Resource { get; init; }
 
         /// <summary>
         /// The identifier uniquely referring to this balance. Mollie assigns this identifier at balance creation time. For example bal_gVMhHKqSSRYJyPsuoPNFH.
         /// </summary>
-        public string Id { get; set; }
+        public required string Id { get; init; }
         
         /// <summary>
         /// The balance’s date and time of creation, in ISO 8601 format.

@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Mollie.Api.Client;
+using Mollie.Api.Models;
 using Mollie.Api.Models.Customer;
 using Mollie.Api.Models.Payment.Request;
 using RichardSzalay.MockHttp;
@@ -168,9 +169,14 @@ namespace Mollie.Tests.Unit.Client {
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             CustomerClient customerClient = new CustomerClient("api-key", httpClient);
+            var paymentRequest = new PaymentRequest()
+            {
+                Amount = new Amount(Currency.EUR, 100),
+                Description = "Order #12345",
+            };
 
             // When: We send the request
-            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await customerClient.CreateCustomerPayment(customerId, new PaymentRequest()));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await customerClient.CreateCustomerPayment(customerId, paymentRequest));
 
             // Then
             exception.Message.Should().Be("Required URL argument 'customerId' is null or empty");

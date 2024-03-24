@@ -5,12 +5,12 @@ namespace Mollie.Api.Models.Profile.Response {
         /// <summary>
         /// Indicates the response contains an issuer object. Will always contain issuer for this endpoint.
         /// </summary>
-        public string Resource { get; set; }
+        public required string Resource { get; init; }
 
         /// <summary>
         /// The unique identifier of the gift card issuer.
         /// </summary>
-        public string Id { get; set; }
+        public required string Id { get; init; }
 
         /// <summary>
         /// The full name of the gift card issuer.

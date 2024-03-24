@@ -72,11 +72,11 @@ namespace Mollie.Api.Client {
             return await this.GetAsync<T>(urlObject.Href).ConfigureAwait(false);
         }
 
-        protected async Task<T> PostAsync<T>(string relativeUri, object data) {
+        protected async Task<T> PostAsync<T>(string relativeUri, object? data) {
             return await this.SendHttpRequest<T>(HttpMethod.Post, relativeUri, data).ConfigureAwait(false);
         }
 
-        protected async Task<T> PatchAsync<T>(string relativeUri, object data) {
+        protected async Task<T> PatchAsync<T>(string relativeUri, object? data) {
             return await this.SendHttpRequest<T>(new HttpMethod("PATCH"), relativeUri, data).ConfigureAwait(false);
         }
 
