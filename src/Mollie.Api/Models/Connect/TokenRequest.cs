@@ -7,14 +7,14 @@ namespace Mollie.Api.Models.Connect {
         /// <param name="redirectUri">The URL the merchant is sent back to once the request has been authorized. It must match the URL you set when registering your app. </param>
         public TokenRequest(string code, string redirectUri) {
             if (code.StartsWith("refresh_")) {
-                this.GrantType = "refresh_token";
-                this.RefreshToken = code;
+                GrantType = "refresh_token";
+                RefreshToken = code;
             }
             else {
-                this.GrantType = "authorization_code";
-                this.Code = code;
+                GrantType = "authorization_code";
+                Code = code;
             }
-            this.RedirectUri = redirectUri;
+            RedirectUri = redirectUri;
         }
 
         /// <summary>
@@ -29,20 +29,20 @@ namespace Mollie.Api.Models.Connect {
         ///     Optional – The auth code you've received when creating the authorization. Only use this field when using grant type
         ///     authorization_code.
         /// </summary>
-        public string Code { get; }
+        public string? Code { get; set; }
 
         /// <summary>
         ///     Optional – The refresh token you've received when creating the authorization. Only use this field when using grant
         ///     type refresh_token.
         /// </summary>
         [JsonProperty("refresh_token")]
-        public string RefreshToken { get; }
+        public string? RefreshToken { get; set; }
 
         /// <summary>
         ///     The URL the merchant is sent back to once the request has been authorized. It must match the URL you set when
         ///     registering your app.
         /// </summary>
         [JsonProperty("redirect_uri")]
-        public string RedirectUri { get; }
+        public string? RedirectUri { get; set; }
     }
 }
