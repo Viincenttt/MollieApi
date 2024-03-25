@@ -1,6 +1,4 @@
-﻿using System.Runtime.Serialization;
-
-namespace Mollie.Api.Models.Mandate {
+﻿namespace Mollie.Api.Models.Mandate {
     public static class MandateStatus {
         public const string Valid = "valid";
         public const string Invalid = "invalid";

@@ -3,8 +3,8 @@
 namespace Mollie.Api.Models.Error {
     public class MollieErrorMessage {
         public int Status { get; set; }
-        public string Title { get; set; }
-        public string Detail { get; set; }
+        public required string Title { get; init; }
+        public required string Detail { get; init; }
 
         /// <summary>
         /// The errors that are returned by the Connect client have a different format for some reason
@@ -12,14 +12,13 @@ namespace Mollie.Api.Models.Error {
         /// that are used by the public api
         /// </summary>
         [JsonProperty("error")]
-        private string Error { set { Title = value; } }
+        private string Error { init { Title = value; } }
 
         [JsonProperty("error_description")]
-        private string ErrorDescription { set { Detail = value; } }
-
+        private string ErrorDescription { init { Detail = value; } }
 
         public override string ToString() {
-            return $"{this.Title} - {this.Detail}";
+            return $"{Title} - {Detail}";
         }
     }
 }

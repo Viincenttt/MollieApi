@@ -6,11 +6,11 @@
         /// <summary>
         /// Name of the organization.
         /// </summary>
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>
         /// Address of the organization.
         /// </summary>
-        public AddressObject Address { get; set; }
+        public AddressObject? Address { get; set; }
     }
 }
