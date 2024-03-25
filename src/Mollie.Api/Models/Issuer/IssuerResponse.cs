@@ -15,11 +15,11 @@
         /// <summary>
         ///     The issuer's full name, for example 'ABN AMRO'.
         /// </summary>
-        public string Name { get; set; }
+        public required string Name { get; init; }
 
         /// <summary>
         ///     Different Issuer Image icons (iDEAL).
         /// </summary>
-        public IssuerResponseImage Image { get; set; }
+        public required IssuerResponseImage Image { get; init; }
     }
 }

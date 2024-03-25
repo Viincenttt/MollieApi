@@ -5,12 +5,12 @@ namespace Mollie.Api.Models.Invoice {
         /// <summary>
         /// The API resource URL of the invoice itself.
         /// </summary>
-        public UrlObjectLink<InvoiceResponse> Self { get; set; }
+        public required UrlObjectLink<InvoiceResponse> Self { get; init; }
 
         /// <summary>
         /// The URL to the PDF version of the invoice. The URL will expire after 60 minutes.
         /// </summary>
-		public UrlLink Pdf { get; set; }
+		public UrlLink? Pdf { get; set; }
 
         /// <summary>
         /// The URL to the invoice retrieval endpoint documentation.

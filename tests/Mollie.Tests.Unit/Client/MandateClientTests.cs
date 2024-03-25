@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Mollie.Api.Client;
 using Mollie.Api.Models.Mandate;
+using Mollie.Api.Models.Payment;
 using RichardSzalay.MockHttp;
 using Xunit;
 
@@ -134,9 +135,13 @@ namespace Mollie.Tests.Unit.Client {
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             MandateClient mandateClient = new MandateClient("api-key", httpClient);
+            MandateRequest mandateRequest = new MandateRequest {
+                ConsumerName = "John Doe",
+                Method = PaymentMethod.DirectDebit
+            };
 
             // When: We send the request
-            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await mandateClient.CreateMandateAsync(mandateId, new MandateRequest()));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await mandateClient.CreateMandateAsync(mandateId, mandateRequest));
 
             // Then
             exception.Message.Should().Be("Required URL argument 'customerId' is null or empty");
