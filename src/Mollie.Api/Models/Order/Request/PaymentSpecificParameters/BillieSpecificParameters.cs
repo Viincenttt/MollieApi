@@ -6,6 +6,6 @@
         /// order request for a seamless flow, otherwise the customer will be asked to fill the missing fields
         /// at the Billie’s checkout page.
         /// </summary>
-        public CompanyObject Company { get; set; }
+        public CompanyObject? Company { get; set; }
     }
 }

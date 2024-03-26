@@ -1,9 +1,9 @@
 namespace Mollie.Api.Models.Order.Request.ManageOrderLines {
     public class ManageOrderLinesCancelOperation : ManageOrderLinesOperation {
-        public ManagerOrderLinesCancelOperationData Data { get; set; }
+        public required ManagerOrderLinesCancelOperationData Data { get; init; }
         
         public ManageOrderLinesCancelOperation() {
-            this.Operation = OrderLineOperation.Cancel;
+            Operation = OrderLineOperation.Cancel;
         }
     }
 }

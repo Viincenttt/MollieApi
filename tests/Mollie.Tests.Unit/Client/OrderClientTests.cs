@@ -329,9 +329,20 @@ namespace Mollie.Tests.Unit.Client {
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             OrderClient orderClient = new OrderClient("api-key", httpClient);
+            ManageOrderLinesRequest request = new ManageOrderLinesRequest {
+                Operations = new List<ManageOrderLinesOperation> {
+                    new ManageOrderLinesUpdateOperation {
+                        Data = new ManageOrderLinesUpdateOperationData
+                        {
+                            Id = "id"
+                        }
+                    }
+                }
+            };
 
             // When: We send the request
-            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await orderClient.ManageOrderLinesAsync(orderId, new ManageOrderLinesRequest()));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => 
+                await orderClient.ManageOrderLinesAsync(orderId, request));
 
             // Then
             exception.Message.Should().Be("Required URL argument 'orderId' is null or empty");
@@ -380,9 +391,13 @@ namespace Mollie.Tests.Unit.Client {
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             OrderClient orderClient = new OrderClient("api-key", httpClient);
+            var request = new OrderRefundRequest()
+            {
+                Lines = new List<OrderLineDetails>()
+            };
 
             // When: We send the request
-            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await orderClient.CreateOrderRefundAsync(orderId, new OrderRefundRequest()));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await orderClient.CreateOrderRefundAsync(orderId, request));
 
             // Then
             exception.Message.Should().Be("Required URL argument 'orderId' is null or empty");

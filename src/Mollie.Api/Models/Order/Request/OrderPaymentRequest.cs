@@ -39,13 +39,13 @@ namespace Mollie.Api.Models.Order {
         /// The ID of the Customer for whom the payment is being created. This is used for recurring payments
         /// and single click payments.
         /// </summary>
-        public string CustomerId { get; set; }
+        public string? CustomerId { get; set; }
 
         /// <summary>
         /// When creating recurring payments, the ID of a specific Mandate may be supplied to indicate which
         /// of the consumer’s accounts should be credited.
         /// </summary>
-        public string MandateId { get; set; }
+        public string? MandateId { get; set; }
         
         /// <summary>
         ///	Oauth only - Optional – Set this to true to make this payment a test payment.
@@ -56,6 +56,6 @@ namespace Mollie.Api.Models.Order {
         ///	Oauth only - Optional – Adding an Application Fee allows you to charge the merchant a small sum for the payment and transfer 
         /// this to your own account.
         /// </summary>
-        public ApplicationFee ApplicationFee { get; set; }
+        public ApplicationFee? ApplicationFee { get; set; }
     }
 }
