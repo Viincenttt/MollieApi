@@ -4,14 +4,14 @@ using Newtonsoft.Json;
 namespace Mollie.Api.Models.Customer {
     public class CustomerRequest {
         /// <summary>
-        /// Required - The full name of the customer.
+        /// The full name of the customer.
         /// </summary>
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>
-        /// Required - The email address of the customer.
+        /// The email address of the customer.
         /// </summary>
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
         /// <summary>
         /// Allows you to preset the language to be used in the payment screens shown to the consumer. When this parameter is not 

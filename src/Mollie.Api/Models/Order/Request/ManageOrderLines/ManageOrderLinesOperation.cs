@@ -3,6 +3,6 @@ namespace Mollie.Api.Models.Order.Request.ManageOrderLines {
         /// <summary>
         /// Operation type. Either `add`, `update`, or `cancel`.
         /// </summary>
-        public string Operation { get; protected set; }
+        public string Operation { get; protected set; } = string.Empty;
     }
 }

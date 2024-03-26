@@ -2,7 +2,7 @@
 
 namespace Mollie.Api.Models.Order {
     public class OrderLineCancellationRequest {
-        public IEnumerable<OrderLineDetails> Lines { get; set; }
+        public required IEnumerable<OrderLineDetails> Lines { get; init; }
         
         /// <summary>
         ///	Oauth only - Optional
