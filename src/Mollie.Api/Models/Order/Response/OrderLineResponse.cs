@@ -12,24 +12,24 @@ namespace Mollie.Api.Models.Order {
         /// <summary>
         /// The ID of the order the line belongs too, for example ord_kEn1PlbGa.
         /// </summary>
-        public string OrderId { get; set; }
+        public required string OrderId { get; init; }
         
         /// <summary>
         /// The type of product bought, for example, a physical or a digital product. See the 
         /// Mollie.Api.Models.Order.OrderLineDetailsType class for a full list of known values.
         /// </summary>
-        public string Type { get; set; }
+        public string? Type { get; set; }
         
         /// <summary>
         /// A description of the order line, for example LEGO 4440 Forest Police Station.
         /// </summary>
-        public string Name { get; set; }
+        public required string Name { get; init; }
 
         /// <summary>
         /// Status of the order line - See the Mollie.Api.Models.Order.OrderLineStatus class for 
         /// a full list of known values.
         /// </summary>
-        public string Status { get; set; }
+        public required string Status { get; init; }
 
         /// <summary>
         /// Whether or not the order line can be (partially) canceled.
