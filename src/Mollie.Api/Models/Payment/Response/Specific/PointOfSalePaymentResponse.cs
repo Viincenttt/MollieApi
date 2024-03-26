@@ -1,9 +1,9 @@
 ﻿namespace Mollie.Api.Models.Payment.Response.Specific {
     public class PointOfSalePaymentResponse : PaymentResponse {
-        public PointOfSalePaymentResponseDetails Details { get; set; }
+        public required PointOfSalePaymentResponseDetails Details { get; init; }
     }
     
     public class PointOfSalePaymentResponseDetails {
-        public string TerminalId { get; set; }
+        public required string TerminalId { get; init; }
     }
 }

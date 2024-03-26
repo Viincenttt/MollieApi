@@ -1,30 +1,28 @@
-﻿using System;
-
-namespace Mollie.Api.Models.Invoice {
+﻿namespace Mollie.Api.Models.Invoice {
 	public class InvoiceLine {
 		/// <summary>
 		/// The administrative period (YYYY) on which the line should be booked.
 		/// </summary>
-		public string Period { get; set; }
+		public required string Period { get; init; }
 
 		/// <summary>
 		/// Description of the product.
 		/// </summary>
-		public string Description { get; set; }
+		public required string Description { get; init; }
 
 		/// <summary>
 		/// Number of products invoiced (usually number of payments).
 		/// </summary>
-		public int Count { get; set; }
+		public required int Count { get; init; }
 
 		/// <summary>
 		/// Optional – VAT percentage rate that applies to this product.
 		/// </summary>
-		public decimal VatPercentage { get; set; }
+		public required decimal VatPercentage { get; init; }
 
 		/// <summary>
 		/// Amount excluding VAT.
 		/// </summary>
-		public Amount Amount { get; set; }
+		public required Amount Amount { get; init; }
 	}
 }

@@ -8,8 +8,8 @@ namespace Mollie.Api.JsonConverters {
             return objectType == typeof(string);
         }
 
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer) {
-            string valueToParse = value.ToString();
+        public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer) {
+            string valueToParse = value!.ToString();
             if (IsValidJson(valueToParse)) {
                 writer.WriteRawValue(valueToParse);
             }
@@ -18,7 +18,7 @@ namespace Mollie.Api.JsonConverters {
             }            
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer) {
+        public override object ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer) {
             return JToken.Load(reader).ToString();
         }
 

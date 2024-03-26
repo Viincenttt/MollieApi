@@ -3,6 +3,7 @@ using Mollie.Api.Client;
 using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Mollie.Api.Models;
 using Mollie.Api.Models.Refund;
 using RichardSzalay.MockHttp;
 using Xunit;
@@ -69,9 +70,12 @@ namespace Mollie.Tests.Unit.Client {
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             RefundClient refundClient = new RefundClient("api-key", httpClient);
+            var refund = new RefundRequest  {
+                Amount = new Amount(Currency.EUR, 100m)
+            };
 
             // When: We send the request
-            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await refundClient.CreateRefundAsync(paymentId, new RefundRequest()));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await refundClient.CreateRefundAsync(paymentId, refund));
 
             // Then
             exception.Message.Should().Be("Required URL argument 'paymentId' is null or empty");

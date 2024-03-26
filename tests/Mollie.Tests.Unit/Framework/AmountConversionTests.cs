@@ -8,7 +8,7 @@ namespace Mollie.Tests.Unit.Framework {
         public void InvalidAmountValueWillThrowInvalidCastException() {
 
             // Initiate Amount with invalid decimal value
-            var amount = new Amount() { Currency = Currency.EUR, Value = "NotAValidDecimal" };
+            var amount = new Amount(Currency.EUR, "NotAValidDecimal");
 
             // When: We implicitly cast Amount to decimal
             // Then: An InvalidCastException will be thrown

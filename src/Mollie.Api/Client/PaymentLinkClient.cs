@@ -12,7 +12,7 @@ namespace Mollie.Api.Client
 {
     public class PaymentLinkClient : BaseMollieClient, IPaymentLinkClient
     {
-        public PaymentLinkClient(string apiKey, HttpClient httpClient = null) : base(apiKey, httpClient) { }
+        public PaymentLinkClient(string apiKey, HttpClient? httpClient = null) : base(apiKey, httpClient) { }
 
         public async Task<PaymentLinkResponse> CreatePaymentLinkAsync(PaymentLinkRequest paymentLinkRequest)
         {
@@ -48,7 +48,7 @@ namespace Mollie.Api.Client
             return await this.GetAsync(url).ConfigureAwait(false);
         }
  
-        public async Task<ListResponse<PaymentLinkResponse>> GetPaymentLinkListAsync(string from = null, int? limit = null, string profileId = null, bool testmode = false)
+        public async Task<ListResponse<PaymentLinkResponse>> GetPaymentLinkListAsync(string? from = null, int? limit = null, string? profileId = null, bool testmode = false)
         {
             if (!string.IsNullOrWhiteSpace(profileId) || testmode)
             {
@@ -62,7 +62,7 @@ namespace Mollie.Api.Client
             return await this.GetListAsync<ListResponse<PaymentLinkResponse>>("payment-links", from, limit, queryParameters).ConfigureAwait(false);
         }
 
-        private Dictionary<string, string> BuildQueryParameters(string profileId = null, bool testmode = false)
+        private Dictionary<string, string> BuildQueryParameters(string? profileId = null, bool testmode = false)
         {
             var result = new Dictionary<string, string>();
             result.AddValueIfTrue(nameof(testmode), testmode);

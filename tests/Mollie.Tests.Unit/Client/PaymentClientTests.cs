@@ -39,7 +39,7 @@ public class PaymentClientTests : BaseClientTests {
         // Then
         this.AssertPaymentIsEqual(paymentRequest, paymentResponse);
         paymentResponse.AuthorizedAt!.Value.ToUniversalTime().Should().Be(DateTime.SpecifyKind(19.March(2018).At(13, 28, 37), DateTimeKind.Utc));
-        paymentResponse.CreatedAt!.Value.ToUniversalTime().Should().Be(DateTime.SpecifyKind(20.March(2018).At(13, 13, 37), DateTimeKind.Utc));
+        paymentResponse.CreatedAt!.ToUniversalTime().Should().Be(DateTime.SpecifyKind(20.March(2018).At(13, 13, 37), DateTimeKind.Utc));
         paymentResponse.PaidAt!.Value.ToUniversalTime().Should().Be(DateTime.SpecifyKind(21.March(2018).At(13, 28, 37), DateTimeKind.Utc));
         paymentResponse.CanceledAt!.Value.ToUniversalTime().Should().Be(DateTime.SpecifyKind(22.March(2018).At(13, 28, 37), DateTimeKind.Utc));
         paymentResponse.ExpiredAt!.Value.ToUniversalTime().Should().Be(DateTime.SpecifyKind(23.March(2018).At(13, 28, 37), DateTimeKind.Utc));
@@ -355,7 +355,6 @@ public class PaymentClientTests : BaseClientTests {
         result.Should().BeOfType<BancontactPaymentResponse>();
         var banContactPayment = result as BancontactPaymentResponse;
         banContactPayment.Details.CardNumber.Should().Be("1234567890123456");
-        banContactPayment.Details.CardFingerprint.Should().Be("fingerprint");
         banContactPayment.Details.QrCode.Should().NotBeNull();
         banContactPayment.Details.QrCode.Height.Should().Be(5);
         banContactPayment.Details.QrCode.Width.Should().Be(10);
@@ -372,7 +371,7 @@ public class PaymentClientTests : BaseClientTests {
         // Given we create a creditcard specific payment request
         var paymentRequest = new SepaDirectDebitRequest()
         {
-            Amount = new Amount() { Currency = Currency.EUR, Value = "100.00" },
+            Amount = new Amount(Currency.EUR, "100.00"),
             Description = "Description",
             Method = PaymentMethod.Ideal,
             RedirectUrl = "http://www.mollie.com",
@@ -521,7 +520,7 @@ public class PaymentClientTests : BaseClientTests {
         // Given we create a creditcard specific payment request
         var paymentRequest = new CreditCardPaymentRequest()
         {
-            Amount = new Amount() { Currency = Currency.EUR, Value = "100.00" },
+            Amount = new Amount(Currency.EUR, "100.00"),
             Description = "Description",
             Method = PaymentMethod.Ideal,
             RedirectUrl = "http://www.mollie.com",
@@ -627,7 +626,7 @@ public class PaymentClientTests : BaseClientTests {
         // Given we create a giftcard specific payment request
         var paymentRequest = new GiftcardPaymentRequest()
         {
-            Amount = new Amount() { Currency = Currency.EUR, Value = "100.00" },
+            Amount = new Amount(Currency.EUR, "100.00"),
             Description = "Description",
             Method = PaymentMethod.Ideal,
             RedirectUrl = "http://www.mollie.com",
@@ -829,7 +828,7 @@ public class PaymentClientTests : BaseClientTests {
         // Given we create a ideal specific payment request
         var paymentRequest = new IdealPaymentRequest()
         {
-            Amount = new Amount() { Currency = Currency.EUR, Value = "100.00" },
+            Amount = new Amount(Currency.EUR, "100.00"),
             Description = "Description",
             Method = PaymentMethod.Ideal,
             RedirectUrl = "http://www.mollie.com",

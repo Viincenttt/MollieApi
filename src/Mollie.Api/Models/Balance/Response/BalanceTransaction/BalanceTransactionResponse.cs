@@ -7,19 +7,19 @@ namespace Mollie.Api.Models.Balance.Response.BalanceTransaction {
         /// The number of transactions found in _embedded, which is either the requested number
         /// (with a maximum of 250) or the default number.
         /// </summary>
-        public int Count { get; set; }
+        public required int Count { get; init; }
         
         /// <summary>
         /// The object containing the queried data.
         /// </summary>
         [JsonProperty("_embedded")]
-        public BalanceTransactionEmbeddedResponse Embedded { get; set; }
+        public required BalanceTransactionEmbeddedResponse Embedded { get; init; }
         
         /// <summary>
         /// Links to help navigate through the lists of balance transactions. Every URL object will contain an href and a type field.
         /// </summary>
         [JsonProperty("_links")]
-        public BalanceTransactionResponseLinks Links { get; set; }
+        public required BalanceTransactionResponseLinks Links { get; init; }
     }
 
     public class BalanceTransactionEmbeddedResponse {

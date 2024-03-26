@@ -59,7 +59,8 @@ else {
         }
         else {
             _mandates = await MandateClient.GetMandateListAsync(new UrlObjectLink<ListResponse<MandateResponse>>() {
-                Href = Url
+                Href = Url,
+                Type = "application/json"
             });
         }
     }

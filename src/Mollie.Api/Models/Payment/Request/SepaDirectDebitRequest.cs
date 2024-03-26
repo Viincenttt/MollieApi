@@ -1,5 +1,5 @@
 namespace Mollie.Api.Models.Payment.Request {
-    public class SepaDirectDebitRequest : PaymentRequest {
+    public record SepaDirectDebitRequest : PaymentRequest {
         public SepaDirectDebitRequest() {
             this.Method = PaymentMethod.DirectDebit;
         }
@@ -7,11 +7,11 @@ namespace Mollie.Api.Models.Payment.Request {
         /// <summary>
         /// Optional - Beneficiary name of the account holder.
         /// </summary>
-        public string ConsumerName { get; set; }
+        public string? ConsumerName { get; set; }
 
         /// <summary>
         /// Optional - IBAN of the account holder.
         /// </summary>
-        public string ConsumerAccount { get; set; }
+        public string? ConsumerAccount { get; set; }
     }
 }

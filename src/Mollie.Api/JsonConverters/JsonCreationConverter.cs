@@ -32,10 +32,12 @@ namespace Mollie.Api.JsonConverters {
         /// <param name="existingValue">Ignored</param>
         /// <param name="serializer">Newtonsoft.Json.JsonSerializer to use.</param>
         /// <returns>Deserialized Object</returns>
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
+        public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue,
             JsonSerializer serializer) {
             if (reader.TokenType == JsonToken.Null)
+            {
                 return null;
+            }
 
             // Load JObject from stream
             var jObject = JObject.Load(reader);
@@ -60,7 +62,7 @@ namespace Mollie.Api.JsonConverters {
         /// <param name="writer">Newtonsoft.Json.JsonWriter</param>
         /// <param name="value">Object to serialize.</param>
         /// <param name="serializer">Newtonsoft.Json.JsonSerializer to use.</param>
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer) {
+        public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer) {
             serializer.Serialize(writer, value);
         }
 

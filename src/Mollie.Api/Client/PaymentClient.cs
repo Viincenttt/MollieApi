@@ -12,7 +12,7 @@ using Mollie.Api.Models.Url;
 namespace Mollie.Api.Client {
     public class PaymentClient : BaseMollieClient, IPaymentClient {
 
-	    public PaymentClient(string apiKey, HttpClient httpClient = null) : base(apiKey, httpClient) { }
+	    public PaymentClient(string apiKey, HttpClient? httpClient = null) : base(apiKey, httpClient) { }
 
         public async Task<PaymentResponse> CreatePaymentAsync(PaymentRequest paymentRequest, bool includeQrCode = false) {
             if (!string.IsNullOrWhiteSpace(paymentRequest.ProfileId) || paymentRequest.Testmode.HasValue || paymentRequest.ApplicationFee != null) {
@@ -65,9 +65,9 @@ namespace Mollie.Api.Client {
         }
 
         public async Task<ListResponse<PaymentResponse>> GetPaymentListAsync(
-            string from = null, 
+            string? from = null, 
             int? limit = null,
-            string profileId = null, 
+            string? profileId = null, 
             bool testmode = false, 
             bool includeQrCode = false, 
             bool embedRefunds = false, 
@@ -96,7 +96,7 @@ namespace Mollie.Api.Client {
         }
 
         private Dictionary<string, string> BuildQueryParameters(
-            string profileId = null, 
+            string? profileId = null, 
             bool testmode = false, 
             bool includeQrCode = false, 
             bool includeRemainderDetails = false, 

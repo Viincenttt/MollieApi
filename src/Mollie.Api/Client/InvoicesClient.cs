@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
@@ -11,7 +10,7 @@ using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client {
     public class InvoicesClient : OauthBaseMollieClient, IInvoicesClient {
-        public InvoicesClient(string oauthAccessToken, HttpClient httpClient = null) : base(oauthAccessToken, httpClient) {
+        public InvoicesClient(string oauthAccessToken, HttpClient? httpClient = null) : base(oauthAccessToken, httpClient) {
         }
 
         public async Task<InvoiceResponse> GetInvoiceAsync(string invoiceId) {
@@ -24,7 +23,7 @@ namespace Mollie.Api.Client {
         }
 
         public async Task<ListResponse<InvoiceResponse>> GetInvoiceListAsync(
-            string reference = null, int? year = null, string from = null, int? limit = null) {
+            string? reference = null, int? year = null, string? from = null, int? limit = null) {
             var parameters = new Dictionary<string, string>();
             parameters.AddValueIfNotNullOrEmpty(nameof(reference), reference);
             parameters.AddValueIfNotNullOrEmpty(nameof(year), Convert.ToString(year));

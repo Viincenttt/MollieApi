@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Mollie.Api.Models.Chargeback;
+﻿using Mollie.Api.Models.Chargeback;
 using Mollie.Api.Models.List;
 
 using Mollie.Api.Models.Payment.Response;
@@ -11,26 +10,26 @@ namespace Mollie.Api.Models.Settlement {
         /// <summary>
         /// The API resource URL of the settlement itself.
         /// </summary>
-        public UrlObjectLink<SettlementResponse> Self { get; set; }
+        public required UrlObjectLink<SettlementResponse> Self { get; init; }
 
         /// <summary>
         /// The API resource URL of the payments that are included in this settlement.
         /// </summary>
-        public UrlObjectLink<ListResponse<PaymentResponse>> Payments { get; set; }
+        public required UrlObjectLink<ListResponse<PaymentResponse>> Payments { get; init; }
 
         /// <summary>
         /// The API resource URL of the refunds that are included in this settlement.
         /// </summary>
-        public UrlObjectLink<ListResponse<RefundResponse>> Refunds { get; set; }
+        public required UrlObjectLink<ListResponse<RefundResponse>> Refunds { get; init; }
 
         /// <summary>
         /// The API resource URL of the chargebacks that are included in this settlement.
         /// </summary>
-        public UrlObjectLink<ListResponse<ChargebackResponse>> Chargebacks { get; set; }
+        public required UrlObjectLink<ListResponse<ChargebackResponse>> Chargebacks { get; init; }
 
         /// <summary>
         /// The URL to the settlement retrieval endpoint documentation.
         /// </summary>
-        public UrlLink Documentation { get; set; }
+        public required UrlLink Documentation { get; init; }
     }
 }

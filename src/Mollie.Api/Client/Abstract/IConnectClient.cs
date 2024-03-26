@@ -28,8 +28,8 @@ namespace Mollie.Api.Client.Abstract {
         ///     Possible values: en_US nl_NL nl_BE fr_FR fr_BE de_DE es_ES it_IT
         /// </param>
         /// <returns>The url to the mollie consent screen.</returns>
-        string GetAuthorizationUrl(string state, List<string> scopes, string redirectUri = null,
-            bool forceApprovalPrompt = false, string locale = null);
+        string GetAuthorizationUrl(string state, List<string> scopes, string? redirectUri = null,
+            bool forceApprovalPrompt = false, string? locale = null);
 
         /// <summary>
         /// Exchange the auth code received at the Authorize endpoint for an actual access token, with which you can

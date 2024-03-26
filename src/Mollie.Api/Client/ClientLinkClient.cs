@@ -11,7 +11,7 @@ namespace Mollie.Api.Client {
     {
         private readonly string _clientId;
 
-        public ClientLinkClient(string clientId, string oauthAccessToken, HttpClient httpClient = null)
+        public ClientLinkClient(string clientId, string oauthAccessToken, HttpClient? httpClient = null)
             : base(oauthAccessToken, httpClient)
         {
             this._clientId = clientId;

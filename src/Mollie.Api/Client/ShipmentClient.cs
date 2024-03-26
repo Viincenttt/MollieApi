@@ -10,7 +10,7 @@ using Mollie.Api.Models.Url;
 namespace Mollie.Api.Client
 {
     public class ShipmentClient : BaseMollieClient, IShipmentClient {
-        public ShipmentClient(string apiKey, HttpClient httpClient = null) : base(apiKey, httpClient) {
+        public ShipmentClient(string apiKey, HttpClient? httpClient = null) : base(apiKey, httpClient) {
         }
 
         public async Task<ShipmentResponse> CreateShipmentAsync(string orderId, ShipmentRequest shipmentRequest) {

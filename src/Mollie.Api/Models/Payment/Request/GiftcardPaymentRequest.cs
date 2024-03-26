@@ -1,5 +1,5 @@
 ﻿namespace Mollie.Api.Models.Payment.Request {
-    public class GiftcardPaymentRequest : PaymentRequest {
+    public record GiftcardPaymentRequest : PaymentRequest {
         public GiftcardPaymentRequest() {
             this.Method = PaymentMethod.GiftCard;
         }
@@ -9,16 +9,16 @@
         /// but can be retrieved by using the issuers include in the Methods API. If you need a brand not in the list, contact
         /// our support department. If only one issuer is activated on your account, you can omit this parameter.
         /// </summary>
-        public string Issuer { get; set; }
+        public string? Issuer { get; set; }
 
         /// <summary>
         /// The card number on the gift card.
         /// </summary>
-        public string VoucherNumber { get; set; }
+        public string? VoucherNumber { get; set; }
 
         /// <summary>
         /// The PIN code on the gift card. Only required if there is a PIN code printed on the gift card.
         /// </summary>
-        public string VoucherPin { get; set; }
+        public string? VoucherPin { get; set; }
     }
 }

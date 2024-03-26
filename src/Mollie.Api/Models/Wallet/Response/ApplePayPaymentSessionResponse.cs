@@ -3,16 +3,16 @@ using Mollie.Api.JsonConverters;
 using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Wallet.Response {
-    public class ApplePayPaymentSessionResponse {
+    public record ApplePayPaymentSessionResponse {
         [JsonConverter(typeof(MicrosecondEpochConverter))]
-        public DateTime EpochTimestamp { get; set; }
+        public required DateTime EpochTimestamp { get; init; }
         [JsonConverter(typeof(MicrosecondEpochConverter))]
-        public DateTime ExpiresAt { get; set; }
-        public string MerchantSessionIdentifier { get; set; }
-        public string Nonce { get; set; }
-        public string MerchantIdentifier { get; set; }
-        public string DomainName { get; set; }
-        public string DisplayName { get; set; }
-        public string Signature { get; set; }
+        public required DateTime ExpiresAt { get; init; }
+        public required string MerchantSessionIdentifier { get; init; }
+        public required string Nonce { get; init; }
+        public required string MerchantIdentifier { get; init; }
+        public required string DomainName { get; init; }
+        public required string DisplayName { get; init; }
+        public required string Signature { get; init; }
     }
 }

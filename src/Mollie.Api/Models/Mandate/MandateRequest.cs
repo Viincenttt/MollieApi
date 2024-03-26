@@ -5,12 +5,12 @@ namespace Mollie.Api.Models.Mandate {
         /// <summary>
         /// Payment method of the mandate - Possible values: `directdebit` `paypal`
         /// </summary>
-        public string Method { get; set; }
+        public required string Method { get; init; }
 
         /// <summary>
         /// Required - Name of consumer you add to the mandate
         /// </summary>
-        public string ConsumerName { get; set; }
+        public required string ConsumerName { get; init; }
 
         /// <summary>
         /// Optional - The date when the mandate was signed.
@@ -20,7 +20,7 @@ namespace Mollie.Api.Models.Mandate {
         /// <summary>
         /// Optional - A custom reference
         /// </summary>
-        public string MandateReference { get; set; }
+        public string? MandateReference { get; set; }
         
         /// <summary>
         ///	Oauth only - Optional – Set this to true to make this mandate a test mandate.
