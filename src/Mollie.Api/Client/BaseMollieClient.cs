@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Mollie.Api.Extensions;
 using Mollie.Api.Framework;
+using Mollie.Api.Framework.Idempotency;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client {
@@ -17,6 +18,8 @@ namespace Mollie.Api.Client {
         private readonly string _apiKey;
         private readonly HttpClient _httpClient;
         private readonly JsonConverterService _jsonConverterService;
+        
+        private readonly AsyncLocalVariable<string> _idempotencyKey = new AsyncLocalVariable<string>(null);
 
         private readonly bool _createdHttpClient = false;
 
@@ -36,6 +39,11 @@ namespace Mollie.Api.Client {
             this._jsonConverterService = new JsonConverterService();
             this._createdHttpClient = httpClient == null;
             this._httpClient = httpClient ?? new HttpClient();
+        }
+        
+        public IDisposable WithIdempotencyKey(string value) {
+            _idempotencyKey.Value = value;
+            return _idempotencyKey;
         }
 
         private async Task<T> SendHttpRequest<T>(HttpMethod httpMethod, string relativeUri, object data = null) {
@@ -127,7 +135,8 @@ namespace Mollie.Api.Client {
             httpRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", this._apiKey);
             httpRequest.Headers.Add("User-Agent", this.GetUserAgent());
-            httpRequest.Headers.Add("Idempotency-Key", Guid.NewGuid().ToString());
+            var idemPotencyKey = _idempotencyKey.Value ?? Guid.NewGuid().ToString();
+            httpRequest.Headers.Add("Idempotency-Key", idemPotencyKey);
             httpRequest.Content = content;
 
             return httpRequest;

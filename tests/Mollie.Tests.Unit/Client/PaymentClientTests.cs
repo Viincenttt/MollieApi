@@ -6,6 +6,7 @@ using Mollie.Api.Models.Payment.Request;
 using Mollie.Api.Models.Payment.Response;
 using RichardSzalay.MockHttp;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -16,6 +17,32 @@ using Xunit;
 namespace Mollie.Tests.Unit.Client;
 
 public class PaymentClientTests : BaseClientTests {
+    [Fact]
+    public async Task CreatePaymentAsync_WithCustomIdempotencyKey_CustomIdemPotencyKeyIsSent()
+    {
+        // Given: We create a payment request with only the required parameters
+        PaymentRequest paymentRequest = new PaymentRequest()
+        {
+            Amount = new Amount(Currency.EUR, "100.00"),
+            Description = "Description",
+            RedirectUrl = "http://www.mollie.com"
+        };
+        const string customIdempotencyKey = "my-idempotency-key";
+        const string jsonToReturnInMockResponse = defaultPaymentJsonResponse;
+        var mockHttp = new MockHttpMessageHandler();
+        mockHttp.When($"{BaseMollieClient.ApiEndPoint}*")
+            .With(request => request.Headers.Contains("Idempotency-Key") && request.Headers.GetValues("Idempotency-Key").Single() == customIdempotencyKey)
+            .Respond("application/json", jsonToReturnInMockResponse);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
+
+        // Arrange & Act
+        using (paymentClient.WithIdempotencyKey(customIdempotencyKey))
+        {
+            await paymentClient.CreatePaymentAsync(paymentRequest);
+        }
+    }
+    
     [Fact]
     public async Task CreatePaymentAsync_PaymentWithRequiredParameters_ResponseIsDeserializedInExpectedFormat() {
         // Given: we create a payment request with only the required parameters
