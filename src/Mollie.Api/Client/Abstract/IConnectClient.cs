@@ -4,7 +4,8 @@ using System.Threading.Tasks;
 using Mollie.Api.Models.Connect;
 
 namespace Mollie.Api.Client.Abstract {
-    public interface IConnectClient : IDisposable {
+    public interface IConnectClient : IDisposable
+    {
         /// <summary>
         ///     Constructs the Authorize URL for the Authorize endpoint from the parameters
         /// </summary>
@@ -27,9 +28,18 @@ namespace Mollie.Api.Client.Abstract {
         ///     You can provide any ISO 15897 locale, but the authorize flow currently only supports the following languages:
         ///     Possible values: en_US nl_NL nl_BE fr_FR fr_BE de_DE es_ES it_IT
         /// </param>
+        ///  <param name="landingPage">
+        ///     Allows you to specify if Mollie should show the login or the signup page, when the merchant is not logged in at Mollie.
+        ///     Defaults to the login page. Defaults to login.
+        /// </param>
         /// <returns>The url to the mollie consent screen.</returns>
-        string GetAuthorizationUrl(string state, List<string> scopes, string redirectUri = null,
-            bool forceApprovalPrompt = false, string locale = null);
+        string GetAuthorizationUrl(
+            string state,
+            List<string> scopes,
+            string redirectUri = null,
+            bool forceApprovalPrompt = false,
+            string locale = null,
+            string landingPage = null);
 
         /// <summary>
         /// Exchange the auth code received at the Authorize endpoint for an actual access token, with which you can

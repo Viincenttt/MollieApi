@@ -28,7 +28,14 @@ namespace Mollie.Api.Client {
             this._clientId = clientId;
         }
 
-        public string GetAuthorizationUrl(string state, List<string> scopes, string redirectUri = null, bool forceApprovalPrompt = false, string locale = null) {
+        public string GetAuthorizationUrl(
+            string state, 
+            List<string> scopes, 
+            string redirectUri = null, 
+            bool forceApprovalPrompt = false, 
+            string locale = null, 
+            string landingPage = null) {
+            
             var parameters = new Dictionary<string, string> {
                 {"client_id", this._clientId},
                 {"state", state},
@@ -38,6 +45,7 @@ namespace Mollie.Api.Client {
             };
             parameters.AddValueIfNotNullOrEmpty("redirect_uri", redirectUri);
             parameters.AddValueIfNotNullOrEmpty("locale", locale);
+            parameters.AddValueIfNotNullOrEmpty("landing_page", landingPage);
 
             return AuthorizeEndPoint + parameters.ToQueryString();
         }
