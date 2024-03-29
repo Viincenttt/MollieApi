@@ -27,17 +27,25 @@ public class PaymentClientTests : BaseClientTests {
             Description = "Description",
             RedirectUrl = "http://www.mollie.com"
         };
-        const string customIdempotencyKey = "my-idempotency-key";
+        const string customIdempotencyKey1 = "my-idempotency-key-1";
+        const string customIdempotencyKey2 = "my-idempotency-key-2";
         const string jsonToReturnInMockResponse = defaultPaymentJsonResponse;
         var mockHttp = new MockHttpMessageHandler();
         mockHttp.Expect(HttpMethod.Post, $"{BaseMollieClient.ApiEndPoint}*")
-            .WithHeaders("Idempotency-Key", customIdempotencyKey)
+            .WithHeaders("Idempotency-Key", customIdempotencyKey1)
+            .Respond("application/json", jsonToReturnInMockResponse);
+        mockHttp.Expect(HttpMethod.Post, $"{BaseMollieClient.ApiEndPoint}*")
+            .WithHeaders("Idempotency-Key", customIdempotencyKey2)
             .Respond("application/json", jsonToReturnInMockResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
         PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
 
         // Act
-        using (paymentClient.WithIdempotencyKey(customIdempotencyKey))
+        using (paymentClient.WithIdempotencyKey(customIdempotencyKey1))
+        {
+            await paymentClient.CreatePaymentAsync(paymentRequest);
+        }
+        using (paymentClient.WithIdempotencyKey(customIdempotencyKey2))
         {
             await paymentClient.CreatePaymentAsync(paymentRequest);
         }

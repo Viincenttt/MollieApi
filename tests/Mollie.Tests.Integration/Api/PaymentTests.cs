@@ -102,6 +102,26 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         result.Description.Should().Be(paymentRequest.Description);
         result.RedirectUrl.Should().Be(paymentRequest.RedirectUrl);
     }
+    
+    [DefaultRetryFact]
+    public async Task CanCreateDefaultPaymentWithCustomIdempotencyKey() {
+        // Given: we create a payment request with only the required parameters
+        PaymentRequest paymentRequest = new PaymentRequest() {
+            Amount = new Amount(Currency.EUR, "100.00"),
+            Description = "Description",
+            RedirectUrl = DefaultRedirectUrl
+        };
+
+        // When: We send the payment request to Mollie
+        using (_paymentClient.WithIdempotencyKey("my-idempotency-key"))
+        {
+            PaymentResponse firstAttempt = await _paymentClient.CreatePaymentAsync(paymentRequest);
+            PaymentResponse secondAttempt = await _paymentClient.CreatePaymentAsync(paymentRequest);
+            
+            // Then: Make sure the responses have the same payment Id
+            firstAttempt.Id.Should().Be(secondAttempt.Id);
+        }
+    }
 
     [DefaultRetryFact]
     public async Task CanCreateDefaultPaymentWithAllFields() {
