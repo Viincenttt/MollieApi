@@ -1,11 +1,10 @@
 ﻿using System;
 using Mollie.Api.Framework.Factories;
 using Mollie.Api.Models.Balance.Response.BalanceTransaction;
-using Mollie.Api.Models.Balance.Response.BalanceTransaction.Specific;
 using Newtonsoft.Json.Linq;
 
 namespace Mollie.Api.JsonConverters {
-    public class BalanceTransactionJsonConverter : JsonCreationConverter<BalanceTransaction> {
+    internal class BalanceTransactionJsonConverter : JsonCreationConverter<BalanceTransaction> {
         private readonly BalanceTransactionFactory _balanceTransactionFactory;
 
         public BalanceTransactionJsonConverter(BalanceTransactionFactory balanceTransactionFactory) {

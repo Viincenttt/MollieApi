@@ -4,7 +4,7 @@ using Mollie.Api.Models.Balance.Response.BalanceReport;
 using Newtonsoft.Json.Linq;
 
 namespace Mollie.Api.JsonConverters {
-    public class BalanceReportResponseJsonConverter : JsonCreationConverter<BalanceReportResponse> {
+    internal class BalanceReportResponseJsonConverter : JsonCreationConverter<BalanceReportResponse> {
         private readonly BalanceReportResponseFactory _balanceReportResponseFactory;
 
         public BalanceReportResponseJsonConverter(BalanceReportResponseFactory balanceReportResponseFactory) {

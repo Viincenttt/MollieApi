@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Mollie.Api.Extensions {
-    public static class HttpClientExtensions {
+    internal static class HttpClientExtensions {
         public static Task<HttpResponseMessage> PatchAsync(this HttpClient client, string requestUri, HttpContent content) {
             return client.PatchAsync(CreateUri(requestUri), content);
         }

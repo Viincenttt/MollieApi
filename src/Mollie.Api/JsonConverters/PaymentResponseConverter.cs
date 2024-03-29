@@ -4,7 +4,7 @@ using Mollie.Api.Models.Payment.Response;
 using Newtonsoft.Json.Linq;
 
 namespace Mollie.Api.JsonConverters {
-    public class PaymentResponseConverter : JsonCreationConverter<PaymentResponse> {
+    internal class PaymentResponseConverter : JsonCreationConverter<PaymentResponse> {
         private readonly PaymentResponseFactory _paymentResponseFactory;
 
         public PaymentResponseConverter(PaymentResponseFactory paymentResponseFactory) {

@@ -1,9 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-
-[assembly: InternalsVisibleTo("Mollie.Tests.Integration")]
 namespace Mollie.Api.Extensions {
-    public static class ListExtensions {
+    internal static class ListExtensions {
         public static string ToIncludeParameter(this List<string> includeList) {
             return string.Join(",", includeList);
         }

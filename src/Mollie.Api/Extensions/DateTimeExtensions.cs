@@ -1,7 +1,7 @@
 ﻿using System;
 
 namespace Mollie.Api.Extensions {
-    public static class DateTimeExtensions {
+    internal static class DateTimeExtensions {
         public static DateTime Truncate(this DateTime dateTime, TimeSpan timeSpan)
         {
             if (timeSpan == TimeSpan.Zero) {
