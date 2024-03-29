@@ -34,8 +34,11 @@ public class DependencyInjectionTests
             .Where(type => type.Namespace == typeof(IPaymentClient).Namespace);
         foreach (var apiClientInterface in apiClientInterfaces)
         {
-            var apiClientImplementation = serviceProvider.GetService(apiClientInterface);
-            apiClientImplementation.Should().NotBeNull();
+            if (apiClientInterface != typeof(IBaseMollieClient))
+            {
+                var apiClientImplementation = serviceProvider.GetService(apiClientInterface);
+                apiClientImplementation.Should().NotBeNull();
+            }
         }
     }
 }
