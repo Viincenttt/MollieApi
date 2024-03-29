@@ -6,6 +6,7 @@ using Mollie.Api.Models.Payment.Request;
 using Mollie.Api.Models.Payment.Response;
 using RichardSzalay.MockHttp;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -16,6 +17,43 @@ using Xunit;
 namespace Mollie.Tests.Unit.Client;
 
 public class PaymentClientTests : BaseClientTests {
+    [Fact]
+    public async Task CreatePaymentAsync_WithCustomIdempotencyKey_CustomIdemPotencyKeyIsSent()
+    {
+        // Given: We create a payment request with only the required parameters
+        PaymentRequest paymentRequest = new PaymentRequest()
+        {
+            Amount = new Amount(Currency.EUR, "100.00"),
+            Description = "Description",
+            RedirectUrl = "http://www.mollie.com"
+        };
+        const string customIdempotencyKey1 = "my-idempotency-key-1";
+        const string customIdempotencyKey2 = "my-idempotency-key-2";
+        const string jsonToReturnInMockResponse = defaultPaymentJsonResponse;
+        var mockHttp = new MockHttpMessageHandler();
+        mockHttp.Expect(HttpMethod.Post, $"{BaseMollieClient.ApiEndPoint}*")
+            .WithHeaders("Idempotency-Key", customIdempotencyKey1)
+            .Respond("application/json", jsonToReturnInMockResponse);
+        mockHttp.Expect(HttpMethod.Post, $"{BaseMollieClient.ApiEndPoint}*")
+            .WithHeaders("Idempotency-Key", customIdempotencyKey2)
+            .Respond("application/json", jsonToReturnInMockResponse);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
+
+        // Act
+        using (paymentClient.WithIdempotencyKey(customIdempotencyKey1))
+        {
+            await paymentClient.CreatePaymentAsync(paymentRequest);
+        }
+        using (paymentClient.WithIdempotencyKey(customIdempotencyKey2))
+        {
+            await paymentClient.CreatePaymentAsync(paymentRequest);
+        }
+
+        // Assert
+        mockHttp.VerifyNoOutstandingExpectation();
+    }
+    
     [Fact]
     public async Task CreatePaymentAsync_PaymentWithRequiredParameters_ResponseIsDeserializedInExpectedFormat() {
         // Given: we create a payment request with only the required parameters
