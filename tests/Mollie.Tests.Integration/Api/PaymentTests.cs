@@ -460,6 +460,11 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
             response.Should().BeOfType<PointOfSalePaymentResponse>();
             PointOfSalePaymentResponse posResponse = (PointOfSalePaymentResponse)response;
             posResponse.Details.TerminalId.Should().Be(paymentRequest.TerminalId);
+            posResponse.Details.CardNumber.Should().BeNull();
+            posResponse.Details.CardFingerprint.Should().BeNull();
+            posResponse.Details.CardAudience.Should().BeNull();
+            posResponse.Details.CardLabel.Should().BeNull();
+            posResponse.Details.CardCountryCode.Should().BeNull();
             posResponse.Method.Should().Be(PaymentMethod.PointOfSale);
         }
     }
