@@ -7,7 +7,7 @@ using Mollie.Api.Models.List;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client.Abstract {
-    public interface IBalanceClient : IDisposable {
+    public interface IBalanceClient : IBaseMollieClient {
         Task<BalanceResponse> GetBalanceAsync(string balanceId);
         Task<BalanceResponse> GetBalanceAsync(UrlObjectLink<BalanceResponse> url);
         Task<BalanceResponse> GetPrimaryBalanceAsync();

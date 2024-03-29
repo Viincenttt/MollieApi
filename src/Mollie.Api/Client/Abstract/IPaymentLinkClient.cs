@@ -1,12 +1,11 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.PaymentLink.Request;
 using Mollie.Api.Models.PaymentLink.Response;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client.Abstract {
-    public interface IPaymentLinkClient : IDisposable {
+    public interface IPaymentLinkClient : IBaseMollieClient {
         Task<PaymentLinkResponse> CreatePaymentLinkAsync(PaymentLinkRequest paymentLinkRequest);
 
         /// <summary>

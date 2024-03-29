@@ -30,17 +30,20 @@ public class PaymentClientTests : BaseClientTests {
         const string customIdempotencyKey = "my-idempotency-key";
         const string jsonToReturnInMockResponse = defaultPaymentJsonResponse;
         var mockHttp = new MockHttpMessageHandler();
-        mockHttp.When($"{BaseMollieClient.ApiEndPoint}*")
-            .With(request => request.Headers.Contains("Idempotency-Key") && request.Headers.GetValues("Idempotency-Key").Single() == customIdempotencyKey)
+        mockHttp.Expect(HttpMethod.Post, $"{BaseMollieClient.ApiEndPoint}*")
+            .WithHeaders("Idempotency-Key", customIdempotencyKey)
             .Respond("application/json", jsonToReturnInMockResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
         PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
 
-        // Arrange & Act
+        // Act
         using (paymentClient.WithIdempotencyKey(customIdempotencyKey))
         {
             await paymentClient.CreatePaymentAsync(paymentRequest);
         }
+
+        // Assert
+        mockHttp.VerifyNoOutstandingExpectation();
     }
     
     [Fact]

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Mollie.Api.Models;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Payment;
@@ -7,7 +6,7 @@ using Mollie.Api.Models.PaymentMethod;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client.Abstract {
-    public interface IPaymentMethodClient : IDisposable {
+    public interface IPaymentMethodClient : IBaseMollieClient {
 		Task<PaymentMethodResponse> GetPaymentMethodAsync(
             string paymentMethod, 
             bool includeIssuers = false, 

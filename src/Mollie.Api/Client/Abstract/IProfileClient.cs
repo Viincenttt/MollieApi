@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.PaymentMethod;
 using Mollie.Api.Models.Profile.Request;
@@ -7,7 +6,7 @@ using Mollie.Api.Models.Profile.Response;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client.Abstract {
-    public interface IProfileClient : IDisposable {
+    public interface IProfileClient : IBaseMollieClient {
         Task<ProfileResponse> CreateProfileAsync(ProfileRequest request);
         Task<ProfileResponse> GetProfileAsync(string profileId);
         Task<ProfileResponse> GetProfileAsync(UrlObjectLink<ProfileResponse> url);

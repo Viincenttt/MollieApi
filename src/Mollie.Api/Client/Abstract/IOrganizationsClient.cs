@@ -1,11 +1,10 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Organization;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client.Abstract {
-    public interface IOrganizationsClient : IDisposable {
+    public interface IOrganizationsClient : IBaseMollieClient {
         Task<OrganizationResponse> GetCurrentOrganizationAsync();
         Task<OrganizationResponse> GetOrganizationAsync(string organizationId);
         Task<ListResponse<OrganizationResponse>> GetOrganizationsListAsync(string from = null, int? limit = null);

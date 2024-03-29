@@ -1,12 +1,11 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Capture;
 using Mollie.Api.Models.Capture.Request;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client.Abstract {
-    public interface ICaptureClient : IDisposable {
+    public interface ICaptureClient : IBaseMollieClient {
         Task<CaptureResponse> GetCaptureAsync(string paymentId, string captureId, bool testmode = false);
         Task<CaptureResponse> GetCaptureAsync(UrlObjectLink<CaptureResponse> url);
         Task<ListResponse<CaptureResponse>> GetCapturesListAsync(string paymentId, bool testmode = false);

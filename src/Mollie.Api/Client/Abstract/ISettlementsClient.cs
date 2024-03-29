@@ -9,7 +9,7 @@ using Mollie.Api.Models.Settlement;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client.Abstract {
-    public interface ISettlementsClient : IDisposable {
+    public interface ISettlementsClient : IBaseMollieClient {
         Task<SettlementResponse> GetSettlementAsync(string settlementId);
         Task<SettlementResponse> GetNextSettlement();
         Task<SettlementResponse> GetOpenSettlement();

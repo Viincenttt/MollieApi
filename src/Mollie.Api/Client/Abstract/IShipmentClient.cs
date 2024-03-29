@@ -1,11 +1,10 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Shipment;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client.Abstract {
-    public interface IShipmentClient : IDisposable {
+    public interface IShipmentClient : IBaseMollieClient {
         Task<ShipmentResponse> CreateShipmentAsync(string orderId, ShipmentRequest shipmentRequest);
         Task<ShipmentResponse> GetShipmentAsync(string orderId, string shipmentId, bool testmode = false);
         Task<ShipmentResponse> GetShipmentAsync(UrlObjectLink<ShipmentResponse> url);

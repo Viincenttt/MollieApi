@@ -1,12 +1,11 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Mollie.Api.Models.Invoice;
 using Mollie.Api.Models.List;
 
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client.Abstract {
-    public interface IInvoicesClient : IDisposable {
+    public interface IInvoicesClient : IBaseMollieClient {
         Task<InvoiceResponse> GetInvoiceAsync(string invoiceId);
         Task<InvoiceResponse> GetInvoiceAsync(UrlObjectLink<InvoiceResponse> url);
         Task<ListResponse<InvoiceResponse>> GetInvoiceListAsync(
