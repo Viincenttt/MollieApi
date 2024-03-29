@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 namespace Mollie.Api.JsonConverters {
-    public class MicrosecondEpochConverter : DateTimeConverterBase
+    internal class MicrosecondEpochConverter : DateTimeConverterBase
     {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {

@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Mollie.Api.JsonConverters {
-    public class RawJsonConverter : JsonConverter {
+    internal class RawJsonConverter : JsonConverter {
         public override bool CanConvert(Type objectType) {
             return objectType == typeof(string);
         }

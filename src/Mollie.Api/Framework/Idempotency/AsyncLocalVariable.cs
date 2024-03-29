@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace Mollie.Api.Framework.Idempotency
 {
-    public class AsyncLocalVariable<T> : IDisposable where T : class
+    internal class AsyncLocalVariable<T> : IDisposable where T : class
     {
         private readonly AsyncLocal<T> _asyncLocal = new AsyncLocal<T>();
 

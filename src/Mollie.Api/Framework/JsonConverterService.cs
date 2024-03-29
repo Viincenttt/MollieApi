@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
-using Mollie.Api.Extensions;
 using Mollie.Api.Framework.Factories;
 using Mollie.Api.JsonConverters;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
 namespace Mollie.Api.Framework {
-    public class JsonConverterService {
+    internal class JsonConverterService {
         private readonly JsonSerializerSettings _defaultJsonDeserializerSettings;
 
         public JsonConverterService() {

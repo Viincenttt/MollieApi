@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("Mollie.Tests.Integration")]
 namespace Mollie.Api.Extensions {
-    public static class DictionaryExtensions {
+    internal static class DictionaryExtensions {
         public static string ToQueryString(this IDictionary<string, string> parameters) {
             if (!parameters.Any()) {
                 return string.Empty;

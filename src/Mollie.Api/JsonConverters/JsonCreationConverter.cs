@@ -10,7 +10,7 @@ namespace Mollie.Api.JsonConverters {
     ///     generating the CanConvert, ReadJson, and WriteJson methods, requiring the implementer only to define a strongly
     ///     typed Create method.
     /// </summary>
-    public abstract class JsonCreationConverter<T> : JsonConverter {
+    internal abstract class JsonCreationConverter<T> : JsonConverter {
         /// <summary>Create an instance of objectType, based properties in the JSON object</summary>
         /// <param name="objectType">type of object expected</param>
         /// <param name="jObject">contents of JSON object that will be deserialized</param>

@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 
 namespace Mollie.Api.JsonConverters {
-    public class SettlementPeriodConverter : JsonConverter {
+    internal class SettlementPeriodConverter : JsonConverter {
         public override bool CanConvert(Type objectType) {
             return false;
         }
