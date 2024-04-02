@@ -16,8 +16,9 @@ namespace Mollie.Api {
             MollieOptions mollieOptions = new MollieOptions();
             mollieOptionsDelegate.Invoke(mollieOptions);
 
-            if (retryPolicy is null && mollieOptions.RetryPolicy is not null)
+            if (retryPolicy == null && mollieOptions.RetryPolicy != null) { 
                 retryPolicy = mollieOptions.RetryPolicy;
+            }
 
             RegisterMollieApiClient<IBalanceClient, BalanceClient>(services, httpClient =>
                 new BalanceClient(mollieOptions.ApiKey, httpClient), retryPolicy);
