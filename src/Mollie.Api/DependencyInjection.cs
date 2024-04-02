@@ -16,7 +16,7 @@ namespace Mollie.Api {
             MollieOptions mollieOptions = new MollieOptions();
             mollieOptionsDelegate.Invoke(mollieOptions);
 
-            if (retryPolicy == null && mollieOptions.RetryPolicy != null) {
+            if (retryPolicy == null) {
                 retryPolicy = mollieOptions.RetryPolicy;
             }
 
