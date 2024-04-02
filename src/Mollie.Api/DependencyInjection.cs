@@ -9,14 +9,14 @@ using Polly;
 namespace Mollie.Api {
     public static class DependencyInjection {
         public static IServiceCollection AddMollieApi(
-            this IServiceCollection services,
+            this IServiceCollection services, 
             Action<MollieOptions> mollieOptionsDelegate,
             IAsyncPolicy<HttpResponseMessage> retryPolicy = null) {
 
             MollieOptions mollieOptions = new MollieOptions();
             mollieOptionsDelegate.Invoke(mollieOptions);
 
-            if (retryPolicy == null && mollieOptions.RetryPolicy != null) { 
+            if (retryPolicy == null && mollieOptions.RetryPolicy != null) {
                 retryPolicy = mollieOptions.RetryPolicy;
             }
 
@@ -64,17 +64,17 @@ namespace Mollie.Api {
                 new ClientLinkClient(mollieOptions.ClientId, mollieOptions.ApiKey, httpClient), retryPolicy);
             RegisterMollieApiClient<IWalletClient, WalletClient>(services, httpClient =>
                 new WalletClient(mollieOptions.ApiKey, httpClient), retryPolicy);
-
+            
             return services;
         }
 
         static void RegisterMollieApiClient<TInterface, TImplementation>(
             IServiceCollection services,
             Func<HttpClient, TImplementation> factory,
-            IAsyncPolicy<HttpResponseMessage> retryPolicy = null)
+            IAsyncPolicy<HttpResponseMessage> retryPolicy = null) 
             where TInterface : class
             where TImplementation : class, TInterface {
-
+            
             IHttpClientBuilder clientBuilder = services.AddHttpClient<TInterface, TImplementation>(factory);
             if (retryPolicy != null) {
                 clientBuilder.AddPolicyHandler(retryPolicy);
