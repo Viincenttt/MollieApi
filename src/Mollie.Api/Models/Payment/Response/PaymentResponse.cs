@@ -82,22 +82,22 @@ namespace Mollie.Api.Models.Payment.Response {
         /// amount may be higher than the payment amount, for example to allow reimbursement of the costs for a return shipment
         /// to the consumer.
         /// </summary>
-        public Amount AmountRefunded { get; set; }
+        public Amount? AmountRefunded { get; set; }
 
         /// <summary>
         /// Only available when refunds are available for this payment – The remaining amount in EURO that can be refunded.
         /// </summary>
-        public Amount AmountRemaining { get; set; }
+        public Amount? AmountRemaining { get; set; }
 
         /// <summary>
         /// The total amount that is already captured for this payment. Only available when this payment supports captures.
         /// </summary>
-        public Amount AmountCaptured { get; set; }
+        public Amount? AmountCaptured { get; set; }
 
         /// <summary>
         /// The total amount that was charged back for this payment. Only available when the total charged back amount is not zero.
         /// </summary>
-        public Amount AmountChargedBack { get; set; }
+        public Amount? AmountChargedBack { get; set; }
 
         /// <summary>
         /// A short description of the payment. The description will be shown on the consumer's bank or card statement when
