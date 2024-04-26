@@ -19,7 +19,7 @@ namespace Mollie.Api.Client {
         private readonly HttpClient _httpClient;
         private readonly JsonConverterService _jsonConverterService;
         
-        private readonly AsyncLocalVariable<string> _idempotencyKey = new AsyncLocalVariable<string>(null);
+        private readonly AsyncLocalVariable<string> _idempotencyKey = new (null);
 
         private readonly bool _createdHttpClient = default;
 
