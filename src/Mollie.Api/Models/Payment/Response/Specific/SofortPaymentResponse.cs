@@ -1,6 +1,6 @@
 namespace Mollie.Api.Models.Payment.Response {
     public class SofortPaymentResponse : PaymentResponse {
-        public SofortPaymentResponseDetails Details { get; set; }
+        public required SofortPaymentResponseDetails Details { get; init; }
     }
 
     public class SofortPaymentResponseDetails {

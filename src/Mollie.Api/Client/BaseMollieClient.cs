@@ -39,6 +39,7 @@ namespace Mollie.Api.Client {
             _jsonConverterService = new JsonConverterService();
             _createdHttpClient = httpClient == null;
             _httpClient = httpClient ?? new HttpClient();
+            _apiKey = string.Empty;
         }
         
         public IDisposable WithIdempotencyKey(string value) {
@@ -49,12 +50,12 @@ namespace Mollie.Api.Client {
         private async Task<T> SendHttpRequest<T>(HttpMethod httpMethod, string relativeUri, object? data = null) {
             HttpRequestMessage httpRequest = this.CreateHttpRequest(httpMethod, relativeUri);
             if (data != null) {
-                var jsonData = this._jsonConverterService.Serialize(data);
+                var jsonData = _jsonConverterService.Serialize(data);
                 var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
                 httpRequest.Content = content;
             }
 
-            var response = await this._httpClient.SendAsync(httpRequest).ConfigureAwait(false);
+            var response = await _httpClient.SendAsync(httpRequest).ConfigureAwait(false);
             return await ProcessHttpResponseMessage<T>(response).ConfigureAwait(false);
         }
 
@@ -84,11 +85,11 @@ namespace Mollie.Api.Client {
             await SendHttpRequest<object>(HttpMethod.Delete, relativeUri, data).ConfigureAwait(false);
         }
 
-        private async Task<T?> ProcessHttpResponseMessage<T>(HttpResponseMessage response) {
+        private async Task<T> ProcessHttpResponseMessage<T>(HttpResponseMessage response) {
             var resultContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode) {
-                return _jsonConverterService.Deserialize<T?>(resultContent);
+                return _jsonConverterService.Deserialize<T>(resultContent)!;
             }
 
             switch (response.StatusCode) {
