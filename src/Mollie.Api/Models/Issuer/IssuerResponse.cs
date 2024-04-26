@@ -1,5 +1,5 @@
 ﻿namespace Mollie.Api.Models.Issuer {
-    public record IssuerResponse : IResponseObject {
+    public record IssuerResponse {
         /// <summary>
         /// Contains "issuer"
         /// </summary>

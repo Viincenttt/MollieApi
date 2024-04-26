@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Invoice {
-	public record InvoiceResponse : IResponseObject {
+	public record InvoiceResponse {
         /// <summary>
         /// Indicates the response contains an invoice object. Will always contain invoice for this endpoint.
         /// </summary>

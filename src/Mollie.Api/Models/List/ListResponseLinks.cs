@@ -4,7 +4,7 @@ namespace Mollie.Api.Models.List {
     /// <summary>
     /// Links to help navigate through the lists of objects, based on the given offset.
     /// </summary>
-    public record ListResponseLinks<T> where T : IResponseObject {
+    public record ListResponseLinks<T> where T : class {
         /// <summary>
         /// The URL to the current set of payments.
         /// </summary>

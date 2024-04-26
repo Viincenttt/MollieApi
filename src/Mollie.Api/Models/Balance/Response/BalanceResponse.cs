@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 namespace Mollie.Api.Models.Balance.Response {
-    public class BalanceResponse : IResponseObject {
+    public class BalanceResponse {
         /// <summary>
         /// Indicates the response contains a balance object. Will always contain balance for this endpoint.
         /// </summary>

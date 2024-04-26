@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Mandate {
-    public record MandateResponse : IResponseObject {
+    public record MandateResponse {
         /// <summary>
         /// Indicates the response contains a mandate object. Will always contain mandate for this endpoint.
         /// </summary>

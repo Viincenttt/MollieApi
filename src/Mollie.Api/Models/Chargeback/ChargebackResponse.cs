@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Chargeback {
-    public record ChargebackResponse : IResponseObject {
+    public record ChargebackResponse {
 		/// <summary>
 		/// The chargeback's unique identifier, for example chb_n9z0tp.
 		/// </summary>

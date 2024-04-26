@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 namespace Mollie.Api.Models.Subscription {
-    public record SubscriptionResponse : IResponseObject {
+    public record SubscriptionResponse {
         /// <summary>
         /// Indicates the response contains a subscription object.
         /// </summary>

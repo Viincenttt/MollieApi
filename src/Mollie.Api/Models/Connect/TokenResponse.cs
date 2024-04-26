@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Connect {
-    public record TokenResponse : IResponseObject {
+    public record TokenResponse {
         /// <summary>
         ///     The access token, with which you will be able to access the Mollie API on the merchant's behalf.
         /// </summary>

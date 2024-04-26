@@ -4,7 +4,7 @@ using Mollie.Api.Models.Issuer;
 using Mollie.Api.Models.PaymentMethod.Pricing;
 
 namespace Mollie.Api.Models.PaymentMethod {
-    public record PaymentMethodResponse : IResponseObject {
+    public record PaymentMethodResponse {
         /// <summary>
         /// Indicates the response contains a method object. Will always contain method for this endpoint.
         /// </summary>

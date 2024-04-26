@@ -5,7 +5,7 @@ using Mollie.Api.Models.Shipment;
 
 namespace Mollie.Api.Models.Order.Response {
 
-    public record OrderEmbeddedResponse : IResponseObject {
+    public record OrderEmbeddedResponse {
 
         public IEnumerable<PaymentResponse>? Payments { get; set; }
 

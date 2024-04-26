@@ -3,7 +3,7 @@ using Mollie.Api.JsonConverters;
 using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Refund {
-    public record RefundResponse : IResponseObject {
+    public record RefundResponse {
         /// <summary>
         /// Indicates the response contains a refund object. Will always contain refund for this endpoint.
         /// </summary>
