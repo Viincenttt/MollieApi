@@ -2,11 +2,11 @@
 using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Chargeback {
-    public class ChargebackResponse : IResponseObject {
-	/// <summary>
-	/// The chargeback's unique identifier, for example chb_n9z0tp.
-	/// </summary>
-	public required string Id { get; init; }
+    public record ChargebackResponse : IResponseObject {
+		/// <summary>
+		/// The chargeback's unique identifier, for example chb_n9z0tp.
+		/// </summary>
+		public required string Id { get; init; }
 
         /// <summary>
         /// The amount charged back.

@@ -1,6 +1,6 @@
 ﻿namespace Mollie.Api.Models.Payment
 {
-    public class RoutingDestination
+    public record RoutingDestination
     {
         /// <summary>
         /// The type of destination. Currently only the destination type organization is supported.

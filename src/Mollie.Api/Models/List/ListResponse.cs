@@ -3,7 +3,7 @@ using Mollie.Api.JsonConverters;
 using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.List {
-    public class ListResponse<T> where T : IResponseObject{
+    public record ListResponse<T> where T : IResponseObject{
         public int Count { get; set; }
 
         [JsonConverter(typeof(ListResponseConverter))]

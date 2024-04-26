@@ -1,9 +1,9 @@
 ﻿namespace Mollie.Api.Models.Payment.Response.Specific {
-    public class KbcPaymentResponse : PaymentResponse {
+    public record KbcPaymentResponse : PaymentResponse {
         public required KbcPaymentResponseDetails Details { get; init; }
     }
 
-    public class KbcPaymentResponseDetails {
+    public record KbcPaymentResponseDetails {
         /// <summary>
         /// Only available if the payment has been completed – The consumer's name.
         /// </summary>

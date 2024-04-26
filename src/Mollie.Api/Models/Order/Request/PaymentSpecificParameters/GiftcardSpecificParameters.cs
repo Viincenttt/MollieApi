@@ -1,5 +1,5 @@
 ﻿namespace Mollie.Api.Models.Order.Request.PaymentSpecificParameters {
-    public class GiftcardSpecificParameters : PaymentSpecificParameters {
+    public record GiftcardSpecificParameters : PaymentSpecificParameters {
         /// <summary>
         /// The gift card brand to use for the payment. These issuers are not dynamically available through the Issuers API, 
         /// but can be retrieved by using the issuers include in the Methods API. If you need a brand not in the list, contact

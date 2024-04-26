@@ -1,5 +1,5 @@
 ﻿namespace Mollie.Api.Models.Onboarding.Request {
-    public class SubmitOnboardingDataRequest {
+    public record SubmitOnboardingDataRequest {
         /// <summary>
         /// Data of the organization you want to provide.
         /// </summary>

@@ -5,7 +5,7 @@ namespace Mollie.Api.Models.Onboarding.Response {
     /// <summary>
     /// An object with several URL objects relevant to the onboarding status. Every URL object will contain an href and a type field.
     /// </summary>
-    public class OnboardingStatusResponseLinks {
+    public record OnboardingStatusResponseLinks {
         /// <summary>
         /// The API resource URL of this endpoint itself.
         /// </summary>

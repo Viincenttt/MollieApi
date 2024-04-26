@@ -1,7 +1,7 @@
 ﻿using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Models.Permission {
-    public class PermissionResponseLinks {
+    public record PermissionResponseLinks {
         /// <summary>
         /// The API resource URL of the permission itself.
         /// </summary>

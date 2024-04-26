@@ -2,7 +2,7 @@
     /// <summary>
     /// URLs of images representing the payment method.
     /// </summary>
-    public class PaymentMethodResponseImage {
+    public record PaymentMethodResponseImage {
         /// <summary>
         /// The URL for a payment method icon of 55x37 pixels.
         /// </summary>

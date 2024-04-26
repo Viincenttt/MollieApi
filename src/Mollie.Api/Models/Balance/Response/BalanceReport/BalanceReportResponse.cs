@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Balance.Response.BalanceReport {
-    public class BalanceReportResponse : IResponseObject {
+    public record BalanceReportResponse : IResponseObject {
         /// <summary>
         /// Indicates the response contains a balance report object. Will always contain balance-report for this endpoint.
         /// </summary>

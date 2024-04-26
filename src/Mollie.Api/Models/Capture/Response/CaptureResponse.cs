@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Capture
 {
-    public class CaptureResponse : IResponseObject {
+    public record CaptureResponse : IResponseObject {
         /// <summary>
         /// Indicates the response contains a capture object. Will always contain capture for this endpoint.
         /// </summary>

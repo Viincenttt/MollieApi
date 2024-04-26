@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 namespace Mollie.Api.Models.Balance.Response.BalanceReport {
-    public class BalanceReportSubtotals {
+    public record BalanceReportSubtotals {
         public string? TransactionType { get; set; }
         public string? Method { get; set; }
         public string? PrepaymentPartType { get; init; }

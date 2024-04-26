@@ -1,8 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace Mollie.Api.Models.Mandate
+﻿namespace Mollie.Api.Models.Mandate
 {
-    public class PayPalMandateRequest : MandateRequest
+    public record PayPalMandateRequest : MandateRequest
     {
         public PayPalMandateRequest() {
             Method = Payment.PaymentMethod.PayPal;

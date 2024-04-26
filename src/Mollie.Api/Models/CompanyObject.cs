@@ -1,5 +1,5 @@
 ﻿namespace Mollie.Api.Models {
-    public class CompanyObject {
+    public record CompanyObject {
         /// <summary>
         /// Organization’s registration number.
         /// </summary>

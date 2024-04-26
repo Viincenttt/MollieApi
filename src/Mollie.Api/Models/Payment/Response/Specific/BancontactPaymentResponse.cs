@@ -1,11 +1,11 @@
 ﻿using System;
 
 namespace Mollie.Api.Models.Payment.Response.Specific {
-    public class BancontactPaymentResponse : PaymentResponse {
+    public record BancontactPaymentResponse : PaymentResponse {
         public required BancontactPaymentResponseDetails Details { get; init; }
     }
 
-    public class BancontactPaymentResponseDetails {
+    public record BancontactPaymentResponseDetails {
         /// <summary>
         /// Only available if the payment is completed - The last four digits of the card number.
         /// </summary>

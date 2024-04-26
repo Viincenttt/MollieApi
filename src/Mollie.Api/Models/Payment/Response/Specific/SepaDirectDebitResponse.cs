@@ -1,9 +1,9 @@
 ﻿namespace Mollie.Api.Models.Payment.Response.Specific {
-    public class SepaDirectDebitResponse : PaymentResponse {
+    public record SepaDirectDebitResponse : PaymentResponse {
         public required SepaDirectDebitResponseDetails Details { get; init; }
     }
 
-    public class SepaDirectDebitResponseDetails {
+    public record SepaDirectDebitResponseDetails {
         /// <summary>
         /// Transfer reference used by Mollie to identify this payment.
         /// </summary>

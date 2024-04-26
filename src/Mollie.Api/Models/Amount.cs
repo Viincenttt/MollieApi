@@ -5,7 +5,7 @@ using System.Globalization;
 using Newtonsoft.Json;
 
 namespace Mollie.Api.Models {
-    public class Amount {
+    public record Amount {
         private static readonly IDictionary<string, string> CurrenciesWithAlternativeDecimalPrecision =
             new Dictionary<string, string>() {
                 { "JPY", "0" },
@@ -58,14 +58,6 @@ namespace Mollie.Api.Models {
         
         public override string ToString() {
             return $"{Value} {Currency}";
-        }
-
-        public override bool Equals(object? obj) {
-            if (obj is Amount amount) {
-                return Currency == amount.Currency && Value == amount.Value;
-            }
-
-            return false;
         }
 
         public override int GetHashCode() {

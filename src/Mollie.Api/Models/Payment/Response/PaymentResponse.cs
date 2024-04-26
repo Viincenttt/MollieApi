@@ -4,7 +4,7 @@ using Mollie.Api.JsonConverters;
 using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Payment.Response {
-    public class PaymentResponse : IResponseObject
+    public record PaymentResponse : IResponseObject
     {
         /// <summary>
         /// Indicates the response contains a payment object. Will always contain payment for this endpoint.

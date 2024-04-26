@@ -1,7 +1,7 @@
 ﻿using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Models.Profile.Response {
-    public class EnableGiftCardIssuerResponseLinks {
+    public record EnableGiftCardIssuerResponseLinks {
         /// <summary>
         /// The API resource URL of the gift card issuer itself.
         /// </summary>

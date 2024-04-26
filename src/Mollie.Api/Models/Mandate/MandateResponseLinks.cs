@@ -2,7 +2,7 @@
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Models.Mandate {
-    public class MandateResponseLinks {
+    public record MandateResponseLinks {
         /// <summary>
         /// The API resource URL of the mandate itself.
         /// </summary>

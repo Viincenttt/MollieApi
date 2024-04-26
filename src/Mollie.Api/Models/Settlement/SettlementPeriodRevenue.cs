@@ -1,6 +1,6 @@
 ﻿namespace Mollie.Api.Models.Settlement
 {
-	public class SettlementPeriodRevenue
+	public record SettlementPeriodRevenue
 	{
 		/// <summary>
 		/// A description of the subtotal.

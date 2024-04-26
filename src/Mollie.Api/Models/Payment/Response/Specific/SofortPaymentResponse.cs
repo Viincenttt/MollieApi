@@ -1,9 +1,9 @@
 namespace Mollie.Api.Models.Payment.Response {
-    public class SofortPaymentResponse : PaymentResponse {
+    public record SofortPaymentResponse : PaymentResponse {
         public required SofortPaymentResponseDetails Details { get; init; }
     }
 
-    public class SofortPaymentResponseDetails {
+    public record SofortPaymentResponseDetails {
         /// <summary>
         /// Only available if the payment has been completed � The consumer's name.
         /// </summary>

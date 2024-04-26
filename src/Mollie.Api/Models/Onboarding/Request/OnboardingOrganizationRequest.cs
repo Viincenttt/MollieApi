@@ -2,7 +2,7 @@
     /// <summary>
     /// Data of the organization you want to provide.
     /// </summary>
-    public class OnboardingOrganizationRequest {
+    public record OnboardingOrganizationRequest {
         /// <summary>
         /// Name of the organization.
         /// </summary>

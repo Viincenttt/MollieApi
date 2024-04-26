@@ -4,7 +4,7 @@ using Mollie.Api.Models.Shipment;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Models.Capture {
-    public class CaptureResponseLinks {
+    public record CaptureResponseLinks {
         /// <summary>
         /// The API resource URL of the capture itself.
         /// </summary>

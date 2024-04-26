@@ -7,7 +7,7 @@ using Mollie.Api.Models.Subscription;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Models.Payment.Response {
-    public class PaymentResponseLinks {
+    public record PaymentResponseLinks {
         /// <summary>
         /// The API resource URL of the payment itself.
         /// </summary>

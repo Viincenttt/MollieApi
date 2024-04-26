@@ -1,7 +1,7 @@
 ﻿using System;
 
 namespace Mollie.Api.Models.Mandate {
-    public class MandateRequest {
+    public record MandateRequest {
         /// <summary>
         /// Payment method of the mandate - Possible values: `directdebit` `paypal`
         /// </summary>

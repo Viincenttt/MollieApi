@@ -6,7 +6,7 @@ using Mollie.Api.Models.Refund;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Models.Settlement {
-    public class SettlementResponseLinks {
+    public record SettlementResponseLinks {
         /// <summary>
         /// The API resource URL of the settlement itself.
         /// </summary>

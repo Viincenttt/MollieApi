@@ -1,5 +1,5 @@
 ﻿namespace Mollie.Api.Models.Payment.Response {
-    public class QrCode {
+    public record QrCode {
         /// <summary>
         ///     Height of the image in pixels.
         /// </summary>

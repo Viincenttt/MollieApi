@@ -1,12 +1,12 @@
 ﻿namespace Mollie.Api.Models.Payment.Response.Specific {
-    public class PointOfSalePaymentResponse : PaymentResponse {
+    public record PointOfSalePaymentResponse : PaymentResponse {
         /// <summary>
         /// An object with payment details.
         /// </summary>
         public required PointOfSalePaymentResponseDetails Details { get; set; }
     }
     
-    public class PointOfSalePaymentResponseDetails {
+    public record PointOfSalePaymentResponseDetails {
         /// <summary>
         /// The identifier referring to the terminal this payment was created for. For example, term_utGtYu756h.
         /// </summary>

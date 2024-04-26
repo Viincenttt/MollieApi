@@ -3,7 +3,7 @@ using Mollie.Api.Models.Settlement;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Models.Refund {
-    public class RefundResponseLinks {
+    public record RefundResponseLinks {
         /// <summary>
         /// The API resource URL of the refund itself.
         /// </summary>

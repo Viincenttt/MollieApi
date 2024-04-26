@@ -1,5 +1,5 @@
 namespace Mollie.Api.Models.Order.Request.ManageOrderLines {
-    public class ManageOrderLinesUpdateOperation : ManageOrderLinesOperation {
+    public record ManageOrderLinesUpdateOperation : ManageOrderLinesOperation {
         public required ManageOrderLinesUpdateOperationData Data { get; init; }
         
         public ManageOrderLinesUpdateOperation() {

@@ -5,7 +5,7 @@ namespace Mollie.Api.Models.Terminal
     /// <summary>
     /// This Sublass is part of the TerminalResponse Class, Full documentation for this class can be found at https://docs.mollie.com/reference/v2/terminals-api/overview
     /// </summary>
-    public class TerminalResponseLinks
+    public record TerminalResponseLinks
     {
         /// <summary>
         /// The API resource URL of the payment method itself.

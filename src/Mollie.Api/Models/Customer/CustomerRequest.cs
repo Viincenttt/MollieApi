@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Customer {
-    public class CustomerRequest {
+    public record CustomerRequest {
         /// <summary>
         /// The full name of the customer.
         /// </summary>

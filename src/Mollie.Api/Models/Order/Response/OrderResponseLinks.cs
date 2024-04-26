@@ -1,8 +1,7 @@
-﻿using Mollie.Api.Models.Subscription;
-using Mollie.Api.Models.Url;
+﻿using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Models.Order {
-    public class OrderResponseLinks {
+    public record OrderResponseLinks {
         /// <summary>
         /// The API resource URL of the order itself.
         /// </summary>

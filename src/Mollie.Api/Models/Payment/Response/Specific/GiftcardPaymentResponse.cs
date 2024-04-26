@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
 
 namespace Mollie.Api.Models.Payment.Response.Specific {
-    public class GiftcardPaymentResponse : PaymentResponse {
+    public record GiftcardPaymentResponse : PaymentResponse {
         /// <summary>
         /// An object with payment details.
         /// </summary>
         public required GiftcardPaymentResponseDetails Details { get; init; }
     }
 
-    public class GiftcardPaymentResponseDetails {
+    public record GiftcardPaymentResponseDetails {
         /// <summary>
         /// The voucher number, with the last four digits masked. When multiple gift cards are used, this is the first voucher 
         /// number. Example: 606436353088147****.
@@ -33,7 +33,7 @@ namespace Mollie.Api.Models.Payment.Response.Specific {
         public string? RemainderMethod { get; set; }
     }
 
-    public class Giftcard {
+    public record Giftcard {
         /// <summary>
         /// The ID of the gift card brand that was used during the payment.
         /// </summary>

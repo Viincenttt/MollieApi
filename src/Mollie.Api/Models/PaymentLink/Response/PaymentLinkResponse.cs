@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.PaymentLink.Response
 {
-    public class PaymentLinkResponse : IResponseObject
+    public record PaymentLinkResponse : IResponseObject
     {
         /// <summary>
         /// Indicates the response contains a payment object. Will always contain payment-link for this endpoint.

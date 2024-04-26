@@ -1,10 +1,8 @@
-﻿using System;
-
-namespace Mollie.Api.Models.Onboarding.Request {
+﻿namespace Mollie.Api.Models.Onboarding.Request {
     /// <summary>
     /// Data of the payment profile you want to provide.
     /// </summary>
-    public class OnboardingProfileRequest {
+    public record OnboardingProfileRequest {
         /// <summary>
         /// The profile’s name should reflect the tradename or brand name of the profile’s website or application.
         /// </summary>

@@ -1,6 +1,6 @@
 ﻿namespace Mollie.Api.Models.Settlement
 {
-	public class SettlementPeriodCostsRate {
+	public record SettlementPeriodCostsRate {
         /// <summary>
         /// An amount object describing the fixed costs.
         /// </summary>

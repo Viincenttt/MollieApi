@@ -1,5 +1,5 @@
 ﻿namespace Mollie.Api.Models.Order.Request.PaymentSpecificParameters {
-    public class BillieSpecificParameters : PaymentSpecificParameters {
+    public record BillieSpecificParameters : PaymentSpecificParameters {
         /// <summary>
         /// Billie is a B2B payment method, thus it requires some extra information to identify the business
         /// that is creating the order. It is recommended to include these parameters as part of the create

@@ -3,7 +3,7 @@ using Mollie.Api.JsonConverters;
 using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Order {
-    public class OrderLineResponse {
+    public record OrderLineResponse {
         /// <summary>
         /// The order line’s unique identifier, for example odl_dgtxyl.
         /// </summary>

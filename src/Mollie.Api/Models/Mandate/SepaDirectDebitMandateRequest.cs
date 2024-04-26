@@ -2,7 +2,7 @@
 
 namespace Mollie.Api.Models.Mandate
 {
-    public class SepaDirectDebitMandateRequest : MandateRequest
+    public record SepaDirectDebitMandateRequest : MandateRequest
     {
         public SepaDirectDebitMandateRequest() {
             Method = Payment.PaymentMethod.DirectDebit;

@@ -1,5 +1,5 @@
 ﻿namespace Mollie.Api.Models.Shipment{
-    public class TrackingObject {
+    public record TrackingObject {
         /// <summary>
         /// Name of the postal carrier (as specific as possible). For example PostNL.
         /// </summary>

@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Profile.Response {
-    public class EnableGiftCardIssuerResponse {
+    public record EnableGiftCardIssuerResponse {
         /// <summary>
         /// Indicates the response contains an issuer object. Will always contain issuer for this endpoint.
         /// </summary>

@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using System;
 
 namespace Mollie.Api.Models.PaymentLink.Request {
-    public class PaymentLinkRequest
+    public record PaymentLinkRequest
     {
         /// <summary>
         /// The amount that you want to charge, e.g. {"currency":"EUR", "value":"1000.00"} if you would want to charge €1000.00.

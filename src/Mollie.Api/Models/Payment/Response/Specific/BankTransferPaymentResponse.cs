@@ -2,7 +2,7 @@ using Mollie.Api.Models.Url;
 using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Payment.Response.Specific {
-    public class BankTransferPaymentResponse : PaymentResponse {
+    public record BankTransferPaymentResponse : PaymentResponse {
         public required BankTransferPaymentResponseDetails Details { get; init; }
 
         /// <summary>
@@ -12,7 +12,7 @@ namespace Mollie.Api.Models.Payment.Response.Specific {
         public new required BankTransferPaymentResponseLinks Links { get; init; }
     }
 
-    public class BankTransferPaymentResponseDetails {
+    public record BankTransferPaymentResponseDetails {
         /// <summary>
         /// The name of the bank the consumer should wire the amount to.
         /// </summary>
@@ -62,7 +62,7 @@ namespace Mollie.Api.Models.Payment.Response.Specific {
         public QrCode? QrCode { get; set; }
     }
 
-    public class BankTransferPaymentResponseLinks : PaymentResponseLinks {
+    public record BankTransferPaymentResponseLinks : PaymentResponseLinks {
         /// <summary>
         /// A link to a hosted payment page where your customer can check the status of their payment.
         /// </summary>

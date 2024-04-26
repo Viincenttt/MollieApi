@@ -1,6 +1,6 @@
 namespace Mollie.Api.Models.Shipment
 {
-    public class ShipmentUpdateRequest {
+    public record ShipmentUpdateRequest {
         public required TrackingObject Tracking { get; init; }
         
         /// <summary>

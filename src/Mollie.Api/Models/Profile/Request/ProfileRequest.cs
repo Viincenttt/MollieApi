@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 namespace Mollie.Api.Models.Profile.Request {
-    public class ProfileRequest {
+    public record ProfileRequest {
         /// <summary>
         /// The profile's name should reflect the tradename or brand name of the profile's website or application.
         /// </summary>

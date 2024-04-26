@@ -1,9 +1,9 @@
 ﻿namespace Mollie.Api.Models.Payment.Response.Specific {
-    public class BelfiusPaymentResponse : PaymentResponse {
+    public record BelfiusPaymentResponse : PaymentResponse {
         public required BelfiusPaymentResponseDetails Details { get; init; }
     }
 
-    public class BelfiusPaymentResponseDetails {
+    public record BelfiusPaymentResponseDetails {
         /// <summary>
         /// Only available if the payment has been completed – The consumer's name.
         /// </summary>

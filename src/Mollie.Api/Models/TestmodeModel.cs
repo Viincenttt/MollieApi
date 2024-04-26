@@ -1,5 +1,5 @@
 ﻿namespace Mollie.Api.Models {
-    public class TestmodeModel {
+    public record TestmodeModel {
         public static TestmodeModel? Create(bool testmode) {
             return testmode ? new TestmodeModel { Testmode = testmode } : null;
         }

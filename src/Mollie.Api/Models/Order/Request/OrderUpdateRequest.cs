@@ -1,5 +1,5 @@
 ﻿namespace Mollie.Api.Models.Order {
-    public class OrderUpdateRequest {
+    public record OrderUpdateRequest {
         /// <summary>
         /// The billing person and address for the order. See Order address details for the
         /// exact fields needed.

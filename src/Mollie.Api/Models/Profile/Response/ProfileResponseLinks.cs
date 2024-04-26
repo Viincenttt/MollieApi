@@ -6,7 +6,7 @@ using Mollie.Api.Models.Refund;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Models.Profile.Response {
-    public class ProfileResponseLinks {
+    public record ProfileResponseLinks {
         public required UrlObjectLink<ProfileResponse> Self { get; init; }
         public required UrlLink Dashboard { get; init; }
         public UrlObjectLink<ListResponse<ChargebackResponse>>? Chargebacks { get; set; }

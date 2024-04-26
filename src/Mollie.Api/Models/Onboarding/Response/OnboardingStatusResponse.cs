@@ -2,7 +2,7 @@
 using System;
 
 namespace Mollie.Api.Models.Onboarding.Response {
-    public class OnboardingStatusResponse {
+    public record OnboardingStatusResponse {
         /// <summary>
         /// Indicates the response contains an onboarding object. Will always contain onboarding for this endpoint.
         /// </summary>

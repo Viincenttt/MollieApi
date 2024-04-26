@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Profile.Response {
-    public class ProfileResponse : IResponseObject {
+    public record ProfileResponse : IResponseObject {
         /// <summary>
         /// Indicates the response contains a profile object. Will always contain profile for this endpoint.
         /// </summary>
@@ -88,7 +88,7 @@ namespace Mollie.Api.Models.Profile.Response {
         public required ProfileResponseLinks Links { get; init; }
     }
 
-    public class Review {
+    public record Review {
         /// <summary>
         /// The status of the requested profile changes. See the Mollie.Api.Models.Profile.ReviewStatus 
         /// class for a full list of known values.

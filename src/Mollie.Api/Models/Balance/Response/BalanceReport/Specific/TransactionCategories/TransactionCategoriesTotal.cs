@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Balance.Response.BalanceReport.Specific.TransactionCategories {
-    public class TransactionCategoriesTotal {
+    public record TransactionCategoriesTotal {
         public required TransactionCategoriesSummaryBalances Open { get; init; }
         public required TransactionCategoriesSummaryBalances Close { get; init; }
         public required TransactionCategoriesTransaction Payments { get; init; }

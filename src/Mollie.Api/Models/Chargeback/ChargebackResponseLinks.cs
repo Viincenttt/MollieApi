@@ -3,7 +3,7 @@ using Mollie.Api.Models.Settlement;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Models.Chargeback {
-    public class ChargebackResponseLinks {
+    public record ChargebackResponseLinks {
         /// <summary>
         /// The API resource URL of the chargeback itself.
         /// </summary>

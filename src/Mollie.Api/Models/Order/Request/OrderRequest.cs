@@ -6,7 +6,7 @@ using Mollie.Api.Models.Order.Request.PaymentSpecificParameters;
 using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Order {
-    public class OrderRequest {
+    public record OrderRequest {
         /// <summary>
         /// The total amount of the order, including VAT and discounts. This is the amount that will be charged
         /// to your customer.

@@ -1,12 +1,12 @@
 ﻿namespace Mollie.Api.Models.Payment.Response {
-    public class CreditCardPaymentResponse : PaymentResponse {
+    public record CreditCardPaymentResponse : PaymentResponse {
         /// <summary>
         /// An object with credit card details.
         /// </summary>
         public required CreditCardPaymentResponseDetails Details { get; init; }
     }
 
-    public class CreditCardPaymentResponseDetails {
+    public record CreditCardPaymentResponseDetails {
         /// <summary>
         /// The card holder's name.
         /// </summary>

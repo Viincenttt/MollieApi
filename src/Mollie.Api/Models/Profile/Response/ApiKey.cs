@@ -1,7 +1,7 @@
 ﻿using System;
 
 namespace Mollie.Api.Models.Profile.Response {
-    public class ApiKey {
+    public record ApiKey {
         /// <summary>
         ///     Indicates the response contains an API key object.
         /// </summary>

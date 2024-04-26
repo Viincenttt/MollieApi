@@ -4,7 +4,7 @@ using Mollie.Api.Models.Subscription;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Models.Customer {
-    public class CustomerResponseLinks {
+    public record CustomerResponseLinks {
         /// <summary>
         /// The API resource URL of the customer itself.
         /// </summary>

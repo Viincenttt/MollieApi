@@ -6,7 +6,7 @@ namespace Mollie.Api.Models.Terminal
     /// <summary>
     /// Full documentation for this class can be found at https://docs.mollie.com/reference/v2/terminals-api/overview
     /// </summary>
-    public class TerminalResponse : IResponseObject
+    public record TerminalResponse : IResponseObject
     {
         /// <summary>
         /// The unique identifier used for referring to a terminal. Mollie assigns this identifier at terminal creation time. 

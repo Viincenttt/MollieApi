@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using Mollie.Api.JsonConverters;
-using Mollie.Api.Models.Payment;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 namespace Mollie.Api.Models.Customer {
-    public class CustomerResponse : IResponseObject {
+    public record CustomerResponse : IResponseObject {
         /// <summary>
         /// Indicates the response contains a customer object. Will always contain customer for this endpoint.
         /// </summary>

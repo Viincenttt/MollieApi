@@ -1,6 +1,6 @@
 ﻿namespace Mollie.Api.Models.ClientLink.Request
 {
-    public class ClientLinkOwner
+    public record ClientLinkOwner
     {
         /// <summary>
         /// The email address of your customer.

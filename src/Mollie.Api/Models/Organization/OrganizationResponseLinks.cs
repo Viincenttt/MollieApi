@@ -9,7 +9,7 @@ using Mollie.Api.Models.Settlement;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Models.Organization {
-    public class OrganizationResponseLinks {
+    public record OrganizationResponseLinks {
         /// <summary>
         /// The API resource URL of the organization itself.
         /// </summary>

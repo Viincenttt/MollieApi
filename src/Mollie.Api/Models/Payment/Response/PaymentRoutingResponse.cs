@@ -2,7 +2,7 @@
 
 namespace Mollie.Api.Models.Payment.Response
 {
-    public class PaymentRoutingResponse
+    public record PaymentRoutingResponse
     {
 
         /// <summary>

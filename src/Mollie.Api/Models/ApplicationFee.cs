@@ -1,5 +1,5 @@
 ﻿namespace Mollie.Api.Models {
-	public class ApplicationFee {
+	public record ApplicationFee {
 		/// <summary>
 		///	The amount in EURO that the app wants to charge, e.g. 10.00 if the app would want to charge €10.00.
 		/// </summary>

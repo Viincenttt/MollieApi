@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Error {
-    public class MollieErrorMessage {
+    public record MollieErrorMessage {
         public int Status { get; set; }
         public required string Title { get; init; }
         public required string Detail { get; init; }

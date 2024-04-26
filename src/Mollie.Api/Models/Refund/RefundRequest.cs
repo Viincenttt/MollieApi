@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Refund {
-    public class RefundRequest {
+    public record RefundRequest {
         /// <summary>
         /// The amount to refund. For some payments, it can be up to €25.00 more than the original transaction amount.
         /// </summary>

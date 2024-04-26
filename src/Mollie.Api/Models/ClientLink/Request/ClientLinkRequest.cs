@@ -1,6 +1,6 @@
 ﻿namespace Mollie.Api.Models.ClientLink.Request
 {
-    public class ClientLinkRequest
+    public record ClientLinkRequest
     {
         /// <summary>
         /// Personal data of your customer which is required for this endpoint.

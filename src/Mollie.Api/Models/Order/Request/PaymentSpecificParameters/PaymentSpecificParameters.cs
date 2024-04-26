@@ -1,5 +1,5 @@
 ﻿namespace Mollie.Api.Models.Order.Request.PaymentSpecificParameters {
-    public class PaymentSpecificParameters {
+    public record PaymentSpecificParameters {
         public string? CustomerId { get; set; }
         /// <summary>
         /// See the Mollie.Api.Models.Payment.SequenceType class for a full list of known values.

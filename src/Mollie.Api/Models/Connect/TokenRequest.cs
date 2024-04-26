@@ -1,8 +1,7 @@
 ﻿using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Connect {
-    public class TokenRequest {
-
+    public record TokenRequest {
         /// <param name="code">This can be an authorization code or a refresh token. The correct grant type will be automatically selected</param>
         /// <param name="redirectUri">The URL the merchant is sent back to once the request has been authorized. It must match the URL you set when registering your app. </param>
         public TokenRequest(string code, string redirectUri) {

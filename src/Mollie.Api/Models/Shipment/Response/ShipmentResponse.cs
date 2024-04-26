@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Shipment
 {
-    public class ShipmentResponse : IResponseObject
+    public record ShipmentResponse : IResponseObject
     {
         /// <summary>
         /// Indicates the response contains a shipment object. Will always contain shipment for this endpoint.

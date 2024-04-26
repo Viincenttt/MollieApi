@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 namespace Mollie.Api.Models.Settlement {
-	public class SettlementPeriod {
+	public record SettlementPeriod {
 		/// <summary>
 		/// The total revenue for each payment method during this period.
 		/// </summary>
