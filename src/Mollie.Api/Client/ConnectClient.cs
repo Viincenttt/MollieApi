@@ -10,8 +10,9 @@ using Mollie.Api.Models.Connect;
 
 namespace Mollie.Api.Client {
     public class ConnectClient : BaseMollieClient, IConnectClient {
-        public const string AuthorizeEndPoint = "https://www.mollie.com/oauth2/authorize";
-        public const string TokenEndPoint = "https://api.mollie.nl/oauth2/";
+        private const string AuthorizeEndPoint = "https://www.mollie.com/oauth2/authorize";
+        private const string TokenEndPoint = "https://api.mollie.nl/oauth2/";
+        
         private readonly string _clientId;
         private readonly string _clientSecret;
 
@@ -31,10 +32,10 @@ namespace Mollie.Api.Client {
         public string GetAuthorizationUrl(
             string state, 
             List<string> scopes, 
-            string redirectUri = null, 
+            string? redirectUri = null, 
             bool forceApprovalPrompt = false, 
-            string locale = null, 
-            string landingPage = null) {
+            string? locale = null, 
+            string? landingPage = null) {
             
             var parameters = new Dictionary<string, string> {
                 {"client_id", this._clientId},
