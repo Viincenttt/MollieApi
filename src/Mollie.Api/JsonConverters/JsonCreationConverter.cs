@@ -43,7 +43,7 @@ namespace Mollie.Api.JsonConverters {
             var jObject = JObject.Load(reader);
 
             // Create target object based on JObject
-            var target = this.Create(objectType, jObject);
+            var target = Create(objectType, jObject);
 
             //Create a new reader for this jObject, and set all properties to match the original reader.
             var jObjectReader = jObject.CreateReader();
@@ -53,7 +53,10 @@ namespace Mollie.Api.JsonConverters {
             jObjectReader.FloatParseHandling = reader.FloatParseHandling;
 
             // Populate the object properties
-            serializer.Populate(jObjectReader, target);
+            if (target != null)
+            {
+                serializer.Populate(jObjectReader, target);
+            }
 
             return target;
         }

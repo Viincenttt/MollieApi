@@ -1,5 +1,5 @@
 ﻿namespace Mollie.Api.Models {
-    public class AddressObject {
+    public record AddressObject {
         /// <summary>
         /// The card holder’s street and street number.
         /// </summary>
