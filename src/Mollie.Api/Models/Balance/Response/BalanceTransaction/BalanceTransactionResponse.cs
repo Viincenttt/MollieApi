@@ -24,6 +24,6 @@ namespace Mollie.Api.Models.Balance.Response.BalanceTransaction {
 
     public class BalanceTransactionEmbeddedResponse {
         [JsonProperty("balance_transactions")]
-        public IEnumerable<BalanceTransaction> BalanceTransactions { get; set; }
+        public required IEnumerable<BalanceTransaction> BalanceTransactions { get; init; }
     }
 }

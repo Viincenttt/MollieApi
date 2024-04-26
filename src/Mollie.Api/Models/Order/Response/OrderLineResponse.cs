@@ -44,47 +44,47 @@ namespace Mollie.Api.Models.Order {
         /// <summary>
         /// The number of items that are shipped for this order line.
         /// </summary>
-        public int QuantityShipped { get; set; }
+        public required int QuantityShipped { get; init; }
 
         /// <summary>
         /// The total amount that is shipped for this order line.
         /// </summary>
-        public Amount AmountShipped { get; set; }
+        public required Amount AmountShipped { get; init; }
 
         /// <summary>
         /// The number of items that are refunded for this order line.
         /// </summary>
-        public int QuantityRefunded { get; set; }
+        public required int QuantityRefunded { get; init; }
 
         /// <summary>
         /// The total amount that is refunded for this order line.
         /// </summary>
-        public Amount AmountRefunded { get; set; }
+        public required Amount AmountRefunded { get; init; }
 
         /// <summary>
         /// The number of items that are canceled in this order line.
         /// </summary>
-        public int QuantityCanceled { get; set; }
+        public required int QuantityCanceled { get; init; }
 
         /// <summary>
         /// The total amount that is canceled in this order line.
         /// </summary>
-        public Amount AmountCanceled { get; set; }
+        public required Amount AmountCanceled { get; init; }
 
         /// <summary>
         /// The number of items that can still be shipped for this order line.
         /// </summary>
-        public int ShippableQuantity { get; set; }
+        public required int ShippableQuantity { get; init; }
 
         /// <summary>
         /// The number of items that can still be refunded for this order line.
         /// </summary>
-        public int RefundableQuantity { get; set; }
+        public required int RefundableQuantity { get; init; }
 
         /// <summary>
         /// The number of items that can still be canceled for this order line.
         /// </summary>
-        public int CancelableQuantity { get; set; }
+        public required int CancelableQuantity { get; init; }
         
         /// <summary>
         /// The price of a single item in the order line.
