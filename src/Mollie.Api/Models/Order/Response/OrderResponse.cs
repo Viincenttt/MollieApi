@@ -6,27 +6,27 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 namespace Mollie.Api.Models.Order {
-    public class OrderResponse : IResponseObject {
+    public record OrderResponse : IResponseObject {
         /// <summary>
         /// Indicates the response contains an order object. Will always contain order for this endpoint.
         /// </summary>
-        public string Resource { get; set; }
+        public required string Resource { get; init; }
 
         /// <summary>
         /// The order’s unique identifier, for example ord_vsKJpSsabw.
         /// </summary>
-        public string Id { get; set; }
+        public required string Id { get; init; }
 
         /// <summary>
         /// The profile the order was created on, for example pfl_v9hTwCvYqw.
         /// </summary>
-        public string ProfileId { get; set; }
+        public required string ProfileId { get; init; }
 
         /// <summary>
         /// The payment method last used when paying for the order - See the 
         /// Mollie.Api.Models.Payment.PaymentMethod class for a full list of known values.
         /// </summary>
-        public string Method { get; set; }
+        public string? Method { get; set; }
 
         /// <summary>
         /// The mode used to create this order.
@@ -37,32 +37,32 @@ namespace Mollie.Api.Models.Order {
         /// <summary>
         /// The total amount of the order, including VAT and discounts.
         /// </summary>
-        public Amount Amount { get; set; }
+        public required Amount Amount { get; init; }
 
         /// <summary>
         /// The amount captured, thus far. The captured amount will be settled to your account.
         /// </summary>
-        public Amount AmountCaptured { get; set; }
+        public Amount? AmountCaptured { get; set; }
 
         /// <summary>
         /// The total amount refunded, thus far.
         /// </summary>
-        public Amount AmountRefunded { get; set; }
+        public Amount? AmountRefunded { get; set; }
 
         /// <summary>
         /// The status of the order - See the Mollie.Api.Models.Order.OrderStatus class for a full list of known values.
         /// </summary>
-        public string Status { get; set; }
+        public required string Status { get; init; }
 
         /// <summary>
         /// Whether or not the order can be (partially) canceled.
         /// </summary>
-        public bool IsCancelable { get; set; }
+        public required bool IsCancelable { get; init; }
 
         /// <summary>
         /// The person and the address the order is billed to. See below.
         /// </summary>
-        public OrderAddressDetails BillingAddress { get; set; }
+        public OrderAddressDetails? BillingAddress { get; set; }
 
         /// <summary>
         /// The date of birth of your customer, if available.
@@ -72,17 +72,17 @@ namespace Mollie.Api.Models.Order {
         /// <summary>
         /// Your order number that was used when creating the order.
         /// </summary>
-        public string OrderNumber { get; set; }
+        public required string OrderNumber { get; init; }
 
         /// <summary>
         /// The person and the address the order is billed to. See below.
         /// </summary>
-        public OrderAddressDetails ShippingAddress { get; set; }
+        public OrderAddressDetails? ShippingAddress { get; set; }
 
         /// <summary>
         /// The locale used during checkout. 
         /// </summary>
-        public string Locale { get; set; }
+        public required string Locale { get; init; }
 
         /// <summary>
         /// Provide any data you like, for example a string or a JSON object. We will save the data 
@@ -90,12 +90,12 @@ namespace Mollie.Api.Models.Order {
         /// metadata. You can use up to approximately 1kB.
         /// </summary>
         [JsonConverter(typeof(RawJsonConverter))]
-        public string Metadata { get; set; }
+        public string? Metadata { get; set; }
 
         /// <summary>
         /// The URL your customer will be redirected to after completing or canceling the payment process.
         /// </summary>
-        public string RedirectUrl { get; set; }
+        public string? RedirectUrl { get; set; }
         
         /// <summary>
         /// The optional redirect URL you provided during payment creation. Consumer that explicitly cancel the
@@ -107,17 +107,17 @@ namespace Mollie.Api.Models.Order {
         ///
         /// The URL will be null for recurring orders.
         /// </summary>
-        public string CancelUrl { get; set; }
+        public string? CancelUrl { get; set; }
 
         /// <summary>
         /// The URL Mollie will call as soon an important status change on the order takes place.
         /// </summary>
-        public string WebhookUrl { get; set; }
+        public string? WebhookUrl { get; set; }
 
         /// <summary>
         /// The order’s date and time of creation, in ISO 8601 format.
         /// </summary>
-        public DateTime CreatedAt { get; set; }
+        public required DateTime CreatedAt { get; init; }
 
         /// <summary>
         /// The date and time the order will expire, in ISO 8601 format. Note that you have until this date to fully ship the
@@ -150,19 +150,19 @@ namespace Mollie.Api.Models.Order {
         /// </summary>
         public DateTime? CompletedAt { get; set; }
 
-        public IEnumerable<OrderLineResponse> Lines { get; set; }
+        public required IEnumerable<OrderLineResponse> Lines { get; init; }
 
         [JsonProperty("_embedded")]
-        public OrderEmbeddedResponse Embedded { get; set; }
+        public OrderEmbeddedResponse? Embedded { get; set; }
 
         /// <summary>
         /// An object with several URL objects relevant to the order. Every URL object will contain an href and a type field.
         /// </summary>
         [JsonProperty("_links")]
-        public OrderResponseLinks Links { get; set; }
+        public required OrderResponseLinks Links { get; init; }
 
-        public T GetMetadata<T>(JsonSerializerSettings jsonSerializerSettings = null) {
-            return JsonConvert.DeserializeObject<T>(this.Metadata, jsonSerializerSettings);
+        public T? GetMetadata<T>(JsonSerializerSettings? jsonSerializerSettings = null) {
+            return Metadata != null ? JsonConvert.DeserializeObject<T>(this.Metadata, jsonSerializerSettings) : default;
         }
     }
 }

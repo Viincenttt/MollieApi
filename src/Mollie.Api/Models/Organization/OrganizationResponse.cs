@@ -1,56 +1,56 @@
 ﻿using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Organization {
-    public class OrganizationResponse : IResponseObject {
+    public record OrganizationResponse : IResponseObject {
         /// <summary>
         /// Indicates the response contains a organization object.
         /// </summary>
-        public string Resource { get; set; }
+        public required string Resource { get; init; }
 
         /// <summary>
         ///     The organization's identifier, for example org_1234567.
         /// </summary>
-        public string Id { get; set; }
+        public required string Id { get; init; }
 
         /// <summary>
         /// The organization's official name.
         /// </summary>
-        public string Name { get; set; }
+        public required string Name { get; init; }
         
         /// <summary>
         /// The organization's email.
         /// </summary>
-        public string Email { get; set; }
+        public required string Email { get; init; }
 
         /// <summary>
         /// The preferred locale of the merchant which has been set in Mollie Dashboard.
         /// </summary>
-        public string Locale { get; set; }
+        public required string Locale { get; init; }
 
         /// <summary>
         /// The address of the organization.
         /// </summary>
-        public AddressObject Address { get; set; }
+        public required AddressObject Address { get; init; }
 
         /// <summary>
         /// The registration number of the organization at the (local) chamber of commerce.
         /// </summary>
-        public string RegistrationNumber { get; set; }
+        public required string RegistrationNumber { get; init; }
 
         /// <summary>
         /// The VAT number of the organization, if based in the European Union. The VAT number has been checked with the VIES by Mollie.
         /// </summary>
-        public string VatNumber { get; set; }
+        public required string VatNumber { get; init; }
 
         /// <summary>
         /// The organization’s VAT regulation, if based in the European Union. Either shifted (VAT is shifted) or dutch (Dutch VAT rate).
         /// </summary>
-        public string VatRegulation { get; set; }
+        public required string VatRegulation { get; init; }
 
         /// <summary>
         /// An object with several URL objects relevant to the organization. Every URL object will contain an href and a type field.
         /// </summary>
         [JsonProperty("_links")]
-        public OrganizationResponseLinks Links { get; set; }
+        public required OrganizationResponseLinks Links { get; init; }
     }
 }

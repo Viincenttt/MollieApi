@@ -5,11 +5,11 @@ namespace Mollie.Api.Models.Balance.Response {
         /// <summary>
         /// The API resource URL of the balance itself.
         /// </summary>
-        public UrlObjectLink<BalanceResponse> Self { get; set; }
+        public required UrlObjectLink<BalanceResponse> Self { get; init; }
         
         /// <summary>
         /// The URL to the order retrieval endpoint documentation.
         /// </summary>
-        public UrlLink Documentation { get; set; }
+        public required UrlLink Documentation { get; init; }
     }
 }

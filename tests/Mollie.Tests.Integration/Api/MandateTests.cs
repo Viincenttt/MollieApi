@@ -7,6 +7,7 @@ using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models.Customer;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Mandate;
+using Mollie.Api.Models.Payment;
 using Mollie.Tests.Integration.Framework;
 
 namespace Mollie.Tests.Integration.Api; 
@@ -58,9 +59,10 @@ public class MandateTests : BaseMollieApiTestClass, IDisposable {
         ListResponse<CustomerResponse> customers = await this._customerClient.GetCustomerListAsync();
         if (customers.Count > 0) {
             // If: We create a new mandate request
-            SepaDirectDebitMandateRequest mandateRequest = new SepaDirectDebitMandateRequest() {
+            SepaDirectDebitMandateRequest mandateRequest = new SepaDirectDebitMandateRequest {
                 ConsumerAccount = "NL26ABNA0516682814",
-                ConsumerName = "John Doe"
+                ConsumerName = "John Doe",
+                Method = PaymentMethod.DirectDebit
             };
 
             // When: We send the mandate request

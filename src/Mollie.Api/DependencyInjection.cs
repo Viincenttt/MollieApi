@@ -70,7 +70,7 @@ namespace Mollie.Api {
         static void RegisterMollieApiClient<TInterface, TImplementation>(
             IServiceCollection services,
             Func<HttpClient, TImplementation> factory,
-            IAsyncPolicy<HttpResponseMessage> retryPolicy = null) 
+            IAsyncPolicy<HttpResponseMessage>? retryPolicy = null) 
             where TInterface : class
             where TImplementation : class, TInterface {
             

@@ -1,6 +1,6 @@
 namespace Mollie.Api.Models.Payment.Request
 {
-    public class Przelewy24PaymentRequest : PaymentRequest
+    public record Przelewy24PaymentRequest : PaymentRequest
     {
         public Przelewy24PaymentRequest()
         {
@@ -8,8 +8,8 @@ namespace Mollie.Api.Models.Payment.Request
         }
 
         /// <summary>
-        /// Consumer’s email address, this is required for Przelewy24 payments.
+        /// Consumerï¿½s email address, this is required for Przelewy24 payments.
         /// </summary>
-        public string BillingEmail { get; set; }
+        public string? BillingEmail { get; set; }
     }
 }

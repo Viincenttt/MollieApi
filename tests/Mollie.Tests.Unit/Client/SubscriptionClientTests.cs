@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Mollie.Api.Client;
+using Mollie.Api.Models;
 using Mollie.Api.Models.Subscription;
 using RichardSzalay.MockHttp;
 using Xunit;
@@ -182,9 +183,18 @@ namespace Mollie.Tests.Unit.Client {
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             SubscriptionClient subscriptionClient = new SubscriptionClient("api-key", httpClient);
+            SubscriptionRequest subscriptionRequest = new SubscriptionRequest {
+                Amount = new Amount(Currency.EUR, "100.00"),
+                Times = 5,
+                Interval = "1 month",
+                Description = $"Subscription {Guid.NewGuid()}", // Subscriptions must have a unique name
+                WebhookUrl = "http://www.google.nl",
+                StartDate = DateTime.Now.AddDays(1),
+            };
 
             // When: We send the request
-            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await subscriptionClient.CreateSubscriptionAsync(customerId, new SubscriptionRequest()));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => 
+                await subscriptionClient.CreateSubscriptionAsync(customerId, subscriptionRequest));
 
             // Then
             exception.Message.Should().Be("Required URL argument 'customerId' is null or empty");

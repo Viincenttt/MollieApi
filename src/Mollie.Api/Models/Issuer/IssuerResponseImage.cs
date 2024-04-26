@@ -2,13 +2,13 @@
 	/// <summary>
 	/// URLs of images representing the issuer.
 	/// </summary>
-	public class IssuerResponseImage {
-		public string Size1x { get; set; }
-		public string Size2x { get; set; }
-		public string Svg { get; set; }
+	public record IssuerResponseImage {
+		public required string Size1x { get; init; }
+		public required string Size2x { get; init; }
+		public required string Svg { get; init; }
 
 		public override string ToString() {
-			return this.Size1x;
+			return Size1x;
 		}
 	}
 }

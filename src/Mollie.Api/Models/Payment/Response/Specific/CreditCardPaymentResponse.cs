@@ -1,73 +1,73 @@
 ﻿namespace Mollie.Api.Models.Payment.Response {
-    public class CreditCardPaymentResponse : PaymentResponse {
+    public record CreditCardPaymentResponse : PaymentResponse {
         /// <summary>
         /// An object with credit card details.
         /// </summary>
-        public CreditCardPaymentResponseDetails Details { get; set; }
+        public required CreditCardPaymentResponseDetails Details { get; init; }
     }
 
-    public class CreditCardPaymentResponseDetails {
+    public record CreditCardPaymentResponseDetails {
         /// <summary>
         /// The card holder's name.
         /// </summary>
-        public string CardHolder { get; set; }
+        public string? CardHolder { get; set; }
 
         /// <summary>
         /// The last four digits of the card number.
         /// </summary>
-        public string CardNumber { get; set; }
+        public string? CardNumber { get; set; }
 
         /// <summary>
         /// Only available if the payment has been completed - Unique alphanumeric representation of card, usable for identifying 
         /// returning customers.
         /// </summary>
-        public string CardFingerprint { get; set; }
+        public string? CardFingerprint { get; set; }
 
         /// <summary>
         /// Not always available. – The card's target audience. See the Mollie.Api.Models.Payment.Response.CreditCardAudience 
         /// class for a full list of known values
         /// </summary>
-        public string CardAudience { get; set; }
+        public string? CardAudience { get; set; }
 
         /// <summary>
         /// The card's label. Note that not all labels can be acquired through Mollie. See the
         /// Mollie.Api.Models.Payment.Response.CreditCardLabel class for a full list of known values
         /// </summary>
-        public string CardLabel { get; set; }
+        public string? CardLabel { get; set; }
 
         /// <summary>
         /// The ISO 3166-1 alpha-2 country code of the country the card was issued in. For example: BE.
         /// </summary>
-        public string CardCountryCode { get; set; }
+        public string? CardCountryCode { get; set; }
 
         /// <summary>
         /// Only available if the payment succeeded. – The payment's security type. See the 
         /// Mollie.Api.Models.Payment.Response.CreditCardSecurity class for a full list of known values
         /// </summary>
-        public string CardSecurity { get; set; }
+        public string? CardSecurity { get; set; }
 
         /// <summary>
         /// Only available if the payment succeeded. – The fee region for the payment. See your credit card addendum for
         /// details. intra-eu for consumer cards from the EU, and other for all other cards. See the 
         /// Mollie.Api.Models.Payment.Response.CreditCardFeeRegion class for a full list of known values
         /// </summary>
-        public string FeeRegion { get; set; }
+        public string? FeeRegion { get; set; }
 
         /// <summary>
         /// Only available for failed payments. Contains a failure reason code. See the 
         /// Mollie.Api.Models.Payment.Response.CreditCardFailureReason class for a full list of known values
         /// </summary>
-        public string FailureReason { get; set; }
+        public string? FailureReason { get; set; }
 
         /// <summary>
         /// A localized message that can be shown to your customer, depending on the failureReason
         /// </summary>
-        public string FailureMessage { get; set; }
+        public string? FailureMessage { get; set; }
 
         /// <summary>
         /// The wallet used when creating the payment.
         /// </summary>
-        public string Wallet { get; set; }
+        public string? Wallet { get; set; }
     }
 
     /// <summary>

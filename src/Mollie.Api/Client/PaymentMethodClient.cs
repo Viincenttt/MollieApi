@@ -13,17 +13,17 @@ namespace Mollie.Api.Client
 {
     public class PaymentMethodClient : BaseMollieClient, IPaymentMethodClient
     {
-        public PaymentMethodClient(string apiKey, HttpClient httpClient = null) : base(apiKey, httpClient) {
+        public PaymentMethodClient(string apiKey, HttpClient? httpClient = null) : base(apiKey, httpClient) {
         }
 
         public async Task<PaymentMethodResponse> GetPaymentMethodAsync(
             string paymentMethod, 
             bool includeIssuers = false, 
-            string locale = null, 
+            string? locale = null, 
             bool includePricing = false, 
-            string profileId = null, 
+            string? profileId = null, 
             bool testmode = false, 
-            string currency = null) {
+            string? currency = null) {
             
             this.ValidateRequiredUrlParameter(nameof(paymentMethod), paymentMethod);
             
@@ -39,11 +39,11 @@ namespace Mollie.Api.Client
         }
 
         public async Task<ListResponse<PaymentMethodResponse>> GetAllPaymentMethodListAsync(
-            string locale = null, 
-            Amount amount = null, 
+            string? locale = null, 
+            Amount? amount = null, 
             bool includeIssuers = false, 
             bool includePricing = false, 
-            string profileId = null) {
+            string? profileId = null) {
             
             Dictionary<string, string> queryParameters = this.BuildQueryParameters(
                locale: locale,
@@ -56,16 +56,16 @@ namespace Mollie.Api.Client
         }
 
         public async Task<ListResponse<PaymentMethodResponse>> GetPaymentMethodListAsync(
-            string sequenceType = null,
-            string locale = null, 
-            Amount amount = null, 
+            string? sequenceType = null,
+            string? locale = null, 
+            Amount? amount = null, 
             bool includeIssuers = false, 
             bool includePricing = false, 
-            string profileId = null, 
+            string? profileId = null, 
             bool testmode = false, 
             Resource? resource = null, 
-            string billingCountry = null,
-            string includeWallets = null) {
+            string? billingCountry = null,
+            string? includeWallets = null) {
             
             Dictionary<string, string> queryParameters = this.BuildQueryParameters(
                sequenceType: sequenceType,
@@ -87,17 +87,17 @@ namespace Mollie.Api.Client
         }
 
         private Dictionary<string, string> BuildQueryParameters(
-            string sequenceType = null, 
-            string locale = null, 
-            Amount amount = null, 
+            string? sequenceType = null, 
+            string? locale = null, 
+            Amount? amount = null, 
             bool includeIssuers = false, 
             bool includePricing = false, 
-            string profileId = null, 
+            string? profileId = null, 
             bool testmode = false, 
             Resource? resource = null, 
-            string currency = null, 
-            string billingCountry = null,
-            string includeWallets = null) {
+            string? currency = null, 
+            string? billingCountry = null,
+            string? includeWallets = null) {
             
             var result = new Dictionary<string, string>();
             result.AddValueIfTrue(nameof(testmode), testmode);

@@ -1,22 +1,22 @@
 ﻿using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Permission {
-    public class PermissionResponse : IResponseObject {
+    public record PermissionResponse : IResponseObject {
         /// <summary>
         /// Indicates the response contains a permission object.
         /// Possible values: permission
         /// </summary>
-        public string Resource { get; set; }
+        public required string Resource { get; init; }
 
         /// <summary>
         /// The permission's identifier. See OAuth: Permissions for more details about the available permissions.
         /// </summary>
-        public string Id { get; set; }
+        public required string Id { get; init; }
 
         /// <summary>
         /// A short description of what the permission allows.
         /// </summary>
-        public string Description { get; set; }
+        public required string Description { get; init; }
 
         /// <summary>
         /// Whether this permission is granted to the app by the organization or not.
@@ -27,6 +27,6 @@ namespace Mollie.Api.Models.Permission {
         /// An object with several URL objects relevant to the permission. Every URL object will contain an href and a type field.
         /// </summary>
         [JsonProperty("_links")]
-        public PermissionResponseLinks Links { get; set; }
+        public required PermissionResponseLinks Links { get; init; }
     }
 }

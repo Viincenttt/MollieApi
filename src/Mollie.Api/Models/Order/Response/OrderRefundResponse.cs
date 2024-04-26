@@ -2,16 +2,16 @@
 using Mollie.Api.Models.Refund;
 
 namespace Mollie.Api.Models.Order {
-    public class OrderRefundResponse : RefundResponse {
+    public record OrderRefundResponse : RefundResponse {
         /// <summary>
         /// The unique identifier of the order this refund was created for. For example: ord_stTC2WHAuS.
         /// </summary>
-        public string OrderId { get; set; }
+        public required string OrderId { get; init; }
 
         /// <summary>
         /// An array of order line objects as described in Get order. Only available if the refund was created via the
         /// Create Order Refund API.
         /// </summary>
-        public IEnumerable<OrderLineResponse> Lines { get; set; }
+        public required IEnumerable<OrderLineResponse> Lines { get; init; }
     }
 }

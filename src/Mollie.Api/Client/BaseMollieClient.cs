@@ -19,26 +19,27 @@ namespace Mollie.Api.Client {
         private readonly HttpClient _httpClient;
         private readonly JsonConverterService _jsonConverterService;
         
-        private readonly AsyncLocalVariable<string> _idempotencyKey = new AsyncLocalVariable<string>(null);
+        private readonly AsyncLocalVariable<string> _idempotencyKey = new (null);
 
-        private readonly bool _createdHttpClient = false;
+        private readonly bool _createdHttpClient = default;
 
-        protected BaseMollieClient(string apiKey, HttpClient httpClient = null) {
+        protected BaseMollieClient(string apiKey, HttpClient? httpClient = null) {
             if (string.IsNullOrWhiteSpace(apiKey)) {
                 throw new ArgumentNullException(nameof(apiKey), "Mollie API key cannot be empty");
             }
 
-            this._jsonConverterService = new JsonConverterService();
-            this._createdHttpClient = httpClient == null;
-            this._httpClient = httpClient ?? new HttpClient();
-            this._apiKey = apiKey;
+            _jsonConverterService = new JsonConverterService();
+            _createdHttpClient = httpClient == null;
+            _httpClient = httpClient ?? new HttpClient();
+            _apiKey = apiKey;
         }
 
-        protected BaseMollieClient(HttpClient httpClient = null, string apiEndpoint = ApiEndPoint) {
-            this._apiEndpoint = apiEndpoint;
-            this._jsonConverterService = new JsonConverterService();
-            this._createdHttpClient = httpClient == null;
-            this._httpClient = httpClient ?? new HttpClient();
+        protected BaseMollieClient(HttpClient? httpClient = null, string apiEndpoint = ApiEndPoint) {
+            _apiEndpoint = apiEndpoint;
+            _jsonConverterService = new JsonConverterService();
+            _createdHttpClient = httpClient == null;
+            _httpClient = httpClient ?? new HttpClient();
+            _apiKey = string.Empty;
         }
         
         public IDisposable WithIdempotencyKey(string value) {
@@ -46,49 +47,49 @@ namespace Mollie.Api.Client {
             return _idempotencyKey;
         }
 
-        private async Task<T> SendHttpRequest<T>(HttpMethod httpMethod, string relativeUri, object data = null) {
+        private async Task<T> SendHttpRequest<T>(HttpMethod httpMethod, string relativeUri, object? data = null) {
             HttpRequestMessage httpRequest = this.CreateHttpRequest(httpMethod, relativeUri);
             if (data != null) {
-                var jsonData = this._jsonConverterService.Serialize(data);
+                var jsonData = _jsonConverterService.Serialize(data);
                 var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
                 httpRequest.Content = content;
             }
 
-            var response = await this._httpClient.SendAsync(httpRequest).ConfigureAwait(false);
-            return await this.ProcessHttpResponseMessage<T>(response).ConfigureAwait(false);
+            var response = await _httpClient.SendAsync(httpRequest).ConfigureAwait(false);
+            return await ProcessHttpResponseMessage<T>(response).ConfigureAwait(false);
         }
 
-        protected async Task<T> GetListAsync<T>(string relativeUri, string from, int? limit, IDictionary<string, string> otherParameters = null) {
+        protected async Task<T> GetListAsync<T>(string relativeUri, string? from, int? limit, IDictionary<string, string>? otherParameters = null) {
             string url = relativeUri + this.BuildListQueryString(from, limit, otherParameters);
-            return await this.SendHttpRequest<T>(HttpMethod.Get, url).ConfigureAwait(false);
+            return await SendHttpRequest<T>(HttpMethod.Get, url).ConfigureAwait(false);
         }
 
         protected async Task<T> GetAsync<T>(string relativeUri) {
-            return await this.SendHttpRequest<T>(HttpMethod.Get, relativeUri).ConfigureAwait(false);
+            return await SendHttpRequest<T>(HttpMethod.Get, relativeUri).ConfigureAwait(false);
         }
 
         protected async Task<T> GetAsync<T>(UrlObjectLink<T> urlObject) {
-            this.ValidateUrlLink(urlObject);
-            return await this.GetAsync<T>(urlObject.Href).ConfigureAwait(false); ;
+            ValidateUrlLink(urlObject);
+            return await GetAsync<T>(urlObject.Href).ConfigureAwait(false);
         }
 
-        protected async Task<T> PostAsync<T>(string relativeUri, object data) {
-            return await this.SendHttpRequest<T>(HttpMethod.Post, relativeUri, data).ConfigureAwait(false); ;
+        protected async Task<T> PostAsync<T>(string relativeUri, object? data) {
+            return await SendHttpRequest<T>(HttpMethod.Post, relativeUri, data).ConfigureAwait(false);
         }
 
-        protected async Task<T> PatchAsync<T>(string relativeUri, object data) {
-            return await this.SendHttpRequest<T>(new HttpMethod("PATCH"), relativeUri, data).ConfigureAwait(false); ;
+        protected async Task<T> PatchAsync<T>(string relativeUri, object? data) {
+            return await SendHttpRequest<T>(new HttpMethod("PATCH"), relativeUri, data).ConfigureAwait(false);
         }
 
-        protected async Task DeleteAsync(string relativeUri, object data = null) {
-            await this.SendHttpRequest<object>(HttpMethod.Delete, relativeUri, data).ConfigureAwait(false); ;
+        protected async Task DeleteAsync(string relativeUri, object? data = null) {
+            await SendHttpRequest<object>(HttpMethod.Delete, relativeUri, data).ConfigureAwait(false);
         }
 
         private async Task<T> ProcessHttpResponseMessage<T>(HttpResponseMessage response) {
             var resultContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode) {
-                return this._jsonConverterService.Deserialize<T>(resultContent);
+                return _jsonConverterService.Deserialize<T>(resultContent)!;
             }
 
             switch (response.StatusCode) {
@@ -108,7 +109,7 @@ namespace Mollie.Api.Client {
         }
 
         protected void ValidateApiKeyIsOauthAccesstoken(bool isConstructor = false) {
-            if (!this._apiKey.StartsWith("access_")) {
+            if (!_apiKey.StartsWith("access_")) {
                 if (isConstructor) {
                     throw new InvalidOperationException(
                         "The provided token isn't an oauth token. You have invoked the method with oauth parameters thus an oauth accesstoken is required.");
@@ -120,20 +121,20 @@ namespace Mollie.Api.Client {
 
         private void ValidateUrlLink(UrlLink urlObject) {
             // Make sure the URL is not empty
-            if (String.IsNullOrEmpty(urlObject?.Href)) {
+            if (String.IsNullOrEmpty(urlObject.Href)) {
                 throw new ArgumentException($"Url object is null or href is empty: {urlObject}");
             }
 
             // Don't execute any requests that don't point to the Mollie API URL for security reasons
-            if (!urlObject.Href.Contains(this._apiEndpoint)) {
+            if (!urlObject.Href.Contains(_apiEndpoint)) {
                 throw new ArgumentException($"Url does not point to the Mollie API: {urlObject.Href}");
             }
         }
 
-        protected virtual HttpRequestMessage CreateHttpRequest(HttpMethod method, string relativeUri, HttpContent content = null) {
-            HttpRequestMessage httpRequest = new HttpRequestMessage(method, new Uri(new Uri(this._apiEndpoint), relativeUri));
+        protected virtual HttpRequestMessage CreateHttpRequest(HttpMethod method, string relativeUri, HttpContent? content = null) {
+            HttpRequestMessage httpRequest = new HttpRequestMessage(method, new Uri(new Uri(_apiEndpoint), relativeUri));
             httpRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", this._apiKey);
+            httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _apiKey);
             httpRequest.Headers.Add("User-Agent", this.GetUserAgent());
             var idemPotencyKey = _idempotencyKey.Value ?? Guid.NewGuid().ToString();
             httpRequest.Headers.Add("Idempotency-Key", idemPotencyKey);
@@ -142,7 +143,7 @@ namespace Mollie.Api.Client {
             return httpRequest;
         }
 
-        private string BuildListQueryString(string from, int? limit, IDictionary<string, string> otherParameters = null) {
+        private string BuildListQueryString(string? from, int? limit, IDictionary<string, string>? otherParameters = null) {
             Dictionary<string, string> queryParameters = new Dictionary<string, string>();
             queryParameters.AddValueIfNotNullOrEmpty(nameof(from), from);
             queryParameters.AddValueIfNotNullOrEmpty(nameof(limit), Convert.ToString(limit));
@@ -168,9 +169,8 @@ namespace Mollie.Api.Client {
             }
         }
 
-        public void Dispose()
-        {
-            if (this._createdHttpClient) {
+        public void Dispose() {
+            if (_createdHttpClient) {
                 _httpClient.Dispose();
             }
         }

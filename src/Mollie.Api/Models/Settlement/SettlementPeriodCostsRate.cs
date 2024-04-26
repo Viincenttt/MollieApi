@@ -1,14 +1,14 @@
 ﻿namespace Mollie.Api.Models.Settlement
 {
-	public class SettlementPeriodCostsRate {
+	public record SettlementPeriodCostsRate {
         /// <summary>
         /// An amount object describing the fixed costs.
         /// </summary>
-		public Amount Fixed { get; set; }
+		public required Amount Fixed { get; init; }
 
         /// <summary>
         /// A string describing the variable costs as a percentage.
         /// </summary>
-		public string Percentage { get; set; }
+		public required string Percentage { get; init; }
 	}
 }

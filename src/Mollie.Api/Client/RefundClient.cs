@@ -9,7 +9,7 @@ using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client {
     public class RefundClient : BaseMollieClient, IRefundClient {
-        public RefundClient(string apiKey, HttpClient httpClient = null) : base(apiKey, httpClient) {
+        public RefundClient(string apiKey, HttpClient? httpClient = null) : base(apiKey, httpClient) {
         }
 
         public async Task<RefundResponse> CreateRefundAsync(string paymentId, RefundRequest refundRequest) {
@@ -23,13 +23,13 @@ namespace Mollie.Api.Client {
             return await this.PostAsync<RefundResponse>($"payments/{paymentId}/refunds", refundRequest).ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<RefundResponse>> GetRefundListAsync(string from = null, int? limit = null, bool testmode = false) {
+        public async Task<ListResponse<RefundResponse>> GetRefundListAsync(string? from = null, int? limit = null, bool testmode = false) {
             var queryParameters = this.BuildQueryParameters(testmode: testmode);
             
             return await this.GetListAsync<ListResponse<RefundResponse>>($"refunds", from, limit, queryParameters).ConfigureAwait(false);
         }
         
-        public async Task<ListResponse<RefundResponse>> GetRefundListAsync(string paymentId, string from = null, int? limit = null, bool testmode = false) {
+        public async Task<ListResponse<RefundResponse>> GetRefundListAsync(string paymentId, string? from = null, int? limit = null, bool testmode = false) {
             this.ValidateRequiredUrlParameter(nameof(paymentId), paymentId);
             var queryParameters = this.BuildQueryParameters(testmode: testmode);
 

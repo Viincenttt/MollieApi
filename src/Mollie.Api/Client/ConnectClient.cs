@@ -10,12 +10,13 @@ using Mollie.Api.Models.Connect;
 
 namespace Mollie.Api.Client {
     public class ConnectClient : BaseMollieClient, IConnectClient {
-        public const string AuthorizeEndPoint = "https://www.mollie.com/oauth2/authorize";
-        public const string TokenEndPoint = "https://api.mollie.nl/oauth2/";
+        private const string AuthorizeEndPoint = "https://www.mollie.com/oauth2/authorize";
+        private const string TokenEndPoint = "https://api.mollie.nl/oauth2/";
+        
         private readonly string _clientId;
         private readonly string _clientSecret;
 
-        public ConnectClient(string clientId, string clientSecret, HttpClient httpClient = null): base(httpClient, ConnectClient.TokenEndPoint) {
+        public ConnectClient(string clientId, string clientSecret, HttpClient? httpClient = null): base(httpClient, ConnectClient.TokenEndPoint) {
             if (string.IsNullOrWhiteSpace(clientId)) {
                 throw new ArgumentNullException(nameof(clientId));
             }
@@ -31,10 +32,10 @@ namespace Mollie.Api.Client {
         public string GetAuthorizationUrl(
             string state, 
             List<string> scopes, 
-            string redirectUri = null, 
+            string? redirectUri = null, 
             bool forceApprovalPrompt = false, 
-            string locale = null, 
-            string landingPage = null) {
+            string? locale = null, 
+            string? landingPage = null) {
             
             var parameters = new Dictionary<string, string> {
                 {"client_id", this._clientId},
@@ -58,7 +59,7 @@ namespace Mollie.Api.Client {
             await this.DeleteAsync("tokens", request).ConfigureAwait(false);
         }
 
-        protected override HttpRequestMessage CreateHttpRequest(HttpMethod method, string relativeUri, HttpContent content = null) {
+        protected override HttpRequestMessage CreateHttpRequest(HttpMethod method, string relativeUri, HttpContent? content = null) {
             HttpRequestMessage httpRequest = new HttpRequestMessage(method, new Uri(new Uri(ConnectClient.TokenEndPoint), relativeUri));
             httpRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Basic", this.Base64Encode($"{this._clientId}:{this._clientSecret}"));

@@ -1,12 +1,12 @@
 namespace Mollie.Api.Models.Payment.Response {
-    public class PaySafeCardPaymentResponse : PaymentResponse {
-        public PaySafeCardPaymentResponseDetails Details { get; set; }
+    public record PaySafeCardPaymentResponse : PaymentResponse {
+        public required PaySafeCardPaymentResponseDetails Details { get; init; }
     }
 
-    public class PaySafeCardPaymentResponseDetails {
+    public record PaySafeCardPaymentResponseDetails {
         /// <summary>
         /// The consumer identification supplied when the payment was created.
         /// </summary>
-        public string CustomerReference { get; set; }
+        public string? CustomerReference { get; set; }
     }
 }

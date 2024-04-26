@@ -9,7 +9,7 @@ namespace Mollie.Api.Client.Abstract {
         Task<InvoiceResponse> GetInvoiceAsync(string invoiceId);
         Task<InvoiceResponse> GetInvoiceAsync(UrlObjectLink<InvoiceResponse> url);
         Task<ListResponse<InvoiceResponse>> GetInvoiceListAsync(
-            string reference = null, int? year = null, string from = null, int? limit = null);
+            string? reference = null, int? year = null, string? from = null, int? limit = null);
         Task<ListResponse<InvoiceResponse>> GetInvoiceListAsync(UrlObjectLink<ListResponse<InvoiceResponse>> url);
     }
 }

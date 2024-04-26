@@ -61,7 +61,8 @@ else {
         }
         else {
             subscriptions = await SubscriptionClient.GetSubscriptionListAsync(new UrlObjectLink<ListResponse<SubscriptionResponse>>() {
-                Href = Url
+                Href = Url,
+                Type = "application/json"
             });
         }
     }

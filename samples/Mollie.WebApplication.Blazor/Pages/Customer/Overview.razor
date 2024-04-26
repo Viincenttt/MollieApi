@@ -63,7 +63,8 @@ else {
         }
         else {
             _customers = await CustomerClient.GetCustomerListAsync(new UrlObjectLink<ListResponse<CustomerResponse>>() {
-                Href = Url
+                Href = Url,
+                Type = "application/json"
             });
         }
     }

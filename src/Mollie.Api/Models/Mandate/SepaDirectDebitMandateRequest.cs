@@ -1,20 +1,22 @@
-﻿namespace Mollie.Api.Models.Mandate
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Mollie.Api.Models.Mandate
 {
-    public class SepaDirectDebitMandateRequest : MandateRequest
+    public record SepaDirectDebitMandateRequest : MandateRequest
     {
         public SepaDirectDebitMandateRequest() {
-            this.Method = Payment.PaymentMethod.DirectDebit;
+            Method = Payment.PaymentMethod.DirectDebit;
         }
 
         /// <summary>
         /// Required for `directdebit` mandates - Consumer's IBAN account
         /// </summary>
-        public string ConsumerAccount { get; set; }
+        public required string ConsumerAccount { get; init; }
 
         /// <summary>
         /// Optional - The consumer's bank's BIC / SWIFT code.
         /// </summary>
-        public string ConsumerBic { get; set; }
+        public string? ConsumerBic { get; set; }
 
     }
 }

@@ -6,34 +6,34 @@ using Mollie.Api.Models.Order.Request.PaymentSpecificParameters;
 using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Order {
-    public class OrderRequest {
+    public record OrderRequest {
         /// <summary>
         /// The total amount of the order, including VAT and discounts. This is the amount that will be charged
         /// to your customer.
         /// </summary>
-        public Amount Amount { get; set; }
+        public required Amount Amount { get; init; }
 
         /// <summary>
         /// The order number. For example, 16738. We recommend that each order should have a unique order number.
         /// </summary>
-        public string OrderNumber { get; set; }
+        public required string OrderNumber { get; init; }
 
         /// <summary>
         /// The lines in the order. Each line contains details such as a description of the item ordered, its
         /// price et cetera. 
         /// </summary>
-        public IEnumerable<OrderLineRequest> Lines { get; set; }
+        public required IEnumerable<OrderLineRequest> Lines { get; init; }
 
         /// <summary>
         /// The billing person and address for the order.
         /// </summary>
-        public OrderAddressDetails BillingAddress { get; set; }
+        public OrderAddressDetails? BillingAddress { get; set; }
 
         /// <summary>
         /// The shipping address for the order. See Order address details for the exact fields needed. If omitted,
         /// it is assumed to be identical to the billingAddress.
         /// </summary>
-        public OrderAddressDetails ShippingAddress { get; set; }
+        public OrderAddressDetails? ShippingAddress { get; set; }
 
         /// <summary>
         /// The date of birth of your customer. Some payment methods need this value and if you have it, you should
@@ -44,7 +44,7 @@ namespace Mollie.Api.Models.Order {
         /// <summary>
         /// The URL your customer will be redirected to after the payment process.
         /// </summary>
-        public string RedirectUrl { get; set; }
+        public string? RedirectUrl { get; set; }
 
         /// <summary>
         /// The URL your consumer will be redirected to when the consumer explicitly cancels the payment. If this URL
@@ -56,17 +56,17 @@ namespace Mollie.Api.Models.Order {
         /// 
         /// The parameter can be omitted for orders with payment.sequenceType set to recurring.
         /// </summary>
-        public string CancelUrl { get; set; }
+        public string? CancelUrl { get; set; }
         
         /// <summary>
         /// Set the webhook URL, where we will send order status changes to.
         /// </summary>
-        public string WebhookUrl { get; set; }
+        public string? WebhookUrl { get; set; }
 
         /// <summary>
         /// Allows you to preset the language to be used in the hosted payment pages shown to the consumer. 
         /// </summary>
-        public string Locale { get; set; }
+        public required string Locale { get; init; }
 
         /// <summary>
         /// Normally, a payment method selection screen is shown. However, when using this parameter, your customer
@@ -75,17 +75,15 @@ namespace Mollie.Api.Models.Order {
         /// Mollie.Api.Models.Payment.PaymentMethod class for a full list of known values.
         /// </summary>
         [JsonIgnore]
-        public string Method {
-            get {
-                return this.Methods.FirstOrDefault();
-            }
+        public string? Method { 
+            get => Methods?.FirstOrDefault();
             set {
                 if (value == null) {
-                    this.Methods = null;
+                    Methods = null;
                 }
                 else {
-                    this.Methods = new List<string>();
-                    this.Methods.Add(value);
+                    Methods = new List<string>();
+                    Methods.Add(value);
                 }
             }
         }
@@ -99,25 +97,25 @@ namespace Mollie.Api.Models.Order {
         /// from a specific country to your customer.
         /// </summary>
         [JsonProperty("method")]
-        public IList<string> Methods { get; set; }
+        public IList<string>? Methods { get; set; }
 
         /// <summary>
         /// Optional - Any payment specific properties can be passed here.
         /// </summary>
-        public PaymentSpecificParameters Payment { get; set; }
+        public PaymentSpecificParameters? Payment { get; set; }
 
         /// <summary>
         /// Provide any data you like, and we will save the data alongside the subscription. Whenever you fetch the subscription
         /// with our API, we’ll also include the metadata. You can use up to 1kB of JSON.
         /// </summary>
         [JsonConverter(typeof(RawJsonConverter))]
-        public string Metadata { get; set; }
+        public string? Metadata { get; set; }
 
         /// <summary>
         /// The date the order should expire in YYYY-MM-DD format. The minimum date is tomorrow and the maximum date is 100 days 
         /// after tomorrow.
         /// </summary>
-        public string ExpiresAt { get; set; }
+        public string? ExpiresAt { get; set; }
 
         /// <summary>
         /// For digital goods, you must make sure to apply the VAT rate from your customer’s country in most jurisdictions. Use 
@@ -129,19 +127,19 @@ namespace Mollie.Api.Models.Order {
         /// Adding an application fee allows you to charge the merchant for the payment and transfer this to your own account.
         /// </summary>
         [JsonProperty("payment.applicationFee")]
-        public ApplicationFee ApplicationFee { get; set; }
+        public ApplicationFee? ApplicationFee { get; set; }
         
         /// <summary>
         ///	Oauth only - The payment profile's unique identifier, for example pfl_3RkSN1zuPE.
         /// </summary>
-        public string ProfileId { get; set; }
+        public string? ProfileId { get; set; }
 
         /// <summary>
         ///	Oauth only - Optional – Set this to true to make this payment a test payment.
         /// </summary>
         public bool? Testmode { get; set; }
 
-        public void SetMetadata(object metadataObj, JsonSerializerSettings jsonSerializerSettings = null) {
+        public void SetMetadata(object metadataObj, JsonSerializerSettings? jsonSerializerSettings = null) {
             this.Metadata = JsonConvert.SerializeObject(metadataObj, jsonSerializerSettings);
         }
     }

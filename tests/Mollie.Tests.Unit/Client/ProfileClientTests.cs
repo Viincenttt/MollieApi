@@ -171,9 +171,17 @@ public class ProfileClientTests : BaseClientTests
         var mockHttp = new MockHttpMessageHandler();
         HttpClient httpClient = mockHttp.ToHttpClient();
         using var profileClient = new ProfileClient("abcde", httpClient);
+        ProfileRequest profileRequest = new ProfileRequest() {
+            Name = "My website name",
+            Email = "info@mywebsite.com",
+            Mode = Mode.Test,
+            Phone = "+31208202070",
+            Website = "https://www.mywebsite.com",
+            BusinessCategory = "OTHER_MERCHANDISE"
+        };
         
         // Act
-        var exception = await Assert.ThrowsAsync<ArgumentException>(() => profileClient.UpdateProfileAsync(profileId, new ProfileRequest()));
+        var exception = await Assert.ThrowsAsync<ArgumentException>(() => profileClient.UpdateProfileAsync(profileId, profileRequest));
 
         // Assert
         exception.Message.Should().Be($"Required URL argument '{nameof(profileId)}' is null or empty");

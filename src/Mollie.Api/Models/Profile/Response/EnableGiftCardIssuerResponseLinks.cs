@@ -1,15 +1,15 @@
 ﻿using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Models.Profile.Response {
-    public class EnableGiftCardIssuerResponseLinks {
+    public record EnableGiftCardIssuerResponseLinks {
         /// <summary>
         /// The API resource URL of the gift card issuer itself.
         /// </summary>
-        public UrlLink Self { get; set; }
+        public required UrlLink Self { get; init; }
 
         /// <summary>
         /// The URL to the gift card issuer retrieval endpoint documentation.
         /// </summary>
-        public UrlLink Documentation { get; set; }
+        public required UrlLink Documentation { get; init; }
     }
 }
