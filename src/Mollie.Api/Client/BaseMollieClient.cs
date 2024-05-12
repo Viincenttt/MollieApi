@@ -18,7 +18,7 @@ namespace Mollie.Api.Client {
         private readonly string _apiKey;
         private readonly HttpClient _httpClient;
         private readonly JsonConverterService _jsonConverterService;
-        
+
         private readonly AsyncLocalVariable<string> _idempotencyKey = new (null);
 
         private readonly bool _createdHttpClient = default;
@@ -41,7 +41,7 @@ namespace Mollie.Api.Client {
             _httpClient = httpClient ?? new HttpClient();
             _apiKey = string.Empty;
         }
-        
+
         public IDisposable WithIdempotencyKey(string value) {
             _idempotencyKey.Value = value;
             return _idempotencyKey;
@@ -121,7 +121,7 @@ namespace Mollie.Api.Client {
 
         private void ValidateUrlLink(UrlLink urlObject) {
             // Make sure the URL is not empty
-            if (String.IsNullOrEmpty(urlObject.Href)) {
+            if (string.IsNullOrEmpty(urlObject.Href)) {
                 throw new ArgumentException($"Url object is null or href is empty: {urlObject}");
             }
 
@@ -162,7 +162,7 @@ namespace Mollie.Api.Client {
             string versionNumber = typeof(BaseMollieClient).GetTypeInfo().Assembly.GetName().Version.ToString();
             return $"{packageName}/{versionNumber}";
         }
-        
+
         protected void ValidateRequiredUrlParameter(string parameterName, string parameterValue) {
             if (string.IsNullOrWhiteSpace(parameterValue)) {
                 throw new ArgumentException($"Required URL argument '{parameterName}' is null or empty");
