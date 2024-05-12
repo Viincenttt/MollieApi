@@ -3,6 +3,7 @@ using Mollie.Api.Models.List;
 using Mollie.Api.Models.Capture;
 using Mollie.Api.Models.Capture.Request;
 using Mollie.Api.Models.Capture.Response;
+using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client.Abstract {

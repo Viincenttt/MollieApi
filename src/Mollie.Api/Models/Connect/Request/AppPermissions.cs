@@ -1,4 +1,4 @@
-﻿namespace Mollie.Api.Models.Connect {
+﻿namespace Mollie.Api.Models.Connect.Request {
     public static class AppPermissions {
         public const string PaymentsRead = "payments.read";
         public const string PaymentsWrite = "payments.write";

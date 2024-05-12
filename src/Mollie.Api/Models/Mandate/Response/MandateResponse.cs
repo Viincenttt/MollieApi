@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace Mollie.Api.Models.Mandate {
+namespace Mollie.Api.Models.Mandate.Response {
     public record MandateResponse {
         /// <summary>
         /// Indicates the response contains a mandate object. Will always contain mandate for this endpoint.
@@ -14,7 +14,7 @@ namespace Mollie.Api.Models.Mandate {
         public required string Id { get; init; }
 
         /// <summary>
-        /// Current status of mandate - See the Mollie.Api.Models.Mandate.MandateStatus class for a full 
+        /// Current status of mandate - See the Mollie.Api.Models.Mandate.MandateStatus class for a full
         /// list of known values.
         /// </summary>
         public required string Status { get; init; }

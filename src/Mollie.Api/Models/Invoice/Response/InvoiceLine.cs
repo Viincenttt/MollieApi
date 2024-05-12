@@ -1,4 +1,4 @@
-﻿namespace Mollie.Api.Models.Invoice {
+﻿namespace Mollie.Api.Models.Invoice.Response {
 	public record InvoiceLine {
 		/// <summary>
 		/// The administrative period (YYYY) on which the line should be booked.

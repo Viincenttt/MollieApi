@@ -1,7 +1,11 @@
 ﻿using Mollie.Api.Models.Chargeback;
+using Mollie.Api.Models.Chargeback.Response;
 using Mollie.Api.Models.Customer;
+using Mollie.Api.Models.Customer.Response;
 using Mollie.Api.Models.List;
+using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Mandate;
+using Mollie.Api.Models.Mandate.Response;
 using Mollie.Api.Models.Settlement;
 using Mollie.Api.Models.Subscription;
 using Mollie.Api.Models.Url;

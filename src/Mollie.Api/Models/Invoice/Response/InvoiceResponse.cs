@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace Mollie.Api.Models.Invoice {
+namespace Mollie.Api.Models.Invoice.Response {
 	public record InvoiceResponse {
         /// <summary>
         /// Indicates the response contains an invoice object. Will always contain invoice for this endpoint.
@@ -50,8 +50,8 @@ namespace Mollie.Api.Models.Invoice {
         public required Amount NetAmount { get; init; }
 
         /// <summary>
-        /// VAT amount of the invoice. Only for merchants registered in the Netherlands. For EU merchants, VAT 
-        /// will be shifted to recipient; article 44 and 196 EU VAT Directive 2006/112. For merchants outside the 
+        /// VAT amount of the invoice. Only for merchants registered in the Netherlands. For EU merchants, VAT
+        /// will be shifted to recipient; article 44 and 196 EU VAT Directive 2006/112. For merchants outside the
         /// EU, no VAT will be charged.
         /// </summary>
         public required Amount VatAmount { get; init; }

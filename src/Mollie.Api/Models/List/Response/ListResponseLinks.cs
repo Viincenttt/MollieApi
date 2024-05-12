@@ -1,6 +1,6 @@
 ﻿using Mollie.Api.Models.Url;
 
-namespace Mollie.Api.Models.List {
+namespace Mollie.Api.Models.List.Response {
     /// <summary>
     /// Links to help navigate through the lists of objects, based on the given offset.
     /// </summary>

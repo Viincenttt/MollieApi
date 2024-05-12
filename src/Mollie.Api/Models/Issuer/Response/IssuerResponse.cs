@@ -1,4 +1,4 @@
-﻿namespace Mollie.Api.Models.Issuer {
+﻿namespace Mollie.Api.Models.Issuer.Response {
     public record IssuerResponse {
         /// <summary>
         /// Contains "issuer"

@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace Mollie.Api.Models.Chargeback {
+namespace Mollie.Api.Models.Chargeback.Response {
     public record ChargebackResponse {
 		/// <summary>
 		/// The chargeback's unique identifier, for example chb_n9z0tp.
@@ -14,7 +14,7 @@ namespace Mollie.Api.Models.Chargeback {
         public required Amount Amount { get; init; }
 
         /// <summary>
-        /// This optional field will contain the amount that will be deducted from your account, converted to the currency 
+        /// This optional field will contain the amount that will be deducted from your account, converted to the currency
         /// your account is settled in. It follows the same syntax as the amount property.
         /// </summary>
         public Amount? SettlementAmount { get; set; }
@@ -23,7 +23,7 @@ namespace Mollie.Api.Models.Chargeback {
         /// The date and time the chargeback was issued, in ISO 8601 format.
         /// </summary>
         public required DateTime CreatedAt { get; init; }
-        
+
         /// <summary>
         /// The date and time the chargeback was reversed, in ISO 8601 format.
         /// </summary>
@@ -33,7 +33,7 @@ namespace Mollie.Api.Models.Chargeback {
         /// The id of the payment this chargeback belongs to.
         /// </summary>
 		public required string PaymentId { get; init; }
-	    
+
 		/// <summary>
         /// The reason given for a Chargeback, this can help determine the cost for the chargeback
         /// </summary>

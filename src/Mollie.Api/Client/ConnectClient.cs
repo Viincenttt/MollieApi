@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
 using Mollie.Api.Models.Connect;
+using Mollie.Api.Models.Connect.Request;
+using Mollie.Api.Models.Connect.Response;
 
 namespace Mollie.Api.Client {
     public class ConnectClient : BaseMollieClient, IConnectClient {

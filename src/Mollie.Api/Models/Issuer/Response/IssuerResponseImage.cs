@@ -1,4 +1,4 @@
-﻿namespace Mollie.Api.Models.Issuer {
+﻿namespace Mollie.Api.Models.Issuer.Response {
 	/// <summary>
 	/// URLs of images representing the issuer.
 	/// </summary>

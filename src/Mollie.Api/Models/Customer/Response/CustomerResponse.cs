@@ -3,7 +3,7 @@ using Mollie.Api.JsonConverters;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace Mollie.Api.Models.Customer {
+namespace Mollie.Api.Models.Customer.Response {
     public record CustomerResponse {
         /// <summary>
         /// Indicates the response contains a customer object. Will always contain customer for this endpoint.
@@ -33,7 +33,7 @@ namespace Mollie.Api.Models.Customer {
         public string? Email { get; set; }
 
         /// <summary>
-        /// Allows you to preset the language to be used in the payment screens shown to the consumer. If this parameter was not 
+        /// Allows you to preset the language to be used in the payment screens shown to the consumer. If this parameter was not
         /// provided when the customer was created, the browser language will be used instead in the payment flow (which is usually
         /// more accurate).
         /// </summary>

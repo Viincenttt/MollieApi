@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
+using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Profile.Request;
 
 namespace Mollie.Tests.Integration.Api;

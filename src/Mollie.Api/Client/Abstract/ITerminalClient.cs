@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Mollie.Api.Models.List;
+using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Terminal;
 using Mollie.Api.Models.Url;
 

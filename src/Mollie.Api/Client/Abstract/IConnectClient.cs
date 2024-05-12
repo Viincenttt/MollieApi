@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Mollie.Api.Models.Connect;
+using Mollie.Api.Models.Connect.Request;
+using Mollie.Api.Models.Connect.Response;
 
 namespace Mollie.Api.Client.Abstract {
     public interface IConnectClient : IDisposable

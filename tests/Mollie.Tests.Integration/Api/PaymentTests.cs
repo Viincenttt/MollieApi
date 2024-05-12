@@ -18,7 +18,10 @@ using System.Linq;
 using FluentAssertions;
 using Mollie.Api.Models.Capture.Response;
 using Mollie.Api.Models.Customer;
+using Mollie.Api.Models.Customer.Response;
+using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Mandate;
+using Mollie.Api.Models.Mandate.Response;
 
 namespace Mollie.Tests.Integration.Api;
 

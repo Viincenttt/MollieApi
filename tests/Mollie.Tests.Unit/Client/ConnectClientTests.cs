@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Mollie.Api.Client;
 using Mollie.Api.Models.Connect;
+using Mollie.Api.Models.Connect.Request;
+using Mollie.Api.Models.Connect.Response;
 using RichardSzalay.MockHttp;
 using Xunit;
 

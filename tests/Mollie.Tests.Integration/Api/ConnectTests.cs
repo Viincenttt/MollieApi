@@ -4,6 +4,8 @@ using Mollie.Tests.Integration.Framework;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Mollie.Api.Models.Connect.Request;
+using Mollie.Api.Models.Connect.Response;
 
 namespace Mollie.Tests.Integration.Api;
 

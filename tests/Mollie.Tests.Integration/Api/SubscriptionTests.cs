@@ -6,8 +6,11 @@ using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Customer;
+using Mollie.Api.Models.Customer.Response;
 using Mollie.Api.Models.List;
+using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Mandate;
+using Mollie.Api.Models.Mandate.Response;
 using Mollie.Api.Models.Subscription;
 using Mollie.Tests.Integration.Framework;
 

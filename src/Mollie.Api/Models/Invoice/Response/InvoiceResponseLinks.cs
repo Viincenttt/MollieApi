@@ -1,6 +1,6 @@
 ﻿using Mollie.Api.Models.Url;
 
-namespace Mollie.Api.Models.Invoice {
+namespace Mollie.Api.Models.Invoice.Response {
 	public record InvoiceResponseLinks {
         /// <summary>
         /// The API resource URL of the invoice itself.

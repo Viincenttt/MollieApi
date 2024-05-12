@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Mollie.Api.Models.Connect {
+namespace Mollie.Api.Models.Connect.Request {
     public record RevokeTokenRequest {
         /// <summary>
         /// Type of the token you want to revoke.

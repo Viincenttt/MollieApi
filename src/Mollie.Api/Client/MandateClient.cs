@@ -5,7 +5,10 @@ using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
 using Mollie.Api.Models;
 using Mollie.Api.Models.List;
+using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Mandate;
+using Mollie.Api.Models.Mandate.Request;
+using Mollie.Api.Models.Mandate.Response;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client {

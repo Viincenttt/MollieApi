@@ -1,5 +1,7 @@
 ﻿using Mollie.Api.Models.Chargeback;
+using Mollie.Api.Models.Chargeback.Response;
 using Mollie.Api.Models.List;
+using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Payment.Response;
 using Mollie.Api.Models.PaymentMethod;
 using Mollie.Api.Models.Refund;

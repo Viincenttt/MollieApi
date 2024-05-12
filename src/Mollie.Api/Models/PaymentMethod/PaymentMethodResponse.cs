@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 using Mollie.Api.Models.Issuer;
+using Mollie.Api.Models.Issuer.Response;
 using Mollie.Api.Models.PaymentMethod.Pricing;
 
 namespace Mollie.Api.Models.PaymentMethod {

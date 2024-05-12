@@ -1,4 +1,4 @@
-﻿namespace Mollie.Api.Models.Mandate {
+﻿namespace Mollie.Api.Models.Mandate.Response {
     public static class MandateStatus {
         public const string Valid = "valid";
         public const string Invalid = "invalid";

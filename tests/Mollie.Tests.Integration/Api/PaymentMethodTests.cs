@@ -6,6 +6,7 @@ using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
 using Mollie.Api.Models.List;
+using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Payment;
 using Mollie.Api.Models.PaymentMethod;
 using Mollie.Tests.Integration.Framework;

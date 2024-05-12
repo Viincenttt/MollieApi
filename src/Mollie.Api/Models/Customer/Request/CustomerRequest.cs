@@ -1,7 +1,7 @@
 ﻿using Mollie.Api.JsonConverters;
 using Newtonsoft.Json;
 
-namespace Mollie.Api.Models.Customer {
+namespace Mollie.Api.Models.Customer.Request {
     public record CustomerRequest {
         /// <summary>
         /// The full name of the customer.

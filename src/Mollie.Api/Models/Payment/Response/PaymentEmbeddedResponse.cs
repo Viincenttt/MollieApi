@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Mollie.Api.Models.Chargeback;
+using Mollie.Api.Models.Chargeback.Response;
 using Mollie.Api.Models.Refund;
 
 namespace Mollie.Api.Models.Payment.Response {

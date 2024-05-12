@@ -8,6 +8,7 @@ using FluentAssertions;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Capture.Request;
 using Mollie.Api.Models.Capture.Response;
+using Mollie.Api.Models.List.Response;
 using RichardSzalay.MockHttp;
 using Xunit;
 

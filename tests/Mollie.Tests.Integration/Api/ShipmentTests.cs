@@ -5,6 +5,7 @@ using FluentAssertions;
 using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models.List;
+using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Shipment.Request;
 using Mollie.Api.Models.Shipment.Response;
 using Mollie.Tests.Integration.Framework;

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Mollie.Api.Client;
 using Mollie.Api.Models.Mandate;
+using Mollie.Api.Models.Mandate.Request;
 using Mollie.Api.Models.Payment;
 using RichardSzalay.MockHttp;
 using Xunit;

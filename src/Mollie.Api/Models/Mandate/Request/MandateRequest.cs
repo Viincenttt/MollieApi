@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Mollie.Api.Models.Mandate {
+namespace Mollie.Api.Models.Mandate.Request {
     public record MandateRequest {
         /// <summary>
         /// Payment method of the mandate - Possible values: `directdebit` `paypal`
@@ -21,7 +21,7 @@ namespace Mollie.Api.Models.Mandate {
         /// Optional - A custom reference
         /// </summary>
         public string? MandateReference { get; set; }
-        
+
         /// <summary>
         ///	Oauth only - Optional – Set this to true to make this mandate a test mandate.
         /// </summary>
