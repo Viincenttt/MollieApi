@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using Mollie.Api.JsonConverters;
-using Mollie.Api.Models.Order.Response;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace Mollie.Api.Models.Order {
+namespace Mollie.Api.Models.Order.Response {
     public record OrderResponse {
         /// <summary>
         /// Indicates the response contains an order object. Will always contain order for this endpoint.

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
-namespace Mollie.Api.Models.Shipment {
+
+namespace Mollie.Api.Models.Shipment.Request {
     public record ShipmentRequest {
         /// <summary>
         /// The total amount of the order, including VAT and discounts. This is the amount that will be charged

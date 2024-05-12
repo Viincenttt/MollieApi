@@ -16,6 +16,7 @@ using Mollie.Tests.Integration.Framework;
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
+using Mollie.Api.Models.Capture.Response;
 using Mollie.Api.Models.Customer;
 using Mollie.Api.Models.Mandate;
 

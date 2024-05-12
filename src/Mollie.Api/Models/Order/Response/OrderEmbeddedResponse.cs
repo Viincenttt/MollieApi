@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Mollie.Api.Models.Payment.Response;
 using Mollie.Api.Models.Refund;
-using Mollie.Api.Models.Shipment;
+using Mollie.Api.Models.Shipment.Response;
 
 namespace Mollie.Api.Models.Order.Response {
 

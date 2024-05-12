@@ -1,7 +1,7 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
-using Mollie.Api.Models.Capture;
+using Mollie.Api.Models.Capture.Response;
 using Mollie.Api.Models.Chargeback;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.Payment.Response;

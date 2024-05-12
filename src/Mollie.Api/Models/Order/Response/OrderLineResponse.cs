@@ -2,31 +2,31 @@
 using Mollie.Api.JsonConverters;
 using Newtonsoft.Json;
 
-namespace Mollie.Api.Models.Order {
+namespace Mollie.Api.Models.Order.Response {
     public record OrderLineResponse {
         /// <summary>
         /// The order line’s unique identifier, for example odl_dgtxyl.
         /// </summary>
         public required string Id { get; init; }
-        
+
         /// <summary>
         /// The ID of the order the line belongs too, for example ord_kEn1PlbGa.
         /// </summary>
         public required string OrderId { get; init; }
-        
+
         /// <summary>
-        /// The type of product bought, for example, a physical or a digital product. See the 
+        /// The type of product bought, for example, a physical or a digital product. See the
         /// Mollie.Api.Models.Order.OrderLineDetailsType class for a full list of known values.
         /// </summary>
         public string? Type { get; set; }
-        
+
         /// <summary>
         /// A description of the order line, for example LEGO 4440 Forest Police Station.
         /// </summary>
         public required string Name { get; init; }
 
         /// <summary>
-        /// Status of the order line - See the Mollie.Api.Models.Order.OrderLineStatus class for 
+        /// Status of the order line - See the Mollie.Api.Models.Order.OrderLineStatus class for
         /// a full list of known values.
         /// </summary>
         public required string Status { get; init; }
@@ -40,7 +40,7 @@ namespace Mollie.Api.Models.Order {
         /// The number of items in the order line.
         /// </summary>
         public required int Quantity { get; init; }
-        
+
         /// <summary>
         /// The number of items that are shipped for this order line.
         /// </summary>
@@ -85,24 +85,24 @@ namespace Mollie.Api.Models.Order {
         /// The number of items that can still be canceled for this order line.
         /// </summary>
         public required int CancelableQuantity { get; init; }
-        
+
         /// <summary>
         /// The price of a single item in the order line.
         /// </summary>
         public required Amount UnitPrice { get; init; }
-        
+
         /// <summary>
         /// Any discounts applied to the order line. For example, if you have a two-for-one sale, you should pass the
         /// amount discounted as a positive amount.
         /// </summary>
         public Amount? DiscountAmount { get; set; }
-        
+
         /// <summary>
         /// The total amount of the line, including VAT and discounts. Adding all totalAmount values together should
         /// result in the same amount as the amount top level property.
         /// </summary>
         public required Amount TotalAmount { get; init; }
-        
+
         /// <summary>
         /// The VAT rate applied to the order line, for example "21.00" for 21%. The vatRate should be passed as a
         /// string and not as a float to ensure the correct number of decimals are passed.
@@ -115,7 +115,7 @@ namespace Mollie.Api.Models.Order {
         /// result in an error.
         /// </summary>
         public required Amount VatAmount { get; init; }
-        
+
         /// <summary>
         /// The SKU, EAN, ISBN or UPC of the product sold. The maximum character length is 64.
         /// </summary>
@@ -125,13 +125,13 @@ namespace Mollie.Api.Models.Order {
         /// The order line’s date and time of creation
         /// </summary>
         public required DateTime CreatedAt { get; init; }
-        
+
         /// <summary>
         /// An object with several URL objects relevant to the order line. Every URL object will contain an href and a type field.
         /// </summary>
         [JsonProperty("_links")]
         public required OrderLineResponseLinks Links { get; set; }
-        
+
         /// <summary>
         /// The optional metadata you provided upon line creation.
         /// </summary>

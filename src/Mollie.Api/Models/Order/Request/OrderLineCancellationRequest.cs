@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 
-namespace Mollie.Api.Models.Order {
+namespace Mollie.Api.Models.Order.Request {
     public record OrderLineCancellationRequest {
         public required IEnumerable<OrderLineDetails> Lines { get; init; }
-        
+
         /// <summary>
         ///	Oauth only - Optional
         /// </summary>

@@ -1,7 +1,7 @@
 ﻿using Mollie.Api.JsonConverters;
 using Newtonsoft.Json;
 
-namespace Mollie.Api.Models.Order {
+namespace Mollie.Api.Models.Order.Request {
     public record OrderLineUpdateRequest {
         /// <summary>
         /// A description of the order line, for example LEGO 4440 Forest Police Station.

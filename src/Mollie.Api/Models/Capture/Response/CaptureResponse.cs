@@ -2,7 +2,7 @@ using System;
 using Mollie.Api.JsonConverters;
 using Newtonsoft.Json;
 
-namespace Mollie.Api.Models.Capture
+namespace Mollie.Api.Models.Capture.Response
 {
     public record CaptureResponse {
         /// <summary>
@@ -25,7 +25,7 @@ namespace Mollie.Api.Models.Capture
         /// The amount captured.
         /// </summary>
         public required Amount Amount { get; init; }
-        
+
         /// <summary>
         /// The capture’s status.
         /// </summary>
@@ -55,7 +55,7 @@ namespace Mollie.Api.Models.Capture
         /// The capture’s date and time of creation, in ISO 8601 format.
         /// </summary>
         public required DateTime CreatedAt { get; init; }
-        
+
         /// <summary>
         /// The optional metadata you provided upon payment creation. Metadata can be used to link an order to a payment.
         /// </summary>

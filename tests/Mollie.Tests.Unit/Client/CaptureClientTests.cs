@@ -1,6 +1,5 @@
 ﻿using System;
 using Mollie.Api.Client;
-using Mollie.Api.Models.Capture;
 using Mollie.Api.Models.List;
 using System.Linq;
 using System.Net.Http;
@@ -8,6 +7,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Capture.Request;
+using Mollie.Api.Models.Capture.Response;
 using RichardSzalay.MockHttp;
 using Xunit;
 

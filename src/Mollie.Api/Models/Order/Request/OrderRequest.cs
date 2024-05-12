@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Mollie.Api.JsonConverters;
-using Mollie.Api.Models.Order.Request.PaymentSpecificParameters;
 using Newtonsoft.Json;
 
-namespace Mollie.Api.Models.Order {
+namespace Mollie.Api.Models.Order.Request {
     public record OrderRequest {
         /// <summary>
         /// The total amount of the order, including VAT and discounts. This is the amount that will be charged
@@ -102,7 +101,7 @@ namespace Mollie.Api.Models.Order {
         /// <summary>
         /// Optional - Any payment specific properties can be passed here.
         /// </summary>
-        public PaymentSpecificParameters? Payment { get; set; }
+        public PaymentSpecificParameters.PaymentSpecificParameters? Payment { get; set; }
 
         /// <summary>
         /// Provide any data you like, and we will save the data alongside the subscription. Whenever you fetch the subscription

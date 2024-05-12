@@ -1,4 +1,4 @@
-﻿namespace Mollie.Api.Models.Shipment {
+﻿namespace Mollie.Api.Models.Shipment.Request {
     public record ShipmentLineRequest {
         /// <summary>
         /// The API resource token of the order line, for example: odl_jp31jz.

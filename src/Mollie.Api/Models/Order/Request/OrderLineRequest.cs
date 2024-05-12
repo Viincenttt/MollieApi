@@ -1,10 +1,10 @@
 ﻿using Mollie.Api.JsonConverters;
 using Newtonsoft.Json;
 
-namespace Mollie.Api.Models.Order {
+namespace Mollie.Api.Models.Order.Request {
     public record OrderLineRequest {
         /// <summary>
-        /// The type of product bought, for example, a physical or a digital product. See the 
+        /// The type of product bought, for example, a physical or a digital product. See the
         /// Mollie.Api.Models.Order.OrderLineDetailsType class for a full list of known values.
         /// </summary>
         public string? Type { get; set; }

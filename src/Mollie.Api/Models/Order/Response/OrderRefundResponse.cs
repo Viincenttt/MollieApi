@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Mollie.Api.Models.Refund;
 
-namespace Mollie.Api.Models.Order {
+namespace Mollie.Api.Models.Order.Response {
     public record OrderRefundResponse : RefundResponse {
         /// <summary>
         /// The unique identifier of the order this refund was created for. For example: ord_stTC2WHAuS.

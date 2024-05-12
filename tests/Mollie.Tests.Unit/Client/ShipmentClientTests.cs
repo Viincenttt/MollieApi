@@ -6,6 +6,8 @@ using FluentAssertions;
 using Mollie.Api.Client;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Shipment;
+using Mollie.Api.Models.Shipment.Request;
+using Mollie.Api.Models.Shipment.Response;
 using RichardSzalay.MockHttp;
 using Xunit;
 
