@@ -1,3 +1,3 @@
 ﻿namespace Mollie.Api.Models.Url {
-    public record UrlObjectLink<T> : UrlLink { }
+    public record UrlObjectLink<T> : UrlLink;
 }

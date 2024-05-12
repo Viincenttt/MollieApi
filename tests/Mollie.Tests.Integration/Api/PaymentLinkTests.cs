@@ -20,7 +20,7 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
     }
 
     [DefaultRetryFact]
-    public async Task CanRetrievePaymentlinkList() {
+    public async Task CanRetrievePaymentLinkList() {
         // When: Retrieve payment list with default settings
         ListResponse<PaymentLinkResponse> response = await _paymentLinkClient.GetPaymentLinkListAsync();
 

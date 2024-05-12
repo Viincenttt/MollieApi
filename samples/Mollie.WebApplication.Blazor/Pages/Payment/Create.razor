@@ -14,7 +14,7 @@
 <EditForm Model="model" OnValidSubmit="@OnSave" class="col-md-6">
     <DataAnnotationsValidator />
     <ValidationSummary />
-    
+
     <div class="form-group">
         <label for="amount">Amount</label>
         <InputNumber
@@ -58,19 +58,19 @@
 </EditForm>
 
 @code {
-    private MollieApiException _apiException = null;
-    
+    private MollieApiException _apiException;
+
     private CreatePaymentModel model = new() {
         Amount = 10.00m,
         Currency = "EUR",
         RedirectUrl = "https://www.mollie.com/",
         Description = "A payment from the example application"
     };
-    
+
     private async Task OnSave() {
         try {
             _apiException = null;
-            
+
             await PaymentClient.CreatePaymentAsync(new PaymentRequest {
                 Amount = new Amount(model.Currency, model.Amount),
                 RedirectUrl = model.RedirectUrl,

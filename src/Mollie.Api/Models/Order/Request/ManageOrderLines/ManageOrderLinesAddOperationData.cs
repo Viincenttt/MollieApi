@@ -1,4 +1,3 @@
 namespace Mollie.Api.Models.Order.Request.ManageOrderLines {
-    public record ManageOrderLinesAddOperationData : OrderLineRequest {
-    }
+    public record ManageOrderLinesAddOperationData : OrderLineRequest;
 }

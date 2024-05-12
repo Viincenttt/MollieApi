@@ -83,12 +83,12 @@ namespace Mollie.Api.Client {
         public async Task DisableGiftCardIssuerAsync(string profileId, string issuer) {
             ValidateRequiredUrlParameter(nameof(profileId), profileId);
             ValidateRequiredUrlParameter(nameof(issuer), issuer);
-            await DeleteAsync($"profiles/{profileId}/methods/giftcard/issuers/{issuer}", null).ConfigureAwait(false);
+            await DeleteAsync($"profiles/{profileId}/methods/giftcard/issuers/{issuer}").ConfigureAwait(false);
         }
 
         public async Task DisableGiftCardIssuerAsync(string issuer) {
             ValidateRequiredUrlParameter(nameof(issuer), issuer);
-            await DeleteAsync($"profiles/me/methods/giftcard/issuers/{issuer}", null).ConfigureAwait(false);
+            await DeleteAsync($"profiles/me/methods/giftcard/issuers/{issuer}").ConfigureAwait(false);
         }
     }
 }

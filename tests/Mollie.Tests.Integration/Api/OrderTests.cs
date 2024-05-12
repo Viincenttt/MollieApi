@@ -79,8 +79,8 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         OrderLineRequest orderLineRequest = orderRequest.Lines.First();
         OrderLineResponse orderResponseLine = result.Lines.First();
         orderResponseLine.Type.Should().Be(orderLineRequest.Type);
-        orderResponseLine.Links.ImageUrl.Href.Should().Be(orderLineRequest.ImageUrl);
-        orderResponseLine.Links.ProductUrl.Href.Should().Be(orderLineRequest.ProductUrl);
+        orderResponseLine.Links.ImageUrl!.Href.Should().Be(orderLineRequest.ImageUrl);
+        orderResponseLine.Links.ProductUrl!.Href.Should().Be(orderLineRequest.ProductUrl);
         var expectedMetadataString = result.Lines.First().Metadata;
         orderResponseLine.Metadata.Should().Be(expectedMetadataString);
     }
@@ -115,7 +115,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
 
         // Then: Make sure we get a valid response
         orderRequest.Method.Should().Be(PaymentMethod.CreditCard);
-        orderRequest.Methods.First().Should().Be(PaymentMethod.CreditCard);
+        orderRequest.Methods!.First().Should().Be(PaymentMethod.CreditCard);
         result.Should().NotBeNull();
         result.Amount.Should().Be(orderRequest.Amount);
         result.OrderNumber.Should().Be(orderRequest.OrderNumber);
@@ -181,7 +181,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
 
         // If: we create a order request with payment specific parameters
         OrderRequest orderRequest = CreateOrder();
-        orderRequest.BillingAddress.Country = "DE"; // Billie only works in Germany
+        orderRequest.BillingAddress!.Country = "DE"; // Billie only works in Germany
         orderRequest.BillingAddress.OrganizationName = "Mollie"; // Billie requires a organization name
         orderRequest.Payment = paymentSpecificParameters;
 
@@ -221,7 +221,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         retrievedOrder.Should().NotBeNull();
         retrievedOrder.Id.Should().Be(createdOrder.Id);
         retrievedOrder.Embedded.Should().NotBeNull();
-        retrievedOrder.Embedded.Payments.Should().NotBeNull();
+        retrievedOrder.Embedded!.Payments.Should().NotBeNull();
         retrievedOrder.Embedded.Shipments.Should().NotBeNull();
         retrievedOrder.Embedded.Refunds.Should().NotBeNull();
     }
@@ -301,7 +301,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         addedOrderLineRequest.VatRate.Should().Be(newOrderLineRequest.VatRate);
         addedOrderLineRequest.VatAmount.Should().Be(newOrderLineRequest.VatAmount);
         var newMetaData = addedOrderLineRequest.Metadata
-            .Replace(System.Environment.NewLine, "")
+            .Replace(Environment.NewLine, "")
             .Replace(" ", "");
         newMetaData.Should().Be(newOrderLineRequest.Metadata);
     }
@@ -346,7 +346,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         addedOrderLineRequest.VatRate.Should().Be(orderLineUpdateRequest.VatRate);
         addedOrderLineRequest.VatAmount.Should().Be(orderLineUpdateRequest.VatAmount);
         addedOrderLineRequest.Metadata
-            .Replace(System.Environment.NewLine, "")
+            .Replace(Environment.NewLine, "")
             .Replace(" ", "")
             .Should().Be(orderLineUpdateRequest.Metadata);
     }

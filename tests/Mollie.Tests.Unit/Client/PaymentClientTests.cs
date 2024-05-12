@@ -6,7 +6,6 @@ using Mollie.Api.Models.Payment.Request;
 using Mollie.Api.Models.Payment.Response;
 using RichardSzalay.MockHttp;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -83,18 +82,18 @@ public class PaymentClientTests : BaseClientTests {
         paymentResponse.ExpiredAt!.Value.ToUniversalTime().Should().Be(DateTime.SpecifyKind(23.March(2018).At(13, 28, 37), DateTimeKind.Utc));
         paymentResponse.FailedAt!.Value.ToUniversalTime().Should().Be(DateTime.SpecifyKind(24.March(2018).At(13, 28, 37), DateTimeKind.Utc));
         paymentResponse.CaptureBefore!.Value.ToUniversalTime().Should().Be(DateTime.SpecifyKind(25.March(2018).At(13, 28, 37), DateTimeKind.Utc));
-        paymentResponse.AmountRefunded.Value.Should().Be("10.00");
+        paymentResponse.AmountRefunded!.Value.Should().Be("10.00");
         paymentResponse.AmountRefunded.Currency.Should().Be(Currency.EUR);
-        paymentResponse.AmountRemaining.Value.Should().Be("90.00");
+        paymentResponse.AmountRemaining!.Value.Should().Be("90.00");
         paymentResponse.AmountRemaining.Currency.Should().Be(Currency.EUR);
-        paymentResponse.AmountChargedBack.Value.Should().Be("10.00");
+        paymentResponse.AmountChargedBack!.Value.Should().Be("10.00");
         paymentResponse.AmountChargedBack.Currency.Should().Be(Currency.EUR);
         paymentResponse.CancelUrl.Should().Be("https://webshop.example.org/order/12345/cancel");
         paymentResponse.CountryCode.Should().Be("NL");
         paymentResponse.SettlementId.Should().Be("stl_jDk30akdN");
         paymentResponse.SubscriptionId.Should().Be("sub_rVKGtNd6s3");
         paymentResponse.ApplicationFee.Should().NotBeNull();
-        paymentResponse.ApplicationFee.Amount.Value.Should().Be("1.00");
+        paymentResponse.ApplicationFee!.Amount.Value.Should().Be("1.00");
         paymentResponse.ApplicationFee.Amount.Currency.Should().Be(Currency.EUR);
         paymentResponse.ApplicationFee.Description.Should().Be("description");
     }
@@ -260,7 +259,7 @@ public class PaymentClientTests : BaseClientTests {
         payment.Status.Should().Be(PaymentStatus.Open);
         payment.IsCancelable.Should().BeFalse();
         payment.Locale.Should().Be("nl_NL");
-        payment.ExpiresAt.Value.ToUniversalTime().Should().Be(DateTime.SpecifyKind(20.March(2018).At(13, 28, 37), DateTimeKind.Utc));
+        payment.ExpiresAt!.Value.ToUniversalTime().Should().Be(DateTime.SpecifyKind(20.March(2018).At(13, 28, 37), DateTimeKind.Utc));
         payment.ProfileId.Should().Be("pfl_QkEhN94Ba");
         payment.SequenceType.Should().Be(SequenceType.OneOff);
         payment.RedirectUrl.Should().Be("https://webshop.example.org/order/12345/");
@@ -268,7 +267,7 @@ public class PaymentClientTests : BaseClientTests {
         payment.Links.Should().NotBeNull();
         payment.Links.Self.Href.Should().Be("https://api.mollie.com/v2/payments/tr_WDqYK6vllg");
         payment.Links.Self.Type.Should().Be("application/hal+json");
-        payment.Links.Checkout.Href.Should().Be("https://www.mollie.com/payscreen/select-method/WDqYK6vllg");
+        payment.Links.Checkout!.Href.Should().Be("https://www.mollie.com/payscreen/select-method/WDqYK6vllg");
         payment.Links.Checkout.Type.Should().Be("text/html");
         payment.Links.Dashboard.Href.Should().Be("https://www.mollie.com/dashboard/org_12345678/payments/tr_WDqYK6vllg");
         payment.Links.Dashboard.Type.Should().Be("text/html");

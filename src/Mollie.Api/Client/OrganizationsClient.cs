@@ -24,7 +24,7 @@ namespace Mollie.Api.Client {
         }
 
         public async Task<ListResponse<OrganizationResponse>> GetOrganizationsListAsync(string? from = null, int? limit = null) {
-            return await GetListAsync<ListResponse<OrganizationResponse>>("organizations", from, limit, null).ConfigureAwait(false);
+            return await GetListAsync<ListResponse<OrganizationResponse>>("organizations", from, limit).ConfigureAwait(false);
         }
 
         public async Task<ListResponse<OrganizationResponse>> GetOrganizationsListAsync(UrlObjectLink<ListResponse<OrganizationResponse>> url) {

@@ -10,7 +10,7 @@
 
 <ApiExceptionDisplay Exception="_apiException"></ApiExceptionDisplay>
 
-<EditForm Model="model" OnValidSubmit="@OnSave" class="col-md-6">
+<EditForm Model="_model" OnValidSubmit="@OnSave" class="col-md-6">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
@@ -19,7 +19,7 @@
         <InputNumber
             id="amount"
             class="form-control"
-            @bind-Value="model.Amount">
+            @bind-Value="_model.Amount">
         </InputNumber>
     </div>
 
@@ -28,53 +28,53 @@
         <InputSelect
             id="currency"
             class="form-control"
-            @bind-Value="model.Currency">
+            @bind-Value="_model.Currency">
             @foreach (string currency in StaticStringListBuilder.GetStaticStringList(typeof(Currency))) {
                 <option value="@currency">@currency</option>
             }
         </InputSelect>
     </div>
-    
+
     <div class="form-group">
         <label for="times">Times</label>
         <InputNumber
             id="times"
             class="form-control"
-            @bind-Value="model.Times">
+            @bind-Value="_model.Times">
         </InputNumber>
     </div>
-    
+
     <div class="form-group">
         <label for="interval-amount">Interval amount</label>
         <InputNumber
             id="interval-amount"
             class="form-control"
-            @bind-Value="model.IntervalAmount">
+            @bind-Value="_model.IntervalAmount">
         </InputNumber>
     </div>
-    
+
     <div class="form-group">
         <label for="interval-period">Interval period</label>
         <InputSelect
             id="interval-period"
             class="form-control"
-            @bind-Value="model.IntervalPeriod">
+            @bind-Value="_model.IntervalPeriod">
             @foreach (string intervalPeriod in Enum.GetNames(typeof(IntervalPeriod))) {
                 <option value="@intervalPeriod">@intervalPeriod</option>
             }
         </InputSelect>
     </div>
-    
+
     <input type="submit" name="Save" value="Save" class="btn btn-primary mt-2"/>
 </EditForm>
 
 @code {
-    private MollieApiException _apiException = null;
-    
+    private MollieApiException _apiException;
+
     [Parameter]
     public string CustomerId { get; set; }
-    
-    private CreateSubscriptionModel model = new() {
+
+    private CreateSubscriptionModel _model = new() {
         Amount = 10.00m,
         Currency = Currency.EUR,
         IntervalPeriod = IntervalPeriod.Days,
@@ -82,16 +82,16 @@
         IntervalAmount = 2,
         Description = "A subscription created by the example application"
     };
-    
+
     private async Task OnSave() {
         try {
             _apiException = null;
-            
+
             await SubscriptionClient.CreateSubscriptionAsync(CustomerId, new SubscriptionRequest {
-                Amount = new Amount(model.Currency, model.Amount),
-                Interval = $"{model.IntervalAmount} {model.IntervalPeriod.ToString().ToLower()}",
-                Times = model.Times,
-                Description = model.Description
+                Amount = new Amount(_model.Currency, _model.Amount),
+                Interval = $"{_model.IntervalAmount} {_model.IntervalPeriod.ToString().ToLower()}",
+                Times = _model.Times,
+                Description = _model.Description
             });
 
             NavigationManager.NavigateTo($"/customer/{CustomerId}/subscription/overview");

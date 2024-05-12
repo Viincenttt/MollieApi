@@ -11,7 +11,7 @@ else {
     <div class="clearfix">
         <a href="/customer/create" class="btn btn-primary float-right">Create new customer</a>
     </div>
-    
+
     <table class="table table-striped">
         <thead>
         <tr>
@@ -39,7 +39,7 @@ else {
         }
         </tbody>
     </table>
-    
+
     <OverviewNavigation
         Previous="_customers.Links.Previous"
         Next="_customers.Links.Next">
@@ -50,8 +50,8 @@ else {
     [Parameter]
     [SupplyParameterFromQuery]
     public string Url { get; set; }
-    
-    private ListResponse<CustomerResponse> _customers = null;
+
+    private ListResponse<CustomerResponse> _customers;
 
     protected override async Task OnParametersSetAsync() {
         await LoadData();

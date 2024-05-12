@@ -18,7 +18,6 @@ using System.Linq;
 using FluentAssertions;
 using Mollie.Api.Models.Customer;
 using Mollie.Api.Models.Mandate;
-using Xunit;
 
 namespace Mollie.Tests.Integration.Api;
 
@@ -380,8 +379,8 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
 
             // Then: Make sure we get the mandate id back in the details
             result.MandateId.Should().Be(validMandate.Id);
-            result.Links.Mandate.Href.Should().EndWith(validMandate.Id);
-            result.Links.Customer.Href.Should().EndWith(customer.Id);
+            result.Links.Mandate!.Href.Should().EndWith(validMandate.Id);
+            result.Links.Customer!.Href.Should().EndWith(customer.Id);
         }
     }
 
@@ -512,6 +511,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         });
 
         // Then
+        captureResponse.Should().NotBeNull();
         paymentResponse.Status.Should().Be(PaymentStatus.Authorized);
         paymentRequest.CaptureMode.Should().Be(CaptureMode.Manual);
         paymentResponse.CaptureBefore.Should().NotBeNull();

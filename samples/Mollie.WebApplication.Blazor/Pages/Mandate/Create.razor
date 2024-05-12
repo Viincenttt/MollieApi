@@ -45,8 +45,8 @@
 </EditForm>
 
 @code {
-    private MollieApiException _apiException = null;
-    
+    private MollieApiException _apiException;
+
     [Parameter]
     public string CustomerId { get; set; }
     
@@ -58,7 +58,7 @@
     private async Task OnSave() {
         try {
             _apiException = null;
-            
+
             await MandateClient.CreateMandateAsync(CustomerId, new SepaDirectDebitMandateRequest {
                 Method = PaymentMethod.DirectDebit,
                 ConsumerName = _mandate.ConsumerName,

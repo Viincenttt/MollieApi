@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -46,7 +45,7 @@ public class PermissionClientTests : BaseClientTests
         var mockHttp = new MockHttpMessageHandler();
         HttpClient httpClient = mockHttp.ToHttpClient();
         using var permissionClient = new PermissionsClient("access_abcde", httpClient);
-        
+
         // Act
         var exception = await Assert.ThrowsAsync<ArgumentException>(() => permissionClient.GetPermissionAsync(string.Empty));
 

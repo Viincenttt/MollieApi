@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace Mollie.Api.Models.Mandate
+﻿namespace Mollie.Api.Models.Mandate
 {
     public record SepaDirectDebitMandateRequest : MandateRequest
     {

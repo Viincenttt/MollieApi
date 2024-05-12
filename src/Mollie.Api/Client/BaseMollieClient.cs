@@ -21,7 +21,7 @@ namespace Mollie.Api.Client {
 
         private readonly AsyncLocalVariable<string> _idempotencyKey = new (null);
 
-        private readonly bool _createdHttpClient = default;
+        private readonly bool _createdHttpClient;
 
         protected BaseMollieClient(string apiKey, HttpClient? httpClient = null) {
             if (string.IsNullOrWhiteSpace(apiKey)) {

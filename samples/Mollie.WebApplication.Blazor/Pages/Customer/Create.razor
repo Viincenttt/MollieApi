@@ -36,17 +36,17 @@
 </EditForm>
 
 @code {
-    private MollieApiException _apiException = null;
-    
+    private MollieApiException _apiException;
+
     private CreateCustomerModel _customer = new() {
         Name = "Customer name",
         Email = "customer@customer.customer"
     };
-    
+
     private async Task OnSave() {
         try {
             _apiException = null;
-            
+
             await CustomerClient.CreateCustomerAsync(new CustomerRequest() {
                 Name = _customer.Name,
                 Email = _customer.Email

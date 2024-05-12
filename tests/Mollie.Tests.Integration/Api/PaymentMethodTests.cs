@@ -68,7 +68,7 @@ public class PaymentMethodTests : BaseMollieApiTestClass, IDisposable {
     [DefaultRetryFact]
     public async Task DoNotRetrieveIssuersWhenIncludeIsFalse() {
         // When: retrieving the ideal method with the include parameter set to false
-        PaymentMethodResponse paymentMethod = await _paymentMethodClient.GetPaymentMethodAsync(PaymentMethod.Kbc, false);
+        PaymentMethodResponse paymentMethod = await _paymentMethodClient.GetPaymentMethodAsync(PaymentMethod.Kbc);
 
         // Then: Issuers should not be included
         paymentMethod.Issuers.Should().BeNull();
