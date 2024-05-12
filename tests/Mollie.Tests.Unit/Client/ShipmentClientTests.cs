@@ -31,14 +31,14 @@ namespace Mollie.Tests.Unit.Client {
             };
             const string orderId = "order-id";
             const string expectedPartialRequest = @"{""tracking"":{""carrier"":""tracking-carrier"",""code"":""tracking-code"",""url"":""tracking-url""},""lines"":[{""id"":""shipment-line-id"",""quantity"":1,""amount"":{""currency"":""EUR"",""value"":""50.00""}}],""testmode"":true}";
-            var mockHttp = this.CreateMockHttpMessageHandler(
-                HttpMethod.Post, 
-                $"{BaseMollieClient.ApiEndPoint}orders/{orderId}/shipments", 
-                DefaultShipmentJsonToReturn, 
+            var mockHttp = CreateMockHttpMessageHandler(
+                HttpMethod.Post,
+                $"{BaseMollieClient.ApiEndPoint}orders/{orderId}/shipments",
+                DefaultShipmentJsonToReturn,
                 expectedPartialRequest);
             HttpClient httpClient = mockHttp.ToHttpClient();
             ShipmentClient shipmentClient = new ShipmentClient("abcde", httpClient);
-            
+
             // When: We send the request
             ShipmentResponse shipmentResponse = await shipmentClient.CreateShipmentAsync(orderId, shipmentRequest);
 
@@ -50,7 +50,7 @@ namespace Mollie.Tests.Unit.Client {
             shipmentResponse.Tracking.Code.Should().Be(shipmentRequest.Tracking.Code);
             shipmentResponse.Tracking.Url.Should().Be(shipmentRequest.Tracking.Url);
         }
-        
+
         [Theory]
         [InlineData("orders/order-id/shipments/shipment-id", false)]
         [InlineData("orders/order-id/shipments/shipment-id?testmode=true", true)]
@@ -58,7 +58,7 @@ namespace Mollie.Tests.Unit.Client {
             // Given: We retrieve a shipment
             const string orderId = "order-id";
             const string shipmentId = "shipment-id";
-            
+
             var mockHttp = new MockHttpMessageHandler();
             mockHttp.When($"{BaseMollieClient.ApiEndPoint}{expectedUrl}")
                 .Respond("application/json", DefaultShipmentJsonToReturn);
@@ -72,14 +72,14 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.VerifyNoOutstandingExpectation();
             shipmentResponse.Should().NotBeNull();
         }
-        
+
         [Theory]
         [InlineData("orders/order-id/shipments", false)]
         [InlineData("orders/order-id/shipments?testmode=true", true)]
         public async Task GetShipmentsListAsync_TestModeParameterCase_QueryStringOnlyContainsTestModeParameterIfTrue(string expectedUrl, bool testModeParameter) {
             // Given: We retrieve the list of shipments
             const string orderId = "order-id";
-            
+
             var mockHttp = new MockHttpMessageHandler();
             mockHttp.When($"{BaseMollieClient.ApiEndPoint}{expectedUrl}")
                 .Respond("application/json", DefaultShipmentJsonToReturn);
@@ -93,7 +93,7 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.VerifyNoOutstandingExpectation();
             shipmentListResponse.Should().NotBeNull();
         }
-        
+
         [Fact]
         public async Task UpdateShipmentAsync_ValidUpdateShipmentRequest_ResponseIsDeserializedInExpectedFormat() {
             // Given: We create a shipment
@@ -108,14 +108,14 @@ namespace Mollie.Tests.Unit.Client {
             const string orderId = "order-id";
             const string shipmentId = "shipment-id";
             const string expectedPartialRequest = @"{""tracking"":{""carrier"":""tracking-carrier"",""code"":""tracking-code"",""url"":""tracking-url""},""testmode"":true}";
-            var mockHttp = this.CreateMockHttpMessageHandler(
-                HttpMethod.Patch, 
-                $"{BaseMollieClient.ApiEndPoint}orders/{orderId}/shipments/{shipmentId}", 
-                DefaultShipmentJsonToReturn, 
+            var mockHttp = CreateMockHttpMessageHandler(
+                HttpMethod.Patch,
+                $"{BaseMollieClient.ApiEndPoint}orders/{orderId}/shipments/{shipmentId}",
+                DefaultShipmentJsonToReturn,
                 expectedPartialRequest);
             HttpClient httpClient = mockHttp.ToHttpClient();
             ShipmentClient shipmentClient = new ShipmentClient("abcde", httpClient);
-            
+
             // When: We send the request
             ShipmentResponse shipmentResponse = await shipmentClient.UpdateShipmentAsync(orderId, shipmentId, updateShipmentRequest);
 
@@ -127,7 +127,7 @@ namespace Mollie.Tests.Unit.Client {
             shipmentResponse.Tracking.Code.Should().Be(updateShipmentRequest.Tracking.Code);
             shipmentResponse.Tracking.Url.Should().Be(updateShipmentRequest.Tracking.Url);
         }
-        
+
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
@@ -144,7 +144,7 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             exception.Message.Should().Be("Required URL argument 'orderId' is null or empty");
         }
-        
+
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
@@ -161,7 +161,7 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             exception.Message.Should().Be("Required URL argument 'orderId' is null or empty");
         }
-        
+
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
@@ -178,7 +178,7 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             exception.Message.Should().Be("Required URL argument 'shipmentId' is null or empty");
         }
-        
+
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
@@ -195,7 +195,7 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             exception.Message.Should().Be("Required URL argument 'orderId' is null or empty");
         }
-        
+
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
@@ -219,7 +219,7 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             exception.Message.Should().Be("Required URL argument 'orderId' is null or empty");
         }
-        
+
         [Theory]
         [InlineData("")]
         [InlineData(" ")]

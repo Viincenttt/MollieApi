@@ -52,7 +52,7 @@ namespace Mollie.Api.Models.Shipment
         public required ShipmentResponseLinks Links { get; init; }
 
         public T? GetMetadata<T>(JsonSerializerSettings? jsonSerializerSettings = null) {
-            return Metadata != null ? JsonConvert.DeserializeObject<T>(this.Metadata, jsonSerializerSettings) : default;
+            return Metadata != null ? JsonConvert.DeserializeObject<T>(Metadata, jsonSerializerSettings) : default;
         }
     }
 }

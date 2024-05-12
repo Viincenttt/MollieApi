@@ -14,13 +14,13 @@ using Mollie.Api.Models.Payment;
 using Mollie.Tests.Integration.Framework;
 using Xunit;
 
-namespace Mollie.Tests.Integration.Api; 
+namespace Mollie.Tests.Integration.Api;
 
 public class OrderTests : BaseMollieApiTestClass, IDisposable {
     private readonly IOrderClient _orderClient;
 
     public OrderTests() {
-        _orderClient = new OrderClient(this.ApiKey);
+        _orderClient = new OrderClient(ApiKey);
     }
 
     [DefaultRetryFact]
@@ -28,47 +28,47 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
     {
         // Act
         var orders = await _orderClient.GetOrderListAsync();
-        
+
         // Assert
         if (orders.Items.Any())
         {
             orders.Items.Should().BeInDescendingOrder(x => x.CreatedAt);
         }
     }
-    
+
     [DefaultRetryFact]
     public async Task GetOrderListAsync_InDescendingOrder_ReturnsOrdersInDescendingOrder()
     {
         // Act
         var orders = await _orderClient.GetOrderListAsync(sort: SortDirection.Desc);
-        
+
         // Assert
         if (orders.Items.Any())
         {
             orders.Items.Should().BeInDescendingOrder(x => x.CreatedAt);
         }
     }
-    
+
     [DefaultRetryFact]
     public async Task GetOrderListAsync_InAscendingOrder_ReturnsOrdersInAscendingOrder()
     {
         // Act
         var orders = await _orderClient.GetOrderListAsync(sort: SortDirection.Asc);
-        
+
         // Assert
         if (orders.Items.Any())
         {
             orders.Items.Should().BeInAscendingOrder(x => x.CreatedAt);
         }
     }
-        
+
     [DefaultRetryFact]
     public async Task CreateOrderAsync_OrderWithRequiredFields_OrderIsCreated() {
         // If: we create a order request with only the required parameters
-        OrderRequest orderRequest = this.CreateOrder();
+        OrderRequest orderRequest = CreateOrder();
 
         // When: We send the order request to Mollie
-        OrderResponse result = await this._orderClient.CreateOrderAsync(orderRequest);
+        OrderResponse result = await _orderClient.CreateOrderAsync(orderRequest);
 
         // Then: Make sure we get a valid response
         result.Should().NotBeNull();
@@ -88,7 +88,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
     [DefaultRetryFact]
     public async Task CreateOrderAsync_WithMultiplePaymentMethods_OrderIsCreated() {
         // When: we create a order request and specify multiple payment methods
-        OrderRequest orderRequest = this.CreateOrder();
+        OrderRequest orderRequest = CreateOrder();
         orderRequest.Methods = new List<string>() {
             PaymentMethod.Ideal,
             PaymentMethod.CreditCard,
@@ -96,7 +96,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         };
 
         // When: We send the order request to Mollie
-        OrderResponse result = await this._orderClient.CreateOrderAsync(orderRequest);
+        OrderResponse result = await _orderClient.CreateOrderAsync(orderRequest);
 
         // Then: Make sure we get a valid response
         result.Should().NotBeNull();
@@ -107,11 +107,11 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
     [DefaultRetryFact]
     public async Task CreateOrderAsync_WithSinglePaymentMethod_OrderIsCreated() {
         // When: we create a order request and specify a single payment method
-        OrderRequest orderRequest = this.CreateOrder();
+        OrderRequest orderRequest = CreateOrder();
         orderRequest.Method = PaymentMethod.CreditCard;
 
         // When: We send the order request to Mollie
-        OrderResponse result = await this._orderClient.CreateOrderAsync(orderRequest);
+        OrderResponse result = await _orderClient.CreateOrderAsync(orderRequest);
 
         // Then: Make sure we get a valid response
         orderRequest.Method.Should().Be(PaymentMethod.CreditCard);
@@ -124,7 +124,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
     public static IEnumerable<object[]> PaymentSpecificParameters =>
         new List<object[]>
         {
-            new object[] { 
+            new object[] {
                 new KlarnaSpecificParameters<object> {
                     ExtraMerchantData = new {
                         payment_history_simple = new[] {
@@ -136,7 +136,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
                     }
                 }
             },
-            new object[] { 
+            new object[] {
                 new BillieSpecificParameters {
                     Company = new CompanyObject {
                         EntityType = CompanyEntityType.LimitedCompany,
@@ -144,64 +144,64 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
                         VatNumber = "vat-number"
                     }
                 }
-            },            
-            new object[] { 
+            },
+            new object[] {
                 new GiftcardSpecificParameters() {
                     Issuer = "boekenbon",
                     VoucherNumber = "voucher-number",
                     VoucherPin = "1234"
                 }
             },
-            new object[] { 
+            new object[] {
                 new IDealSpecificParameters {
                     Issuer = "ideal_INGBNL2A"
                 }
             },
-            new object[] { 
+            new object[] {
                 new KbcSpecificParameters {
                     Issuer = "ideal_INGBNL2A"
                 }
             },
-            new object[] { 
+            new object[] {
                 new PaySafeCardSpecificParameters {
                     CustomerReference = "customer-reference"
                 }
             },
-            new object[] { 
+            new object[] {
                 new SepaDirectDebitSpecificParameters {
                     ConsumerAccount = "Consumer account"
                 }
             }
         };
-    
+
     [DefaultRetryTheory]
     [MemberData(nameof(PaymentSpecificParameters))]
     public async Task CreateOrderAsync_WithPaymentSpecificParameters_OrderIsCreated(
         PaymentSpecificParameters paymentSpecificParameters) {
-        
+
         // If: we create a order request with payment specific parameters
-        OrderRequest orderRequest = this.CreateOrder();
+        OrderRequest orderRequest = CreateOrder();
         orderRequest.BillingAddress.Country = "DE"; // Billie only works in Germany
         orderRequest.BillingAddress.OrganizationName = "Mollie"; // Billie requires a organization name
         orderRequest.Payment = paymentSpecificParameters;
 
         // When: We send the order request to Mollie
-        OrderResponse result = await this._orderClient.CreateOrderAsync(orderRequest);
+        OrderResponse result = await _orderClient.CreateOrderAsync(orderRequest);
 
         // Then: Make sure we get a valid response
         result.Should().NotBeNull();
         result.Amount.Should().Be(orderRequest.Amount);
         result.OrderNumber.Should().Be(orderRequest.OrderNumber);
     }
-    
+
     [DefaultRetryFact]
     public async Task GetOrderAsync_OrderIsCreated_OrderCanBeRetrieved() {
         // If: we create a new order
-        OrderRequest orderRequest = this.CreateOrder();
-        OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
+        OrderRequest orderRequest = CreateOrder();
+        OrderResponse createdOrder = await _orderClient.CreateOrderAsync(orderRequest);
 
         // When: We attempt to retrieve the order
-        OrderResponse retrievedOrder = await this._orderClient.GetOrderAsync(createdOrder.Id);
+        OrderResponse retrievedOrder = await _orderClient.GetOrderAsync(createdOrder.Id);
 
         // Then: Make sure we get a valid response
         retrievedOrder.Should().NotBeNull();
@@ -211,11 +211,11 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
     [DefaultRetryFact]
     public async Task GetOrderAsync_WithIncludeParameters_OrderIsRetrievedWithEmbeddedData() {
         // If: we create a new order
-        OrderRequest orderRequest = this.CreateOrder();
-        OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
+        OrderRequest orderRequest = CreateOrder();
+        OrderResponse createdOrder = await _orderClient.CreateOrderAsync(orderRequest);
 
         // When: We attempt to retrieve the order and add the include parameters
-        OrderResponse retrievedOrder = await this._orderClient.GetOrderAsync(createdOrder.Id, embedPayments: true, embedShipments: true, embedRefunds: true);
+        OrderResponse retrievedOrder = await _orderClient.GetOrderAsync(createdOrder.Id, embedPayments: true, embedShipments: true, embedRefunds: true);
 
         // Then: Make sure we get a valid response
         retrievedOrder.Should().NotBeNull();
@@ -229,8 +229,8 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
     [DefaultRetryFact]
     public async Task UpdateOrderAsync_OrderIsUpdated_OrderIsUpdated() {
         // If: we create a new order
-        OrderRequest orderRequest = this.CreateOrder();
-        OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
+        OrderRequest orderRequest = CreateOrder();
+        OrderResponse createdOrder = await _orderClient.CreateOrderAsync(orderRequest);
 
         // When: We attempt to update the order
         OrderUpdateRequest orderUpdateRequest = new OrderUpdateRequest() {
@@ -238,34 +238,34 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
             BillingAddress = createdOrder.BillingAddress
         };
         orderUpdateRequest.BillingAddress.City = "Den Haag";
-        OrderResponse updatedOrder = await this._orderClient.UpdateOrderAsync(createdOrder.Id, orderUpdateRequest);
+        OrderResponse updatedOrder = await _orderClient.UpdateOrderAsync(createdOrder.Id, orderUpdateRequest);
 
         // Then: Make sure the order is updated
         updatedOrder.OrderNumber.Should().Be(orderUpdateRequest.OrderNumber);
         updatedOrder.BillingAddress.City.Should().Be(orderUpdateRequest.BillingAddress.City);
     }
-      
+
     [DefaultRetryFact(Skip = "Broken - Reported to Mollie: https://discordapp.com/channels/1037712581407817839/1180467187677401198/1180467187677401198")]
     public async Task UpdateOrderLinesAsync_WhenOrderLineIsUpdated_UpdatedPropertiesCanBeRetrieved() {
         // If: we create a new order
-        OrderRequest orderRequest = this.CreateOrder();
-        OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
+        OrderRequest orderRequest = CreateOrder();
+        OrderResponse createdOrder = await _orderClient.CreateOrderAsync(orderRequest);
 
         // When: We update the order line
         OrderLineUpdateRequest updateRequest = new OrderLineUpdateRequest() {
             Name = "A fluffy bear"
         };
-        OrderResponse updatedOrder = await this._orderClient.UpdateOrderLinesAsync(createdOrder.Id, createdOrder.Lines.First().Id, updateRequest);
+        OrderResponse updatedOrder = await _orderClient.UpdateOrderLinesAsync(createdOrder.Id, createdOrder.Lines.First().Id, updateRequest);
 
         // Then: The name of the order line should be updated
         updatedOrder.Lines.First().Name.Should().Be(updateRequest.Name);
     }
-        
+
     [DefaultRetryFact]
     public async Task ManageOrderLinesAsync_AddOperation_OrderLineIsAdded() {
         // If: we create a new order
-        OrderRequest orderRequest = this.CreateOrder();
-        OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
+        OrderRequest orderRequest = CreateOrder();
+        OrderResponse createdOrder = await _orderClient.CreateOrderAsync(orderRequest);
 
         // When: We use the manager order lines endpoint to add a order line
         ManageOrderLinesAddOperationData newOrderLineRequest = new ManageOrderLinesAddOperationData {
@@ -288,7 +288,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
                 }
             }
         };
-        OrderResponse updatedOrder = await this._orderClient.ManageOrderLinesAsync(createdOrder.Id, manageOrderLinesRequest);
+        OrderResponse updatedOrder = await _orderClient.ManageOrderLinesAsync(createdOrder.Id, manageOrderLinesRequest);
 
         // Then: The order line should be added
         updatedOrder.Lines.Should().HaveCount(2);
@@ -305,12 +305,12 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
             .Replace(" ", "");
         newMetaData.Should().Be(newOrderLineRequest.Metadata);
     }
-        
+
     [DefaultRetryFact]
     public async Task ManageOrderLinesAsync_UpdateOperation_OrderLineIsUpdated() {
         // If: we create a new order
-        OrderRequest orderRequest = this.CreateOrder();
-        OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
+        OrderRequest orderRequest = CreateOrder();
+        OrderResponse createdOrder = await _orderClient.CreateOrderAsync(orderRequest);
 
         // When: We use the manager order lines endpoint to update a order line
         ManageOrderLinesUpdateOperationData orderLineUpdateRequest = new ManageOrderLinesUpdateOperationData {
@@ -334,7 +334,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
                 }
             }
         };
-        OrderResponse updatedOrder = await this._orderClient.ManageOrderLinesAsync(createdOrder.Id, manageOrderLinesRequest);
+        OrderResponse updatedOrder = await _orderClient.ManageOrderLinesAsync(createdOrder.Id, manageOrderLinesRequest);
 
         // Then: The order line should be updated
         updatedOrder.Lines.Should().HaveCount(1);
@@ -350,12 +350,12 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
             .Replace(" ", "")
             .Should().Be(orderLineUpdateRequest.Metadata);
     }
-        
+
     [DefaultRetryFact]
     public async Task ManageOrderLinesAsync_CancelOperation_OrderLineIsCanceled() {
         // If: we create a new order
-        OrderRequest orderRequest = this.CreateOrder();
-        OrderResponse createdOrder = await this._orderClient.CreateOrderAsync(orderRequest);
+        OrderRequest orderRequest = CreateOrder();
+        OrderResponse createdOrder = await _orderClient.CreateOrderAsync(orderRequest);
 
         // When: We use the manager order lines endpoint to cancel a order line
         ManagerOrderLinesCancelOperationData orderLineCancelRequest = new ManagerOrderLinesCancelOperationData {
@@ -369,7 +369,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
                 }
             }
         };
-        OrderResponse updatedOrder = await this._orderClient.ManageOrderLinesAsync(createdOrder.Id, manageOrderLinesRequest);
+        OrderResponse updatedOrder = await _orderClient.ManageOrderLinesAsync(createdOrder.Id, manageOrderLinesRequest);
 
         // Then: The order line should be canceled
         updatedOrder.Lines.Should().HaveCount(1);
@@ -380,7 +380,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
     [DefaultRetryFact]
     public async Task GetOrderListAsync_NoParameters_OrderListIsRetrieved() {
         // When: Retrieve payment list with default settings
-        ListResponse<OrderResponse> response = await this._orderClient.GetOrderListAsync();
+        ListResponse<OrderResponse> response = await _orderClient.GetOrderListAsync();
 
         // Then
         response.Should().NotBeNull();
@@ -393,7 +393,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         int numberOfOrders = 5;
 
         // When: Retrieve 5 orders
-        ListResponse<OrderResponse> response = await this._orderClient.GetOrderListAsync(null, numberOfOrders);
+        ListResponse<OrderResponse> response = await _orderClient.GetOrderListAsync(null, numberOfOrders);
 
         // Then
         response.Items.Should().HaveCountLessThanOrEqualTo(numberOfOrders);

@@ -1,7 +1,7 @@
 ﻿namespace Mollie.Api.Models.Payment.Request {
     public record PaySafeCardPaymentRequest : PaymentRequest {
         public PaySafeCardPaymentRequest() {
-            this.Method = PaymentMethod.PaySafeCard;
+            Method = PaymentMethod.PaySafeCard;
         }
 
         /// <summary>

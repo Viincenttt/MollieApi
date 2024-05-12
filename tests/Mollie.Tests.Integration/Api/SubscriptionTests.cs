@@ -11,7 +11,7 @@ using Mollie.Api.Models.Mandate;
 using Mollie.Api.Models.Subscription;
 using Mollie.Tests.Integration.Framework;
 
-namespace Mollie.Tests.Integration.Api; 
+namespace Mollie.Tests.Integration.Api;
 
 public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
     private readonly ISubscriptionClient _subscriptionClient;
@@ -19,18 +19,18 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
     private readonly IMandateClient _mandateClient;
 
     public SubscriptionTests() {
-        _subscriptionClient = new SubscriptionClient(this.ApiKey);
-        _customerClient = new CustomerClient(this.ApiKey);
-        _mandateClient = new MandateClient(this.ApiKey);
+        _subscriptionClient = new SubscriptionClient(ApiKey);
+        _customerClient = new CustomerClient(ApiKey);
+        _mandateClient = new MandateClient(ApiKey);
     }
-    
+
     [DefaultRetryFact]
     public async Task CanRetrieveSubscriptionList() {
         // Given
-        string customerId = await this.GetFirstCustomerWithValidMandate();
+        string customerId = await GetFirstCustomerWithValidMandate();
 
         // When: Retrieve subscription list with default settings
-        ListResponse<SubscriptionResponse> response = await this._subscriptionClient.GetSubscriptionListAsync(customerId);
+        ListResponse<SubscriptionResponse> response = await _subscriptionClient.GetSubscriptionListAsync(customerId);
 
         // Then
         response.Should().NotBeNull();
@@ -42,7 +42,7 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
         // Given
 
         // When: Retrieve subscription list with default settings
-        ListResponse<SubscriptionResponse> response = await this._subscriptionClient.GetAllSubscriptionList();
+        ListResponse<SubscriptionResponse> response = await _subscriptionClient.GetAllSubscriptionList();
 
         // Then
         response.Should().NotBeNull();
@@ -52,11 +52,11 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
     [DefaultRetryFact]
     public async Task ListSubscriptionsNeverReturnsMoreCustomersThenTheNumberOfRequestedSubscriptions() {
         // Given: Number of customers requested is 5
-        string customerId = await this.GetFirstCustomerWithValidMandate();
+        string customerId = await GetFirstCustomerWithValidMandate();
         int numberOfSubscriptions = 5;
 
         // When: Retrieve 5 subscriptions
-        ListResponse<SubscriptionResponse> response = await this._subscriptionClient.GetSubscriptionListAsync(customerId, null, numberOfSubscriptions);
+        ListResponse<SubscriptionResponse> response = await _subscriptionClient.GetSubscriptionListAsync(customerId, null, numberOfSubscriptions);
 
         // Then
         response.Items.Count.Should().BeLessOrEqualTo(numberOfSubscriptions);
@@ -65,7 +65,7 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
     [DefaultRetryFact]
     public async Task CanCreateSubscription() {
         // Given
-        string customerId = await this.GetFirstCustomerWithValidMandate();
+        string customerId = await GetFirstCustomerWithValidMandate();
         SubscriptionRequest subscriptionRequest = new SubscriptionRequest {
             Amount = new Amount(Currency.EUR, "100.00"),
             Times = 5,
@@ -74,7 +74,7 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
             WebhookUrl = "http://www.google.nl",
             StartDate = DateTime.Now.AddDays(1)
         };
-        
+
         // When
         SubscriptionResponse subscriptionResponse = await _subscriptionClient.CreateSubscriptionAsync(customerId, subscriptionRequest);
 
@@ -90,15 +90,15 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
     [DefaultRetryFact]
     public async Task CanCancelSubscription() {
         // Given
-        string customerId = await this.GetFirstCustomerWithValidMandate();
-        ListResponse<SubscriptionResponse> subscriptions = await this._subscriptionClient.GetSubscriptionListAsync(customerId);
+        string customerId = await GetFirstCustomerWithValidMandate();
+        ListResponse<SubscriptionResponse> subscriptions = await _subscriptionClient.GetSubscriptionListAsync(customerId);
 
         // When
         SubscriptionResponse subscriptionToCancel = subscriptions.Items
             .FirstOrDefault(s => s.Status != SubscriptionStatus.Canceled);
         if (subscriptionToCancel != null) {
-            await this._subscriptionClient.CancelSubscriptionAsync(customerId, subscriptionToCancel.Id);
-            SubscriptionResponse cancelledSubscription = await this._subscriptionClient.GetSubscriptionAsync(customerId, subscriptionToCancel.Id);
+            await _subscriptionClient.CancelSubscriptionAsync(customerId, subscriptionToCancel.Id);
+            SubscriptionResponse cancelledSubscription = await _subscriptionClient.GetSubscriptionAsync(customerId, subscriptionToCancel.Id);
 
             // Then
             cancelledSubscription.Status.Should().Be(SubscriptionStatus.Canceled);
@@ -107,9 +107,9 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
 
     [DefaultRetryFact]
     public async Task CanUpdateSubscription() {
-        // Given 
-        string customerId = await this.GetFirstCustomerWithValidMandate();
-        ListResponse<SubscriptionResponse> subscriptions = await this._subscriptionClient.GetSubscriptionListAsync(customerId);
+        // Given
+        string customerId = await GetFirstCustomerWithValidMandate();
+        ListResponse<SubscriptionResponse> subscriptions = await _subscriptionClient.GetSubscriptionListAsync(customerId);
 
         // When
         SubscriptionResponse subscriptionToUpdate = subscriptions.Items
@@ -118,7 +118,7 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
             SubscriptionUpdateRequest request = new SubscriptionUpdateRequest() {
                 Description = $"Updated subscription {Guid.NewGuid()}"
             };
-            SubscriptionResponse response = await this._subscriptionClient.UpdateSubscriptionAsync(customerId, subscriptionToUpdate.Id, request);
+            SubscriptionResponse response = await _subscriptionClient.UpdateSubscriptionAsync(customerId, subscriptionToUpdate.Id, request);
 
             // Then
             response.Description.Should().Be(request.Description);
@@ -129,7 +129,7 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
     public async Task CanCreateSubscriptionWithMetaData() {
         // If: We create a subscription with meta data
         string json = "{\"order_id\":\"4.40\"}";
-        string customerId = await this.GetFirstCustomerWithValidMandate();
+        string customerId = await GetFirstCustomerWithValidMandate();
         if (customerId != null) {
             SubscriptionRequest subscriptionRequest = new SubscriptionRequest {
                 Amount = new Amount(Currency.EUR, "100.00"),
@@ -150,10 +150,10 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
     }
 
     private async Task<string> GetFirstCustomerWithValidMandate() {
-        ListResponse<CustomerResponse> customers = await this._customerClient.GetCustomerListAsync();
-            
+        ListResponse<CustomerResponse> customers = await _customerClient.GetCustomerListAsync();
+
         foreach (CustomerResponse customer in customers.Items) {
-            ListResponse<MandateResponse> mandates = await this._mandateClient.GetMandateListAsync(customer.Id);
+            ListResponse<MandateResponse> mandates = await _mandateClient.GetMandateListAsync(customer.Id);
             if (mandates.Items.Any(x => x.Status == MandateStatus.Valid)) {
                 return customer.Id;
             }

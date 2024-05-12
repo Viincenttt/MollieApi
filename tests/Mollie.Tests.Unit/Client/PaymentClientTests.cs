@@ -53,7 +53,7 @@ public class PaymentClientTests : BaseClientTests {
         // Assert
         mockHttp.VerifyNoOutstandingExpectation();
     }
-    
+
     [Fact]
     public async Task CreatePaymentAsync_PaymentWithRequiredParameters_ResponseIsDeserializedInExpectedFormat() {
         // Given: we create a payment request with only the required parameters
@@ -75,7 +75,7 @@ public class PaymentClientTests : BaseClientTests {
         PaymentResponse paymentResponse = await paymentClient.CreatePaymentAsync(paymentRequest);
 
         // Then
-        this.AssertPaymentIsEqual(paymentRequest, paymentResponse);
+        AssertPaymentIsEqual(paymentRequest, paymentResponse);
         paymentResponse.AuthorizedAt!.Value.ToUniversalTime().Should().Be(DateTime.SpecifyKind(19.March(2018).At(13, 28, 37), DateTimeKind.Utc));
         paymentResponse.CreatedAt!.ToUniversalTime().Should().Be(DateTime.SpecifyKind(20.March(2018).At(13, 13, 37), DateTimeKind.Utc));
         paymentResponse.PaidAt!.Value.ToUniversalTime().Should().Be(DateTime.SpecifyKind(21.March(2018).At(13, 28, 37), DateTimeKind.Utc));
@@ -117,7 +117,7 @@ public class PaymentClientTests : BaseClientTests {
                 ""description"":""Description"",
                 ""method"":""ideal"",
                 ""redirectUrl"":""http://www.mollie.com""}";
-        var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Post, $"{BaseMollieClient.ApiEndPoint}payments", jsonResponse, expectedPaymentMethodJson);
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Post, $"{BaseMollieClient.ApiEndPoint}payments", jsonResponse, expectedPaymentMethodJson);
         HttpClient httpClient = mockHttp.ToHttpClient();
         PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
 
@@ -126,7 +126,7 @@ public class PaymentClientTests : BaseClientTests {
 
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
-        this.AssertPaymentIsEqual(paymentRequest, paymentResponse);
+        AssertPaymentIsEqual(paymentRequest, paymentResponse);
         paymentResponse.Method.Should().Be(paymentRequest.Method);
     }
 
@@ -152,7 +152,7 @@ public class PaymentClientTests : BaseClientTests {
                 ""description"":""Description"",
                 ""method"": null,
                 ""redirectUrl"":""http://www.mollie.com""}";
-        var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Post, $"{BaseMollieClient.ApiEndPoint}payments", expectedJsonResponse, expectedPaymentMethodJson);
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Post, $"{BaseMollieClient.ApiEndPoint}payments", expectedJsonResponse, expectedPaymentMethodJson);
         HttpClient httpClient = mockHttp.ToHttpClient();
         PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
 
@@ -161,10 +161,10 @@ public class PaymentClientTests : BaseClientTests {
 
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
-        this.AssertPaymentIsEqual(paymentRequest, paymentResponse);
+        AssertPaymentIsEqual(paymentRequest, paymentResponse);
         paymentResponse.Method.Should().BeNull();
     }
-        
+
     [Fact]
     public async Task CreatePayment_WithRoutingInformation_RequestIsSerializedInExpectedFormat() {
         // Given: We create a payment request with the routing request
@@ -205,16 +205,16 @@ public class PaymentClientTests : BaseClientTests {
                         ""releaseDate"": ""2022-01-14""
                     }
                 ]}";
-        var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Post, $"{BaseMollieClient.ApiEndPoint}payments", expectedJsonResponse, expectedRoutingInformation);
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Post, $"{BaseMollieClient.ApiEndPoint}payments", expectedJsonResponse, expectedRoutingInformation);
         HttpClient httpClient = mockHttp.ToHttpClient();
         PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
-            
+
         // When: We send the request
         PaymentResponse paymentResponse = await paymentClient.CreatePaymentAsync(paymentRequest);
 
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
-        this.AssertPaymentIsEqual(paymentRequest, paymentResponse);
+        AssertPaymentIsEqual(paymentRequest, paymentResponse);
         paymentResponse.Method.Should().BeNull();
     }
 
@@ -227,7 +227,7 @@ public class PaymentClientTests : BaseClientTests {
             RedirectUrl = "http://www.mollie.com",
             Method = PaymentMethod.Ideal
         };
-        var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Post, $"{BaseMollieClient.ApiEndPoint}payments?include=details.qrCode", defaultPaymentJsonResponse);
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Post, $"{BaseMollieClient.ApiEndPoint}payments?include=details.qrCode", defaultPaymentJsonResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
         PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
 
@@ -242,7 +242,7 @@ public class PaymentClientTests : BaseClientTests {
     public async Task GetPaymentAsync_NoIncludeParameters_RequestIsDeserializedInExpectedFormat() {
         // Given: We make a request to retrieve a payment without wanting any extra data
         const string paymentId = "tr_WDqYK6vllg";
-        var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}", defaultPaymentJsonResponse);
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}", defaultPaymentJsonResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
         PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
 
@@ -306,9 +306,9 @@ public class PaymentClientTests : BaseClientTests {
                     ""height"": 5,
                     ""width"": 10,
                     ""src"": ""https://www.mollie.com/qr/12345678.png""
-                }       
+                }
             },
-            ""_links"": { 
+            ""_links"": {
                 ""status"": {
                     ""href"": ""https://api.mollie.com/v2/payments/tr_WDqYK6vllg"",
                     ""type"": ""application/hal+json""
@@ -319,14 +319,14 @@ public class PaymentClientTests : BaseClientTests {
                 }
             }
         }";
-        
-        var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}", jsonResponse);
+
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}", jsonResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
         PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
 
         // When: We send the request
         var payment = await paymentClient.GetPaymentAsync(paymentId);
-        
+
         // Then
         payment.Should().BeOfType<BankTransferPaymentResponse>();
         var bankTransferPayment = payment as BankTransferPaymentResponse;
@@ -350,7 +350,7 @@ public class PaymentClientTests : BaseClientTests {
         bankTransferPayment.Links.PayOnline.Href.Should().Be("https://www.mollie.com/payscreen/select-method/WDqYK6vllg");
         bankTransferPayment.Links.PayOnline.Type.Should().Be("text/html");
     }
-    
+
     [Fact]
     public async Task GetPaymentAsync_ForBanContactPayment_DetailsAreDeserialized()
     {
@@ -382,13 +382,13 @@ public class PaymentClientTests : BaseClientTests {
                 ""failureReason"": ""failure-reason""
             }
         }";
-        var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}", jsonResponse);
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}", jsonResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
         PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
-        
+
         // When: We send the request
         var result = await paymentClient.GetPaymentAsync(paymentId);
-        
+
         // Then
         result.Should().BeOfType<BancontactPaymentResponse>();
         var banContactPayment = result as BancontactPaymentResponse;
@@ -402,7 +402,7 @@ public class PaymentClientTests : BaseClientTests {
         banContactPayment.Details.ConsumerBic.Should().Be("consumer-bic");
         banContactPayment.Details.FailureReason.Should().Be("failure-reason");
     }
-    
+
     [Fact]
     public async Task CreatePaymentAsync_SepaDirectDebit_RequestAndResponseAreConvertedToExpectedJsonFormat()
     {
@@ -457,16 +457,16 @@ public class PaymentClientTests : BaseClientTests {
                 ""signatureDate"": ""2018-03-20"",
                 ""endToEndIdentifier"": ""end-to-end-identifier"",
                 ""batchReference"": ""batch-reference"",
-                ""fileReference"": ""file-reference""                
+                ""fileReference"": ""file-reference""
             }
         }";
-        var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Post, $"{BaseMollieClient.ApiEndPoint}payments", jsonResponse, jsonRequest);
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Post, $"{BaseMollieClient.ApiEndPoint}payments", jsonResponse, jsonRequest);
         HttpClient httpClient = mockHttp.ToHttpClient();
         PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
-        
+
         // When: We send the request
         var result = await paymentClient.CreatePaymentAsync(paymentRequest);
-        
+
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
         var specificPaymentResponse = result as SepaDirectDebitResponse;
@@ -486,7 +486,7 @@ public class PaymentClientTests : BaseClientTests {
         specificPaymentResponse.Details.BatchReference.Should().Be("batch-reference");
         specificPaymentResponse.Details.FileReference.Should().Be("file-reference");
     }
-    
+
     [Fact]
     public async Task GetPaymentAsync_ForPayPalPayment_DetailsAreDeserialized()
     {
@@ -521,10 +521,10 @@ public class PaymentClientTests : BaseClientTests {
                 ""paypalFee"": {
                     ""currency"": ""EUR"",
                     ""value"": ""100.00""
-                }           
+                }
             }
         }";
-        var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get,
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get,
             $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}", jsonResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
         PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
@@ -551,7 +551,7 @@ public class PaymentClientTests : BaseClientTests {
         payPalPayment.Details.PaypalFee.Currency.Should().Be("EUR");
         payPalPayment.Details.PaypalFee.Value.Should().Be("100.00");
     }
-    
+
     [Fact]
     public async Task CreatePaymentAsync_CreditcardPayment_RequestAndResponseAreConvertedToExpectedJsonFormat()
     {
@@ -634,13 +634,13 @@ public class PaymentClientTests : BaseClientTests {
                 ""wallet"": ""applepay""
             }
         }";
-        var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Post, $"{BaseMollieClient.ApiEndPoint}payments", jsonResponse, jsonRequest);
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Post, $"{BaseMollieClient.ApiEndPoint}payments", jsonResponse, jsonRequest);
         HttpClient httpClient = mockHttp.ToHttpClient();
         PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
-        
+
         // When: We send the request
         var result = await paymentClient.CreatePaymentAsync(paymentRequest);
-        
+
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
         var specificPaymentResponse = result as CreditCardPaymentResponse;
@@ -657,7 +657,7 @@ public class PaymentClientTests : BaseClientTests {
         specificPaymentResponse.Details.FailureMessage.Should().Be("faulure-message");
         specificPaymentResponse.Details.Wallet.Should().Be("applepay");
     }
-    
+
     [Fact]
     public async Task CreatePaymentAsync_GiftcardPayment_RequestAndResponseAreConvertedToExpectedJsonFormat()
     {
@@ -719,13 +719,13 @@ public class PaymentClientTests : BaseClientTests {
                 ""RemainderMethod"": ""ideal""
             }
         }";
-        var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Post, $"{BaseMollieClient.ApiEndPoint}payments", jsonResponse, jsonRequest);
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Post, $"{BaseMollieClient.ApiEndPoint}payments", jsonResponse, jsonRequest);
         HttpClient httpClient = mockHttp.ToHttpClient();
         PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
-        
+
         // When: We send the request
         var result = await paymentClient.CreatePaymentAsync(paymentRequest);
-        
+
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
         var specificPaymentResponse = result as GiftcardPaymentResponse;
@@ -767,13 +767,13 @@ public class PaymentClientTests : BaseClientTests {
                 ""consumerBic"": ""consumer-bic""
             }
         }";
-        var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}", jsonResponse);
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}", jsonResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
         PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
-        
+
         // When: We send the request
         var result = await paymentClient.GetPaymentAsync(paymentId);
-        
+
         // Then
         result.Should().BeOfType<BelfiusPaymentResponse>();
         var belfiusPayment = result as BelfiusPaymentResponse;
@@ -805,14 +805,14 @@ public class PaymentClientTests : BaseClientTests {
                 ""consumerBic"": ""consumer-bic""
             }
         }";
-        
-        var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}", jsonResponse);
+
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}", jsonResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
         PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
-        
+
         // When: We send the request
         var result = await paymentClient.GetPaymentAsync(paymentId);
-        
+
         // Then
         result.Should().BeOfType<IngHomePayPaymentResponse>();
         var ingHomePayPayment = result as IngHomePayPaymentResponse;
@@ -820,7 +820,7 @@ public class PaymentClientTests : BaseClientTests {
         ingHomePayPayment.Details.ConsumerAccount.Should().Be("consumer-account");
         ingHomePayPayment.Details.ConsumerBic.Should().Be("consumer-bic");
     }
-    
+
     [Fact]
     public async Task GetPaymentAsync_ForKbcPayment_DetailsAreDeserialized()
     {
@@ -844,14 +844,14 @@ public class PaymentClientTests : BaseClientTests {
                 ""consumerBic"": ""consumer-bic""
             }
         }";
-        
-        var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}", jsonResponse);
+
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}", jsonResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
         PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
-        
+
         // When: We send the request
         var result = await paymentClient.GetPaymentAsync(paymentId);
-        
+
         // Then
         result.Should().BeOfType<KbcPaymentResponse>();
         var kbcPayment = result as KbcPaymentResponse;
@@ -909,13 +909,13 @@ public class PaymentClientTests : BaseClientTests {
                 }
             }
         }";
-        var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Post, $"{BaseMollieClient.ApiEndPoint}payments", jsonResponse, jsonRequest);
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Post, $"{BaseMollieClient.ApiEndPoint}payments", jsonResponse, jsonRequest);
         HttpClient httpClient = mockHttp.ToHttpClient();
         PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
-        
+
         // When: We send the request
         var result = await paymentClient.CreatePaymentAsync(paymentRequest);
-        
+
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
         var specificPaymentResponse = result as IdealPaymentResponse;
@@ -927,7 +927,7 @@ public class PaymentClientTests : BaseClientTests {
         specificPaymentResponse.Details.QrCode.Width.Should().Be(10);
         specificPaymentResponse.Details.QrCode.Src.Should().Be("https://www.mollie.com/qr/12345678.png");
     }
-    
+
     [Fact]
     public async Task GetPaymentAsync_ForSofortPayment_DetailsAreDeserialized()
     {
@@ -951,14 +951,14 @@ public class PaymentClientTests : BaseClientTests {
                 ""consumerBic"": ""consumer-bic""
             }
         }";
-        
-        var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}", jsonResponse);
+
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}", jsonResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
         PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
-        
+
         // When: We send the request
         var result = await paymentClient.GetPaymentAsync(paymentId);
-        
+
         // Then
         result.Should().BeOfType<SofortPaymentResponse>();
         var sofortPayment = result as SofortPaymentResponse;
@@ -966,7 +966,7 @@ public class PaymentClientTests : BaseClientTests {
         sofortPayment.Details.ConsumerAccount.Should().Be("consumer-account");
         sofortPayment.Details.ConsumerBic.Should().Be("consumer-bic");
     }
-        
+
     [Theory]
     [InlineData("")]
     [InlineData(" ")]
@@ -1005,7 +1005,7 @@ public class PaymentClientTests : BaseClientTests {
                 }
             }
         }";
-        var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, 
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get,
             $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}?include=details.qrCode",
             jsonResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
@@ -1028,7 +1028,7 @@ public class PaymentClientTests : BaseClientTests {
     public async Task GetPaymentAsync_IncludeRemainderDetails_QueryStringContainsIncludeRemainderDetailsParameter() {
         // Given: We make a request to retrieve a payment without wanting any extra data
         const string paymentId = "abcde";
-        var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}?include=details.remainderDetails", defaultPaymentJsonResponse);
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}?include=details.remainderDetails", defaultPaymentJsonResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
         PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
 
@@ -1042,7 +1042,7 @@ public class PaymentClientTests : BaseClientTests {
     [Fact]
     public async Task GetPaymentListAsync_IncludeQrCode_QueryStringContainsIncludeQrCodeParameter() {
         // Given: We make a request to retrieve a payment without wanting any extra data
-        var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments?include=details.qrCode", defaultPaymentJsonResponse);
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments?include=details.qrCode", defaultPaymentJsonResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
         PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
 
@@ -1058,7 +1058,7 @@ public class PaymentClientTests : BaseClientTests {
     {
         // Given: We make a request to retrieve a payment with embedded refunds
         const string paymentId = "abcde";
-        var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}?embed=refunds", defaultPaymentJsonResponse);
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}?embed=refunds", defaultPaymentJsonResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
         PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
 
@@ -1073,7 +1073,7 @@ public class PaymentClientTests : BaseClientTests {
     public async Task GetPaymentListAsync_EmbedRefunds_QueryStringContainsEmbedRefundsParameter()
     {
         // Given: We make a request to retrieve a payment with embedded refunds
-        var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments?embed=refunds", defaultPaymentJsonResponse);
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments?embed=refunds", defaultPaymentJsonResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
         PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
 
@@ -1089,7 +1089,7 @@ public class PaymentClientTests : BaseClientTests {
     {
         // Given: We make a request to retrieve a payment with embedded refunds
         const string paymentId = "abcde";
-        var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}?embed=chargebacks", defaultPaymentJsonResponse);
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}?embed=chargebacks", defaultPaymentJsonResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
         PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
 
@@ -1104,7 +1104,7 @@ public class PaymentClientTests : BaseClientTests {
     public async Task GetPaymentListAsync_EmbedChargebacks_QueryStringContainsEmbedChargebacksParameter()
     {
         // Given: We make a request to retrieve a payment with embedded refunds
-        var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments?embed=chargebacks", defaultPaymentJsonResponse);
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments?embed=chargebacks", defaultPaymentJsonResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
         PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
 
@@ -1114,7 +1114,7 @@ public class PaymentClientTests : BaseClientTests {
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
     }
-    
+
     [Theory]
     [InlineData(null, "")]
     [InlineData(SortDirection.Desc, "?sort=desc")]
@@ -1122,7 +1122,7 @@ public class PaymentClientTests : BaseClientTests {
     public async Task GetPaymentListAsync_AddSortDirection_QueryStringContainsSortDirection(SortDirection? sortDirection, string expectedQueryString)
     {
         // Given: We make a request to retrieve a payment with embedded refunds
-        var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments{expectedQueryString}", defaultPaymentJsonResponse);
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments{expectedQueryString}", defaultPaymentJsonResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
         PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
 
@@ -1138,7 +1138,7 @@ public class PaymentClientTests : BaseClientTests {
         // Given: We make a request to retrieve a payment with embedded refunds
         const string paymentId = "payment-id";
         string expectedContent = "\"testmode\":true";
-        var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Delete, $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}", defaultPaymentJsonResponse, expectedContent);
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Delete, $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}", defaultPaymentJsonResponse, expectedContent);
         HttpClient httpClient = mockHttp.ToHttpClient();
         PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
 
@@ -1148,7 +1148,7 @@ public class PaymentClientTests : BaseClientTests {
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
     }
-        
+
     [Theory]
     [InlineData("")]
     [InlineData(" ")]
@@ -1165,7 +1165,7 @@ public class PaymentClientTests : BaseClientTests {
         // Then
         exception.Message.Should().Be("Required URL argument 'paymentId' is null or empty");
     }
-        
+
     [Theory]
     [InlineData("")]
     [InlineData(" ")]
@@ -1199,7 +1199,7 @@ public class PaymentClientTests : BaseClientTests {
             }
         }
     }
-        
+
     private const string defaultPaymentJsonResponse = @"
 {
     ""resource"": ""payment"",
@@ -1224,7 +1224,7 @@ public class PaymentClientTests : BaseClientTests {
     ""profileId"": ""pfl_QkEhN94Ba"",
     ""sequenceType"": ""oneoff"",
     ""redirectUrl"": ""https://webshop.example.org/order/12345/"",
-    ""webhookUrl"": ""https://webshop.example.org/payments/webhook/"", 
+    ""webhookUrl"": ""https://webshop.example.org/payments/webhook/"",
     ""authorizedAt"": ""2018-03-19T13:28:37+00:00"",
     ""paidAt"": ""2018-03-21T13:28:37+00:00"",
     ""canceledAt"": ""2018-03-22T13:28:37+00:00"",

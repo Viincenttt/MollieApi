@@ -11,24 +11,24 @@ namespace Mollie.Api.Client {
         }
 
         public async Task<OrganizationResponse> GetCurrentOrganizationAsync() {
-            return await this.GetAsync<OrganizationResponse>($"organizations/me").ConfigureAwait(false);
+            return await GetAsync<OrganizationResponse>($"organizations/me").ConfigureAwait(false);
         }
 
         public async Task<OrganizationResponse> GetOrganizationAsync(string organizationId) {
-            this.ValidateRequiredUrlParameter(nameof(organizationId), organizationId);
-            return await this.GetAsync<OrganizationResponse>($"organizations/{organizationId}").ConfigureAwait(false);
+            ValidateRequiredUrlParameter(nameof(organizationId), organizationId);
+            return await GetAsync<OrganizationResponse>($"organizations/{organizationId}").ConfigureAwait(false);
         }
 
         public async Task<OrganizationResponse> GetOrganizationAsync(UrlObjectLink<OrganizationResponse> url) {
-            return await this.GetAsync(url).ConfigureAwait(false);
+            return await GetAsync(url).ConfigureAwait(false);
         }
 
         public async Task<ListResponse<OrganizationResponse>> GetOrganizationsListAsync(string? from = null, int? limit = null) {
-            return await this.GetListAsync<ListResponse<OrganizationResponse>>("organizations", from, limit, null).ConfigureAwait(false);
+            return await GetListAsync<ListResponse<OrganizationResponse>>("organizations", from, limit, null).ConfigureAwait(false);
         }
-        
+
         public async Task<ListResponse<OrganizationResponse>> GetOrganizationsListAsync(UrlObjectLink<ListResponse<OrganizationResponse>> url) {
-            return await this.GetAsync(url).ConfigureAwait(false);
+            return await GetAsync(url).ConfigureAwait(false);
         }
     }
 }

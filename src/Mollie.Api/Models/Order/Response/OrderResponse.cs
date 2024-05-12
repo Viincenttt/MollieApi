@@ -23,7 +23,7 @@ namespace Mollie.Api.Models.Order {
         public required string ProfileId { get; init; }
 
         /// <summary>
-        /// The payment method last used when paying for the order - See the 
+        /// The payment method last used when paying for the order - See the
         /// Mollie.Api.Models.Payment.PaymentMethod class for a full list of known values.
         /// </summary>
         public string? Method { get; set; }
@@ -80,13 +80,13 @@ namespace Mollie.Api.Models.Order {
         public OrderAddressDetails? ShippingAddress { get; set; }
 
         /// <summary>
-        /// The locale used during checkout. 
+        /// The locale used during checkout.
         /// </summary>
         public required string Locale { get; init; }
 
         /// <summary>
-        /// Provide any data you like, for example a string or a JSON object. We will save the data 
-        /// alongside the order. Whenever you fetch the order with our API, we’ll also include the 
+        /// Provide any data you like, for example a string or a JSON object. We will save the data
+        /// alongside the order. Whenever you fetch the order with our API, we’ll also include the
         /// metadata. You can use up to approximately 1kB.
         /// </summary>
         [JsonConverter(typeof(RawJsonConverter))]
@@ -96,7 +96,7 @@ namespace Mollie.Api.Models.Order {
         /// The URL your customer will be redirected to after completing or canceling the payment process.
         /// </summary>
         public string? RedirectUrl { get; set; }
-        
+
         /// <summary>
         /// The optional redirect URL you provided during payment creation. Consumer that explicitly cancel the
         /// order will be redirected to this URL if provided, or otherwise to the redirectUrl instead — see above.
@@ -162,7 +162,7 @@ namespace Mollie.Api.Models.Order {
         public required OrderResponseLinks Links { get; init; }
 
         public T? GetMetadata<T>(JsonSerializerSettings? jsonSerializerSettings = null) {
-            return Metadata != null ? JsonConvert.DeserializeObject<T>(this.Metadata, jsonSerializerSettings) : default;
+            return Metadata != null ? JsonConvert.DeserializeObject<T>(Metadata, jsonSerializerSettings) : default;
         }
     }
 }

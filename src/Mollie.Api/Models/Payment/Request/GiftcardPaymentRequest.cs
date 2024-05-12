@@ -1,11 +1,11 @@
 ﻿namespace Mollie.Api.Models.Payment.Request {
     public record GiftcardPaymentRequest : PaymentRequest {
         public GiftcardPaymentRequest() {
-            this.Method = PaymentMethod.GiftCard;
+            Method = PaymentMethod.GiftCard;
         }
 
         /// <summary>
-        /// The gift card brand to use for the payment. These issuers are not dynamically available through the Issuers API, 
+        /// The gift card brand to use for the payment. These issuers are not dynamically available through the Issuers API,
         /// but can be retrieved by using the issuers include in the Methods API. If you need a brand not in the list, contact
         /// our support department. If only one issuer is activated on your account, you can omit this parameter.
         /// </summary>

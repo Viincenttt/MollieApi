@@ -28,7 +28,7 @@ namespace Mollie.Tests.Unit.Client {
         public async Task GetOnboardingStatusAsync_DefaultBehaviour_ResponseIsParsed() {
             // Given: We request the onboarding status
             string expectedUrl = $"{BaseMollieClient.ApiEndPoint}onboarding/me";
-            var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, defaultOnboardingStatusJsonResponse);
+            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, defaultOnboardingStatusJsonResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
             OnboardingClient onboardingClient = new OnboardingClient("api-key", httpClient);
 
@@ -59,7 +59,7 @@ namespace Mollie.Tests.Unit.Client {
                     Name = defaultName
                 }
             };
-            var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Post, expectedUrl, string.Empty);
+            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Post, expectedUrl, string.Empty);
             HttpClient httpClient = mockHttp.ToHttpClient();
             OnboardingClient onboardingClient = new OnboardingClient("api-key", httpClient);
 

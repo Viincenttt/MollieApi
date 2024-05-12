@@ -17,57 +17,57 @@ namespace Mollie.Api.Client
         }
 
         public async Task<PaymentMethodResponse> GetPaymentMethodAsync(
-            string paymentMethod, 
-            bool includeIssuers = false, 
-            string? locale = null, 
-            bool includePricing = false, 
-            string? profileId = null, 
-            bool testmode = false, 
+            string paymentMethod,
+            bool includeIssuers = false,
+            string? locale = null,
+            bool includePricing = false,
+            string? profileId = null,
+            bool testmode = false,
             string? currency = null) {
-            
-            this.ValidateRequiredUrlParameter(nameof(paymentMethod), paymentMethod);
-            
-            Dictionary<string, string> queryParameters = this.BuildQueryParameters(
-                locale: locale, 
-                currency: currency, 
-                profileId: profileId, 
-                testmode: testmode, 
-                includeIssuers: includeIssuers, 
+
+            ValidateRequiredUrlParameter(nameof(paymentMethod), paymentMethod);
+
+            Dictionary<string, string> queryParameters = BuildQueryParameters(
+                locale: locale,
+                currency: currency,
+                profileId: profileId,
+                testmode: testmode,
+                includeIssuers: includeIssuers,
                 includePricing: includePricing);
 
-            return await this.GetAsync<PaymentMethodResponse>($"methods/{paymentMethod.ToLower()}{queryParameters.ToQueryString()}").ConfigureAwait(false);
+            return await GetAsync<PaymentMethodResponse>($"methods/{paymentMethod.ToLower()}{queryParameters.ToQueryString()}").ConfigureAwait(false);
         }
 
         public async Task<ListResponse<PaymentMethodResponse>> GetAllPaymentMethodListAsync(
-            string? locale = null, 
-            Amount? amount = null, 
-            bool includeIssuers = false, 
-            bool includePricing = false, 
+            string? locale = null,
+            Amount? amount = null,
+            bool includeIssuers = false,
+            bool includePricing = false,
             string? profileId = null) {
-            
-            Dictionary<string, string> queryParameters = this.BuildQueryParameters(
+
+            Dictionary<string, string> queryParameters = BuildQueryParameters(
                locale: locale,
                amount: amount,
                includeIssuers: includeIssuers,
                includePricing: includePricing,
                profileId: profileId);
 
-            return await this.GetListAsync<ListResponse<PaymentMethodResponse>>("methods/all", null, null, queryParameters).ConfigureAwait(false);
+            return await GetListAsync<ListResponse<PaymentMethodResponse>>("methods/all", null, null, queryParameters).ConfigureAwait(false);
         }
 
         public async Task<ListResponse<PaymentMethodResponse>> GetPaymentMethodListAsync(
             string? sequenceType = null,
-            string? locale = null, 
-            Amount? amount = null, 
-            bool includeIssuers = false, 
-            bool includePricing = false, 
-            string? profileId = null, 
-            bool testmode = false, 
-            Resource? resource = null, 
+            string? locale = null,
+            Amount? amount = null,
+            bool includeIssuers = false,
+            bool includePricing = false,
+            string? profileId = null,
+            bool testmode = false,
+            Resource? resource = null,
             string? billingCountry = null,
             string? includeWallets = null) {
-            
-            Dictionary<string, string> queryParameters = this.BuildQueryParameters(
+
+            Dictionary<string, string> queryParameters = BuildQueryParameters(
                sequenceType: sequenceType,
                locale: locale,
                amount: amount,
@@ -79,26 +79,26 @@ namespace Mollie.Api.Client
                billingCountry: billingCountry,
                includeWallets: includeWallets);
 
-            return await this.GetListAsync<ListResponse<PaymentMethodResponse>>("methods", null, null, queryParameters).ConfigureAwait(false);
+            return await GetListAsync<ListResponse<PaymentMethodResponse>>("methods", null, null, queryParameters).ConfigureAwait(false);
         }
 
         public async Task<PaymentMethodResponse> GetPaymentMethodAsync(UrlObjectLink<PaymentMethodResponse> url) {
-            return await this.GetAsync(url).ConfigureAwait(false);
+            return await GetAsync(url).ConfigureAwait(false);
         }
 
         private Dictionary<string, string> BuildQueryParameters(
-            string? sequenceType = null, 
-            string? locale = null, 
-            Amount? amount = null, 
-            bool includeIssuers = false, 
-            bool includePricing = false, 
-            string? profileId = null, 
-            bool testmode = false, 
-            Resource? resource = null, 
-            string? currency = null, 
+            string? sequenceType = null,
+            string? locale = null,
+            Amount? amount = null,
+            bool includeIssuers = false,
+            bool includePricing = false,
+            string? profileId = null,
+            bool testmode = false,
+            Resource? resource = null,
+            string? currency = null,
             string? billingCountry = null,
             string? includeWallets = null) {
-            
+
             var result = new Dictionary<string, string>();
             result.AddValueIfTrue(nameof(testmode), testmode);
             result.AddValueIfNotNullOrEmpty(nameof(sequenceType), sequenceType?.ToLower());
@@ -106,7 +106,7 @@ namespace Mollie.Api.Client
             result.AddValueIfNotNullOrEmpty(nameof(locale), locale);
             result.AddValueIfNotNullOrEmpty("amount[currency]", amount?.Currency);
             result.AddValueIfNotNullOrEmpty("amount[value]", amount?.Value);
-            result.AddValueIfNotNullOrEmpty("include", this.BuildIncludeParameter(includeIssuers, includePricing));
+            result.AddValueIfNotNullOrEmpty("include", BuildIncludeParameter(includeIssuers, includePricing));
             result.AddValueIfNotNullOrEmpty(nameof(resource), resource?.ToString()?.ToLower());
             result.AddValueIfNotNullOrEmpty(nameof(currency), currency);
             result.AddValueIfNotNullOrEmpty(nameof(billingCountry), billingCountry);

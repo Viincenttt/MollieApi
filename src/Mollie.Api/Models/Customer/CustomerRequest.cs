@@ -14,7 +14,7 @@ namespace Mollie.Api.Models.Customer {
         public string? Email { get; set; }
 
         /// <summary>
-        /// Allows you to preset the language to be used in the payment screens shown to the consumer. When this parameter is not 
+        /// Allows you to preset the language to be used in the payment screens shown to the consumer. When this parameter is not
         /// provided, the browser language will be used instead in the payment flow (which is usually more accurate).
         /// </summary>
         public string? Locale { get; set; }
@@ -25,14 +25,14 @@ namespace Mollie.Api.Models.Customer {
         /// </summary>
         [JsonConverter(typeof(RawJsonConverter))]
         public string? Metadata { get; set; }
-        
+
         /// <summary>
         ///	Oauth only - Optional – Set this to true to make this customer a test customer.
         /// </summary>
         public bool? Testmode { get; set; }
 
         public void SetMetadata(object metadataObj, JsonSerializerSettings? jsonSerializerSettings = null) {
-            this.Metadata = JsonConvert.SerializeObject(metadataObj, jsonSerializerSettings);
+            Metadata = JsonConvert.SerializeObject(metadataObj, jsonSerializerSettings);
         }
     }
 }

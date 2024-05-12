@@ -1,7 +1,7 @@
 namespace Mollie.Api.Models.Payment.Request {
     public record BankTransferPaymentRequest : PaymentRequest {
         public BankTransferPaymentRequest() {
-            this.Method = PaymentMethod.BankTransfer;
+            Method = PaymentMethod.BankTransfer;
         }
 
         /// <summary>

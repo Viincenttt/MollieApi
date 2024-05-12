@@ -11,7 +11,7 @@ namespace Mollie.Api.Models.PaymentLink.Request {
         public required Amount Amount { get; init; }
 
         /// <summary>
-        /// This description will also be used as the payment description and will be shown to your customer on their card or bank 
+        /// This description will also be used as the payment description and will be shown to your customer on their card or bank
         /// statement when possible.
         /// </summary>
         public required string Description { get; init; }
@@ -43,7 +43,7 @@ namespace Mollie.Api.Models.PaymentLink.Request {
         public bool? Testmode { get; set; }
 
         public override string ToString() {
-            return $"Amount: {this.Amount} - Description: {this.Description}";
+            return $"Amount: {Amount} - Description: {Description}";
         }
     }
 }

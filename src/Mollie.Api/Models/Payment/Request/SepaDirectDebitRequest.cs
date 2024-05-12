@@ -1,7 +1,7 @@
 namespace Mollie.Api.Models.Payment.Request {
     public record SepaDirectDebitRequest : PaymentRequest {
         public SepaDirectDebitRequest() {
-            this.Method = PaymentMethod.DirectDebit;
+            Method = PaymentMethod.DirectDebit;
         }
 
         /// <summary>

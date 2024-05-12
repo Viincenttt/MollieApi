@@ -8,7 +8,7 @@ namespace Mollie.Api.Client {
                 throw new ArgumentNullException(nameof(oauthAccessToken), "Mollie API key cannot be empty");
             }
 
-            this.ValidateApiKeyIsOauthAccesstoken(true);
+            ValidateApiKeyIsOauthAccesstoken(true);
         }
     }
 }

@@ -8,15 +8,15 @@ using Mollie.Api.Models.List;
 using Mollie.Api.Models.Terminal;
 using Mollie.Tests.Integration.Framework;
 
-namespace Mollie.Tests.Integration.Api; 
+namespace Mollie.Tests.Integration.Api;
 
 public class TerminalTests : BaseMollieApiTestClass, IDisposable {
     private readonly ITerminalClient _terminalClient;
 
     public TerminalTests() {
-        _terminalClient = new TerminalClient(this.ApiKey);
+        _terminalClient = new TerminalClient(ApiKey);
     }
-    
+
     [DefaultRetryFact]
     public async Task CanRetrieveTerminalList() {
         // Given

@@ -16,7 +16,7 @@ namespace Mollie.Tests.Unit.Client {
         public async Task ListSettlementCaptures_DefaultBehaviour_ResponseIsParsed() {
             // Given: We request a list of captures
             string expectedUrl = $"{BaseMollieClient.ApiEndPoint}settlements/{defaultSettlementId}/captures";
-            var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, defaultCaptureListJsonResponse);
+            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, defaultCaptureListJsonResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
             SettlementsClient settlementsClient = new SettlementsClient("api-key", httpClient);
 
@@ -54,7 +54,7 @@ namespace Mollie.Tests.Unit.Client {
         public async Task GetOpenSettlement_DefaultBehaviour_ResponseIsParsed() {
             // Given: We request a list of captures
             string expectedUrl = $"{BaseMollieClient.ApiEndPoint}settlements/open";
-            var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, defaultGetSettlementResponse);
+            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, defaultGetSettlementResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
             SettlementsClient settlementsClient = new SettlementsClient("api-key", httpClient);
 
@@ -121,7 +121,7 @@ namespace Mollie.Tests.Unit.Client {
         public async Task GetOpenSettlement_ResponseWithEmptyPeriods_ResponseIsParsed() {
             // Given: We request a list of captures
             string expectedUrl = $"{BaseMollieClient.ApiEndPoint}settlements/open";
-            var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, emptyPeriodsSettlementResponse);
+            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, emptyPeriodsSettlementResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
             SettlementsClient settlementsClient = new SettlementsClient("api-key", httpClient);
 
@@ -133,7 +133,7 @@ namespace Mollie.Tests.Unit.Client {
             settlementResponse.Should().NotBeNull();
             settlementResponse.Periods.Count.Should().Be(0);
         }
-        
+
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
@@ -150,7 +150,7 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             exception.Message.Should().Be("Required URL argument 'settlementId' is null or empty");
         }
-        
+
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
@@ -167,7 +167,7 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             exception.Message.Should().Be("Required URL argument 'settlementId' is null or empty");
         }
-        
+
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
@@ -184,7 +184,7 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             exception.Message.Should().Be("Required URL argument 'settlementId' is null or empty");
         }
-        
+
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
@@ -201,7 +201,7 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             exception.Message.Should().Be("Required URL argument 'settlementId' is null or empty");
         }
-        
+
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
@@ -218,8 +218,8 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             exception.Message.Should().Be("Required URL argument 'settlementId' is null or empty");
         }
-        
-        
+
+
         private const string defaultSettlementId = "tr_Agfg241g";
         private const string defaultPaymentId = "tr_WDqYK6vllg";
         private const string defaultShipmentId = "shp_3wmsgCJN4U";
@@ -403,7 +403,7 @@ namespace Mollie.Tests.Unit.Client {
       ""currency"":""EUR""
    }},
    ""periods"":[
-      
+
    ],
    ""_links"":{{
       ""self"":{{
@@ -416,5 +416,5 @@ namespace Mollie.Tests.Unit.Client {
       }}
    }}
 }}";
-    }    
+    }
 }

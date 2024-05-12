@@ -4,7 +4,7 @@ namespace Mollie.Api.Models.Payment.Request
     {
         public Przelewy24PaymentRequest()
         {
-            this.Method = PaymentMethod.Przelewy24;
+            Method = PaymentMethod.Przelewy24;
         }
 
         /// <summary>

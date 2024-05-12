@@ -2,7 +2,7 @@
     public record ApplePayPaymentRequest : PaymentRequest {
         public ApplePayPaymentRequest()
         {
-            this.Method = PaymentMethod.ApplePay;
+            Method = PaymentMethod.ApplePay;
         }
 
         /// <summary>
