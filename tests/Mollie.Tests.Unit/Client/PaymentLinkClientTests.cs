@@ -15,10 +15,9 @@ namespace Mollie.Tests.Unit.Client {
         private const decimal DefaultPaymentAmount = 50;
         private const string DefaultPaymentLinkId = "pl_4Y0eZitmBnQ6IDoMqZQKh";
         private const string DefaultDescription = "A car";
-        private const string DefaultWebhookUrl = "http://www.mollie.com";
-        private const string DefaultRedirectUrl = "http://www.mollie.com";
-        
-        private readonly string defaultPaymentLinkJsonResponse = @$"{{
+        private const string DefaultWebhookUrl = "https://www.mollie.com";
+
+        private readonly string _defaultPaymentLinkJsonResponse = @$"{{
     ""resource"": ""payment-link"",
     ""id"": ""{DefaultPaymentLinkId}"",
     ""mode"": ""test"",
@@ -56,16 +55,16 @@ namespace Mollie.Tests.Unit.Client {
             PaymentLinkRequest paymentLinkRequest = new PaymentLinkRequest() {
                 Description = "Test",
                 Amount = new Amount(Currency.EUR, 50),
-                WebhookUrl = "http://www.mollie.com",
-                RedirectUrl = "http://www.mollie.com",
+                WebhookUrl = "https://www.mollie.com",
+                RedirectUrl = "https://www.mollie.com",
                 ExpiresAt = DateTime.Now.AddDays(1)
             };
             var mockHttp = new MockHttpMessageHandler();
             mockHttp.When($"{BaseMollieClient.ApiEndPoint}*")
-                .Respond("application/json", defaultPaymentLinkJsonResponse);
+                .Respond("application/json", _defaultPaymentLinkJsonResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
-            PaymentLinkClient paymentLinkClient = new PaymentLinkClient("abcde", httpClient);
-            
+            PaymentLinkClient paymentLinkClient = new PaymentLinkClient("api-key", httpClient);
+
             // When: We send the request
             PaymentLinkResponse response = await paymentLinkClient.CreatePaymentLinkAsync(paymentLinkRequest);
 
@@ -79,10 +78,10 @@ namespace Mollie.Tests.Unit.Client {
             // Given: we retrieve a payment link
             var mockHttp = new MockHttpMessageHandler();
             mockHttp.When($"{BaseMollieClient.ApiEndPoint}*")
-                .Respond("application/json", defaultPaymentLinkJsonResponse);
+                .Respond("application/json", _defaultPaymentLinkJsonResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
-            PaymentLinkClient paymentLinkClient = new PaymentLinkClient("abcde", httpClient);
-            
+            PaymentLinkClient paymentLinkClient = new PaymentLinkClient("api-key", httpClient);
+
             // When: We send the request
             PaymentLinkResponse response = await paymentLinkClient.GetPaymentLinkAsync(DefaultPaymentLinkId);
 
@@ -90,7 +89,7 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.VerifyNoOutstandingExpectation();
             VerifyPaymentLinkResponse(response);
         }
-        
+
         [Theory]
         [InlineData("")]
         [InlineData(" ")]

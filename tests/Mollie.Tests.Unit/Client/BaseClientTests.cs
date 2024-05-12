@@ -3,8 +3,8 @@ using System.Net.Http;
 
 namespace Mollie.Tests.Unit.Client {
     public abstract class BaseClientTests {
-        protected readonly string DefaultRedirectUrl = "http://mysite.com";
-        
+        protected const string DefaultRedirectUrl = "https://www.mollie.com";
+
         protected MockHttpMessageHandler CreateMockHttpMessageHandler(HttpMethod httpMethod, string url, string response, string expectedPartialContent = null) {
             MockHttpMessageHandler mockHttp = new MockHttpMessageHandler();
             MockedRequest mockedRequest = mockHttp.Expect(httpMethod, url)
