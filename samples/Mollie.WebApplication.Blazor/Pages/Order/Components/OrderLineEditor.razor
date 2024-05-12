@@ -3,7 +3,7 @@
 <EditForm Model="_newOrderLineModel" OnValidSubmit="@OnAddOrderLine">
     <DataAnnotationsValidator />
     <ValidationSummary />
-        
+
     <table class="table table-striped">
         <thead>
             <tr>
@@ -81,9 +81,9 @@
 
 @code {
     [Parameter, EditorRequired]
-    public IList<CreateOrderLineModel> OrderLines { get; set; }
+    public required IList<CreateOrderLineModel> OrderLines { get; set; }
 
-    private CreateOrderLineModel _newOrderLineModel = new CreateOrderLineModel();
+    private CreateOrderLineModel _newOrderLineModel = new ();
 
     private void OnAddOrderLine() {
         decimal totalAmount = _newOrderLineModel.Quantity * _newOrderLineModel.UnitPrice;

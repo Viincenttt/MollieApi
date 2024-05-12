@@ -1,27 +1,31 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 
-namespace Mollie.WebApplication.Blazor.Framework.Validators; 
+namespace Mollie.WebApplication.Blazor.Framework.Validators;
 
 public class DecimalPlacesAttribute : ValidationAttribute {
-    public int DecimalPlaces { get; }
+    private int _decimalPlaces { get; }
 
     public DecimalPlacesAttribute(int decimalPlaces) {
-        DecimalPlaces = decimalPlaces;
+        _decimalPlaces = decimalPlaces;
     }
 
-    protected override ValidationResult IsValid(object value, ValidationContext validationContext) {
+    protected override ValidationResult? IsValid(object? value, ValidationContext validationContext) {
+        if (value == null) {
+            return new ValidationResult("Value is null");
+        }
+
         decimal amount = (decimal)value;
         string text = amount.ToString(CultureInfo.InvariantCulture);
         int dotIndex = text.IndexOf('.');
         var decimals = text.Length - dotIndex - 1;
-        var places = DecimalPlaces switch
+        var places = _decimalPlaces switch
         {
             0 => "without decimal places",
             1 => "with one decimal place",
-            _ => $"with {DecimalPlaces} decimal places"
+            _ => $"with {_decimalPlaces} decimal places"
         };
-        return dotIndex < 0 || dotIndex != text.LastIndexOf('.') || decimals != DecimalPlaces
+        return dotIndex < 0 || dotIndex != text.LastIndexOf('.') || decimals != _decimalPlaces
             ? new ValidationResult(ErrorMessage ?? $"Please enter an amount {places}")
             : ValidationResult.Success;
     }

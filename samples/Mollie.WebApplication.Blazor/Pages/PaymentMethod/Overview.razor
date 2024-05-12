@@ -32,7 +32,7 @@ else {
 
 
 @code {
-    private ListResponse<PaymentMethodResponse> _paymentMethods;
+    private ListResponse<PaymentMethodResponse>? _paymentMethods;
 
     protected override async Task OnInitializedAsync() {
         _paymentMethods = await PaymentMethodClient.GetPaymentMethodListAsync();

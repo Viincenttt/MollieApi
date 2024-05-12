@@ -34,7 +34,7 @@ else {
                 <td>@order.Method</td>
                 <td>@order.Metadata</td>
                 <td>
-                    @if (order.Status == OrderStatus.Created) {
+                    @if (order.Status == OrderStatus.Created && order.Links.Checkout != null) {
                         <a href="@order.Links.Checkout.Href" class="btn btn-outline-secondary" target="_blank">Pay</a>
                     }
                 </td>
@@ -52,9 +52,9 @@ else {
 @code {
     [Parameter]
     [SupplyParameterFromQuery]
-    public string Url { get; set; }
+    public string? Url { get; set; }
 
-    private ListResponse<OrderResponse> _orders;
+    private ListResponse<OrderResponse>? _orders;
 
     protected override async Task OnParametersSetAsync() {
         await LoadData();

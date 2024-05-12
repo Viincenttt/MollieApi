@@ -49,9 +49,9 @@ else {
 @code {
     [Parameter]
     [SupplyParameterFromQuery]
-    public string Url { get; set; }
+    public string? Url { get; set; }
 
-    private ListResponse<CustomerResponse> _customers;
+    private ListResponse<CustomerResponse>? _customers;
 
     protected override async Task OnParametersSetAsync() {
         await LoadData();

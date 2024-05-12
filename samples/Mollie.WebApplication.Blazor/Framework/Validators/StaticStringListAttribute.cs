@@ -10,10 +10,10 @@ public class StaticStringListAttribute : ValidationAttribute {
         _staticClass = staticClass;
     }
 
-    protected override ValidationResult IsValid(object value, ValidationContext validationContext) {
-        IEnumerable<string> validValues = _staticClass
+    protected override ValidationResult? IsValid(object? value, ValidationContext validationContext) {
+        IEnumerable<string?> validValues = _staticClass
             .GetFields(BindingFlags.Static | BindingFlags.Public)
-            .Select(x => x.GetValue(null).ToString());
+            .Select(x => x.GetValue(null)?.ToString());
 
         if (validValues.Contains(value)) {
             return ValidationResult.Success;

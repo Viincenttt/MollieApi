@@ -69,10 +69,10 @@
 </EditForm>
 
 @code {
-    private MollieApiException _apiException;
+    private MollieApiException? _apiException;
 
     [Parameter]
-    public string CustomerId { get; set; }
+    public required string CustomerId { get; set; }
 
     private CreateSubscriptionModel _model = new() {
         Amount = 10.00m,

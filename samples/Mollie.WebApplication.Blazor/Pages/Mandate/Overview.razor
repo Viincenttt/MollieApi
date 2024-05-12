@@ -41,13 +41,13 @@ else {
 
 @code {
     [Parameter]
-    public string CustomerId { get; set; }
+    public required string CustomerId { get; set; }
 
     [Parameter]
     [SupplyParameterFromQuery]
-    public string Url { get; set; }
+    public string? Url { get; set; }
 
-    private ListResponse<MandateResponse> _mandates;
+    private ListResponse<MandateResponse>? _mandates;
 
     protected override async Task OnParametersSetAsync() {
         await LoadData();

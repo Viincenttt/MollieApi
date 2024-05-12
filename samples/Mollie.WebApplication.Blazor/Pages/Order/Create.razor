@@ -68,15 +68,16 @@
 </EditForm>
 
 @code {
-    private MollieApiException _apiException;
-    
-    private CreateOrderModel _order = new() {
+    private MollieApiException? _apiException;
+
+    private readonly CreateOrderModel _order = new() {
         OrderNumber = "Order number",
         Locale = Locale.nl_NL,
+        Amount = 100m,
         Currency = "EUR",
         RedirectUrl = "https://www.mollie.com/",
         Lines = new List<CreateOrderLineModel> {
-            new CreateOrderLineModel {
+            new() {
                 Name = "Chocolates",
                 UnitPrice = 100.00m,
                 Quantity = 1,
@@ -101,9 +102,9 @@
             _apiException = null;
 
             await OrderClient.CreateOrderAsync(new OrderRequest {
-                OrderNumber = _order.OrderNumber,
-                Locale = _order.Locale,
-                Amount = new Amount(_order.Currency, _order.Lines.Sum(lines => lines.TotalAmount)),
+                OrderNumber = _order.OrderNumber!,
+                Locale = _order.Locale!,
+                Amount = new Amount(_order.Currency, _order.Lines!.Sum(lines => lines.TotalAmount)),
                 RedirectUrl = _order.RedirectUrl,
                 BillingAddress = new OrderAddressDetails {
                     GivenName = _order.BillingAddress.GivenName,
@@ -114,7 +115,7 @@
                     City = _order.BillingAddress.City,
                     Country = _order.BillingAddress.Country
                 },
-                Lines = _order.Lines.Select(line => new OrderLineRequest {
+                Lines = _order.Lines!.Select(line => new OrderLineRequest {
                     Name = line.Name,
                     Quantity = line.Quantity,
                     UnitPrice = new Amount(_order.Currency, line.UnitPrice),
