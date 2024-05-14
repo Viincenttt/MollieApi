@@ -1,7 +1,7 @@
 ﻿using System;
 using Mollie.Api.Models.Payment;
 using Mollie.Api.Models.Payment.Response;
-using Mollie.Api.Models.Payment.Response.Specific;
+using Mollie.Api.Models.Payment.Response.PaymentSpecificParameters;
 
 namespace Mollie.Api.Framework.Factories {
     internal class PaymentResponseFactory {

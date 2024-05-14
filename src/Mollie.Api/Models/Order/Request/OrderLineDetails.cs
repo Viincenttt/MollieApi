@@ -1,4 +1,4 @@
-﻿namespace Mollie.Api.Models.Order {
+﻿namespace Mollie.Api.Models.Order.Request {
     public record OrderLineDetails {
         public required string Id { get; init; }
         public int? Quantity { get; set; }

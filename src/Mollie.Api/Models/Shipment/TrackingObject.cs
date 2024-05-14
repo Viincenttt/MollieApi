@@ -11,7 +11,7 @@
         public required string Code { get; init; }
 
         /// <summary>
-        /// The URL where your customer can track the shipment, for example: http://postnl.nl/tracktrace/?B=3SKABA000000000&P=1016EE&D=NL&T=C.
+        /// The URL where your customer can track the shipment
         /// </summary>
         public string? Url { get; set; }
     }

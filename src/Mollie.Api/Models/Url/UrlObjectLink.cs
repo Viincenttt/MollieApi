@@ -1,3 +1,4 @@
 ﻿namespace Mollie.Api.Models.Url {
-    public record UrlObjectLink<T> : UrlLink { }
+    // ReSharper disable once UnusedTypeParameter
+    public record UrlObjectLink<T> : UrlLink;
 }

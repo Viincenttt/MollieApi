@@ -1,6 +1,6 @@
 ﻿using Mollie.Api.Models.Url;
 
-namespace Mollie.Api.Models.Shipment {
+namespace Mollie.Api.Models.Shipment.Response {
     public record ShipmentResponseLinks {
         /// <summary>
         /// The API resource URL of the order itself.

@@ -15,7 +15,7 @@ namespace Mollie.Api.JsonConverters {
             }
             else {
                 writer.WriteValue(valueToParse);
-            }            
+            }
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer) {
@@ -31,7 +31,7 @@ namespace Mollie.Api.JsonConverters {
                 (strInput.StartsWith("[") && strInput.EndsWith("]")))
             {
                 try {
-                    var obj = JToken.Parse(strInput);
+                    JToken.Parse(strInput);
                     return true;
                 }
                 catch (JsonReaderException) {

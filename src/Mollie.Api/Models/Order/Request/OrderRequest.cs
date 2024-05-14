@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Mollie.Api.JsonConverters;
-using Mollie.Api.Models.Order.Request.PaymentSpecificParameters;
 using Newtonsoft.Json;
 
-namespace Mollie.Api.Models.Order {
+namespace Mollie.Api.Models.Order.Request {
     public record OrderRequest {
         /// <summary>
         /// The total amount of the order, including VAT and discounts. This is the amount that will be charged
@@ -20,7 +19,7 @@ namespace Mollie.Api.Models.Order {
 
         /// <summary>
         /// The lines in the order. Each line contains details such as a description of the item ordered, its
-        /// price et cetera. 
+        /// price et cetera.
         /// </summary>
         public required IEnumerable<OrderLineRequest> Lines { get; init; }
 
@@ -49,33 +48,33 @@ namespace Mollie.Api.Models.Order {
         /// <summary>
         /// The URL your consumer will be redirected to when the consumer explicitly cancels the payment. If this URL
         /// is not provided, the consumer will be redirected to the redirectUrl instead — see above.
-        /// 
+        ///
         /// Mollie will always give you status updates via webhooks, including for the canceled status. This parameter
         /// is therefore entirely optional, but can be useful when implementing a dedicated consumer-facing flow to handle
         /// payment cancellations.
-        /// 
+        ///
         /// The parameter can be omitted for orders with payment.sequenceType set to recurring.
         /// </summary>
         public string? CancelUrl { get; set; }
-        
+
         /// <summary>
         /// Set the webhook URL, where we will send order status changes to.
         /// </summary>
         public string? WebhookUrl { get; set; }
 
         /// <summary>
-        /// Allows you to preset the language to be used in the hosted payment pages shown to the consumer. 
+        /// Allows you to preset the language to be used in the hosted payment pages shown to the consumer.
         /// </summary>
         public required string Locale { get; init; }
 
         /// <summary>
         /// Normally, a payment method selection screen is shown. However, when using this parameter, your customer
         /// will skip the selection screen and will be sent directly to the chosen payment method. The parameter enables
-        /// you to fully integrate the payment method selection into your website. See the 
+        /// you to fully integrate the payment method selection into your website. See the
         /// Mollie.Api.Models.Payment.PaymentMethod class for a full list of known values.
         /// </summary>
         [JsonIgnore]
-        public string? Method { 
+        public string? Method {
             get => Methods?.FirstOrDefault();
             set {
                 if (value == null) {
@@ -90,10 +89,10 @@ namespace Mollie.Api.Models.Order {
 
         /// <summary>
         /// Normally, a payment method screen is shown. However, when using this parameter, you can choose a specific payment method
-        /// and your customer will skip the selection screen and is sent directly to the chosen payment method. The parameter 
+        /// and your customer will skip the selection screen and is sent directly to the chosen payment method. The parameter
         /// enables you to fully integrate the payment method selection into your website.
-        /// You can also specify the methods in an array.By doing so we will still show the payment method selection screen but will 
-        /// only show the methods specified in the array. For example, you can use this functionality to only show payment methods 
+        /// You can also specify the methods in an array.By doing so we will still show the payment method selection screen but will
+        /// only show the methods specified in the array. For example, you can use this functionality to only show payment methods
         /// from a specific country to your customer.
         /// </summary>
         [JsonProperty("method")]
@@ -102,7 +101,7 @@ namespace Mollie.Api.Models.Order {
         /// <summary>
         /// Optional - Any payment specific properties can be passed here.
         /// </summary>
-        public PaymentSpecificParameters? Payment { get; set; }
+        public PaymentSpecificParameters.PaymentSpecificParameters? Payment { get; set; }
 
         /// <summary>
         /// Provide any data you like, and we will save the data alongside the subscription. Whenever you fetch the subscription
@@ -112,13 +111,13 @@ namespace Mollie.Api.Models.Order {
         public string? Metadata { get; set; }
 
         /// <summary>
-        /// The date the order should expire in YYYY-MM-DD format. The minimum date is tomorrow and the maximum date is 100 days 
+        /// The date the order should expire in YYYY-MM-DD format. The minimum date is tomorrow and the maximum date is 100 days
         /// after tomorrow.
         /// </summary>
         public string? ExpiresAt { get; set; }
 
         /// <summary>
-        /// For digital goods, you must make sure to apply the VAT rate from your customer’s country in most jurisdictions. Use 
+        /// For digital goods, you must make sure to apply the VAT rate from your customer’s country in most jurisdictions. Use
         /// this parameter to restrict the payment methods available to your customer to methods from the billing country only.
         /// </summary>
         public bool? ShopperCountryMustMatchBillingCountry { get; set; }
@@ -128,7 +127,7 @@ namespace Mollie.Api.Models.Order {
         /// </summary>
         [JsonProperty("payment.applicationFee")]
         public ApplicationFee? ApplicationFee { get; set; }
-        
+
         /// <summary>
         ///	Oauth only - The payment profile's unique identifier, for example pfl_3RkSN1zuPE.
         /// </summary>
@@ -140,7 +139,7 @@ namespace Mollie.Api.Models.Order {
         public bool? Testmode { get; set; }
 
         public void SetMetadata(object metadataObj, JsonSerializerSettings? jsonSerializerSettings = null) {
-            this.Metadata = JsonConvert.SerializeObject(metadataObj, jsonSerializerSettings);
+            Metadata = JsonConvert.SerializeObject(metadataObj, jsonSerializerSettings);
         }
     }
 }

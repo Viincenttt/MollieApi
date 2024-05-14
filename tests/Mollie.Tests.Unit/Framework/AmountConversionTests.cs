@@ -13,6 +13,7 @@ namespace Mollie.Tests.Unit.Framework {
             // When: We implicitly cast Amount to decimal
             // Then: An InvalidCastException will be thrown
             Assert.Throws<InvalidCastException>(() => {
+                // ReSharper disable once UnusedVariable
                 decimal a = amount;
             });
         }

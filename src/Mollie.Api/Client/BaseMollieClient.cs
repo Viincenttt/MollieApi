@@ -18,10 +18,10 @@ namespace Mollie.Api.Client {
         private readonly string _apiKey;
         private readonly HttpClient _httpClient;
         private readonly JsonConverterService _jsonConverterService;
-        
+
         private readonly AsyncLocalVariable<string> _idempotencyKey = new (null);
 
-        private readonly bool _createdHttpClient = default;
+        private readonly bool _createdHttpClient;
 
         protected BaseMollieClient(string apiKey, HttpClient? httpClient = null) {
             if (string.IsNullOrWhiteSpace(apiKey)) {
@@ -41,14 +41,14 @@ namespace Mollie.Api.Client {
             _httpClient = httpClient ?? new HttpClient();
             _apiKey = string.Empty;
         }
-        
+
         public IDisposable WithIdempotencyKey(string value) {
             _idempotencyKey.Value = value;
             return _idempotencyKey;
         }
 
         private async Task<T> SendHttpRequest<T>(HttpMethod httpMethod, string relativeUri, object? data = null) {
-            HttpRequestMessage httpRequest = this.CreateHttpRequest(httpMethod, relativeUri);
+            HttpRequestMessage httpRequest = CreateHttpRequest(httpMethod, relativeUri);
             if (data != null) {
                 var jsonData = _jsonConverterService.Serialize(data);
                 var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
@@ -60,7 +60,7 @@ namespace Mollie.Api.Client {
         }
 
         protected async Task<T> GetListAsync<T>(string relativeUri, string? from, int? limit, IDictionary<string, string>? otherParameters = null) {
-            string url = relativeUri + this.BuildListQueryString(from, limit, otherParameters);
+            string url = relativeUri + BuildListQueryString(from, limit, otherParameters);
             return await SendHttpRequest<T>(HttpMethod.Get, url).ConfigureAwait(false);
         }
 
@@ -121,7 +121,7 @@ namespace Mollie.Api.Client {
 
         private void ValidateUrlLink(UrlLink urlObject) {
             // Make sure the URL is not empty
-            if (String.IsNullOrEmpty(urlObject.Href)) {
+            if (string.IsNullOrEmpty(urlObject.Href)) {
                 throw new ArgumentException($"Url object is null or href is empty: {urlObject}");
             }
 
@@ -135,7 +135,7 @@ namespace Mollie.Api.Client {
             HttpRequestMessage httpRequest = new HttpRequestMessage(method, new Uri(new Uri(_apiEndpoint), relativeUri));
             httpRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _apiKey);
-            httpRequest.Headers.Add("User-Agent", this.GetUserAgent());
+            httpRequest.Headers.Add("User-Agent", GetUserAgent());
             var idemPotencyKey = _idempotencyKey.Value ?? Guid.NewGuid().ToString();
             httpRequest.Headers.Add("Idempotency-Key", idemPotencyKey);
             httpRequest.Content = content;
@@ -162,7 +162,7 @@ namespace Mollie.Api.Client {
             string versionNumber = typeof(BaseMollieClient).GetTypeInfo().Assembly.GetName().Version.ToString();
             return $"{packageName}/{versionNumber}";
         }
-        
+
         protected void ValidateRequiredUrlParameter(string parameterName, string parameterValue) {
             if (string.IsNullOrWhiteSpace(parameterValue)) {
                 throw new ArgumentException($"Required URL argument '{parameterName}' is null or empty");

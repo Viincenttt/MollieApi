@@ -14,19 +14,19 @@ namespace Mollie.Api.Client {
         public ClientLinkClient(string clientId, string oauthAccessToken, HttpClient? httpClient = null)
             : base(oauthAccessToken, httpClient)
         {
-            this._clientId = clientId;
+            _clientId = clientId;
         }
 
         public async Task<ClientLinkResponse> CreateClientLinkAsync(ClientLinkRequest request)
         {
-            return await this.PostAsync<ClientLinkResponse>($"client-links", request)
+            return await PostAsync<ClientLinkResponse>($"client-links", request)
                 .ConfigureAwait(false);
         }
 
         public string GenerateClientLinkWithParameters(
             string clientLinkUrl,
             string state,
-            List<string> scopes, 
+            List<string> scopes,
             bool forceApprovalPrompt = false)
         {
             var parameters = new Dictionary<string, string> {

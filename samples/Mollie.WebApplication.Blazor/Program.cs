@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddMollieApi(options => {
-    options.ApiKey = builder.Configuration["Mollie:ApiKey"];
+    options.ApiKey = builder.Configuration["Mollie:ApiKey"]!;
     options.RetryPolicy = MollieHttpRetryPolicies.TransientHttpErrorRetryPolicy();
 });
 

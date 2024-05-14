@@ -1,17 +1,19 @@
 ﻿@page "/customer/{customerId}/subscription/overview"
+@using Mollie.Api.Models.List.Response
+@using Mollie.Api.Models.Subscription.Response
 
 @inject ISubscriptionClient SubscriptionClient
 
 <h3>Subscriptions</h3>
 
-@if (subscriptions == null) {
+@if (_subscriptions == null) {
     <p>Loading...</p>
 }
 else {
     <div class="clearfix">
         <a href="/customer/@CustomerId/subscription/create" class="btn btn-primary float-right">Create new subscription</a>
     </div>
-    
+
     <table class="table table-striped">
         <thead>
         <tr>
@@ -23,7 +25,7 @@ else {
         </tr>
         </thead>
         <tbody>
-        @foreach (SubscriptionResponse subscription in subscriptions.Items) {
+        @foreach (SubscriptionResponse subscription in _subscriptions.Items) {
             <tr>
                 <td>@subscription.Id</td>
                 <td>@subscription.CreatedAt</td>
@@ -34,22 +36,22 @@ else {
         }
         </tbody>
     </table>
-    
+
     <OverviewNavigation
-        Previous="subscriptions.Links.Previous"
-        Next="subscriptions.Links.Next">
+        Previous="_subscriptions.Links.Previous"
+        Next="_subscriptions.Links.Next">
     </OverviewNavigation>
 }
 
 @code {
     [Parameter]
-    public string CustomerId { get; set; }
-    
+    public required string CustomerId { get; set; }
+
     [Parameter]
     [SupplyParameterFromQuery]
-    public string Url { get; set; }
-    
-    private ListResponse<SubscriptionResponse> subscriptions = null;
+    public string? Url { get; set; }
+
+    private ListResponse<SubscriptionResponse>? _subscriptions;
 
     protected override async Task OnParametersSetAsync() {
         await LoadData();
@@ -57,10 +59,10 @@ else {
 
     private async Task LoadData() {
         if (string.IsNullOrEmpty(Url)) {
-            subscriptions = await SubscriptionClient.GetSubscriptionListAsync(CustomerId);
+            _subscriptions = await SubscriptionClient.GetSubscriptionListAsync(CustomerId);
         }
         else {
-            subscriptions = await SubscriptionClient.GetSubscriptionListAsync(new UrlObjectLink<ListResponse<SubscriptionResponse>>() {
+            _subscriptions = await SubscriptionClient.GetSubscriptionListAsync(new UrlObjectLink<ListResponse<SubscriptionResponse>>() {
                 Href = Url,
                 Type = "application/json"
             });

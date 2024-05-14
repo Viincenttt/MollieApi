@@ -1,7 +1,8 @@
 ﻿using System.Threading.Tasks;
-using Mollie.Api.Models.List;
+using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Payment.Response;
-using Mollie.Api.Models.Subscription;
+using Mollie.Api.Models.Subscription.Request;
+using Mollie.Api.Models.Subscription.Response;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client.Abstract {

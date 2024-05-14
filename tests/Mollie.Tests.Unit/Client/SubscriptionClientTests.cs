@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Mollie.Api.Client;
 using Mollie.Api.Models;
-using Mollie.Api.Models.Subscription;
+using Mollie.Api.Models.Subscription.Request;
 using RichardSzalay.MockHttp;
 using Xunit;
 
@@ -19,7 +19,7 @@ namespace Mollie.Tests.Unit.Client {
         public async Task GetSubscriptionListAsync_TestModeParameterCase_QueryStringOnlyContainsTestModeParameterIfTrue(string from, int? limit, string profileId, bool testmode, string expectedQueryString) {
             // Given: We retrieve a list of subscriptions
             const string customerId = "customer-id";
-            
+
             var mockHttp = new MockHttpMessageHandler();
             mockHttp.When($"{BaseMollieClient.ApiEndPoint}customers/customer-id/subscriptions{expectedQueryString}")
                 .Respond("application/json", DefaultSubscriptionJsonToReturn);
@@ -33,7 +33,7 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.VerifyNoOutstandingExpectation();
             result.Should().NotBeNull();
         }
-        
+
         [Theory]
         [InlineData(null, null, null,false, "")]
         [InlineData("from", null, null, false, "?from=from")]
@@ -55,7 +55,7 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.VerifyNoOutstandingExpectation();
             result.Should().NotBeNull();
         }
-        
+
         [Theory]
         [InlineData("customers/customer-id/subscriptions/subscription-id", false)]
         [InlineData("customers/customer-id/subscriptions/subscription-id?testmode=true", true)]
@@ -63,7 +63,7 @@ namespace Mollie.Tests.Unit.Client {
             // Given: We retrieve a subscriptions
             const string customerId = "customer-id";
             const string subscriptionId = "subscription-id";
-            
+
             var mockHttp = new MockHttpMessageHandler();
             mockHttp.When($"{BaseMollieClient.ApiEndPoint}{expectedUrl}")
                 .Respond("application/json", DefaultSubscriptionJsonToReturn);
@@ -77,18 +77,18 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.VerifyNoOutstandingExpectation();
             result.Should().NotBeNull();
         }
-        
+
         [Fact]
         public async Task RevokeMandate_TestmodeIsTrue_RequestContainsTestmodeModel() {
             // Given: We make a request to retrieve a payment with embedded refunds
             const string customerId = "customer-id";
             const string subscriptionId = "subscription-id";
-            
+
             string expectedContent = "\"testmode\":true";
-            var mockHttp = this.CreateMockHttpMessageHandler(
-                HttpMethod.Delete, 
-                $"{BaseMollieClient.ApiEndPoint}customers/{customerId}/subscriptions/{subscriptionId}", 
-                DefaultSubscriptionJsonToReturn, 
+            var mockHttp = CreateMockHttpMessageHandler(
+                HttpMethod.Delete,
+                $"{BaseMollieClient.ApiEndPoint}customers/{customerId}/subscriptions/{subscriptionId}",
+                DefaultSubscriptionJsonToReturn,
                 expectedContent);
             HttpClient httpClient = mockHttp.ToHttpClient();
             SubscriptionClient subscriptionClient = new SubscriptionClient("abcde", httpClient);
@@ -99,7 +99,7 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
         }
-        
+
         [Theory]
         [InlineData(null, null, false, "")]
         [InlineData("from", null, false, "?from=from")]
@@ -122,7 +122,7 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.VerifyNoOutstandingExpectation();
             result.Should().NotBeNull();
         }
-        
+
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
@@ -139,7 +139,7 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             exception.Message.Should().Be("Required URL argument 'customerId' is null or empty");
         }
-        
+
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
@@ -156,7 +156,7 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             exception.Message.Should().Be("Required URL argument 'customerId' is null or empty");
         }
-        
+
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
@@ -173,7 +173,7 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             exception.Message.Should().Be("Required URL argument 'subscriptionId' is null or empty");
         }
-        
+
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
@@ -193,13 +193,13 @@ namespace Mollie.Tests.Unit.Client {
             };
 
             // When: We send the request
-            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => 
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () =>
                 await subscriptionClient.CreateSubscriptionAsync(customerId, subscriptionRequest));
 
             // Then
             exception.Message.Should().Be("Required URL argument 'customerId' is null or empty");
         }
-        
+
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
@@ -216,7 +216,7 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             exception.Message.Should().Be("Required URL argument 'customerId' is null or empty");
         }
-        
+
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
@@ -233,7 +233,7 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             exception.Message.Should().Be("Required URL argument 'subscriptionId' is null or empty");
         }
-        
+
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
@@ -250,7 +250,7 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             exception.Message.Should().Be("Required URL argument 'customerId' is null or empty");
         }
-        
+
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
@@ -267,7 +267,7 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             exception.Message.Should().Be("Required URL argument 'subscriptionId' is null or empty");
         }
-        
+
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
@@ -284,7 +284,7 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             exception.Message.Should().Be("Required URL argument 'customerId' is null or empty");
         }
-        
+
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
@@ -301,7 +301,7 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             exception.Message.Should().Be("Required URL argument 'subscriptionId' is null or empty");
         }
-        
+
         private const string DefaultSubscriptionJsonToReturn = @"{
     ""resource"": ""subscription"",
     ""id"": ""subscription-id"",
@@ -323,7 +323,7 @@ namespace Mollie.Tests.Unit.Client {
     ""webhookUrl"": ""https://webshop.example.org/payments/webhook"",
     ""metadata"": {
         ""plan"": ""small""
-    }    
+    }
 }";
     }
 }

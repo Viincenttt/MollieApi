@@ -6,7 +6,7 @@ using Mollie.Api.Client;
 using Mollie.Api.Models.Wallet.Request;
 using Xunit;
 
-namespace Mollie.Tests.Unit.Client; 
+namespace Mollie.Tests.Unit.Client;
 
 public class WalletClientTest : BaseClientTests {
     private const string defaultApplePayPaymentSessionResponse = @"{
@@ -19,7 +19,7 @@ public class WalletClientTest : BaseClientTests {
         ""displayName"": ""Chuck Norris's Store"",
         ""signature"": ""308006092a864886f7...8cc030ad3000000000000""
     }";
-    
+
     [Fact]
     public async Task RequestApplePayPaymentSessionAsync_ResponseIsDeserializedInExpectedFormat() {
         // Arrange
@@ -27,9 +27,9 @@ public class WalletClientTest : BaseClientTests {
             Domain = "pay.mywebshop.com",
             ValidationUrl = "https://apple-pay-gateway-cert.apple.com/paymentservices/paymentSession"
         };
-        var mockHttp = this.CreateMockHttpMessageHandler(
-            HttpMethod.Post, 
-            $"{BaseMollieClient.ApiEndPoint}wallets/applepay/sessions", 
+        var mockHttp = CreateMockHttpMessageHandler(
+            HttpMethod.Post,
+            $"{BaseMollieClient.ApiEndPoint}wallets/applepay/sessions",
             defaultApplePayPaymentSessionResponse);
         using var walletClient = new WalletClient("abcde", mockHttp.ToHttpClient());
 

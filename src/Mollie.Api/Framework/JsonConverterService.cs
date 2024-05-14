@@ -9,7 +9,7 @@ namespace Mollie.Api.Framework {
         private readonly JsonSerializerSettings _defaultJsonDeserializerSettings;
 
         public JsonConverterService() {
-            this._defaultJsonDeserializerSettings = this.CreateDefaultJsonDeserializerSettings();
+            _defaultJsonDeserializerSettings = CreateDefaultJsonDeserializerSettings();
         }
 
         public string Serialize(object objectToSerialize) {

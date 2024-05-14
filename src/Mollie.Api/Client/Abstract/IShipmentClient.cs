@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
-using Mollie.Api.Models.List;
-using Mollie.Api.Models.Shipment;
+using Mollie.Api.Models.List.Response;
+using Mollie.Api.Models.Shipment.Request;
+using Mollie.Api.Models.Shipment.Response;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client.Abstract {

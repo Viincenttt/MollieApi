@@ -2,7 +2,7 @@
 using Mollie.Api.JsonConverters;
 using Newtonsoft.Json;
 
-namespace Mollie.Api.Models.Order {
+namespace Mollie.Api.Models.Order.Request {
     public record OrderRefundRequest {
         /// <summary>
         /// An array of objects containing the order line details you want to create a refund for. If you send
@@ -21,7 +21,7 @@ namespace Mollie.Api.Models.Order {
         /// </summary>
         [JsonConverter(typeof(RawJsonConverter))]
         public string? Metadata { get; set; }
-        
+
         /// <summary>
         ///	Oauth only - Optional
         /// </summary>

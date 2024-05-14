@@ -3,12 +3,12 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Mollie.Api.Client;
-using Mollie.Api.Models.List;
-using Mollie.Api.Models.Terminal;
+using Mollie.Api.Models.List.Response;
+using Mollie.Api.Models.Terminal.Response;
 using RichardSzalay.MockHttp;
 using Xunit;
 
-namespace Mollie.Tests.Unit.Client; 
+namespace Mollie.Tests.Unit.Client;
 
 public class TerminalClientTests : BaseClientTests {
     [Theory]
@@ -43,10 +43,10 @@ public class TerminalClientTests : BaseClientTests {
             .Respond("application/json", jsonToReturnInMockResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
         var terminalClient = new TerminalClient("abcde", httpClient);
-        
+
         // When
         TerminalResponse response = await terminalClient.GetTerminalAsync(terminalId);
-        
+
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
         response.Id.Should().Be(terminalId);
@@ -59,7 +59,7 @@ public class TerminalClientTests : BaseClientTests {
         response.Links.Self.Href.Should().Be($"https://api.mollie.com/v2/terminals/{terminalId}");
         response.Links.Documentation.Should().NotBeNull();
     }
-    
+
     [Theory]
     [InlineData(null, null, null, false, "")]
     [InlineData("from", null, null, false, "?from=from")]
@@ -69,8 +69,8 @@ public class TerminalClientTests : BaseClientTests {
     public async Task GetTerminalListAsync_QueryParameterOptions_CorrectParametersAreAdded(string from, int? limit, string profileId, bool testmode, string expectedQueryString) {
         // Given
         string jsonToReturnInMockResponse = CreateTerminalListJsonResponse();
-        var mockHttp = this.CreateMockHttpMessageHandler(
-            HttpMethod.Get, 
+        var mockHttp = CreateMockHttpMessageHandler(
+            HttpMethod.Get,
             $"{BaseMollieClient.ApiEndPoint}terminals{expectedQueryString}",
             jsonToReturnInMockResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
@@ -87,16 +87,16 @@ public class TerminalClientTests : BaseClientTests {
     public async Task GetTerminalListAsync_ResponseIsDeserializedInExpectedFormat() {
         // Given
         string jsonToReturnInMockResponse = CreateTerminalListJsonResponse();
-        var mockHttp = this.CreateMockHttpMessageHandler(
-            HttpMethod.Get, 
+        var mockHttp = CreateMockHttpMessageHandler(
+            HttpMethod.Get,
             $"{BaseMollieClient.ApiEndPoint}terminals",
             jsonToReturnInMockResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
         var terminalClient = new TerminalClient("abcde", httpClient);
-        
+
         // When
         ListResponse<TerminalResponse> response = await terminalClient.GetTerminalListAsync();
-        
+
         // Then
         response.Count.Should().Be(1);
         response.Items.Count.Should().Be(response.Count);
@@ -106,7 +106,7 @@ public class TerminalClientTests : BaseClientTests {
 
     private string CreateTerminalListJsonResponse() {
         string terminalJson = CreateTerminalJsonResponse("terminal-id", "description", "serial", "brand", "model");
-        
+
         return @$"{{
     ""count"": 1,
     ""_embedded"": {{

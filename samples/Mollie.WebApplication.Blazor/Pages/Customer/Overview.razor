@@ -1,4 +1,6 @@
 ﻿@page "/customer/overview"
+@using Mollie.Api.Models.Customer.Response
+@using Mollie.Api.Models.List.Response
 
 @inject ICustomerClient CustomerClient
 
@@ -11,7 +13,7 @@ else {
     <div class="clearfix">
         <a href="/customer/create" class="btn btn-primary float-right">Create new customer</a>
     </div>
-    
+
     <table class="table table-striped">
         <thead>
         <tr>
@@ -39,7 +41,7 @@ else {
         }
         </tbody>
     </table>
-    
+
     <OverviewNavigation
         Previous="_customers.Links.Previous"
         Next="_customers.Links.Next">
@@ -49,9 +51,9 @@ else {
 @code {
     [Parameter]
     [SupplyParameterFromQuery]
-    public string Url { get; set; }
-    
-    private ListResponse<CustomerResponse> _customers = null;
+    public string? Url { get; set; }
+
+    private ListResponse<CustomerResponse>? _customers;
 
     protected override async Task OnParametersSetAsync() {
         await LoadData();

@@ -4,8 +4,8 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
-using Mollie.Api.Models.Invoice;
-using Mollie.Api.Models.List;
+using Mollie.Api.Models.Invoice.Response;
+using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client {
@@ -14,12 +14,12 @@ namespace Mollie.Api.Client {
         }
 
         public async Task<InvoiceResponse> GetInvoiceAsync(string invoiceId) {
-            this.ValidateRequiredUrlParameter(nameof(invoiceId), invoiceId);
-            return await this.GetAsync<InvoiceResponse>($"invoices/{invoiceId}").ConfigureAwait(false);
+            ValidateRequiredUrlParameter(nameof(invoiceId), invoiceId);
+            return await GetAsync<InvoiceResponse>($"invoices/{invoiceId}").ConfigureAwait(false);
         }
 
         public async Task<InvoiceResponse> GetInvoiceAsync(UrlObjectLink<InvoiceResponse> url) {
-            return await this.GetAsync(url).ConfigureAwait(false);
+            return await GetAsync(url).ConfigureAwait(false);
         }
 
         public async Task<ListResponse<InvoiceResponse>> GetInvoiceListAsync(
@@ -28,12 +28,12 @@ namespace Mollie.Api.Client {
             parameters.AddValueIfNotNullOrEmpty(nameof(reference), reference);
             parameters.AddValueIfNotNullOrEmpty(nameof(year), Convert.ToString(year));
 
-            return await this.GetListAsync<ListResponse<InvoiceResponse>>($"invoices", from, limit, parameters)
+            return await GetListAsync<ListResponse<InvoiceResponse>>($"invoices", from, limit, parameters)
                 .ConfigureAwait(false);
         }
-        
+
         public async Task<ListResponse<InvoiceResponse>> GetInvoiceListAsync(UrlObjectLink<ListResponse<InvoiceResponse>> url) {
-            return await this.GetAsync(url).ConfigureAwait(false);
+            return await GetAsync(url).ConfigureAwait(false);
         }
     }
 }

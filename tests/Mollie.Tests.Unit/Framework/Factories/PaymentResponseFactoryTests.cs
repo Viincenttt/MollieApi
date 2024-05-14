@@ -3,7 +3,7 @@ using FluentAssertions;
 using Mollie.Api.Framework.Factories;
 using Mollie.Api.Models.Payment;
 using Mollie.Api.Models.Payment.Response;
-using Mollie.Api.Models.Payment.Response.Specific;
+using Mollie.Api.Models.Payment.Response.PaymentSpecificParameters;
 using Xunit;
 
 namespace Mollie.Tests.Unit.Framework.Factories {

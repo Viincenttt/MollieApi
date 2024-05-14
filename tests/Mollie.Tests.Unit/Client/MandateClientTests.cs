@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Mollie.Api.Client;
-using Mollie.Api.Models.Mandate;
+using Mollie.Api.Models.Mandate.Request;
 using Mollie.Api.Models.Payment;
 using RichardSzalay.MockHttp;
 using Xunit;
@@ -17,7 +17,7 @@ namespace Mollie.Tests.Unit.Client {
             // Given: We retrieve a mandate
             const string customerId = "customer-id";
             const string mandateId = "mandate-id";
-            
+
             var mockHttp = new MockHttpMessageHandler();
             mockHttp.When($"{BaseMollieClient.ApiEndPoint}{expectedUrl}")
                 .Respond("application/json", DefaultMandateJsonToReturn);
@@ -31,7 +31,7 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.VerifyNoOutstandingExpectation();
             result.Should().NotBeNull();
         }
-        
+
         [Theory]
         [InlineData(null, null, false, "")]
         [InlineData("from", null, false, "?from=from")]
@@ -53,17 +53,17 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.VerifyNoOutstandingExpectation();
             result.Should().NotBeNull();
         }
-        
+
         [Fact]
         public async Task RevokeMandate_TestmodeIsTrue_RequestContainsTestmodeModel() {
             // Given: We make a request to retrieve a payment with embedded refunds
             const string customerId = "customer-id";
             const string mandateId = "mandate-id";
             string expectedContent = "\"testmode\":true";
-            var mockHttp = this.CreateMockHttpMessageHandler(
-                HttpMethod.Delete, 
-                $"{BaseMollieClient.ApiEndPoint}customers/{customerId}/mandates/{mandateId}", 
-                DefaultMandateJsonToReturn, 
+            var mockHttp = CreateMockHttpMessageHandler(
+                HttpMethod.Delete,
+                $"{BaseMollieClient.ApiEndPoint}customers/{customerId}/mandates/{mandateId}",
+                DefaultMandateJsonToReturn,
                 expectedContent);
             HttpClient httpClient = mockHttp.ToHttpClient();
             MandateClient mandateClient = new MandateClient("abcde", httpClient);
@@ -74,7 +74,7 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
         }
-        
+
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
@@ -91,7 +91,7 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             exception.Message.Should().Be("Required URL argument 'customerId' is null or empty");
         }
-        
+
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
@@ -108,7 +108,7 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             exception.Message.Should().Be("Required URL argument 'mandateId' is null or empty");
         }
-        
+
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
@@ -125,7 +125,7 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             exception.Message.Should().Be("Required URL argument 'customerId' is null or empty");
         }
-        
+
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
@@ -160,7 +160,7 @@ namespace Mollie.Tests.Unit.Client {
     },
     ""mandateReference"": ""YOUR-COMPANY-MD1380"",
     ""signatureDate"": ""2018-05-07"",
-    ""createdAt"": ""2018-05-07T10:49:08+00:00""    
+    ""createdAt"": ""2018-05-07T10:49:08+00:00""
 }";
     }
 }

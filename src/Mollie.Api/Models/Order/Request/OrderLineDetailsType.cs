@@ -1,4 +1,4 @@
-﻿namespace Mollie.Api.Models.Order {
+﻿namespace Mollie.Api.Models.Order.Request {
     public static class OrderLineDetailsType {
         public const string Physical = "physical";
         public const string Discount = "discount";
