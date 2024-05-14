@@ -1,7 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Mollie.Api.Models.Chargeback;
 using Mollie.Api.Models.Chargeback.Response;
-using Mollie.Api.Models.List;
 using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Url;
 

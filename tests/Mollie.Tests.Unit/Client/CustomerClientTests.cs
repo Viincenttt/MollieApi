@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Mollie.Api.Client;
 using Mollie.Api.Models;
-using Mollie.Api.Models.Customer;
 using Mollie.Api.Models.Customer.Request;
 using Mollie.Api.Models.Customer.Response;
 using Mollie.Api.Models.Payment.Request;

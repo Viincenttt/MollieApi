@@ -1,7 +1,5 @@
 ﻿using System;
 using Mollie.Api.Client;
-using Mollie.Api.Models.List;
-using Mollie.Api.Models.Settlement;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;

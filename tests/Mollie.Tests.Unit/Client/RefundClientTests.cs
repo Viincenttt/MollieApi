@@ -4,7 +4,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Mollie.Api.Models;
-using Mollie.Api.Models.Refund;
 using Mollie.Api.Models.Refund.Request;
 using RichardSzalay.MockHttp;
 using Xunit;

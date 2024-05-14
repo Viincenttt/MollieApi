@@ -1,5 +1,4 @@
 ﻿using Mollie.Api.Client;
-using Mollie.Api.Models.Connect;
 using Mollie.Tests.Integration.Framework;
 using System.Collections.Generic;
 using System.Threading.Tasks;

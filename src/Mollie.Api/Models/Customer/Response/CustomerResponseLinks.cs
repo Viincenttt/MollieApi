@@ -1,7 +1,5 @@
-﻿using Mollie.Api.Models.List;
-using Mollie.Api.Models.List.Response;
+﻿using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Payment.Response;
-using Mollie.Api.Models.Subscription;
 using Mollie.Api.Models.Subscription.Response;
 using Mollie.Api.Models.Url;
 

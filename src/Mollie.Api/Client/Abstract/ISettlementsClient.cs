@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Mollie.Api.Models.Capture.Response;
-using Mollie.Api.Models.Chargeback;
 using Mollie.Api.Models.Chargeback.Response;
-using Mollie.Api.Models.List;
 using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Payment.Response;
-using Mollie.Api.Models.Refund;
 using Mollie.Api.Models.Refund.Response;
-using Mollie.Api.Models.Settlement;
 using Mollie.Api.Models.Settlement.Response;
 using Mollie.Api.Models.Url;
 

@@ -1,9 +1,7 @@
 ﻿
 using System;
 using Mollie.Api.Client;
-using Mollie.Api.Models.List;
 using Mollie.Api.Models.Payment;
-using Mollie.Api.Models.PaymentMethod;
 using Mollie.Api.Models.Profile.Response;
 using Mollie.Tests.Integration.Framework;
 using System.Linq;

@@ -3,9 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
-using Mollie.Api.Models.List;
 using Mollie.Api.Models.List.Response;
-using Mollie.Api.Models.Terminal;
 using Mollie.Api.Models.Terminal.Response;
 using Mollie.Api.Models.Url;
 

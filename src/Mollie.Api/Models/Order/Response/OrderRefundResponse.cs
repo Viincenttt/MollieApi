@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Mollie.Api.Models.Refund;
 using Mollie.Api.Models.Refund.Response;
 
 namespace Mollie.Api.Models.Order.Response {

@@ -4,7 +4,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Mollie.Api.Client;
-using Mollie.Api.Models.Connect;
 using Mollie.Api.Models.Connect.Request;
 using Mollie.Api.Models.Connect.Response;
 using RichardSzalay.MockHttp;
@@ -16,7 +15,7 @@ public class ConnectClientTests : BaseClientTests
 {
     private const string ClientId = "client-id";
     private const string ClientSecret = "client-secret";
-    
+
     [Fact]
     public void GetAuthorizationUrl_WithSingleScope_GeneratesAuthorizationUrl()
     {
@@ -32,7 +31,7 @@ public class ConnectClientTests : BaseClientTests
         string expectedUrl = $"https://www.mollie.com/oauth2/authorize?client_id={ClientId}&state=abcde&scope=payments.read&response_type=code&approval_prompt=auto";
         authorizationUrl.Should().Be(expectedUrl);
     }
-    
+
     [Theory]
     [InlineData("refresh_abcde", "refresh_token")]
     [InlineData("abcde", "authorization_code")]
@@ -74,7 +73,7 @@ public class ConnectClientTests : BaseClientTests
             Token = "access_46EUJ6x8jFJZZeAvhNH4JVey6qVpqR",
             TokenTypeHint = "refresh_token"
         };
-        
+
         // Act
         await connectClient.RevokeTokenAsync(revokeTokenRequest);
 

@@ -1,5 +1,4 @@
-﻿using Mollie.Api.Models.Settlement;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -12,7 +11,7 @@ namespace Mollie.Api.JsonConverters {
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer) {
-            // If we have no periods, Mollie returns a empty array instead of an object      
+            // If we have no periods, Mollie returns a empty array instead of an object
             JToken token = JToken.Load(reader);
             if (token is JArray) {
                 return new Dictionary<int, Dictionary<int, SettlementPeriod>>();
