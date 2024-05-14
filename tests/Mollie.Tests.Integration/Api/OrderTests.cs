@@ -302,7 +302,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         addedOrderLineRequest.TotalAmount.Should().Be(newOrderLineRequest.TotalAmount);
         addedOrderLineRequest.VatRate.Should().Be(newOrderLineRequest.VatRate);
         addedOrderLineRequest.VatAmount.Should().Be(newOrderLineRequest.VatAmount);
-        var newMetaData = addedOrderLineRequest.Metadata
+        var newMetaData = addedOrderLineRequest.Metadata!
             .Replace(Environment.NewLine, "")
             .Replace(" ", "");
         newMetaData.Should().Be(newOrderLineRequest.Metadata);
@@ -342,12 +342,12 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         updatedOrder.Lines.Should().HaveCount(1);
         var addedOrderLineRequest = updatedOrder.Lines.SingleOrDefault(line => line.Name == orderLineUpdateRequest.Name);
         addedOrderLineRequest.Should().NotBeNull();
-        addedOrderLineRequest.Quantity.Should().Be(orderLineUpdateRequest.Quantity);
+        addedOrderLineRequest!.Quantity.Should().Be(orderLineUpdateRequest.Quantity);
         addedOrderLineRequest.UnitPrice.Should().Be(orderLineUpdateRequest.UnitPrice);
         addedOrderLineRequest.TotalAmount.Should().Be(orderLineUpdateRequest.TotalAmount);
         addedOrderLineRequest.VatRate.Should().Be(orderLineUpdateRequest.VatRate);
         addedOrderLineRequest.VatAmount.Should().Be(orderLineUpdateRequest.VatAmount);
-        addedOrderLineRequest.Metadata
+        addedOrderLineRequest.Metadata!
             .Replace(Environment.NewLine, "")
             .Replace(" ", "")
             .Should().Be(orderLineUpdateRequest.Metadata);
