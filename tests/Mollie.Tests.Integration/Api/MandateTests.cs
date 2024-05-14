@@ -70,7 +70,7 @@ public class MandateTests : BaseMollieApiTestClass, IDisposable {
             MandateResponse mandateResponse = await _mandateClient.CreateMandateAsync(customers.Items.First().Id, mandateRequest);
 
             // Then: Make sure we created a new mandate
-            mandateResponse.Details.ConsumerAccount.Should().Be(mandateRequest.ConsumerAccount);
+            mandateResponse.Details!.ConsumerAccount.Should().Be(mandateRequest.ConsumerAccount);
             mandateResponse.Details.ConsumerName.Should().Be(mandateRequest.ConsumerName);
         }
     }

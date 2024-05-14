@@ -64,7 +64,7 @@ namespace Mollie.Tests.Unit.Client {
             chargebackResponse.PaymentId.Should().Be(defaultPaymentId);
             chargebackResponse.Id.Should().Be(defaultChargebackId);
             chargebackResponse.Reason.Should().NotBeNull();
-            chargebackResponse.Reason.Code.Should().Be(defaultChargebackReasonCode);
+            chargebackResponse.Reason!.Code.Should().Be(defaultChargebackReasonCode);
             chargebackResponse.Reason.Description.Should().Be(defaultChargebackReason);
         }
 

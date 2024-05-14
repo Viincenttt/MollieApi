@@ -35,7 +35,7 @@ else {
                 <td>@payment.Method</td>
                 <td>@payment.Metadata</td>
                 <td>
-                    @if (payment.Status == PaymentStatus.Open && @payment.Links?.Checkout != null) {
+                    @if (payment.Status == PaymentStatus.Open && @payment.Links.Checkout != null) {
                         <a href="@payment.Links.Checkout.Href" class="btn btn-outline-secondary" target="_blank">Pay</a>
                     }
                 </td>
