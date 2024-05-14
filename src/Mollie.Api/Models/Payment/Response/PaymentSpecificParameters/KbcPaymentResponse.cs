@@ -1,12 +1,9 @@
-﻿namespace Mollie.Api.Models.Payment.Response {
-    public record GiropayPaymentResponse : PaymentResponse {
-        /// <summary>
-        /// An object with the consumer bank account details.
-        /// </summary>
-        public required GiropayPaymentResponseDetails Details { get; init; }
+﻿namespace Mollie.Api.Models.Payment.Response.PaymentSpecificParameters {
+    public record KbcPaymentResponse : PaymentResponse {
+        public required KbcPaymentResponseDetails Details { get; init; }
     }
 
-    public record GiropayPaymentResponseDetails {
+    public record KbcPaymentResponseDetails {
         /// <summary>
         /// Only available if the payment has been completed – The consumer's name.
         /// </summary>

@@ -1,4 +1,4 @@
-namespace Mollie.Api.Models.Payment.Request {
+namespace Mollie.Api.Models.Payment.Request.PaymentSpecificParameters {
     public record SepaDirectDebitRequest : PaymentRequest {
         public SepaDirectDebitRequest() {
             Method = PaymentMethod.DirectDebit;

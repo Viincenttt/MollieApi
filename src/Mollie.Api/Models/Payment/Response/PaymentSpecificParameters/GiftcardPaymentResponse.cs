@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Mollie.Api.Models.Payment.Response.Specific {
+namespace Mollie.Api.Models.Payment.Response.PaymentSpecificParameters {
     public record GiftcardPaymentResponse : PaymentResponse {
         /// <summary>
         /// An object with payment details.
@@ -10,7 +10,7 @@ namespace Mollie.Api.Models.Payment.Response.Specific {
 
     public record GiftcardPaymentResponseDetails {
         /// <summary>
-        /// The voucher number, with the last four digits masked. When multiple gift cards are used, this is the first voucher 
+        /// The voucher number, with the last four digits masked. When multiple gift cards are used, this is the first voucher
         /// number. Example: 606436353088147****.
         /// </summary>
         public string? VoucherNumber { get; set; }
@@ -21,13 +21,13 @@ namespace Mollie.Api.Models.Payment.Response.Specific {
         public List<Giftcard>? Giftcards { get; set; }
 
         /// <summary>
-        /// Only available if another payment method was used to pay the remainder amount – The amount that was paid with 
+        /// Only available if another payment method was used to pay the remainder amount – The amount that was paid with
         /// another payment method for the remainder amount.
         /// </summary>
         public Amount? RemainderAmount { get; set; }
 
         /// <summary>
-        /// Only available if another payment method was used to pay the remainder amount – The payment method that was used to 
+        /// Only available if another payment method was used to pay the remainder amount – The payment method that was used to
         /// pay the remainder amount.
         /// </summary>
         public string? RemainderMethod { get; set; }

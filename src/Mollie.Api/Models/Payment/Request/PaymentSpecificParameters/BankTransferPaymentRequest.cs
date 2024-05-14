@@ -1,4 +1,4 @@
-namespace Mollie.Api.Models.Payment.Request {
+namespace Mollie.Api.Models.Payment.Request.PaymentSpecificParameters {
     public record BankTransferPaymentRequest : PaymentRequest {
         public BankTransferPaymentRequest() {
             Method = PaymentMethod.BankTransfer;

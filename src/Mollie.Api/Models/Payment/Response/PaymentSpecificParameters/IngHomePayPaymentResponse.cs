@@ -1,4 +1,4 @@
-﻿namespace Mollie.Api.Models.Payment.Response.Specific {
+﻿namespace Mollie.Api.Models.Payment.Response.PaymentSpecificParameters {
     public record IngHomePayPaymentResponse : PaymentResponse {
         /// <summary>
         /// An object with payment details.

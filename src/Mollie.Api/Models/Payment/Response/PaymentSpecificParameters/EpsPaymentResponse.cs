@@ -1,9 +1,12 @@
-﻿namespace Mollie.Api.Models.Payment.Response.Specific {
-    public record KbcPaymentResponse : PaymentResponse {
-        public required KbcPaymentResponseDetails Details { get; init; }
+﻿namespace Mollie.Api.Models.Payment.Response.PaymentSpecificParameters {
+    public record EpsPaymentResponse : PaymentResponse {
+        /// <summary>
+        /// An object with the consumer bank account details.
+        /// </summary>
+        public required EpsPaymentResponseDetails Details { get; init; }
     }
 
-    public record KbcPaymentResponseDetails {
+    public record EpsPaymentResponseDetails {
         /// <summary>
         /// Only available if the payment has been completed – The consumer's name.
         /// </summary>

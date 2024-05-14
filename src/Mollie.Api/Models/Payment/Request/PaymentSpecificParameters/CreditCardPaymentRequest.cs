@@ -1,4 +1,4 @@
-namespace Mollie.Api.Models.Payment.Request {
+namespace Mollie.Api.Models.Payment.Request.PaymentSpecificParameters {
     public record CreditCardPaymentRequest : PaymentRequest {
         public CreditCardPaymentRequest() {
             Method = PaymentMethod.CreditCard;

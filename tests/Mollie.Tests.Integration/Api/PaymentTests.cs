@@ -9,7 +9,6 @@ using Mollie.Api.Models.Capture.Request;
 using Mollie.Api.Models.Payment;
 using Mollie.Api.Models.Payment.Request;
 using Mollie.Api.Models.Payment.Response;
-using Mollie.Api.Models.Payment.Response.Specific;
 using Mollie.Tests.Integration.Framework;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +17,8 @@ using Mollie.Api.Models.Capture.Response;
 using Mollie.Api.Models.Customer.Response;
 using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Mandate.Response;
+using Mollie.Api.Models.Payment.Request.PaymentSpecificParameters;
+using Mollie.Api.Models.Payment.Response.PaymentSpecificParameters;
 using Mollie.Api.Models.Terminal.Response;
 
 namespace Mollie.Tests.Integration.Api;

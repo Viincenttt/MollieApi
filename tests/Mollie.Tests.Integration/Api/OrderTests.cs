@@ -296,7 +296,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         updatedOrder.Lines.Should().HaveCount(2);
         var addedOrderLineRequest = updatedOrder.Lines.SingleOrDefault(line => line.Name == newOrderLineRequest.Name);
         addedOrderLineRequest.Should().NotBeNull();
-        addedOrderLineRequest.Type.Should().Be(newOrderLineRequest.Type);
+        addedOrderLineRequest!.Type.Should().Be(newOrderLineRequest.Type);
         addedOrderLineRequest.Quantity.Should().Be(newOrderLineRequest.Quantity);
         addedOrderLineRequest.UnitPrice.Should().Be(newOrderLineRequest.UnitPrice);
         addedOrderLineRequest.TotalAmount.Should().Be(newOrderLineRequest.TotalAmount);

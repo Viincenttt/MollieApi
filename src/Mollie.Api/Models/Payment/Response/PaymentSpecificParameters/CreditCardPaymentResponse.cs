@@ -1,4 +1,4 @@
-﻿namespace Mollie.Api.Models.Payment.Response {
+﻿namespace Mollie.Api.Models.Payment.Response.PaymentSpecificParameters {
     public record CreditCardPaymentResponse : PaymentResponse {
         /// <summary>
         /// An object with credit card details.
@@ -18,13 +18,13 @@
         public string? CardNumber { get; set; }
 
         /// <summary>
-        /// Only available if the payment has been completed - Unique alphanumeric representation of card, usable for identifying 
+        /// Only available if the payment has been completed - Unique alphanumeric representation of card, usable for identifying
         /// returning customers.
         /// </summary>
         public string? CardFingerprint { get; set; }
 
         /// <summary>
-        /// Not always available. – The card's target audience. See the Mollie.Api.Models.Payment.Response.CreditCardAudience 
+        /// Not always available. – The card's target audience. See the Mollie.Api.Models.Payment.Response.CreditCardAudience
         /// class for a full list of known values
         /// </summary>
         public string? CardAudience { get; set; }
@@ -41,20 +41,20 @@
         public string? CardCountryCode { get; set; }
 
         /// <summary>
-        /// Only available if the payment succeeded. – The payment's security type. See the 
+        /// Only available if the payment succeeded. – The payment's security type. See the
         /// Mollie.Api.Models.Payment.Response.CreditCardSecurity class for a full list of known values
         /// </summary>
         public string? CardSecurity { get; set; }
 
         /// <summary>
         /// Only available if the payment succeeded. – The fee region for the payment. See your credit card addendum for
-        /// details. intra-eu for consumer cards from the EU, and other for all other cards. See the 
+        /// details. intra-eu for consumer cards from the EU, and other for all other cards. See the
         /// Mollie.Api.Models.Payment.Response.CreditCardFeeRegion class for a full list of known values
         /// </summary>
         public string? FeeRegion { get; set; }
 
         /// <summary>
-        /// Only available for failed payments. Contains a failure reason code. See the 
+        /// Only available for failed payments. Contains a failure reason code. See the
         /// Mollie.Api.Models.Payment.Response.CreditCardFailureReason class for a full list of known values
         /// </summary>
         public string? FailureReason { get; set; }
@@ -87,7 +87,7 @@
     }
 
     /// <summary>
-    /// Only available if the payment has been completed – The fee region for the payment: intra-eu for consumer cards from the EU, and 
+    /// Only available if the payment has been completed – The fee region for the payment: intra-eu for consumer cards from the EU, and
     /// other for all other cards.
     /// </summary>
     public static class CreditCardFeeRegion {
@@ -124,7 +124,7 @@
 
     /// <summary>
     /// The card's label. Note that not all labels can be acquired through Mollie.
-    /// </summary>    
+    /// </summary>
     public static class CreditCardLabel {
         public const string AmericanExpress = "American Express";
         public const string CartaSi = "Carta si";

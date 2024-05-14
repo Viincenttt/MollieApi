@@ -1,7 +1,7 @@
 using Mollie.Api.Models.Url;
 using Newtonsoft.Json;
 
-namespace Mollie.Api.Models.Payment.Response.Specific {
+namespace Mollie.Api.Models.Payment.Response.PaymentSpecificParameters {
     public record BankTransferPaymentResponse : PaymentResponse {
         public required BankTransferPaymentResponseDetails Details { get; init; }
 
@@ -51,7 +51,7 @@ namespace Mollie.Api.Models.Payment.Response.Specific {
         public string? ConsumerBic { get; set; }
 
         /// <summary>
-        /// Only available if filled out in the API or by the consumer � The email address which the consumer asked the payment 
+        /// Only available if filled out in the API or by the consumer � The email address which the consumer asked the payment
         /// instructions to be sent to.
         /// </summary>
         public string? BillingEmail { get; set; }
@@ -69,7 +69,7 @@ namespace Mollie.Api.Models.Payment.Response.Specific {
         public required UrlLink Status { get; init; }
 
         /// <summary>
-        /// A link to a hosted payment page where your customer can finish the payment using an alternative payment method also 
+        /// A link to a hosted payment page where your customer can finish the payment using an alternative payment method also
         /// activated on your website profile.
         /// </summary>
         public required UrlLink PayOnline { get; init; }

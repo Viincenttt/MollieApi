@@ -10,7 +10,8 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
 using FluentAssertions.Extensions;
-using Mollie.Api.Models.Payment.Response.Specific;
+using Mollie.Api.Models.Payment.Request.PaymentSpecificParameters;
+using Mollie.Api.Models.Payment.Response.PaymentSpecificParameters;
 using Xunit;
 
 namespace Mollie.Tests.Unit.Client;
