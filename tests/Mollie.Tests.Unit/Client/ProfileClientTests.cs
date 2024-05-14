@@ -220,7 +220,7 @@ public class ProfileClientTests : BaseClientTests
         var exception = await Assert.ThrowsAsync<ArgumentException>(() => profileClient.EnablePaymentMethodAsync(string.Empty));
 
         // Assert
-        exception.Message.Should().Be($"Required URL argument '{nameof(PaymentMethod.Ideal)}' is null or empty");
+        exception.Message.Should().Be($"Required URL argument 'paymentMethod' is null or empty");
     }
 
     [Fact]
