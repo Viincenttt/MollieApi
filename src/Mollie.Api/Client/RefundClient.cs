@@ -6,6 +6,8 @@ using Mollie.Api.Extensions;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Refund;
+using Mollie.Api.Models.Refund.Request;
+using Mollie.Api.Models.Refund.Response;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client {

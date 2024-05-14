@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Mollie.Api.JsonConverters;
 using Newtonsoft.Json;
 
-namespace Mollie.Api.Models.Settlement {
+namespace Mollie.Api.Models.Settlement.Response {
 	public record SettlementResponse {
         /// <summary>
         /// Indicates the response contains a settlement object. Will always contain settlement for this endpoint.
@@ -33,7 +33,7 @@ namespace Mollie.Api.Models.Settlement {
 		public DateTime? SettledAt { get; set; }
 
 		/// <summary>
-		/// The status of the settlement - See the Mollie.Api.Models.Settlement.SettlementStatus 
+		/// The status of the settlement - See the Mollie.Api.Models.Settlement.SettlementStatus
 		/// class for a full list of known values.
 		/// </summary>
 		public required string Status { get; init; }

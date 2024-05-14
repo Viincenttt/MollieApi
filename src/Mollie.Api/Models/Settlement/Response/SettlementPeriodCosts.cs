@@ -1,4 +1,4 @@
-﻿namespace Mollie.Api.Models.Settlement {
+﻿namespace Mollie.Api.Models.Settlement.Response {
 	public record SettlementPeriodCosts {
 		/// <summary>
 		/// A description of the subtotal.
@@ -31,7 +31,7 @@
 		public required SettlementPeriodCostsRate Rate { get; init; }
 
 		/// <summary>
-		/// The payment method ID, if applicable - See the Mollie.Api.Models.Payment.PaymentMethod 
+		/// The payment method ID, if applicable - See the Mollie.Api.Models.Payment.PaymentMethod
 		/// class for a full list of known values.
 		/// </summary>
 		public string? Method { get; set; }

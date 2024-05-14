@@ -22,6 +22,7 @@ using Mollie.Api.Models.Customer.Response;
 using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Mandate;
 using Mollie.Api.Models.Mandate.Response;
+using Mollie.Api.Models.Terminal.Response;
 
 namespace Mollie.Tests.Integration.Api;
 

@@ -1,8 +1,9 @@
 ﻿using Mollie.Api.Models.Payment.Response;
 using Mollie.Api.Models.Settlement;
+using Mollie.Api.Models.Settlement.Response;
 using Mollie.Api.Models.Url;
 
-namespace Mollie.Api.Models.Refund {
+namespace Mollie.Api.Models.Refund.Response {
     public record RefundResponseLinks {
         /// <summary>
         /// The API resource URL of the refund itself.

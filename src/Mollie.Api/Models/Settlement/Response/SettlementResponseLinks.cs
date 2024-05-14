@@ -1,12 +1,10 @@
-﻿using Mollie.Api.Models.Chargeback;
-using Mollie.Api.Models.Chargeback.Response;
-using Mollie.Api.Models.List;
+﻿using Mollie.Api.Models.Chargeback.Response;
 using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Payment.Response;
-using Mollie.Api.Models.Refund;
+using Mollie.Api.Models.Refund.Response;
 using Mollie.Api.Models.Url;
 
-namespace Mollie.Api.Models.Settlement {
+namespace Mollie.Api.Models.Settlement.Response {
     public record SettlementResponseLinks {
         /// <summary>
         /// The API resource URL of the settlement itself.

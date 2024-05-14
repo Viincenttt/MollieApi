@@ -12,6 +12,8 @@ using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Mandate;
 using Mollie.Api.Models.Mandate.Response;
 using Mollie.Api.Models.Subscription;
+using Mollie.Api.Models.Subscription.Request;
+using Mollie.Api.Models.Subscription.Response;
 using Mollie.Tests.Integration.Framework;
 
 namespace Mollie.Tests.Integration.Api;

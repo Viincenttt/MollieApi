@@ -1,4 +1,4 @@
-﻿namespace Mollie.Api.Models.PaymentMethod {
+﻿namespace Mollie.Api.Models.PaymentMethod.Response {
     /// <summary>
     /// URLs of images representing the payment method.
     /// </summary>

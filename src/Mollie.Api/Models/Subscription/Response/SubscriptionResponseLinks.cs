@@ -1,12 +1,10 @@
-﻿using Mollie.Api.Models.Customer;
-using Mollie.Api.Models.Customer.Response;
-using Mollie.Api.Models.List;
+﻿using Mollie.Api.Models.Customer.Response;
 using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Payment.Response;
 using Mollie.Api.Models.Profile.Response;
 using Mollie.Api.Models.Url;
 
-namespace Mollie.Api.Models.Subscription {
+namespace Mollie.Api.Models.Subscription.Response {
     public record SubscriptionResponseLinks {
         /// <summary>
         ///     The API resource URL of the subscription itself.
@@ -19,7 +17,7 @@ namespace Mollie.Api.Models.Subscription {
         public required UrlObjectLink<CustomerResponse> Customer { get; init; }
 
         /// <summary>
-        /// The API resource URL of the payments that are created by this subscription. Not present 
+        /// The API resource URL of the payments that are created by this subscription. Not present
         /// if no payments yet created.
         /// </summary>
         public UrlObjectLink<ListResponse<PaymentResponse>>? Payments { get; set; }

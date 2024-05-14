@@ -6,6 +6,7 @@ using Mollie.Api.Client;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Terminal;
+using Mollie.Api.Models.Terminal.Response;
 using RichardSzalay.MockHttp;
 using Xunit;
 

@@ -1,4 +1,4 @@
-﻿namespace Mollie.Api.Models.Settlement
+﻿namespace Mollie.Api.Models.Settlement.Response
 {
 	public record SettlementPeriodCostsRate {
         /// <summary>

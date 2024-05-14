@@ -8,6 +8,7 @@ using Mollie.Api.Models.Order.Request.ManageOrderLines;
 using Mollie.Api.Models.Order.Response;
 using Mollie.Api.Models.Payment.Response;
 using Mollie.Api.Models.Refund;
+using Mollie.Api.Models.Refund.Response;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client.Abstract {

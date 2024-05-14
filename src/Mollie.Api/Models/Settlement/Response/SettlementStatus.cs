@@ -1,4 +1,4 @@
-﻿namespace Mollie.Api.Models.Settlement {
+﻿namespace Mollie.Api.Models.Settlement.Response {
 	public static class SettlementStatus {
 		public const string Open = "open";
 		public const string Pending = "pending";

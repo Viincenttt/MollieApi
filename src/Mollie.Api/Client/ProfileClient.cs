@@ -4,6 +4,7 @@ using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.PaymentMethod;
+using Mollie.Api.Models.PaymentMethod.Response;
 using Mollie.Api.Models.Profile.Request;
 using Mollie.Api.Models.Profile.Response;
 using Mollie.Api.Models.Url;

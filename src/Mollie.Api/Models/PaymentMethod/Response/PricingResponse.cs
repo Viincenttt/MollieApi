@@ -1,4 +1,4 @@
-﻿namespace Mollie.Api.Models.PaymentMethod.Pricing
+﻿namespace Mollie.Api.Models.PaymentMethod.Response
 {
     public record PricingResponse {
         /// <summary>
@@ -17,8 +17,8 @@
         public required decimal Variable { get; init; }
 
         /// <summary>
-        /// This value is only available for credit card rates. It will correspond with the regions as documented in 
-        /// the Payments API. See the Mollie.Api.Models.Payment.Response.CreditCardFeeRegion class for a full list of 
+        /// This value is only available for credit card rates. It will correspond with the regions as documented in
+        /// the Payments API. See the Mollie.Api.Models.Payment.Response.CreditCardFeeRegion class for a full list of
         /// known values.
         /// </summary>
         public required string? FeeRegion { get; set; }

@@ -1,4 +1,4 @@
-﻿namespace Mollie.Api.Models.Settlement
+﻿namespace Mollie.Api.Models.Settlement.Response
 {
 	public record SettlementPeriodRevenue
 	{
@@ -28,7 +28,7 @@
 		public int Count { get; set; }
 
 		/// <summary>
-		/// The payment method ID, if applicable - See the Mollie.Api.Models.Payment.PaymentMethod 
+		/// The payment method ID, if applicable - See the Mollie.Api.Models.Payment.PaymentMethod
 		/// class for a full list of known values.
 		/// </summary>
 		public string? Method { get; set; }

@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using Mollie.Api.Models.Settlement.Response;
 
 namespace Mollie.Api.JsonConverters {
     internal class SettlementPeriodConverter : JsonConverter {

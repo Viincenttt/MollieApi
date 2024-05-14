@@ -2,6 +2,7 @@
 using Mollie.Api.Models.Chargeback;
 using Mollie.Api.Models.Chargeback.Response;
 using Mollie.Api.Models.Refund;
+using Mollie.Api.Models.Refund.Response;
 
 namespace Mollie.Api.Models.Payment.Response {
     public record PaymentEmbeddedResponse {

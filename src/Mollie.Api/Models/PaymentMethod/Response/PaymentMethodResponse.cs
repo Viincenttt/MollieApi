@@ -1,10 +1,8 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
-using Mollie.Api.Models.Issuer;
+﻿using System.Collections.Generic;
 using Mollie.Api.Models.Issuer.Response;
-using Mollie.Api.Models.PaymentMethod.Pricing;
+using Newtonsoft.Json;
 
-namespace Mollie.Api.Models.PaymentMethod {
+namespace Mollie.Api.Models.PaymentMethod.Response {
     public record PaymentMethodResponse {
         /// <summary>
         /// Indicates the response contains a method object. Will always contain method for this endpoint.

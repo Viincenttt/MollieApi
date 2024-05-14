@@ -1,4 +1,4 @@
-﻿namespace Mollie.Api.Models.PaymentMethod.Pricing
+﻿namespace Mollie.Api.Models.PaymentMethod.Response
 {
     public record FixedPricingResponse {
         /// <summary>

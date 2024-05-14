@@ -4,6 +4,7 @@ using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models.List;
 using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Permission;
+using Mollie.Api.Models.Permission.Response;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client {

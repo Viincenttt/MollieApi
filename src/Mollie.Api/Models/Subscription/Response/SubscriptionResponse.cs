@@ -3,7 +3,7 @@ using Mollie.Api.JsonConverters;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace Mollie.Api.Models.Subscription {
+namespace Mollie.Api.Models.Subscription.Response {
     public record SubscriptionResponse {
         /// <summary>
         /// Indicates the response contains a subscription object.
@@ -20,7 +20,7 @@ namespace Mollie.Api.Models.Subscription {
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
         public Mode Mode { get; set; }
-        
+
         /// <summary>
         ///  The subscription's date and time of creation, in ISO 8601 format.
         /// </summary>
@@ -31,7 +31,7 @@ namespace Mollie.Api.Models.Subscription {
         /// See the Mollie.Api.Models.Subscription.SubscriptionStatus class for a full list of known values.
         /// </summary>
         public required string Status { get; init; }
-        
+
         /// <summary>
         /// The constant amount that is charged with each subscription payment.
         /// </summary>
@@ -105,7 +105,7 @@ namespace Mollie.Api.Models.Subscription {
         public required SubscriptionResponseLinks Links { get; init; }
 
         /// <summary>
-        /// Adding an application fee allows you to charge the merchant for each payment in the subscription and 
+        /// Adding an application fee allows you to charge the merchant for each payment in the subscription and
         /// transfer these amounts to your own account.
         /// </summary>
         public ApplicationFee? ApplicationFee { get; set; }

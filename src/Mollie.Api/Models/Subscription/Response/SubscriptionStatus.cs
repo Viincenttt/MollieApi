@@ -1,4 +1,4 @@
-﻿namespace Mollie.Api.Models.Subscription {
+﻿namespace Mollie.Api.Models.Subscription.Response {
     public static class SubscriptionStatus {
         public const string Pending = "pending";
         public const string Active = "active";

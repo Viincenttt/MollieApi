@@ -1,4 +1,4 @@
-﻿namespace Mollie.Api.Models.Refund {
+﻿namespace Mollie.Api.Models.Refund.Response {
     public static class RefundStatus {
         public const string Pending = "pending";
         public const string Processing = "processing";

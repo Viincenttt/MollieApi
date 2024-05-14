@@ -1,5 +1,6 @@
 ﻿using Mollie.Api.Models.Payment.Response;
 using Mollie.Api.Models.Settlement;
+using Mollie.Api.Models.Settlement.Response;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Models.Chargeback.Response {

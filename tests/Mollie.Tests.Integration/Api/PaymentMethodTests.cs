@@ -9,6 +9,7 @@ using Mollie.Api.Models.List;
 using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Payment;
 using Mollie.Api.Models.PaymentMethod;
+using Mollie.Api.Models.PaymentMethod.Response;
 using Mollie.Tests.Integration.Framework;
 using Xunit;
 

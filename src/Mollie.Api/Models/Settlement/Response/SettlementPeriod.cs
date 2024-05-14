@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Mollie.Api.Models.Settlement {
+namespace Mollie.Api.Models.Settlement.Response {
 	public record SettlementPeriod {
 		/// <summary>
 		/// The total revenue for each payment method during this period.
@@ -11,7 +11,7 @@ namespace Mollie.Api.Models.Settlement {
 		/// The fees withheld for each payment method during this period.
 		/// </summary>
 		public required List<SettlementPeriodCosts> Costs { get; init; }
-		
+
 		/// <summary>
 		/// The ID of the invoice that was created to invoice specifically the costs in this month/period.
 		/// If an individual month/period has not been invoiced yet, then this field will not be present until
