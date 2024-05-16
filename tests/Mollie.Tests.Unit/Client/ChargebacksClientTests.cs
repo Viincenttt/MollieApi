@@ -100,7 +100,7 @@ namespace Mollie.Tests.Unit.Client {
             ChargebacksClient chargebacksClient = new ChargebacksClient("abcde", httpClient);
 
             // When: We send the request
-            await chargebacksClient.GetChargebacksListAsync(defaultPaymentId, from, limit, testmode);
+            await chargebacksClient.GetChargebackListAsync(defaultPaymentId, from, limit, testmode);
 
             // Then
             mockHttp.VerifyNoOutstandingRequest();
@@ -119,7 +119,7 @@ namespace Mollie.Tests.Unit.Client {
             ChargebacksClient chargebacksClient = new ChargebacksClient("abcde", httpClient);
 
             // When: We send the request
-            await chargebacksClient.GetChargebacksListAsync(profileId, testmode);
+            await chargebacksClient.GetChargebackListAsync(profileId, testmode);
 
             // Then
             mockHttp.VerifyNoOutstandingRequest();
@@ -170,7 +170,7 @@ namespace Mollie.Tests.Unit.Client {
             ChargebacksClient chargebacksClient = new ChargebacksClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await chargebacksClient.GetChargebacksListAsync(paymentId: paymentId));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await chargebacksClient.GetChargebackListAsync(paymentId: paymentId));
 
             // Then
             exception.Message.Should().Be("Required URL argument 'paymentId' is null or empty");

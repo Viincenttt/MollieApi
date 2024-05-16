@@ -6,8 +6,8 @@ using Mollie.Api.Models.Url;
 namespace Mollie.Api.Client.Abstract {
     public interface IChargebacksClient : IBaseMollieClient {
         Task<ChargebackResponse> GetChargebackAsync(string paymentId, string chargebackId, bool testmode = false);
-        Task<ListResponse<ChargebackResponse>> GetChargebacksListAsync(string paymentId, string? from = null, int? limit = null, bool testmode = false);
-        Task<ListResponse<ChargebackResponse>> GetChargebacksListAsync(string? profileId = null, bool testmode = false);
-        Task<ListResponse<ChargebackResponse>> GetChargebacksListAsync(UrlObjectLink<ListResponse<ChargebackResponse>> url);
+        Task<ListResponse<ChargebackResponse>> GetChargebackListAsync(string paymentId, string? from = null, int? limit = null, bool testmode = false);
+        Task<ListResponse<ChargebackResponse>> GetChargebackListAsync(string? profileId = null, bool testmode = false);
+        Task<ListResponse<ChargebackResponse>> GetChargebackListAsync(UrlObjectLink<ListResponse<ChargebackResponse>> url);
     }
 }

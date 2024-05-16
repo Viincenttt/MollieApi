@@ -20,7 +20,7 @@ namespace Mollie.Api.Client {
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<ChargebackResponse>> GetChargebacksListAsync(string paymentId, string? from = null, int? limit = null, bool testmode = false) {
+        public async Task<ListResponse<ChargebackResponse>> GetChargebackListAsync(string paymentId, string? from = null, int? limit = null, bool testmode = false) {
             ValidateRequiredUrlParameter(nameof(paymentId), paymentId);
             var queryParameters = BuildQueryParameters(testmode);
             return await this
@@ -28,12 +28,12 @@ namespace Mollie.Api.Client {
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<ChargebackResponse>> GetChargebacksListAsync(string? profileId = null, bool testmode = false) {
+        public async Task<ListResponse<ChargebackResponse>> GetChargebackListAsync(string? profileId = null, bool testmode = false) {
             var queryParameters = BuildQueryParameters(profileId, testmode);
             return await GetListAsync<ListResponse<ChargebackResponse>>($"chargebacks", null, null, queryParameters).ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<ChargebackResponse>> GetChargebacksListAsync(UrlObjectLink<ListResponse<ChargebackResponse>> url) {
+        public async Task<ListResponse<ChargebackResponse>> GetChargebackListAsync(UrlObjectLink<ListResponse<ChargebackResponse>> url) {
             return await GetAsync(url).ConfigureAwait(false);
         }
 
