@@ -69,17 +69,6 @@ namespace Mollie.Api.Client {
             return await PostAsync<PaymentResponse>($"orders/{orderId}/payments", createOrderPaymentRequest).ConfigureAwait(false);
         }
 
-        public async Task<OrderRefundResponse> CreateOrderRefundAsync(string orderId, OrderRefundRequest createOrderRefundRequest) {
-            ValidateRequiredUrlParameter(nameof(orderId), orderId);
-            return await PostAsync<OrderRefundResponse>($"orders/{orderId}/refunds", createOrderRefundRequest);
-        }
-
-        public async Task<ListResponse<RefundResponse>> GetOrderRefundListAsync(string orderId, string? from = null, int? limit = null, bool testmode = false) {
-            ValidateRequiredUrlParameter(nameof(orderId), orderId);
-            var queryParameters = BuildQueryParameters(null, testmode);
-            return await GetListAsync<ListResponse<RefundResponse>>($"orders/{orderId}/refunds", from, limit, queryParameters).ConfigureAwait(false);
-        }
-
         private Dictionary<string, string> BuildQueryParameters(string? profileId = null, bool testmode = false, SortDirection? sort = null) {
             var result = new Dictionary<string, string>();
             result.AddValueIfNotNullOrEmpty(nameof(profileId), profileId);

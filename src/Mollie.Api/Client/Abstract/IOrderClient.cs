@@ -5,7 +5,6 @@ using Mollie.Api.Models.Order.Request;
 using Mollie.Api.Models.Order.Request.ManageOrderLines;
 using Mollie.Api.Models.Order.Response;
 using Mollie.Api.Models.Payment.Response;
-using Mollie.Api.Models.Refund.Response;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client.Abstract {
@@ -22,8 +21,5 @@ namespace Mollie.Api.Client.Abstract {
         Task<ListResponse<OrderResponse>> GetOrderListAsync(UrlObjectLink<ListResponse<OrderResponse>> url);
         Task CancelOrderLinesAsync(string orderId, OrderLineCancellationRequest cancelationRequest);
         Task<PaymentResponse> CreateOrderPaymentAsync(string orderId, OrderPaymentRequest createOrderPaymentRequest);
-        Task<OrderRefundResponse> CreateOrderRefundAsync(string orderId, OrderRefundRequest createOrderRefundRequest);
-        Task<ListResponse<RefundResponse>> GetOrderRefundListAsync(
-            string orderId, string? from = null, int? limit = null, bool testmode = false);
     }
 }
