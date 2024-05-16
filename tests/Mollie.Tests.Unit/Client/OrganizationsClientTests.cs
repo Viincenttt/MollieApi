@@ -59,7 +59,7 @@ public class OrganizationsClientTests : BaseClientTests
         var organizationsClient = new OrganizationsClient("access_abcde", httpClient);
         
         // Act
-        var result = await organizationsClient.GetOrganizationsListAsync();
+        var result = await organizationsClient.GetOrganizationListAsync();
 
         // Assert
         result.Count.Should().Be(2);
