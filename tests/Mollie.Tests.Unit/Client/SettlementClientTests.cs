@@ -21,7 +21,7 @@ namespace Mollie.Tests.Unit.Client {
             SettlementsClient settlementsClient = new SettlementsClient("api-key", httpClient);
 
             // When: We make the request
-            ListResponse<CaptureResponse> listCaptureResponse = await settlementsClient.GetSettlementCapturesListAsync(defaultSettlementId);
+            ListResponse<CaptureResponse> listCaptureResponse = await settlementsClient.GetSettlementCaptureListAsync(defaultSettlementId);
 
             // Then: Response should be parsed
             mockHttp.VerifyNoOutstandingExpectation();
@@ -162,7 +162,7 @@ namespace Mollie.Tests.Unit.Client {
             SettlementsClient settlementsClient = new SettlementsClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await settlementsClient.GetSettlementPaymentsListAsync(settlementId));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await settlementsClient.GetSettlementPaymentListAsync(settlementId));
 
             // Then
             exception.Message.Should().Be("Required URL argument 'settlementId' is null or empty");
@@ -179,7 +179,7 @@ namespace Mollie.Tests.Unit.Client {
             SettlementsClient settlementsClient = new SettlementsClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await settlementsClient.GetSettlementRefundsListAsync(settlementId));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await settlementsClient.GetSettlementRefundListAsync(settlementId));
 
             // Then
             exception.Message.Should().Be("Required URL argument 'settlementId' is null or empty");
@@ -196,7 +196,7 @@ namespace Mollie.Tests.Unit.Client {
             SettlementsClient settlementsClient = new SettlementsClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await settlementsClient.GetSettlementChargebacksListAsync(settlementId));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await settlementsClient.GetSettlementChargebackListAsync(settlementId));
 
             // Then
             exception.Message.Should().Be("Required URL argument 'settlementId' is null or empty");
@@ -213,7 +213,7 @@ namespace Mollie.Tests.Unit.Client {
             SettlementsClient settlementsClient = new SettlementsClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await settlementsClient.GetSettlementCapturesListAsync(settlementId));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await settlementsClient.GetSettlementCaptureListAsync(settlementId));
 
             // Then
             exception.Message.Should().Be("Required URL argument 'settlementId' is null or empty");

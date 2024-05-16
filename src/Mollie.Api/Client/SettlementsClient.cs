@@ -27,53 +27,53 @@ namespace Mollie.Api.Client {
             return await GetAsync<SettlementResponse>($"settlements/open").ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<SettlementResponse>> GetSettlementsListAsync(string? reference = null, string? offset = null, int? count = null) {
+        public async Task<ListResponse<SettlementResponse>> GetSettlementListAsync(string? reference = null, string? offset = null, int? count = null) {
             var queryString = !string.IsNullOrWhiteSpace(reference) ? $"?reference={reference}" : string.Empty;
             return await GetListAsync<ListResponse<SettlementResponse>>($"settlements{queryString}", offset, count).ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<SettlementResponse>> GetSettlementsListAsync(UrlObjectLink<ListResponse<SettlementResponse>> url)
+        public async Task<ListResponse<SettlementResponse>> GetSettlementListAsync(UrlObjectLink<ListResponse<SettlementResponse>> url)
         {
             return await GetAsync(url).ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<PaymentResponse>> GetSettlementPaymentsListAsync(string settlementId, string? offset = null, int? count = null) {
+        public async Task<ListResponse<PaymentResponse>> GetSettlementPaymentListAsync(string settlementId, string? offset = null, int? count = null) {
             ValidateRequiredUrlParameter(nameof(settlementId), settlementId);
             return await GetListAsync<ListResponse<PaymentResponse>>($"settlements/{settlementId}/payments", offset, count).ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<PaymentResponse>> GetSettlementPaymentsListAsync(UrlObjectLink<ListResponse<PaymentResponse>> url)
+        public async Task<ListResponse<PaymentResponse>> GetSettlementPaymentListAsync(UrlObjectLink<ListResponse<PaymentResponse>> url)
         {
             return await GetAsync(url).ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<RefundResponse>> GetSettlementRefundsListAsync(string settlementId, string? offset = null, int? count = null) {
+        public async Task<ListResponse<RefundResponse>> GetSettlementRefundListAsync(string settlementId, string? offset = null, int? count = null) {
             ValidateRequiredUrlParameter(nameof(settlementId), settlementId);
             return await GetListAsync<ListResponse<RefundResponse>>($"settlements/{settlementId}/refunds", offset, count).ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<RefundResponse>> GetSettlementRefundsListAsync(UrlObjectLink<ListResponse<RefundResponse>> url)
+        public async Task<ListResponse<RefundResponse>> GetSettlementRefundListAsync(UrlObjectLink<ListResponse<RefundResponse>> url)
         {
             return await GetAsync(url).ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<ChargebackResponse>> GetSettlementChargebacksListAsync(string settlementId, string? offset = null, int? count = null) {
+        public async Task<ListResponse<ChargebackResponse>> GetSettlementChargebackListAsync(string settlementId, string? offset = null, int? count = null) {
             ValidateRequiredUrlParameter(nameof(settlementId), settlementId);
             return await GetListAsync<ListResponse<ChargebackResponse>>($"settlements/{settlementId}/chargebacks", offset, count).ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<ChargebackResponse>> GetSettlementChargebacksListAsync(UrlObjectLink<ListResponse<ChargebackResponse>> url)
+        public async Task<ListResponse<ChargebackResponse>> GetSettlementChargebackListAsync(UrlObjectLink<ListResponse<ChargebackResponse>> url)
         {
             return await GetAsync(url).ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<CaptureResponse>> GetSettlementCapturesListAsync(string settlementId, string? offset = null, int? count = null)
+        public async Task<ListResponse<CaptureResponse>> GetSettlementCaptureListAsync(string settlementId, string? offset = null, int? count = null)
         {
             ValidateRequiredUrlParameter(nameof(settlementId), settlementId);
             return await GetListAsync<ListResponse<CaptureResponse>>($"settlements/{settlementId}/captures", offset, count).ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<CaptureResponse>> GetSettlementCapturesListAsync(UrlObjectLink<ListResponse<CaptureResponse>> url)
+        public async Task<ListResponse<CaptureResponse>> GetSettlementCaptureListAsync(UrlObjectLink<ListResponse<CaptureResponse>> url)
         {
             return await GetAsync(url).ConfigureAwait(false);
         }
@@ -84,7 +84,7 @@ namespace Mollie.Api.Client {
 
         public async Task<ListResponse<CaptureResponse>> ListSettlementCapturesAsync(string settlementId)
         {
-            return await GetSettlementCapturesListAsync(settlementId);
+            return await GetSettlementCaptureListAsync(settlementId);
         }
     }
 }
