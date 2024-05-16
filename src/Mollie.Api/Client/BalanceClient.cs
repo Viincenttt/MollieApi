@@ -29,12 +29,12 @@ namespace Mollie.Api.Client {
             return await GetAsync<BalanceResponse>("balances/primary").ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<BalanceResponse>> ListBalancesAsync(string? from = null, int? limit = null, string? currency = null) {
+        public async Task<ListResponse<BalanceResponse>> GetBalanceListAsync(string? from = null, int? limit = null, string? currency = null) {
             var queryParameters = BuildListBalanceQueryParameters(currency);
             return await GetListAsync<ListResponse<BalanceResponse>>($"balances", from, limit, queryParameters).ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<BalanceResponse>> ListBalancesAsync(UrlObjectLink<ListResponse<BalanceResponse>> url) {
+        public async Task<ListResponse<BalanceResponse>> GetBalanceListAsync(UrlObjectLink<ListResponse<BalanceResponse>> url) {
             return await GetAsync(url).ConfigureAwait(false);
         }
 
@@ -49,13 +49,13 @@ namespace Mollie.Api.Client {
             return await GetAsync<BalanceReportResponse>($"balances/primary/report{queryParameters.ToQueryString()}").ConfigureAwait(false);
         }
 
-        public async Task<BalanceTransactionResponse> ListBalanceTransactionsAsync(string balanceId, string? from = null, int? limit = null) {
+        public async Task<BalanceTransactionResponse> GetBalanceTransactionListAsync(string balanceId, string? from = null, int? limit = null) {
             ValidateRequiredUrlParameter(nameof(balanceId), balanceId);
             var queryParameters = BuildListBalanceTransactionsQueryParameters(from, limit);
             return await GetAsync<BalanceTransactionResponse>($"balances/{balanceId}/transactions{queryParameters.ToQueryString()}").ConfigureAwait(false);
         }
 
-        public async Task<BalanceTransactionResponse> ListPrimaryBalanceTransactionsAsync(string? from = null, int? limit = null) {
+        public async Task<BalanceTransactionResponse> GetPrimaryBalanceTransactionListAsync(string? from = null, int? limit = null) {
             var queryParameters = BuildListBalanceTransactionsQueryParameters(from, limit);
             return await GetAsync<BalanceTransactionResponse>($"balances/primary/transactions{queryParameters.ToQueryString()}").ConfigureAwait(false);
         }

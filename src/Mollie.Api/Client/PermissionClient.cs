@@ -6,8 +6,8 @@ using Mollie.Api.Models.Permission.Response;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client {
-    public class PermissionsClient : OauthBaseMollieClient, IPermissionsClient {
-        public PermissionsClient(string oauthAccessToken, HttpClient? httpClient = null) : base(oauthAccessToken, httpClient) {
+    public class PermissionClient : OauthBaseMollieClient, IPermissionClient {
+        public PermissionClient(string oauthAccessToken, HttpClient? httpClient = null) : base(oauthAccessToken, httpClient) {
         }
 
         public async Task<PermissionResponse> GetPermissionAsync(string permissionId) {

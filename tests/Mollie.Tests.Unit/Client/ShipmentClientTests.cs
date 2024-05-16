@@ -89,7 +89,7 @@ namespace Mollie.Tests.Unit.Client {
             ShipmentClient shipmentClient = new ShipmentClient("abcde", httpClient);
 
             // When: We send the request
-            var shipmentListResponse = await shipmentClient.GetShipmentsListAsync(orderId, testModeParameter);
+            var shipmentListResponse = await shipmentClient.GetShipmentListAsync(orderId, testModeParameter);
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
@@ -192,7 +192,7 @@ namespace Mollie.Tests.Unit.Client {
             ShipmentClient shipmentClient = new ShipmentClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await shipmentClient.GetShipmentsListAsync(orderId));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await shipmentClient.GetShipmentListAsync(orderId));
 
             // Then
             exception.Message.Should().Be("Required URL argument 'orderId' is null or empty");

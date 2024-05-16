@@ -38,7 +38,7 @@ public class RefundTests : BaseMollieApiTestClass, IDisposable {
         RefundRequest refundRequest = new RefundRequest() {
             Amount = new Amount(Currency.EUR, amount)
         };
-        RefundResponse refundResponse = await _refundClient.CreateRefundAsync(payment.Id, refundRequest);
+        RefundResponse refundResponse = await _refundClient.CreatePaymentRefundAsync(payment.Id, refundRequest);
 
         // Then
         refundResponse.Should().NotBeNull();
@@ -57,7 +57,7 @@ public class RefundTests : BaseMollieApiTestClass, IDisposable {
         RefundRequest refundRequest = new RefundRequest() {
             Amount = new Amount(Currency.EUR, "50.00")
         };
-        RefundResponse refundResponse = await _refundClient.CreateRefundAsync(payment.Id, refundRequest);
+        RefundResponse refundResponse = await _refundClient.CreatePaymentRefundAsync(payment.Id, refundRequest);
 
         // Then
         refundResponse.Amount.Should().Be(refundRequest.Amount);
@@ -74,10 +74,10 @@ public class RefundTests : BaseMollieApiTestClass, IDisposable {
         RefundRequest refundRequest = new RefundRequest() {
             Amount = new Amount(Currency.EUR, "50.00")
         };
-        RefundResponse refundResponse = await _refundClient.CreateRefundAsync(payment.Id, refundRequest);
+        RefundResponse refundResponse = await _refundClient.CreatePaymentRefundAsync(payment.Id, refundRequest);
 
         // When: We attempt to retrieve this refund
-        RefundResponse result = await _refundClient.GetRefundAsync(payment.Id, refundResponse.Id);
+        RefundResponse result = await _refundClient.GetPaymentRefundAsync(payment.Id, refundResponse.Id);
 
         // Then
         result.Should().NotBeNull();
@@ -91,7 +91,7 @@ public class RefundTests : BaseMollieApiTestClass, IDisposable {
         PaymentResponse payment = await CreatePayment();
 
         // When: Retrieve refund list for this payment
-        ListResponse<RefundResponse> refundList = await _refundClient.GetRefundListAsync(payment.Id);
+        ListResponse<RefundResponse> refundList = await _refundClient.GetPaymentRefundListAsync(payment.Id);
 
         // Then
         refundList.Should().NotBeNull();
@@ -114,7 +114,7 @@ public class RefundTests : BaseMollieApiTestClass, IDisposable {
             Amount = new Amount(Currency.EUR, amount),
             Metadata = metadata
         };
-        RefundResponse refundResponse = await _refundClient.CreateRefundAsync(payment.Id, refundRequest);
+        RefundResponse refundResponse = await _refundClient.CreatePaymentRefundAsync(payment.Id, refundRequest);
 
         // Then: Make sure we get the same json result as metadata
         refundResponse.Metadata.Should().Be(metadata);

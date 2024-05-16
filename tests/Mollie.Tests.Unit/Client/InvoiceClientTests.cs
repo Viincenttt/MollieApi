@@ -18,10 +18,10 @@ public class InvoiceClientTests : BaseClientTests
         mockHttp.When($"{BaseMollieClient.ApiEndPoint}invoices/{invoiceId}")
             .Respond("application/json", defaultInvoice);
         HttpClient httpClient = mockHttp.ToHttpClient();
-        using InvoicesClient invoicesClient = new InvoicesClient("access_abcde", httpClient);
+        using InvoiceClient invoiceClient = new InvoiceClient("access_abcde", httpClient);
         
         // When
-        var result = await invoicesClient.GetInvoiceAsync(invoiceId);
+        var result = await invoiceClient.GetInvoiceAsync(invoiceId);
 
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
@@ -46,10 +46,10 @@ public class InvoiceClientTests : BaseClientTests
         mockHttp.When($"{BaseMollieClient.ApiEndPoint}invoices{expectedQueryString}")
             .Respond("application/json", defaultInvoiceList);
         HttpClient httpClient = mockHttp.ToHttpClient();
-        using InvoicesClient invoicesClient = new InvoicesClient("access_abcde", httpClient);
+        using InvoiceClient invoiceClient = new InvoiceClient("access_abcde", httpClient);
 
         // When: We send the request
-        var result = await invoicesClient.GetInvoiceListAsync(
+        var result = await invoiceClient.GetInvoiceListAsync(
             reference, year, from, limit);
 
         // Then

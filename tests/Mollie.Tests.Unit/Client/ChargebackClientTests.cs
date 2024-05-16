@@ -8,7 +8,7 @@ using RichardSzalay.MockHttp;
 using Xunit;
 
 namespace Mollie.Tests.Unit.Client {
-    public class ChargebacksClientTests : BaseClientTests {
+    public class ChargebackClientTests : BaseClientTests {
         private const string defaultPaymentId = "tr_WDqYK6vllg";
         private const string defaultChargebackId = "chb_n9z0tp";
         private const string defaultChargebackReasonCode = "AC01";
@@ -55,10 +55,10 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.When($"{BaseMollieClient.ApiEndPoint}*")
                 .Respond("application/json", defaultGetChargebacksResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
-            ChargebacksClient chargebacksClient = new ChargebacksClient("abcde", httpClient);
+            ChargebackClient chargebackClient = new ChargebackClient("abcde", httpClient);
 
             // When: We send the request
-            ChargebackResponse chargebackResponse = await chargebacksClient.GetChargebackAsync(defaultPaymentId, defaultChargebackId);
+            ChargebackResponse chargebackResponse = await chargebackClient.GetChargebackAsync(defaultPaymentId, defaultChargebackId);
 
             // Then
             chargebackResponse.PaymentId.Should().Be(defaultPaymentId);
@@ -77,10 +77,10 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.When($"{BaseMollieClient.ApiEndPoint}payments/{defaultPaymentId}/chargebacks/{defaultChargebackId}{expectedQueryString}")
                 .Respond("application/json", defaultGetChargebacksResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
-            ChargebacksClient chargebacksClient = new ChargebacksClient("abcde", httpClient);
+            ChargebackClient chargebackClient = new ChargebackClient("abcde", httpClient);
 
             // When: We send the request
-            await chargebacksClient.GetChargebackAsync(defaultPaymentId, defaultChargebackId, testmode);
+            await chargebackClient.GetChargebackAsync(defaultPaymentId, defaultChargebackId, testmode);
 
             // Then
             mockHttp.VerifyNoOutstandingRequest();
@@ -97,10 +97,10 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.When($"{BaseMollieClient.ApiEndPoint}payments/{defaultPaymentId}/chargebacks{expectedQueryString}")
                 .Respond("application/json", defaultGetChargebacksResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
-            ChargebacksClient chargebacksClient = new ChargebacksClient("abcde", httpClient);
+            ChargebackClient chargebackClient = new ChargebackClient("abcde", httpClient);
 
             // When: We send the request
-            await chargebacksClient.GetChargebacksListAsync(defaultPaymentId, from, limit, testmode);
+            await chargebackClient.GetChargebackListAsync(defaultPaymentId, from, limit, testmode);
 
             // Then
             mockHttp.VerifyNoOutstandingRequest();
@@ -116,10 +116,10 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.When($"{BaseMollieClient.ApiEndPoint}chargebacks{expectedQueryString}")
                 .Respond("application/json", defaultGetChargebacksResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
-            ChargebacksClient chargebacksClient = new ChargebacksClient("abcde", httpClient);
+            ChargebackClient chargebackClient = new ChargebackClient("abcde", httpClient);
 
             // When: We send the request
-            await chargebacksClient.GetChargebacksListAsync(profileId, testmode);
+            await chargebackClient.GetChargebackListAsync(profileId, testmode);
 
             // Then
             mockHttp.VerifyNoOutstandingRequest();
@@ -133,10 +133,10 @@ namespace Mollie.Tests.Unit.Client {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
-            ChargebacksClient chargebacksClient = new ChargebacksClient("api-key", httpClient);
+            ChargebackClient chargebackClient = new ChargebackClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await chargebacksClient.GetChargebackAsync(paymentId, "chargeback-id"));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await chargebackClient.GetChargebackAsync(paymentId, "chargeback-id"));
 
             // Then
             exception.Message.Should().Be("Required URL argument 'paymentId' is null or empty");
@@ -150,10 +150,10 @@ namespace Mollie.Tests.Unit.Client {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
-            ChargebacksClient chargebacksClient = new ChargebacksClient("api-key", httpClient);
+            ChargebackClient chargebackClient = new ChargebackClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await chargebacksClient.GetChargebackAsync("payment-id", chargebackId));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await chargebackClient.GetChargebackAsync("payment-id", chargebackId));
 
             // Then
             exception.Message.Should().Be("Required URL argument 'chargebackId' is null or empty");
@@ -167,10 +167,10 @@ namespace Mollie.Tests.Unit.Client {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
-            ChargebacksClient chargebacksClient = new ChargebacksClient("api-key", httpClient);
+            ChargebackClient chargebackClient = new ChargebackClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await chargebacksClient.GetChargebacksListAsync(paymentId: paymentId));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await chargebackClient.GetChargebackListAsync(paymentId: paymentId));
 
             // Then
             exception.Message.Should().Be("Required URL argument 'paymentId' is null or empty");

@@ -33,7 +33,7 @@ public class ShipmentTests : BaseMollieApiTestClass, IDisposable {
     [DefaultRetryFact(Skip = "For manual testing only")]
     public async Task CanListShipmentsForOrder(){
         string validOrderId = "XXXXX";
-        ListResponse<ShipmentResponse> result = await _shipmentClient.GetShipmentsListAsync(validOrderId);
+        ListResponse<ShipmentResponse> result = await _shipmentClient.GetShipmentListAsync(validOrderId);
 
         result.Should().NotBeNull();
         result.Count.Should().BeGreaterThan(0);

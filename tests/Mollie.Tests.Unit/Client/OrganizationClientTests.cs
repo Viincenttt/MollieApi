@@ -8,7 +8,7 @@ using Xunit;
 
 namespace Mollie.Tests.Unit.Client;
 
-public class OrganizationsClientTests : BaseClientTests
+public class OrganizationClientTests : BaseClientTests
 {
     [Fact]
     public async Task GetCurrentOrganizationAsync_ResponseIsDeserializedInExpectedFormat()
@@ -19,7 +19,7 @@ public class OrganizationsClientTests : BaseClientTests
             .With(request => request.Headers.Contains("Idempotency-Key"))
             .Respond("application/json", defaultOrganizationResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
-        var organizationsClient = new OrganizationsClient("access_abcde", httpClient);
+        var organizationsClient = new OrganizationClient("access_abcde", httpClient);
         
         // Act
         var result = await organizationsClient.GetCurrentOrganizationAsync();
@@ -38,7 +38,7 @@ public class OrganizationsClientTests : BaseClientTests
             .With(request => request.Headers.Contains("Idempotency-Key"))
             .Respond("application/json", defaultOrganizationResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
-        var organizationsClient = new OrganizationsClient("access_abcde", httpClient);
+        var organizationsClient = new OrganizationClient("access_abcde", httpClient);
         
         // Act
         var result = await organizationsClient.GetOrganizationAsync(organizationId);
@@ -56,10 +56,10 @@ public class OrganizationsClientTests : BaseClientTests
             .With(request => request.Headers.Contains("Idempotency-Key"))
             .Respond("application/json", defaultOrganizationListResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
-        var organizationsClient = new OrganizationsClient("access_abcde", httpClient);
+        var organizationsClient = new OrganizationClient("access_abcde", httpClient);
         
         // Act
-        var result = await organizationsClient.GetOrganizationsListAsync();
+        var result = await organizationsClient.GetOrganizationListAsync();
 
         // Assert
         result.Count.Should().Be(2);

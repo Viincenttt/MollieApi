@@ -1143,7 +1143,7 @@ public class PaymentClientTests : BaseClientTests {
         PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
 
         // When: We send the request
-        await paymentClient.DeletePaymentAsync(paymentId, true);
+        await paymentClient.CancelPaymentAsync(paymentId, true);
 
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
@@ -1160,7 +1160,7 @@ public class PaymentClientTests : BaseClientTests {
         PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
 
         // When: We send the request
-        var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await paymentClient.DeletePaymentAsync(paymentId));
+        var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await paymentClient.CancelPaymentAsync(paymentId));
 
         // Then
         exception.Message.Should().Be("Required URL argument 'paymentId' is null or empty");

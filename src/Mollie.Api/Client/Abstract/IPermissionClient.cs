@@ -4,7 +4,7 @@ using Mollie.Api.Models.Permission.Response;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client.Abstract {
-    public interface IPermissionsClient : IBaseMollieClient {
+    public interface IPermissionClient : IBaseMollieClient {
         Task<PermissionResponse> GetPermissionAsync(string permissionId);
         Task<PermissionResponse> GetPermissionAsync(UrlObjectLink<PermissionResponse> url);
         Task<ListResponse<PermissionResponse>> GetPermissionListAsync();
