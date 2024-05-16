@@ -38,14 +38,14 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="currency">Currency filter that will make it so only balances in given currency are returned.
         /// For example EUR.</param>
         /// <returns></returns>
-        Task<ListResponse<BalanceResponse>> ListBalancesAsync(string? from = null, int? limit = null, string? currency = null);
+        Task<ListResponse<BalanceResponse>> GetBalanceListAsync(string? from = null, int? limit = null, string? currency = null);
 
         /// <summary>
         /// Retrieve all the organization’s balances by URL
         /// </summary>
         /// <param name="url">The URL of the balance objects</param>
         /// <returns></returns>
-        Task<ListResponse<BalanceResponse>> ListBalancesAsync(UrlObjectLink<ListResponse<BalanceResponse>> url);
+        Task<ListResponse<BalanceResponse>> GetBalanceListAsync(UrlObjectLink<ListResponse<BalanceResponse>> url);
 
         /// <summary>
         /// With the Get balance report endpoint you can retrieve a summarized report for all movements on a given
@@ -87,7 +87,7 @@ namespace Mollie.Api.Client.Abstract {
         /// with this ID is included in the result set as well.</param>
         /// <param name="limit">The number of balance transactions to return (with a maximum of 250).</param>
         /// <returns></returns>
-        Task<BalanceTransactionResponse> ListBalanceTransactionsAsync(string balanceId, string? from = null, int? limit = null);
+        Task<BalanceTransactionResponse> GetBalanceTransactionListAsync(string balanceId, string? from = null, int? limit = null);
 
         /// <summary>
         /// With the List primary balance transactions endpoint you can retrieve a list of all the movements on your
@@ -97,6 +97,6 @@ namespace Mollie.Api.Client.Abstract {
         /// with this ID is included in the result set as well.</param>
         /// <param name="limit">The number of balance transactions to return (with a maximum of 250).</param>
         /// <returns></returns>
-        Task<BalanceTransactionResponse> ListPrimaryBalanceTransactionsAsync(string? from = null, int? limit = null);
+        Task<BalanceTransactionResponse> GetPrimaryBalanceTransactionListAsync(string? from = null, int? limit = null);
     }
 }

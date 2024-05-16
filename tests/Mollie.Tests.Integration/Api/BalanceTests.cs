@@ -41,7 +41,7 @@ public class BalanceTests : BaseMollieApiTestClass, IDisposable {
     [DefaultRetryFact]
     public async Task GetBalanceAsync_IsParsedCorrectly() {
         // Given: We get a balance id from the list balances endpoint
-        var balanceList = await _balanceClient.ListBalancesAsync();
+        var balanceList = await _balanceClient.GetBalanceListAsync();
         if (balanceList.Count == 0) {
             Assert.Fail("No balance found to retrieve");
         }
@@ -67,7 +67,7 @@ public class BalanceTests : BaseMollieApiTestClass, IDisposable {
     [DefaultRetryFact]
     public async Task ListBalancesAsync_IsParsedCorrectly() {
         // When: We retrieve the list of balances
-        var result = await _balanceClient.ListBalancesAsync();
+        var result = await _balanceClient.GetBalanceListAsync();
 
         // Then: Make sure we can parse the result
         result.Should().NotBeNull();
@@ -108,7 +108,7 @@ public class BalanceTests : BaseMollieApiTestClass, IDisposable {
         var limit = 250;
 
         // When: We list the balance transactions
-        var result = await _balanceClient.ListBalanceTransactionsAsync(balanceId, from, limit);
+        var result = await _balanceClient.GetBalanceTransactionListAsync(balanceId, from, limit);
 
         // Then: Make sure we can parse the result
         result.Should().NotBeNull();
@@ -125,7 +125,7 @@ public class BalanceTests : BaseMollieApiTestClass, IDisposable {
         var limit = 250;
 
         // When: We list the balance transactions
-        var result = await _balanceClient.ListPrimaryBalanceTransactionsAsync(from, limit);
+        var result = await _balanceClient.GetPrimaryBalanceTransactionListAsync(from, limit);
 
         // Then: Make sure we can parse the result
         result.Should().NotBeNull();

@@ -115,7 +115,7 @@ namespace Mollie.Tests.Unit.Client {
           BalanceClient balanceClient = new BalanceClient("api-key", httpClient);
 
           // When: We make the request
-          var balances = await balanceClient.ListBalancesAsync();
+          var balances = await balanceClient.GetBalanceListAsync();
 
           // Then: Response should be parsed
           mockHttp.VerifyNoOutstandingExpectation();
@@ -230,7 +230,7 @@ namespace Mollie.Tests.Unit.Client {
           BalanceClient balanceClient = new BalanceClient("api-key", httpClient);
 
           // When: We make the request
-          var balanceTransactions = await balanceClient.ListBalanceTransactionsAsync(balanceId);
+          var balanceTransactions = await balanceClient.GetBalanceTransactionListAsync(balanceId);
 
           // Then: Response should be parsed
           mockHttp.VerifyNoOutstandingExpectation();
@@ -261,7 +261,7 @@ namespace Mollie.Tests.Unit.Client {
           BalanceClient balanceClient = new BalanceClient("api-key", httpClient);
 
           // When: We send the request
-          var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await balanceClient.ListBalanceTransactionsAsync(balanceId));
+          var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await balanceClient.GetBalanceTransactionListAsync(balanceId));
 
           // Then
           exception.Message.Should().Be("Required URL argument 'balanceId' is null or empty");
@@ -276,7 +276,7 @@ namespace Mollie.Tests.Unit.Client {
           BalanceClient balanceClient = new BalanceClient("api-key", httpClient);
 
           // When: We make the request
-          var balanceTransactions = await balanceClient.ListPrimaryBalanceTransactionsAsync();
+          var balanceTransactions = await balanceClient.GetPrimaryBalanceTransactionListAsync();
 
           // Then: Response should be parsed
           mockHttp.VerifyNoOutstandingExpectation();
