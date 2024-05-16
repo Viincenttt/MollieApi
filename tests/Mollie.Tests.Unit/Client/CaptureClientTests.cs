@@ -95,7 +95,7 @@ namespace Mollie.Tests.Unit.Client {
             CaptureClient captureClient = new CaptureClient("abcde", httpClient);
 
             // When: We send the request
-            await captureClient.GetCapturesListAsync(paymentId, testmode);
+            await captureClient.GetCaptureListAsync(paymentId, testmode);
 
             // Then
             mockHttp.VerifyNoOutstandingRequest();
@@ -132,7 +132,7 @@ namespace Mollie.Tests.Unit.Client {
             CaptureClient captureClient = new CaptureClient("api-key", httpClient);
 
             // When: We make the request
-            ListResponse<CaptureResponse> listCaptureResponse = await captureClient.GetCapturesListAsync(defaultPaymentId);
+            ListResponse<CaptureResponse> listCaptureResponse = await captureClient.GetCaptureListAsync(defaultPaymentId);
 
             // Then: Response should be parsed
             mockHttp.VerifyNoOutstandingExpectation();
@@ -192,7 +192,7 @@ namespace Mollie.Tests.Unit.Client {
             CaptureClient captureClient = new CaptureClient("abcde", httpClient);
 
             // When: We send the request
-            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await captureClient.GetCapturesListAsync(paymentId));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await captureClient.GetCaptureListAsync(paymentId));
 
             // Then
             exception.Message.Should().Be("Required URL argument 'paymentId' is null or empty");

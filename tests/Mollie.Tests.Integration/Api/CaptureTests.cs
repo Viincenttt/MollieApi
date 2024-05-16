@@ -73,7 +73,7 @@ public class CaptureTests : BaseMollieApiTestClass, IDisposable {
         await _captureClient.CreateCapture(payment.Id, captureRequest);
 
         // When: we retrieve the captures of the payment
-        var captureList = await _captureClient.GetCapturesListAsync(payment.Id);
+        var captureList = await _captureClient.GetCaptureListAsync(payment.Id);
 
         // Then
         captureList.Count.Should().Be(1);
