@@ -19,36 +19,36 @@ namespace Mollie.Api {
                 new BalanceClient(mollieOptions.ApiKey, httpClient), mollieOptions.RetryPolicy);
             RegisterMollieApiClient<ICaptureClient, CaptureClient>(services, httpClient =>
                 new CaptureClient(mollieOptions.ApiKey, httpClient), mollieOptions.RetryPolicy);
-            RegisterMollieApiClient<IChargebacksClient, ChargebacksClient>(services, httpClient =>
-                new ChargebacksClient(mollieOptions.ApiKey, httpClient), mollieOptions.RetryPolicy);
+            RegisterMollieApiClient<IChargebackClient, ChargebackClient>(services, httpClient =>
+                new ChargebackClient(mollieOptions.ApiKey, httpClient), mollieOptions.RetryPolicy);
             RegisterMollieApiClient<IConnectClient, ConnectClient>(services, httpClient =>
                 new ConnectClient(mollieOptions.ClientId, mollieOptions.ClientSecret, httpClient), mollieOptions.RetryPolicy);
             RegisterMollieApiClient<ICustomerClient, CustomerClient>(services, httpClient =>
                 new CustomerClient(mollieOptions.ApiKey, httpClient), mollieOptions.RetryPolicy);
-            RegisterMollieApiClient<IInvoicesClient, InvoicesClient>(services, httpClient =>
-                new InvoicesClient(mollieOptions.ApiKey, httpClient), mollieOptions.RetryPolicy);
+            RegisterMollieApiClient<IInvoiceClient, InvoiceClient>(services, httpClient =>
+                new InvoiceClient(mollieOptions.ApiKey, httpClient), mollieOptions.RetryPolicy);
             RegisterMollieApiClient<IMandateClient, MandateClient>(services, httpClient =>
                 new MandateClient(mollieOptions.ApiKey, httpClient), mollieOptions.RetryPolicy);
             RegisterMollieApiClient<IOnboardingClient, OnboardingClient>(services, httpClient =>
                 new OnboardingClient(mollieOptions.ApiKey, httpClient), mollieOptions.RetryPolicy);
             RegisterMollieApiClient<IOrderClient, OrderClient>(services, httpClient =>
                 new OrderClient(mollieOptions.ApiKey, httpClient), mollieOptions.RetryPolicy);
-            RegisterMollieApiClient<IOrganizationsClient, OrganizationsClient>(services, httpClient =>
-                new OrganizationsClient(mollieOptions.ApiKey, httpClient), mollieOptions.RetryPolicy);
+            RegisterMollieApiClient<IOrganizationClient, OrganizationClient>(services, httpClient =>
+                new OrganizationClient(mollieOptions.ApiKey, httpClient), mollieOptions.RetryPolicy);
             RegisterMollieApiClient<IPaymentClient, PaymentClient>(services, httpClient =>
                 new PaymentClient(mollieOptions.ApiKey, httpClient), mollieOptions.RetryPolicy);
             RegisterMollieApiClient<IPaymentLinkClient, PaymentLinkClient>(services, httpClient =>
                 new PaymentLinkClient(mollieOptions.ApiKey, httpClient), mollieOptions.RetryPolicy);
             RegisterMollieApiClient<IPaymentMethodClient, PaymentMethodClient>(services, httpClient =>
                 new PaymentMethodClient(mollieOptions.ApiKey, httpClient), mollieOptions.RetryPolicy);
-            RegisterMollieApiClient<IPermissionsClient, PermissionsClient>(services, httpClient =>
-                new PermissionsClient(mollieOptions.ApiKey, httpClient), mollieOptions.RetryPolicy);
+            RegisterMollieApiClient<IPermissionClient, PermissionClient>(services, httpClient =>
+                new PermissionClient(mollieOptions.ApiKey, httpClient), mollieOptions.RetryPolicy);
             RegisterMollieApiClient<IProfileClient, ProfileClient>(services, httpClient =>
                 new ProfileClient(mollieOptions.ApiKey, httpClient), mollieOptions.RetryPolicy);
             RegisterMollieApiClient<IRefundClient, RefundClient>(services, httpClient =>
                 new RefundClient(mollieOptions.ApiKey, httpClient), mollieOptions.RetryPolicy);
-            RegisterMollieApiClient<ISettlementsClient, SettlementsClient>(services, httpClient =>
-                new SettlementsClient(mollieOptions.ApiKey, httpClient), mollieOptions.RetryPolicy);
+            RegisterMollieApiClient<ISettlementClient, SettlementClient>(services, httpClient =>
+                new SettlementClient(mollieOptions.ApiKey, httpClient), mollieOptions.RetryPolicy);
             RegisterMollieApiClient<IShipmentClient, ShipmentClient>(services, httpClient =>
                 new ShipmentClient(mollieOptions.ApiKey, httpClient), mollieOptions.RetryPolicy);
             RegisterMollieApiClient<ISubscriptionClient, SubscriptionClient>(services, httpClient =>

@@ -6,8 +6,8 @@ using Mollie.Api.Models.Organization;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client {
-    public class OrganizationsClient : OauthBaseMollieClient, IOrganizationsClient {
-        public OrganizationsClient(string oauthAccessToken, HttpClient? httpClient = null) : base(oauthAccessToken, httpClient) {
+    public class OrganizationClient : OauthBaseMollieClient, IOrganizationClient {
+        public OrganizationClient(string oauthAccessToken, HttpClient? httpClient = null) : base(oauthAccessToken, httpClient) {
         }
 
         public async Task<OrganizationResponse> GetCurrentOrganizationAsync() {

@@ -4,7 +4,7 @@ using Mollie.Api.Models.Organization;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client.Abstract {
-    public interface IOrganizationsClient : IBaseMollieClient {
+    public interface IOrganizationClient : IBaseMollieClient {
         Task<OrganizationResponse> GetCurrentOrganizationAsync();
         Task<OrganizationResponse> GetOrganizationAsync(string organizationId);
         Task<ListResponse<OrganizationResponse>> GetOrganizationListAsync(string? from = null, int? limit = null);

@@ -10,8 +10,8 @@ using Mollie.Api.Models.Settlement.Response;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client {
-    public class SettlementsClient : BaseMollieClient, ISettlementsClient {
-        public SettlementsClient(string oauthAccessToken, HttpClient? httpClient = null) : base(oauthAccessToken, httpClient) {
+    public class SettlementClient : BaseMollieClient, ISettlementClient {
+        public SettlementClient(string oauthAccessToken, HttpClient? httpClient = null) : base(oauthAccessToken, httpClient) {
         }
 
         public async Task<SettlementResponse> GetSettlementAsync(string settlementId) {

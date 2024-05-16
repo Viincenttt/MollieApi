@@ -8,8 +8,8 @@ using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client {
-    public class ChargebacksClient : BaseMollieClient, IChargebacksClient {
-        public ChargebacksClient(string apiKey, HttpClient? httpClient = null) : base(apiKey, httpClient) {
+    public class ChargebackClient : BaseMollieClient, IChargebackClient {
+        public ChargebackClient(string apiKey, HttpClient? httpClient = null) : base(apiKey, httpClient) {
         }
 
         public async Task<ChargebackResponse> GetChargebackAsync(string paymentId, string chargebackId, bool testmode = false) {

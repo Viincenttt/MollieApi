@@ -20,7 +20,7 @@ public class PermissionClientTests : BaseClientTests
             .With(request => request.Headers.Contains("Idempotency-Key"))
             .Respond("application/json", defaultGetPermissionResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
-        using var permissionClient = new PermissionsClient("access_abcde", httpClient);
+        using var permissionClient = new PermissionClient("access_abcde", httpClient);
 
         // Act
         var response = await permissionClient.GetPermissionAsync(permissionId);
@@ -44,7 +44,7 @@ public class PermissionClientTests : BaseClientTests
         // Arrange
         var mockHttp = new MockHttpMessageHandler();
         HttpClient httpClient = mockHttp.ToHttpClient();
-        using var permissionClient = new PermissionsClient("access_abcde", httpClient);
+        using var permissionClient = new PermissionClient("access_abcde", httpClient);
 
         // Act
         var exception = await Assert.ThrowsAsync<ArgumentException>(() => permissionClient.GetPermissionAsync(string.Empty));
@@ -62,7 +62,7 @@ public class PermissionClientTests : BaseClientTests
             .With(request => request.Headers.Contains("Idempotency-Key"))
             .Respond("application/json", defaultListPermissionsResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
-        using var permissionClient = new PermissionsClient("access_abcde", httpClient);
+        using var permissionClient = new PermissionClient("access_abcde", httpClient);
 
         // Act
         var response = await permissionClient.GetPermissionListAsync();
