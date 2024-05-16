@@ -38,7 +38,7 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="paymentId"></param>
         /// <param name="testmode">Oauth - Optional – Set this to true to cancel a test mode payment.</param>
         /// <returns></returns>
-        Task DeletePaymentAsync(string paymentId, bool testmode = false);
+        Task CancelPaymentAsync(string paymentId, bool testmode = false);
 
         /// <summary>
         /// Retrieve all payments created with the current payment profile, ordered from newest to oldest.

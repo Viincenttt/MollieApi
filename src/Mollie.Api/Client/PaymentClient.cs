@@ -49,7 +49,7 @@ namespace Mollie.Api.Client {
 			return await GetAsync<PaymentResponse>($"payments/{paymentId}{queryParameters.ToQueryString()}").ConfigureAwait(false);
 		}
 
-		public async Task DeletePaymentAsync(string paymentId, bool testmode = false) {
+		public async Task CancelPaymentAsync(string paymentId, bool testmode = false) {
             ValidateRequiredUrlParameter(nameof(paymentId), paymentId);
 
             var data = TestmodeModel.Create(testmode);
