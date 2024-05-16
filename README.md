@@ -49,21 +49,21 @@ Source: https://docs.microsoft.com/en-us/dotnet/standard/net-standard?tabs=net-s
 
 ## Supported API's
 This library currently supports the following API's:
-- Payments API
+- Payment API
 - PaymentMethod API
 - PaymentLink API
-- Customers API
-- Mandates API
-- Subscriptions API
+- Customer API
+- Mandate API
+- Subscription API
 - Refund API
 - Connect API
-- Chargebacks API
-- Invoices API
+- Chargeback API
+- Invoice API
 - Permissions API
-- Profiles API
+- Profile API
 - Organizations API
 - Order API
-- Captures API
+- Capture API
 - Onboarding API
 - Balances API
 - Terminal API
