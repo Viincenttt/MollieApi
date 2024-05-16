@@ -32,14 +32,14 @@ namespace Mollie.Api.Client
             return await GetAsync(url).ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<ShipmentResponse>> GetShipmentsListAsync(string orderId, bool testmode = false) {
+        public async Task<ListResponse<ShipmentResponse>> GetShipmentListAsync(string orderId, bool testmode = false) {
             ValidateRequiredUrlParameter(nameof(orderId), orderId);
             var queryParameters = BuildQueryParameters(testmode);
             return await GetAsync<ListResponse<ShipmentResponse>>($"orders/{orderId}/shipments{queryParameters.ToQueryString()}")
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<ShipmentResponse>> GetShipmentsListAsync(UrlObjectLink<ListResponse<ShipmentResponse>> url) {
+        public async Task<ListResponse<ShipmentResponse>> GetShipmentListAsync(UrlObjectLink<ListResponse<ShipmentResponse>> url) {
             return await GetAsync(url).ConfigureAwait(false);
         }
 
