@@ -7,10 +7,24 @@ using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client.Abstract {
     public interface IPaymentClient : IBaseMollieClient {
+        /// <summary>
+        /// Create a new payment and specify the type of request and response you want to use.
+        /// </summary>
+        /// <param name="paymentRequest">The payment request details.</param>
+        /// <param name="includeQrCode">Embed the QR code in the response, disabled by default.</param>
+        /// <typeparam name="TRequest">The type of request you want to send, for example IdealPaymentRequest.</typeparam>
+        /// <typeparam name="TResponse">The type of response you expect, for example IdealPaymentResponse.</typeparam>
+        /// <returns></returns>
         Task<TResponse> CreatePaymentAsync<TRequest, TResponse>(TRequest paymentRequest, bool includeQrCode = false)
             where TRequest : PaymentRequest
             where TResponse : PaymentResponse;
 
+        /// <summary>
+        /// Create a new payment with the default PaymentRequest and PaymentResponse details.
+        /// </summary>
+        /// <param name="paymentRequest">The payment request details.</param>
+        /// <param name="includeQrCode">Embed the QR code in the response, disabled by default.</param>
+        /// <returns></returns>
         Task<PaymentResponse> CreatePaymentAsync(PaymentRequest paymentRequest, bool includeQrCode = false);
 
         /// <summary>
@@ -37,7 +51,7 @@ namespace Mollie.Api.Client.Abstract {
             bool embedChargebacks = false);
 
         /// <summary>
-        ///	Retrieve a single payment object by its payment identifier.
+        ///	Retrieve a single payment object by its payment identifier and expected payment return type.
         /// </summary>
         /// <param name="paymentId">The payment's ID, for example tr_7UhSN1zuXS.</param>
         /// <param name="testmode">Oauth - Optional – Set this to true to get a payment made in test mode. If you omit
@@ -50,15 +64,16 @@ namespace Mollie.Api.Client.Abstract {
         /// </param>
         /// <param name="embedRefunds">Include all refunds created for the payment.</param>
         /// <param name="embedChargebacks"> Include all chargebacks issued for the payment.</param>
+        /// <typeparam name="TResponse">The type of response you expect to receive, for example IdealPaymentResponse.</typeparam>
         /// <returns></returns>
-        Task<T> GetPaymentAsync<T>(
+        Task<TResponse> GetPaymentAsync<TResponse>(
             string paymentId,
             bool testmode = false,
             bool includeQrCode = false,
             bool includeRemainderDetails = false,
             bool embedRefunds = false,
             bool embedChargebacks = false)
-            where T : PaymentResponse;
+            where TResponse : PaymentResponse;
 
         /// <summary>
         /// Some payment methods are cancellable for an amount of time, usually until the next day. Or as long as the payment status is open. Payments may be cancelled manually from the Dashboard, or automatically by using this endpoint.
