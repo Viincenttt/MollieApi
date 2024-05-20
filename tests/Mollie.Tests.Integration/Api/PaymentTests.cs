@@ -255,6 +255,33 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
     }*/
 
     [DefaultRetryFact]
+    public async Task CanCreatePayPalPaymentAndRetrieveIt() {
+        // Arrange
+        var paymentRequest = new PayPalPaymentRequest() {
+            Amount = new Amount(Currency.EUR, "100.00"),
+            Description = "Description",
+            RedirectUrl = DefaultRedirectUrl,
+            ShippingAddress = new AddressObject {
+                StreetAndNumber = "street",
+                PostalCode = "1234AB",
+                City = "Amsterdam",
+                Country = "NL"
+            }
+        };
+
+        // Act
+        PayPalPaymentResponse paymentResponse = await _paymentClient.CreatePaymentAsync<PayPalPaymentRequest, PayPalPaymentResponse>(paymentRequest);
+
+        // Assert
+        paymentResponse.Should().NotBeNull();
+        paymentResponse.Amount.Should().Be(paymentRequest.Amount);
+        paymentResponse.Description.Should().Be(paymentRequest.Description);
+        paymentResponse.RedirectUrl.Should().Be(paymentRequest.RedirectUrl);
+        paymentResponse.Method.Should().Be(paymentRequest.Method);
+        paymentResponse.Should().BeOfType<PayPalPaymentResponse>();
+    }
+
+    [DefaultRetryFact]
     public async Task CanCreatePaymentAndRetrieveIt() {
         // When: we create a new payment request
         PaymentRequest paymentRequest = new PaymentRequest() {
