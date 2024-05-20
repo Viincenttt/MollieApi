@@ -11,10 +11,11 @@ using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client {
     public class PaymentClient : BaseMollieClient, IPaymentClient {
-
 	    public PaymentClient(string apiKey, HttpClient? httpClient = null) : base(apiKey, httpClient) { }
 
-        public async Task<PaymentResponse> CreatePaymentAsync(PaymentRequest paymentRequest, bool includeQrCode = false) {
+        public async Task<TResponse> CreatePaymentAsync<TRequest, TResponse>(TRequest paymentRequest, bool includeQrCode = false)
+            where TRequest : PaymentRequest
+            where TResponse : PaymentResponse {
             if (!string.IsNullOrWhiteSpace(paymentRequest.ProfileId) || paymentRequest.Testmode.HasValue || paymentRequest.ApplicationFee != null) {
                 ValidateApiKeyIsOauthAccesstoken();
             }
@@ -22,19 +23,25 @@ namespace Mollie.Api.Client {
             var queryParameters = BuildQueryParameters(
                 includeQrCode: includeQrCode);
 
-            return await PostAsync<PaymentResponse>($"payments{queryParameters.ToQueryString()}", paymentRequest).ConfigureAwait(false);
+            return await PostAsync<TResponse>($"payments{queryParameters.ToQueryString()}", paymentRequest).ConfigureAwait(false);
         }
 
-        public async Task<PaymentResponse> GetPaymentAsync(
+        public async Task<PaymentResponse> CreatePaymentAsync(PaymentRequest paymentRequest, bool includeQrCode = false) {
+            return await CreatePaymentAsync<PaymentRequest, PaymentResponse>(paymentRequest, includeQrCode)
+                .ConfigureAwait(false);
+        }
+
+        public async Task<T> GetPaymentAsync<T>(
             string paymentId,
             bool testmode = false,
             bool includeQrCode = false,
             bool includeRemainderDetails = false,
             bool embedRefunds = false,
-            bool embedChargebacks = false) {
+            bool embedChargebacks = false)
+            where T : PaymentResponse {
 
-	        if (testmode) {
-	            ValidateApiKeyIsOauthAccesstoken();
+            if (testmode) {
+                ValidateApiKeyIsOauthAccesstoken();
             }
 
             ValidateRequiredUrlParameter(nameof(paymentId), paymentId);
@@ -46,7 +53,25 @@ namespace Mollie.Api.Client {
                 embedRefunds: embedRefunds,
                 embedChargebacks: embedChargebacks
             );
-			return await GetAsync<PaymentResponse>($"payments/{paymentId}{queryParameters.ToQueryString()}").ConfigureAwait(false);
+
+            return await GetAsync<T>($"payments/{paymentId}{queryParameters.ToQueryString()}").ConfigureAwait(false);
+        }
+
+        public async Task<PaymentResponse> GetPaymentAsync(
+            string paymentId,
+            bool testmode = false,
+            bool includeQrCode = false,
+            bool includeRemainderDetails = false,
+            bool embedRefunds = false,
+            bool embedChargebacks = false) {
+
+	        return await GetPaymentAsync<PaymentResponse>(
+                paymentId,
+                testmode,
+                includeQrCode,
+                includeRemainderDetails,
+                embedRefunds,
+                embedChargebacks);
 		}
 
 		public async Task CancelPaymentAsync(string paymentId, bool testmode = false) {

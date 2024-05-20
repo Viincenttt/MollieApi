@@ -7,6 +7,10 @@ using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client.Abstract {
     public interface IPaymentClient : IBaseMollieClient {
+        Task<TResponse> CreatePaymentAsync<TRequest, TResponse>(TRequest paymentRequest, bool includeQrCode = false)
+            where TRequest : PaymentRequest
+            where TResponse : PaymentResponse;
+
         Task<PaymentResponse> CreatePaymentAsync(PaymentRequest paymentRequest, bool includeQrCode = false);
 
         /// <summary>
@@ -31,6 +35,30 @@ namespace Mollie.Api.Client.Abstract {
             bool includeRemainderDetails = false,
             bool embedRefunds = false,
             bool embedChargebacks = false);
+
+        /// <summary>
+        ///	Retrieve a single payment object by its payment identifier.
+        /// </summary>
+        /// <param name="paymentId">The payment's ID, for example tr_7UhSN1zuXS.</param>
+        /// <param name="testmode">Oauth - Optional – Set this to true to get a payment made in test mode. If you omit
+        /// this parameter, you can only retrieve live mode payments.</param>
+        /// <param name="includeQrCode">Include a QR code object. Only available for iDEAL, Bancontact and bank transfer
+        /// payments.</param>
+        /// <param name="includeRemainderDetails">Include the Payment method-specific response parameters of the
+        /// ‘remainder payment’ as well. This applies to gift card and voucher payments where only part of the payment
+        /// was completed with gift cards or vouchers, and the remainder was completed with a regular payment method.
+        /// </param>
+        /// <param name="embedRefunds">Include all refunds created for the payment.</param>
+        /// <param name="embedChargebacks"> Include all chargebacks issued for the payment.</param>
+        /// <returns></returns>
+        Task<T> GetPaymentAsync<T>(
+            string paymentId,
+            bool testmode = false,
+            bool includeQrCode = false,
+            bool includeRemainderDetails = false,
+            bool embedRefunds = false,
+            bool embedChargebacks = false)
+            where T : PaymentResponse;
 
         /// <summary>
         /// Some payment methods are cancellable for an amount of time, usually until the next day. Or as long as the payment status is open. Payments may be cancelled manually from the Dashboard, or automatically by using this endpoint.
