@@ -4,14 +4,14 @@ using Mollie.Api.Models.Balance.Response.BalanceTransaction;
 using Newtonsoft.Json.Linq;
 
 namespace Mollie.Api.JsonConverters {
-    internal class BalanceTransactionJsonConverter : JsonCreationConverter<BalanceTransaction> {
+    internal class BalanceTransactionJsonConverter : JsonCreationConverter<BalanceTransactionResponse> {
         private readonly BalanceTransactionFactory _balanceTransactionFactory;
 
         public BalanceTransactionJsonConverter(BalanceTransactionFactory balanceTransactionFactory) {
             _balanceTransactionFactory = balanceTransactionFactory;
         }
 
-        protected override BalanceTransaction Create(Type objectType, JObject jObject) {
+        protected override BalanceTransactionResponse Create(Type objectType, JObject jObject) {
             string? transactionType = GetTransactionType(jObject);
 
             return _balanceTransactionFactory.Create(transactionType);

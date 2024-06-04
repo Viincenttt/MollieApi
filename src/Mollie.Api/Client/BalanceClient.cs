@@ -49,15 +49,19 @@ namespace Mollie.Api.Client {
             return await GetAsync<BalanceReportResponse>($"balances/primary/report{queryParameters.ToQueryString()}").ConfigureAwait(false);
         }
 
-        public async Task<BalanceTransactionResponse> GetBalanceTransactionListAsync(string balanceId, string? from = null, int? limit = null) {
+        public async Task<ListResponse<BalanceTransactionResponse>> GetBalanceTransactionListAsync(string balanceId, string? from = null, int? limit = null) {
             ValidateRequiredUrlParameter(nameof(balanceId), balanceId);
-            var queryParameters = BuildListBalanceTransactionsQueryParameters(from, limit);
-            return await GetAsync<BalanceTransactionResponse>($"balances/{balanceId}/transactions{queryParameters.ToQueryString()}").ConfigureAwait(false);
+            return await GetListAsync<ListResponse<BalanceTransactionResponse>>($"balances/{balanceId}/transactions", from, limit)
+                .ConfigureAwait(false);
         }
 
-        public async Task<BalanceTransactionResponse> GetPrimaryBalanceTransactionListAsync(string? from = null, int? limit = null) {
-            var queryParameters = BuildListBalanceTransactionsQueryParameters(from, limit);
-            return await GetAsync<BalanceTransactionResponse>($"balances/primary/transactions{queryParameters.ToQueryString()}").ConfigureAwait(false);
+        public async Task<ListResponse<BalanceTransactionResponse>>  GetPrimaryBalanceTransactionListAsync(string? from = null, int? limit = null) {
+            return await GetListAsync<ListResponse<BalanceTransactionResponse>>($"balances/primary/transactions", from, limit)
+                .ConfigureAwait(false);
+        }
+
+        public async Task<ListResponse<BalanceTransactionResponse>> GetBalanceTransactionListAsync(UrlObjectLink<ListResponse<BalanceTransactionResponse>> url) {
+            return await GetAsync(url).ConfigureAwait(false);
         }
 
         private Dictionary<string, string> BuildListBalanceTransactionsQueryParameters(string? from, int? limit) {

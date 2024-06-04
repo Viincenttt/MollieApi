@@ -87,7 +87,7 @@ namespace Mollie.Api.Client.Abstract {
         /// with this ID is included in the result set as well.</param>
         /// <param name="limit">The number of balance transactions to return (with a maximum of 250).</param>
         /// <returns></returns>
-        Task<BalanceTransactionResponse> GetBalanceTransactionListAsync(string balanceId, string? from = null, int? limit = null);
+        Task<ListResponse<BalanceTransactionResponse>> GetBalanceTransactionListAsync(string balanceId, string? from = null, int? limit = null);
 
         /// <summary>
         /// With the List primary balance transactions endpoint you can retrieve a list of all the movements on your
@@ -97,6 +97,13 @@ namespace Mollie.Api.Client.Abstract {
         /// with this ID is included in the result set as well.</param>
         /// <param name="limit">The number of balance transactions to return (with a maximum of 250).</param>
         /// <returns></returns>
-        Task<BalanceTransactionResponse> GetPrimaryBalanceTransactionListAsync(string? from = null, int? limit = null);
+        Task<ListResponse<BalanceTransactionResponse>> GetPrimaryBalanceTransactionListAsync(string? from = null, int? limit = null);
+
+        /// <summary>
+        /// Retrieve a list of balance transactions by URL
+        /// </summary>
+        /// <param name="url">The URL from which to retrieve the balance transactions</param>
+        /// <returns></returns>
+        Task<ListResponse<BalanceTransactionResponse>> GetBalanceTransactionListAsync(UrlObjectLink<ListResponse<BalanceTransactionResponse>> url);
     }
 }
