@@ -1,6 +1,6 @@
 ﻿namespace Mollie.Api.Models.Mandate.Response.PaymentSpecificParameters;
 
-public record PayPalMandateResponse {
+public record PayPalMandateResponse : MandateResponse {
     public required PayPalMandateResponseDetails Details { get; set; }
 }
 
