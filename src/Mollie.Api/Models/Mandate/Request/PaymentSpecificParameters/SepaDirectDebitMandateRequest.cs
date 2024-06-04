@@ -1,4 +1,4 @@
-﻿namespace Mollie.Api.Models.Mandate.Request
+﻿namespace Mollie.Api.Models.Mandate.Request.PaymentSpecificParameters
 {
     public record SepaDirectDebitMandateRequest : MandateRequest
     {

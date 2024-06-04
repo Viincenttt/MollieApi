@@ -7,8 +7,11 @@ using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models.Customer.Response;
 using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Mandate.Request;
+using Mollie.Api.Models.Mandate.Request.PaymentSpecificParameters;
 using Mollie.Api.Models.Mandate.Response;
+using Mollie.Api.Models.Mandate.Response.PaymentSpecificParameters;
 using Mollie.Api.Models.Payment;
+using Mollie.Api.Models.Payment.Response.PaymentSpecificParameters;
 using Mollie.Tests.Integration.Framework;
 
 namespace Mollie.Tests.Integration.Api;
@@ -55,12 +58,12 @@ public class MandateTests : BaseMollieApiTestClass, IDisposable {
     }
 
     [DefaultRetryFact]
-    public async Task CanCreateMandate() {
+    public async Task CanCreateSepaDirectDebitMandate() {
         // We can only test this if there are customers
         ListResponse<CustomerResponse> customers = await _customerClient.GetCustomerListAsync();
         if (customers.Count > 0) {
             // If: We create a new mandate request
-            SepaDirectDebitMandateRequest mandateRequest = new SepaDirectDebitMandateRequest {
+            SepaDirectDebitMandateRequest mandateRequest = new () {
                 ConsumerAccount = "NL26ABNA0516682814",
                 ConsumerName = "John Doe",
                 Method = PaymentMethod.DirectDebit
@@ -70,8 +73,10 @@ public class MandateTests : BaseMollieApiTestClass, IDisposable {
             MandateResponse mandateResponse = await _mandateClient.CreateMandateAsync(customers.Items.First().Id, mandateRequest);
 
             // Then: Make sure we created a new mandate
-            mandateResponse.Details!.ConsumerAccount.Should().Be(mandateRequest.ConsumerAccount);
-            mandateResponse.Details.ConsumerName.Should().Be(mandateRequest.ConsumerName);
+            mandateResponse.Should().BeOfType<SepaDirectDebitMandateResponse>();
+            var sepaDirectDebitResponse = (SepaDirectDebitMandateResponse)mandateResponse;
+            sepaDirectDebitResponse.Details.ConsumerAccount.Should().Be(mandateRequest.ConsumerAccount);
+            sepaDirectDebitResponse.Details.ConsumerName.Should().Be(mandateRequest.ConsumerName);
         }
     }
 
