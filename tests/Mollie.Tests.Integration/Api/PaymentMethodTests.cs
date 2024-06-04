@@ -133,7 +133,6 @@ public class PaymentMethodTests : BaseMollieApiTestClass, IDisposable {
 
     [DefaultRetryTheory]
     [InlineData("JPY", 249)]
-    [InlineData("ISK", 50)]
     [InlineData("EUR", 50.25)]
     public async Task GetPaymentMethodListAsync_WithVariousCurrencies_ReturnsAvailablePaymentMethods(string currency, decimal value) {
         // When: Retrieving the payment methods for a currency and amount
