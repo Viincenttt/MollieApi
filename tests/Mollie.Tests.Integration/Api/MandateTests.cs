@@ -89,7 +89,7 @@ public class MandateTests : BaseMollieApiTestClass, IDisposable {
             PayPalMandateRequest mandateRequest = new () {
                 ConsumerName = "John Doe",
                 Method = PaymentMethod.PayPal,
-                PaypalBillingAgreementId = "paypal-billing-agreement-id",
+                PaypalBillingAgreementId = Guid.NewGuid().ToString(), // Needs to be unique
                 ConsumerEmail = "consumer-email@email.com"
             };
 
