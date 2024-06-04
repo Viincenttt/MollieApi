@@ -1,5 +1,5 @@
 ﻿namespace Mollie.Api.Models.Balance.Response.BalanceTransaction.Specific {
-    public class RefundBalanceTransaction : BalanceTransaction {
+    public class RefundBalanceTransactionResponse : BalanceTransactionResponse {
         public required RefundTransactionContext Context { get; set; }
     }
 

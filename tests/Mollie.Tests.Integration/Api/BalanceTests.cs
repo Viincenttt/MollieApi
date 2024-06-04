@@ -112,8 +112,7 @@ public class BalanceTests : BaseMollieApiTestClass, IDisposable {
 
         // Then: Make sure we can parse the result
         result.Should().NotBeNull();
-        result.Embedded.Should().NotBeNull();
-        result.Embedded.BalanceTransactions.Should().NotBeNull();
+        result.Items.Should().NotBeNull();
         result.Links.Should().NotBeNull();
         result.Links.Self.Href.Should().Be($"https://api.mollie.com/v2/balances/{balanceId}/transactions?from={from}&limit={limit}");
     }
@@ -129,8 +128,7 @@ public class BalanceTests : BaseMollieApiTestClass, IDisposable {
 
         // Then: Make sure we can parse the result
         result.Should().NotBeNull();
-        result.Embedded.Should().NotBeNull();
-        result.Embedded.BalanceTransactions.Should().NotBeNull();
+        result.Items.Should().NotBeNull();
     }
 
     public void Dispose()
