@@ -60,6 +60,10 @@ namespace Mollie.Api.Client {
                 .ConfigureAwait(false);
         }
 
+        public async Task<ListResponse<BalanceTransactionResponse>> GetBalanceTransactionListAsync(UrlObjectLink<ListResponse<BalanceTransactionResponse>> url) {
+            return await GetAsync(url).ConfigureAwait(false);
+        }
+
         private Dictionary<string, string> BuildListBalanceTransactionsQueryParameters(string? from, int? limit) {
             var result = new Dictionary<string, string>();
             result.AddValueIfNotNullOrEmpty("from", from);

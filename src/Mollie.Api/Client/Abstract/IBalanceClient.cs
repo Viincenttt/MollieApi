@@ -98,5 +98,12 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="limit">The number of balance transactions to return (with a maximum of 250).</param>
         /// <returns></returns>
         Task<ListResponse<BalanceTransactionResponse>> GetPrimaryBalanceTransactionListAsync(string? from = null, int? limit = null);
+
+        /// <summary>
+        /// Retrieve a list of balance transactions by URL
+        /// </summary>
+        /// <param name="url">The URL from which to retrieve the balance transactions</param>
+        /// <returns></returns>
+        Task<ListResponse<BalanceTransactionResponse>> GetBalanceTransactionListAsync(UrlObjectLink<ListResponse<BalanceTransactionResponse>> url);
     }
 }
