@@ -7,6 +7,7 @@ using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models.Customer.Response;
 using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Mandate.Request;
+using Mollie.Api.Models.Mandate.Request.PaymentSpecificParameters;
 using Mollie.Api.Models.Mandate.Response;
 using Mollie.Api.Models.Payment;
 using Mollie.Tests.Integration.Framework;
