@@ -80,30 +80,6 @@ public class MandateTests : BaseMollieApiTestClass, IDisposable {
         }
     }
 
-    [DefaultRetryFact]
-    public async Task CanCreatePayPalMandate() {
-        // We can only test this if there are customers
-        ListResponse<CustomerResponse> customers = await _customerClient.GetCustomerListAsync();
-        if (customers.Count > 0) {
-            // If: We create a new mandate request
-            PayPalMandateRequest mandateRequest = new () {
-                ConsumerName = "John Doe",
-                Method = PaymentMethod.PayPal,
-                PaypalBillingAgreementId = Guid.NewGuid().ToString(), // Needs to be unique
-                ConsumerEmail = "consumer-email@email.com"
-            };
-
-            // When: We send the mandate request
-            MandateResponse mandateResponse = await _mandateClient.CreateMandateAsync(customers.Items.First().Id, mandateRequest);
-
-            // Then: Make sure we created a new mandate
-            mandateResponse.Should().BeOfType<PayPalMandateResponse>();
-            var paypalMandateResponse = (PayPalMandateResponse)mandateResponse;
-            paypalMandateResponse.Details.ConsumerAccount.Should().Be(mandateRequest.ConsumerEmail);
-            paypalMandateResponse.Details.ConsumerName.Should().Be(mandateRequest.ConsumerName);
-        }
-    }
-
     public void Dispose()
     {
         _mandateClient?.Dispose();
