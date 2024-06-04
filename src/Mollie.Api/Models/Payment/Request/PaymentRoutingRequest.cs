@@ -12,7 +12,7 @@ namespace Mollie.Api.Models.Payment.Request
         /// <summary>
         /// The destination of this portion of the payment.
         /// </summary>
-        public required RoutingDestination Destination { get; init; }
+        public required RoutingDestination Destination { get; set; }
 
         /// <summary>
         /// Optionally, schedule this portion of the payment to be transferred to its destination on a later date. If no date is given, the funds become available to the balance as soon as the payment succeeds.

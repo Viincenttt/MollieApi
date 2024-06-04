@@ -8,9 +8,9 @@ namespace Mollie.Api.Models.List.Response {
 
         [JsonConverter(typeof(ListResponseConverter))]
         [JsonProperty("_embedded")]
-        public required List<T> Items { get; init; }
+        public required List<T> Items { get; set; }
 
         [JsonProperty("_links")]
-        public required ListResponseLinks<T> Links { get; init; }
+        public required ListResponseLinks<T> Links { get; set; }
     }
 }

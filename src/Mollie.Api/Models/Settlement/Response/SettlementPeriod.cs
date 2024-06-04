@@ -5,12 +5,12 @@ namespace Mollie.Api.Models.Settlement.Response {
 		/// <summary>
 		/// The total revenue for each payment method during this period.
 		/// </summary>
-		public required List<SettlementPeriodRevenue> Revenue { get; init; }
+		public required List<SettlementPeriodRevenue> Revenue { get; set; }
 
 		/// <summary>
 		/// The fees withheld for each payment method during this period.
 		/// </summary>
-		public required List<SettlementPeriodCosts> Costs { get; init; }
+		public required List<SettlementPeriodCosts> Costs { get; set; }
 
 		/// <summary>
 		/// The ID of the invoice that was created to invoice specifically the costs in this month/period.

@@ -5,6 +5,6 @@ namespace Mollie.Api.Models.Order.Request.ManageOrderLines {
         /// <summary>
         /// List of operations to be processed.
         /// </summary>
-        public required IList<ManageOrderLinesOperation> Operations { get; init; }
+        public required IList<ManageOrderLinesOperation> Operations { get; set; }
     }
 }

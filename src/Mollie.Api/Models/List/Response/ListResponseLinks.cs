@@ -8,7 +8,7 @@ namespace Mollie.Api.Models.List.Response {
         /// <summary>
         /// The URL to the current set of payments.
         /// </summary>
-        public required UrlObjectLink<ListResponse<T>> Self { get; init; }
+        public required UrlObjectLink<ListResponse<T>> Self { get; set; }
 
         /// <summary>
         /// The previous set of objects, if available.
@@ -23,6 +23,6 @@ namespace Mollie.Api.Models.List.Response {
         /// <summary>
         /// The URL to the payments list endpoint documentation.
         /// </summary>
-        public required UrlLink Documentation { get; init; }
+        public required UrlLink Documentation { get; set; }
     }
 }

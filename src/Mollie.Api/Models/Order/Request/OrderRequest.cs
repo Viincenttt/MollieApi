@@ -10,18 +10,18 @@ namespace Mollie.Api.Models.Order.Request {
         /// The total amount of the order, including VAT and discounts. This is the amount that will be charged
         /// to your customer.
         /// </summary>
-        public required Amount Amount { get; init; }
+        public required Amount Amount { get; set; }
 
         /// <summary>
         /// The order number. For example, 16738. We recommend that each order should have a unique order number.
         /// </summary>
-        public required string OrderNumber { get; init; }
+        public required string OrderNumber { get; set; }
 
         /// <summary>
         /// The lines in the order. Each line contains details such as a description of the item ordered, its
         /// price et cetera.
         /// </summary>
-        public required IEnumerable<OrderLineRequest> Lines { get; init; }
+        public required IEnumerable<OrderLineRequest> Lines { get; set; }
 
         /// <summary>
         /// The billing person and address for the order.
@@ -65,7 +65,7 @@ namespace Mollie.Api.Models.Order.Request {
         /// <summary>
         /// Allows you to preset the language to be used in the hosted payment pages shown to the consumer.
         /// </summary>
-        public required string Locale { get; init; }
+        public required string Locale { get; set; }
 
         /// <summary>
         /// Normally, a payment method selection screen is shown. However, when using this parameter, your customer

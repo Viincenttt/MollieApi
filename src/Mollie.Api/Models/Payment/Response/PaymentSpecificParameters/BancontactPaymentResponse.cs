@@ -2,7 +2,7 @@
 
 namespace Mollie.Api.Models.Payment.Response.PaymentSpecificParameters {
     public record BancontactPaymentResponse : PaymentResponse {
-        public required BancontactPaymentResponseDetails Details { get; init; }
+        public required BancontactPaymentResponseDetails Details { get; set; }
     }
 
     public record BancontactPaymentResponseDetails {

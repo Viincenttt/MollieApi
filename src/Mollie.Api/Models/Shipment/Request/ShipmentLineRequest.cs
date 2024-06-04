@@ -3,7 +3,7 @@
         /// <summary>
         /// The API resource token of the order line, for example: odl_jp31jz.
         /// </summary>
-        public required string Id { get; init; }
+        public required string Id { get; set; }
 
         /// <summary>
         /// The number of items that should be shipped for this order line.

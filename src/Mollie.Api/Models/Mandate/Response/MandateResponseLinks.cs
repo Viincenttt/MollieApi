@@ -6,16 +6,16 @@ namespace Mollie.Api.Models.Mandate.Response {
         /// <summary>
         /// The API resource URL of the mandate itself.
         /// </summary>
-        public required UrlObjectLink<MandateResponse> Self { get; init; }
+        public required UrlObjectLink<MandateResponse> Self { get; set; }
 
         /// <summary>
         /// The API resource URL of the customer the mandate is for.
         /// </summary>
-        public required UrlObjectLink<CustomerResponse> Customer { get; init; }
+        public required UrlObjectLink<CustomerResponse> Customer { get; set; }
 
         /// <summary>
         /// The URL to the mandate retrieval endpoint documentation.
         /// </summary>
-        public required UrlLink Documentation { get; init; }
+        public required UrlLink Documentation { get; set; }
     }
 }

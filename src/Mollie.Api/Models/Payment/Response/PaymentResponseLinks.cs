@@ -11,7 +11,7 @@ namespace Mollie.Api.Models.Payment.Response {
         /// <summary>
         /// The API resource URL of the payment itself.
         /// </summary>
-        public required UrlObjectLink<PaymentResponse> Self { get; init; }
+        public required UrlObjectLink<PaymentResponse> Self { get; set; }
 
         /// <summary>
         /// The URL your customer should visit to make the payment. This is where you should redirect the consumer to.
@@ -26,7 +26,7 @@ namespace Mollie.Api.Models.Payment.Response {
         /// <summary>
         /// Direct link to the payment in the Mollie Dashboard.
         /// </summary>
-        public required UrlLink Dashboard { get; init; }
+        public required UrlLink Dashboard { get; set; }
 
         /// <summary>
         /// The API resource URL of the refunds that belong to this payment.
@@ -51,7 +51,7 @@ namespace Mollie.Api.Models.Payment.Response {
         /// <summary>
         /// The URL to the payment retrieval endpoint documentation.
         /// </summary>
-        public required UrlLink Documentation { get; init; }
+        public required UrlLink Documentation { get; set; }
 
         /// <summary>
         /// The API resource URL of the mandate linked to this payment. Not present if a one-off payment.

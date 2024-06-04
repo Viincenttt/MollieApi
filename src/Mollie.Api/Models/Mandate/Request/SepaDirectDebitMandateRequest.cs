@@ -9,7 +9,7 @@
         /// <summary>
         /// Required for `directdebit` mandates - Consumer's IBAN account
         /// </summary>
-        public required string ConsumerAccount { get; init; }
+        public required string ConsumerAccount { get; set; }
 
         /// <summary>
         /// Optional - The consumer's bank's BIC / SWIFT code.

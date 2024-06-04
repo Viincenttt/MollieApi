@@ -6,7 +6,7 @@ namespace Mollie.Api.Models.Onboarding.Response {
         /// <summary>
         /// Indicates the response contains an onboarding object. Will always contain onboarding for this endpoint.
         /// </summary>
-        public required string Resource { get; init; }
+        public required string Resource { get; set; }
 
         /// <summary>
         /// The name of the organization.
@@ -22,7 +22,7 @@ namespace Mollie.Api.Models.Onboarding.Response {
         /// The current status of the organization’s onboarding process. See the Mollie.Api.Models.Onboarding.Response.OnboardingStatus
         /// class for a full list of known values.
         /// </summary>
-        public required string Status { get; init; }
+        public required string Status { get; set; }
 
         /// <summary>
         /// Whether or not the organization can receive payments.
@@ -38,6 +38,6 @@ namespace Mollie.Api.Models.Onboarding.Response {
         /// An object with several URL objects relevant to the organization. Every URL object will contain an href and a type field.
         /// </summary>
         [JsonProperty("_links")]
-        public required OnboardingStatusResponseLinks Links { get; init; }
+        public required OnboardingStatusResponseLinks Links { get; set; }
     }
 }

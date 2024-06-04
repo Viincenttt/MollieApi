@@ -5,12 +5,12 @@ namespace Mollie.Api.Models.Mandate.Request {
         /// <summary>
         /// Payment method of the mandate - Possible values: `directdebit` `paypal`
         /// </summary>
-        public required string Method { get; init; }
+        public required string Method { get; set; }
 
         /// <summary>
         /// Required - Name of consumer you add to the mandate
         /// </summary>
-        public required string ConsumerName { get; init; }
+        public required string ConsumerName { get; set; }
 
         /// <summary>
         /// Optional - The date when the mandate was signed.

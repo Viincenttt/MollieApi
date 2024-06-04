@@ -4,11 +4,11 @@
         /// <summary>
         /// The ISO 4217 currency code.
         /// </summary>
-        public required string Currency { get; init; }
+        public required string Currency { get; set; }
 
         /// <summary>
         /// A string containing the exact amount in the given currency.
         /// </summary>
-        public required decimal Value { get; init; }
+        public required decimal Value { get; set; }
     }
 }

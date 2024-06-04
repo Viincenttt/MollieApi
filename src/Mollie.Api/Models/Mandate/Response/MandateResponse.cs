@@ -6,23 +6,23 @@ namespace Mollie.Api.Models.Mandate.Response {
         /// <summary>
         /// Indicates the response contains a mandate object. Will always contain mandate for this endpoint.
         /// </summary>
-        public required string Resource { get; init; }
+        public required string Resource { get; set; }
 
         /// <summary>
         /// Unique identifier of you mandate.
         /// </summary>
-        public required string Id { get; init; }
+        public required string Id { get; set; }
 
         /// <summary>
         /// Current status of mandate - See the Mollie.Api.Models.Mandate.MandateStatus class for a full
         /// list of known values.
         /// </summary>
-        public required string Status { get; init; }
+        public required string Status { get; set; }
 
         /// <summary>
         /// Payment method of the mandate - See the Mollie.Api.Models.Payment.PaymentMethod class for a full list of known values.
         /// </summary>
-        public required string Method { get; init; }
+        public required string Method { get; set; }
 
         /// <summary>
         /// Mandate details that are different per payment method. Available fields depend on that payment method.
@@ -42,13 +42,13 @@ namespace Mollie.Api.Models.Mandate.Response {
         /// <summary>
         /// DateTime when mandate was created.
         /// </summary>
-        public DateTime CreatedAt { get; init; }
+        public DateTime CreatedAt { get; set; }
 
         /// <summary>
         /// An object with several URL objects relevant to the mandate. Every URL object will contain an href and a type field.
         /// </summary>
         [JsonProperty("_links")]
-        public required MandateResponseLinks Links { get; init; }
+        public required MandateResponseLinks Links { get; set; }
     }
 
     public class MandateDetails {

@@ -15,12 +15,12 @@ namespace Mollie.Api.Models {
         /// <summary>
         /// An ISO 4217 currency code. The currencies supported depend on the payment methods that are enabled on your account.
         /// </summary>
-        public required string Currency { get; init; }
+        public required string Currency { get; set; }
 
         /// <summary>
         /// An ISO 4217 currency code. The currencies supported depend on the payment methods that are enabled on your account.
         /// </summary>
-        public required string Value { get; init; }
+        public required string Value { get; set; }
 
         [JsonConstructor]
         [SetsRequiredMembers]

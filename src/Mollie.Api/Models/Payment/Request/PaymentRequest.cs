@@ -9,7 +9,7 @@ namespace Mollie.Api.Models.Payment.Request {
         /// <summary>
         /// The amount that you want to charge, e.g. {"currency":"EUR", "value":"100.00"} if you would want to charge €100.00.
         /// </summary>
-        public required Amount Amount { get; init; }
+        public required Amount Amount { get; set; }
 
         /// <summary>
         /// The description of the payment you’re creating. This will be shown to the consumer on their card or bank statement
@@ -17,7 +17,7 @@ namespace Mollie.Api.Models.Payment.Request {
         /// description is also visible in any exports you generate. We recommend you use a unique identifier so that you can
         /// always link the payment to the order.This is particularly useful for bookkeeping.
         /// </summary>
-        public required string Description { get; init; }
+        public required string Description { get; set; }
 
         /// <summary>
         /// Required - The URL the consumer will be redirected to after the payment process. It could make sense for the

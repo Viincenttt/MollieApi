@@ -7,12 +7,12 @@ namespace Mollie.Api.Models.Chargeback.Response {
         /// <summary>
         /// The API resource URL of the chargeback itself.
         /// </summary>
-        public required UrlObjectLink<ChargebackResponse> Self { get; init; }
+        public required UrlObjectLink<ChargebackResponse> Self { get; set; }
 
         /// <summary>
         /// The API resource URL of the payment this chargeback belongs to.
         /// </summary>
-        public required UrlObjectLink<PaymentResponse> Payment { get; init; }
+        public required UrlObjectLink<PaymentResponse> Payment { get; set; }
 
         /// <summary>
         /// The API resource URL of the settlement this payment has been settled with. Not present if not yet settled.
@@ -22,6 +22,6 @@ namespace Mollie.Api.Models.Chargeback.Response {
         /// <summary>
         /// The URL to the chargeback retrieval endpoint documentation.
         /// </summary>
-        public required UrlLink Documentation { get; init; }
+        public required UrlLink Documentation { get; set; }
     }
 }

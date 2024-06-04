@@ -9,26 +9,26 @@ namespace Mollie.Api.Models.Settlement.Response {
         /// <summary>
         /// The API resource URL of the settlement itself.
         /// </summary>
-        public required UrlObjectLink<SettlementResponse> Self { get; init; }
+        public required UrlObjectLink<SettlementResponse> Self { get; set; }
 
         /// <summary>
         /// The API resource URL of the payments that are included in this settlement.
         /// </summary>
-        public required UrlObjectLink<ListResponse<PaymentResponse>> Payments { get; init; }
+        public required UrlObjectLink<ListResponse<PaymentResponse>> Payments { get; set; }
 
         /// <summary>
         /// The API resource URL of the refunds that are included in this settlement.
         /// </summary>
-        public required UrlObjectLink<ListResponse<RefundResponse>> Refunds { get; init; }
+        public required UrlObjectLink<ListResponse<RefundResponse>> Refunds { get; set; }
 
         /// <summary>
         /// The API resource URL of the chargebacks that are included in this settlement.
         /// </summary>
-        public required UrlObjectLink<ListResponse<ChargebackResponse>> Chargebacks { get; init; }
+        public required UrlObjectLink<ListResponse<ChargebackResponse>> Chargebacks { get; set; }
 
         /// <summary>
         /// The URL to the settlement retrieval endpoint documentation.
         /// </summary>
-        public required UrlLink Documentation { get; init; }
+        public required UrlLink Documentation { get; set; }
     }
 }

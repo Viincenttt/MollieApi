@@ -5,7 +5,7 @@ namespace Mollie.Api.Models.Payment.Response.PaymentSpecificParameters {
         /// <summary>
         /// An object with payment details.
         /// </summary>
-        public required GiftcardPaymentResponseDetails Details { get; init; }
+        public required GiftcardPaymentResponseDetails Details { get; set; }
     }
 
     public record GiftcardPaymentResponseDetails {
@@ -37,16 +37,16 @@ namespace Mollie.Api.Models.Payment.Response.PaymentSpecificParameters {
         /// <summary>
         /// The ID of the gift card brand that was used during the payment.
         /// </summary>
-        public required string Issuer { get; init; }
+        public required string Issuer { get; set; }
 
         /// <summary>
         /// The amount in EUR that was paid with this gift card.
         /// </summary>
-        public required Amount Amount { get; init; }
+        public required Amount Amount { get; set; }
 
         /// <summary>
         /// The voucher number, with the last four digits masked. Example: 606436353088147****
         /// </summary>
-        public required string VoucherNumber { get; init; }
+        public required string VoucherNumber { get; set; }
     }
 }

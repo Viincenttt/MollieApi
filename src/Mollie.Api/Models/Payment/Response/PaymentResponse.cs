@@ -9,29 +9,29 @@ namespace Mollie.Api.Models.Payment.Response {
         /// <summary>
         /// Indicates the response contains a payment object. Will always contain payment for this endpoint.
         /// </summary>
-        public required string Resource { get; init; }
+        public required string Resource { get; set; }
 
         /// <summary>
         /// The identifier uniquely referring to this payment. Mollie assigns this identifier randomly at payment creation
         /// time. For example tr_7UhSN1zuXS. Its ID will always be used by Mollie to refer to a certain payment.
         /// </summary>
-        public required string Id { get; init; }
+        public required string Id { get; set; }
 
         /// <summary>
         /// The mode used to create this payment. Mode determines whether a payment is real or a test payment.
         /// </summary>
-        public required Mode Mode { get; init; }
+        public required Mode Mode { get; set; }
 
         /// <summary>
         /// The payment's date and time of creation, in ISO 8601 format.
         /// </summary>
-        public required DateTime CreatedAt { get; init; }
+        public required DateTime CreatedAt { get; set; }
 
         /// <summary>
         /// The payment's status. Please refer to the page about statuses for more info about which statuses occur at what
         /// point. See the Mollie.Api.Models.Payment.PaymentStatus class for a full list of known values.
         /// </summary>
-        public required string Status { get; init; }
+        public required string Status { get; set; }
 
         /// <summary>
         /// Whether or not the payment can be canceled.
@@ -74,7 +74,7 @@ namespace Mollie.Api.Models.Payment.Response {
         /// <summary>
         /// The amount of the payment, e.g. {"currency":"EUR", "value":"100.00"} for a €100.00 payment.
         /// </summary>
-        public required Amount Amount { get; init; }
+        public required Amount Amount { get; set; }
 
         /// <summary>
         /// Only available when refunds are available for this payment – The total amount in EURO that is already refunded. For
@@ -109,7 +109,7 @@ namespace Mollie.Api.Models.Payment.Response {
         /// The URL the consumer will be redirected to after completing or cancelling the payment process.
         /// </summary>
         public string? RedirectUrl { get; set; }
-        
+
         /// <summary>
         /// The optional redirect URL you provided during payment creation. Consumer that explicitly cancel the payment
         /// will be redirected to this URL if provided, or otherwise to the redirectUrl instead — see above.
@@ -125,7 +125,7 @@ namespace Mollie.Api.Models.Payment.Response {
         /// <summary>
         /// The URL Mollie will call as soon an important status change takes place.
         /// </summary>
-        public required string WebhookUrl { get; init; }
+        public required string WebhookUrl { get; set; }
 
         /// <summary>
         /// An optional routing configuration that you provided, which enables you to route a successful payment, or part of the payment, to one or more connected accounts.
@@ -136,7 +136,7 @@ namespace Mollie.Api.Models.Payment.Response {
 
         /// <summary>
         /// The payment method used for this payment, either forced on creation by specifying the method parameter, or chosen
-        /// by the consumer our payment method selection screen. See the Mollie.Api.Models.Payment.PaymentMethod class for a 
+        /// by the consumer our payment method selection screen. See the Mollie.Api.Models.Payment.PaymentMethod class for a
         /// full list of known values.
         /// </summary>
         public string? Method { get; set; }
@@ -161,7 +161,7 @@ namespace Mollie.Api.Models.Payment.Response {
         /// <summary>
         /// The identifier referring to the profile this payment was created on. For example, pfl_QkEhN94Ba.
         /// </summary>
-        public required string ProfileId { get; init; }
+        public required string ProfileId { get; set; }
 
         /// <summary>
         /// This optional field will contain the amount that will be settled to your account, converted to the currency your
@@ -180,11 +180,11 @@ namespace Mollie.Api.Models.Payment.Response {
         public string? CustomerId { get; set; }
 
         /// <summary>
-        /// Indicates which type of payment this is in a recurring sequence. Set to first for first payments that allow the customer to agree 
+        /// Indicates which type of payment this is in a recurring sequence. Set to first for first payments that allow the customer to agree
         /// to automatic recurring charges taking place on their account in the future. Set to recurring for payments where the customer’s card
         /// is charged automatically. See the Mollie.Api.Models.Payment.SequenceType class for a full list of known values.
         /// </summary>
-        public required string SequenceType { get; init; }
+        public required string SequenceType { get; set; }
 
         /// <summary>
         /// Only available for recurring payments – If the payment is a recurring payment, this field will hold the ID of the
@@ -207,20 +207,20 @@ namespace Mollie.Api.Models.Payment.Response {
         /// The application fee, if the payment was created with one.
         /// </summary>
         public ApplicationFee? ApplicationFee { get; set; }
-        
+
         /// <summary>
         /// Indicates whether the capture will be scheduled automatically or not. Set to manual for payments that can be captured
         /// manually using the Create capture endpoint. Set to automatic by default, which indicates the payment will be captured
         /// automatically, without having to separately request it.
         /// </summary>
         public string? CaptureMode { get; set; }
-        
+
         /// <summary>
         /// Indicates the interval to wait before the payment is captured, for example 8 hours or 2 days. The capture delay will be
         /// added to the date and time the payment became authorized.
         /// </summary>
         public string? CaptureDelay { get; set; }
-        
+
         /// <summary>
         /// Indicates the datetime on which the merchant has to have captured the payment, before we can no longer guarantee a
         /// successful capture, in ISO 8601 format. This parameter is omitted if the payment is not authorized (yet).

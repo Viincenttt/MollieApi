@@ -8,7 +8,7 @@ namespace Mollie.Api.Models.Subscription.Request {
         /// The constant amount in EURO that you want to charge with each subscription payment, e.g. 100.00 if you would want
         /// to charge € 100,00.
         /// </summary>
-        public required Amount Amount { get; init; }
+        public required Amount Amount { get; set; }
 
         /// <summary>
         /// Optional – Total number of charges for the subscription to complete. Leave empty for an on-going subscription.
@@ -18,7 +18,7 @@ namespace Mollie.Api.Models.Subscription.Request {
         /// <summary>
         /// Interval to wait between charges, for example 1 month or 14 days.
         /// </summary>
-        public required string Interval { get; init; }
+        public required string Interval { get; set; }
 
         /// <summary>
         /// Optional – The start date of the subscription in yyyy-mm-dd format. This is the first day on which your customer
@@ -31,7 +31,7 @@ namespace Mollie.Api.Models.Subscription.Request {
         /// A description unique per customer. This will be included in the payment description along with the charge date in
         /// Y-m-d format.
         /// </summary>
-        public required string Description { get; init; }
+        public required string Description { get; set; }
 
         /// <summary>
         /// Optional – The payment method used for this subscription, either forced on creation or null if any of the

@@ -8,19 +8,19 @@ namespace Mollie.Api.Models.PaymentLink.Response
         /// <summary>
         /// Indicates the response contains a payment object. Will always contain payment-link for this endpoint.
         /// </summary>
-        public required string Resource { get; init; }
+        public required string Resource { get; set; }
 
         /// <summary>
-        /// The identifier uniquely referring to this payment link. Mollie assigns this identifier at creation time. 
+        /// The identifier uniquely referring to this payment link. Mollie assigns this identifier at creation time.
         /// For example pl_4Y0eZitmBnQ6IDoMqZQKh. Its ID will always be used by Mollie to refer to a certain payment link.
         /// </summary>
-        public required string Id { get; init; }
+        public required string Id { get; set; }
 
         /// <summary>
-        ///A short description of the payment link. The description is visible in the Dashboard and will be shown on the 
+        ///A short description of the payment link. The description is visible in the Dashboard and will be shown on the
         ///customer’s bank or card statement when possible. This description will eventual been used as payment description.
         /// </summary>
-        public required string Description { get; init; }
+        public required string Description { get; set; }
 
         /// <summary>
         /// The mode used to create this payment link. Mode determines whether a payment link is real (live mode) or a test payment link.
@@ -35,7 +35,7 @@ namespace Mollie.Api.Models.PaymentLink.Response
         /// <summary>
         /// The amount of the payment link, e.g. {"currency":"EUR", "value":"100.00"} for a €100.00 payment link.
         /// </summary>
-        public required Amount Amount { get; init; }
+        public required Amount Amount { get; set; }
 
         /// <summary>
         /// The URL your customer will be redirected to after completing the payment process.
@@ -71,8 +71,8 @@ namespace Mollie.Api.Models.PaymentLink.Response
         /// An object with several URL objects relevant to the payment. Every URL object will contain an href and a type field.
         /// </summary>
         [JsonProperty("_links")]
-        public required PaymentLinkResponseLinks Links { get; init; }
-         
+        public required PaymentLinkResponseLinks Links { get; set; }
+
         public override string ToString()
         {
             return $"Id: {Id} - Description: {Description} - Amount: {Amount}";

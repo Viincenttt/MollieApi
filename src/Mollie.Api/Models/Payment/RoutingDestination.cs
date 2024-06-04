@@ -5,7 +5,7 @@
         /// <summary>
         /// The type of destination. Currently only the destination type organization is supported.
         /// </summary>
-        public required string Type { get; init; }
+        public required string Type { get; set; }
 
         /// <summary>
         /// Required for destination type organization.The ID of the connected organization the funds should be routed

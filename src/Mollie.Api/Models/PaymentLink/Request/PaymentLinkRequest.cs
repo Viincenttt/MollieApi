@@ -8,13 +8,13 @@ namespace Mollie.Api.Models.PaymentLink.Request {
         /// <summary>
         /// The amount that you want to charge, e.g. {"currency":"EUR", "value":"1000.00"} if you would want to charge €1000.00.
         /// </summary>
-        public Amount? Amount { get; init; }
+        public Amount? Amount { get; set; }
 
         /// <summary>
         /// This description will also be used as the payment description and will be shown to your customer on their card or bank
         /// statement when possible.
         /// </summary>
-        public required string Description { get; init; }
+        public required string Description { get; set; }
 
         /// <summary>
         /// Optional - The URL your customer will be redirected to after completing the payment process.
