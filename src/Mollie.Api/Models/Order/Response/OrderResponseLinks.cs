@@ -5,7 +5,7 @@ namespace Mollie.Api.Models.Order.Response {
         /// <summary>
         /// The API resource URL of the order itself.
         /// </summary>
-        public required UrlObjectLink<OrderResponse> Self { get; init; }
+        public required UrlObjectLink<OrderResponse> Self { get; set; }
 
         /// <summary>
         /// The URL your customer should visit to make the payment for the order.
@@ -16,6 +16,6 @@ namespace Mollie.Api.Models.Order.Response {
         /// <summary>
         /// The URL to the order retrieval endpoint documentation.
         /// </summary>
-        public required UrlLink Documentation { get; init; }
+        public required UrlLink Documentation { get; set; }
     }
 }

@@ -7,32 +7,32 @@ namespace Mollie.Api.Models.PaymentMethod.Response {
         /// <summary>
         /// Indicates the response contains a method object. Will always contain method for this endpoint.
         /// </summary>
-        public required string Resource { get; init; }
+        public required string Resource { get; set; }
 
         /// <summary>
         /// The unique identifier of the payment method. When used during payment creation, the payment method selection screen will be skipped.
         /// </summary>
-        public required string Id { get; init; }
+        public required string Id { get; set; }
 
         /// <summary>
         /// The full name of the payment method.
         /// </summary>
-        public required string Description { get; init; }
+        public required string Description { get; set; }
 
         /// <summary>
         /// Minimum payment amount required to use this payment method.
         /// </summary>
-        public required Amount MinimumAmount { get; init; }
+        public required Amount MinimumAmount { get; set; }
 
         /// <summary>
         /// Maximum payment amount allowed when using this payment method. (Could be null)
         /// </summary>
-        public required Amount MaximumAmount { get; init; }
+        public required Amount MaximumAmount { get; set; }
 
         /// <summary>
         /// URLs of images representing the payment method.
         /// </summary>
-        public required PaymentMethodResponseImage Image { get; init; }
+        public required PaymentMethodResponseImage Image { get; set; }
 
 		/// <summary>
 		///	List of Issuers
@@ -48,7 +48,7 @@ namespace Mollie.Api.Models.PaymentMethod.Response {
 		/// An object with several URL objects relevant to the payment method. Every URL object will contain an href and a type field.
 		/// </summary>
 		[JsonProperty("_links")]
-        public required PaymentMethodResponseLinks Links { get; init; }
+        public required PaymentMethodResponseLinks Links { get; set; }
 
         public override string ToString() {
             return Description;

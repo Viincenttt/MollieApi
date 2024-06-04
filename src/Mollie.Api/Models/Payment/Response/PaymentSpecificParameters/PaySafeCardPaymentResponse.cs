@@ -1,6 +1,6 @@
 namespace Mollie.Api.Models.Payment.Response.PaymentSpecificParameters {
     public record PaySafeCardPaymentResponse : PaymentResponse {
-        public required PaySafeCardPaymentResponseDetails Details { get; init; }
+        public required PaySafeCardPaymentResponseDetails Details { get; set; }
     }
 
     public record PaySafeCardPaymentResponseDetails {

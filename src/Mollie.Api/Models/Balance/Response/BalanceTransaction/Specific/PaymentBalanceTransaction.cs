@@ -1,9 +1,9 @@
 ﻿namespace Mollie.Api.Models.Balance.Response.BalanceTransaction.Specific {
     public class PaymentBalanceTransaction : BalanceTransaction {
-        public required PaymentTransactionContext Context { get; init; }
+        public required PaymentTransactionContext Context { get; set; }
     }
-    
+
     public class PaymentTransactionContext {
-        public required string PaymentId { get; init; }
+        public required string PaymentId { get; set; }
     }
 }

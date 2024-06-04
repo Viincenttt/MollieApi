@@ -9,12 +9,12 @@ namespace Mollie.Api.Models.Onboarding.Response {
         /// <summary>
         /// The API resource URL of this endpoint itself.
         /// </summary>
-        public required UrlLink Self { get; init; }
+        public required UrlLink Self { get; set; }
 
         /// <summary>
         /// The URL of the onboarding process in Mollie Dashboard. You can redirect your customer to here for e.g. completing the onboarding process.
         /// </summary>
-        public required UrlLink Dashboard { get; init; }
+        public required UrlLink Dashboard { get; set; }
 
         /// <summary>
         /// The API resource URL of the organization.
@@ -24,6 +24,6 @@ namespace Mollie.Api.Models.Onboarding.Response {
         /// <summary>
         /// The URL to the onboarding status retrieval endpoint documentation.
         /// </summary>
-        public required UrlLink Documentation { get; init; }
+        public required UrlLink Documentation { get; set; }
     }
 }

@@ -7,12 +7,12 @@ namespace Mollie.Api.Models.Refund.Response {
         /// <summary>
         /// The API resource URL of the refund itself.
         /// </summary>
-        public required UrlObjectLink<RefundResponse> Self { get; init; }
+        public required UrlObjectLink<RefundResponse> Self { get; set; }
 
         /// <summary>
         /// The API resource URL of the payment the refund belongs to.
         /// </summary>
-        public required UrlObjectLink<PaymentResponse> Payment { get; init; }
+        public required UrlObjectLink<PaymentResponse> Payment { get; set; }
 
         /// <summary>
         /// The API resource URL of the settlement this payment has been settled with. Not present if not yet settled.
@@ -22,6 +22,6 @@ namespace Mollie.Api.Models.Refund.Response {
         /// <summary>
         /// The URL to the refund retrieval endpoint documentation.
         /// </summary>
-        public required UrlLink Documentation { get; init; }
+        public required UrlLink Documentation { get; set; }
     }
 }

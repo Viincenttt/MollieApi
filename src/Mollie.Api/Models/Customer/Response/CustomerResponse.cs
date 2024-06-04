@@ -8,13 +8,13 @@ namespace Mollie.Api.Models.Customer.Response {
         /// <summary>
         /// Indicates the response contains a customer object. Will always contain customer for this endpoint.
         /// </summary>
-        public required string Resource { get; init; }
+        public required string Resource { get; set; }
 
         /// <summary>
         /// The customer's unique identifier, for example cst_4pmbK7CqtT.
         /// Store this identifier for later recurring payments.
         /// </summary>
-        public required string Id { get; init; }
+        public required string Id { get; set; }
 
         /// <summary>
         /// The mode used to create this payment. Mode determines whether a payment is real or a test payment.
@@ -48,13 +48,13 @@ namespace Mollie.Api.Models.Customer.Response {
         /// <summary>
         /// DateTime when user was created.
         /// </summary>
-        public required DateTime CreatedAt { get; init; }
+        public required DateTime CreatedAt { get; set; }
 
         /// <summary>
         /// An object with several URL objects relevant to the customer. Every URL object will contain an href and a type field.
         /// </summary>
         [JsonProperty("_links")]
-        public required CustomerResponseLinks Links { get; init; }
+        public required CustomerResponseLinks Links { get; set; }
 
         public T? GetMetadata<T>(JsonSerializerSettings? jsonSerializerSettings = null) {
             return Metadata != null ? JsonConvert.DeserializeObject<T>(Metadata, jsonSerializerSettings) : default;

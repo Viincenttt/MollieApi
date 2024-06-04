@@ -3,8 +3,8 @@
 namespace Mollie.Api.Models.Error {
     public record MollieErrorMessage {
         public int Status { get; set; }
-        public required string Title { get; init; }
-        public required string Detail { get; init; }
+        public required string Title { get; set; }
+        public required string Detail { get; set; }
 
         /// <summary>
         /// The errors that are returned by the Connect client have a different format for some reason

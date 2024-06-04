@@ -18,17 +18,17 @@ namespace Mollie.Api.Models.Order.Request {
         /// <summary>
         /// A description of the order line, for example LEGO 4440 Forest Police Station.
         /// </summary>
-        public required string Name { get; init; }
+        public required string Name { get; set; }
 
         /// <summary>
         /// The number of items in the order line.
         /// </summary>
-        public required int Quantity { get; init; }
+        public required int Quantity { get; set; }
 
         /// <summary>
         /// The price of a single item in the order line.
         /// </summary>
-        public required Amount UnitPrice { get; init; }
+        public required Amount UnitPrice { get; set; }
 
         /// <summary>
         /// Any discounts applied to the order line. For example, if you have a two-for-one sale, you should pass the
@@ -40,20 +40,20 @@ namespace Mollie.Api.Models.Order.Request {
         /// The total amount of the line, including VAT and discounts. Adding all totalAmount values together should
         /// result in the same amount as the amount top level property.
         /// </summary>
-        public required Amount TotalAmount { get; init; }
+        public required Amount TotalAmount { get; set; }
 
         /// <summary>
         /// The VAT rate applied to the order line, for example "21.00" for 21%. The vatRate should be passed as a
         /// string and not as a float to ensure the correct number of decimals are passed.
         /// </summary>
-        public required string VatRate { get; init; }
+        public required string VatRate { get; set; }
 
         /// <summary>
         /// The amount of value-added tax on the line. The totalAmount field includes VAT, so the vatAmount can be
         /// calculated with the formula totalAmount × (vatRate / (100 + vatRate)). Any deviations from this will
         /// result in an error.
         /// </summary>
-        public required Amount VatAmount { get; init; }
+        public required Amount VatAmount { get; set; }
 
         /// <summary>
         /// The SKU, EAN, ISBN or UPC of the product sold. The maximum character length is 64.

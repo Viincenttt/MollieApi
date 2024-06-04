@@ -4,17 +4,17 @@
         /// <summary>
         /// The area or product-type where the pricing is applied for, translated in the optional locale passed.
         /// </summary>
-        public required string Description { get; init; }
+        public required string Description { get; set; }
 
         /// <summary>
         /// The fixed price per transaction
         /// </summary>
-        public required FixedPricingResponse Fixed { get; init; }
+        public required FixedPricingResponse Fixed { get; set; }
 
         /// <summary>
         /// A string containing the percentage what will be charged over the payment amount besides the fixed price.
         /// </summary>
-        public required decimal Variable { get; init; }
+        public required decimal Variable { get; set; }
 
         /// <summary>
         /// This value is only available for credit card rates. It will correspond with the regions as documented in

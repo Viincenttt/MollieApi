@@ -3,7 +3,7 @@
         /// <summary>
         /// An object with the consumer bank account details.
         /// </summary>
-        public required EpsPaymentResponseDetails Details { get; init; }
+        public required EpsPaymentResponseDetails Details { get; set; }
     }
 
     public record EpsPaymentResponseDetails {
