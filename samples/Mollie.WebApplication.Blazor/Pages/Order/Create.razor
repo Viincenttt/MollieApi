@@ -4,6 +4,7 @@
 @using Mollie.WebApplication.Blazor.Models.Order
 @using System.Globalization
 @using Mollie.Api.Client
+@using Mollie.Api.Models.Order.Request
 
 @inject IOrderClient OrderClient
 @inject NavigationManager NavigationManager
@@ -15,7 +16,7 @@
 <EditForm Model="_order" OnValidSubmit="@OnSave" class="col-md-6">
     <DataAnnotationsValidator />
     <ValidationSummary />
-    
+
     <div class="form-group">
         <label for="order-number">Order number</label>
         <InputText
@@ -24,7 +25,7 @@
             @bind-Value="_order.OrderNumber">
         </InputText>
     </div>
-    
+
     <div class="form-group">
         <label for="locale">Locale</label>
         <InputSelect
@@ -57,10 +58,10 @@
             @bind-Value="_order.RedirectUrl">
         </InputText>
     </div>
-    
+
     <h5 class="mt-3">Billing address</h5>
     <OrderAddressEditor Address="_order.BillingAddress"></OrderAddressEditor>
-    
+
     <h5 class="mt-3">Order lines</h5>
     <OrderLineEditor OrderLines="_order.Lines"></OrderLineEditor>
 
@@ -68,15 +69,16 @@
 </EditForm>
 
 @code {
-    private MollieApiException _apiException = null;
-    
-    private CreateOrderModel _order = new() {
+    private MollieApiException? _apiException;
+
+    private readonly CreateOrderModel _order = new() {
         OrderNumber = "Order number",
         Locale = Locale.nl_NL,
+        Amount = 100m,
         Currency = "EUR",
         RedirectUrl = "https://www.mollie.com/",
         Lines = new List<CreateOrderLineModel> {
-            new CreateOrderLineModel {
+            new() {
                 Name = "Chocolates",
                 UnitPrice = 100.00m,
                 Quantity = 1,
@@ -95,15 +97,15 @@
             StreetAndNumber = "Keizersgracht 126"
         }
     };
-    
+
     private async Task OnSave() {
         try {
             _apiException = null;
-            
+
             await OrderClient.CreateOrderAsync(new OrderRequest {
-                OrderNumber = _order.OrderNumber,
-                Locale = _order.Locale,
-                Amount = new Amount(_order.Currency, _order.Lines.Sum(lines => lines.TotalAmount)),
+                OrderNumber = _order.OrderNumber!,
+                Locale = _order.Locale!,
+                Amount = new Amount(_order.Currency, _order.Lines!.Sum(lines => lines.TotalAmount)),
                 RedirectUrl = _order.RedirectUrl,
                 BillingAddress = new OrderAddressDetails {
                     GivenName = _order.BillingAddress.GivenName,
@@ -114,7 +116,7 @@
                     City = _order.BillingAddress.City,
                     Country = _order.BillingAddress.Country
                 },
-                Lines = _order.Lines.Select(line => new OrderLineRequest {
+                Lines = _order.Lines!.Select(line => new OrderLineRequest {
                     Name = line.Name,
                     Quantity = line.Quantity,
                     UnitPrice = new Amount(_order.Currency, line.UnitPrice),

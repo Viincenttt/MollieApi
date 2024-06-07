@@ -1,4 +1,6 @@
 ﻿@page "/payment-method/overview"
+@using Mollie.Api.Models.List.Response
+@using Mollie.Api.Models.PaymentMethod.Response
 
 @inject IPaymentMethodClient PaymentMethodClient
 
@@ -32,7 +34,7 @@ else {
 
 
 @code {
-    private ListResponse<PaymentMethodResponse> _paymentMethods = null;
+    private ListResponse<PaymentMethodResponse>? _paymentMethods;
 
     protected override async Task OnInitializedAsync() {
         _paymentMethods = await PaymentMethodClient.GetPaymentMethodListAsync();

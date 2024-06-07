@@ -37,7 +37,7 @@ public class ProfileClientTests : BaseClientTests
             .Respond("application/json", defaultProfileJsonResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
         using var profileClient = new ProfileClient("abcde", httpClient);
-        
+
         // Act
         var result = await profileClient.CreateProfileAsync(profileRequest);
 
@@ -47,7 +47,7 @@ public class ProfileClientTests : BaseClientTests
         result.Description.Should().Be(profileRequest.Description);
         result.CountriesOfActivity.Should().Equal(profileRequest.CountriesOfActivity);
     }
-    
+
     [Fact]
     public async Task GetProfileAsync_WithProfileId_ResponseIsDeserializedInExpectedFormat()
     {
@@ -59,7 +59,7 @@ public class ProfileClientTests : BaseClientTests
             .Respond("application/json", defaultProfileJsonResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
         using var profileClient = new ProfileClient("abcde", httpClient);
-        
+
         // Act
         var result = await profileClient.GetProfileAsync(profileId);
 
@@ -78,7 +78,7 @@ public class ProfileClientTests : BaseClientTests
             .Respond("application/json", defaultProfileJsonResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
         using var profileClient = new ProfileClient("abcde", httpClient);
-        
+
         // Act
         var result = await profileClient.GetCurrentProfileAsync();
 
@@ -86,7 +86,7 @@ public class ProfileClientTests : BaseClientTests
         mockHttp.VerifyNoOutstandingRequest();
         AssertDefaultProfileResponse(result);
     }
-    
+
     [Fact]
     public async Task GetProfileListAsync_WithNoParameters_ResponseIsDeserializedInExpectedFormat()
     {
@@ -97,7 +97,7 @@ public class ProfileClientTests : BaseClientTests
             .Respond("application/json", defaultGetProfileListJsonResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
         using var profileClient = new ProfileClient("abcde", httpClient);
-        
+
         // Act
         var result = await profileClient.GetProfileListAsync();
 
@@ -154,7 +154,7 @@ public class ProfileClientTests : BaseClientTests
             .Respond("application/json", defaultProfileJsonResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
         using var profileClient = new ProfileClient("abcde", httpClient);
-        
+
         // Act
         var result = await profileClient.UpdateProfileAsync(profileId, profileRequest);
 
@@ -162,7 +162,7 @@ public class ProfileClientTests : BaseClientTests
         mockHttp.VerifyNoOutstandingRequest();
         AssertDefaultProfileResponse(result);
     }
-    
+
     [Fact]
     public async Task UpdateProfileAsync_WithMissingProfileIdParameter_ThrowsArgumentException()
     {
@@ -171,9 +171,17 @@ public class ProfileClientTests : BaseClientTests
         var mockHttp = new MockHttpMessageHandler();
         HttpClient httpClient = mockHttp.ToHttpClient();
         using var profileClient = new ProfileClient("abcde", httpClient);
-        
+        ProfileRequest profileRequest = new ProfileRequest() {
+            Name = "My website name",
+            Email = "info@mywebsite.com",
+            Mode = Mode.Test,
+            Phone = "+31208202070",
+            Website = "https://www.mywebsite.com",
+            BusinessCategory = "OTHER_MERCHANDISE"
+        };
+
         // Act
-        var exception = await Assert.ThrowsAsync<ArgumentException>(() => profileClient.UpdateProfileAsync(profileId, new ProfileRequest()));
+        var exception = await Assert.ThrowsAsync<ArgumentException>(() => profileClient.UpdateProfileAsync(profileId, profileRequest));
 
         // Assert
         exception.Message.Should().Be($"Required URL argument '{nameof(profileId)}' is null or empty");
@@ -190,7 +198,7 @@ public class ProfileClientTests : BaseClientTests
             .Respond("application/json", defaultPaymentMethodResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
         using var profileClient = new ProfileClient("abcde", httpClient);
-        
+
         // Act
         var result = await profileClient.EnablePaymentMethodAsync(paymentMethod);
 
@@ -199,23 +207,22 @@ public class ProfileClientTests : BaseClientTests
         result.Resource.Should().Be("method");
         result.Id.Should().Be(paymentMethod);
     }
-    
+
     [Fact]
     public async Task EnablePaymentMethodAsync_ForCurrentProfileWithMissingPaymentMethodParameter_ThrowsArgumentException()
     {
         // Arrange
-        const string paymentMethod = PaymentMethod.Ideal;
         var mockHttp = new MockHttpMessageHandler();
         HttpClient httpClient = mockHttp.ToHttpClient();
         using var profileClient = new ProfileClient("abcde", httpClient);
-        
+
         // Act
         var exception = await Assert.ThrowsAsync<ArgumentException>(() => profileClient.EnablePaymentMethodAsync(string.Empty));
 
         // Assert
-        exception.Message.Should().Be($"Required URL argument '{nameof(paymentMethod)}' is null or empty");
+        exception.Message.Should().Be($"Required URL argument 'paymentMethod' is null or empty");
     }
-    
+
     [Fact]
     public async Task DisablePaymentMethodAsync_ForCurrentProfile_SendsRequest()
     {
@@ -227,14 +234,14 @@ public class ProfileClientTests : BaseClientTests
             .Respond(HttpStatusCode.NoContent);
         HttpClient httpClient = mockHttp.ToHttpClient();
         using var profileClient = new ProfileClient("abcde", httpClient);
-        
+
         // Act
         await profileClient.DisablePaymentMethodAsync(paymentMethod);
 
         // Assert
         mockHttp.VerifyNoOutstandingExpectation();
     }
-    
+
     [Fact]
     public async Task DisablePaymentMethodAsync_ForCurrentProfileWithMissingPaymentMethodParameter_ThrowsArgumentException()
     {
@@ -242,7 +249,7 @@ public class ProfileClientTests : BaseClientTests
         var mockHttp = new MockHttpMessageHandler();
         HttpClient httpClient = mockHttp.ToHttpClient();
         using var profileClient = new ProfileClient("abcde", httpClient);
-        
+
         // Act
         var exception = await Assert.ThrowsAsync<ArgumentException>(() => profileClient.DisablePaymentMethodAsync(string.Empty));
 
@@ -261,14 +268,14 @@ public class ProfileClientTests : BaseClientTests
             .Respond(HttpStatusCode.NoContent);
         HttpClient httpClient = mockHttp.ToHttpClient();
         using var profileClient = new ProfileClient("abcde", httpClient);
-        
+
         // Act
         await profileClient.DeleteProfileAsync(profileId);
 
         // Assert
         mockHttp.VerifyNoOutstandingExpectation();
     }
-    
+
     [Fact]
     public async Task DeleteProfileAsync_WithMissingProfileIdParameter_ThrowsArgumentException()
     {
@@ -276,7 +283,7 @@ public class ProfileClientTests : BaseClientTests
         var mockHttp = new MockHttpMessageHandler();
         HttpClient httpClient = mockHttp.ToHttpClient();
         using var profileClient = new ProfileClient("abcde", httpClient);
-        
+
         // Act
         var exception = await Assert.ThrowsAsync<ArgumentException>(() => profileClient.DeleteProfileAsync(string.Empty));
 
@@ -295,7 +302,7 @@ public class ProfileClientTests : BaseClientTests
             .Respond("application/json", defaultEnableGiftcardIssuerResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
         using var profileClient = new ProfileClient("abcde", httpClient);
-        
+
         // Act
         var result = await profileClient.EnableGiftCardIssuerAsync(issuer);
 
@@ -314,14 +321,14 @@ public class ProfileClientTests : BaseClientTests
         var mockHttp = new MockHttpMessageHandler();
         HttpClient httpClient = mockHttp.ToHttpClient();
         using var profileClient = new ProfileClient("abcde", httpClient);
-        
+
         // Act
         var exception = await Assert.ThrowsAsync<ArgumentException>(() => profileClient.EnableGiftCardIssuerAsync(string.Empty));
 
         // Assert
         exception.Message.Should().Be($"Required URL argument 'issuer' is null or empty");
     }
-    
+
     [Fact]
     public async Task DisableGiftCardIssuerAsync_ForCurrentProfile_SendsRequest()
     {
@@ -333,7 +340,7 @@ public class ProfileClientTests : BaseClientTests
             .Respond(HttpStatusCode.NoContent);
         HttpClient httpClient = mockHttp.ToHttpClient();
         using var profileClient = new ProfileClient("abcde", httpClient);
-        
+
         // Act
         await profileClient.DisableGiftCardIssuerAsync(issuer);
 
@@ -348,7 +355,7 @@ public class ProfileClientTests : BaseClientTests
         var mockHttp = new MockHttpMessageHandler();
         HttpClient httpClient = mockHttp.ToHttpClient();
         using var profileClient = new ProfileClient("abcde", httpClient);
-        
+
         // Act
         var exception = await Assert.ThrowsAsync<ArgumentException>(() => profileClient.DisableGiftCardIssuerAsync(string.Empty));
 
@@ -415,7 +422,7 @@ public class ProfileClientTests : BaseClientTests
          }
      }
  }";
-    
+
     private const string defaultProfileJsonResponse = @"{
     ""resource"": ""profile"",
     ""id"": ""pfl_v9hTwCvYqw"",

@@ -12,14 +12,14 @@ namespace Mollie.Api.JsonConverters {
         }
 
         protected override BalanceReportResponse Create(Type objectType, JObject jObject) {
-            string reportGrouping = this.GetBalanceReportGrouping(jObject);
+            string? reportGrouping = GetBalanceReportGrouping(jObject);
 
-            return this._balanceReportResponseFactory.Create(reportGrouping);
+            return _balanceReportResponseFactory.Create(reportGrouping);
         }
         
-        private string GetBalanceReportGrouping(JObject jObject) {
-            if (this.FieldExists("grouping", jObject)) {
-                string reportGroupingValue = (string) jObject["grouping"];
+        private string? GetBalanceReportGrouping(JObject jObject) {
+            if (FieldExists("grouping", jObject)) {
+                string? reportGroupingValue = (string?) jObject["grouping"];
                 if (!string.IsNullOrEmpty(reportGroupingValue)) {
                     return reportGroupingValue;
                 }

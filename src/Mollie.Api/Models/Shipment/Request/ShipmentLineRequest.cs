@@ -1,18 +1,18 @@
-﻿namespace Mollie.Api.Models.Shipment {
-    public class ShipmentLineRequest {
+﻿namespace Mollie.Api.Models.Shipment.Request {
+    public record ShipmentLineRequest {
         /// <summary>
         /// The API resource token of the order line, for example: odl_jp31jz.
         /// </summary>
-        public string Id { get; set; }
+        public required string Id { get; set; }
 
         /// <summary>
         /// The number of items that should be shipped for this order line.
         /// </summary>
-        public int Quantity { get; set; }
+        public int? Quantity { get; set; }
 
         /// <summary>
         /// The amount that you want to ship. In almost all cases, Mollie can determine the amount automatically.
         /// </summary>
-        public Amount Amount { get; set; }
+        public Amount? Amount { get; set; }
     }
 }

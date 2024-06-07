@@ -4,25 +4,25 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
-using Mollie.Api.Models.List;
-using Mollie.Api.Models.Terminal;
+using Mollie.Api.Models.List.Response;
+using Mollie.Api.Models.Terminal.Response;
 using Mollie.Tests.Integration.Framework;
 
-namespace Mollie.Tests.Integration.Api; 
+namespace Mollie.Tests.Integration.Api;
 
 public class TerminalTests : BaseMollieApiTestClass, IDisposable {
     private readonly ITerminalClient _terminalClient;
 
     public TerminalTests() {
-        _terminalClient = new TerminalClient(this.ApiKey);
+        _terminalClient = new TerminalClient(ApiKey);
     }
-    
+
     [DefaultRetryFact]
     public async Task CanRetrieveTerminalList() {
         // Given
 
         // When: Retrieve terminal client list
-        ListResponse<TerminalResponse> response = await this._terminalClient.GetTerminalListAsync();
+        ListResponse<TerminalResponse> response = await _terminalClient.GetTerminalListAsync();
 
         // Then
         response.Should().NotBeNull();
@@ -32,12 +32,12 @@ public class TerminalTests : BaseMollieApiTestClass, IDisposable {
     [DefaultRetryFact(Skip = "Not implemented by Mollie yet")]
     public async Task CanRetrieveSingleTerminal() {
         // Given
-        ListResponse<TerminalResponse> allTerminals = await this._terminalClient.GetTerminalListAsync();
+        ListResponse<TerminalResponse> allTerminals = await _terminalClient.GetTerminalListAsync();
         if (allTerminals.Count > 0) {
             TerminalResponse firstTerminal = allTerminals.Items.First();
 
             // When: Retrieve terminal client list
-            TerminalResponse response = await this._terminalClient.GetTerminalAsync(firstTerminal.Id);
+            TerminalResponse response = await _terminalClient.GetTerminalAsync(firstTerminal.Id);
 
             // Then
             response.Should().NotBeNull();

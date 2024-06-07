@@ -1,9 +1,9 @@
 ﻿namespace Mollie.Api.Models.Order.Request.PaymentSpecificParameters {
-    public class IDealSpecificParameters : PaymentSpecificParameters {
+    public record IDealSpecificParameters : PaymentSpecificParameters {
         /// <summary>
         /// Optional - iDEAL issuer id. The id could for example be ideal_INGBNL2A. The returned paymentUrl will then directly
         /// point to the ING web site.
         /// </summary>
-        public string Issuer { get; set; }
+        public string? Issuer { get; set; }
     }
 }

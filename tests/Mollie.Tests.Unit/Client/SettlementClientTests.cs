@@ -1,12 +1,12 @@
 ﻿using System;
 using Mollie.Api.Client;
-using Mollie.Api.Models.Capture;
-using Mollie.Api.Models.List;
-using Mollie.Api.Models.Settlement;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Mollie.Api.Models.Capture.Response;
+using Mollie.Api.Models.List.Response;
+using Mollie.Api.Models.Settlement.Response;
 using RichardSzalay.MockHttp;
 using Xunit;
 
@@ -16,12 +16,12 @@ namespace Mollie.Tests.Unit.Client {
         public async Task ListSettlementCaptures_DefaultBehaviour_ResponseIsParsed() {
             // Given: We request a list of captures
             string expectedUrl = $"{BaseMollieClient.ApiEndPoint}settlements/{defaultSettlementId}/captures";
-            var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, defaultCaptureListJsonResponse);
+            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, defaultCaptureListJsonResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
-            SettlementsClient settlementsClient = new SettlementsClient("api-key", httpClient);
+            SettlementClient settlementClient = new SettlementClient("api-key", httpClient);
 
             // When: We make the request
-            ListResponse<CaptureResponse> listCaptureResponse = await settlementsClient.GetSettlementCapturesListAsync(defaultSettlementId);
+            ListResponse<CaptureResponse> listCaptureResponse = await settlementClient.GetSettlementCaptureListAsync(defaultSettlementId);
 
             // Then: Response should be parsed
             mockHttp.VerifyNoOutstandingExpectation();
@@ -54,12 +54,12 @@ namespace Mollie.Tests.Unit.Client {
         public async Task GetOpenSettlement_DefaultBehaviour_ResponseIsParsed() {
             // Given: We request a list of captures
             string expectedUrl = $"{BaseMollieClient.ApiEndPoint}settlements/open";
-            var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, defaultGetSettlementResponse);
+            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, defaultGetSettlementResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
-            SettlementsClient settlementsClient = new SettlementsClient("api-key", httpClient);
+            SettlementClient settlementClient = new SettlementClient("api-key", httpClient);
 
             // When: We make the request
-            SettlementResponse settlementResponse = await settlementsClient.GetOpenSettlement();
+            SettlementResponse settlementResponse = await settlementClient.GetOpenSettlement();
 
             // Then: Response should be parsed
             mockHttp.VerifyNoOutstandingExpectation();
@@ -121,19 +121,19 @@ namespace Mollie.Tests.Unit.Client {
         public async Task GetOpenSettlement_ResponseWithEmptyPeriods_ResponseIsParsed() {
             // Given: We request a list of captures
             string expectedUrl = $"{BaseMollieClient.ApiEndPoint}settlements/open";
-            var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, emptyPeriodsSettlementResponse);
+            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, emptyPeriodsSettlementResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
-            SettlementsClient settlementsClient = new SettlementsClient("api-key", httpClient);
+            SettlementClient settlementClient = new SettlementClient("api-key", httpClient);
 
             // When: We make the request
-            SettlementResponse settlementResponse = await settlementsClient.GetOpenSettlement();
+            SettlementResponse settlementResponse = await settlementClient.GetOpenSettlement();
 
             // Then: Response should be parsed
             mockHttp.VerifyNoOutstandingExpectation();
             settlementResponse.Should().NotBeNull();
             settlementResponse.Periods.Count.Should().Be(0);
         }
-        
+
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
@@ -142,15 +142,15 @@ namespace Mollie.Tests.Unit.Client {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
-            SettlementsClient settlementsClient = new SettlementsClient("api-key", httpClient);
+            SettlementClient settlementClient = new SettlementClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await settlementsClient.GetSettlementAsync(settlementId));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await settlementClient.GetSettlementAsync(settlementId));
 
             // Then
             exception.Message.Should().Be("Required URL argument 'settlementId' is null or empty");
         }
-        
+
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
@@ -159,15 +159,15 @@ namespace Mollie.Tests.Unit.Client {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
-            SettlementsClient settlementsClient = new SettlementsClient("api-key", httpClient);
+            SettlementClient settlementClient = new SettlementClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await settlementsClient.GetSettlementPaymentsListAsync(settlementId));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await settlementClient.GetSettlementPaymentListAsync(settlementId));
 
             // Then
             exception.Message.Should().Be("Required URL argument 'settlementId' is null or empty");
         }
-        
+
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
@@ -176,15 +176,15 @@ namespace Mollie.Tests.Unit.Client {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
-            SettlementsClient settlementsClient = new SettlementsClient("api-key", httpClient);
+            SettlementClient settlementClient = new SettlementClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await settlementsClient.GetSettlementRefundsListAsync(settlementId));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await settlementClient.GetSettlementRefundListAsync(settlementId));
 
             // Then
             exception.Message.Should().Be("Required URL argument 'settlementId' is null or empty");
         }
-        
+
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
@@ -193,15 +193,15 @@ namespace Mollie.Tests.Unit.Client {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
-            SettlementsClient settlementsClient = new SettlementsClient("api-key", httpClient);
+            SettlementClient settlementClient = new SettlementClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await settlementsClient.GetSettlementChargebacksListAsync(settlementId));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await settlementClient.GetSettlementChargebackListAsync(settlementId));
 
             // Then
             exception.Message.Should().Be("Required URL argument 'settlementId' is null or empty");
         }
-        
+
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
@@ -210,16 +210,16 @@ namespace Mollie.Tests.Unit.Client {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
-            SettlementsClient settlementsClient = new SettlementsClient("api-key", httpClient);
+            SettlementClient settlementClient = new SettlementClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await settlementsClient.GetSettlementCapturesListAsync(settlementId));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await settlementClient.GetSettlementCaptureListAsync(settlementId));
 
             // Then
             exception.Message.Should().Be("Required URL argument 'settlementId' is null or empty");
         }
-        
-        
+
+
         private const string defaultSettlementId = "tr_Agfg241g";
         private const string defaultPaymentId = "tr_WDqYK6vllg";
         private const string defaultShipmentId = "shp_3wmsgCJN4U";
@@ -403,7 +403,7 @@ namespace Mollie.Tests.Unit.Client {
       ""currency"":""EUR""
    }},
    ""periods"":[
-      
+
    ],
    ""_links"":{{
       ""self"":{{
@@ -416,5 +416,5 @@ namespace Mollie.Tests.Unit.Client {
       }}
    }}
 }}";
-    }    
+    }
 }

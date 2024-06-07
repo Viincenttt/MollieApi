@@ -21,7 +21,7 @@ namespace Mollie.Tests.Unit.Client {
           var getBalanceResponseFactory = new GetBalanceResponseFactory();
           var getBalanceResponse = getBalanceResponseFactory.CreateGetBalanceResponse();
           string expectedUrl = $"{BaseMollieClient.ApiEndPoint}balances/{getBalanceResponseFactory.BalanceId}";
-          var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, getBalanceResponse);
+          var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, getBalanceResponse);
           HttpClient httpClient = mockHttp.ToHttpClient();
           BalanceClient balanceClient = new BalanceClient("api-key", httpClient);
 
@@ -53,7 +53,7 @@ namespace Mollie.Tests.Unit.Client {
           balanceResponse.Links.Documentation.Href.Should().Be($"https://docs.mollie.com/reference/v2/balances-api/get-balance");
           balanceResponse.Links.Documentation.Type.Should().Be("text/html");
       }
-      
+
       [Theory]
       [InlineData("")]
       [InlineData(" ")]
@@ -77,7 +77,7 @@ namespace Mollie.Tests.Unit.Client {
           var getBalanceResponseFactory = new GetBalanceResponseFactory();
           var getBalanceResponse = getBalanceResponseFactory.CreateGetBalanceResponse();
           string expectedUrl = $"{BaseMollieClient.ApiEndPoint}balances/primary";
-          var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, getBalanceResponse);
+          var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, getBalanceResponse);
           HttpClient httpClient = mockHttp.ToHttpClient();
           BalanceClient balanceClient = new BalanceClient("api-key", httpClient);
 
@@ -110,12 +110,12 @@ namespace Mollie.Tests.Unit.Client {
       public async Task ListBalancesAsync_DefaultBehaviour_ResponseIsParsed() {
           // Given: We request a list of balances
           string expectedUrl = $"{BaseMollieClient.ApiEndPoint}balances";
-          var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, DefaultListBalancesResponse);
+          var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, DefaultListBalancesResponse);
           HttpClient httpClient = mockHttp.ToHttpClient();
           BalanceClient balanceClient = new BalanceClient("api-key", httpClient);
 
           // When: We make the request
-          var balances = await balanceClient.ListBalancesAsync();
+          var balances = await balanceClient.GetBalanceListAsync();
 
           // Then: Response should be parsed
           mockHttp.VerifyNoOutstandingExpectation();
@@ -123,7 +123,7 @@ namespace Mollie.Tests.Unit.Client {
           balances.Count.Should().Be(2);
           balances.Items.Should().HaveCount(2);
       }
-      
+
       [Fact]
       public async Task GetBalanceReportAsync_TransactionCategories_ResponseIsParsed() {
           // Given: We request a balance report
@@ -131,10 +131,10 @@ namespace Mollie.Tests.Unit.Client {
           DateTime from = new DateTime(2022, 11, 1);
           DateTime until = new DateTime(2022, 11, 30);
           string grouping = ReportGrouping.TransactionCategories;
-          
+
           string expectedUrl = $"{BaseMollieClient.ApiEndPoint}balances/{balanceId}/report" +
                                $"?from={from.ToString("yyyy-MM-dd")}&until={until.ToString("yyyy-MM-dd")}&grouping={grouping}";
-          var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, DefaultGetBalanceReportTransactionCategoriesResponse);
+          var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, DefaultGetBalanceReportTransactionCategoriesResponse);
           HttpClient httpClient = mockHttp.ToHttpClient();
           BalanceClient balanceClient = new BalanceClient("api-key", httpClient);
 
@@ -162,7 +162,7 @@ namespace Mollie.Tests.Unit.Client {
           var childChildSubTotals = childSubTotals.Subtotals.First();
           childChildSubTotals.Method.Should().Be("ideal");
       }
-      
+
       [Theory]
       [InlineData("")]
       [InlineData(" ")]
@@ -181,7 +181,7 @@ namespace Mollie.Tests.Unit.Client {
           // Then
           exception.Message.Should().Be("Required URL argument 'balanceId' is null or empty");
       }
-      
+
       [Fact]
       public async Task GetBalanceReportAsync_StatusBalances_ResponseIsParsed() {
           // Given: We request a balance report
@@ -189,10 +189,10 @@ namespace Mollie.Tests.Unit.Client {
           DateTime from = new DateTime(2022, 11, 1);
           DateTime until = new DateTime(2022, 11, 30);
           string grouping = ReportGrouping.StatusBalances;
-          
+
           string expectedUrl = $"{BaseMollieClient.ApiEndPoint}balances/{balanceId}/report" +
                                $"?from={from.ToString("yyyy-MM-dd")}&until={until.ToString("yyyy-MM-dd")}&grouping={grouping}";
-          var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, DefaultGetBalanceReportStatusBalancesResponse);
+          var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, DefaultGetBalanceReportStatusBalancesResponse);
           HttpClient httpClient = mockHttp.ToHttpClient();
           BalanceClient balanceClient = new BalanceClient("api-key", httpClient);
 
@@ -219,24 +219,24 @@ namespace Mollie.Tests.Unit.Client {
           var childChildSubtotals = childSubTotals.Subtotals.First();
           childChildSubtotals.Method.Should().Be("ideal");
       }
-      
+
       [Fact]
       public async Task ListBalanceTransactionsAsync_StatusBalances_ResponseIsParsed() {
           // Given
           string balanceId = "bal_CKjKwQdjCwCSArXFAJNFH";
           string expectedUrl = $"{BaseMollieClient.ApiEndPoint}balances/{balanceId}/transactions";
-          var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, DefaultListBalanceTransactionsResponse);
+          var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, DefaultListBalanceTransactionsResponse);
           HttpClient httpClient = mockHttp.ToHttpClient();
           BalanceClient balanceClient = new BalanceClient("api-key", httpClient);
 
           // When: We make the request
-          var balanceTransactions = await balanceClient.ListBalanceTransactionsAsync(balanceId);
+          var balanceTransactions = await balanceClient.GetBalanceTransactionListAsync(balanceId);
 
           // Then: Response should be parsed
           mockHttp.VerifyNoOutstandingExpectation();
-          balanceTransactions?.Embedded?.BalanceTransactions.Should().NotBeNull();
-          balanceTransactions.Count.Should().Be(balanceTransactions.Embedded.BalanceTransactions.Count());
-          var transaction = balanceTransactions.Embedded.BalanceTransactions.First();
+          balanceTransactions?.Items?.Should().NotBeNull();
+          balanceTransactions.Count.Should().Be(balanceTransactions.Items.Count());
+          var transaction = balanceTransactions.Items.First();
           transaction.Resource.Should().Be("balance_transactions");
           transaction.Id.Should().Be("baltr_9S8yk4FFqqi2Qm6K3rqRH");
           transaction.Type.Should().Be("outgoing-transfer");
@@ -244,12 +244,12 @@ namespace Mollie.Tests.Unit.Client {
           transaction.ResultAmount.Currency.Should().Be(Currency.EUR);
           transaction.InitialAmount.Value.Should().Be("-7.76");
           transaction.InitialAmount.Currency.Should().Be(Currency.EUR);
-          transaction.Should().BeOfType<SettlementBalanceTransaction>();
-          var transactionContext = (SettlementBalanceTransaction)transaction;
+          transaction.Should().BeOfType<SettlementBalanceTransactionResponse>();
+          var transactionContext = (SettlementBalanceTransactionResponse)transaction;
           transactionContext.Context.SettlementId.Should().Be("stl_ma2vu8");
           transactionContext.Context.TransferId.Should().Be("trf_ma2vu8");
       }
-      
+
       [Theory]
       [InlineData("")]
       [InlineData(" ")]
@@ -261,27 +261,27 @@ namespace Mollie.Tests.Unit.Client {
           BalanceClient balanceClient = new BalanceClient("api-key", httpClient);
 
           // When: We send the request
-          var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await balanceClient.ListBalanceTransactionsAsync(balanceId));
+          var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await balanceClient.GetBalanceTransactionListAsync(balanceId));
 
           // Then
           exception.Message.Should().Be("Required URL argument 'balanceId' is null or empty");
       }
-      
+
       [Fact]
       public async Task ListPrimaryBalanceTransactionsAsync_StatusBalances_ResponseIsParsed() {
           // Given
           string expectedUrl = $"{BaseMollieClient.ApiEndPoint}balances/primary/transactions";
-          var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, DefaultListBalanceTransactionsResponse);
+          var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, DefaultListBalanceTransactionsResponse);
           HttpClient httpClient = mockHttp.ToHttpClient();
           BalanceClient balanceClient = new BalanceClient("api-key", httpClient);
 
           // When: We make the request
-          var balanceTransactions = await balanceClient.ListPrimaryBalanceTransactionsAsync();
+          var balanceTransactions = await balanceClient.GetPrimaryBalanceTransactionListAsync();
 
           // Then: Response should be parsed
           mockHttp.VerifyNoOutstandingExpectation();
-          balanceTransactions?.Embedded?.BalanceTransactions.Should().NotBeNull();
-          balanceTransactions.Count.Should().Be(balanceTransactions.Embedded.BalanceTransactions.Count());
+          balanceTransactions?.Items?.Should().NotBeNull();
+          balanceTransactions.Count.Should().Be(balanceTransactions.Items.Count());
       }
 
       private readonly string DefaultListBalanceTransactionsResponse = @"
@@ -340,7 +340,7 @@ namespace Mollie.Tests.Unit.Client {
         }
     }
 }";
-      
+
       private readonly string DefaultListBalancesResponse = $@"{{
   ""count"": 2,
   ""_embedded"": {{

@@ -1,4 +1,6 @@
 ﻿@page "/order/overview"
+@using Mollie.Api.Models.Order.Response
+@using Mollie.Api.Models.List.Response
 
 @inject IOrderClient OrderClient
 
@@ -11,7 +13,7 @@ else {
     <div class="clearfix">
         <a href="/order/create" class="btn btn-primary float-right">Create new order</a>
     </div>
-    
+
     <table class="table table-striped">
         <thead>
         <tr>
@@ -34,7 +36,7 @@ else {
                 <td>@order.Method</td>
                 <td>@order.Metadata</td>
                 <td>
-                    @if (order.Status == OrderStatus.Created) {
+                    @if (order.Status == OrderStatus.Created && order.Links.Checkout != null) {
                         <a href="@order.Links.Checkout.Href" class="btn btn-outline-secondary" target="_blank">Pay</a>
                     }
                 </td>
@@ -42,7 +44,7 @@ else {
         }
         </tbody>
     </table>
-    
+
     <OverviewNavigation
         Previous="_orders.Links.Previous"
         Next="_orders.Links.Next">
@@ -52,9 +54,9 @@ else {
 @code {
     [Parameter]
     [SupplyParameterFromQuery]
-    public string Url { get; set; }
-    
-    private ListResponse<OrderResponse> _orders = null;
+    public string? Url { get; set; }
+
+    private ListResponse<OrderResponse>? _orders;
 
     protected override async Task OnParametersSetAsync() {
         await LoadData();
@@ -66,7 +68,8 @@ else {
         }
         else {
             _orders = await OrderClient.GetOrderListAsync(new UrlObjectLink<ListResponse<OrderResponse>>() {
-                Href = Url
+                Href = Url,
+                Type = "application/json"
             });
         }
     }

@@ -5,24 +5,24 @@ using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
 using Mollie.Api.Models;
-using Mollie.Api.Models.List;
+using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.PaymentLink.Request;
 using Mollie.Api.Models.PaymentLink.Response;
 using Mollie.Tests.Integration.Framework;
 
-namespace Mollie.Tests.Integration.Api; 
+namespace Mollie.Tests.Integration.Api;
 
 public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
     private readonly IPaymentLinkClient _paymentLinkClient;
 
     public PaymentLinkTests() {
-        _paymentLinkClient = new PaymentLinkClient(this.ApiKey);
+        _paymentLinkClient = new PaymentLinkClient(ApiKey);
     }
-        
+
     [DefaultRetryFact]
-    public async Task CanRetrievePaymentlinkList() {
+    public async Task CanRetrievePaymentLinkList() {
         // When: Retrieve payment list with default settings
-        ListResponse<PaymentLinkResponse> response = await this._paymentLinkClient.GetPaymentLinkListAsync();
+        ListResponse<PaymentLinkResponse> response = await _paymentLinkClient.GetPaymentLinkListAsync();
 
         // Then
         response.Should().NotBeNull();
@@ -31,24 +31,53 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
 
     [DefaultRetryFact]
     public async Task CanCreatePaymentLinkAndRetrieveIt() {
-        // Given: We create a new payment 
-        PaymentLinkRequest paymentLinkRequest = new PaymentLinkRequest() {
+        // Given: We create a new payment link
+        PaymentLinkRequest paymentLinkRequest = new() {
             Description = "Test",
             Amount = new Amount(Currency.EUR, 50),
-            WebhookUrl = this.DefaultWebhookUrl,
-            RedirectUrl = this.DefaultRedirectUrl,
+            WebhookUrl = DefaultWebhookUrl,
+            RedirectUrl = DefaultRedirectUrl,
             ExpiresAt = DateTime.Now.AddDays(1)
         };
-        var createdPaymentLinkResponse = await this._paymentLinkClient.CreatePaymentLinkAsync(paymentLinkRequest);
+        var createdPaymentLinkResponse = await _paymentLinkClient.CreatePaymentLinkAsync(paymentLinkRequest);
 
         // When: We retrieve it
-        var retrievePaymentLinkResponse = await this._paymentLinkClient.GetPaymentLinkAsync(createdPaymentLinkResponse.Id);
+        var retrievePaymentLinkResponse = await _paymentLinkClient.GetPaymentLinkAsync(createdPaymentLinkResponse.Id);
 
-        // Then: We expect a list with a single ideal payment     
+        // Then: We expect a payment link with the expected properties
         var verifyPaymentLinkResponse = new Action<PaymentLinkResponse>(response => {
             var expiresAtWithoutMs = paymentLinkRequest.ExpiresAt.Value.Truncate(TimeSpan.FromSeconds(1));
 
             response.Amount.Should().Be(paymentLinkRequest.Amount);
+            response.ExpiresAt.Should().Be(expiresAtWithoutMs);
+            response.Description.Should().Be(paymentLinkRequest.Description);
+            response.RedirectUrl.Should().Be(paymentLinkRequest.RedirectUrl);
+        });
+
+        verifyPaymentLinkResponse(createdPaymentLinkResponse);
+        verifyPaymentLinkResponse(retrievePaymentLinkResponse);
+    }
+
+    [DefaultRetryFact]
+    public async Task CanCreatePaymentLinkWithNullAmount() {
+        // Given: We create a new payment link
+        PaymentLinkRequest paymentLinkRequest = new() {
+            Description = "Test",
+            Amount =  null,
+            WebhookUrl = DefaultWebhookUrl,
+            RedirectUrl = DefaultRedirectUrl,
+            ExpiresAt = DateTime.Now.AddDays(1)
+        };
+        var createdPaymentLinkResponse = await _paymentLinkClient.CreatePaymentLinkAsync(paymentLinkRequest);
+
+        // When: We retrieve it
+        var retrievePaymentLinkResponse = await _paymentLinkClient.GetPaymentLinkAsync(createdPaymentLinkResponse.Id);
+
+        // Then: We expect a payment link with the expected properties
+        var verifyPaymentLinkResponse = new Action<PaymentLinkResponse>(response => {
+            var expiresAtWithoutMs = paymentLinkRequest.ExpiresAt.Value.Truncate(TimeSpan.FromSeconds(1));
+
+            response.Amount.Should().BeNull();
             response.ExpiresAt.Should().Be(expiresAtWithoutMs);
             response.Description.Should().Be(paymentLinkRequest.Description);
             response.RedirectUrl.Should().Be(paymentLinkRequest.RedirectUrl);

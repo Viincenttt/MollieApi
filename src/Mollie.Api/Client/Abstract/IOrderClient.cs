@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
 using Mollie.Api.Models;
-using Mollie.Api.Models.List;
-using Mollie.Api.Models.Order;
+using Mollie.Api.Models.List.Response;
+using Mollie.Api.Models.Order.Request;
 using Mollie.Api.Models.Order.Request.ManageOrderLines;
+using Mollie.Api.Models.Order.Response;
 using Mollie.Api.Models.Payment.Response;
-using Mollie.Api.Models.Refund;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client.Abstract {
@@ -17,12 +17,9 @@ namespace Mollie.Api.Client.Abstract {
         Task<OrderResponse> ManageOrderLinesAsync(string orderId, ManageOrderLinesRequest manageOrderLinesRequest);
         Task CancelOrderAsync(string orderId, bool testmode = false);
         Task<ListResponse<OrderResponse>> GetOrderListAsync(
-            string from = null, int? limit = null, string profileId = null, bool testmode = false, SortDirection? sort = null);
+            string? from = null, int? limit = null, string? profileId = null, bool testmode = false, SortDirection? sort = null);
         Task<ListResponse<OrderResponse>> GetOrderListAsync(UrlObjectLink<ListResponse<OrderResponse>> url);
         Task CancelOrderLinesAsync(string orderId, OrderLineCancellationRequest cancelationRequest);
         Task<PaymentResponse> CreateOrderPaymentAsync(string orderId, OrderPaymentRequest createOrderPaymentRequest);
-        Task<OrderRefundResponse> CreateOrderRefundAsync(string orderId, OrderRefundRequest createOrderRefundRequest);
-        Task<ListResponse<RefundResponse>> GetOrderRefundListAsync(
-            string orderId, string from = null, int? limit = null, bool testmode = false);
     }
 }

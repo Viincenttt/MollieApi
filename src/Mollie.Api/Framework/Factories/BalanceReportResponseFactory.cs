@@ -1,17 +1,18 @@
+using System;
 using Mollie.Api.Models.Balance.Response.BalanceReport;
 using Mollie.Api.Models.Balance.Response.BalanceReport.Specific.StatusBalance;
 using Mollie.Api.Models.Balance.Response.BalanceReport.Specific.TransactionCategories;
 
 namespace Mollie.Api.Framework.Factories {
     internal class BalanceReportResponseFactory {
-        public BalanceReportResponse Create(string reportGrouping) {
+        public BalanceReportResponse Create(string? reportGrouping) {
             switch (reportGrouping) {
                 case ReportGrouping.StatusBalances:
-                    return new StatusBalanceReportResponse();
+                    return Activator.CreateInstance<StatusBalanceReportResponse>();
                 case ReportGrouping.TransactionCategories:
-                    return new TransactionCategoriesReportResponse();
+                    return Activator.CreateInstance<TransactionCategoriesReportResponse>();
                 default: 
-                    return new BalanceReportResponse();
+                    return Activator.CreateInstance<BalanceReportResponse>();
             }
         }
     }

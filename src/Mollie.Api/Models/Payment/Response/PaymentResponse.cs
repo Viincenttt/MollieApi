@@ -1,42 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
 using Mollie.Api.JsonConverters;
-using Mollie.Api.Models.Capture;
 using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Payment.Response {
-    public class PaymentResponse : IResponseObject {
+    public record PaymentResponse
+    {
         /// <summary>
         /// Indicates the response contains a payment object. Will always contain payment for this endpoint.
         /// </summary>
-        public string Resource { get; set; }
+        public required string Resource { get; set; }
 
         /// <summary>
         /// The identifier uniquely referring to this payment. Mollie assigns this identifier randomly at payment creation
         /// time. For example tr_7UhSN1zuXS. Its ID will always be used by Mollie to refer to a certain payment.
         /// </summary>
-        public string Id { get; set; }
+        public required string Id { get; set; }
 
         /// <summary>
         /// The mode used to create this payment. Mode determines whether a payment is real or a test payment.
         /// </summary>
-        public Mode Mode { get; set; }
+        public required Mode Mode { get; set; }
 
         /// <summary>
         /// The payment's date and time of creation, in ISO 8601 format.
         /// </summary>
-        public DateTime? CreatedAt { get; set; }
+        public required DateTime CreatedAt { get; set; }
 
         /// <summary>
         /// The payment's status. Please refer to the page about statuses for more info about which statuses occur at what
         /// point. See the Mollie.Api.Models.Payment.PaymentStatus class for a full list of known values.
         /// </summary>
-        public string Status { get; set; }
+        public required string Status { get; set; }
 
         /// <summary>
         /// Whether or not the payment can be canceled.
         /// </summary>
-        public bool IsCancelable { get; set; }
+        public bool? IsCancelable { get; set; }
 
         /// <summary>
         /// The date and time the payment became authorized, in ISO 8601 format. This parameter is omitted if the payment is not authorized (yet).
@@ -74,7 +74,7 @@ namespace Mollie.Api.Models.Payment.Response {
         /// <summary>
         /// The amount of the payment, e.g. {"currency":"EUR", "value":"100.00"} for a €100.00 payment.
         /// </summary>
-        public Amount Amount { get; set; }
+        public required Amount Amount { get; set; }
 
         /// <summary>
         /// Only available when refunds are available for this payment – The total amount in EURO that is already refunded. For
@@ -82,34 +82,34 @@ namespace Mollie.Api.Models.Payment.Response {
         /// amount may be higher than the payment amount, for example to allow reimbursement of the costs for a return shipment
         /// to the consumer.
         /// </summary>
-        public Amount AmountRefunded { get; set; }
+        public Amount? AmountRefunded { get; set; }
 
         /// <summary>
         /// Only available when refunds are available for this payment – The remaining amount in EURO that can be refunded.
         /// </summary>
-        public Amount AmountRemaining { get; set; }
+        public Amount? AmountRemaining { get; set; }
 
         /// <summary>
         /// The total amount that is already captured for this payment. Only available when this payment supports captures.
         /// </summary>
-        public Amount AmountCaptured { get; set; }
+        public Amount? AmountCaptured { get; set; }
 
         /// <summary>
         /// The total amount that was charged back for this payment. Only available when the total charged back amount is not zero.
         /// </summary>
-        public Amount AmountChargedBack { get; set; }
+        public Amount? AmountChargedBack { get; set; }
 
         /// <summary>
         /// A short description of the payment. The description will be shown on the consumer's bank or card statement when
         /// possible.
         /// </summary>
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         /// <summary>
         /// The URL the consumer will be redirected to after completing or cancelling the payment process.
         /// </summary>
-        public string RedirectUrl { get; set; }
-        
+        public string? RedirectUrl { get; set; }
+
         /// <summary>
         /// The optional redirect URL you provided during payment creation. Consumer that explicitly cancel the payment
         /// will be redirected to this URL if provided, or otherwise to the redirectUrl instead — see above.
@@ -120,107 +120,107 @@ namespace Mollie.Api.Models.Payment.Response {
         ///
         /// The URL will be null for recurring payments.
         /// </summary>
-        public string CancelUrl { get; set; }
+        public string? CancelUrl { get; set; }
 
         /// <summary>
         /// The URL Mollie will call as soon an important status change takes place.
         /// </summary>
-        public string WebhookUrl { get; set; }
+        public required string WebhookUrl { get; set; }
 
         /// <summary>
         /// An optional routing configuration that you provided, which enables you to route a successful payment, or part of the payment, to one or more connected accounts.
         /// Additionally, you can schedule (parts of) the payment to become available on the connected account on a future date.
         /// </summary>
         [JsonProperty("routing")]
-        public IList<PaymentRoutingResponse> Routings { get; set; }
+        public IList<PaymentRoutingResponse>? Routings { get; set; }
 
         /// <summary>
         /// The payment method used for this payment, either forced on creation by specifying the method parameter, or chosen
-        /// by the consumer our payment method selection screen. See the Mollie.Api.Models.Payment.PaymentMethod class for a 
+        /// by the consumer our payment method selection screen. See the Mollie.Api.Models.Payment.PaymentMethod class for a
         /// full list of known values.
         /// </summary>
-        public string Method { get; set; }
+        public string? Method { get; set; }
 
         /// <summary>
         /// The optional metadata you provided upon payment creation. Metadata can be used to link an order to a payment.
         /// </summary>
         [JsonConverter(typeof(RawJsonConverter))]
-        public string Metadata { get; set; }
+        public string? Metadata { get; set; }
 
         /// <summary>
         /// The consumer's locale, either forced on creation by specifying the locale parameter, or detected by us during
         /// checkout.
         /// </summary>
-        public string Locale { get; set; }
+        public string? Locale { get; set; }
 
         /// <summary>
         /// The customer’s ISO 3166-1 alpha-2 country code, detected by us during checkout. For example: BE.
         /// </summary>
-        public string CountryCode { get; set; }
+        public string? CountryCode { get; set; }
 
         /// <summary>
         /// The identifier referring to the profile this payment was created on. For example, pfl_QkEhN94Ba.
         /// </summary>
-        public string ProfileId { get; set; }
+        public required string ProfileId { get; set; }
 
         /// <summary>
         /// This optional field will contain the amount that will be settled to your account, converted to the currency your
         /// account is settled in. It follows the same syntax as the amount property.
         /// </summary>
-        public Amount SettlementAmount { get; set; }
+        public Amount? SettlementAmount { get; set; }
 
         /// <summary>
         /// The identifier referring to the settlement this payment belongs to. For example, stl_BkEjN2eBb.
         /// </summary>
-        public string SettlementId { get; set; }
+        public string? SettlementId { get; set; }
 
         /// <summary>
         /// The customerid of this payment
         /// </summary>
-        public string CustomerId { get; set; }
+        public string? CustomerId { get; set; }
 
         /// <summary>
-        /// Indicates which type of payment this is in a recurring sequence. Set to first for first payments that allow the customer to agree 
+        /// Indicates which type of payment this is in a recurring sequence. Set to first for first payments that allow the customer to agree
         /// to automatic recurring charges taking place on their account in the future. Set to recurring for payments where the customer’s card
         /// is charged automatically. See the Mollie.Api.Models.Payment.SequenceType class for a full list of known values.
         /// </summary>
-        public string SequenceType { get; set; }
+        public required string SequenceType { get; set; }
 
         /// <summary>
         /// Only available for recurring payments – If the payment is a recurring payment, this field will hold the ID of the
         /// mandate used to authorize the recurring payment.
         /// </summary>
-        public string MandateId { get; set; }
+        public string? MandateId { get; set; }
 
         /// <summary>
         /// Only available for recurring payments – When implementing the Subscriptions API, any recurring charges resulting
         /// from the subscription will hold the ID of the subscription that triggered the payment.
         /// </summary>
-        public string SubscriptionId { get; set; }
+        public string? SubscriptionId { get; set; }
 
         /// <summary>
         /// If the payment was created for an order, the ID of that order will be part of the response.
         /// </summary>
-        public string OrderId { get; set; }
+        public string? OrderId { get; set; }
 
         /// <summary>
         /// The application fee, if the payment was created with one.
         /// </summary>
-        public ApplicationFee ApplicationFee { get; set; }
-        
+        public ApplicationFee? ApplicationFee { get; set; }
+
         /// <summary>
         /// Indicates whether the capture will be scheduled automatically or not. Set to manual for payments that can be captured
         /// manually using the Create capture endpoint. Set to automatic by default, which indicates the payment will be captured
         /// automatically, without having to separately request it.
         /// </summary>
-        public string CaptureMode { get; set; }
-        
+        public string? CaptureMode { get; set; }
+
         /// <summary>
         /// Indicates the interval to wait before the payment is captured, for example 8 hours or 2 days. The capture delay will be
         /// added to the date and time the payment became authorized.
         /// </summary>
-        public string CaptureDelay { get; set; }
-        
+        public string? CaptureDelay { get; set; }
+
         /// <summary>
         /// Indicates the datetime on which the merchant has to have captured the payment, before we can no longer guarantee a
         /// successful capture, in ISO 8601 format. This parameter is omitted if the payment is not authorized (yet).
@@ -228,20 +228,20 @@ namespace Mollie.Api.Models.Payment.Response {
         public DateTime? CaptureBefore { get; set; }
 
         [JsonProperty("_embedded")]
-        public PaymentEmbeddedResponse Embedded { get; set; }
+        public PaymentEmbeddedResponse? Embedded { get; set; }
 
         /// <summary>
         /// An object with several URL objects relevant to the payment. Every URL object will contain an href and a type field.
         /// </summary>
         [JsonProperty("_links")]
-        public PaymentResponseLinks Links { get; set; }
+        public PaymentResponseLinks Links { get; set; } = null!;
 
-        public T GetMetadata<T>(JsonSerializerSettings jsonSerializerSettings = null) {
-            return JsonConvert.DeserializeObject<T>(this.Metadata, jsonSerializerSettings);
+        public T? GetMetadata<T>(JsonSerializerSettings? jsonSerializerSettings = null)  {
+            return Metadata != null ? JsonConvert.DeserializeObject<T>(Metadata, jsonSerializerSettings) : default;
         }
 
         public override string ToString() {
-            return $"Id: {this.Id} - Status: {this.Status} - Method: {this.Method} - Amount: {this.Amount}";
+            return $"Id: {Id} - Status: {Status} - Method: {Method} - Amount: {Amount}";
         }
     }
 }

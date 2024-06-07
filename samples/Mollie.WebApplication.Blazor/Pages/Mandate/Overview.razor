@@ -1,4 +1,6 @@
 ﻿@page "/customer/{customerId}/mandate/overview"
+@using Mollie.Api.Models.List.Response
+@using Mollie.Api.Models.Mandate.Response
 
 @inject IMandateClient MandateClient
 
@@ -11,7 +13,7 @@ else {
     <div class="clearfix">
         <a href="/customer/@CustomerId/mandate/create" class="btn btn-primary float-right">Create new mandate</a>
     </div>
-    
+
     <table class="table table-striped">
         <thead>
         <tr>
@@ -32,7 +34,7 @@ else {
         }
         </tbody>
     </table>
-    
+
     <OverviewNavigation
         Previous="_mandates.Links.Previous"
         Next="_mandates.Links.Next">
@@ -41,13 +43,13 @@ else {
 
 @code {
     [Parameter]
-    public string CustomerId { get; set; }
-    
+    public required string CustomerId { get; set; }
+
     [Parameter]
     [SupplyParameterFromQuery]
-    public string Url { get; set; }
-    
-    private ListResponse<MandateResponse> _mandates = null;
+    public string? Url { get; set; }
+
+    private ListResponse<MandateResponse>? _mandates;
 
     protected override async Task OnParametersSetAsync() {
         await LoadData();
@@ -59,7 +61,8 @@ else {
         }
         else {
             _mandates = await MandateClient.GetMandateListAsync(new UrlObjectLink<ListResponse<MandateResponse>>() {
-                Href = Url
+                Href = Url,
+                Type = "application/json"
             });
         }
     }

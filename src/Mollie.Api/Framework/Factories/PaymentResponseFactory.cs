@@ -1,43 +1,48 @@
-﻿using Mollie.Api.Models.Payment;
+﻿using System;
+using Mollie.Api.Models.Payment;
 using Mollie.Api.Models.Payment.Response;
-using Mollie.Api.Models.Payment.Response.Specific;
+using Mollie.Api.Models.Payment.Response.PaymentSpecificParameters;
 
 namespace Mollie.Api.Framework.Factories {
     internal class PaymentResponseFactory {
-        public PaymentResponse Create(string paymentMethod) {
+        public PaymentResponse Create(string? paymentMethod) {
+            if (string.IsNullOrEmpty(paymentMethod)) {
+                return Activator.CreateInstance<PaymentResponse>();
+            }
+            
             switch (paymentMethod) {
                 case PaymentMethod.BankTransfer:
-                    return new BankTransferPaymentResponse();
+                    return Activator.CreateInstance<BankTransferPaymentResponse>();
                 case PaymentMethod.CreditCard:
-                    return new CreditCardPaymentResponse();
+                    return Activator.CreateInstance<CreditCardPaymentResponse>();
                 case PaymentMethod.Ideal:
-                    return new IdealPaymentResponse();
+                    return Activator.CreateInstance<IdealPaymentResponse>();
                 case PaymentMethod.Giropay:
-                    return new GiropayPaymentResponse();
+                    return Activator.CreateInstance<GiropayPaymentResponse>();
                 case PaymentMethod.Eps:
-                    return new EpsPaymentResponse();
+                    return Activator.CreateInstance<EpsPaymentResponse>();
                 case PaymentMethod.Bancontact:
-                    return new BancontactPaymentResponse();
+                    return Activator.CreateInstance<BancontactPaymentResponse>();
                 case PaymentMethod.PayPal:
-                    return new PayPalPaymentResponse();
+                    return Activator.CreateInstance<PayPalPaymentResponse>();
                 case PaymentMethod.PaySafeCard:
-                    return new PaySafeCardPaymentResponse();
+                    return Activator.CreateInstance<PaySafeCardPaymentResponse>();
                 case PaymentMethod.Sofort:
-                    return new SofortPaymentResponse();
+                    return Activator.CreateInstance<SofortPaymentResponse>();
                 case PaymentMethod.Belfius:
-                    return new BelfiusPaymentResponse();
+                    return Activator.CreateInstance<BelfiusPaymentResponse>();
                 case PaymentMethod.DirectDebit:
-                    return new SepaDirectDebitResponse();
+                    return Activator.CreateInstance<SepaDirectDebitResponse>();
                 case PaymentMethod.Kbc:
-                    return new KbcPaymentResponse();
+                    return Activator.CreateInstance<KbcPaymentResponse>();
                 case PaymentMethod.GiftCard:
-                    return new GiftcardPaymentResponse();
+                    return Activator.CreateInstance<GiftcardPaymentResponse>();
                 case PaymentMethod.IngHomePay:
-                    return new IngHomePayPaymentResponse();
+                    return Activator.CreateInstance<IngHomePayPaymentResponse>();
                 case PaymentMethod.PointOfSale:
-                    return new PointOfSalePaymentResponse();
+                    return Activator.CreateInstance<PointOfSalePaymentResponse>();
                 default:
-                    return new PaymentResponse();
+                    return Activator.CreateInstance<PaymentResponse>();
             }
         }
     }

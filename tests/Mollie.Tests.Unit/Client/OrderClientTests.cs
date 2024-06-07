@@ -8,7 +8,9 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
 using FluentAssertions.Extensions;
+using Mollie.Api.Models.Order.Request;
 using Mollie.Api.Models.Order.Request.ManageOrderLines;
+using Mollie.Api.Models.Order.Response;
 using RichardSzalay.MockHttp;
 using Xunit;
 
@@ -18,7 +20,7 @@ namespace Mollie.Tests.Unit.Client {
         public async Task GetOrderAsync_NoEmbedParameters_QueryStringIsEmpty() {
             // Given: We make a request to retrieve a order without wanting any extra data
             const string orderId = "abcde";
-            var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}orders/{orderId}", defaultOrderJsonResponse);
+            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}orders/{orderId}", defaultOrderJsonResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
             OrderClient orderClient = new OrderClient("abcde", httpClient);
 
@@ -33,7 +35,7 @@ namespace Mollie.Tests.Unit.Client {
         public async Task GetOrderAsync_SingleEmbedParameters_QueryStringContainsEmbedParameter() {
             // Given: We make a request to retrieve a order with a single embed parameter
             const string orderId = "abcde";
-            var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}orders/{orderId}?embed=payments", defaultOrderJsonResponse);
+            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}orders/{orderId}?embed=payments", defaultOrderJsonResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
             OrderClient orderClient = new OrderClient("abcde", httpClient);
 
@@ -48,7 +50,7 @@ namespace Mollie.Tests.Unit.Client {
         public async Task GetOrderAsync_MultipleEmbedParameters_QueryStringContainsMultipleParameters() {
             // Given: We make a request to retrieve a order with a single embed parameter
             const string orderId = "abcde";
-            var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}orders/{orderId}?embed=payments,refunds,shipments", defaultOrderJsonResponse);
+            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}orders/{orderId}?embed=payments,refunds,shipments", defaultOrderJsonResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
             OrderClient orderClient = new OrderClient("abcde", httpClient);
 
@@ -58,12 +60,12 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
         }
-        
+
         [Fact]
         public async Task GetOrderAsync_WithTestModeParameter_QueryStringContainsTestModeParameter() {
             // Given: We make a request to retrieve a order with a single embed parameter
             const string orderId = "abcde";
-            var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}orders/{orderId}?testmode=true", defaultOrderJsonResponse);
+            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}orders/{orderId}?testmode=true", defaultOrderJsonResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
             OrderClient orderClient = new OrderClient("abcde", httpClient);
 
@@ -73,7 +75,7 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
         }
-        
+
         [Theory]
         [InlineData(null, null, null, false, null, "")]
         [InlineData("from", null, null, false, null, "?from=from")]
@@ -83,14 +85,14 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData(null, null, "profile-id", true, SortDirection.Desc, "?profileId=profile-id&testmode=true&sort=desc")]
         [InlineData(null, null, "profile-id", true, SortDirection.Asc, "?profileId=profile-id&testmode=true&sort=asc")]
         public async Task GetOrderListAsync_QueryParameterOptions_CorrectParametersAreAdded(
-            string from, 
-            int? limit, 
-            string profileId, 
-            bool testmode, 
+            string from,
+            int? limit,
+            string profileId,
+            bool testmode,
             SortDirection? sortDirection,
             string expectedQueryString) {
             // Given: We make a request to retrieve the list of orders
-            var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}orders{expectedQueryString}", defaultOrderJsonResponse);
+            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}orders{expectedQueryString}", defaultOrderJsonResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
             OrderClient orderClient = new OrderClient("abcde", httpClient);
 
@@ -100,41 +102,22 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             mockHttp.VerifyNoOutstandingRequest();
         }
-        
-        [Theory]
-        [InlineData(null, null, false, "")]
-        [InlineData("from", null, false, "?from=from")]
-        [InlineData("from", 50, false, "?from=from&limit=50")]
-        [InlineData(null, null, true, "?testmode=true")]
-        public async Task GetOrderRefundListAsync_QueryParameterOptions_CorrectParametersAreAdded(string from, int? limit, bool testmode, string expectedQueryString) {
-            // Given: We make a request to retrieve the list of orders
-            const string orderId = "abcde";
-            var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}orders/{orderId}/refunds{expectedQueryString}", defaultOrderJsonResponse);
-            HttpClient httpClient = mockHttp.ToHttpClient();
-            OrderClient orderClient = new OrderClient("abcde", httpClient);
-
-            // When: We send the request
-            await orderClient.GetOrderRefundListAsync(orderId, from, limit, testmode);
-
-            // Then
-            mockHttp.VerifyNoOutstandingRequest();
-        }
 
         [Fact]
         public async Task CreateOrderAsync_SinglePaymentMethod_RequestIsSerializedInExpectedFormat() {
             // Given: we create a order with a single payment method
-            OrderRequest orderRequest = this.CreateOrderRequestWithOnlyRequiredFields();
+            OrderRequest orderRequest = CreateOrderRequestWithOnlyRequiredFields();
             orderRequest.Method = PaymentMethod.Ideal;
             string expectedPaymentMethodJson = $"\"method\":[\"{PaymentMethod.Ideal}";
             const string jsonResponse = defaultOrderJsonResponse;
-            var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Post, $"{BaseMollieClient.ApiEndPoint}orders", jsonResponse, expectedPaymentMethodJson);
+            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Post, $"{BaseMollieClient.ApiEndPoint}orders", jsonResponse, expectedPaymentMethodJson);
             HttpClient httpClient = mockHttp.ToHttpClient();
             OrderClient orderClient = new OrderClient("abcde", httpClient);
 
             // When: We send the request
             OrderResponse orderResponse = await orderClient.CreateOrderAsync(orderRequest);
 
-            // Then            
+            // Then
             mockHttp.VerifyNoOutstandingExpectation();
             orderResponse.Method.Should().Be(orderRequest.Method);
         }
@@ -142,7 +125,7 @@ namespace Mollie.Tests.Unit.Client {
         [Fact]
         public async Task CreateOrderAsync_MultiplePaymentMethods_RequestIsSerializedInExpectedFormat() {
             // Given: we create a order with a single payment method
-            OrderRequest orderRequest = this.CreateOrderRequestWithOnlyRequiredFields();
+            OrderRequest orderRequest = CreateOrderRequestWithOnlyRequiredFields();
             orderRequest.Methods = new List<string>() {
                 PaymentMethod.Ideal,
                 PaymentMethod.CreditCard,
@@ -150,17 +133,17 @@ namespace Mollie.Tests.Unit.Client {
             };
             string expectedPaymentMethodJson = $"\"method\":[\"{PaymentMethod.Ideal}\",\"{PaymentMethod.CreditCard}\",\"{PaymentMethod.DirectDebit}\"]";
             const string jsonResponse = defaultOrderJsonResponse;
-            var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Post, $"{BaseMollieClient.ApiEndPoint}orders", jsonResponse, expectedPaymentMethodJson);
+            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Post, $"{BaseMollieClient.ApiEndPoint}orders", jsonResponse, expectedPaymentMethodJson);
             HttpClient httpClient = mockHttp.ToHttpClient();
             OrderClient orderClient = new OrderClient("abcde", httpClient);
 
             // When: We send the request
             await orderClient.CreateOrderAsync(orderRequest);
 
-            // Then            
+            // Then
             mockHttp.VerifyNoOutstandingExpectation();
         }
-        
+
         [Fact]
         public async Task CreateOrderPaymentAsync_PaymentWithSinglePaymentMethod_RequestIsSerializedInExpectedFormat() {
             // Given: We create a payment request with multiple payment methods
@@ -175,7 +158,7 @@ namespace Mollie.Tests.Unit.Client {
             const string orderId = "order-id";
             string url = $"{BaseMollieClient.ApiEndPoint}orders/{orderId}/payments";
             string expectedPaymentMethodJson = $"\"method\":[\"{PaymentMethod.Ideal}\"]";
-            var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Post, url, defaultPaymentJsonResponse, expectedPaymentMethodJson);
+            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Post, url, defaultPaymentJsonResponse, expectedPaymentMethodJson);
             HttpClient httpClient = mockHttp.ToHttpClient();
             OrderClient orderClient = new OrderClient("abcde", httpClient);
 
@@ -185,7 +168,7 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
         }
-        
+
         [Fact]
         public async Task CreateOrderPaymentAsync_PaymentWithMultiplePaymentMethods_RequestIsSerializedInExpectedFormat() {
             // Given: We create a payment request with multiple payment methods
@@ -202,7 +185,7 @@ namespace Mollie.Tests.Unit.Client {
             const string orderId = "order-id";
             string url = $"{BaseMollieClient.ApiEndPoint}orders/{orderId}/payments";
             string expectedPaymentMethodJson = $"\"method\":[\"{PaymentMethod.Ideal}\",\"{PaymentMethod.CreditCard}\",\"{PaymentMethod.DirectDebit}\"]";
-            var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Post, url, defaultPaymentJsonResponse, expectedPaymentMethodJson);
+            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Post, url, defaultPaymentJsonResponse, expectedPaymentMethodJson);
             HttpClient httpClient = mockHttp.ToHttpClient();
             OrderClient orderClient = new OrderClient("abcde", httpClient);
 
@@ -213,45 +196,6 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.VerifyNoOutstandingExpectation();
         }
 
-        [Fact]
-        public async Task CreateOrderRefundAsync_WithRequiredParameters_ResponseIsDeserializedInExpectedFormat()
-        {
-            // Given: We create a refund request with only the required parameters
-            const string orderId = "ord_stTC2WHAuS";
-            OrderRefundRequest orderRefundRequest = new OrderRefundRequest()
-            {
-                Description = "description",
-                Lines = new[]
-                {
-                    new OrderLineDetails()
-                    {
-                        Id = "odl_dgtxyl",
-                        Quantity = 1,
-                        Amount = new Amount(Currency.EUR, "399.00")
-                    }
-                },
-                Metadata = "my-metadata"
-            };
-            string url = $"{BaseMollieClient.ApiEndPoint}orders/{orderId}/refunds";
-            var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Post, url, defaultOrderRefundJsonResponse);
-            HttpClient httpClient = mockHttp.ToHttpClient();
-            OrderClient orderClient = new OrderClient("abcde", httpClient);
-            
-            // When: We send the request
-            var response = await orderClient.CreateOrderRefundAsync(orderId, orderRefundRequest);
-            
-            // Then
-            mockHttp.VerifyNoOutstandingExpectation();
-            response.Resource.Should().Be("refund");
-            response.Id.Should().Be("re_4qqhO89gsT");
-            response.Description.Should().Be("description");
-            response.Status.Should().Be("pending");
-            response.CreatedAt!.Value.ToUniversalTime().Should().Be(DateTime.SpecifyKind(14.March(2018).At(17, 09, 02), DateTimeKind.Utc));
-            response.PaymentId.Should().Be("tr_WDqYK6vllg");
-            response.OrderId.Should().Be(orderId);
-            response.Lines.Should().HaveCount(1);
-        }
-        
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
@@ -268,7 +212,7 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             exception.Message.Should().Be("Required URL argument 'orderId' is null or empty");
         }
-        
+
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
@@ -285,7 +229,7 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             exception.Message.Should().Be("Required URL argument 'orderId' is null or empty");
         }
-        
+
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
@@ -302,7 +246,7 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             exception.Message.Should().Be("Required URL argument 'orderId' is null or empty");
         }
-        
+
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
@@ -319,7 +263,7 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             exception.Message.Should().Be("Required URL argument 'orderLineId' is null or empty");
         }
-        
+
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
@@ -329,14 +273,25 @@ namespace Mollie.Tests.Unit.Client {
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             OrderClient orderClient = new OrderClient("api-key", httpClient);
+            ManageOrderLinesRequest request = new ManageOrderLinesRequest {
+                Operations = new List<ManageOrderLinesOperation> {
+                    new ManageOrderLinesUpdateOperation {
+                        Data = new ManageOrderLinesUpdateOperationData
+                        {
+                            Id = "id"
+                        }
+                    }
+                }
+            };
 
             // When: We send the request
-            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await orderClient.ManageOrderLinesAsync(orderId, new ManageOrderLinesRequest()));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () =>
+                await orderClient.ManageOrderLinesAsync(orderId, request));
 
             // Then
             exception.Message.Should().Be("Required URL argument 'orderId' is null or empty");
         }
-        
+
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
@@ -353,7 +308,7 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             exception.Message.Should().Be("Required URL argument 'orderId' is null or empty");
         }
-        
+
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
@@ -366,40 +321,6 @@ namespace Mollie.Tests.Unit.Client {
 
             // When: We send the request
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await orderClient.CreateOrderPaymentAsync(orderId, new OrderPaymentRequest()));
-
-            // Then
-            exception.Message.Should().Be("Required URL argument 'orderId' is null or empty");
-        }
-        
-        [Theory]
-        [InlineData("")]
-        [InlineData(" ")]
-        [InlineData(null)]
-        public async Task CreateOrderRefundAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string orderId) {
-            // Arrange
-            var mockHttp = new MockHttpMessageHandler();
-            HttpClient httpClient = mockHttp.ToHttpClient();
-            OrderClient orderClient = new OrderClient("api-key", httpClient);
-
-            // When: We send the request
-            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await orderClient.CreateOrderRefundAsync(orderId, new OrderRefundRequest()));
-
-            // Then
-            exception.Message.Should().Be("Required URL argument 'orderId' is null or empty");
-        }
-        
-        [Theory]
-        [InlineData("")]
-        [InlineData(" ")]
-        [InlineData(null)]
-        public async Task GetOrderRefundListAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string orderId) {
-            // Arrange
-            var mockHttp = new MockHttpMessageHandler();
-            HttpClient httpClient = mockHttp.ToHttpClient();
-            OrderClient orderClient = new OrderClient("api-key", httpClient);
-
-            // When: We send the request
-            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await orderClient.GetOrderRefundListAsync(orderId));
 
             // Then
             exception.Message.Should().Be("Required URL argument 'orderId' is null or empty");
@@ -434,82 +355,6 @@ namespace Mollie.Tests.Unit.Client {
             };
         }
 
-        private const string defaultOrderRefundJsonResponse = @"{
-    ""resource"": ""refund"",
-    ""id"": ""re_4qqhO89gsT"",
-    ""amount"": {
-        ""currency"": ""EUR"",
-        ""value"": ""698.00""
-    },
-    ""status"": ""pending"",
-    ""createdAt"": ""2018-03-14T17:09:02.0Z"",
-    ""description"": ""description"",
-    ""metadata"": {
-         ""bookkeeping_id"": 12345
-    },
-    ""paymentId"": ""tr_WDqYK6vllg"",
-    ""orderId"": ""ord_stTC2WHAuS"",
-    ""lines"": [
-        {
-            ""resource"": ""orderline"",
-            ""id"": ""odl_dgtxyl"",
-            ""orderId"": ""ord_stTC2WHAuS"",
-            ""name"": ""LEGO 42083 Bugatti Chiron"",
-            ""sku"": ""5702016116977"",
-            ""type"": ""physical"",
-            ""status"": ""paid"",
-            ""metadata"": null,
-            ""quantity"": 1,
-            ""unitPrice"": {
-                ""value"": ""399.00"",
-                ""currency"": ""EUR""
-            },
-            ""vatRate"": ""21.00"",
-            ""vatAmount"": {
-                ""value"": ""51.89"",
-                ""currency"": ""EUR""
-            },
-            ""discountAmount"": {
-                ""value"": ""100.00"",
-                ""currency"": ""EUR""
-            },
-            ""totalAmount"": {
-                ""value"": ""299.00"",
-                ""currency"": ""EUR""
-            },
-            ""createdAt"": ""2018-08-02T09:29:56+00:00"",
-            ""_links"": {
-                ""productUrl"": {
-                    ""href"": ""https://shop.lego.com/nl-NL/Bugatti-Chiron-42083"",
-                    ""type"": ""text/html""
-                },
-                ""imageUrl"": {
-                    ""href"": ""https://sh-s7-live-s.legocdn.com/is/image//LEGO/42083_alt1?$main$"",
-                    ""type"": ""text/html""
-                }
-            }
-        }
-    ],
-    ""_links"": {
-        ""self"": {
-            ""href"": ""https://api.mollie.com/v2/payments/tr_WDqYK6vllg/refunds/re_4qqhO89gsT"",
-            ""type"": ""application/hal+json""
-        },
-        ""payment"": {
-            ""href"": ""https://api.mollie.com/v2/payments/tr_WDqYK6vllg"",
-            ""type"": ""application/hal+json""
-        },
-        ""order"": {
-            ""href"": ""https://api.mollie.com/v2/orders/ord_stTC2WHAuS"",
-            ""type"": ""application/hal+json""
-        },
-        ""documentation"": {
-            ""href"": ""https://docs.mollie.com/reference/v2/refunds-api/create-order-refund"",
-            ""type"": ""text/html""
-        }
-    }
-}";
-        
         private const string defaultOrderJsonResponse = @"{
             ""resource"": ""order"",
             ""id"": ""ord_kEn1PlbGa"",
@@ -520,7 +365,7 @@ namespace Mollie.Tests.Unit.Client {
                 ""currency"": ""EUR""
             },
         }";
-        
+
         private const string defaultPaymentJsonResponse = @"{
             ""amount"":{
                 ""currency"":""EUR"",

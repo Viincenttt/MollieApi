@@ -1,6 +1,8 @@
 ﻿@page "/customer/{customerId}/mandate/create"
 @using Mollie.WebApplication.Blazor.Models.Mandate
 @using Mollie.Api.Client
+@using Mollie.Api.Models.Mandate.Request
+@using Mollie.Api.Models.Mandate.Request.PaymentSpecificParameters
 
 @inject IMandateClient MandateClient
 @inject NavigationManager NavigationManager
@@ -45,11 +47,11 @@
 </EditForm>
 
 @code {
-    private MollieApiException _apiException = null;
-    
+    private MollieApiException? _apiException;
+
     [Parameter]
-    public string CustomerId { get; set; }
-    
+    public required string CustomerId { get; set; }
+
     private CreateMandateModel _mandate = new() {
         ConsumerName = "Consumer name",
         ConsumerAccount = ""
@@ -58,7 +60,7 @@
     private async Task OnSave() {
         try {
             _apiException = null;
-            
+
             await MandateClient.CreateMandateAsync(CustomerId, new SepaDirectDebitMandateRequest {
                 Method = PaymentMethod.DirectDebit,
                 ConsumerName = _mandate.ConsumerName,

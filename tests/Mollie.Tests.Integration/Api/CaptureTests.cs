@@ -16,12 +16,12 @@ namespace Mollie.Tests.Integration.Api;
 public class CaptureTests : BaseMollieApiTestClass, IDisposable {
     private readonly ICaptureClient _captureClient;
     private readonly IPaymentClient _paymentClient;
-    
+
     public CaptureTests() {
-        _captureClient = new CaptureClient(this.ApiKey);
-        _paymentClient = new PaymentClient(this.ApiKey);
+        _captureClient = new CaptureClient(ApiKey);
+        _paymentClient = new PaymentClient(ApiKey);
     }
-    
+
     [DefaultRetryFact(Skip = "We can only test this in debug mode, because we actually have to use the PaymentUrl" +
                              " to make the payment, since Mollie can only capture payments that have been authorized")]
     public async Task CanCreateCaptureForPaymentWithManualCaptureMode() {
@@ -29,12 +29,12 @@ public class CaptureTests : BaseMollieApiTestClass, IDisposable {
         PaymentRequest paymentRequest = new PaymentRequest() {
             Amount = new Amount(Currency.EUR, 1000.00m),
             Description = "Description",
-            RedirectUrl = this.DefaultRedirectUrl,
+            RedirectUrl = DefaultRedirectUrl,
             Method = PaymentMethod.CreditCard,
             CaptureMode = CaptureMode.Manual
         };
         var payment = await _paymentClient.CreatePaymentAsync(paymentRequest);
-        
+
         // When: We create a capture for the payment
         var captureRequest = new CaptureRequest
         {
@@ -59,7 +59,7 @@ public class CaptureTests : BaseMollieApiTestClass, IDisposable {
         PaymentRequest paymentRequest = new PaymentRequest() {
             Amount = new Amount(Currency.EUR, 1000.00m),
             Description = "Description",
-            RedirectUrl = this.DefaultRedirectUrl,
+            RedirectUrl = DefaultRedirectUrl,
             Method = PaymentMethod.CreditCard,
             CaptureMode = CaptureMode.Manual
         };
@@ -71,10 +71,10 @@ public class CaptureTests : BaseMollieApiTestClass, IDisposable {
             Metadata = "my-metadata string"
         };
         await _captureClient.CreateCapture(payment.Id, captureRequest);
-        
+
         // When: we retrieve the captures of the payment
-        var captureList = await _captureClient.GetCapturesListAsync(payment.Id);
-        
+        var captureList = await _captureClient.GetCaptureListAsync(payment.Id);
+
         // Then
         captureList.Count.Should().Be(1);
         var capture = captureList.Items.Single();
@@ -83,7 +83,7 @@ public class CaptureTests : BaseMollieApiTestClass, IDisposable {
         capture.Resource.Should().Be("capture");
         capture.Metadata.Should().Be(captureRequest.Metadata);
     }
-    
+
     public void Dispose()
     {
         _captureClient?.Dispose();

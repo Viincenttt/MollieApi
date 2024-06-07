@@ -1,9 +1,14 @@
-﻿using Mollie.Api.Models.Balance.Response.BalanceTransaction;
+﻿using System;
+using Mollie.Api.Models.Balance.Response.BalanceTransaction;
 using Mollie.Api.Models.Balance.Response.BalanceTransaction.Specific;
 
 namespace Mollie.Api.Framework.Factories {
     internal class BalanceTransactionFactory {
-        public BalanceTransaction Create(string type) {
+        public BalanceTransactionResponse Create(string? type) {
+            if (string.IsNullOrEmpty(type)) {
+                return Activator.CreateInstance<BalanceTransactionResponse>();
+            }
+            
             switch (type) {
                 case BalanceTransactionContextType.Payment:
                 case BalanceTransactionContextType.UnauthorizedDirectDebit:
@@ -11,24 +16,24 @@ namespace Mollie.Api.Framework.Factories {
                 case BalanceTransactionContextType.ChargebackReversal:
                 case BalanceTransactionContextType.ApplicationFee:
                 case BalanceTransactionContextType.SplitPayment:
-                    return new PaymentBalanceTransaction();
+                    return Activator.CreateInstance<PaymentBalanceTransactionResponse>();
                 case BalanceTransactionContextType.Capture:
-                    return new CaptureBalanceTransaction();
+                    return Activator.CreateInstance<CaptureBalanceTransactionResponse>();
                 case BalanceTransactionContextType.Refund:
                 case BalanceTransactionContextType.ReturnedRefund:
                 case BalanceTransactionContextType.PlatformPaymentRefund:
-                    return new RefundBalanceTransaction();
+                    return Activator.CreateInstance<RefundBalanceTransactionResponse>();
                 case BalanceTransactionContextType.Chargeback:
                 case BalanceTransactionContextType.PlatformPaymentChargeback:
-                    return new ChargebackBalanceTransaction();
+                    return Activator.CreateInstance<ChargebackBalanceTransactionResponse>();
                 case BalanceTransactionContextType.OutgoingTransfer:
                 case BalanceTransactionContextType.CanceledOutgoingTransfer:
                 case BalanceTransactionContextType.ReturnedTransfer:
-                    return new SettlementBalanceTransaction();
+                    return Activator.CreateInstance<SettlementBalanceTransactionResponse>();
                 case BalanceTransactionContextType.InvoiceCompensation:
-                    return new InvoiceBalanceTransaction();
+                    return Activator.CreateInstance<InvoiceBalanceTransactionResponse>();
                 default: 
-                    return new BalanceTransaction();
+                    return Activator.CreateInstance<BalanceTransactionResponse>();
             }
         }
     }

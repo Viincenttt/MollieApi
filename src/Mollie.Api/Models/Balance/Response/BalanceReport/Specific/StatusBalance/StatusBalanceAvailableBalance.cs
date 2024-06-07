@@ -1,8 +1,8 @@
 ﻿namespace Mollie.Api.Models.Balance.Response.BalanceReport.Specific.StatusBalance {
-    public class StatusBalanceAvailableBalance {
-        public BalanceReportAmount Open { get; set; }
-        public BalanceReportAmount Close { get; set; }
-        public BalanceReportAmountWithSubtotals MovedFromPending { get; set; }
-        public BalanceReportAmountWithSubtotals ImmediatelyAvailable { get; set; }
+    public record StatusBalanceAvailableBalance {
+        public required BalanceReportAmount Open { get; set; }
+        public required BalanceReportAmount Close { get; set; }
+        public required BalanceReportAmountWithSubtotals MovedFromPending { get; set; }
+        public required BalanceReportAmountWithSubtotals ImmediatelyAvailable { get; set; }
     }
 }

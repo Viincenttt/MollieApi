@@ -1,7 +1,7 @@
 ﻿namespace Mollie.Api.Models.Balance.Response.BalanceReport.Specific.TransactionCategories {
-    public class TransactionCategoriesTransaction {
-        public BalanceReportAmountWithSubtotals Pending { get; set; }
-        public BalanceReportAmountWithSubtotals MovedToAvailable { get; set; }
-        public BalanceReportAmountWithSubtotals ImmediatelyAvailable { get; set; }
+    public record TransactionCategoriesTransaction {
+        public required BalanceReportAmountWithSubtotals Pending { get; set; }
+        public required BalanceReportAmountWithSubtotals MovedToAvailable { get; set; }
+        public required BalanceReportAmountWithSubtotals ImmediatelyAvailable { get; set; }
     }
 }

@@ -3,7 +3,9 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Mollie.Api.Client;
-using Mollie.Api.Models.Customer;
+using Mollie.Api.Models;
+using Mollie.Api.Models.Customer.Request;
+using Mollie.Api.Models.Customer.Response;
 using Mollie.Api.Models.Payment.Request;
 using RichardSzalay.MockHttp;
 using Xunit;
@@ -16,7 +18,7 @@ namespace Mollie.Tests.Unit.Client {
         public async Task GetCustomerAsync_TestModeParameterCase_QueryStringOnlyContainsTestModeParameterIfTrue(string expectedUrl, bool testModeParameter) {
             // Given: We retrieve a customer
             const string customerId = "customer-id";
-            
+
             var mockHttp = new MockHttpMessageHandler();
             mockHttp.When($"{BaseMollieClient.ApiEndPoint}{expectedUrl}")
                 .Respond("application/json", DefaultCustomerJsonToReturn);
@@ -30,7 +32,7 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.VerifyNoOutstandingExpectation();
             customerResponse.Should().NotBeNull();
         }
-        
+
         [Theory]
         [InlineData(null, null, false, "")]
         [InlineData("from", null, false, "?from=from")]
@@ -51,7 +53,7 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.VerifyNoOutstandingExpectation();
             result.Should().NotBeNull();
         }
-        
+
         [Theory]
         [InlineData(null, null, null, false, "")]
         [InlineData("from", null, null, false, "?from=from")]
@@ -74,13 +76,13 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.VerifyNoOutstandingExpectation();
             result.Should().NotBeNull();
         }
-        
+
         [Fact]
         public async Task DeleteCustomerAsync_TestmodeIsTrue_RequestContainsTestmodeModel() {
             // Given: We make a request to retrieve a payment with embedded refunds
             const string customerId = "customer-id";
             string expectedContent = "\"testmode\":true";
-            var mockHttp = this.CreateMockHttpMessageHandler(HttpMethod.Delete, $"{BaseMollieClient.ApiEndPoint}customers/{customerId}", DefaultCustomerJsonToReturn, expectedContent);
+            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Delete, $"{BaseMollieClient.ApiEndPoint}customers/{customerId}", DefaultCustomerJsonToReturn, expectedContent);
             HttpClient httpClient = mockHttp.ToHttpClient();
             CustomerClient customerClient = new CustomerClient("abcde", httpClient);
 
@@ -90,7 +92,7 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
         }
-        
+
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
@@ -107,7 +109,7 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             exception.Message.Should().Be("Required URL argument 'customerId' is null or empty");
         }
-        
+
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
@@ -124,7 +126,7 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             exception.Message.Should().Be("Required URL argument 'customerId' is null or empty");
         }
-        
+
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
@@ -141,7 +143,7 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             exception.Message.Should().Be("Required URL argument 'customerId' is null or empty");
         }
-        
+
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
@@ -158,7 +160,7 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             exception.Message.Should().Be("Required URL argument 'customerId' is null or empty");
         }
-        
+
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
@@ -168,9 +170,14 @@ namespace Mollie.Tests.Unit.Client {
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             CustomerClient customerClient = new CustomerClient("api-key", httpClient);
+            var paymentRequest = new PaymentRequest()
+            {
+                Amount = new Amount(Currency.EUR, 100),
+                Description = "Order #12345",
+            };
 
             // When: We send the request
-            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await customerClient.CreateCustomerPayment(customerId, new PaymentRequest()));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await customerClient.CreateCustomerPayment(customerId, paymentRequest));
 
             // Then
             exception.Message.Should().Be("Required URL argument 'customerId' is null or empty");
@@ -184,7 +191,7 @@ namespace Mollie.Tests.Unit.Client {
     ""email"": ""customer@example.org"",
     ""locale"": ""nl_NL"",
     ""metadata"": null,
-    ""createdAt"": ""2018-04-06T13:23:21.0Z""    
+    ""createdAt"": ""2018-04-06T13:23:21.0Z""
 }";
     }
 }

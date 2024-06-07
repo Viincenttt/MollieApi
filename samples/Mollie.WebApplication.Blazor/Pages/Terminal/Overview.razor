@@ -1,4 +1,6 @@
 ﻿@page "/terminal/overview"
+@using Mollie.Api.Models.List.Response
+@using Mollie.Api.Models.Terminal.Response
 
 @inject ITerminalClient TerminalClient
 
@@ -18,7 +20,6 @@ else {
             <th scope="col">Model</th>
             <th scope="col">Serialnumber</th>
             <th scope="col">Currency</th>
-            <th scope="col">Locale</th>
         </tr>
         </thead>
         <tbody>
@@ -31,12 +32,11 @@ else {
                 <td>@terminal.Model</td>
                 <td>@terminal.SerialNumber</td>
                 <td>@terminal.Currency</td>
-                <td>@terminal.Locale</td>
             </tr>
         }
         </tbody>
     </table>
-    
+
     <OverviewNavigation
         Previous="_terminals.Links.Previous"
         Next="_terminals.Links.Next">
@@ -46,9 +46,9 @@ else {
 @code {
     [Parameter]
     [SupplyParameterFromQuery]
-    public string Url { get; set; }
-    
-    private ListResponse<TerminalResponse> _terminals = null;
+    public string? Url { get; set; }
+
+    private ListResponse<TerminalResponse>? _terminals;
 
     protected override async Task OnParametersSetAsync() {
         await LoadData();
@@ -60,7 +60,8 @@ else {
         }
         else {
             _terminals = await TerminalClient.GetTerminalListAsync(new UrlObjectLink<ListResponse<TerminalResponse>>() {
-                Href = Url
+                Href = Url,
+                Type = "application/json"
             });
         }
     }

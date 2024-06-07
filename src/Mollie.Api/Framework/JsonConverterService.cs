@@ -9,7 +9,7 @@ namespace Mollie.Api.Framework {
         private readonly JsonSerializerSettings _defaultJsonDeserializerSettings;
 
         public JsonConverterService() {
-            this._defaultJsonDeserializerSettings = this.CreateDefaultJsonDeserializerSettings();
+            _defaultJsonDeserializerSettings = CreateDefaultJsonDeserializerSettings();
         }
 
         public string Serialize(object objectToSerialize) {
@@ -22,8 +22,8 @@ namespace Mollie.Api.Framework {
                 });
         }
 
-        public T Deserialize<T>(string json) {
-            return JsonConvert.DeserializeObject<T>(json, this._defaultJsonDeserializerSettings);
+        public T? Deserialize<T>(string json) {
+            return JsonConvert.DeserializeObject<T>(json, _defaultJsonDeserializerSettings);
         }
 
         /// <summary>
@@ -40,6 +40,8 @@ namespace Mollie.Api.Framework {
                     new BalanceReportResponseJsonConverter(new BalanceReportResponseFactory()),
                     // Add a special converter for the balance transaction responses, because we need to create specific classes based on the transaction type
                     new BalanceTransactionJsonConverter(new BalanceTransactionFactory()),
+                    // Add a special converter for mandate responses, because we need to create specific classes based on the payment method
+                    new MandateResponseConverter(new MandateResponseFactory())
                 }
             };
         }
