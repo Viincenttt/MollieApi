@@ -234,9 +234,9 @@ namespace Mollie.Tests.Unit.Client {
 
           // Then: Response should be parsed
           mockHttp.VerifyNoOutstandingExpectation();
-          balanceTransactions?.Embedded?.BalanceTransactions.Should().NotBeNull();
-          balanceTransactions.Count.Should().Be(balanceTransactions.Embedded.BalanceTransactions.Count());
-          var transaction = balanceTransactions.Embedded.BalanceTransactions.First();
+          balanceTransactions?.Items?.Should().NotBeNull();
+          balanceTransactions.Count.Should().Be(balanceTransactions.Items.Count());
+          var transaction = balanceTransactions.Items.First();
           transaction.Resource.Should().Be("balance_transactions");
           transaction.Id.Should().Be("baltr_9S8yk4FFqqi2Qm6K3rqRH");
           transaction.Type.Should().Be("outgoing-transfer");
@@ -244,8 +244,8 @@ namespace Mollie.Tests.Unit.Client {
           transaction.ResultAmount.Currency.Should().Be(Currency.EUR);
           transaction.InitialAmount.Value.Should().Be("-7.76");
           transaction.InitialAmount.Currency.Should().Be(Currency.EUR);
-          transaction.Should().BeOfType<SettlementBalanceTransaction>();
-          var transactionContext = (SettlementBalanceTransaction)transaction;
+          transaction.Should().BeOfType<SettlementBalanceTransactionResponse>();
+          var transactionContext = (SettlementBalanceTransactionResponse)transaction;
           transactionContext.Context.SettlementId.Should().Be("stl_ma2vu8");
           transactionContext.Context.TransferId.Should().Be("trf_ma2vu8");
       }
@@ -280,8 +280,8 @@ namespace Mollie.Tests.Unit.Client {
 
           // Then: Response should be parsed
           mockHttp.VerifyNoOutstandingExpectation();
-          balanceTransactions?.Embedded?.BalanceTransactions.Should().NotBeNull();
-          balanceTransactions.Count.Should().Be(balanceTransactions.Embedded.BalanceTransactions.Count());
+          balanceTransactions?.Items?.Should().NotBeNull();
+          balanceTransactions.Count.Should().Be(balanceTransactions.Items.Count());
       }
 
       private readonly string DefaultListBalanceTransactionsResponse = @"
