@@ -20,6 +20,7 @@ using Mollie.Api.Models.Mandate.Response;
 using Mollie.Api.Models.Payment.Request.PaymentSpecificParameters;
 using Mollie.Api.Models.Payment.Response.PaymentSpecificParameters;
 using Mollie.Api.Models.Terminal.Response;
+using Xunit;
 
 namespace Mollie.Tests.Integration.Api;
 
@@ -218,8 +219,6 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         result.Method.Should().BeNull();
     }
 
-    // TODO: Needs to be split out to separate tests
-    /*
     [DefaultRetryTheory]
     [InlineData(typeof(PaymentRequest), PaymentMethod.Bancontact, typeof(BancontactPaymentResponse))]
     [InlineData(typeof(BankTransferPaymentRequest), PaymentMethod.BankTransfer, typeof(BankTransferPaymentResponse))]
@@ -232,7 +231,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
     public async Task CanCreateSpecificPaymentType(Type paymentType, string paymentMethod, Type expectedResponseType) {
         // When: we create a specific payment type with some bank transfer specific values
         PaymentRequest paymentRequest = (PaymentRequest)Activator.CreateInstance(paymentType)!;
-        paymentRequest.GetType().GetProperty(nameof(PaymentRequest.Amount)).SetValue(paymentRequest, new Amount(Currency.EUR, "100.00"));
+        paymentRequest.Amount = new Amount(Currency.EUR, "100.00");
         paymentRequest.Description = "Description";
         paymentRequest.RedirectUrl = DefaultRedirectUrl;
         paymentRequest.Method = paymentMethod;
@@ -252,7 +251,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         result.Description.Should().Be(paymentRequest.Description);
         result.RedirectUrl.Should().Be(paymentRequest.RedirectUrl);
         result.Method.Should().Be(paymentRequest.Method);
-    }*/
+    }
 
     [DefaultRetryFact]
     public async Task CanCreatePaymentAndRetrieveIt() {
