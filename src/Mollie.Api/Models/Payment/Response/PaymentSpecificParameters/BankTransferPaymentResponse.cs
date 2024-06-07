@@ -1,3 +1,4 @@
+using System.Runtime.Serialization;
 using Mollie.Api.Models.Url;
 using Newtonsoft.Json;
 
@@ -10,6 +11,12 @@ namespace Mollie.Api.Models.Payment.Response.PaymentSpecificParameters {
         /// </summary>
         [JsonProperty("_links")]
         public new required BankTransferPaymentResponseLinks Links { get; set; }
+
+        [OnDeserialized]
+        internal void OnDeserializedMethod(StreamingContext context)
+        {
+            base.Links = this.Links;
+        }
     }
 
     public record BankTransferPaymentResponseDetails {
