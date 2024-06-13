@@ -128,6 +128,12 @@ namespace Mollie.Api.Models.Payment.Response {
         public required string WebhookUrl { get; set; }
 
         /// <summary>
+        /// Optionally provide the order lines for the payment. Each line contains details such as a description of the item ordered and its price.
+        /// All lines must have the same currency as the payment.
+        /// </summary>
+        public List<PaymentLine>? Lines { get; set; }
+
+        /// <summary>
         /// An optional routing configuration that you provided, which enables you to route a successful payment, or part of the payment, to one or more connected accounts.
         /// Additionally, you can schedule (parts of) the payment to become available on the connected account on a future date.
         /// </summary>
