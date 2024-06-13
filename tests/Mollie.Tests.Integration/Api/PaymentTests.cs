@@ -17,6 +17,7 @@ using Mollie.Api.Models.Capture.Response;
 using Mollie.Api.Models.Customer.Response;
 using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Mandate.Response;
+using Mollie.Api.Models.Order.Request;
 using Mollie.Api.Models.Payment.Request.PaymentSpecificParameters;
 using Mollie.Api.Models.Payment.Response.PaymentSpecificParameters;
 using Mollie.Api.Models.Terminal.Response;
@@ -358,6 +359,38 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         metadataResponse.Should().NotBeNull();
         metadataResponse.OrderId.Should().Be(metadataRequest.OrderId);
         metadataResponse.Description.Should().Be(metadataRequest.Description);
+    }
+
+    [DefaultRetryFact]
+    public async Task CanCreatePaymentWithLines() {
+        // Arrange
+        PaymentRequest paymentRequest = new PaymentRequest() {
+            Amount = new Amount(Currency.EUR, 90m),
+            Description = "Description",
+            RedirectUrl = DefaultRedirectUrl,
+            Lines = new List<PaymentLine>() {
+                new() {
+                    Type = OrderLineDetailsType.Digital,
+                    Description = "Star wars lego",
+                    Quantity = 1,
+                    QuantityUnit = "pcs",
+                    UnitPrice = new Amount(Currency.EUR, 100m),
+                    TotalAmount = new Amount(Currency.EUR, 90m),
+                    DiscountAmount = new Amount(Currency.EUR, 10m),
+                    ProductUrl = "http://www.lego.com/starwars",
+                    ImageUrl = "http://www.lego.com/starwars.jpg",
+                    Sku = "my-sku",
+                    VatAmount = new Amount(Currency.EUR, 15.62m),
+                    VatRate = "21.00"
+                }
+            }
+        };
+
+        // Act
+        PaymentResponse result = await _paymentClient.CreatePaymentAsync(paymentRequest);
+
+        // Assert
+        result.Lines.Should().BeEquivalentTo(paymentRequest.Lines);
     }
 
     [DefaultRetryFact]
