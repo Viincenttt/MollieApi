@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Mollie.Api.JsonConverters;
 using Newtonsoft.Json;
 
@@ -54,6 +55,13 @@ namespace Mollie.Api.Models.Refund.Response {
         /// payment object can be retrieved via the payment URL in the _links object.
         /// </summary>
         public required string PaymentId { get; set; }
+
+        /// <summary>
+        /// If you wish to pull back the money that was sent to connected accounts within the creation of a partial
+        /// refund (namely a refund of less of the amount of the original payment), you can do so by setting the
+        /// routingReversals array in the request
+        /// </summary>
+        public IList<RoutingReversal>? RoutingReversals { get; set; }
 
         /// <summary>
         /// Provide any data you like, for example a string or a JSON object. We will save the data alongside the refund. Whenever
