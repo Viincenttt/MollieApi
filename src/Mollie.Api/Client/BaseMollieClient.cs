@@ -92,20 +92,7 @@ namespace Mollie.Api.Client {
                 return _jsonConverterService.Deserialize<T>(resultContent)!;
             }
 
-            switch (response.StatusCode) {
-                case HttpStatusCode.BadRequest:
-                case HttpStatusCode.Unauthorized:
-                case HttpStatusCode.Forbidden:
-                case HttpStatusCode.NotFound:
-                case HttpStatusCode.MethodNotAllowed:
-                case HttpStatusCode.UnsupportedMediaType:
-                case HttpStatusCode.Gone:
-                case (HttpStatusCode) 422: // Unprocessable entity
-                    throw new MollieApiException(resultContent);
-                default:
-                    throw new HttpRequestException(
-                        $"Unknown http exception occured with status code: {(int) response.StatusCode}.");
-            }
+            throw new MollieApiException(response.StatusCode, resultContent);
         }
 
         protected void ValidateApiKeyIsOauthAccesstoken(bool isConstructor = false) {
