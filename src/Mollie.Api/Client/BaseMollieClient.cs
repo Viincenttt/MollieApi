@@ -9,7 +9,9 @@ using System.Threading.Tasks;
 using Mollie.Api.Extensions;
 using Mollie.Api.Framework;
 using Mollie.Api.Framework.Idempotency;
+using Mollie.Api.Models.Error;
 using Mollie.Api.Models.Url;
+using Newtonsoft.Json;
 
 namespace Mollie.Api.Client {
     public abstract class BaseMollieClient : IDisposable {
@@ -92,7 +94,8 @@ namespace Mollie.Api.Client {
                 return _jsonConverterService.Deserialize<T>(resultContent)!;
             }
 
-            throw new MollieApiException(response.StatusCode, resultContent);
+            MollieErrorMessage errorDetails = ParseMollieErrorMessage(response.StatusCode, resultContent);
+            throw new MollieApiException(errorDetails);
         }
 
         protected void ValidateApiKeyIsOauthAccesstoken(bool isConstructor = false) {
@@ -148,6 +151,19 @@ namespace Mollie.Api.Client {
             const string packageName = "Mollie.Api.NET";
             string versionNumber = typeof(BaseMollieClient).GetTypeInfo().Assembly.GetName().Version.ToString();
             return $"{packageName}/{versionNumber}";
+        }
+
+        private MollieErrorMessage ParseMollieErrorMessage(HttpStatusCode responseStatusCode, string responseBody) {
+            try {
+                return _jsonConverterService.Deserialize<MollieErrorMessage>(responseBody)!;
+            }
+            catch (JsonReaderException) {
+                return new MollieErrorMessage {
+                    Title = "Unknown error",
+                    Status = (int)responseStatusCode,
+                    Detail = responseBody
+                };
+            }
         }
 
         protected void ValidateRequiredUrlParameter(string parameterName, string parameterValue) {
