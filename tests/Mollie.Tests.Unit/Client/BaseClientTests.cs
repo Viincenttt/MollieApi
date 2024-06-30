@@ -1,14 +1,23 @@
-﻿using RichardSzalay.MockHttp;
+﻿using System.Net;
+using RichardSzalay.MockHttp;
 using System.Net.Http;
+using System.Net.Mime;
 
 namespace Mollie.Tests.Unit.Client {
     public abstract class BaseClientTests {
         protected const string DefaultRedirectUrl = "https://www.mollie.com";
 
-        protected MockHttpMessageHandler CreateMockHttpMessageHandler(HttpMethod httpMethod, string url, string response, string expectedPartialContent = null) {
-            MockHttpMessageHandler mockHttp = new MockHttpMessageHandler();
+        protected MockHttpMessageHandler CreateMockHttpMessageHandler(
+            HttpMethod httpMethod,
+            string url,
+            string response,
+            string expectedPartialContent = null,
+            string responseContentType =  MediaTypeNames.Application.Json,
+            HttpStatusCode responseStatusCode = HttpStatusCode.OK) {
+
+            MockHttpMessageHandler mockHttp = new();
             MockedRequest mockedRequest = mockHttp.Expect(httpMethod, url)
-                .Respond("application/json", response);
+                .Respond(responseStatusCode, responseContentType, response);
 
             if (!string.IsNullOrEmpty(expectedPartialContent))
             {
