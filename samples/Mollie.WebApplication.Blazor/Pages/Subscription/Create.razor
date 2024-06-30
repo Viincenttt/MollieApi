@@ -16,6 +16,24 @@
     <ValidationSummary />
 
     <div class="form-group">
+        <label for="description">Description</label>
+        <InputText
+            id="description"
+            class="form-control"
+            @bind-Value="_model.Description">
+        </InputText>
+    </div>
+
+    <div class="form-group">
+        <label for="mandate-id">Mandate id</label>
+        <InputText
+            id="mandate-id"
+            class="form-control"
+            @bind-Value="_model.MandateId">
+        </InputText>
+    </div>
+
+    <div class="form-group">
         <label for="amount">Amount</label>
         <InputNumber
             id="amount"
@@ -81,7 +99,7 @@
         IntervalPeriod = IntervalPeriod.Days,
         Times = 5,
         IntervalAmount = 2,
-        Description = "A subscription created by the example application"
+        Description = "A subscription created by the example application",
     };
 
     private async Task OnSave() {
@@ -92,7 +110,8 @@
                 Amount = new Amount(_model.Currency, _model.Amount),
                 Interval = $"{_model.IntervalAmount} {_model.IntervalPeriod.ToString().ToLower()}",
                 Times = _model.Times,
-                Description = _model.Description
+                Description = _model.Description,
+                MandateId = _model.MandateId
             });
 
             NavigationManager.NavigateTo($"/customer/{CustomerId}/subscription/overview");

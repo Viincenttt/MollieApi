@@ -20,4 +20,11 @@ public class CreatePaymentModel {
 
     [Required]
     public required string Description { get; set; }
+
+    [Required]
+    public required string SequenceType { get; set; }
+
+    public string? CustomerId { get; set; }
+
+    public string? MandateId { get; set; }
 }

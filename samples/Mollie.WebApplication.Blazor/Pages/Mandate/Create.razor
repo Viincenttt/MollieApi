@@ -43,6 +43,15 @@
         </InputText>
     </div>
 
+    <div class="form-group">
+        <label for="consumer-bic">Consumer BIC</label>
+        <InputText
+            id="consumer-bic"
+            class="form-control"
+            @bind-Value="_mandate.ConsumerBic">
+        </InputText>
+    </div>
+
     <input type="submit" name="Save" value="Save" class="btn btn-primary mt-2"/>
 </EditForm>
 
@@ -54,7 +63,8 @@
 
     private CreateMandateModel _mandate = new() {
         ConsumerName = "Consumer name",
-        ConsumerAccount = ""
+        ConsumerAccount = string.Empty,
+        ConsumerBic = string.Empty
     };
 
     private async Task OnSave() {
@@ -64,7 +74,8 @@
             await MandateClient.CreateMandateAsync(CustomerId, new SepaDirectDebitMandateRequest {
                 Method = PaymentMethod.DirectDebit,
                 ConsumerName = _mandate.ConsumerName,
-                ConsumerAccount = _mandate.ConsumerAccount
+                ConsumerAccount = _mandate.ConsumerAccount,
+                ConsumerBic = _mandate.ConsumerBic
             });
 
             NavigationManager.NavigateTo($"/customer/{CustomerId}/mandate/overview");

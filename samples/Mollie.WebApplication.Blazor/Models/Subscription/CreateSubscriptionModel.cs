@@ -28,4 +28,6 @@ public class CreateSubscriptionModel {
 
     [Required]
     public required string Description { get; set; }
+
+    public string? MandateId { get; set; }
 }

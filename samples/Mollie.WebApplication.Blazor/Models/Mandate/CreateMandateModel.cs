@@ -8,4 +8,7 @@ public class CreateMandateModel {
 
     [Required]
     public required string ConsumerAccount { get; set; }
+
+    [Required]
+    public required string ConsumerBic { get; set; }
 }
