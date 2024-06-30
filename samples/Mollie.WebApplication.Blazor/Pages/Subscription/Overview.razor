@@ -18,6 +18,8 @@ else {
         <thead>
         <tr>
             <th scope="col">#</th>
+            <th scope="col">Description</th>
+            <th scope="col">MandateId</th>
             <th scope="col">Date created</th>
             <th scope="col">Amount</th>
             <th scope="col">Mode</th>
@@ -28,6 +30,8 @@ else {
         @foreach (SubscriptionResponse subscription in _subscriptions.Items) {
             <tr>
                 <td>@subscription.Id</td>
+                <td>@subscription.Description</td>
+                <td>@subscription.MandateId</td>
                 <td>@subscription.CreatedAt</td>
                 <td>@subscription.Amount.ToString()</td>
                 <td>@subscription.Mode</td>
