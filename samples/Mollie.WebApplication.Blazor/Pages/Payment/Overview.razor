@@ -35,8 +35,12 @@ else {
                 <td>@payment.Method</td>
                 <td>@payment.Metadata</td>
                 <td>
-                    @if (payment.Status == PaymentStatus.Open && @payment.Links.Checkout != null) {
-                        <a href="@payment.Links.Checkout.Href" class="btn btn-outline-secondary" target="_blank">Pay</a>
+                    @{
+                        string? checkoutUrl = GetCheckoutUrl(payment);
+                    }
+                    @if (checkoutUrl != null)
+                    {
+                        <a href="@checkoutUrl" class="btn btn-outline-secondary" target="_blank">Pay</a>
                     }
                 </td>
             </tr>
@@ -71,5 +75,14 @@ else {
                 Type = "application/json"
             });
         }
+    }
+
+    private string? GetCheckoutUrl(PaymentResponse payment) {
+        if (payment.Status != PaymentStatus.Open && payment.Status != PaymentStatus.Pending)
+        {
+            return null;
+        }
+
+        return payment.Links.Checkout?.Href ?? payment.Links.ChangePaymentState?.Href;
     }
 }
