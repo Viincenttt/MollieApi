@@ -1,4 +1,5 @@
-﻿using Mollie.Api.JsonConverters;
+﻿using System.Collections.Generic;
+using Mollie.Api.JsonConverters;
 using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Refund.Request {
@@ -25,6 +26,20 @@ namespace Mollie.Api.Models.Refund.Request {
         /// Set this to true to refund a test mode payment.
         /// </summary>
         public bool? Testmode { get; set; }
+
+        /// <summary>
+        /// If you wish to pull back the money that was sent to connected accounts within the creation of a partial
+        /// refund (namely a refund of less of the amount of the original payment), you can do so by setting the
+        /// routingReversals array in the request
+        /// </summary>
+        public IList<RoutingReversal>? RoutingReversals { get; set; }
+
+        /// <summary>
+        /// For a full reversal of the split that was specified during payment creation, simply set reverseRouting=true
+        /// when creating the refund, so that a full compensation is created for every route of the original payment.
+        /// This flag only works with full refunds, namely a refund of the same amount (or more) than the original payment.
+        /// </summary>
+        public bool? ReverseRouting { get; set; }
 
         public void SetMetadata(object metadataObj, JsonSerializerSettings? jsonSerializerSettings = null) {
             Metadata = JsonConvert.SerializeObject(metadataObj, jsonSerializerSettings);
