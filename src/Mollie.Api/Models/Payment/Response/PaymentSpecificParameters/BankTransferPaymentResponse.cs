@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Payment.Response.PaymentSpecificParameters {
     public record BankTransferPaymentResponse : PaymentResponse {
-        public required BankTransferPaymentResponseDetails Details { get; set; }
+        public required BankTransferPaymentResponseDetails? Details { get; set; }
 
         /// <summary>
         /// For bank transfer payments, the _links object will contain some additional URL objects relevant to the payment.

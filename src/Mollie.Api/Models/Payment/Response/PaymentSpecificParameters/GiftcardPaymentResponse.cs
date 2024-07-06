@@ -5,7 +5,7 @@ namespace Mollie.Api.Models.Payment.Response.PaymentSpecificParameters {
         /// <summary>
         /// An object with payment details.
         /// </summary>
-        public required GiftcardPaymentResponseDetails Details { get; set; }
+        public required GiftcardPaymentResponseDetails? Details { get; set; }
     }
 
     public record GiftcardPaymentResponseDetails {
