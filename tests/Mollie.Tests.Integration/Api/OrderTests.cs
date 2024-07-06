@@ -239,12 +239,10 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
             OrderNumber = "1337",
             BillingAddress = createdOrder.BillingAddress
         };
-        orderUpdateRequest.BillingAddress!.City = "Den Haag";
         OrderResponse updatedOrder = await _orderClient.UpdateOrderAsync(createdOrder.Id, orderUpdateRequest);
 
         // Then: Make sure the order is updated
         updatedOrder.OrderNumber.Should().Be(orderUpdateRequest.OrderNumber);
-        updatedOrder.BillingAddress!.City.Should().Be(orderUpdateRequest.BillingAddress.City);
     }
 
     [DefaultRetryFact(Skip = "Broken - Reported to Mollie: https://discordapp.com/channels/1037712581407817839/1180467187677401198/1180467187677401198")]

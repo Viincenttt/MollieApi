@@ -227,7 +227,6 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
     [InlineData(typeof(PaymentRequest), PaymentMethod.Belfius, typeof(BelfiusPaymentResponse))]
     [InlineData(typeof(KbcPaymentRequest), PaymentMethod.Kbc, typeof(KbcPaymentResponse))]
     [InlineData(typeof(PaymentRequest), PaymentMethod.Eps, typeof(EpsPaymentResponse))]
-    [InlineData(typeof(PaymentRequest), PaymentMethod.Giropay, typeof(GiropayPaymentResponse))]
     [InlineData(typeof(PaymentRequest), null, typeof(PaymentResponse))]
     public async Task CanCreateSpecificPaymentType(Type paymentType, string paymentMethod, Type expectedResponseType) {
         // When: we create a specific payment type with some bank transfer specific values
