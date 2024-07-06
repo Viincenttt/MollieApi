@@ -3,7 +3,7 @@
         /// <summary>
         /// An object with payment details.
         /// </summary>
-        public required IngHomePayPaymentResponseDetails Details { get; set; }
+        public required IngHomePayPaymentResponseDetails? Details { get; set; }
     }
 
     public record IngHomePayPaymentResponseDetails {

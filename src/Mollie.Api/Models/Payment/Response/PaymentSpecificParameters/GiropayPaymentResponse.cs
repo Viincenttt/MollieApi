@@ -3,7 +3,7 @@
         /// <summary>
         /// An object with the consumer bank account details.
         /// </summary>
-        public required GiropayPaymentResponseDetails Details { get; set; }
+        public required GiropayPaymentResponseDetails? Details { get; set; }
     }
 
     public record GiropayPaymentResponseDetails {
