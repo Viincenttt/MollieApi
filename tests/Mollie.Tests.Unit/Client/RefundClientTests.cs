@@ -7,7 +7,10 @@ using FluentAssertions;
 using FluentAssertions.Extensions;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Order.Request;
+using Mollie.Api.Models.Payment;
+using Mollie.Api.Models.Refund;
 using Mollie.Api.Models.Refund.Request;
+using Mollie.Api.Models.Refund.Response;
 using RichardSzalay.MockHttp;
 using Xunit;
 
@@ -69,7 +72,7 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData(" ")]
         [InlineData(null)]
         public async Task CreateRefundAsync_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string paymentId) {
-            // Arrange
+            // Given: We create a refund without specifying a paymentId
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             RefundClient refundClient = new RefundClient("api-key", httpClient);
@@ -82,6 +85,65 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then
             exception.Message.Should().Be("Required URL argument 'paymentId' is null or empty");
+        }
+
+        [Fact]
+        public async Task CreateRefundAsync_WithRoutingInformation_ResponseIsDeserializedInExpectedFormat() {
+            // Given: We create a refund with a routing destination
+            const string paymentId = "tr_7UhSN1zuXS";
+            var refundRequest = new RefundRequest  {
+                Amount = new Amount(Currency.EUR, 100m),
+                ReverseRouting = null,
+                RoutingReversals = new List<RoutingReversal> {
+                    new RoutingReversal {
+                        Amount = new Amount(Currency.EUR, 50m),
+                        Source = new RoutingDestination {
+                            Type = "organization",
+                            OrganizationId = "organization-id"
+                        }
+                    }
+                }
+            };
+            string expectedRoutingInformation = $"\"routingReversals\":[{{\"amount\":{{\"currency\":\"EUR\",\"value\":\"50.00\"}},\"source\":{{\"type\":\"organization\",\"organizationId\":\"organization-id\"}}}}]}}";
+            string expectedJsonResponse = @$"{{
+  ""resource"": ""refund"",
+  ""id"": ""re_4qqhO89gsT"",
+  ""description"": """",
+  ""amount"": {{
+    ""currency"": ""EUR"",
+    ""value"": ""100.00""
+  }},
+  ""routingReversals"": [
+    {{
+      ""amount"": {{
+        ""currency"": ""EUR"",
+        ""value"": ""50.00""
+      }},
+      ""source"": {{
+        ""type"": ""organization"",
+        ""organizationId"": ""organization-id""
+      }}
+    }}
+  ],
+  ""status"": ""pending"",
+  ""metadata"": null,
+  ""paymentId"": ""{paymentId}"",
+  ""createdAt"": ""2023-03-14T17:09:02.0Z""
+}}";
+            var mockHttp = CreateMockHttpMessageHandler(
+                HttpMethod.Post,
+                $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}/refunds",
+                expectedJsonResponse,
+                expectedRoutingInformation);
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            RefundClient refundClient = new("api-key", httpClient);
+
+            // When: We create the refund
+            RefundResponse refundResponse = await refundClient.CreatePaymentRefundAsync(paymentId, refundRequest);
+
+            // Then
+            mockHttp.VerifyNoOutstandingExpectation();
+            refundResponse.RoutingReversals.Should().BeEquivalentTo(refundRequest.RoutingReversals);
         }
 
         [Theory]
