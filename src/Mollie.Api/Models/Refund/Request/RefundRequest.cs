@@ -1,4 +1,5 @@
-﻿using Mollie.Api.JsonConverters;
+﻿using System.Collections.Generic;
+using Mollie.Api.JsonConverters;
 using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Refund.Request {
@@ -20,6 +21,23 @@ namespace Mollie.Api.Models.Refund.Request {
         /// </summary>
         [JsonConverter(typeof(RawJsonConverter))]
         public string? Metadata { get; set; }
+
+        /// <summary>
+        /// With Mollie Connect you can charge fees on payments that your app is processing on behalf of other Mollie merchants,
+        /// by providing the routing object during payment creation. When creating refunds for these routed payments, by default
+        /// the full amount is deducted from your balance.If you want to pull back the funds that were routed to the connected
+        /// merchant(s), you can set this parameter to true when issuing a full refund. For more fine-grained control and for
+        /// partial refunds, use the routingReversals parameter instead.
+        /// </summary>
+        public bool? ReverseRouting { get; set; }
+
+        /// <summary>
+        /// When creating refunds for routed payments, by default the full amount is deducted from your balance. If you want to
+        /// pull back funds from the connected merchant(s), you can use this parameter to specify what amount needs to be
+        /// reversed from which merchant(s). If you simply want to fully reverse the routed funds, you can also use the
+        /// reverseRouting parameter instead.
+        /// </summary>
+        public IList<RoutingReversal>? RoutingReversals { get; init; }
 
         /// <summary>
         /// Set this to true to refund a test mode payment.
