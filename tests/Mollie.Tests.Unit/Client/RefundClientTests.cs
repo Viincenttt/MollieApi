@@ -87,6 +87,49 @@ namespace Mollie.Tests.Unit.Client {
             exception.Message.Should().Be("Required URL argument 'paymentId' is null or empty");
         }
 
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public async Task CreateRefundAsync_WithReverseRouting_ResponseIsDeserializedInExpectedFormat(bool reverseRouting) {
+            // Given: We create a refund with a routing destination
+            const string paymentId = "tr_7UhSN1zuXS";
+            var refundRequest = new RefundRequest  {
+                Amount = new Amount(Currency.EUR, 100m),
+                ReverseRouting = reverseRouting
+            };
+            string expectedStringValue = reverseRouting.ToString().ToLowerInvariant();
+            string expectedRoutingInformation = $"\"reverseRouting\": {expectedStringValue}";
+            string expectedJsonResponse = @$"{{
+  ""resource"": ""refund"",
+  ""id"": ""re_4qqhO89gsT"",
+  ""description"": """",
+  ""amount"": {{
+    ""currency"": ""EUR"",
+    ""value"": ""100.00""
+  }},
+  ""reverseRouting"": ""{expectedStringValue}"",
+  ""status"": ""pending"",
+  ""metadata"": null,
+  ""paymentId"": ""{paymentId}"",
+  ""createdAt"": ""2023-03-14T17:09:02.0Z""
+}}";
+            var mockHttp = CreateMockHttpMessageHandler(
+                HttpMethod.Post,
+                $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}/refunds",
+                expectedJsonResponse,
+                expectedRoutingInformation);
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            RefundClient refundClient = new("api-key", httpClient);
+
+            // When: We create the refund
+            RefundResponse refundResponse = await refundClient.CreatePaymentRefundAsync(paymentId, refundRequest);
+
+            // Then
+            mockHttp.VerifyNoOutstandingExpectation();
+            refundResponse.ReverseRouting.Should().Be(reverseRouting);
+            refundResponse.RoutingReversals.Should().BeNull();
+        }
+
         [Fact]
         public async Task CreateRefundAsync_WithRoutingInformation_ResponseIsDeserializedInExpectedFormat() {
             // Given: We create a refund with a routing destination
@@ -144,6 +187,7 @@ namespace Mollie.Tests.Unit.Client {
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
             refundResponse.RoutingReversals.Should().BeEquivalentTo(refundRequest.RoutingReversals);
+            refundResponse.ReverseRouting.Should().BeNull();
         }
 
         [Theory]
