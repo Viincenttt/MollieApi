@@ -14,6 +14,31 @@ namespace Mollie.Api.Client.Abstract {
         Task<PaymentLinkResponse> CreatePaymentLinkAsync(PaymentLinkRequest paymentLinkRequest);
 
         /// <summary>
+        /// Update a payment link
+        /// </summary>
+        /// <param name="paymentLinkId">Provide the ID of the item you want to perform this operation on.</param>
+        /// <param name="paymentLinkUpdateRequest">The request body</param>
+        /// <param name="testmode">Most API credentials are specifically created for either live mode or test mode.
+        /// In those cases the testmode query parameter can be omitted. For organization-level credentials such as
+        /// OAuth access tokens, you can enable test mode by setting the testmode query parameter to true.</param>
+        /// <returns>The updated payment link response</returns>
+        Task<PaymentLinkResponse> UpdatePaymentLinkAsync(
+            string paymentLinkId,
+            PaymentLinkUpdateRequest paymentLinkUpdateRequest,
+            bool testmode = false);
+
+        /// <summary>
+        /// Payment links for which no payments have been made yet can be deleted entirely. This can be useful for
+        /// removing payment links that have been incorrectly configured or that are no longer relevant.
+        /// </summary>
+        /// <param name="paymentLinkId">Provide the ID of the item you want to perform this operation on.</param>
+        /// <param name="testmode">Most API credentials are specifically created for either live mode or test mode.
+        /// In those cases the testmode query parameter can be omitted. For organization-level credentials such as
+        /// OAuth access tokens, you can enable test mode by setting the testmode query parameter to true.</param>
+        /// <returns></returns>
+        Task DeletePaymentLinkAsync(string paymentLinkId, bool testmode = false);
+
+        /// <summary>
         ///	Retrieve a single payment link object by its token.
         /// </summary>
         /// <param name="paymentLinkId">The payment link to retrieve</param>
