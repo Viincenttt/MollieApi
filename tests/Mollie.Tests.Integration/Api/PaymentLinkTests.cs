@@ -9,6 +9,7 @@ using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.PaymentLink.Request;
 using Mollie.Api.Models.PaymentLink.Response;
 using Mollie.Tests.Integration.Framework;
+using Xunit;
 
 namespace Mollie.Tests.Integration.Api;
 
@@ -52,6 +53,7 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
             response.ExpiresAt.Should().Be(expiresAtWithoutMs);
             response.Description.Should().Be(paymentLinkRequest.Description);
             response.RedirectUrl.Should().Be(paymentLinkRequest.RedirectUrl);
+            response.Archived.Should().BeFalse();
         });
 
         verifyPaymentLinkResponse(createdPaymentLinkResponse);
@@ -85,6 +87,54 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
 
         verifyPaymentLinkResponse(createdPaymentLinkResponse);
         verifyPaymentLinkResponse(retrievePaymentLinkResponse);
+    }
+
+    [Fact]
+    public async Task CanUpdatePaymentLink() {
+        // Given: We create a new payment link
+        PaymentLinkRequest paymentLinkRequest = new() {
+            Description = "Test",
+            Amount = new Amount(Currency.EUR, 50),
+            WebhookUrl = DefaultWebhookUrl,
+            RedirectUrl = DefaultRedirectUrl,
+            ExpiresAt = DateTime.Now.AddDays(1)
+        };
+        var createdPaymentLinkResponse = await _paymentLinkClient.CreatePaymentLinkAsync(paymentLinkRequest);
+
+        // When: We update the payment link
+        PaymentLinkUpdateRequest paymentLinkUpdateRequest = new() {
+            Description = "Updated description",
+            Archived = true
+        };
+        var updatedPaymentLinkResponse = await _paymentLinkClient.UpdatePaymentLinkAsync(
+            createdPaymentLinkResponse.Id,
+            paymentLinkUpdateRequest);
+
+        // Then: We expect the payment link to be updated
+        updatedPaymentLinkResponse.Description.Should().Be(paymentLinkUpdateRequest.Description);
+        updatedPaymentLinkResponse.Archived.Should().Be(paymentLinkUpdateRequest.Archived);
+    }
+
+    [Fact]
+    public async Task CanDeletePaymentLink() {
+        // Given: We create a new payment link
+        PaymentLinkRequest paymentLinkRequest = new() {
+            Description = "Test",
+            Amount = new Amount(Currency.EUR, 50),
+            WebhookUrl = DefaultWebhookUrl,
+            RedirectUrl = DefaultRedirectUrl,
+            ExpiresAt = DateTime.Now.AddDays(1)
+        };
+        var createdPaymentLinkResponse = await _paymentLinkClient.CreatePaymentLinkAsync(paymentLinkRequest);
+
+        // When: We delete the payment link
+        await _paymentLinkClient.DeletePaymentLinkAsync(createdPaymentLinkResponse.Id);
+
+        // Then: We expect the payment link to be updated
+        MollieApiException exception = await Assert.ThrowsAsync<MollieApiException>(() =>
+            _paymentLinkClient.GetPaymentLinkAsync(createdPaymentLinkResponse.Id));
+        exception.Details.Status.Should().Be(404);
+        exception.Details.Detail.Should().Be("Payment link does not exists.");
     }
 
     public void Dispose()

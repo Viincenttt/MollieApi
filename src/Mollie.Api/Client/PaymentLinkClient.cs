@@ -23,6 +23,24 @@ namespace Mollie.Api.Client
             return await PostAsync<PaymentLinkResponse>($"payment-links", paymentLinkRequest).ConfigureAwait(false);
         }
 
+        public async Task<PaymentLinkResponse> UpdatePaymentLinkAsync(
+            string paymentLinkId,
+            PaymentLinkUpdateRequest paymentLinkUpdateRequest,
+            bool testmode = false) {
+
+            ValidateRequiredUrlParameter(nameof(paymentLinkId), paymentLinkId);
+            var queryParameters = BuildQueryParameters(testmode);
+            string relativeUri = $"payment-links/{paymentLinkId}{queryParameters.ToQueryString()}";
+            return await PatchAsync<PaymentLinkResponse>(relativeUri, paymentLinkUpdateRequest).ConfigureAwait(false);
+        }
+
+        public async Task DeletePaymentLinkAsync(string paymentLinkId, bool testmode = false) {
+            ValidateRequiredUrlParameter(nameof(paymentLinkId), paymentLinkId);
+            var queryParameters = BuildQueryParameters(testmode);
+            string relativeUri = $"payment-links/{paymentLinkId}{queryParameters.ToQueryString()}";
+            await DeleteAsync(relativeUri).ConfigureAwait(false);
+        }
+
         public async Task<PaymentLinkResponse> GetPaymentLinkAsync(string paymentLinkId, bool testmode = false)
         {
             ValidateRequiredUrlParameter(nameof(paymentLinkId), paymentLinkId);
@@ -42,7 +60,6 @@ namespace Mollie.Api.Client
             return await GetAsync(url).ConfigureAwait(false);
         }
 
-
         public async Task<ListResponse<PaymentLinkResponse>> GetPaymentLinkListAsync(UrlObjectLink<ListResponse<PaymentLinkResponse>> url)
         {
             return await GetAsync(url).ConfigureAwait(false);
@@ -60,6 +77,12 @@ namespace Mollie.Api.Client
                testmode: testmode);
 
             return await GetListAsync<ListResponse<PaymentLinkResponse>>("payment-links", from, limit, queryParameters).ConfigureAwait(false);
+        }
+
+        private Dictionary<string, string> BuildQueryParameters(bool testmode = false) {
+            var result = new Dictionary<string, string>();
+            result.AddValueIfTrue("testmode", testmode);
+            return result;
         }
 
         private Dictionary<string, string> BuildQueryParameters(string? profileId = null, bool testmode = false)

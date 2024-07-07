@@ -38,6 +38,11 @@ namespace Mollie.Api.Models.PaymentLink.Response
         public required Amount Amount { get; set; }
 
         /// <summary>
+        /// Whether the payment link is archived. Customers will not be able to complete payments on archived payment links.
+        /// </summary>
+        public required bool Archived { get; set; }
+
+        /// <summary>
         /// The URL your customer will be redirected to after completing the payment process.
         /// </summary>
         public string? RedirectUrl { get; set; }
