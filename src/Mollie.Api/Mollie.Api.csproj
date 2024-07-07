@@ -9,9 +9,9 @@
     <Product>Mollie Payment API</Product>
     <PackageProjectUrl>https://github.com/Viincenttt/MollieApi</PackageProjectUrl>
     <PackageTags>Mollie</PackageTags>
-    <AssemblyVersion>4.1.0.0</AssemblyVersion>
-    <FileVersion>4.1.0.0</FileVersion>
-    <PackageVersion>4.1.0.0</PackageVersion>
+    <AssemblyVersion>4.2.0.0</AssemblyVersion>
+    <FileVersion>4.2.0.0</FileVersion>
+    <PackageVersion>4.2.0.0</PackageVersion>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
@@ -25,7 +25,7 @@
     <PackageReference Include="PolySharp" Version="1.14.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference> 
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
