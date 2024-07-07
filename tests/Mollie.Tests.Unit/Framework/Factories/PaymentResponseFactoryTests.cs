@@ -32,11 +32,20 @@ namespace Mollie.Tests.Unit.Framework.Factories {
         [InlineData(PaymentMethod.MealVoucher, typeof(PaymentResponse))]
         [InlineData(PaymentMethod.In3, typeof(PaymentResponse))]
         [InlineData(PaymentMethod.PointOfSale, typeof(PointOfSalePaymentResponse))]
+        [InlineData(PaymentMethod.Billie, typeof(PaymentResponse))]
+        [InlineData(PaymentMethod.Trustly, typeof(PaymentResponse))]
+        [InlineData(PaymentMethod.Twint, typeof(PaymentResponse))]
+        [InlineData(PaymentMethod.Satispay, typeof(PaymentResponse))]
+        [InlineData(PaymentMethod.Riverty, typeof(PaymentResponse))]
+        [InlineData(PaymentMethod.Blik, typeof(PaymentResponse))]
+        [InlineData(PaymentMethod.BancomatPay, typeof(PaymentResponse))]
+        [InlineData(PaymentMethod.BacsDirectDebit, typeof(PaymentResponse))]
+        [InlineData(PaymentMethod.Alma, typeof(PaymentResponse))]
         [InlineData("UnknownPaymentMethod", typeof(PaymentResponse))]
         public void Create_CreatesTypeBasedOnPaymentMethod(string paymentMethod, Type expectedType) {
             // Given
             var sut = new PaymentResponseFactory();
-            
+
             // When
             var result = sut.Create(paymentMethod);
 

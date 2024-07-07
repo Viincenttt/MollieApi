@@ -24,5 +24,13 @@
         public const string In3 = "in3";
         public const string PointOfSale = "pointofsale";
         public const string Billie = "billie";
+        public const string Trustly = "trustly";
+        public const string Twint = "twint";
+        public const string Satispay = "satispay";
+        public const string Riverty = "riverty";
+        public const string Blik = "blik";
+        public const string BancomatPay = "bancomat_pay";
+        public const string BacsDirectDebit = "bacs";
+        public const string Alma = "alma";
     }
 }
