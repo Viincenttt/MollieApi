@@ -563,7 +563,7 @@ public class PaymentClientTests : BaseClientTests {
             Method = PaymentMethod.Ideal,
             RedirectUrl = "http://www.mollie.com",
             WebhookUrl = "http://www.mollie.com/webhook",
-            BillingAddress = new AddressObject()
+            BillingAddress = new PaymentAddressDetails()
             {
                 City = "Amsterdam",
                 Country = "NL",
@@ -571,7 +571,7 @@ public class PaymentClientTests : BaseClientTests {
                 Region = "Noord-Holland",
                 StreetAndNumber = "Keizersgracht 313"
             },
-            ShippingAddress = new AddressObject()
+            ShippingAddress = new PaymentAddressDetails()
             {
                 City = "Amsterdam",
                 Country = "NL",
