@@ -4,20 +4,19 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Mollie.Api.Models.Payment.Request {
-    public record PaymentRequest
-    {
+    public record PaymentRequest {
         /// <summary>
-        /// The amount that you want to charge, e.g. {"currency":"EUR", "value":"100.00"} if you would want to charge €100.00.
+        /// Required - The amount that you want to charge, e.g. {"currency":"EUR", "value":"100.00"} if you would want to charge €100.00.
         /// </summary>
-        public required Amount Amount { get; set; }
+        public Amount Amount { get; set; } = null!;
 
         /// <summary>
-        /// The description of the payment you’re creating. This will be shown to the consumer on their card or bank statement
+        /// Required - The description of the payment you’re creating. This will be shown to the consumer on their card or bank statement
         /// when possible. We truncate the description automatically according to the limits of the used payment method. The
         /// description is also visible in any exports you generate. We recommend you use a unique identifier so that you can
         /// always link the payment to the order.This is particularly useful for bookkeeping.
         /// </summary>
-        public required string Description { get; set; }
+        public string Description { get; set; } = null!;
 
         /// <summary>
         /// Required - The URL the consumer will be redirected to after the payment process. It could make sense for the
