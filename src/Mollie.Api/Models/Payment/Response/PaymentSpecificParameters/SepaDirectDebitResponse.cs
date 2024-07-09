@@ -1,6 +1,6 @@
 ﻿namespace Mollie.Api.Models.Payment.Response.PaymentSpecificParameters {
     public record SepaDirectDebitResponse : PaymentResponse {
-        public required SepaDirectDebitResponseDetails? Details { get; set; }
+        public SepaDirectDebitResponseDetails? Details { get; set; }
     }
 
     public record SepaDirectDebitResponseDetails {
