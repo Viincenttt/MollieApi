@@ -1,6 +1,26 @@
 ﻿namespace Mollie.Api.Models {
     public record AddressObject {
         /// <summary>
+        /// The title of the person, for example Mr. or Mrs..
+        /// </summary>
+        public string? Title { get; set; }
+
+        /// <summary>
+        /// The given name (first name) of the person should be at least two characters and cannot contain only numbers.
+        /// </summary>
+        public string? GivenName { get; set; }
+
+        /// <summary>
+        /// The given family name (surname) of the person should be at least two characters and cannot contain only numbers.
+        /// </summary>
+        public string? FamilyName { get; set; }
+
+        /// <summary>
+        /// The name of the organization, in case the addressee is an organization.
+        /// </summary>
+        public string? OrganizationName { get; set; }
+
+        /// <summary>
         /// The card holder’s street and street number.
         /// </summary>
         public string? StreetAndNumber { get; set; }
@@ -14,6 +34,11 @@
         /// The card holder’s postal code.
         /// </summary>
         public string? PostalCode { get; set; }
+
+        /// <summary>
+        /// Email address
+        /// </summary>
+        public string? Email { get; set; }
 
         /// <summary>
         /// The card holder’s city.
