@@ -134,6 +134,18 @@ namespace Mollie.Api.Models.Payment.Response {
         public List<PaymentLine>? Lines { get; set; }
 
         /// <summary>
+        /// The customer's billing address details. We advise to provide these details to improve fraud protection and conversion. This is
+        /// particularly relevant for card payments.
+        /// </summary>
+        public PaymentAddressDetails? BillingAddress { get; set; }
+
+        /// <summary>
+        /// The customer's shipping address details. We advise to provide these details to improve fraud protection and conversion. This is
+        /// particularly relevant for card payments.
+        /// </summary>
+        public PaymentAddressDetails? ShippingAddress { get; set; }
+
+        /// <summary>
         /// An optional routing configuration that you provided, which enables you to route a successful payment, or part of the payment, to one or more connected accounts.
         /// Additionally, you can schedule (parts of) the payment to become available on the connected account on a future date.
         /// </summary>
