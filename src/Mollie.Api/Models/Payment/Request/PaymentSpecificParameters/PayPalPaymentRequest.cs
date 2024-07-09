@@ -1,6 +1,13 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Mollie.Api.Models.Payment.Request.PaymentSpecificParameters {
     public record PayPalPaymentRequest : PaymentRequest {
         public PayPalPaymentRequest() {
+            Method = PaymentMethod.PayPal;
+        }
+
+        [SetsRequiredMembers]
+        public PayPalPaymentRequest(PaymentRequest paymentRequest) : base(paymentRequest) {
             Method = PaymentMethod.PayPal;
         }
 

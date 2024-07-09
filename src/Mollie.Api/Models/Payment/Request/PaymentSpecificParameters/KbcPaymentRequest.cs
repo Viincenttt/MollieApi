@@ -1,6 +1,13 @@
-﻿namespace Mollie.Api.Models.Payment.Request.PaymentSpecificParameters {
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Mollie.Api.Models.Payment.Request.PaymentSpecificParameters {
     public record KbcPaymentRequest : PaymentRequest {
         public KbcPaymentRequest() {
+            Method = PaymentMethod.Kbc;
+        }
+
+        [SetsRequiredMembers]
+        public KbcPaymentRequest(PaymentRequest paymentRequest) : base(paymentRequest) {
             Method = PaymentMethod.Kbc;
         }
 

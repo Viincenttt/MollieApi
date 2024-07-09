@@ -1,7 +1,14 @@
-﻿namespace Mollie.Api.Models.Payment.Request.PaymentSpecificParameters {
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Mollie.Api.Models.Payment.Request.PaymentSpecificParameters {
     public record ApplePayPaymentRequest : PaymentRequest {
         public ApplePayPaymentRequest()
         {
+            Method = PaymentMethod.ApplePay;
+        }
+
+        [SetsRequiredMembers]
+        public ApplePayPaymentRequest(PaymentRequest paymentRequest) : base(paymentRequest) {
             Method = PaymentMethod.ApplePay;
         }
 
