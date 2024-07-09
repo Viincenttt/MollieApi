@@ -582,6 +582,14 @@ public class PaymentClientTests : BaseClientTests {
             CardToken = "card-token"
         };
         const string jsonRequest = @"{
+  ""cardToken"": ""card-token"",
+  ""amount"": {
+    ""currency"": ""EUR"",
+    ""value"": ""100.00""
+  },
+  ""description"": ""Description"",
+  ""redirectUrl"": ""http://www.mollie.com"",
+  ""webhookUrl"": ""http://www.mollie.com/webhook"",
   ""billingAddress"": {
     ""streetAndNumber"": ""Keizersgracht 313"",
     ""postalCode"": ""1000AA"",
@@ -596,14 +604,6 @@ public class PaymentClientTests : BaseClientTests {
     ""region"": ""Noord-Holland"",
     ""country"": ""NL""
   },
-  ""cardToken"": ""card-token"",
-  ""amount"": {
-    ""currency"": ""EUR"",
-    ""value"": ""100.00""
-  },
-  ""description"": ""Description"",
-  ""redirectUrl"": ""http://www.mollie.com"",
-  ""webhookUrl"": ""http://www.mollie.com/webhook"",
   ""method"": [
     ""ideal""
   ]
@@ -636,7 +636,7 @@ public class PaymentClientTests : BaseClientTests {
         }";
         var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Post, $"{BaseMollieClient.ApiEndPoint}payments", jsonResponse, jsonRequest);
         HttpClient httpClient = mockHttp.ToHttpClient();
-        PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
+        PaymentClient paymentClient = new("abcde", httpClient);
 
         // When: We send the request
         var result = await paymentClient.CreatePaymentAsync(paymentRequest);
