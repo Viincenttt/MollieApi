@@ -48,6 +48,18 @@ namespace Mollie.Api.Models.Payment.Request {
         public List<PaymentLine>? Lines { get; set; }
 
         /// <summary>
+        /// The customer's billing address details. We advise to provide these details to improve fraud protection and conversion. This is
+        /// particularly relevant for card payments.
+        /// </summary>
+        public AddressObject? BillingAddress { get; set; }
+
+        /// <summary>
+        /// The customer's shipping address details. We advise to provide these details to improve fraud protection and conversion. This is
+        /// particularly relevant for card payments.
+        /// </summary>
+        public AddressObject? ShippingAddress { get; set; }
+
+        /// <summary>
         /// Allows you to preset the language to be used in the payment screens shown to the consumer. Setting a locale is highly
         /// recommended and will greatly improve your conversion rate. When this parameter is omitted, the browser language will
         /// be used instead if supported by the payment method. You can provide any ISO 15897 locale, but our payment screen currently
