@@ -89,7 +89,7 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
         verifyPaymentLinkResponse(retrievePaymentLinkResponse);
     }
 
-    [Fact]
+    [DefaultRetryFact]
     public async Task CanUpdatePaymentLink() {
         // Given: We create a new payment link
         PaymentLinkRequest paymentLinkRequest = new() {
@@ -115,7 +115,7 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
         updatedPaymentLinkResponse.Archived.Should().Be(paymentLinkUpdateRequest.Archived);
     }
 
-    [Fact]
+    [DefaultRetryFact]
     public async Task CanDeletePaymentLink() {
         // Given: We create a new payment link
         PaymentLinkRequest paymentLinkRequest = new() {
@@ -135,6 +135,26 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
             _paymentLinkClient.GetPaymentLinkAsync(createdPaymentLinkResponse.Id));
         exception.Details.Status.Should().Be(404);
         exception.Details.Detail.Should().Be("Payment link does not exists.");
+    }
+
+    [DefaultRetryFact]
+    public async Task CanListPaymentLinkPayments() {
+        // Given: We create a new payment link
+        PaymentLinkRequest paymentLinkRequest = new() {
+            Description = "Test",
+            Amount = new Amount(Currency.EUR, 50),
+            WebhookUrl = DefaultWebhookUrl,
+            RedirectUrl = DefaultRedirectUrl,
+            ExpiresAt = DateTime.Now.AddDays(1)
+        };
+        var createdPaymentLinkResponse = await _paymentLinkClient.CreatePaymentLinkAsync(paymentLinkRequest);
+
+        // When: We get the payment list of the payment link
+        var result = await _paymentLinkClient.GetPaymentLinkPaymentListAsync(createdPaymentLinkResponse.Id);
+
+        // Then: We expect the payment list to be returned
+        result.Should().NotBeNull();
+        result.Items.Should().HaveCount(0);
     }
 
     public void Dispose()

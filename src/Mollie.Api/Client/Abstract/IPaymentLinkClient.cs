@@ -1,5 +1,7 @@
 ﻿using System.Threading.Tasks;
+using Mollie.Api.Models;
 using Mollie.Api.Models.List.Response;
+using Mollie.Api.Models.Payment.Response;
 using Mollie.Api.Models.PaymentLink.Request;
 using Mollie.Api.Models.PaymentLink.Response;
 using Mollie.Api.Models.Url;
@@ -73,5 +75,22 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="url">The URL from which to retrieve the payment link</param>
         /// <returns></returns>
         Task<PaymentLinkResponse> GetPaymentLinkAsync(UrlObjectLink<PaymentLinkResponse> url);
+
+        /// <summary>
+        /// Retrieve the list of payments for a specific payment link.
+        /// </summary>
+        /// <param name="paymentLinkId">Provide the ID of the item you want to perform this operation on.</param>
+        /// <param name="from">Provide an ID to start the result set from the item with the given ID and onwards. This
+        /// allows you to paginate the result set.</param>
+        /// <param name="limit">The maximum number of items to return. Defaults to 50 items.</param>
+        /// <param name="testmode">Most API credentials are specifically created for either live mode or test mode. In
+        /// those cases the testmode query parameter can be omitted. For organization-level credentials such as OAuth access
+        /// tokens, you can enable test mode by setting the testmode query parameter to true. Test entities cannot be
+        /// retrieved when the endpoint is set to live mode, and vice versa.</param>
+        /// <param name="sort">Used for setting the direction of the result set. Defaults to descending order, meaning
+        /// the results are ordered from newest to oldest.</param>
+        /// <returns></returns>
+        Task<ListResponse<PaymentResponse>> GetPaymentLinkPaymentListAsync(
+            string paymentLinkId, string? from = null, int? limit = null, bool testmode = false, SortDirection? sort = null);
     }
 }
