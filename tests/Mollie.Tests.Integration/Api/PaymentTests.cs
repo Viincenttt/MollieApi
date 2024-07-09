@@ -363,6 +363,19 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
     [DefaultRetryFact]
     public async Task CanCreatePaymentWithLines() {
         // Arrange
+        var address = new PaymentAddressDetails {
+            Title = "Mr",
+            GivenName = "John",
+            FamilyName = "Doe",
+            OrganizationName = "Mollie",
+            StreetAndNumber = "Keizersgracht 126",
+            Email = "johndoe@mollie.com",
+            City = "Amsterdam",
+            Country = "NL",
+            Phone = "+31600000000",
+            Region = "Zuid-Holland",
+            PostalCode = "1015CW"
+        };
         PaymentRequest paymentRequest = new PaymentRequest() {
             Amount = new Amount(Currency.EUR, 90m),
             Description = "Description",
@@ -382,7 +395,9 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
                     VatAmount = new Amount(Currency.EUR, 15.62m),
                     VatRate = "21.00"
                 }
-            }
+            },
+            ShippingAddress = address,
+            BillingAddress = address
         };
 
         // Act
@@ -390,6 +405,8 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
 
         // Assert
         result.Lines.Should().BeEquivalentTo(paymentRequest.Lines);
+        result.BillingAddress.Should().BeEquivalentTo(paymentRequest.BillingAddress);
+        result.ShippingAddress.Should().BeEquivalentTo(paymentRequest.ShippingAddress);
     }
 
     [DefaultRetryFact]

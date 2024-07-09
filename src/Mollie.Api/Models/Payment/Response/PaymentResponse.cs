@@ -137,13 +137,13 @@ namespace Mollie.Api.Models.Payment.Response {
         /// The customer's billing address details. We advise to provide these details to improve fraud protection and conversion. This is
         /// particularly relevant for card payments.
         /// </summary>
-        public AddressObject? BillingAddress { get; set; }
+        public PaymentAddressDetails? BillingAddress { get; set; }
 
         /// <summary>
         /// The customer's shipping address details. We advise to provide these details to improve fraud protection and conversion. This is
         /// particularly relevant for card payments.
         /// </summary>
-        public AddressObject? ShippingAddress { get; set; }
+        public PaymentAddressDetails? ShippingAddress { get; set; }
 
         /// <summary>
         /// An optional routing configuration that you provided, which enables you to route a successful payment, or part of the payment, to one or more connected accounts.

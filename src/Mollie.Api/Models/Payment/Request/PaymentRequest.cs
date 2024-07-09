@@ -51,13 +51,13 @@ namespace Mollie.Api.Models.Payment.Request {
         /// The customer's billing address details. We advise to provide these details to improve fraud protection and conversion. This is
         /// particularly relevant for card payments.
         /// </summary>
-        public AddressObject? BillingAddress { get; set; }
+        public PaymentAddressDetails? BillingAddress { get; set; }
 
         /// <summary>
         /// The customer's shipping address details. We advise to provide these details to improve fraud protection and conversion. This is
         /// particularly relevant for card payments.
         /// </summary>
-        public AddressObject? ShippingAddress { get; set; }
+        public PaymentAddressDetails? ShippingAddress { get; set; }
 
         /// <summary>
         /// Allows you to preset the language to be used in the payment screens shown to the consumer. Setting a locale is highly
