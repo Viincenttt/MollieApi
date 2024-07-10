@@ -1,6 +1,13 @@
-﻿namespace Mollie.Api.Models.Payment.Request.PaymentSpecificParameters {
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Mollie.Api.Models.Payment.Request.PaymentSpecificParameters {
     public record PaySafeCardPaymentRequest : PaymentRequest {
         public PaySafeCardPaymentRequest() {
+            Method = PaymentMethod.PaySafeCard;
+        }
+
+        [SetsRequiredMembers]
+        public PaySafeCardPaymentRequest(PaymentRequest paymentRequest) : base(paymentRequest) {
             Method = PaymentMethod.PaySafeCard;
         }
 

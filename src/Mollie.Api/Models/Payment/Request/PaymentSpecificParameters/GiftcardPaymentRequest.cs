@@ -1,6 +1,13 @@
-﻿namespace Mollie.Api.Models.Payment.Request.PaymentSpecificParameters {
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Mollie.Api.Models.Payment.Request.PaymentSpecificParameters {
     public record GiftcardPaymentRequest : PaymentRequest {
         public GiftcardPaymentRequest() {
+            Method = PaymentMethod.GiftCard;
+        }
+
+        [SetsRequiredMembers]
+        public GiftcardPaymentRequest(PaymentRequest paymentRequest) : base(paymentRequest) {
             Method = PaymentMethod.GiftCard;
         }
 

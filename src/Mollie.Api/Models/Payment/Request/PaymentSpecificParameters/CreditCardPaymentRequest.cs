@@ -1,6 +1,13 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Mollie.Api.Models.Payment.Request.PaymentSpecificParameters {
     public record CreditCardPaymentRequest : PaymentRequest {
         public CreditCardPaymentRequest() {
+            Method = PaymentMethod.CreditCard;
+        }
+
+        [SetsRequiredMembers]
+        public CreditCardPaymentRequest(PaymentRequest paymentRequest) : base(paymentRequest) {
             Method = PaymentMethod.CreditCard;
         }
 

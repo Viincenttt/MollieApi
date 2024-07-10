@@ -1,6 +1,13 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Mollie.Api.Models.Payment.Request.PaymentSpecificParameters {
     public record BankTransferPaymentRequest : PaymentRequest {
         public BankTransferPaymentRequest() {
+            Method = PaymentMethod.BankTransfer;
+        }
+
+        [SetsRequiredMembers]
+        public BankTransferPaymentRequest(PaymentRequest paymentRequest) : base(paymentRequest) {
             Method = PaymentMethod.BankTransfer;
         }
 
