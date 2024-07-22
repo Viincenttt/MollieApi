@@ -35,7 +35,7 @@ namespace Mollie.Api.Models.PaymentLink.Response
         /// <summary>
         /// The amount of the payment link, e.g. {"currency":"EUR", "value":"100.00"} for a €100.00 payment link.
         /// </summary>
-        public required Amount Amount { get; set; }
+        public Amount? Amount { get; set; }
 
         /// <summary>
         /// Whether the payment link is archived. Customers will not be able to complete payments on archived payment links.
