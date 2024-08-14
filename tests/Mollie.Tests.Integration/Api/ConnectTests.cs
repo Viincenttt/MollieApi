@@ -18,7 +18,7 @@ public class ConnectTests : BaseMollieApiTestClass {
         string authorizationUrl = connectClient.GetAuthorizationUrl("abcde", new List<string>() { AppPermissions.PaymentsRead });
 
         // Then:
-        string expectedUrl = $"https://www.mollie.com/oauth2/authorize?client_id={ClientId}&state=abcde&scope=payments.read&response_type=code&approval_prompt=auto";
+        string expectedUrl = $"https://my.mollie.com/oauth2/authorize?client_id={ClientId}&state=abcde&scope=payments.read&response_type=code&approval_prompt=auto";
         authorizationUrl.Should().Be(expectedUrl);
     }
 
@@ -36,7 +36,7 @@ public class ConnectTests : BaseMollieApiTestClass {
         });
 
         // Then:
-        string expectedUrl = $"https://www.mollie.com/oauth2/authorize?client_id={ClientId}" +
+        string expectedUrl = $"https://my.mollie.com/oauth2/authorize?client_id={ClientId}" +
                              $"&state=abcdef&scope=payments.read+payments.write+profiles.read+profiles.write&response_type=code&approval_prompt=auto";
         authorizationUrl.Should().Be(expectedUrl);
     }
