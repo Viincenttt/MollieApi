@@ -11,7 +11,7 @@ using Mollie.Api.Models.Connect.Response;
 
 namespace Mollie.Api.Client {
     public class ConnectClient : BaseMollieClient, IConnectClient {
-        private const string AuthorizeEndPoint = "https://www.mollie.com/oauth2/authorize";
+        private const string AuthorizeEndPoint = "https://my.mollie.com/oauth2/authorize";
         private const string TokenEndPoint = "https://api.mollie.nl/oauth2/";
 
         private readonly string _clientId;

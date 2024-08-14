@@ -28,7 +28,7 @@ public class ConnectClientTests : BaseClientTests
         string authorizationUrl = connectClient.GetAuthorizationUrl("abcde", scopes);
 
         // Assert
-        string expectedUrl = $"https://www.mollie.com/oauth2/authorize?client_id={ClientId}&state=abcde&scope=payments.read&response_type=code&approval_prompt=auto";
+        string expectedUrl = $"https://my.mollie.com/oauth2/authorize?client_id={ClientId}&state=abcde&scope=payments.read&response_type=code&approval_prompt=auto";
         authorizationUrl.Should().Be(expectedUrl);
     }
 
