@@ -1,5 +1,5 @@
 ﻿namespace Mollie.Api.Framework.Authentication.Abstract;
 
-public interface IBearerTokenRetriever {
+public interface IMollieSecretManager {
     public string GetBearerToken();
 }

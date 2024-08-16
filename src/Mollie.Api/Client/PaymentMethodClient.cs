@@ -17,7 +17,7 @@ namespace Mollie.Api.Client
         public PaymentMethodClient(string apiKey, HttpClient? httpClient = null) : base(apiKey, httpClient) {
         }
 
-        public PaymentMethodClient(IBearerTokenRetriever bearerTokenRetriever, HttpClient? httpClient = null) : base(bearerTokenRetriever, httpClient) {
+        public PaymentMethodClient(IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null) : base(mollieSecretManager, httpClient) {
         }
 
         public async Task<PaymentMethodResponse> GetPaymentMethodAsync(

@@ -17,7 +17,7 @@ namespace Mollie.Api.Client
     {
         public PaymentLinkClient(string apiKey, HttpClient? httpClient = null) : base(apiKey, httpClient) { }
 
-        public PaymentLinkClient(IBearerTokenRetriever bearerTokenRetriever, HttpClient? httpClient = null) : base(bearerTokenRetriever, httpClient) {
+        public PaymentLinkClient(IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null) : base(mollieSecretManager, httpClient) {
         }
 
         public async Task<PaymentLinkResponse> CreatePaymentLinkAsync(PaymentLinkRequest paymentLinkRequest)

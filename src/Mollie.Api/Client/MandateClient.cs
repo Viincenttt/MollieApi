@@ -15,7 +15,7 @@ namespace Mollie.Api.Client {
         public MandateClient(string apiKey, HttpClient? httpClient = null) : base(apiKey, httpClient) {
         }
 
-        public MandateClient(IBearerTokenRetriever bearerTokenRetriever, HttpClient? httpClient = null) : base(bearerTokenRetriever, httpClient) {
+        public MandateClient(IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null) : base(mollieSecretManager, httpClient) {
         }
 
         public async Task<MandateResponse> GetMandateAsync(string customerId, string mandateId, bool testmode = false) {

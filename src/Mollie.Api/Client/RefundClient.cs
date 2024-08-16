@@ -16,7 +16,7 @@ namespace Mollie.Api.Client {
         public RefundClient(string apiKey, HttpClient? httpClient = null) : base(apiKey, httpClient) {
         }
 
-        public RefundClient(IBearerTokenRetriever bearerTokenRetriever, HttpClient? httpClient = null) : base(bearerTokenRetriever, httpClient) {
+        public RefundClient(IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null) : base(mollieSecretManager, httpClient) {
         }
 
         public async Task<RefundResponse> CreatePaymentRefundAsync(string paymentId, RefundRequest refundRequest) {

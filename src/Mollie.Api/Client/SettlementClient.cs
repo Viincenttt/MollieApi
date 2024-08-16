@@ -15,7 +15,7 @@ namespace Mollie.Api.Client {
         public SettlementClient(string oauthAccessToken, HttpClient? httpClient = null) : base(oauthAccessToken, httpClient) {
         }
 
-        public SettlementClient(IBearerTokenRetriever bearerTokenRetriever, HttpClient? httpClient = null) : base(bearerTokenRetriever, httpClient) {
+        public SettlementClient(IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null) : base(mollieSecretManager, httpClient) {
         }
 
         public async Task<SettlementResponse> GetSettlementAsync(string settlementId) {

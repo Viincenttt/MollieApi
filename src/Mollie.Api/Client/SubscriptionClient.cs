@@ -16,7 +16,7 @@ namespace Mollie.Api.Client {
         public SubscriptionClient(string apiKey, HttpClient? httpClient = null) : base(apiKey, httpClient) {
         }
 
-        public SubscriptionClient(IBearerTokenRetriever bearerTokenRetriever, HttpClient? httpClient = null) : base(bearerTokenRetriever, httpClient) {
+        public SubscriptionClient(IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null) : base(mollieSecretManager, httpClient) {
         }
 
         public async Task<ListResponse<SubscriptionResponse>> GetSubscriptionListAsync(string customerId, string? from = null, int? limit = null, string? profileId = null, bool testmode = false) {

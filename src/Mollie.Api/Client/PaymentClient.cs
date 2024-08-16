@@ -15,7 +15,7 @@ namespace Mollie.Api.Client {
 
 	    public PaymentClient(string apiKey, HttpClient? httpClient = null) : base(apiKey, httpClient) { }
 
-        public PaymentClient(IBearerTokenRetriever bearerTokenRetriever, HttpClient? httpClient = null) : base(bearerTokenRetriever, httpClient) {
+        public PaymentClient(IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null) : base(mollieSecretManager, httpClient) {
         }
 
         public async Task<PaymentResponse> CreatePaymentAsync(PaymentRequest paymentRequest, bool includeQrCode = false) {

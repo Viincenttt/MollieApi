@@ -13,7 +13,7 @@ namespace Mollie.Api.Client {
     {
         public TerminalClient(string apiKey, HttpClient? httpClient = null) : base(apiKey, httpClient) { }
 
-        public TerminalClient(IBearerTokenRetriever bearerTokenRetriever, HttpClient? httpClient = null) : base(bearerTokenRetriever, httpClient) {
+        public TerminalClient(IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null) : base(mollieSecretManager, httpClient) {
         }
 
         public async Task<TerminalResponse> GetTerminalAsync(string terminalId) {

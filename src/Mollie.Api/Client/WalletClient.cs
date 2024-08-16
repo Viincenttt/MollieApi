@@ -10,7 +10,7 @@ namespace Mollie.Api.Client {
         public WalletClient(string apiKey, HttpClient? httpClient = null) : base(apiKey, httpClient) {
         }
 
-        public WalletClient(IBearerTokenRetriever bearerTokenRetriever, HttpClient? httpClient = null) : base(bearerTokenRetriever, httpClient) {
+        public WalletClient(IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null) : base(mollieSecretManager, httpClient) {
         }
 
         public async Task<ApplePayPaymentSessionResponse> RequestApplePayPaymentSessionAsync(ApplePayPaymentSessionRequest request) {

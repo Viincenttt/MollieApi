@@ -13,7 +13,7 @@ namespace Mollie.Api.Client {
         public ProfileClient(string apiKey, HttpClient? httpClient = null) : base(apiKey, httpClient) {
         }
 
-        public ProfileClient(IBearerTokenRetriever bearerTokenRetriever, HttpClient? httpClient = null) : base(bearerTokenRetriever, httpClient) {
+        public ProfileClient(IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null) : base(mollieSecretManager, httpClient) {
         }
 
         public async Task<ProfileResponse> CreateProfileAsync(ProfileRequest request) {

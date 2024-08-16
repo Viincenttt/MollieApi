@@ -17,7 +17,7 @@ namespace Mollie.Api.Client {
         public OrderClient(string apiKey, HttpClient? httpClient = null) : base(apiKey, httpClient) {
         }
 
-        public OrderClient(IBearerTokenRetriever bearerTokenRetriever, HttpClient? httpClient = null) : base(bearerTokenRetriever, httpClient) {
+        public OrderClient(IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null) : base(mollieSecretManager, httpClient) {
         }
 
         public async Task<OrderResponse> CreateOrderAsync(OrderRequest orderRequest) {

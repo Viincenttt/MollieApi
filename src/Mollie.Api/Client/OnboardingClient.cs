@@ -10,7 +10,7 @@ namespace Mollie.Api.Client {
         public OnboardingClient(string apiKey, HttpClient? httpClient = null) : base(apiKey, httpClient) {
         }
 
-        public OnboardingClient(IBearerTokenRetriever bearerTokenRetriever, HttpClient? httpClient = null) : base(bearerTokenRetriever, httpClient) {
+        public OnboardingClient(IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null) : base(mollieSecretManager, httpClient) {
         }
 
         public async Task<OnboardingStatusResponse> GetOnboardingStatusAsync() {

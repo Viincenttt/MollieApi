@@ -14,7 +14,7 @@ namespace Mollie.Api.Client {
         public InvoiceClient(string oauthAccessToken, HttpClient? httpClient = null) : base(oauthAccessToken, httpClient) {
         }
 
-        public InvoiceClient(IBearerTokenRetriever bearerTokenRetriever, HttpClient? httpClient = null) : base(bearerTokenRetriever, httpClient) {
+        public InvoiceClient(IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null) : base(mollieSecretManager, httpClient) {
         }
 
         public async Task<InvoiceResponse> GetInvoiceAsync(string invoiceId) {

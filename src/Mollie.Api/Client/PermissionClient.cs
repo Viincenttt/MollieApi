@@ -11,7 +11,7 @@ namespace Mollie.Api.Client {
         public PermissionClient(string oauthAccessToken, HttpClient? httpClient = null) : base(oauthAccessToken, httpClient) {
         }
 
-        public PermissionClient(IBearerTokenRetriever bearerTokenRetriever, HttpClient? httpClient = null) : base(bearerTokenRetriever, httpClient) {
+        public PermissionClient(IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null) : base(mollieSecretManager, httpClient) {
         }
 
         public async Task<PermissionResponse> GetPermissionAsync(string permissionId) {

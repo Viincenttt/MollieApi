@@ -11,7 +11,7 @@ namespace Mollie.Api.Client {
         public OrganizationClient(string oauthAccessToken, HttpClient? httpClient = null) : base(oauthAccessToken, httpClient) {
         }
 
-        public OrganizationClient(IBearerTokenRetriever bearerTokenRetriever, HttpClient? httpClient = null) : base(bearerTokenRetriever, httpClient) {
+        public OrganizationClient(IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null) : base(mollieSecretManager, httpClient) {
         }
 
         public async Task<OrganizationResponse> GetCurrentOrganizationAsync() {

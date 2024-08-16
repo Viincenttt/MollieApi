@@ -9,9 +9,9 @@ namespace Mollie.Api.Client {
             ValidateApiKeyIsOauthAccesstoken(oauthAccessToken);
         }
 
-        protected OauthBaseMollieClient(IBearerTokenRetriever bearerTokenRetriever, HttpClient? httpClient = null)
-            : base(bearerTokenRetriever, httpClient) {
-            ValidateApiKeyIsOauthAccesstoken(bearerTokenRetriever.GetBearerToken());
+        protected OauthBaseMollieClient(IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null)
+            : base(mollieSecretManager, httpClient) {
+            ValidateApiKeyIsOauthAccesstoken(mollieSecretManager.GetBearerToken());
         }
 
         private void ValidateApiKeyIsOauthAccesstoken(string oauthAccessToken) {
