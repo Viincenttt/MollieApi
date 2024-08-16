@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
+using Mollie.Api.Framework.Authentication.Abstract;
 using Mollie.Api.Models.Invoice.Response;
 using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Url;
@@ -11,6 +12,9 @@ using Mollie.Api.Models.Url;
 namespace Mollie.Api.Client {
     public class InvoiceClient : OauthBaseMollieClient, IInvoiceClient {
         public InvoiceClient(string oauthAccessToken, HttpClient? httpClient = null) : base(oauthAccessToken, httpClient) {
+        }
+
+        public InvoiceClient(IBearerTokenRetriever bearerTokenRetriever, HttpClient? httpClient = null) : base(bearerTokenRetriever, httpClient) {
         }
 
         public async Task<InvoiceResponse> GetInvoiceAsync(string invoiceId) {

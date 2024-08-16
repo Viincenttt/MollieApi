@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
+using Mollie.Api.Framework.Authentication.Abstract;
 using Mollie.Api.Models;
 using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Mandate.Request;
@@ -12,6 +13,9 @@ using Mollie.Api.Models.Url;
 namespace Mollie.Api.Client {
     public class MandateClient : BaseMollieClient, IMandateClient {
         public MandateClient(string apiKey, HttpClient? httpClient = null) : base(apiKey, httpClient) {
+        }
+
+        public MandateClient(IBearerTokenRetriever bearerTokenRetriever, HttpClient? httpClient = null) : base(bearerTokenRetriever, httpClient) {
         }
 
         public async Task<MandateResponse> GetMandateAsync(string customerId, string mandateId, bool testmode = false) {

@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
+using Mollie.Api.Framework.Authentication.Abstract;
 using Mollie.Api.Models;
 using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Payment.Response;
@@ -15,6 +16,9 @@ namespace Mollie.Api.Client
     public class PaymentLinkClient : BaseMollieClient, IPaymentLinkClient
     {
         public PaymentLinkClient(string apiKey, HttpClient? httpClient = null) : base(apiKey, httpClient) { }
+
+        public PaymentLinkClient(IBearerTokenRetriever bearerTokenRetriever, HttpClient? httpClient = null) : base(bearerTokenRetriever, httpClient) {
+        }
 
         public async Task<PaymentLinkResponse> CreatePaymentLinkAsync(PaymentLinkRequest paymentLinkRequest)
         {

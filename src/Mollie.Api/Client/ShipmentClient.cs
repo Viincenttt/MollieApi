@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
+using Mollie.Api.Framework.Authentication.Abstract;
 using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Shipment.Request;
 using Mollie.Api.Models.Shipment.Response;
@@ -12,6 +13,9 @@ namespace Mollie.Api.Client
 {
     public class ShipmentClient : BaseMollieClient, IShipmentClient {
         public ShipmentClient(string apiKey, HttpClient? httpClient = null) : base(apiKey, httpClient) {
+        }
+
+        public ShipmentClient(IBearerTokenRetriever bearerTokenRetriever, HttpClient? httpClient = null) : base(bearerTokenRetriever, httpClient) {
         }
 
         public async Task<ShipmentResponse> CreateShipmentAsync(string orderId, ShipmentRequest shipmentRequest) {

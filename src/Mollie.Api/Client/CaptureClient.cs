@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
+using Mollie.Api.Framework.Authentication.Abstract;
 using Mollie.Api.Models.Capture.Request;
 using Mollie.Api.Models.Capture.Response;
 using Mollie.Api.Models.List.Response;
@@ -12,6 +13,9 @@ namespace Mollie.Api.Client
 {
     public class CaptureClient : BaseMollieClient, ICaptureClient {
         public CaptureClient(string apiKey, HttpClient? httpClient = null) : base(apiKey, httpClient) {
+        }
+
+        public CaptureClient(IBearerTokenRetriever bearerTokenRetriever, HttpClient? httpClient = null) : base(bearerTokenRetriever, httpClient) {
         }
 
         public async Task<CaptureResponse> GetCaptureAsync(string paymentId, string captureId, bool testmode = false) {

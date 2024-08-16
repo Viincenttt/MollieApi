@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
+using Mollie.Api.Framework.Authentication.Abstract;
 using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Order.Request;
 using Mollie.Api.Models.Order.Response;
@@ -13,6 +14,9 @@ using Mollie.Api.Models.Url;
 namespace Mollie.Api.Client {
     public class RefundClient : BaseMollieClient, IRefundClient {
         public RefundClient(string apiKey, HttpClient? httpClient = null) : base(apiKey, httpClient) {
+        }
+
+        public RefundClient(IBearerTokenRetriever bearerTokenRetriever, HttpClient? httpClient = null) : base(bearerTokenRetriever, httpClient) {
         }
 
         public async Task<RefundResponse> CreatePaymentRefundAsync(string paymentId, RefundRequest refundRequest) {
