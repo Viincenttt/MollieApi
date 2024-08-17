@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
+using Mollie.Api.Framework.Authentication.Abstract;
 using Mollie.Api.Models;
 using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Payment.Response;
@@ -13,6 +14,9 @@ using Mollie.Api.Models.Url;
 namespace Mollie.Api.Client {
     public class SubscriptionClient : BaseMollieClient, ISubscriptionClient {
         public SubscriptionClient(string apiKey, HttpClient? httpClient = null) : base(apiKey, httpClient) {
+        }
+
+        public SubscriptionClient(IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null) : base(mollieSecretManager, httpClient) {
         }
 
         public async Task<ListResponse<SubscriptionResponse>> GetSubscriptionListAsync(string customerId, string? from = null, int? limit = null, string? profileId = null, bool testmode = false) {

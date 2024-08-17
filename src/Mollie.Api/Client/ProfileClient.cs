@@ -1,6 +1,7 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
+using Mollie.Api.Framework.Authentication.Abstract;
 using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.PaymentMethod.Response;
 using Mollie.Api.Models.Profile.Request;
@@ -10,6 +11,9 @@ using Mollie.Api.Models.Url;
 namespace Mollie.Api.Client {
     public class ProfileClient : BaseMollieClient, IProfileClient {
         public ProfileClient(string apiKey, HttpClient? httpClient = null) : base(apiKey, httpClient) {
+        }
+
+        public ProfileClient(IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null) : base(mollieSecretManager, httpClient) {
         }
 
         public async Task<ProfileResponse> CreateProfileAsync(ProfileRequest request) {

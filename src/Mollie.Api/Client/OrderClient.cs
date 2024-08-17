@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
+using Mollie.Api.Framework.Authentication.Abstract;
 using Mollie.Api.Models;
 using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Order.Request;
@@ -14,6 +15,9 @@ using Mollie.Api.Models.Url;
 namespace Mollie.Api.Client {
     public class OrderClient : BaseMollieClient, IOrderClient {
         public OrderClient(string apiKey, HttpClient? httpClient = null) : base(apiKey, httpClient) {
+        }
+
+        public OrderClient(IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null) : base(mollieSecretManager, httpClient) {
         }
 
         public async Task<OrderResponse> CreateOrderAsync(OrderRequest orderRequest) {

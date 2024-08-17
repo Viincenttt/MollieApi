@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Mollie.Api.Extensions;
 using Mollie.Api.Framework;
+using Mollie.Api.Framework.Authentication;
+using Mollie.Api.Framework.Authentication.Abstract;
 using Mollie.Api.Framework.Idempotency;
 using Mollie.Api.Models.Error;
 using Mollie.Api.Models.Url;
@@ -17,7 +19,7 @@ namespace Mollie.Api.Client {
     public abstract class BaseMollieClient : IDisposable {
         public const string ApiEndPoint = "https://api.mollie.com/v2/";
         private readonly string _apiEndpoint = ApiEndPoint;
-        private readonly string _apiKey;
+        private readonly IMollieSecretManager _mollieSecretManager;
         private readonly HttpClient _httpClient;
         private readonly JsonConverterService _jsonConverterService;
 
@@ -33,7 +35,14 @@ namespace Mollie.Api.Client {
             _jsonConverterService = new JsonConverterService();
             _createdHttpClient = httpClient == null;
             _httpClient = httpClient ?? new HttpClient();
-            _apiKey = apiKey;
+            _mollieSecretManager = new DefaultMollieSecretManager(apiKey);
+        }
+
+        protected BaseMollieClient(IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null) {
+            _jsonConverterService = new JsonConverterService();
+            _createdHttpClient = httpClient == null;
+            _httpClient = httpClient ?? new HttpClient();
+            _mollieSecretManager = mollieSecretManager;
         }
 
         protected BaseMollieClient(HttpClient? httpClient = null, string apiEndpoint = ApiEndPoint) {
@@ -41,7 +50,7 @@ namespace Mollie.Api.Client {
             _jsonConverterService = new JsonConverterService();
             _createdHttpClient = httpClient == null;
             _httpClient = httpClient ?? new HttpClient();
-            _apiKey = string.Empty;
+            _mollieSecretManager = new DefaultMollieSecretManager(string.Empty);
         }
 
         public IDisposable WithIdempotencyKey(string value) {
@@ -99,7 +108,8 @@ namespace Mollie.Api.Client {
         }
 
         protected void ValidateApiKeyIsOauthAccesstoken(bool isConstructor = false) {
-            if (!_apiKey.StartsWith("access_")) {
+            string apiKey = _mollieSecretManager.GetBearerToken();
+            if (!apiKey.StartsWith("access_")) {
                 if (isConstructor) {
                     throw new InvalidOperationException(
                         "The provided token isn't an oauth token. You have invoked the method with oauth parameters thus an oauth accesstoken is required.");
@@ -124,7 +134,7 @@ namespace Mollie.Api.Client {
         protected virtual HttpRequestMessage CreateHttpRequest(HttpMethod method, string relativeUri, HttpContent? content = null) {
             HttpRequestMessage httpRequest = new HttpRequestMessage(method, new Uri(new Uri(_apiEndpoint), relativeUri));
             httpRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _apiKey);
+            httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _mollieSecretManager.GetBearerToken());
             httpRequest.Headers.Add("User-Agent", GetUserAgent());
             var idemPotencyKey = _idempotencyKey.Value ?? Guid.NewGuid().ToString();
             httpRequest.Headers.Add("Idempotency-Key", idemPotencyKey);
