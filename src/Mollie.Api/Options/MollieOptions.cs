@@ -1,4 +1,6 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
+using Mollie.Api.Framework.Authentication.Abstract;
 using Polly;
 
 namespace Mollie.Api.Options {
@@ -23,5 +25,18 @@ namespace Mollie.Api.Options {
         /// (Optional) Polly retry policy for failed requests
         /// </summary>
         public IAsyncPolicy<HttpResponseMessage>? RetryPolicy { get; set; }
+
+        /// <summary>
+        /// A custom secret manager that you can override to implement advanced multi-tenant scenario's
+        /// </summary>
+        public Type? CustomMollieSecretManager { get; private set; }
+
+        /// <summary>
+        /// Set a custom secret manager that you can override to implement advanced multi-tenant scenario's
+        /// </summary>
+        public MollieOptions SetCustomMollieSecretManager<T>() where T : IMollieSecretManager {
+            CustomMollieSecretManager = typeof(T);
+            return this;
+        }
     }
 }

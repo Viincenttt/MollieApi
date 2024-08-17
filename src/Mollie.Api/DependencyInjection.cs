@@ -17,8 +17,13 @@ namespace Mollie.Api {
             MollieOptions mollieOptions = new();
             mollieOptionsDelegate.Invoke(mollieOptions);
 
-            services.AddScoped<IMollieSecretManager, DefaultMollieSecretManager>(_ =>
-                new DefaultMollieSecretManager(mollieOptions.ApiKey));
+            if (mollieOptions.CustomMollieSecretManager != null) {
+                services.AddScoped(typeof(IMollieSecretManager), mollieOptions.CustomMollieSecretManager);
+            }
+            else {
+                services.AddScoped<IMollieSecretManager, DefaultMollieSecretManager>(_ =>
+                    new DefaultMollieSecretManager(mollieOptions.ApiKey));
+            }
 
             RegisterMollieApiClient<IBalanceClient, BalanceClient>(services, (httpClient, provider) =>
                 new BalanceClient(provider.GetRequiredService<IMollieSecretManager>(), httpClient), mollieOptions.RetryPolicy);
