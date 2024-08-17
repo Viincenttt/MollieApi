@@ -19,7 +19,7 @@ public class InvoiceClientTests : BaseClientTests
             .Respond("application/json", defaultInvoice);
         HttpClient httpClient = mockHttp.ToHttpClient();
         using InvoiceClient invoiceClient = new InvoiceClient("access_abcde", httpClient);
-        
+
         // When
         var result = await invoiceClient.GetInvoiceAsync(invoiceId);
 
@@ -32,7 +32,7 @@ public class InvoiceClientTests : BaseClientTests
         result.VatNumber.Should().Be("NL001234567B01");
         result.Status.Should().Be("open");
     }
-    
+
     [Theory]
     [InlineData(null, null, null, null, "")]
     [InlineData("my-reference", null, null, null, "?reference=my-reference")]
@@ -158,12 +158,12 @@ public class InvoiceClientTests : BaseClientTests
     },
     ""_links"": {
         ""self"": {
-            ""href"": ""https://api.mollie.nl/v2/invoices?limit=5"",
+            ""href"": ""https://api.mollie.com/v2/invoices?limit=5"",
             ""type"": ""application/hal+json""
         },
         ""previous"": null,
         ""next"": {
-            ""href"": ""https://api.mollie.nl/v2/invoices?from=inv_xBEbP9rvAq&limit=5"",
+            ""href"": ""https://api.mollie.com/v2/invoices?from=inv_xBEbP9rvAq&limit=5"",
             ""type"": ""application/hal+json""
         },
         ""documentation"": {

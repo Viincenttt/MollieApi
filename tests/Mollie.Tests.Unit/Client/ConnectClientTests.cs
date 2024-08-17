@@ -39,7 +39,7 @@ public class ConnectClientTests : BaseClientTests
     {
         // Arrange
         var mockHttp = new MockHttpMessageHandler();
-        mockHttp.Expect(HttpMethod.Post, "https://api.mollie.nl/oauth2/tokens")
+        mockHttp.Expect(HttpMethod.Post, "https://api.mollie.com/oauth2/tokens")
             .Respond("application/json", defaultGetTokenResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
         ConnectClient connectClient = new ConnectClient(ClientId, ClientSecret, httpClient);
@@ -64,7 +64,7 @@ public class ConnectClientTests : BaseClientTests
     {
         // Arrange
         var mockHttp = new MockHttpMessageHandler();
-        mockHttp.Expect(HttpMethod.Delete, "https://api.mollie.nl/oauth2/tokens")
+        mockHttp.Expect(HttpMethod.Delete, "https://api.mollie.com/oauth2/tokens")
             .Respond(HttpStatusCode.NoContent);
         HttpClient httpClient = mockHttp.ToHttpClient();
         ConnectClient connectClient = new ConnectClient(ClientId, ClientSecret, httpClient);
