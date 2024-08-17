@@ -20,6 +20,11 @@ namespace Mollie.Api.Models.Payment.Request {
         public string? RedirectUrl { get; set; }
 
         /// <summary>
+        /// Can be updated while the payment is in an open state.
+        /// </summary>
+        public string? CancelUrl { get; set; }
+
+        /// <summary>
         /// Set the webhook URL, where we will send payment status updates to.
         /// </summary>
         public string? WebhookUrl { get; set; }
@@ -32,12 +37,32 @@ namespace Mollie.Api.Models.Payment.Request {
         public string? Metadata { get; set; }
 
         /// <summary>
+        /// Can be updated while no payment method has been chosen yet.
+        /// See the Mollie.Api.Models.Payment.PaymentMethod class for a full list of known values.
+        /// </summary>
+        public string? Method { get; set; }
+
+        /// <summary>
+        /// Allows you to preset the language to be used in the payment screens shown to the consumer. Setting a locale is highly
+        /// recommended and will greatly improve your conversion rate. When this parameter is omitted, the browser language will
+        /// be used instead if supported by the payment method. You can provide any ISO 15897 locale, but our payment screen currently
+        /// only supports the following languages: en_US nl_NL nl_BE fr_FR fr_BE de_DE de_AT de_CH es_ES ca_ES pt_PT it_IT nb_NO
+        /// sv_SE fi_FI da_DK is_IS hu_HU pl_PL lv_LV lt_LT
+        /// </summary>
+        public string? Locale { get; set; }
+
+        /// <summary>
         /// For digital goods in most jurisdictions, you must apply the VAT rate from your customer’s country. Choose the VAT rates
         /// you have used for the order to ensure your customer’s country matches the VAT country. Use this parameter to restrict the
         /// payment methods available to your customer to those from a single country. If available, the credit card method will still
         /// be offered, but only cards from the allowed country are accepted.
         /// </summary>
         public string? RestrictPaymentMethodsToCountry { get; set; }
+
+        /// <summary>
+        ///	Oauth only - Optional – Set this to true to make this payment a test payment.
+        /// </summary>
+        public bool? Testmode { get; set; }
 
         public void SetMetadata(object metadataObj, JsonSerializerSettings? jsonSerializerSettings = null) {
             Metadata = JsonConvert.SerializeObject(metadataObj, jsonSerializerSettings);
