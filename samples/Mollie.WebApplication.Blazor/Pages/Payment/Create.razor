@@ -45,6 +45,15 @@
         </InputText>
     </div>
 
+        <div class="form-group">
+            <label for="redirect-url">Webhook url</label>
+            <InputText
+                id="redirect-url"
+                class="form-control"
+                @bind-Value="_model.WebhookUrl">
+            </InputText>
+        </div>
+
     <div class="form-group">
         <label for="description">Description</label>
         <InputText
@@ -100,6 +109,7 @@
         Amount = 10.00m,
         Currency = "EUR",
         RedirectUrl = "https://www.mollie.com/",
+        WebhookUrl = null,
         Description = "A payment from the example application",
         SequenceType = SequenceType.OneOff
     };
@@ -111,6 +121,7 @@
             await PaymentClient.CreatePaymentAsync(new PaymentRequest {
                 Amount = new Amount(_model.Currency, _model.Amount),
                 RedirectUrl = _model.RedirectUrl,
+                WebhookUrl = _model.WebhookUrl,
                 Description = _model.Description,
                 CustomerId = _model.CustomerId,
                 SequenceType = _model.SequenceType,
