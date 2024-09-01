@@ -18,6 +18,9 @@ public class CreatePaymentModel {
     [Url]
     public required string RedirectUrl { get; set; }
 
+    [Url]
+    public string? WebhookUrl { get; set; }
+
     [Required]
     public required string Description { get; set; }
 
