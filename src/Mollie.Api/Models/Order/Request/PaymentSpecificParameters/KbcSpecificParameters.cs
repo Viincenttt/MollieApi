@@ -1,5 +1,5 @@
 ﻿namespace Mollie.Api.Models.Order.Request.PaymentSpecificParameters { 
-    public record KbcSpecificParameters : PaymentSpecificParameters {
+    public record KbcSpecificParameters : OrderPaymentParameters {
         /// <summary>
         /// The issuer to use for the KBC/CBC payment. These issuers are not dynamically available through the Issuers API, 
         /// but can be retrieved by using the issuers include in the Methods API. See the Mollie.Api.Models.Payment.Request.KbcIssuer 

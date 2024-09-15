@@ -1,5 +1,5 @@
 ﻿namespace Mollie.Api.Models.Order.Request.PaymentSpecificParameters {
-    public record SepaDirectDebitSpecificParameters : PaymentSpecificParameters {
+    public record SepaDirectDebitSpecificParameters : OrderPaymentParameters {
         /// <summary>
         /// Optional - IBAN of the account holder.
         /// </summary>

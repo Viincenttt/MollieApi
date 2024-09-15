@@ -88,6 +88,36 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
     }
 
     [DefaultRetryFact]
+    public async Task CreateOrderAsync_OrderWithApplicationFee_OrderIsCreated() {
+        // If: we create a order request with only the required parameters
+        OrderRequest orderRequest = CreateOrder() with {
+            Payment = new OrderPaymentParameters {
+                ApplicationFee = new ApplicationFee {
+                    Amount = new Amount(Currency.EUR, 0.25m),
+                    Description = "Test"
+                }
+            }
+        };
+
+        // When: We send the order request to Mollie
+        OrderResponse result = await _orderClient.CreateOrderAsync(orderRequest);
+
+        // Then: Make sure we get a valid response
+        result.Should().NotBeNull();
+        result.Amount.Should().Be(orderRequest.Amount);
+        result.OrderNumber.Should().Be(orderRequest.OrderNumber);
+        result.Lines.Should().HaveCount(orderRequest.Lines.Count());
+        result.Links.Should().NotBeNull();
+        OrderLineRequest orderLineRequest = orderRequest.Lines.First();
+        OrderLineResponse orderResponseLine = result.Lines.First();
+        orderResponseLine.Type.Should().Be(orderLineRequest.Type);
+        orderResponseLine.Links.ImageUrl!.Href.Should().Be(orderLineRequest.ImageUrl);
+        orderResponseLine.Links.ProductUrl!.Href.Should().Be(orderLineRequest.ProductUrl);
+        var expectedMetadataString = result.Lines.First().Metadata;
+        orderResponseLine.Metadata.Should().Be(expectedMetadataString);
+    }
+
+    [DefaultRetryFact]
     public async Task CreateOrderAsync_WithMultiplePaymentMethods_OrderIsCreated() {
         // When: we create a order request and specify multiple payment methods
         OrderRequest orderRequest = CreateOrder();
@@ -179,7 +209,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
     [DefaultRetryTheory]
     [MemberData(nameof(PaymentSpecificParameters))]
     public async Task CreateOrderAsync_WithPaymentSpecificParameters_OrderIsCreated(
-        PaymentSpecificParameters paymentSpecificParameters) {
+        OrderPaymentParameters paymentSpecificParameters) {
 
         // If: we create a order request with payment specific parameters
         OrderRequest orderRequest = CreateOrder();
