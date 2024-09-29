@@ -89,24 +89,6 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
     }
 
     [DefaultRetryFact]
-    public async Task CanCancelSubscription() {
-        // Given
-        string customerId = await GetFirstCustomerWithValidMandate();
-        ListResponse<SubscriptionResponse> subscriptions = await _subscriptionClient.GetSubscriptionListAsync(customerId);
-
-        // When
-        SubscriptionResponse subscriptionToCancel = subscriptions.Items
-            .FirstOrDefault(s => s.Status != SubscriptionStatus.Canceled);
-        if (subscriptionToCancel != null) {
-            await _subscriptionClient.CancelSubscriptionAsync(customerId, subscriptionToCancel.Id);
-            SubscriptionResponse cancelledSubscription = await _subscriptionClient.GetSubscriptionAsync(customerId, subscriptionToCancel.Id);
-
-            // Then
-            cancelledSubscription.Status.Should().Be(SubscriptionStatus.Canceled);
-        }
-    }
-
-    [DefaultRetryFact]
     public async Task CanUpdateSubscription() {
         // Given
         var activeSubscription = await GetActiveSubscription();
@@ -121,6 +103,24 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
 
             // Then
             response.Description.Should().Be(request.Description);
+        }
+    }
+
+    [DefaultRetryFact]
+    public async Task CanCancelSubscription() {
+        // Given
+        string customerId = await GetFirstCustomerWithValidMandate();
+        ListResponse<SubscriptionResponse> subscriptions = await _subscriptionClient.GetSubscriptionListAsync(customerId);
+
+        // When
+        SubscriptionResponse subscriptionToCancel = subscriptions.Items
+            .FirstOrDefault(s => s.Status != SubscriptionStatus.Canceled);
+        if (subscriptionToCancel != null) {
+            await _subscriptionClient.CancelSubscriptionAsync(customerId, subscriptionToCancel.Id);
+            SubscriptionResponse cancelledSubscription = await _subscriptionClient.GetSubscriptionAsync(customerId, subscriptionToCancel.Id);
+
+            // Then
+            cancelledSubscription.Status.Should().Be(SubscriptionStatus.Canceled);
         }
     }
 
