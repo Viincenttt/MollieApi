@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Mollie.Api.JsonConverters;
+using Mollie.Api.Models.Order.Request.PaymentSpecificParameters;
 using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Order.Request {
@@ -101,7 +102,7 @@ namespace Mollie.Api.Models.Order.Request {
         /// <summary>
         /// Optional - Any payment specific properties can be passed here.
         /// </summary>
-        public PaymentSpecificParameters.PaymentSpecificParameters? Payment { get; set; }
+        public OrderPaymentParameters? Payment { get; set; }
 
         /// <summary>
         /// Provide any data you like, and we will save the data alongside the subscription. Whenever you fetch the subscription
@@ -121,12 +122,6 @@ namespace Mollie.Api.Models.Order.Request {
         /// this parameter to restrict the payment methods available to your customer to methods from the billing country only.
         /// </summary>
         public bool? ShopperCountryMustMatchBillingCountry { get; set; }
-
-        /// <summary>
-        /// Adding an application fee allows you to charge the merchant for the payment and transfer this to your own account.
-        /// </summary>
-        [JsonProperty("payment.applicationFee")]
-        public ApplicationFee? ApplicationFee { get; set; }
 
         /// <summary>
         ///	Oauth only - The payment profile's unique identifier, for example pfl_3RkSN1zuPE.

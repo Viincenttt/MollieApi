@@ -92,6 +92,11 @@ namespace Mollie.Api.Models.Subscription.Response {
         public string? WebhookUrl { get; set; }
 
         /// <summary>
+        /// The customer this subscription belongs to.
+        /// </summary>
+        public required string CustomerId { get; init; }
+
+        /// <summary>
         /// The optional metadata you provided upon subscription creation. Metadata can for example be used to link a plan to a
         /// subscription.
         /// </summary>
