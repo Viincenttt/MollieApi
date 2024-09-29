@@ -109,17 +109,15 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
     [DefaultRetryFact]
     public async Task CanUpdateSubscription() {
         // Given
-        string customerId = await GetFirstCustomerWithValidMandate();
-        ListResponse<SubscriptionResponse> subscriptions = await _subscriptionClient.GetSubscriptionListAsync(customerId);
+        var activeSubscription = await GetActiveSubscription();
 
         // When
-        SubscriptionResponse subscriptionToUpdate = subscriptions.Items
-            .FirstOrDefault(s => s.Status != SubscriptionStatus.Canceled);
-        if (subscriptionToUpdate != null) {
+        if (activeSubscription != null) {
+            var customerId = activeSubscription.CustomerId;
             SubscriptionUpdateRequest request = new SubscriptionUpdateRequest() {
                 Description = $"Updated subscription {Guid.NewGuid()}"
             };
-            SubscriptionResponse response = await _subscriptionClient.UpdateSubscriptionAsync(customerId, subscriptionToUpdate.Id, request);
+            SubscriptionResponse response = await _subscriptionClient.UpdateSubscriptionAsync(customerId, activeSubscription.Id, request);
 
             // Then
             response.Description.Should().Be(request.Description);
@@ -157,6 +155,20 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
             ListResponse<MandateResponse> mandates = await _mandateClient.GetMandateListAsync(customer.Id);
             if (mandates.Items.Any(x => x.Status == MandateStatus.Valid)) {
                 return customer.Id;
+            }
+        }
+
+        return null;
+    }
+
+    private async Task<SubscriptionResponse?> GetActiveSubscription() {
+        ListResponse<CustomerResponse> customers = await _customerClient.GetCustomerListAsync();
+
+        foreach (CustomerResponse customer in customers.Items.OrderByDescending(x => x.CreatedAt)) {
+            ListResponse<SubscriptionResponse> subscriptions = await _subscriptionClient.GetSubscriptionListAsync(customer.Id);
+            var activeSubscription = subscriptions.Items.FirstOrDefault(x => x.Status == SubscriptionStatus.Active);
+            if (activeSubscription != null) {
+                return activeSubscription;
             }
         }
 
