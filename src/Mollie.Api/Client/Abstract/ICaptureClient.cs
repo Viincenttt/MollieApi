@@ -10,6 +10,6 @@ namespace Mollie.Api.Client.Abstract {
         Task<CaptureResponse> GetCaptureAsync(UrlObjectLink<CaptureResponse> url);
         Task<ListResponse<CaptureResponse>> GetCaptureListAsync(string paymentId, bool testmode = false);
         Task<ListResponse<CaptureResponse>> GetCaptureListAsync(UrlObjectLink<ListResponse<CaptureResponse>> url);
-        Task<CaptureResponse> CreateCapture(string paymentId, CaptureRequest captureRequest, bool testmode = false);
+        Task<CaptureResponse> CreateCapture(string paymentId, CaptureRequest captureRequest);
     }
 }

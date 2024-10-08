@@ -20,11 +20,16 @@ namespace Mollie.Api.Models.Capture.Request {
         /// </summary>
         [JsonConverter(typeof(RawJsonConverter))]
         public string? Metadata { get; set; }
-        
+
+        /// <summary>
+        ///	Oauth only - Optional – Set this to true to make this capture for a test payment
+        /// </summary>
+        public bool? Testmode { get; set; }
+
         public void SetMetadata(object metadataObj, JsonSerializerSettings? jsonSerializerSettings = null) {
             Metadata = JsonConvert.SerializeObject(metadataObj, jsonSerializerSettings);
         }
-        
+
         public override string ToString() {
             return $"Amount: {Amount} Description: {Description}";
         }

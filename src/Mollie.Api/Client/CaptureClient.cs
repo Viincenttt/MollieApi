@@ -42,10 +42,9 @@ namespace Mollie.Api.Client
             return await GetAsync(url).ConfigureAwait(false);
         }
 
-        public async Task<CaptureResponse> CreateCapture(string paymentId, CaptureRequest captureRequest, bool testmode = false) {
+        public async Task<CaptureResponse> CreateCapture(string paymentId, CaptureRequest captureRequest) {
             ValidateRequiredUrlParameter(nameof(paymentId), paymentId);
-            var queryParameters = BuildQueryParameters(testmode);
-            return await PostAsync<CaptureResponse>($"payments/{paymentId}/captures{queryParameters.ToQueryString()}", captureRequest)
+            return await PostAsync<CaptureResponse>($"payments/{paymentId}/captures", captureRequest)
                 .ConfigureAwait(false);
         }
 
