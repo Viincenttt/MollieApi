@@ -112,10 +112,11 @@ namespace Mollie.Api.Client {
             if (!apiKey.StartsWith("access_")) {
                 if (isConstructor) {
                     throw new InvalidOperationException(
-                        "The provided token isn't an oauth token. You have invoked the method with oauth parameters thus an oauth accesstoken is required.");
+                        "The provided token isn't an oauth token. Are you trying to use oauth specific clients using an API key?");
                 }
 
-                throw new ArgumentException("The provided token isn't an oauth token.");
+                throw new InvalidOperationException(
+                    "The provided token isn't an oauth token. Are you trying to use oauth specific parameters such as ProfileId or TestMode using an API key?");
             }
         }
 
