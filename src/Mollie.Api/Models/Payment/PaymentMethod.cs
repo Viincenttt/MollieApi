@@ -32,5 +32,6 @@
         public const string BancomatPay = "bancomat_pay";
         public const string BacsDirectDebit = "bacs";
         public const string Alma = "alma";
+        public const string GooglePay = "googlepay";
     }
 }
