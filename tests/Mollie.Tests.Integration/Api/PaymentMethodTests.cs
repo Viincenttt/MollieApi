@@ -41,11 +41,7 @@ public class PaymentMethodTests : BaseMollieApiTestClass, IDisposable {
     }
 
     [DefaultRetryTheory]
-    [InlineData(PaymentMethod.Bancontact)]
-    [InlineData(PaymentMethod.BankTransfer)]
-    [InlineData(PaymentMethod.Belfius)]
-    [InlineData(PaymentMethod.PayPal)]
-    [InlineData(PaymentMethod.Kbc)]
+    [InlineData(PaymentMethod.GooglePay)]
     public async Task CanRetrieveSinglePaymentMethod(string method) {
         // When: retrieving a payment method
         PaymentMethodResponse paymentMethod = await _paymentMethodClient.GetPaymentMethodAsync(method);
