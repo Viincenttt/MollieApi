@@ -1,6 +1,6 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
-using FluentAssertions;
+using Shouldly;
 using Mollie.Api.Client;
 using RichardSzalay.MockHttp;
 using Xunit;
@@ -25,12 +25,12 @@ public class InvoiceClientTests : BaseClientTests
 
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
-        result.Should().NotBeNull();
-        result.Resource.Should().Be("invoice");
-        result.Id.Should().Be(invoiceId);
-        result.Reference.Should().Be("2016.10000");
-        result.VatNumber.Should().Be("NL001234567B01");
-        result.Status.Should().Be("open");
+        result.ShouldNotBeNull();
+        result.Resource.ShouldBe("invoice");
+        result.Id.ShouldBe(invoiceId);
+        result.Reference.ShouldBe("2016.10000");
+        result.VatNumber.ShouldBe("NL001234567B01");
+        result.Status.ShouldBe("open");
     }
 
     [Theory]
@@ -54,7 +54,7 @@ public class InvoiceClientTests : BaseClientTests
 
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
-        result.Should().NotBeNull();
+        result.ShouldNotBeNull();
     }
 
     private const string defaultInvoice = @"{

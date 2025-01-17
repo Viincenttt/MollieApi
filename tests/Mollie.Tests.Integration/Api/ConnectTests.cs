@@ -2,7 +2,7 @@
 using Mollie.Tests.Integration.Framework;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using FluentAssertions;
+using Shouldly;
 using Mollie.Api.Models.Connect.Request;
 using Mollie.Api.Models.Connect.Response;
 
@@ -19,7 +19,7 @@ public class ConnectTests : BaseMollieApiTestClass {
 
         // Then:
         string expectedUrl = $"https://my.mollie.com/oauth2/authorize?client_id={ClientId}&state=abcde&scope=payments.read&response_type=code&approval_prompt=auto";
-        authorizationUrl.Should().Be(expectedUrl);
+        authorizationUrl.ShouldBe(expectedUrl);
     }
 
     [DefaultRetryFact]
@@ -38,7 +38,7 @@ public class ConnectTests : BaseMollieApiTestClass {
         // Then:
         string expectedUrl = $"https://my.mollie.com/oauth2/authorize?client_id={ClientId}" +
                              $"&state=abcdef&scope=payments.read+payments.write+profiles.read+profiles.write&response_type=code&approval_prompt=auto";
-        authorizationUrl.Should().Be(expectedUrl);
+        authorizationUrl.ShouldBe(expectedUrl);
     }
 
     [DefaultRetryFact(Skip = "We can only test this in debug mode, because we login to the mollie dashboard and login to get the auth token")]
@@ -52,7 +52,7 @@ public class ConnectTests : BaseMollieApiTestClass {
         TokenResponse tokenResponse = await connectClient.GetAccessTokenAsync(tokenRequest);
 
         // Then: The access token should not be null
-        tokenResponse.AccessToken.Should().NotBeNullOrEmpty();
+        tokenResponse.AccessToken.ShouldNotBeNullOrEmpty();
     }
 
     [DefaultRetryFact(Skip = "We can only test this in debug mode, because we need a valid access token")]

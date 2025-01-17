@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+﻿using Shouldly;
 using Mollie.Api.Framework;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Payment.Request;
@@ -22,8 +22,8 @@ namespace Mollie.Tests.Unit.Framework {
             // When: We serialize the JSON
             string jsonValue = jsonConverterService.Serialize(paymentRequest);
 
-            // Then:            
-            jsonValue.Should().Be(expectedJsonValue);
+            // Then:
+            jsonValue.ShouldBe(expectedJsonValue);
         }
 
         [Fact]
@@ -40,8 +40,8 @@ namespace Mollie.Tests.Unit.Framework {
             // When: We deserialize the JSON
             PaymentResponse payments = jsonConverterService.Deserialize<PaymentResponse>(paymentJson);
 
-            // Then: 
-            payments.Metadata.Should().Be(metadataJson);
+            // Then:
+            payments.Metadata.ShouldBe(metadataJson);
         }
 
         [Fact]
@@ -54,8 +54,8 @@ namespace Mollie.Tests.Unit.Framework {
             // When: We deserialize the JSON
             PaymentResponse payments = jsonConverterService.Deserialize<PaymentResponse>(paymentJson);
 
-            // Then: 
-            payments.Metadata.Should().Be(metadataJson);
+            // Then:
+            payments.Metadata.ShouldBe(metadataJson);
         }
 
         [Fact]
@@ -68,8 +68,8 @@ namespace Mollie.Tests.Unit.Framework {
             // When: We deserialize the JSON
             PaymentResponse payments = jsonConverterService.Deserialize<PaymentResponse>(paymentJson);
 
-            // Then: 
-            payments.Metadata.Should().BeNull();
+            // Then:
+            payments.Metadata.ShouldBeNull();
         }
     }
 }

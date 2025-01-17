@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using FluentAssertions;
+using Shouldly;
 using Mollie.Api.Client;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Payment;
@@ -21,14 +21,14 @@ public class ProfileClientTests : BaseClientTests
     public async Task CreateProfileAsync_WithRequiredParameters_ResponseIsDeserializedInExpectedFormat()
     {
         // Arrange
-        ProfileRequest profileRequest = new ProfileRequest() {
+        ProfileRequest profileRequest = new() {
             Name = "My website name",
             Email = "info@mywebsite.com",
             Mode = Mode.Test,
             Phone = "+31208202070",
             Website = "https://www.mywebsite.com",
             Description = "Description",
-            CountriesOfActivity = new List<string>() { "NL" },
+            CountriesOfActivity = ["NL"],
             BusinessCategory = "OTHER_MERCHANDISE"
         };
         var mockHttp = new MockHttpMessageHandler();
@@ -44,8 +44,8 @@ public class ProfileClientTests : BaseClientTests
         // Assert
         mockHttp.VerifyNoOutstandingRequest();
         AssertDefaultProfileResponse(result);
-        result.Description.Should().Be(profileRequest.Description);
-        result.CountriesOfActivity.Should().Equal(profileRequest.CountriesOfActivity);
+        result.Description.ShouldBe(profileRequest.Description);
+        result.CountriesOfActivity.ShouldBe(profileRequest.CountriesOfActivity);
     }
 
     [Fact]
@@ -103,36 +103,36 @@ public class ProfileClientTests : BaseClientTests
 
         // Assert
         mockHttp.VerifyNoOutstandingRequest();
-        result.Count.Should().Be(1);
+        result.Count.ShouldBe(1);
         var profile = result.Items[0];
-        profile.Resource.Should().Be("profiles");
-        profile.Id.Should().Be("pfl_v9hTwCvYqw");
-        profile.Mode.Should().Be(Mode.Live);
-        profile.Name.Should().Be("My website name");
-        profile.Email.Should().Be("info@mywebsite.com");
-        profile.Website.Should().Be("https://www.mywebsite.com");
-        profile.Phone.Should().Be("+31208202070");
-        profile.BusinessCategory.Should().Be("OTHER_MERCHANDISE");
-        profile.Status.Should().Be(ProfileStatus.Verified);
-        profile.Review.Status.Should().Be(ReviewStatus.Pending);
-        profile.CreatedAt.Should().Be(DateTime.Parse("2018-03-20T09:28:37+00:00"));
-        profile.Links.Should().NotBeNull();
-        profile.Links.Self.Href.Should().Be("https://api.mollie.com/v2/profiles/pfl_v9hTwCvYqw");
-        profile.Links.Self.Type.Should().Be("application/hal+json");
-        profile.Links.Dashboard.Href.Should().Be("https://www.mollie.com/dashboard/org_123456789/settings/profiles/pfl_v9hTwCvYqw");
-        profile.Links.Dashboard.Type.Should().Be("text/html");
-        profile.Links.Chargebacks.Href.Should().Be("https://api.mollie.com/v2/chargebacks?profileId=pfl_v9hTwCvYqw");
-        profile.Links.Chargebacks.Type.Should().Be("application/hal+json");
-        profile.Links.Methods.Href.Should().Be("https://api.mollie.com/v2/methods?profileId=pfl_v9hTwCvYqw");
-        profile.Links.Methods.Type.Should().Be("application/hal+json");
-        profile.Links.Payments.Href.Should().Be("https://api.mollie.com/v2/payments?profileId=pfl_v9hTwCvYqw");
-        profile.Links.Payments.Type.Should().Be("application/hal+json");
-        profile.Links.Refunds.Href.Should().Be("https://api.mollie.com/v2/refunds?profileId=pfl_v9hTwCvYqw");
-        profile.Links.Refunds.Type.Should().Be("application/hal+json");
-        profile.Links.CheckoutPreviewUrl.Href.Should().Be("https://www.mollie.com/payscreen/preview/pfl_v9hTwCvYqw");
-        profile.Links.CheckoutPreviewUrl.Type.Should().Be("text/html");
-        profile.Links.Documentation.Href.Should().Be("https://docs.mollie.com/reference/v2/profiles-api/create-profile");
-        profile.Links.Documentation.Type.Should().Be("text/html");
+        profile.Resource.ShouldBe("profiles");
+        profile.Id.ShouldBe("pfl_v9hTwCvYqw");
+        profile.Mode.ShouldBe(Mode.Live);
+        profile.Name.ShouldBe("My website name");
+        profile.Email.ShouldBe("info@mywebsite.com");
+        profile.Website.ShouldBe("https://www.mywebsite.com");
+        profile.Phone.ShouldBe("+31208202070");
+        profile.BusinessCategory.ShouldBe("OTHER_MERCHANDISE");
+        profile.Status.ShouldBe(ProfileStatus.Verified);
+        profile.Review.Status.ShouldBe(ReviewStatus.Pending);
+        profile.CreatedAt.ShouldBe(DateTime.Parse("2018-03-20T09:28:37+00:00"));
+        profile.Links.ShouldNotBeNull();
+        profile.Links.Self.Href.ShouldBe("https://api.mollie.com/v2/profiles/pfl_v9hTwCvYqw");
+        profile.Links.Self.Type.ShouldBe("application/hal+json");
+        profile.Links.Dashboard.Href.ShouldBe("https://www.mollie.com/dashboard/org_123456789/settings/profiles/pfl_v9hTwCvYqw");
+        profile.Links.Dashboard.Type.ShouldBe("text/html");
+        profile.Links.Chargebacks.Href.ShouldBe("https://api.mollie.com/v2/chargebacks?profileId=pfl_v9hTwCvYqw");
+        profile.Links.Chargebacks.Type.ShouldBe("application/hal+json");
+        profile.Links.Methods.Href.ShouldBe("https://api.mollie.com/v2/methods?profileId=pfl_v9hTwCvYqw");
+        profile.Links.Methods.Type.ShouldBe("application/hal+json");
+        profile.Links.Payments.Href.ShouldBe("https://api.mollie.com/v2/payments?profileId=pfl_v9hTwCvYqw");
+        profile.Links.Payments.Type.ShouldBe("application/hal+json");
+        profile.Links.Refunds.Href.ShouldBe("https://api.mollie.com/v2/refunds?profileId=pfl_v9hTwCvYqw");
+        profile.Links.Refunds.Type.ShouldBe("application/hal+json");
+        profile.Links.CheckoutPreviewUrl.Href.ShouldBe("https://www.mollie.com/payscreen/preview/pfl_v9hTwCvYqw");
+        profile.Links.CheckoutPreviewUrl.Type.ShouldBe("text/html");
+        profile.Links.Documentation.Href.ShouldBe("https://docs.mollie.com/reference/v2/profiles-api/create-profile");
+        profile.Links.Documentation.Type.ShouldBe("text/html");
     }
 
     [Fact]
@@ -184,7 +184,7 @@ public class ProfileClientTests : BaseClientTests
         var exception = await Assert.ThrowsAsync<ArgumentException>(() => profileClient.UpdateProfileAsync(profileId, profileRequest));
 
         // Assert
-        exception.Message.Should().Be($"Required URL argument '{nameof(profileId)}' is null or empty");
+        exception.Message.ShouldBe($"Required URL argument '{nameof(profileId)}' is null or empty");
     }
 
     [Fact]
@@ -204,8 +204,8 @@ public class ProfileClientTests : BaseClientTests
 
         // Assert
         mockHttp.VerifyNoOutstandingRequest();
-        result.Resource.Should().Be("method");
-        result.Id.Should().Be(paymentMethod);
+        result.Resource.ShouldBe("method");
+        result.Id.ShouldBe(paymentMethod);
     }
 
     [Fact]
@@ -220,7 +220,7 @@ public class ProfileClientTests : BaseClientTests
         var exception = await Assert.ThrowsAsync<ArgumentException>(() => profileClient.EnablePaymentMethodAsync(string.Empty));
 
         // Assert
-        exception.Message.Should().Be($"Required URL argument 'paymentMethod' is null or empty");
+        exception.Message.ShouldBe($"Required URL argument 'paymentMethod' is null or empty");
     }
 
     [Fact]
@@ -254,7 +254,7 @@ public class ProfileClientTests : BaseClientTests
         var exception = await Assert.ThrowsAsync<ArgumentException>(() => profileClient.DisablePaymentMethodAsync(string.Empty));
 
         // Assert
-        exception.Message.Should().Be($"Required URL argument 'paymentMethod' is null or empty");
+        exception.Message.ShouldBe($"Required URL argument 'paymentMethod' is null or empty");
     }
 
     [Fact]
@@ -288,7 +288,7 @@ public class ProfileClientTests : BaseClientTests
         var exception = await Assert.ThrowsAsync<ArgumentException>(() => profileClient.DeleteProfileAsync(string.Empty));
 
         // Assert
-        exception.Message.Should().Be($"Required URL argument 'profileId' is null or empty");
+        exception.Message.ShouldBe($"Required URL argument 'profileId' is null or empty");
     }
 
     [Fact]
@@ -308,10 +308,10 @@ public class ProfileClientTests : BaseClientTests
 
         // Assert
         mockHttp.VerifyNoOutstandingRequest();
-        result.Resource.Should().Be("issuer");
-        result.Id.Should().Be(issuer);
-        result.Description.Should().Be("FestivalCadeau Giftcard");
-        result.Status.Should().Be("pending-issuer");
+        result.Resource.ShouldBe("issuer");
+        result.Id.ShouldBe(issuer);
+        result.Description.ShouldBe("FestivalCadeau Giftcard");
+        result.Status.ShouldBe("pending-issuer");
     }
 
     [Fact]
@@ -326,7 +326,7 @@ public class ProfileClientTests : BaseClientTests
         var exception = await Assert.ThrowsAsync<ArgumentException>(() => profileClient.EnableGiftCardIssuerAsync(string.Empty));
 
         // Assert
-        exception.Message.Should().Be($"Required URL argument 'issuer' is null or empty");
+        exception.Message.ShouldBe($"Required URL argument 'issuer' is null or empty");
     }
 
     [Fact]
@@ -360,20 +360,20 @@ public class ProfileClientTests : BaseClientTests
         var exception = await Assert.ThrowsAsync<ArgumentException>(() => profileClient.DisableGiftCardIssuerAsync(string.Empty));
 
         // Assert
-        exception.Message.Should().Be($"Required URL argument 'issuer' is null or empty");
+        exception.Message.ShouldBe($"Required URL argument 'issuer' is null or empty");
     }
 
     private void AssertDefaultProfileResponse(ProfileResponse result)
     {
-        result.Resource.Should().Be("profile");
-        result.Id.Should().Be("pfl_v9hTwCvYqw");
-        result.Mode.Should().Be(Mode.Test);
-        result.Name.Should().Be("My website name");
-        result.Email.Should().Be("info@mywebsite.com");
-        result.Website.Should().Be("https://www.mywebsite.com");
-        result.Phone.Should().Be("+31208202070");
-        result.BusinessCategory.Should().Be("OTHER_MERCHANDISE");
-        result.Status.Should().Be(ProfileStatus.Unverified);
+        result.Resource.ShouldBe("profile");
+        result.Id.ShouldBe("pfl_v9hTwCvYqw");
+        result.Mode.ShouldBe(Mode.Test);
+        result.Name.ShouldBe("My website name");
+        result.Email.ShouldBe("info@mywebsite.com");
+        result.Website.ShouldBe("https://www.mywebsite.com");
+        result.Phone.ShouldBe("+31208202070");
+        result.BusinessCategory.ShouldBe("OTHER_MERCHANDISE");
+        result.Status.ShouldBe(ProfileStatus.Unverified);
     }
 
     private const string defaultEnableGiftcardIssuerResponse = @"{

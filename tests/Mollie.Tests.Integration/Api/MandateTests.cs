@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
+using Shouldly;
 using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models.Customer.Response;
@@ -35,8 +35,8 @@ public class MandateTests : BaseMollieApiTestClass, IDisposable {
             ListResponse<MandateResponse> response = await _mandateClient.GetMandateListAsync(customers.Items.First().Id);
 
             // Then
-            response.Should().NotBeNull();
-            response.Items.Should().NotBeNull();
+            response.ShouldNotBeNull();
+            response.Items.ShouldNotBeNull();
         }
     }
 
@@ -53,7 +53,7 @@ public class MandateTests : BaseMollieApiTestClass, IDisposable {
             ListResponse<MandateResponse> response = await _mandateClient.GetMandateListAsync(customers.Items.First().Id, null, numberOfMandates);
 
             // Then
-            numberOfMandates.Should().BeGreaterOrEqualTo(response.Items.Count);
+            numberOfMandates.ShouldBeGreaterThanOrEqualTo(response.Items.Count);
         }
     }
 
@@ -73,10 +73,10 @@ public class MandateTests : BaseMollieApiTestClass, IDisposable {
             MandateResponse mandateResponse = await _mandateClient.CreateMandateAsync(customers.Items.First().Id, mandateRequest);
 
             // Then: Make sure we created a new mandate
-            mandateResponse.Should().BeOfType<SepaDirectDebitMandateResponse>();
+            mandateResponse.ShouldBeOfType<SepaDirectDebitMandateResponse>();
             var sepaDirectDebitResponse = (SepaDirectDebitMandateResponse)mandateResponse;
-            sepaDirectDebitResponse.Details.ConsumerAccount.Should().Be(mandateRequest.ConsumerAccount);
-            sepaDirectDebitResponse.Details.ConsumerName.Should().Be(mandateRequest.ConsumerName);
+            sepaDirectDebitResponse.Details.ConsumerAccount.ShouldBe(mandateRequest.ConsumerAccount);
+            sepaDirectDebitResponse.Details.ConsumerName.ShouldBe(mandateRequest.ConsumerName);
         }
     }
 

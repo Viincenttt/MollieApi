@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using FluentAssertions;
+using Shouldly;
 using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
@@ -30,8 +30,8 @@ public class CustomerTests : BaseMollieApiTestClass, IDisposable {
         ListResponse<CustomerResponse> response = await _customerClient.GetCustomerListAsync();
 
         // Then
-        response.Should().NotBeNull();
-        response.Items.Should().NotBeNull();
+        response.ShouldNotBeNull();
+        response.Items.ShouldNotBeNull();
     }
 
     [DefaultRetryFact]
@@ -43,7 +43,7 @@ public class CustomerTests : BaseMollieApiTestClass, IDisposable {
         ListResponse<CustomerResponse> response = await _customerClient.GetCustomerListAsync(null, numberOfCustomers);
 
         // Then
-        numberOfCustomers.Should().Be(response.Items.Count);
+        numberOfCustomers.ShouldBe(response.Items.Count);
     }
 
     [DefaultRetryFact]
@@ -56,9 +56,9 @@ public class CustomerTests : BaseMollieApiTestClass, IDisposable {
         CustomerResponse result = await CreateCustomer(name, email);
 
         // Then: Make sure the requested parameters match the response parameter values
-        result.Should().NotBeNull();
-        result.Name.Should().Be(name);
-        result.Email.Should().Be(email);
+        result.ShouldNotBeNull();
+        result.Name.ShouldBe(name);
+        result.Email.ShouldBe(email);
     }
 
     [DefaultRetryFact]
@@ -75,8 +75,8 @@ public class CustomerTests : BaseMollieApiTestClass, IDisposable {
         CustomerResponse result = await _customerClient.UpdateCustomerAsync(customerIdToUpdate, updateParameters);
 
         // Then: Make sure the new name is updated
-        result.Should().NotBeNull();
-        result.Name.Should().Be(newCustomerName);
+        result.ShouldNotBeNull();
+        result.Name.ShouldBe(newCustomerName);
     }
 
     [DefaultRetryFact]
@@ -90,7 +90,7 @@ public class CustomerTests : BaseMollieApiTestClass, IDisposable {
 
         // Then: Make sure its deleted
         MollieApiException apiException = await Assert.ThrowsAsync<MollieApiException>(() => _customerClient.GetCustomerAsync(customerIdToDelete));
-        apiException.Details.Status.Should().Be((int)HttpStatusCode.Gone);
+        apiException.Details.Status.ShouldBe((int)HttpStatusCode.Gone);
     }
 
     [DefaultRetryFact]
@@ -104,8 +104,8 @@ public class CustomerTests : BaseMollieApiTestClass, IDisposable {
         CustomerResponse retrievedCustomer = await _customerClient.GetCustomerAsync(createdCustomer.Links.Self);
 
         // Then: Make sure it's retrieved
-        retrievedCustomer.Name.Should().Be(createdCustomer.Name);
-        retrievedCustomer.Email.Should().Be(createdCustomer.Email);
+        retrievedCustomer.Name.ShouldBe(createdCustomer.Name);
+        retrievedCustomer.Email.ShouldBe(createdCustomer.Email);
     }
 
     [DefaultRetryFact]
@@ -122,7 +122,7 @@ public class CustomerTests : BaseMollieApiTestClass, IDisposable {
         CustomerResponse retrievedCustomer = await _customerClient.CreateCustomerAsync(customerRequest);
 
         // Then: Make sure it's retrieved
-        IsJsonResultEqual(customerRequest.Metadata, retrievedCustomer.Metadata).Should().BeTrue();
+        IsJsonResultEqual(customerRequest.Metadata, retrievedCustomer.Metadata).ShouldBeTrue();
     }
 
     [DefaultRetryFact]
@@ -139,7 +139,7 @@ public class CustomerTests : BaseMollieApiTestClass, IDisposable {
         CustomerResponse retrievedCustomer = await _customerClient.CreateCustomerAsync(customerRequest);
 
         // Then: Make sure it's retrieved
-        retrievedCustomer.Metadata.Should().Be(customerRequest.Metadata);
+        retrievedCustomer.Metadata.ShouldBe(customerRequest.Metadata);
     }
 
     [DefaultRetryFact]
@@ -158,8 +158,8 @@ public class CustomerTests : BaseMollieApiTestClass, IDisposable {
         PaymentResponse paymentResponse = await _customerClient.CreateCustomerPayment(customer.Id, paymentRequest);
 
         // Then: Make sure the requested parameters match the response parameter values
-        paymentResponse.Should().NotBeNull();
-        paymentResponse.CustomerId.Should().Be(customer.Id);
+        paymentResponse.ShouldNotBeNull();
+        paymentResponse.CustomerId.ShouldBe(customer.Id);
     }
 
     private async Task<CustomerResponse> CreateCustomer(string name, string email) {

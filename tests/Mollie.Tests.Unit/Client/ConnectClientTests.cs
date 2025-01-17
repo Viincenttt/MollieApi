@@ -2,7 +2,7 @@
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using FluentAssertions;
+using Shouldly;
 using Mollie.Api.Client;
 using Mollie.Api.Models.Connect.Request;
 using Mollie.Api.Models.Connect.Response;
@@ -29,7 +29,7 @@ public class ConnectClientTests : BaseClientTests
 
         // Assert
         string expectedUrl = $"https://my.mollie.com/oauth2/authorize?client_id={ClientId}&state=abcde&scope=payments.read&response_type=code&approval_prompt=auto";
-        authorizationUrl.Should().Be(expectedUrl);
+        authorizationUrl.ShouldBe(expectedUrl);
     }
 
     [Theory]
@@ -50,13 +50,13 @@ public class ConnectClientTests : BaseClientTests
 
         // Assert
         mockHttp.VerifyNoOutstandingExpectation();
-        tokenRequest.GrantType.Should().Be(expectedGrantType);
-        tokenResponse.Should().NotBeNull();
-        tokenResponse.AccessToken.Should().Be("access_46EUJ6x8jFJZZeAvhNH4JVey6qVpqR");
-        tokenResponse.RefreshToken.Should().Be("refresh_FS4xc3Mgci2xQ5s5DzaLXh3HhaTZOP");
-        tokenResponse.ExpiresIn.Should().Be(3600);
-        tokenResponse.TokenType.Should().Be("bearer");
-        tokenResponse.Scope.Should().Be("payments.read organizations.read");
+        tokenRequest.GrantType.ShouldBe(expectedGrantType);
+        tokenResponse.ShouldNotBeNull();
+        tokenResponse.AccessToken.ShouldBe("access_46EUJ6x8jFJZZeAvhNH4JVey6qVpqR");
+        tokenResponse.RefreshToken.ShouldBe("refresh_FS4xc3Mgci2xQ5s5DzaLXh3HhaTZOP");
+        tokenResponse.ExpiresIn.ShouldBe(3600);
+        tokenResponse.TokenType.ShouldBe("bearer");
+        tokenResponse.Scope.ShouldBe("payments.read organizations.read");
     }
 
     [Fact]

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using FluentAssertions;
+using Shouldly;
 using Mollie.Api.Client;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Shipment;
@@ -46,11 +46,11 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
-            shipmentResponse.Should().NotBeNull();
-            shipmentResponse.OrderId.Should().Be(orderId);
-            shipmentResponse.Tracking.Carrier.Should().Be(shipmentRequest.Tracking.Carrier);
-            shipmentResponse.Tracking.Code.Should().Be(shipmentRequest.Tracking.Code);
-            shipmentResponse.Tracking.Url.Should().Be(shipmentRequest.Tracking.Url);
+            shipmentResponse.ShouldNotBeNull();
+            shipmentResponse.OrderId.ShouldBe(orderId);
+            shipmentResponse.Tracking.Carrier.ShouldBe(shipmentRequest.Tracking.Carrier);
+            shipmentResponse.Tracking.Code.ShouldBe(shipmentRequest.Tracking.Code);
+            shipmentResponse.Tracking.Url.ShouldBe(shipmentRequest.Tracking.Url);
         }
 
         [Theory]
@@ -72,7 +72,7 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
-            shipmentResponse.Should().NotBeNull();
+            shipmentResponse.ShouldNotBeNull();
         }
 
         [Theory]
@@ -93,7 +93,7 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
-            shipmentListResponse.Should().NotBeNull();
+            shipmentListResponse.ShouldNotBeNull();
         }
 
         [Fact]
@@ -123,11 +123,11 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
-            shipmentResponse.Should().NotBeNull();
-            shipmentResponse.OrderId.Should().Be(orderId);
-            shipmentResponse.Tracking.Carrier.Should().Be(updateShipmentRequest.Tracking.Carrier);
-            shipmentResponse.Tracking.Code.Should().Be(updateShipmentRequest.Tracking.Code);
-            shipmentResponse.Tracking.Url.Should().Be(updateShipmentRequest.Tracking.Url);
+            shipmentResponse.ShouldNotBeNull();
+            shipmentResponse.OrderId.ShouldBe(orderId);
+            shipmentResponse.Tracking.Carrier.ShouldBe(updateShipmentRequest.Tracking.Carrier);
+            shipmentResponse.Tracking.Code.ShouldBe(updateShipmentRequest.Tracking.Code);
+            shipmentResponse.Tracking.Url.ShouldBe(updateShipmentRequest.Tracking.Url);
         }
 
         [Theory]
@@ -144,7 +144,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await shipmentClient.CreateShipmentAsync(orderId, new ShipmentRequest()));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'orderId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'orderId' is null or empty");
         }
 
         [Theory]
@@ -161,7 +161,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await shipmentClient.GetShipmentAsync(orderId, "shipment-id"));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'orderId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'orderId' is null or empty");
         }
 
         [Theory]
@@ -178,7 +178,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await shipmentClient.GetShipmentAsync("order-id", shipmentId));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'shipmentId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'shipmentId' is null or empty");
         }
 
         [Theory]
@@ -195,7 +195,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await shipmentClient.GetShipmentListAsync(orderId));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'orderId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'orderId' is null or empty");
         }
 
         [Theory]
@@ -219,7 +219,7 @@ namespace Mollie.Tests.Unit.Client {
                 await shipmentClient.UpdateShipmentAsync(orderId, "shipment-id", updateRequest));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'orderId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'orderId' is null or empty");
         }
 
         [Theory]
@@ -243,7 +243,7 @@ namespace Mollie.Tests.Unit.Client {
                 await shipmentClient.UpdateShipmentAsync("order-id", shipmentId, updateRequest));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'shipmentId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'shipmentId' is null or empty");
         }
 
         private const string DefaultShipmentJsonToReturn = @"{

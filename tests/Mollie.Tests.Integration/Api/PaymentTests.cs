@@ -12,7 +12,7 @@ using Mollie.Api.Models.Payment.Response;
 using Mollie.Tests.Integration.Framework;
 using System.Collections.Generic;
 using System.Linq;
-using FluentAssertions;
+using Shouldly;
 using Mollie.Api.Models.Capture.Response;
 using Mollie.Api.Models.Customer.Response;
 using Mollie.Api.Models.List.Response;
@@ -22,6 +22,7 @@ using Mollie.Api.Models.Payment.Request.PaymentSpecificParameters;
 using Mollie.Api.Models.Payment.Response.PaymentSpecificParameters;
 using Mollie.Api.Models.Terminal.Response;
 using Xunit;
+using SortDirection = Mollie.Api.Models.SortDirection;
 
 namespace Mollie.Tests.Integration.Api;
 
@@ -46,9 +47,9 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         ListResponse<PaymentResponse> response = await _paymentClient.GetPaymentListAsync();
 
         // Then
-        response.Should().NotBeNull();
-        response.Items.Should().NotBeNull();
-        response.Items.Should().BeInDescendingOrder(x => x.CreatedAt);
+        response.ShouldNotBeNull();
+        response.Items.ShouldNotBeNull();
+        response.Items.Select(x => x.CreatedAt).ShouldBeInOrder(Shouldly.SortDirection.Descending);
     }
 
     [DefaultRetryFact]
@@ -58,9 +59,9 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         ListResponse<PaymentResponse> response = await _paymentClient.GetPaymentListAsync(sort: SortDirection.Desc);
 
         // Then
-        response.Should().NotBeNull();
-        response.Items.Should().NotBeNull();
-        response.Items.Should().BeInDescendingOrder(x => x.CreatedAt);
+        response.ShouldNotBeNull();
+        response.Items.ShouldNotBeNull();
+        response.Items.Select(x => x.CreatedAt).ShouldBeInOrder(Shouldly.SortDirection.Descending);
     }
 
     [DefaultRetryFact]
@@ -70,9 +71,9 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         ListResponse<PaymentResponse> response = await _paymentClient.GetPaymentListAsync(sort: SortDirection.Asc);
 
         // Then
-        response.Should().NotBeNull();
-        response.Items.Should().NotBeNull();
-        response.Items.Should().BeInAscendingOrder(x => x.CreatedAt);
+        response.ShouldNotBeNull();
+        response.Items.ShouldNotBeNull();
+        response.Items.Select(x => x.CreatedAt).ShouldBeInOrder(Shouldly.SortDirection.Ascending);
     }
 
     [DefaultRetryFact]
@@ -84,7 +85,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         ListResponse<PaymentResponse> response = await _paymentClient.GetPaymentListAsync(null, numberOfPayments);
 
         // Then
-        response.Items.Count.Should().BeLessOrEqualTo(numberOfPayments);
+        response.Items.Count.ShouldBeLessThanOrEqualTo(numberOfPayments);
     }
 
     [DefaultRetryFact]
@@ -100,10 +101,10 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         PaymentResponse result = await _paymentClient.CreatePaymentAsync(paymentRequest);
 
         // Then: Make sure we get a valid response
-        result.Should().NotBeNull();
-        result.Amount.Should().Be(paymentRequest.Amount);
-        result.Description.Should().Be(paymentRequest.Description);
-        result.RedirectUrl.Should().Be(paymentRequest.RedirectUrl);
+        result.ShouldNotBeNull();
+        result.Amount.ShouldBe(paymentRequest.Amount);
+        result.Description.ShouldBe(paymentRequest.Description);
+        result.RedirectUrl.ShouldBe(paymentRequest.RedirectUrl);
     }
 
     [DefaultRetryFact]
@@ -122,7 +123,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
             PaymentResponse secondAttempt = await _paymentClient.CreatePaymentAsync(paymentRequest);
 
             // Then: Make sure the responses have the same payment Id
-            firstAttempt.Id.Should().Be(secondAttempt.Id);
+            firstAttempt.Id.ShouldBe(secondAttempt.Id);
         }
     }
 
@@ -143,13 +144,13 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         PaymentResponse result = await _paymentClient.CreatePaymentAsync(paymentRequest);
 
         // Then: Make sure all requested parameters match the response parameter values
-        result.Should().NotBeNull();
-        result.Amount.Should().Be(paymentRequest.Amount);
-        result.Description.Should().Be(paymentRequest.Description);
-        result.RedirectUrl.Should().Be(paymentRequest.RedirectUrl);
-        result.Locale.Should().Be(paymentRequest.Locale);
-        result.WebhookUrl.Should().Be(paymentRequest.WebhookUrl);
-        IsJsonResultEqual(result.Metadata, paymentRequest.Metadata).Should().BeTrue();
+        result.ShouldNotBeNull();
+        result.Amount.ShouldBe(paymentRequest.Amount);
+        result.Description.ShouldBe(paymentRequest.Description);
+        result.RedirectUrl.ShouldBe(paymentRequest.RedirectUrl);
+        result.Locale.ShouldBe(paymentRequest.Locale);
+        result.WebhookUrl.ShouldBe(paymentRequest.WebhookUrl);
+        IsJsonResultEqual(result.Metadata, paymentRequest.Metadata).ShouldBeTrue();
     }
 
     [DefaultRetryFact]
@@ -170,8 +171,8 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         PaymentResponse updatedPayment = await _paymentClient.UpdatePaymentAsync(result.Id, paymentUpdateRequest);
 
         // Then: Make sure the payment is updated
-        updatedPayment.Description.Should().Be(paymentUpdateRequest.Description);
-        updatedPayment.Metadata.Should().Be(paymentUpdateRequest.Metadata);
+        updatedPayment.Description.ShouldBe(paymentUpdateRequest.Description);
+        updatedPayment.Metadata.ShouldBe(paymentUpdateRequest.Metadata);
     }
 
     [DefaultRetryFact]
@@ -188,11 +189,11 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         PaymentResponse result = await _paymentClient.CreatePaymentAsync(paymentRequest);
 
         // Then: Make sure we get a valid response
-        result.Should().NotBeNull();
-        result.Amount.Should().Be(paymentRequest.Amount);
-        result.Description.Should().Be(paymentRequest.Description);
-        result.RedirectUrl.Should().Be(paymentRequest.RedirectUrl);
-        result.Method.Should().Be(paymentRequest.Method);
+        result.ShouldNotBeNull();
+        result.Amount.ShouldBe(paymentRequest.Amount);
+        result.Description.ShouldBe(paymentRequest.Description);
+        result.RedirectUrl.ShouldBe(paymentRequest.RedirectUrl);
+        result.Method.ShouldBe(paymentRequest.Method);
     }
 
     [DefaultRetryFact]
@@ -213,11 +214,11 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         PaymentResponse result = await _paymentClient.CreatePaymentAsync(paymentRequest);
 
         // Then: Make sure we get a valid response
-        result.Should().NotBeNull();
-        result.Amount.Should().Be(paymentRequest.Amount);
-        result.Description.Should().Be(paymentRequest.Description);
-        result.RedirectUrl.Should().Be(paymentRequest.RedirectUrl);
-        result.Method.Should().BeNull();
+        result.ShouldNotBeNull();
+        result.Amount.ShouldBe(paymentRequest.Amount);
+        result.Description.ShouldBe(paymentRequest.Description);
+        result.RedirectUrl.ShouldBe(paymentRequest.RedirectUrl);
+        result.Method.ShouldBeNull();
     }
 
     [DefaultRetryTheory]
@@ -245,12 +246,12 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         PaymentResponse result = await _paymentClient.CreatePaymentAsync(paymentRequest);
 
         // Then: Make sure all requested parameters match the response parameter values
-        result.Should().NotBeNull();
-        result.Should().BeOfType(expectedResponseType);
-        result.Amount.Should().Be(paymentRequest.Amount);
-        result.Description.Should().Be(paymentRequest.Description);
-        result.RedirectUrl.Should().Be(paymentRequest.RedirectUrl);
-        result.Method.Should().Be(paymentRequest.Method);
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType(expectedResponseType);
+        result.Amount.ShouldBe(paymentRequest.Amount);
+        result.Description.ShouldBe(paymentRequest.Description);
+        result.RedirectUrl.ShouldBe(paymentRequest.RedirectUrl);
+        result.Method.ShouldBe(paymentRequest.Method);
     }
 
     [DefaultRetryFact]
@@ -268,12 +269,12 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         PaymentResponse result = await _paymentClient.GetPaymentAsync(paymentResponse.Id);
 
         // Then
-        result.Should().NotBeNull();
-        result.Id.Should().Be(paymentResponse.Id);
-        result.Amount.Should().Be(paymentRequest.Amount);
-        result.Description.Should().Be(paymentRequest.Description);
-        result.RedirectUrl.Should().Be(paymentRequest.RedirectUrl);
-        result.Method.Should().Be(paymentRequest.Method);
+        result.ShouldNotBeNull();
+        result.Id.ShouldBe(paymentResponse.Id);
+        result.Amount.ShouldBe(paymentRequest.Amount);
+        result.Description.ShouldBe(paymentRequest.Description);
+        result.RedirectUrl.ShouldBe(paymentRequest.RedirectUrl);
+        result.Method.ShouldBe(paymentRequest.Method);
     }
 
     [DefaultRetryFact]
@@ -295,7 +296,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
             PaymentResponse result = await _paymentClient.GetPaymentAsync(paymentResponse.Id);
 
             // Then: Make sure the recurringtype parameter is entered
-            result.SequenceType.Should().Be(SequenceType.First);
+            result.SequenceType.ShouldBe(SequenceType.First);
         }
     }
 
@@ -314,7 +315,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         PaymentResponse result = await _paymentClient.CreatePaymentAsync(paymentRequest);
 
         // Then: Make sure we get the same json result as metadata
-        result.Metadata.Should().Be(metadata);
+        result.Metadata.ShouldBe(metadata);
     }
 
     [DefaultRetryFact]
@@ -332,7 +333,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         PaymentResponse result = await _paymentClient.CreatePaymentAsync(paymentRequest);
 
         // Then: Make sure we get the same json result as metadata
-        IsJsonResultEqual(result.Metadata, json).Should().BeTrue();
+        IsJsonResultEqual(result.Metadata, json).ShouldBeTrue();
     }
 
     [DefaultRetryFact]
@@ -355,9 +356,9 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         CustomMetadataClass metadataResponse = result.GetMetadata<CustomMetadataClass>();
 
         // Then: Make sure we get the same json result as metadata
-        metadataResponse.Should().NotBeNull();
-        metadataResponse.OrderId.Should().Be(metadataRequest.OrderId);
-        metadataResponse.Description.Should().Be(metadataRequest.Description);
+        metadataResponse.ShouldNotBeNull();
+        metadataResponse.OrderId.ShouldBe(metadataRequest.OrderId);
+        metadataResponse.Description.ShouldBe(metadataRequest.Description);
     }
 
     [DefaultRetryFact]
@@ -404,9 +405,9 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         PaymentResponse result = await _paymentClient.CreatePaymentAsync(paymentRequest);
 
         // Assert
-        result.Lines.Should().BeEquivalentTo(paymentRequest.Lines);
-        result.BillingAddress.Should().BeEquivalentTo(paymentRequest.BillingAddress);
-        result.ShippingAddress.Should().BeEquivalentTo(paymentRequest.ShippingAddress);
+        result.Lines.ShouldBeEquivalentTo(paymentRequest.Lines);
+        result.BillingAddress.ShouldBeEquivalentTo(paymentRequest.BillingAddress);
+        result.ShippingAddress.ShouldBeEquivalentTo(paymentRequest.ShippingAddress);
     }
 
     [DefaultRetryFact]
@@ -428,9 +429,9 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
             PaymentResponse result = await _paymentClient.CreatePaymentAsync(paymentRequest);
 
             // Then: Make sure we get the mandate id back in the details
-            result.MandateId.Should().Be(validMandate.Id);
-            result.Links.Mandate!.Href.Should().EndWith(validMandate.Id);
-            result.Links.Customer!.Href.Should().EndWith(customer.Id);
+            result.MandateId.ShouldBe(validMandate.Id);
+            result.Links.Mandate!.Href.ShouldEndWith(validMandate.Id);
+            result.Links.Customer!.Href.ShouldEndWith(customer.Id);
         }
     }
 
@@ -449,10 +450,10 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         PaymentResponse result = await paymentClient.CreatePaymentAsync(paymentRequest);
 
         // Then: It should still work in the same way
-        result.Should().NotBeNull();
-        result.Amount.Should().Be(paymentRequest.Amount);
-        result.Description.Should().Be(paymentRequest.Description);
-        result.RedirectUrl.Should().Be(paymentRequest.RedirectUrl);
+        result.ShouldNotBeNull();
+        result.Amount.ShouldBe(paymentRequest.Amount);
+        result.Description.ShouldBe(paymentRequest.Description);
+        result.RedirectUrl.ShouldBe(paymentRequest.RedirectUrl);
     }
 
     [DefaultRetryFact]
@@ -470,11 +471,11 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         PaymentResponse result = await _paymentClient.GetPaymentAsync(paymentResponse.Id);
 
         // Then
-        result.Should().NotBeNull();
-        result.Id.Should().Be(paymentResponse.Id);
-        result.Amount.Should().Be(paymentRequest.Amount);
-        result.Description.Should().Be(paymentRequest.Description);
-        result.RedirectUrl.Should().Be(paymentRequest.RedirectUrl);
+        result.ShouldNotBeNull();
+        result.Id.ShouldBe(paymentResponse.Id);
+        result.Amount.ShouldBe(paymentRequest.Amount);
+        result.Description.ShouldBe(paymentRequest.Description);
+        result.RedirectUrl.ShouldBe(paymentRequest.RedirectUrl);
     }
 
     [DefaultRetryFact]
@@ -497,13 +498,13 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         decimal resultAmount = result.Amount; // Implicit cast
 
         // Then
-        result.Should().NotBeNull();
-        result.Id.Should().Be(paymentResponse.Id);
-        result.Amount.Should().Be(paymentRequest.Amount);
-        result.Description.Should().Be(paymentRequest.Description);
-        result.RedirectUrl.Should().Be(paymentRequest.RedirectUrl);
-        resultAmount.Should().Be(responseAmount);
-        resultAmount.Should().Be(initialAmount);
+        result.ShouldNotBeNull();
+        result.Id.ShouldBe(paymentResponse.Id);
+        result.Amount.ShouldBe(paymentRequest.Amount);
+        result.Description.ShouldBe(paymentRequest.Description);
+        result.RedirectUrl.ShouldBe(paymentRequest.RedirectUrl);
+        resultAmount.ShouldBe(responseAmount);
+        resultAmount.ShouldBe(initialAmount);
     }
 
     [DefaultRetryFact]
@@ -524,19 +525,19 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
             PaymentResponse response = await _paymentClient.CreatePaymentAsync(paymentRequest);
 
             // Then
-            response.Should().NotBeNull();
-            response.Amount.Should().Be(paymentRequest.Amount);
-            response.Description.Should().Be(paymentRequest.Description);
-            response.RedirectUrl.Should().Be(paymentRequest.RedirectUrl);
-            response.Should().BeOfType<PointOfSalePaymentResponse>();
+            response.ShouldNotBeNull();
+            response.Amount.ShouldBe(paymentRequest.Amount);
+            response.Description.ShouldBe(paymentRequest.Description);
+            response.RedirectUrl.ShouldBe(paymentRequest.RedirectUrl);
+            response.ShouldBeOfType<PointOfSalePaymentResponse>();
             PointOfSalePaymentResponse posResponse = (PointOfSalePaymentResponse)response;
-            posResponse.Details.TerminalId.Should().Be(paymentRequest.TerminalId);
-            posResponse.Details.CardNumber.Should().BeNull();
-            posResponse.Details.CardFingerprint.Should().BeNull();
-            posResponse.Details.CardAudience.Should().BeNull();
-            posResponse.Details.CardLabel.Should().BeNull();
-            posResponse.Details.CardCountryCode.Should().BeNull();
-            posResponse.Method.Should().Be(PaymentMethod.PointOfSale);
+            posResponse.Details.TerminalId.ShouldBe(paymentRequest.TerminalId);
+            posResponse.Details.CardNumber.ShouldBeNull();
+            posResponse.Details.CardFingerprint.ShouldBeNull();
+            posResponse.Details.CardAudience.ShouldBeNull();
+            posResponse.Details.CardLabel.ShouldBeNull();
+            posResponse.Details.CardCountryCode.ShouldBeNull();
+            posResponse.Method.ShouldBe(PaymentMethod.PointOfSale);
         }
     }
 
@@ -561,10 +562,10 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         });
 
         // Then
-        captureResponse.Should().NotBeNull();
-        paymentResponse.Status.Should().Be(PaymentStatus.Authorized);
-        paymentRequest.CaptureMode.Should().Be(CaptureMode.Manual);
-        paymentResponse.CaptureBefore.Should().NotBeNull();
+        captureResponse.ShouldNotBeNull();
+        paymentResponse.Status.ShouldBe(PaymentStatus.Authorized);
+        paymentRequest.CaptureMode.ShouldBe(CaptureMode.Manual);
+        paymentResponse.CaptureBefore.ShouldNotBeNull();
     }
 
     [DefaultRetryFact]
@@ -582,7 +583,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         PaymentResponse paymentResponse = await _paymentClient.CreatePaymentAsync(paymentRequest);
 
         // Then
-        paymentResponse.CaptureDelay.Should().Be(paymentRequest.CaptureDelay);
+        paymentResponse.CaptureDelay.ShouldBe(paymentRequest.CaptureDelay);
     }
 
     private async Task<MandateResponse> GetFirstValidMandate() {

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using FluentAssertions;
+using Shouldly;
 using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
@@ -26,8 +26,8 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
         ListResponse<PaymentLinkResponse> response = await _paymentLinkClient.GetPaymentLinkListAsync();
 
         // Then
-        response.Should().NotBeNull();
-        response.Items.Should().NotBeNull();
+        response.ShouldNotBeNull();
+        response.Items.ShouldNotBeNull();
     }
 
     [DefaultRetryFact]
@@ -49,11 +49,11 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
         var verifyPaymentLinkResponse = new Action<PaymentLinkResponse>(response => {
             var expiresAtWithoutMs = paymentLinkRequest.ExpiresAt.Value.Truncate(TimeSpan.FromSeconds(1));
 
-            response.Amount.Should().Be(paymentLinkRequest.Amount);
-            response.ExpiresAt.Should().Be(expiresAtWithoutMs);
-            response.Description.Should().Be(paymentLinkRequest.Description);
-            response.RedirectUrl.Should().Be(paymentLinkRequest.RedirectUrl);
-            response.Archived.Should().BeFalse();
+            response.Amount.ShouldBe(paymentLinkRequest.Amount);
+            response.ExpiresAt.ShouldBe(expiresAtWithoutMs);
+            response.Description.ShouldBe(paymentLinkRequest.Description);
+            response.RedirectUrl.ShouldBe(paymentLinkRequest.RedirectUrl);
+            response.Archived.ShouldBeFalse();
         });
 
         verifyPaymentLinkResponse(createdPaymentLinkResponse);
@@ -79,10 +79,10 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
         var verifyPaymentLinkResponse = new Action<PaymentLinkResponse>(response => {
             var expiresAtWithoutMs = paymentLinkRequest.ExpiresAt.Value.Truncate(TimeSpan.FromSeconds(1));
 
-            response.Amount.Should().BeNull();
-            response.ExpiresAt.Should().Be(expiresAtWithoutMs);
-            response.Description.Should().Be(paymentLinkRequest.Description);
-            response.RedirectUrl.Should().Be(paymentLinkRequest.RedirectUrl);
+            response.Amount.ShouldBeNull();
+            response.ExpiresAt.ShouldBe(expiresAtWithoutMs);
+            response.Description.ShouldBe(paymentLinkRequest.Description);
+            response.RedirectUrl.ShouldBe(paymentLinkRequest.RedirectUrl);
         });
 
         verifyPaymentLinkResponse(createdPaymentLinkResponse);
@@ -111,8 +111,8 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
             paymentLinkUpdateRequest);
 
         // Then: We expect the payment link to be updated
-        updatedPaymentLinkResponse.Description.Should().Be(paymentLinkUpdateRequest.Description);
-        updatedPaymentLinkResponse.Archived.Should().Be(paymentLinkUpdateRequest.Archived);
+        updatedPaymentLinkResponse.Description.ShouldBe(paymentLinkUpdateRequest.Description);
+        updatedPaymentLinkResponse.Archived.ShouldBe(paymentLinkUpdateRequest.Archived);
     }
 
     [DefaultRetryFact]
@@ -133,8 +133,8 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
         // Then: We expect the payment link to be updated
         MollieApiException exception = await Assert.ThrowsAsync<MollieApiException>(() =>
             _paymentLinkClient.GetPaymentLinkAsync(createdPaymentLinkResponse.Id));
-        exception.Details.Status.Should().Be(404);
-        exception.Details.Detail.Should().Be("Payment link does not exists.");
+        exception.Details.Status.ShouldBe(404);
+        exception.Details.Detail.ShouldBe("Payment link does not exists.");
     }
 
     [DefaultRetryFact]
@@ -153,8 +153,8 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
         var result = await _paymentLinkClient.GetPaymentLinkPaymentListAsync(createdPaymentLinkResponse.Id);
 
         // Then: We expect the payment list to be returned
-        result.Should().NotBeNull();
-        result.Items.Should().HaveCount(0);
+        result.ShouldNotBeNull();
+        result.Items.Count.ShouldBe(0);
     }
 
     public void Dispose()

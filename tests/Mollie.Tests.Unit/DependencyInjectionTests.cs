@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using System.Reflection;
-using FluentAssertions;
+using Shouldly;
 using Microsoft.Extensions.DependencyInjection;
 using Mollie.Api;
 using Mollie.Api.Client.Abstract;
@@ -23,10 +23,10 @@ public class DependencyInjectionTests
             options.ClientSecret = "client-secret";
             options.RetryPolicy = MollieHttpRetryPolicies.TransientHttpErrorRetryPolicy();
         });
-        
+
         // Act
         var serviceProvider = serviceCollection.BuildServiceProvider();
-        
+
         // Assert
         var assembly = Assembly.GetAssembly(typeof(IPaymentClient));
         var apiClientInterfaces = assembly
@@ -37,7 +37,7 @@ public class DependencyInjectionTests
             if (apiClientInterface != typeof(IBaseMollieClient))
             {
                 var apiClientImplementation = serviceProvider.GetService(apiClientInterface);
-                apiClientImplementation.Should().NotBeNull();
+                apiClientImplementation.ShouldNotBeNull();
             }
         }
     }

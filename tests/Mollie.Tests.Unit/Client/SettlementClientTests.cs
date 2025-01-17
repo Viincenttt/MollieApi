@@ -3,7 +3,7 @@ using Mollie.Api.Client;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using FluentAssertions;
+using Shouldly;
 using Mollie.Api.Models.Capture.Response;
 using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Settlement.Response;
@@ -25,29 +25,29 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then: Response should be parsed
             mockHttp.VerifyNoOutstandingExpectation();
-            listCaptureResponse.Should().NotBeNull();
-            listCaptureResponse.Count.Should().Be(1);
-            listCaptureResponse.Links.Self.Href.Should().Be("https://api.mollie.com/v2/settlements/stl_jDk30akdN/captures?limit=50");
-            listCaptureResponse.Links.Self.Type.Should().Be("application/hal+json");
-            listCaptureResponse.Links.Documentation.Href.Should().Be("https://docs.mollie.com/reference/v2/settlements-api/list-settlement-captures");
-            listCaptureResponse.Links.Documentation.Type.Should().Be("text/html");
+            listCaptureResponse.ShouldNotBeNull();
+            listCaptureResponse.Count.ShouldBe(1);
+            listCaptureResponse.Links.Self.Href.ShouldBe("https://api.mollie.com/v2/settlements/stl_jDk30akdN/captures?limit=50");
+            listCaptureResponse.Links.Self.Type.ShouldBe("application/hal+json");
+            listCaptureResponse.Links.Documentation.Href.ShouldBe("https://docs.mollie.com/reference/v2/settlements-api/list-settlement-captures");
+            listCaptureResponse.Links.Documentation.Type.ShouldBe("text/html");
             CaptureResponse captureResponse = listCaptureResponse.Items.First();
-            captureResponse.PaymentId.Should().Be(defaultPaymentId);
-            captureResponse.ShipmentId.Should().Be(defaultShipmentId);
-            captureResponse.SettlementId.Should().Be(defaultSettlementId);
-            captureResponse.Amount.Value.Should().Be(defaultAmountValue);
-            captureResponse.Amount.Currency.Should().Be(defaultAmountCurrency);
-            captureResponse.Links.Should().NotBeNull();
-            captureResponse.Links.Self.Href.Should().Be($"https://api.mollie.com/v2/payments/{defaultPaymentId}/captures/cpt_4qqhO89gsT");
-            captureResponse.Links.Self.Type.Should().Be("application/hal+json");
-            captureResponse.Links.Payment.Href.Should().Be($"https://api.mollie.com/v2/payments/{defaultPaymentId}");
-            captureResponse.Links.Payment.Type.Should().Be("application/hal+json");
-            captureResponse.Links.Shipment.Href.Should().Be($"https://api.mollie.com/v2/orders/ord_8wmqcHMN4U/shipments/shp_3wmsgCJN4U");
-            captureResponse.Links.Shipment.Type.Should().Be("application/hal+json");
-            captureResponse.Links.Settlement.Href.Should().Be($"https://api.mollie.com/v2/settlements/stl_jDk30akdN");
-            captureResponse.Links.Settlement.Type.Should().Be("application/hal+json");
-            captureResponse.Links.Documentation.Href.Should().Be("https://docs.mollie.com/reference/v2/captures-api/get-capture");
-            captureResponse.Links.Documentation.Type.Should().Be("text/html");
+            captureResponse.PaymentId.ShouldBe(defaultPaymentId);
+            captureResponse.ShipmentId.ShouldBe(defaultShipmentId);
+            captureResponse.SettlementId.ShouldBe(defaultSettlementId);
+            captureResponse.Amount.Value.ShouldBe(defaultAmountValue);
+            captureResponse.Amount.Currency.ShouldBe(defaultAmountCurrency);
+            captureResponse.Links.ShouldNotBeNull();
+            captureResponse.Links.Self.Href.ShouldBe($"https://api.mollie.com/v2/payments/{defaultPaymentId}/captures/cpt_4qqhO89gsT");
+            captureResponse.Links.Self.Type.ShouldBe("application/hal+json");
+            captureResponse.Links.Payment.Href.ShouldBe($"https://api.mollie.com/v2/payments/{defaultPaymentId}");
+            captureResponse.Links.Payment.Type.ShouldBe("application/hal+json");
+            captureResponse.Links.Shipment.Href.ShouldBe($"https://api.mollie.com/v2/orders/ord_8wmqcHMN4U/shipments/shp_3wmsgCJN4U");
+            captureResponse.Links.Shipment.Type.ShouldBe("application/hal+json");
+            captureResponse.Links.Settlement.Href.ShouldBe($"https://api.mollie.com/v2/settlements/stl_jDk30akdN");
+            captureResponse.Links.Settlement.Type.ShouldBe("application/hal+json");
+            captureResponse.Links.Documentation.Href.ShouldBe("https://docs.mollie.com/reference/v2/captures-api/get-capture");
+            captureResponse.Links.Documentation.Type.ShouldBe("text/html");
         }
 
         [Fact]
@@ -63,58 +63,58 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then: Response should be parsed
             mockHttp.VerifyNoOutstandingExpectation();
-            settlementResponse.Should().NotBeNull();
-            settlementResponse.Amount.Value.Should().Be(defaultAmountValue);
-            settlementResponse.Amount.Currency.Should().Be(defaultAmountCurrency);
-            settlementResponse.Periods.Count.Should().Be(1);
-            settlementResponse.Periods[2018][4].InvoiceId.Should().Be(defaultInvoiceId);
-            settlementResponse.Periods[2018][4].Revenue.Count.Should().Be(2);
-            settlementResponse.Periods[2018][4].Revenue[0].Description.Should().Be("iDEAL");
-            settlementResponse.Periods[2018][4].Revenue[0].Method.Should().Be("ideal");
-            settlementResponse.Periods[2018][4].Revenue[0].Count.Should().Be(6);
-            settlementResponse.Periods[2018][4].Revenue[0].AmountNet.Value.Should().Be("86.1000");
-            settlementResponse.Periods[2018][4].Revenue[0].AmountNet.Currency.Should().Be("EUR");
-            settlementResponse.Periods[2018][4].Revenue[0].AmountVat.Should().BeNull();
-            settlementResponse.Periods[2018][4].Revenue[0].AmountGross.Value.Should().Be("86.1000");
-            settlementResponse.Periods[2018][4].Revenue[0].AmountGross.Currency.Should().Be("EUR");
-            settlementResponse.Periods[2018][4].Revenue[1].Description.Should().Be("Refunds iDEAL");
-            settlementResponse.Periods[2018][4].Revenue[1].Method.Should().Be("refund");
-            settlementResponse.Periods[2018][4].Revenue[1].Count.Should().Be(2);
-            settlementResponse.Periods[2018][4].Revenue[1].AmountNet.Value.Should().Be("-43.2000");
-            settlementResponse.Periods[2018][4].Revenue[1].AmountNet.Currency.Should().Be("EUR");
-            settlementResponse.Periods[2018][4].Revenue[1].AmountVat.Should().BeNull();
-            settlementResponse.Periods[2018][4].Revenue[1].AmountGross.Value.Should().Be("43.2000");
-            settlementResponse.Periods[2018][4].Revenue[1].AmountGross.Currency.Should().Be("EUR");
-            settlementResponse.Periods[2018][4].Costs.Count.Should().Be(2);
-            settlementResponse.Periods[2018][4].Costs[0].Description.Should().Be("iDEAL");
-            settlementResponse.Periods[2018][4].Costs[0].Method.Should().Be("ideal");
-            settlementResponse.Periods[2018][4].Costs[0].Count.Should().Be(6);
-            settlementResponse.Periods[2018][4].Costs[0].Rate.Fixed.Value.Should().Be("0.3500");
-            settlementResponse.Periods[2018][4].Costs[0].Rate.Fixed.Currency.Should().Be("EUR");
-            settlementResponse.Periods[2018][4].Costs[0].Rate.Percentage.Should().BeNull();
-            settlementResponse.Periods[2018][4].Costs[0].AmountNet.Value.Should().Be("2.1000");
-            settlementResponse.Periods[2018][4].Costs[0].AmountNet.Currency.Should().Be("EUR");
-            settlementResponse.Periods[2018][4].Costs[0].AmountVat.Value.Should().Be("0.4410");
-            settlementResponse.Periods[2018][4].Costs[0].AmountVat.Currency.Should().Be("EUR");
-            settlementResponse.Periods[2018][4].Costs[0].AmountGross.Value.Should().Be("2.5410");
-            settlementResponse.Periods[2018][4].Costs[0].AmountGross.Currency.Should().Be("EUR");
-            settlementResponse.Periods[2018][4].Costs[1].Description.Should().Be("Refunds iDEAL");
-            settlementResponse.Periods[2018][4].Costs[1].Method.Should().Be("refund");
-            settlementResponse.Periods[2018][4].Costs[1].Count.Should().Be(2);
-            settlementResponse.Periods[2018][4].Costs[1].Rate.Fixed.Value.Should().Be("0.2500");
-            settlementResponse.Periods[2018][4].Costs[1].Rate.Fixed.Currency.Should().Be("EUR");
-            settlementResponse.Periods[2018][4].Costs[1].Rate.Percentage.Should().BeNull();
-            settlementResponse.Periods[2018][4].Costs[1].AmountNet.Value.Should().Be("0.5000");
-            settlementResponse.Periods[2018][4].Costs[1].AmountNet.Currency.Should().Be("EUR");
-            settlementResponse.Periods[2018][4].Costs[1].AmountVat.Value.Should().Be("0.1050");
-            settlementResponse.Periods[2018][4].Costs[1].AmountVat.Currency.Should().Be("EUR");
-            settlementResponse.Periods[2018][4].Costs[1].AmountGross.Value.Should().Be("0.6050");
-            settlementResponse.Periods[2018][4].Costs[1].AmountGross.Currency.Should().Be("EUR");
-            settlementResponse.Links.Should().NotBeNull();
-            settlementResponse.Links.Self.Href.Should().Be("https://api.mollie.com/v2/settlements/open");
-            settlementResponse.Links.Self.Type.Should().Be("application/hal+json");
-            settlementResponse.Links.Documentation.Href.Should().Be("https://docs.mollie.com/reference/v2/settlements-api/get-open-settlement");
-            settlementResponse.Links.Documentation.Type.Should().Be("text/html");
+            settlementResponse.ShouldNotBeNull();
+            settlementResponse.Amount.Value.ShouldBe(defaultAmountValue);
+            settlementResponse.Amount.Currency.ShouldBe(defaultAmountCurrency);
+            settlementResponse.Periods.Count.ShouldBe(1);
+            settlementResponse.Periods[2018][4].InvoiceId.ShouldBe(defaultInvoiceId);
+            settlementResponse.Periods[2018][4].Revenue.Count.ShouldBe(2);
+            settlementResponse.Periods[2018][4].Revenue[0].Description.ShouldBe("iDEAL");
+            settlementResponse.Periods[2018][4].Revenue[0].Method.ShouldBe("ideal");
+            settlementResponse.Periods[2018][4].Revenue[0].Count.ShouldBe(6);
+            settlementResponse.Periods[2018][4].Revenue[0].AmountNet.Value.ShouldBe("86.1000");
+            settlementResponse.Periods[2018][4].Revenue[0].AmountNet.Currency.ShouldBe("EUR");
+            settlementResponse.Periods[2018][4].Revenue[0].AmountVat.ShouldBeNull();
+            settlementResponse.Periods[2018][4].Revenue[0].AmountGross.Value.ShouldBe("86.1000");
+            settlementResponse.Periods[2018][4].Revenue[0].AmountGross.Currency.ShouldBe("EUR");
+            settlementResponse.Periods[2018][4].Revenue[1].Description.ShouldBe("Refunds iDEAL");
+            settlementResponse.Periods[2018][4].Revenue[1].Method.ShouldBe("refund");
+            settlementResponse.Periods[2018][4].Revenue[1].Count.ShouldBe(2);
+            settlementResponse.Periods[2018][4].Revenue[1].AmountNet.Value.ShouldBe("-43.2000");
+            settlementResponse.Periods[2018][4].Revenue[1].AmountNet.Currency.ShouldBe("EUR");
+            settlementResponse.Periods[2018][4].Revenue[1].AmountVat.ShouldBeNull();
+            settlementResponse.Periods[2018][4].Revenue[1].AmountGross.Value.ShouldBe("43.2000");
+            settlementResponse.Periods[2018][4].Revenue[1].AmountGross.Currency.ShouldBe("EUR");
+            settlementResponse.Periods[2018][4].Costs.Count.ShouldBe(2);
+            settlementResponse.Periods[2018][4].Costs[0].Description.ShouldBe("iDEAL");
+            settlementResponse.Periods[2018][4].Costs[0].Method.ShouldBe("ideal");
+            settlementResponse.Periods[2018][4].Costs[0].Count.ShouldBe(6);
+            settlementResponse.Periods[2018][4].Costs[0].Rate.Fixed.Value.ShouldBe("0.3500");
+            settlementResponse.Periods[2018][4].Costs[0].Rate.Fixed.Currency.ShouldBe("EUR");
+            settlementResponse.Periods[2018][4].Costs[0].Rate.Percentage.ShouldBeNull();
+            settlementResponse.Periods[2018][4].Costs[0].AmountNet.Value.ShouldBe("2.1000");
+            settlementResponse.Periods[2018][4].Costs[0].AmountNet.Currency.ShouldBe("EUR");
+            settlementResponse.Periods[2018][4].Costs[0].AmountVat.Value.ShouldBe("0.4410");
+            settlementResponse.Periods[2018][4].Costs[0].AmountVat.Currency.ShouldBe("EUR");
+            settlementResponse.Periods[2018][4].Costs[0].AmountGross.Value.ShouldBe("2.5410");
+            settlementResponse.Periods[2018][4].Costs[0].AmountGross.Currency.ShouldBe("EUR");
+            settlementResponse.Periods[2018][4].Costs[1].Description.ShouldBe("Refunds iDEAL");
+            settlementResponse.Periods[2018][4].Costs[1].Method.ShouldBe("refund");
+            settlementResponse.Periods[2018][4].Costs[1].Count.ShouldBe(2);
+            settlementResponse.Periods[2018][4].Costs[1].Rate.Fixed.Value.ShouldBe("0.2500");
+            settlementResponse.Periods[2018][4].Costs[1].Rate.Fixed.Currency.ShouldBe("EUR");
+            settlementResponse.Periods[2018][4].Costs[1].Rate.Percentage.ShouldBeNull();
+            settlementResponse.Periods[2018][4].Costs[1].AmountNet.Value.ShouldBe("0.5000");
+            settlementResponse.Periods[2018][4].Costs[1].AmountNet.Currency.ShouldBe("EUR");
+            settlementResponse.Periods[2018][4].Costs[1].AmountVat.Value.ShouldBe("0.1050");
+            settlementResponse.Periods[2018][4].Costs[1].AmountVat.Currency.ShouldBe("EUR");
+            settlementResponse.Periods[2018][4].Costs[1].AmountGross.Value.ShouldBe("0.6050");
+            settlementResponse.Periods[2018][4].Costs[1].AmountGross.Currency.ShouldBe("EUR");
+            settlementResponse.Links.ShouldNotBeNull();
+            settlementResponse.Links.Self.Href.ShouldBe("https://api.mollie.com/v2/settlements/open");
+            settlementResponse.Links.Self.Type.ShouldBe("application/hal+json");
+            settlementResponse.Links.Documentation.Href.ShouldBe("https://docs.mollie.com/reference/v2/settlements-api/get-open-settlement");
+            settlementResponse.Links.Documentation.Type.ShouldBe("text/html");
         }
 
         [Fact]
@@ -130,8 +130,8 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then: Response should be parsed
             mockHttp.VerifyNoOutstandingExpectation();
-            settlementResponse.Should().NotBeNull();
-            settlementResponse.Periods.Count.Should().Be(0);
+            settlementResponse.ShouldNotBeNull();
+            settlementResponse.Periods.Count.ShouldBe(0);
         }
 
         [Theory]
@@ -148,7 +148,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await settlementClient.GetSettlementAsync(settlementId));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'settlementId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'settlementId' is null or empty");
         }
 
         [Theory]
@@ -165,7 +165,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await settlementClient.GetSettlementPaymentListAsync(settlementId));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'settlementId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'settlementId' is null or empty");
         }
 
         [Theory]
@@ -182,7 +182,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await settlementClient.GetSettlementRefundListAsync(settlementId));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'settlementId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'settlementId' is null or empty");
         }
 
         [Theory]
@@ -199,7 +199,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await settlementClient.GetSettlementChargebackListAsync(settlementId));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'settlementId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'settlementId' is null or empty");
         }
 
         [Theory]
@@ -216,7 +216,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await settlementClient.GetSettlementCaptureListAsync(settlementId));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'settlementId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'settlementId' is null or empty");
         }
 
 

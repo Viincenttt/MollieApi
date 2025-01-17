@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using FluentAssertions;
 using Mollie.Api.Client;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Balance.Response;
@@ -11,6 +10,7 @@ using Mollie.Api.Models.Balance.Response.BalanceReport.Specific.StatusBalance;
 using Mollie.Api.Models.Balance.Response.BalanceReport.Specific.TransactionCategories;
 using Mollie.Api.Models.Balance.Response.BalanceTransaction.Specific;
 using RichardSzalay.MockHttp;
+using Shouldly;
 using Xunit;
 
 namespace Mollie.Tests.Unit.Client {
@@ -30,28 +30,28 @@ namespace Mollie.Tests.Unit.Client {
 
           // Then: Response should be parsed
           mockHttp.VerifyNoOutstandingExpectation();
-          balanceResponse.Should().NotBeNull();
-          balanceResponse.Id.Should().Be(getBalanceResponseFactory.BalanceId);
-          balanceResponse.CreatedAt.ToUniversalTime().Should().Be(getBalanceResponseFactory.CreatedAt);
-          balanceResponse.TransferThreshold.Currency.Should().Be(getBalanceResponseFactory.TransferThreshold.Currency);
-          balanceResponse.Currency.Should().Be(getBalanceResponseFactory.Currency);
-          balanceResponse.Status.Should().Be(getBalanceResponseFactory.Status);
-          balanceResponse.AvailableAmount.Currency.Should().Be(getBalanceResponseFactory.AvailableAmount.Currency);
-          balanceResponse.AvailableAmount.Value.Should().Be(getBalanceResponseFactory.AvailableAmount.Value);
-          balanceResponse.PendingAmount.Value.Should().Be(getBalanceResponseFactory.PendingAmount.Value);
-          balanceResponse.PendingAmount.Currency.Should().Be(getBalanceResponseFactory.PendingAmount.Currency);
-          balanceResponse.TransferFrequency.Should().Be(getBalanceResponseFactory.TransferFrequency);
-          balanceResponse.TransferReference.Should().Be(getBalanceResponseFactory.TransferReference);
-          balanceResponse.TransferThreshold.Currency.Should().Be(getBalanceResponseFactory.TransferThreshold.Currency);
-          balanceResponse.TransferThreshold.Value.Should().Be(getBalanceResponseFactory.TransferThreshold.Value);
-          balanceResponse.TransferDestination.Type.Should().Be(getBalanceResponseFactory.TransferDestination.Type);
-          balanceResponse.TransferDestination.BankAccount.Should().Be(getBalanceResponseFactory.TransferDestination.BankAccount);
-          balanceResponse.TransferDestination.BeneficiaryName.Should().Be(getBalanceResponseFactory.TransferDestination.BeneficiaryName);
-          balanceResponse.Links.Should().NotBeNull();
-          balanceResponse.Links.Self.Href.Should().Be($"https://api.mollie.com/v2/balances/{getBalanceResponseFactory.BalanceId}");
-          balanceResponse.Links.Self.Type.Should().Be("application/hal+json");
-          balanceResponse.Links.Documentation.Href.Should().Be($"https://docs.mollie.com/reference/v2/balances-api/get-balance");
-          balanceResponse.Links.Documentation.Type.Should().Be("text/html");
+          balanceResponse.ShouldNotBeNull();
+          balanceResponse.Id.ShouldBe(getBalanceResponseFactory.BalanceId);
+          balanceResponse.CreatedAt.ToUniversalTime().ShouldBe(getBalanceResponseFactory.CreatedAt);
+          balanceResponse.TransferThreshold.Currency.ShouldBe(getBalanceResponseFactory.TransferThreshold.Currency);
+          balanceResponse.Currency.ShouldBe(getBalanceResponseFactory.Currency);
+          balanceResponse.Status.ShouldBe(getBalanceResponseFactory.Status);
+          balanceResponse.AvailableAmount.Currency.ShouldBe(getBalanceResponseFactory.AvailableAmount.Currency);
+          balanceResponse.AvailableAmount.Value.ShouldBe(getBalanceResponseFactory.AvailableAmount.Value);
+          balanceResponse.PendingAmount.Value.ShouldBe(getBalanceResponseFactory.PendingAmount.Value);
+          balanceResponse.PendingAmount.Currency.ShouldBe(getBalanceResponseFactory.PendingAmount.Currency);
+          balanceResponse.TransferFrequency.ShouldBe(getBalanceResponseFactory.TransferFrequency);
+          balanceResponse.TransferReference.ShouldBe(getBalanceResponseFactory.TransferReference);
+          balanceResponse.TransferThreshold.Currency.ShouldBe(getBalanceResponseFactory.TransferThreshold.Currency);
+          balanceResponse.TransferThreshold.Value.ShouldBe(getBalanceResponseFactory.TransferThreshold.Value);
+          balanceResponse.TransferDestination.Type.ShouldBe(getBalanceResponseFactory.TransferDestination.Type);
+          balanceResponse.TransferDestination.BankAccount.ShouldBe(getBalanceResponseFactory.TransferDestination.BankAccount);
+          balanceResponse.TransferDestination.BeneficiaryName.ShouldBe(getBalanceResponseFactory.TransferDestination.BeneficiaryName);
+          balanceResponse.Links.ShouldNotBeNull();
+          balanceResponse.Links.Self.Href.ShouldBe($"https://api.mollie.com/v2/balances/{getBalanceResponseFactory.BalanceId}");
+          balanceResponse.Links.Self.Type.ShouldBe("application/hal+json");
+          balanceResponse.Links.Documentation.Href.ShouldBe($"https://docs.mollie.com/reference/v2/balances-api/get-balance");
+          balanceResponse.Links.Documentation.Type.ShouldBe("text/html");
       }
 
       [Theory]
@@ -68,7 +68,7 @@ namespace Mollie.Tests.Unit.Client {
           var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await balanceClient.GetBalanceAsync(balanceId));
 
           // Then
-          exception.Message.Should().Be("Required URL argument 'balanceId' is null or empty");
+          exception.Message.ShouldBe("Required URL argument 'balanceId' is null or empty");
       }
 
       [Fact]
@@ -86,24 +86,24 @@ namespace Mollie.Tests.Unit.Client {
 
           // Then: Response should be parsed
           mockHttp.VerifyNoOutstandingExpectation();
-          balanceResponse.Should().NotBeNull();
-          balanceResponse.Should().NotBeNull();
-          balanceResponse.Id.Should().Be(getBalanceResponseFactory.BalanceId);
-          balanceResponse.CreatedAt.ToUniversalTime().Should().Be(getBalanceResponseFactory.CreatedAt);
-          balanceResponse.TransferThreshold.Currency.Should().Be(getBalanceResponseFactory.TransferThreshold.Currency);
-          balanceResponse.Currency.Should().Be(getBalanceResponseFactory.Currency);
-          balanceResponse.Status.Should().Be(getBalanceResponseFactory.Status);
-          balanceResponse.AvailableAmount.Currency.Should().Be(getBalanceResponseFactory.AvailableAmount.Currency);
-          balanceResponse.AvailableAmount.Value.Should().Be(getBalanceResponseFactory.AvailableAmount.Value);
-          balanceResponse.PendingAmount.Value.Should().Be(getBalanceResponseFactory.PendingAmount.Value);
-          balanceResponse.PendingAmount.Currency.Should().Be(getBalanceResponseFactory.PendingAmount.Currency);
-          balanceResponse.TransferFrequency.Should().Be(getBalanceResponseFactory.TransferFrequency);
-          balanceResponse.TransferReference.Should().Be(getBalanceResponseFactory.TransferReference);
-          balanceResponse.TransferThreshold.Currency.Should().Be(getBalanceResponseFactory.TransferThreshold.Currency);
-          balanceResponse.TransferThreshold.Value.Should().Be(getBalanceResponseFactory.TransferThreshold.Value);
-          balanceResponse.TransferDestination.Type.Should().Be(getBalanceResponseFactory.TransferDestination.Type);
-          balanceResponse.TransferDestination.BankAccount.Should().Be(getBalanceResponseFactory.TransferDestination.BankAccount);
-          balanceResponse.TransferDestination.BeneficiaryName.Should().Be(getBalanceResponseFactory.TransferDestination.BeneficiaryName);
+          balanceResponse.ShouldNotBeNull();
+          balanceResponse.ShouldNotBeNull();
+          balanceResponse.Id.ShouldBe(getBalanceResponseFactory.BalanceId);
+          balanceResponse.CreatedAt.ToUniversalTime().ShouldBe(getBalanceResponseFactory.CreatedAt);
+          balanceResponse.TransferThreshold.Currency.ShouldBe(getBalanceResponseFactory.TransferThreshold.Currency);
+          balanceResponse.Currency.ShouldBe(getBalanceResponseFactory.Currency);
+          balanceResponse.Status.ShouldBe(getBalanceResponseFactory.Status);
+          balanceResponse.AvailableAmount.Currency.ShouldBe(getBalanceResponseFactory.AvailableAmount.Currency);
+          balanceResponse.AvailableAmount.Value.ShouldBe(getBalanceResponseFactory.AvailableAmount.Value);
+          balanceResponse.PendingAmount.Value.ShouldBe(getBalanceResponseFactory.PendingAmount.Value);
+          balanceResponse.PendingAmount.Currency.ShouldBe(getBalanceResponseFactory.PendingAmount.Currency);
+          balanceResponse.TransferFrequency.ShouldBe(getBalanceResponseFactory.TransferFrequency);
+          balanceResponse.TransferReference.ShouldBe(getBalanceResponseFactory.TransferReference);
+          balanceResponse.TransferThreshold.Currency.ShouldBe(getBalanceResponseFactory.TransferThreshold.Currency);
+          balanceResponse.TransferThreshold.Value.ShouldBe(getBalanceResponseFactory.TransferThreshold.Value);
+          balanceResponse.TransferDestination.Type.ShouldBe(getBalanceResponseFactory.TransferDestination.Type);
+          balanceResponse.TransferDestination.BankAccount.ShouldBe(getBalanceResponseFactory.TransferDestination.BankAccount);
+          balanceResponse.TransferDestination.BeneficiaryName.ShouldBe(getBalanceResponseFactory.TransferDestination.BeneficiaryName);
       }
 
       [Fact]
@@ -119,9 +119,9 @@ namespace Mollie.Tests.Unit.Client {
 
           // Then: Response should be parsed
           mockHttp.VerifyNoOutstandingExpectation();
-          balances.Should().NotBeNull();
-          balances.Count.Should().Be(2);
-          balances.Items.Should().HaveCount(2);
+          balances.ShouldNotBeNull();
+          balances.Count.ShouldBe(2);
+          balances.Items.Count.ShouldBe(2);
       }
 
       [Fact]
@@ -143,24 +143,24 @@ namespace Mollie.Tests.Unit.Client {
 
           // Then: Response should be parsed
           mockHttp.VerifyNoOutstandingExpectation();
-          balanceReport.Should().NotBeNull();
-          balanceReport.Should().BeOfType<TransactionCategoriesReportResponse>();
+          balanceReport.ShouldNotBeNull();
+          balanceReport.ShouldBeOfType<TransactionCategoriesReportResponse>();
           var specificBalanceReport = (TransactionCategoriesReportResponse)balanceReport;
-          specificBalanceReport.Grouping.Should().Be(grouping);
-          specificBalanceReport.BalanceId.Should().Be(balanceId);
-          specificBalanceReport.Resource.Should().Be("balance-report");
-          specificBalanceReport.From.Should().Be(from);
-          specificBalanceReport.Until.Should().Be(until);
-          specificBalanceReport.Totals.Should().NotBeNull();
-          specificBalanceReport.Totals.Open.Pending.Amount.Value.Should().Be("5.30");
-          specificBalanceReport.Totals.Open.Pending.Amount.Currency.Should().Be("EUR");
-          specificBalanceReport.Totals.Open.Available.Amount.Value.Should().Be("0.11");
-          specificBalanceReport.Totals.Open.Available.Amount.Currency.Should().Be("EUR");
+          specificBalanceReport.Grouping.ShouldBe(grouping);
+          specificBalanceReport.BalanceId.ShouldBe(balanceId);
+          specificBalanceReport.Resource.ShouldBe("balance-report");
+          specificBalanceReport.From.ShouldBe(from);
+          specificBalanceReport.Until.ShouldBe(until);
+          specificBalanceReport.Totals.ShouldNotBeNull();
+          specificBalanceReport.Totals.Open.Pending.Amount.Value.ShouldBe("5.30");
+          specificBalanceReport.Totals.Open.Pending.Amount.Currency.ShouldBe("EUR");
+          specificBalanceReport.Totals.Open.Available.Amount.Value.ShouldBe("0.11");
+          specificBalanceReport.Totals.Open.Available.Amount.Currency.ShouldBe("EUR");
           var childSubTotals = specificBalanceReport.Totals.Payments.Pending.Subtotals.First();
-          childSubTotals.TransactionType.Should().Be("payment");
-          childSubTotals.Count.Should().Be(36);
+          childSubTotals.TransactionType.ShouldBe("payment");
+          childSubTotals.Count.ShouldBe(36);
           var childChildSubTotals = childSubTotals.Subtotals.First();
-          childChildSubTotals.Method.Should().Be("ideal");
+          childChildSubTotals.Method.ShouldBe("ideal");
       }
 
       [Theory]
@@ -179,7 +179,7 @@ namespace Mollie.Tests.Unit.Client {
           var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await balanceClient.GetBalanceReportAsync(balanceId, from, until));
 
           // Then
-          exception.Message.Should().Be("Required URL argument 'balanceId' is null or empty");
+          exception.Message.ShouldBe("Required URL argument 'balanceId' is null or empty");
       }
 
       [Fact]
@@ -201,23 +201,23 @@ namespace Mollie.Tests.Unit.Client {
 
           // Then: Response should be parsed
           mockHttp.VerifyNoOutstandingExpectation();
-          balanceReport.Should().NotBeNull();
-          balanceReport.Should().BeOfType<StatusBalanceReportResponse>();
+          balanceReport.ShouldNotBeNull();
+          balanceReport.ShouldBeOfType<StatusBalanceReportResponse>();
           var specificBalanceReport = (StatusBalanceReportResponse)balanceReport;
-          specificBalanceReport.Grouping.Should().Be(grouping);
-          specificBalanceReport.BalanceId.Should().Be(balanceId);
-          specificBalanceReport.Resource.Should().Be("balance-report");
-          specificBalanceReport.From.Should().Be(from);
-          specificBalanceReport.Until.Should().Be(until);
-          specificBalanceReport.Totals.Should().NotBeNull();
-          specificBalanceReport.Totals.PendingBalance.Open.Amount.Value.Should().Be("5.30");
-          specificBalanceReport.Totals.PendingBalance.Open.Amount.Currency.Should().Be(Currency.EUR);
-          specificBalanceReport.Totals.AvailableBalance.MovedFromPending.Amount.Value.Should().Be("3.38");
-          specificBalanceReport.Totals.AvailableBalance.MovedFromPending.Amount.Currency.Should().Be(Currency.EUR);
+          specificBalanceReport.Grouping.ShouldBe(grouping);
+          specificBalanceReport.BalanceId.ShouldBe(balanceId);
+          specificBalanceReport.Resource.ShouldBe("balance-report");
+          specificBalanceReport.From.ShouldBe(from);
+          specificBalanceReport.Until.ShouldBe(until);
+          specificBalanceReport.Totals.ShouldNotBeNull();
+          specificBalanceReport.Totals.PendingBalance.Open.Amount.Value.ShouldBe("5.30");
+          specificBalanceReport.Totals.PendingBalance.Open.Amount.Currency.ShouldBe(Currency.EUR);
+          specificBalanceReport.Totals.AvailableBalance.MovedFromPending.Amount.Value.ShouldBe("3.38");
+          specificBalanceReport.Totals.AvailableBalance.MovedFromPending.Amount.Currency.ShouldBe(Currency.EUR);
           var childSubTotals = specificBalanceReport.Totals.AvailableBalance.MovedFromPending.Subtotals.First();
-          childSubTotals.TransactionType.Should().Be("payment");
+          childSubTotals.TransactionType.ShouldBe("payment");
           var childChildSubtotals = childSubTotals.Subtotals.First();
-          childChildSubtotals.Method.Should().Be("ideal");
+          childChildSubtotals.Method.ShouldBe("ideal");
       }
 
       [Fact]
@@ -234,20 +234,20 @@ namespace Mollie.Tests.Unit.Client {
 
           // Then: Response should be parsed
           mockHttp.VerifyNoOutstandingExpectation();
-          balanceTransactions?.Items?.Should().NotBeNull();
-          balanceTransactions.Count.Should().Be(balanceTransactions.Items.Count());
+          balanceTransactions?.Items?.ShouldNotBeNull();
+          balanceTransactions.Count.ShouldBe(balanceTransactions.Items.Count());
           var transaction = balanceTransactions.Items.First();
-          transaction.Resource.Should().Be("balance_transactions");
-          transaction.Id.Should().Be("baltr_9S8yk4FFqqi2Qm6K3rqRH");
-          transaction.Type.Should().Be("outgoing-transfer");
-          transaction.ResultAmount.Value.Should().Be("-7.76");
-          transaction.ResultAmount.Currency.Should().Be(Currency.EUR);
-          transaction.InitialAmount.Value.Should().Be("-7.76");
-          transaction.InitialAmount.Currency.Should().Be(Currency.EUR);
-          transaction.Should().BeOfType<SettlementBalanceTransactionResponse>();
+          transaction.Resource.ShouldBe("balance_transactions");
+          transaction.Id.ShouldBe("baltr_9S8yk4FFqqi2Qm6K3rqRH");
+          transaction.Type.ShouldBe("outgoing-transfer");
+          transaction.ResultAmount.Value.ShouldBe("-7.76");
+          transaction.ResultAmount.Currency.ShouldBe(Currency.EUR);
+          transaction.InitialAmount.Value.ShouldBe("-7.76");
+          transaction.InitialAmount.Currency.ShouldBe(Currency.EUR);
+          transaction.ShouldBeOfType<SettlementBalanceTransactionResponse>();
           var transactionContext = (SettlementBalanceTransactionResponse)transaction;
-          transactionContext.Context.SettlementId.Should().Be("stl_ma2vu8");
-          transactionContext.Context.TransferId.Should().Be("trf_ma2vu8");
+          transactionContext.Context.SettlementId.ShouldBe("stl_ma2vu8");
+          transactionContext.Context.TransferId.ShouldBe("trf_ma2vu8");
       }
 
       [Theory]
@@ -264,7 +264,7 @@ namespace Mollie.Tests.Unit.Client {
           var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await balanceClient.GetBalanceTransactionListAsync(balanceId));
 
           // Then
-          exception.Message.Should().Be("Required URL argument 'balanceId' is null or empty");
+          exception.Message.ShouldBe("Required URL argument 'balanceId' is null or empty");
       }
 
       [Fact]
@@ -280,8 +280,8 @@ namespace Mollie.Tests.Unit.Client {
 
           // Then: Response should be parsed
           mockHttp.VerifyNoOutstandingExpectation();
-          balanceTransactions?.Items?.Should().NotBeNull();
-          balanceTransactions.Count.Should().Be(balanceTransactions.Items.Count());
+          balanceTransactions?.Items?.ShouldNotBeNull();
+          balanceTransactions.Count.ShouldBe(balanceTransactions.Items.Count());
       }
 
       private readonly string DefaultListBalanceTransactionsResponse = @"

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using FluentAssertions;
+using Shouldly;
 using Mollie.Api.Client;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Subscription.Request;
@@ -31,7 +31,7 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
-            result.Should().NotBeNull();
+            result.ShouldNotBeNull();
         }
 
         [Theory]
@@ -53,7 +53,7 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
-            result.Should().NotBeNull();
+            result.ShouldNotBeNull();
         }
 
         [Theory]
@@ -75,7 +75,7 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
-            result.Should().NotBeNull();
+            result.ShouldNotBeNull();
         }
 
         [Fact]
@@ -120,7 +120,7 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
-            result.Should().NotBeNull();
+            result.ShouldNotBeNull();
         }
 
         [Theory]
@@ -137,7 +137,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await subscriptionClient.GetSubscriptionListAsync(customerId));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'customerId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'customerId' is null or empty");
         }
 
         [Theory]
@@ -154,7 +154,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await subscriptionClient.GetSubscriptionAsync(customerId, "subscription-id"));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'customerId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'customerId' is null or empty");
         }
 
         [Theory]
@@ -171,7 +171,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await subscriptionClient.GetSubscriptionAsync("customer-Id", subscriptionId));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'subscriptionId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'subscriptionId' is null or empty");
         }
 
         [Theory]
@@ -197,7 +197,7 @@ namespace Mollie.Tests.Unit.Client {
                 await subscriptionClient.CreateSubscriptionAsync(customerId, subscriptionRequest));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'customerId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'customerId' is null or empty");
         }
 
         [Theory]
@@ -214,7 +214,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await subscriptionClient.CancelSubscriptionAsync(customerId, "subscription-id"));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'customerId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'customerId' is null or empty");
         }
 
         [Theory]
@@ -231,7 +231,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await subscriptionClient.CancelSubscriptionAsync("customer-Id", subscriptionId));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'subscriptionId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'subscriptionId' is null or empty");
         }
 
         [Theory]
@@ -248,7 +248,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await subscriptionClient.UpdateSubscriptionAsync(customerId, "subscription-id", new SubscriptionUpdateRequest()));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'customerId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'customerId' is null or empty");
         }
 
         [Theory]
@@ -265,7 +265,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await subscriptionClient.UpdateSubscriptionAsync("customer-Id", subscriptionId, new SubscriptionUpdateRequest()));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'subscriptionId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'subscriptionId' is null or empty");
         }
 
         [Theory]
@@ -282,7 +282,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await subscriptionClient.GetSubscriptionPaymentListAsync(customerId, "subscription-id"));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'customerId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'customerId' is null or empty");
         }
 
         [Theory]
@@ -299,7 +299,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await subscriptionClient.GetSubscriptionPaymentListAsync("customer-Id", subscriptionId));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'subscriptionId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'subscriptionId' is null or empty");
         }
 
         private const string DefaultSubscriptionJsonToReturn = @"{

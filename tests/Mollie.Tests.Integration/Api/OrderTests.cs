@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
+using Shouldly;
 using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
@@ -15,6 +15,7 @@ using Mollie.Api.Models.Order.Response;
 using Mollie.Api.Models.Payment;
 using Mollie.Tests.Integration.Framework;
 using Xunit;
+using SortDirection = Mollie.Api.Models.SortDirection;
 
 namespace Mollie.Tests.Integration.Api;
 
@@ -34,7 +35,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         // Assert
         if (orders.Items.Any())
         {
-            orders.Items.Should().BeInDescendingOrder(x => x.CreatedAt);
+            orders.Items.Select(x => x.CreatedAt).ShouldBeInOrder(Shouldly.SortDirection.Descending);
         }
     }
 
@@ -47,7 +48,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         // Assert
         if (orders.Items.Any())
         {
-            orders.Items.Should().BeInDescendingOrder(x => x.CreatedAt);
+            orders.Items.Select(x => x.CreatedAt).ShouldBeInOrder(Shouldly.SortDirection.Descending);
         }
     }
 
@@ -60,7 +61,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         // Assert
         if (orders.Items.Any())
         {
-            orders.Items.Should().BeInAscendingOrder(x => x.CreatedAt);
+            orders.Items.Select(x => x.CreatedAt).ShouldBeInOrder(Shouldly.SortDirection.Ascending);
         }
     }
 
@@ -73,18 +74,18 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         OrderResponse result = await _orderClient.CreateOrderAsync(orderRequest);
 
         // Then: Make sure we get a valid response
-        result.Should().NotBeNull();
-        result.Amount.Should().Be(orderRequest.Amount);
-        result.OrderNumber.Should().Be(orderRequest.OrderNumber);
-        result.Lines.Should().HaveCount(orderRequest.Lines.Count());
-        result.Links.Should().NotBeNull();
+        result.ShouldNotBeNull();
+        result.Amount.ShouldBe(orderRequest.Amount);
+        result.OrderNumber.ShouldBe(orderRequest.OrderNumber);
+        result.Lines.Count().ShouldBe(orderRequest.Lines.Count());
+        result.Links.ShouldNotBeNull();
         OrderLineRequest orderLineRequest = orderRequest.Lines.First();
         OrderLineResponse orderResponseLine = result.Lines.First();
-        orderResponseLine.Type.Should().Be(orderLineRequest.Type);
-        orderResponseLine.Links.ImageUrl!.Href.Should().Be(orderLineRequest.ImageUrl);
-        orderResponseLine.Links.ProductUrl!.Href.Should().Be(orderLineRequest.ProductUrl);
+        orderResponseLine.Type.ShouldBe(orderLineRequest.Type);
+        orderResponseLine.Links.ImageUrl!.Href.ShouldBe(orderLineRequest.ImageUrl);
+        orderResponseLine.Links.ProductUrl!.Href.ShouldBe(orderLineRequest.ProductUrl);
         var expectedMetadataString = result.Lines.First().Metadata;
-        orderResponseLine.Metadata.Should().Be(expectedMetadataString);
+        orderResponseLine.Metadata.ShouldBe(expectedMetadataString);
     }
 
     [DefaultRetryFact]
@@ -103,18 +104,18 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         OrderResponse result = await _orderClient.CreateOrderAsync(orderRequest);
 
         // Then: Make sure we get a valid response
-        result.Should().NotBeNull();
-        result.Amount.Should().Be(orderRequest.Amount);
-        result.OrderNumber.Should().Be(orderRequest.OrderNumber);
-        result.Lines.Should().HaveCount(orderRequest.Lines.Count());
-        result.Links.Should().NotBeNull();
+        result.ShouldNotBeNull();
+        result.Amount.ShouldBe(orderRequest.Amount);
+        result.OrderNumber.ShouldBe(orderRequest.OrderNumber);
+        result.Lines.Count().ShouldBe(orderRequest.Lines.Count());
+        result.Links.ShouldNotBeNull();
         OrderLineRequest orderLineRequest = orderRequest.Lines.First();
         OrderLineResponse orderResponseLine = result.Lines.First();
-        orderResponseLine.Type.Should().Be(orderLineRequest.Type);
-        orderResponseLine.Links.ImageUrl!.Href.Should().Be(orderLineRequest.ImageUrl);
-        orderResponseLine.Links.ProductUrl!.Href.Should().Be(orderLineRequest.ProductUrl);
+        orderResponseLine.Type.ShouldBe(orderLineRequest.Type);
+        orderResponseLine.Links.ImageUrl!.Href.ShouldBe(orderLineRequest.ImageUrl);
+        orderResponseLine.Links.ProductUrl!.Href.ShouldBe(orderLineRequest.ProductUrl);
         var expectedMetadataString = result.Lines.First().Metadata;
-        orderResponseLine.Metadata.Should().Be(expectedMetadataString);
+        orderResponseLine.Metadata.ShouldBe(expectedMetadataString);
     }
 
     [DefaultRetryFact]
@@ -131,9 +132,9 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         OrderResponse result = await _orderClient.CreateOrderAsync(orderRequest);
 
         // Then: Make sure we get a valid response
-        result.Should().NotBeNull();
-        result.Amount.Should().Be(orderRequest.Amount);
-        result.OrderNumber.Should().Be(orderRequest.OrderNumber);
+        result.ShouldNotBeNull();
+        result.Amount.ShouldBe(orderRequest.Amount);
+        result.OrderNumber.ShouldBe(orderRequest.OrderNumber);
     }
 
     [DefaultRetryFact]
@@ -146,11 +147,11 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         OrderResponse result = await _orderClient.CreateOrderAsync(orderRequest);
 
         // Then: Make sure we get a valid response
-        orderRequest.Method.Should().Be(PaymentMethod.CreditCard);
-        orderRequest.Methods!.First().Should().Be(PaymentMethod.CreditCard);
-        result.Should().NotBeNull();
-        result.Amount.Should().Be(orderRequest.Amount);
-        result.OrderNumber.Should().Be(orderRequest.OrderNumber);
+        orderRequest.Method.ShouldBe(PaymentMethod.CreditCard);
+        orderRequest.Methods!.First().ShouldBe(PaymentMethod.CreditCard);
+        result.ShouldNotBeNull();
+        result.Amount.ShouldBe(orderRequest.Amount);
+        result.OrderNumber.ShouldBe(orderRequest.OrderNumber);
     }
 
     public static IEnumerable<object[]> PaymentSpecificParameters =>
@@ -221,9 +222,9 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         OrderResponse result = await _orderClient.CreateOrderAsync(orderRequest);
 
         // Then: Make sure we get a valid response
-        result.Should().NotBeNull();
-        result.Amount.Should().Be(orderRequest.Amount);
-        result.OrderNumber.Should().Be(orderRequest.OrderNumber);
+        result.ShouldNotBeNull();
+        result.Amount.ShouldBe(orderRequest.Amount);
+        result.OrderNumber.ShouldBe(orderRequest.OrderNumber);
     }
 
     [DefaultRetryFact]
@@ -236,8 +237,8 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         OrderResponse retrievedOrder = await _orderClient.GetOrderAsync(createdOrder.Id);
 
         // Then: Make sure we get a valid response
-        retrievedOrder.Should().NotBeNull();
-        retrievedOrder.Id.Should().Be(createdOrder.Id);
+        retrievedOrder.ShouldNotBeNull();
+        retrievedOrder.Id.ShouldBe(createdOrder.Id);
     }
 
     [DefaultRetryFact]
@@ -250,12 +251,12 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         OrderResponse retrievedOrder = await _orderClient.GetOrderAsync(createdOrder.Id, embedPayments: true, embedShipments: true, embedRefunds: true);
 
         // Then: Make sure we get a valid response
-        retrievedOrder.Should().NotBeNull();
-        retrievedOrder.Id.Should().Be(createdOrder.Id);
-        retrievedOrder.Embedded.Should().NotBeNull();
-        retrievedOrder.Embedded!.Payments.Should().NotBeNull();
-        retrievedOrder.Embedded.Shipments.Should().NotBeNull();
-        retrievedOrder.Embedded.Refunds.Should().NotBeNull();
+        retrievedOrder.ShouldNotBeNull();
+        retrievedOrder.Id.ShouldBe(createdOrder.Id);
+        retrievedOrder.Embedded.ShouldNotBeNull();
+        retrievedOrder.Embedded!.Payments.ShouldNotBeNull();
+        retrievedOrder.Embedded.Shipments.ShouldNotBeNull();
+        retrievedOrder.Embedded.Refunds.ShouldNotBeNull();
     }
 
     [DefaultRetryFact]
@@ -272,7 +273,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         OrderResponse updatedOrder = await _orderClient.UpdateOrderAsync(createdOrder.Id, orderUpdateRequest);
 
         // Then: Make sure the order is updated
-        updatedOrder.OrderNumber.Should().Be(orderUpdateRequest.OrderNumber);
+        updatedOrder.OrderNumber.ShouldBe(orderUpdateRequest.OrderNumber);
     }
 
     [DefaultRetryFact(Skip = "Broken - Reported to Mollie: https://discordapp.com/channels/1037712581407817839/1180467187677401198/1180467187677401198")]
@@ -288,7 +289,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         OrderResponse updatedOrder = await _orderClient.UpdateOrderLinesAsync(createdOrder.Id, createdOrder.Lines.First().Id, updateRequest);
 
         // Then: The name of the order line should be updated
-        updatedOrder.Lines.First().Name.Should().Be(updateRequest.Name);
+        updatedOrder.Lines.First().Name.ShouldBe(updateRequest.Name);
     }
 
     [DefaultRetryFact]
@@ -321,19 +322,19 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         OrderResponse updatedOrder = await _orderClient.ManageOrderLinesAsync(createdOrder.Id, manageOrderLinesRequest);
 
         // Then: The order line should be added
-        updatedOrder.Lines.Should().HaveCount(2);
+        updatedOrder.Lines.Count().ShouldBe(2);
         var addedOrderLineRequest = updatedOrder.Lines.SingleOrDefault(line => line.Name == newOrderLineRequest.Name);
-        addedOrderLineRequest.Should().NotBeNull();
-        addedOrderLineRequest!.Type.Should().Be(newOrderLineRequest.Type);
-        addedOrderLineRequest.Quantity.Should().Be(newOrderLineRequest.Quantity);
-        addedOrderLineRequest.UnitPrice.Should().Be(newOrderLineRequest.UnitPrice);
-        addedOrderLineRequest.TotalAmount.Should().Be(newOrderLineRequest.TotalAmount);
-        addedOrderLineRequest.VatRate.Should().Be(newOrderLineRequest.VatRate);
-        addedOrderLineRequest.VatAmount.Should().Be(newOrderLineRequest.VatAmount);
+        addedOrderLineRequest.ShouldNotBeNull();
+        addedOrderLineRequest!.Type.ShouldBe(newOrderLineRequest.Type);
+        addedOrderLineRequest.Quantity.ShouldBe(newOrderLineRequest.Quantity);
+        addedOrderLineRequest.UnitPrice.ShouldBe(newOrderLineRequest.UnitPrice);
+        addedOrderLineRequest.TotalAmount.ShouldBe(newOrderLineRequest.TotalAmount);
+        addedOrderLineRequest.VatRate.ShouldBe(newOrderLineRequest.VatRate);
+        addedOrderLineRequest.VatAmount.ShouldBe(newOrderLineRequest.VatAmount);
         var newMetaData = addedOrderLineRequest.Metadata!
             .Replace(Environment.NewLine, "")
             .Replace(" ", "");
-        newMetaData.Should().Be(newOrderLineRequest.Metadata);
+        newMetaData.ShouldBe(newOrderLineRequest.Metadata);
     }
 
     [DefaultRetryFact]
@@ -367,18 +368,18 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         OrderResponse updatedOrder = await _orderClient.ManageOrderLinesAsync(createdOrder.Id, manageOrderLinesRequest);
 
         // Then: The order line should be updated
-        updatedOrder.Lines.Should().HaveCount(1);
+        updatedOrder.Lines.Count().ShouldBe(1);
         var addedOrderLineRequest = updatedOrder.Lines.SingleOrDefault(line => line.Name == orderLineUpdateRequest.Name);
-        addedOrderLineRequest.Should().NotBeNull();
-        addedOrderLineRequest!.Quantity.Should().Be(orderLineUpdateRequest.Quantity);
-        addedOrderLineRequest.UnitPrice.Should().Be(orderLineUpdateRequest.UnitPrice);
-        addedOrderLineRequest.TotalAmount.Should().Be(orderLineUpdateRequest.TotalAmount);
-        addedOrderLineRequest.VatRate.Should().Be(orderLineUpdateRequest.VatRate);
-        addedOrderLineRequest.VatAmount.Should().Be(orderLineUpdateRequest.VatAmount);
+        addedOrderLineRequest.ShouldNotBeNull();
+        addedOrderLineRequest!.Quantity.ShouldBe(orderLineUpdateRequest.Quantity.Value);
+        addedOrderLineRequest.UnitPrice.ShouldBe(orderLineUpdateRequest.UnitPrice);
+        addedOrderLineRequest.TotalAmount.ShouldBe(orderLineUpdateRequest.TotalAmount);
+        addedOrderLineRequest.VatRate.ShouldBe(orderLineUpdateRequest.VatRate);
+        addedOrderLineRequest.VatAmount.ShouldBe(orderLineUpdateRequest.VatAmount);
         addedOrderLineRequest.Metadata!
             .Replace(Environment.NewLine, "")
             .Replace(" ", "")
-            .Should().Be(orderLineUpdateRequest.Metadata);
+            .ShouldBe(orderLineUpdateRequest.Metadata);
     }
 
     [DefaultRetryFact]
@@ -402,9 +403,9 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         OrderResponse updatedOrder = await _orderClient.ManageOrderLinesAsync(createdOrder.Id, manageOrderLinesRequest);
 
         // Then: The order line should be canceled
-        updatedOrder.Lines.Should().HaveCount(1);
+        updatedOrder.Lines.Count().ShouldBe(1);
         var updatedOrderLineRequest = updatedOrder.Lines.Single();
-        updatedOrderLineRequest.Status.Should().Be(OrderStatus.Canceled);
+        updatedOrderLineRequest.Status.ShouldBe(OrderStatus.Canceled);
     }
 
     [DefaultRetryFact]
@@ -413,8 +414,8 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         ListResponse<OrderResponse> response = await _orderClient.GetOrderListAsync();
 
         // Then
-        response.Should().NotBeNull();
-        response.Items.Should().NotBeNull();
+        response.ShouldNotBeNull();
+        response.Items.ShouldNotBeNull();
     }
 
     [DefaultRetryFact]
@@ -426,7 +427,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         ListResponse<OrderResponse> response = await _orderClient.GetOrderListAsync(null, numberOfOrders);
 
         // Then
-        response.Items.Should().HaveCountLessThanOrEqualTo(numberOfOrders);
+        response.Items.Count.ShouldBeLessThanOrEqualTo(numberOfOrders);
     }
 
     private OrderRequest CreateOrder() {

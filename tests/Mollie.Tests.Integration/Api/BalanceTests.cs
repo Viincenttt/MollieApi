@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
+using Shouldly;
 using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models.Balance.Response.BalanceReport;
@@ -26,16 +26,16 @@ public class BalanceTests : BaseMollieApiTestClass, IDisposable {
         var result = await _balanceClient.GetPrimaryBalanceAsync();
 
         // Then: Make sure we can parse the result
-        result.Should().NotBeNull();
-        result.Resource.Should().Be("balance");
-        result.Currency.Should().NotBeNull();
-        result.Id.Should().NotBeNull();
-        result.Links.Documentation.Href.Should().Be("https://docs.mollie.com/reference/v2/balances-api/get-primary-balance");
-        result.Links.Self.Href.Should().Be("https://api.mollie.com/v2/balances/{result.Id}");
-        result.TransferFrequency.Should().NotBeNull();
-        result.AvailableAmount.Should().NotBeNull();
-        result.PendingAmount.Should().NotBeNull();
-        result.TransferThreshold.Should().NotBeNull();
+        result.ShouldNotBeNull();
+        result.Resource.ShouldBe("balance");
+        result.Currency.ShouldNotBeNull();
+        result.Id.ShouldNotBeNull();
+        result.Links.Documentation.Href.ShouldBe("https://docs.mollie.com/reference/v2/balances-api/get-primary-balance");
+        result.Links.Self.Href.ShouldBe("https://api.mollie.com/v2/balances/{result.Id}");
+        result.TransferFrequency.ShouldNotBeNull();
+        result.AvailableAmount.ShouldNotBeNull();
+        result.PendingAmount.ShouldNotBeNull();
+        result.TransferThreshold.ShouldNotBeNull();
     }
 
     [DefaultRetryFact]
@@ -51,17 +51,17 @@ public class BalanceTests : BaseMollieApiTestClass, IDisposable {
         var result = await _balanceClient.GetBalanceAsync(firstBalance.Id);
 
         // Then: Make sure we can parse the result
-        result.Should().NotBeNull();
-        result.Resource.Should().Be("balance");
-        result.AvailableAmount.Should().Be(firstBalance.AvailableAmount);
-        result.Id.Should().Be(firstBalance.Id);
-        result.Links.Documentation.Href.Should().Be("https://docs.mollie.com/reference/v2/balances-api/get-balance");
-        result.Links.Self.Href.Should().Be($"https://api.mollie.com/v2/balances/{result.Id}");
-        result.Currency.Should().Be(firstBalance.Currency);
-        result.TransferFrequency.Should().Be(firstBalance.TransferFrequency);
-        result.AvailableAmount.Should().Be(firstBalance.AvailableAmount);
-        result.PendingAmount.Should().Be(firstBalance.PendingAmount);
-        result.TransferThreshold.Should().Be(firstBalance.TransferThreshold);
+        result.ShouldNotBeNull();
+        result.Resource.ShouldBe("balance");
+        result.AvailableAmount.ShouldBe(firstBalance.AvailableAmount);
+        result.Id.ShouldBe(firstBalance.Id);
+        result.Links.Documentation.Href.ShouldBe("https://docs.mollie.com/reference/v2/balances-api/get-balance");
+        result.Links.Self.Href.ShouldBe($"https://api.mollie.com/v2/balances/{result.Id}");
+        result.Currency.ShouldBe(firstBalance.Currency);
+        result.TransferFrequency.ShouldBe(firstBalance.TransferFrequency);
+        result.AvailableAmount.ShouldBe(firstBalance.AvailableAmount);
+        result.PendingAmount.ShouldBe(firstBalance.PendingAmount);
+        result.TransferThreshold.ShouldBe(firstBalance.TransferThreshold);
     }
 
     [DefaultRetryFact]
@@ -70,8 +70,8 @@ public class BalanceTests : BaseMollieApiTestClass, IDisposable {
         var result = await _balanceClient.GetBalanceListAsync();
 
         // Then: Make sure we can parse the result
-        result.Should().NotBeNull();
-        result.Items.Count.Should().Be(result.Count);
+        result.ShouldNotBeNull();
+        result.Items.Count.ShouldBe(result.Count);
     }
 
     [DefaultRetryTheory]
@@ -91,13 +91,13 @@ public class BalanceTests : BaseMollieApiTestClass, IDisposable {
             grouping: grouping);
 
         // Then: Make sure we can parse the result
-        result.Should().NotBeNull();
-        result.Should().BeOfType(expectedObjectType);
-        result.Resource.Should().Be("balance-report");
-        result.BalanceId.Should().Be(primaryBalance.Id);
-        result.From.Should().Be(from);
-        result.Until.Should().Be(until);
-        result.Grouping.Should().Be(grouping);
+        result.ShouldNotBeNull();
+        result.ShouldBeOfType(expectedObjectType);
+        result.Resource.ShouldBe("balance-report");
+        result.BalanceId.ShouldBe(primaryBalance.Id);
+        result.From.ShouldBe(from);
+        result.Until.ShouldBe(until);
+        result.Grouping.ShouldBe(grouping);
     }
 
     [DefaultRetryFact]
@@ -111,10 +111,10 @@ public class BalanceTests : BaseMollieApiTestClass, IDisposable {
         var result = await _balanceClient.GetBalanceTransactionListAsync(balanceId, from, limit);
 
         // Then: Make sure we can parse the result
-        result.Should().NotBeNull();
-        result.Items.Should().NotBeNull();
-        result.Links.Should().NotBeNull();
-        result.Links.Self.Href.Should().Be($"https://api.mollie.com/v2/balances/{balanceId}/transactions?from={from}&limit={limit}");
+        result.ShouldNotBeNull();
+        result.Items.ShouldNotBeNull();
+        result.Links.ShouldNotBeNull();
+        result.Links.Self.Href.ShouldBe($"https://api.mollie.com/v2/balances/{balanceId}/transactions?from={from}&limit={limit}");
     }
 
     [DefaultRetryFact]
@@ -127,8 +127,8 @@ public class BalanceTests : BaseMollieApiTestClass, IDisposable {
         var result = await _balanceClient.GetPrimaryBalanceTransactionListAsync(from, limit);
 
         // Then: Make sure we can parse the result
-        result.Should().NotBeNull();
-        result.Items.Should().NotBeNull();
+        result.ShouldNotBeNull();
+        result.Items.ShouldNotBeNull();
     }
 
     public void Dispose()

@@ -1,6 +1,6 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
-using FluentAssertions;
+using Shouldly;
 using Mollie.Api.Client;
 using Mollie.Api.Models.Organization;
 using RichardSzalay.MockHttp;
@@ -20,14 +20,14 @@ public class OrganizationClientTests : BaseClientTests
             .Respond("application/json", defaultOrganizationResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
         var organizationsClient = new OrganizationClient("access_abcde", httpClient);
-        
+
         // Act
         var result = await organizationsClient.GetCurrentOrganizationAsync();
 
         // Assert
         AssertDefaultOrganization(result);
     }
-    
+
     [Fact]
     public async Task GetOrganizationAsync_ResponseIsDeserializedInExpectedFormat()
     {
@@ -39,7 +39,7 @@ public class OrganizationClientTests : BaseClientTests
             .Respond("application/json", defaultOrganizationResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
         var organizationsClient = new OrganizationClient("access_abcde", httpClient);
-        
+
         // Act
         var result = await organizationsClient.GetOrganizationAsync(organizationId);
 
@@ -57,38 +57,38 @@ public class OrganizationClientTests : BaseClientTests
             .Respond("application/json", defaultOrganizationListResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
         var organizationsClient = new OrganizationClient("access_abcde", httpClient);
-        
+
         // Act
         var result = await organizationsClient.GetOrganizationListAsync();
 
         // Assert
-        result.Count.Should().Be(2);
-        result.Items.Should().HaveCount(2);
+        result.Count.ShouldBe(2);
+        result.Items.Count.ShouldBe(2);
     }
 
     private void AssertDefaultOrganization(OrganizationResponse response)
     {
-        response.Resource.Should().Be("organization");
-        response.Id.Should().Be("org_12345678");
-        response.Name.Should().Be("Mollie B.V.");
-        response.Email.Should().Be("info@mollie.com");
-        response.Address.StreetAndNumber.Should().Be("Keizersgracht 126");
-        response.Address.PostalCode.Should().Be("1015 CW");
-        response.Address.City.Should().Be("Amsterdam");
-        response.Address.Country.Should().Be("NL");
-        response.RegistrationNumber.Should().Be("30204462");
-        response.VatNumber.Should().Be("NL815839091B01");
-        response.VatRegulation.Should().BeNullOrEmpty();
-        response.Links.Self.Href.Should().Be("https://api.mollie.com/v2/organizations/me");
-        response.Links.Chargebacks.Href.Should().Be("https://api.mollie.com/v2/chargebacks");
-        response.Links.Customers.Href.Should().Be("https://api.mollie.com/v2/customers");
-        response.Links.Invoices.Href.Should().Be("https://api.mollie.com/v2/invoices");
-        response.Links.Payments.Href.Should().Be("https://api.mollie.com/v2/payments");
-        response.Links.Profiles.Href.Should().Be("https://api.mollie.com/v2/profiles");
-        response.Links.Refunds.Href.Should().Be("https://api.mollie.com/v2/refunds");
-        response.Links.Settlements.Href.Should().Be("https://api.mollie.com/v2/settlements");
-        response.Links.Dashboard.Href.Should().Be("https://mollie.com/dashboard/org_12345678");
-        response.Links.Documentation.Href.Should().Be("https://docs.mollie.com/reference/v2/organizations-api/current-organization");
+        response.Resource.ShouldBe("organization");
+        response.Id.ShouldBe("org_12345678");
+        response.Name.ShouldBe("Mollie B.V.");
+        response.Email.ShouldBe("info@mollie.com");
+        response.Address.StreetAndNumber.ShouldBe("Keizersgracht 126");
+        response.Address.PostalCode.ShouldBe("1015 CW");
+        response.Address.City.ShouldBe("Amsterdam");
+        response.Address.Country.ShouldBe("NL");
+        response.RegistrationNumber.ShouldBe("30204462");
+        response.VatNumber.ShouldBe("NL815839091B01");
+        response.VatRegulation.ShouldBeNullOrEmpty();
+        response.Links.Self.Href.ShouldBe("https://api.mollie.com/v2/organizations/me");
+        response.Links.Chargebacks.Href.ShouldBe("https://api.mollie.com/v2/chargebacks");
+        response.Links.Customers.Href.ShouldBe("https://api.mollie.com/v2/customers");
+        response.Links.Invoices.Href.ShouldBe("https://api.mollie.com/v2/invoices");
+        response.Links.Payments.Href.ShouldBe("https://api.mollie.com/v2/payments");
+        response.Links.Profiles.Href.ShouldBe("https://api.mollie.com/v2/profiles");
+        response.Links.Refunds.Href.ShouldBe("https://api.mollie.com/v2/refunds");
+        response.Links.Settlements.Href.ShouldBe("https://api.mollie.com/v2/settlements");
+        response.Links.Dashboard.Href.ShouldBe("https://mollie.com/dashboard/org_12345678");
+        response.Links.Documentation.Href.ShouldBe("https://docs.mollie.com/reference/v2/organizations-api/current-organization");
     }
 
     private const string defaultOrganizationListResponse = @$"
@@ -101,7 +101,7 @@ public class OrganizationClientTests : BaseClientTests
         ]
     }}
 }}";
-    
+
     private const string defaultOrganizationResponse = @"{
      ""resource"": ""organization"",
      ""id"": ""org_12345678"",

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using FluentAssertions;
+using Shouldly;
 using Mollie.Api.Client;
 using Mollie.Api.Models;
 using Mollie.Api.Models.ClientLink.Request;
@@ -39,8 +39,8 @@ public class ClientLinkClientTests : BaseClientTests
         ClientLinkResponse response = await clientLinkClient.CreateClientLinkAsync(request);
 
         // Then
-        response.Id.Should().Be(clientLinkId);
-        response.Links.ClientLink.Href.Should().Be(clientLinkUrl);
+        response.Id.ShouldBe(clientLinkId);
+        response.Links.ClientLink.Href.ShouldBe(clientLinkUrl);
         mockHttp.VerifyNoOutstandingRequest();
     }
 
@@ -70,12 +70,11 @@ public class ClientLinkClientTests : BaseClientTests
 
         // Assert
         string expectedApprovalPrompt = forceApprovalPrompt ? "force" : "auto";
-        result.Should()
-            .Be("https://my.mollie.com/dashboard/client-link/csr_vZCnNQsV2UtfXxYifWKWH" +
-                $"?client_id={clientId}" +
-                $"&state={state}" +
-                "&scope=onboarding.read+organizations.read+payments.write+payments.read+profiles.write" +
-                $"&approval_prompt={expectedApprovalPrompt}");
+        result.ShouldBe("https://my.mollie.com/dashboard/client-link/csr_vZCnNQsV2UtfXxYifWKWH" +
+                        $"?client_id={clientId}" +
+                        $"&state={state}" +
+                        "&scope=onboarding.read+organizations.read+payments.write+payments.read+profiles.write" +
+                        $"&approval_prompt={expectedApprovalPrompt}");
     }
 
     private string CreateClientLinkResponseJson(string id, string clientLinkUrl)

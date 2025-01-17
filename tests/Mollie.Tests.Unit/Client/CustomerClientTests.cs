@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using FluentAssertions;
+using Shouldly;
 using Mollie.Api.Client;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Customer.Request;
@@ -30,7 +30,7 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
-            customerResponse.Should().NotBeNull();
+            customerResponse.ShouldNotBeNull();
         }
 
         [Theory]
@@ -51,7 +51,7 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
-            result.Should().NotBeNull();
+            result.ShouldNotBeNull();
         }
 
         [Theory]
@@ -74,7 +74,7 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
-            result.Should().NotBeNull();
+            result.ShouldNotBeNull();
         }
 
         [Fact]
@@ -107,7 +107,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await customerClient.UpdateCustomerAsync(customerId, new CustomerRequest()));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'customerId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'customerId' is null or empty");
         }
 
         [Theory]
@@ -124,7 +124,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await customerClient.DeleteCustomerAsync(customerId));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'customerId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'customerId' is null or empty");
         }
 
         [Theory]
@@ -141,7 +141,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await customerClient.GetCustomerAsync(customerId));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'customerId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'customerId' is null or empty");
         }
 
         [Theory]
@@ -158,7 +158,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await customerClient.GetCustomerPaymentListAsync(customerId));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'customerId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'customerId' is null or empty");
         }
 
         [Theory]
@@ -180,7 +180,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await customerClient.CreateCustomerPayment(customerId, paymentRequest));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'customerId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'customerId' is null or empty");
         }
 
         private const string DefaultCustomerJsonToReturn = @"{

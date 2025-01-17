@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using FluentAssertions;
+using Shouldly;
 using Mollie.Api.Extensions;
 using Xunit;
 
@@ -22,7 +22,7 @@ namespace Mollie.Tests.Unit.Extensions
             var result = parameters.ToQueryString();
 
             // Assert
-            result.Should().Be(expected);
+            result.ShouldBe(expected);
         }
 
         [Fact]
@@ -36,7 +36,7 @@ namespace Mollie.Tests.Unit.Extensions
             var result = parameters.ToQueryString();
 
             // Assert
-            result.Should().Be(expected);
+            result.ShouldBe(expected);
         }
 
         [Fact]
@@ -51,8 +51,8 @@ namespace Mollie.Tests.Unit.Extensions
             parameters.AddValueIfNotNullOrEmpty(parameterName, parameterValue);
 
             // Assert
-            parameters.Should().NotBeEmpty();
-            parameters[parameterName].Should().Be(parameterValue);
+            parameters.ShouldNotBeEmpty();
+            parameters[parameterName].ShouldBe(parameterValue);
         }
 
         [Fact]
@@ -65,9 +65,9 @@ namespace Mollie.Tests.Unit.Extensions
             parameters.AddValueIfNotNullOrEmpty("include", "");
 
             // Assert
-            parameters.Should().BeEmpty();
+            parameters.ShouldBeEmpty();
         }
-        
+
         [Fact]
         public void AddValueIfTrue_ValueIsTrue_ValueIsAdded()
         {
@@ -79,8 +79,8 @@ namespace Mollie.Tests.Unit.Extensions
             parameters.AddValueIfTrue(parameterName, true);
 
             // Assert
-            parameters.Should().NotBeEmpty();
-            parameters[parameterName].Should().Be(bool.TrueString.ToLower());
+            parameters.ShouldNotBeEmpty();
+            parameters[parameterName].ShouldBe(bool.TrueString.ToLower());
         }
 
         [Fact]
@@ -93,7 +93,7 @@ namespace Mollie.Tests.Unit.Extensions
             parameters.AddValueIfTrue("testmode", false);
 
             // Assert
-            parameters.Should().BeEmpty();
+            parameters.ShouldBeEmpty();
         }
     }
 }

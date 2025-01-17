@@ -6,7 +6,7 @@ using Mollie.Api.Models.Profile.Response;
 using Mollie.Tests.Integration.Framework;
 using System.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
+using Shouldly;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
 using Mollie.Api.Models.List.Response;
@@ -30,10 +30,10 @@ public class ProfileTests : BaseMollieApiTestClass, IDisposable {
         ProfileResponse profileResponse = await _profileClient.GetCurrentProfileAsync();
 
         // Then: Make sure we get a valid response
-        profileResponse.Should().NotBeNull();
-        profileResponse.Id.Should().NotBeNullOrEmpty();
-        profileResponse.Email.Should().NotBeNullOrEmpty();
-        profileResponse.Status.Should().NotBeNullOrEmpty();
+        profileResponse.ShouldNotBeNull();
+        profileResponse.Id.ShouldNotBeNullOrEmpty();
+        profileResponse.Email.ShouldNotBeNullOrEmpty();
+        profileResponse.Status.ShouldNotBeNullOrEmpty();
     }
 
     [DefaultRetryFact]
@@ -44,8 +44,8 @@ public class ProfileTests : BaseMollieApiTestClass, IDisposable {
         PaymentMethodResponse paymentMethodResponse = await _profileClient.EnablePaymentMethodAsync(PaymentMethod.CreditCard);
 
         // Then: Make sure a payment method is returned
-        paymentMethodResponse.Should().NotBeNull();
-        paymentMethodResponse.Id.Should().Be(PaymentMethod.CreditCard);
+        paymentMethodResponse.ShouldNotBeNull();
+        paymentMethodResponse.Id.ShouldBe(PaymentMethod.CreditCard);
     }
 
     [DefaultRetryFact(Skip = "We can only test this in debug mode, because we need to retrieve a oauth access token to test this method")]
@@ -60,8 +60,8 @@ public class ProfileTests : BaseMollieApiTestClass, IDisposable {
             PaymentMethodResponse paymentMethodResponse = await profileClient.EnablePaymentMethodAsync(profileToTestWith.Id, PaymentMethod.Ideal);
 
             // Then: Make sure a payment method is returned
-            paymentMethodResponse.Should().NotBeNull();
-            paymentMethodResponse.Id.Should().NotBeNullOrEmpty();
+            paymentMethodResponse.ShouldNotBeNull();
+            paymentMethodResponse.Id.ShouldBeNullOrEmpty();
         }
     }
 
@@ -82,7 +82,7 @@ public class ProfileTests : BaseMollieApiTestClass, IDisposable {
         ProfileResponse profileResponse = await profileClient.CreateProfileAsync(profileRequest);
 
         // Then: Make sure the profile that is created matched the profile request
-        profileResponse.Should().NotBeNull();
+        profileResponse.ShouldNotBeNull();
     }
 
     [DefaultRetryFact(Skip = "Don't disable payment methods, other tests might break")]

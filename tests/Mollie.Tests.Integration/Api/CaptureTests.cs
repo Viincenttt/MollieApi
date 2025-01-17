@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
+using Shouldly;
 using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
@@ -45,10 +45,10 @@ public class CaptureTests : BaseMollieApiTestClass, IDisposable {
         var capture = await _captureClient.CreateCapture(payment.Id, captureRequest);
 
         // Then: The capture should be created
-        capture.Status.Should().Be("pending");
-        capture.PaymentId.Should().Be(payment.Id);
-        capture.Resource.Should().Be("capture");
-        capture.Metadata.Should().Be(captureRequest.Metadata);
+        capture.Status.ShouldBe("pending");
+        capture.PaymentId.ShouldBe(payment.Id);
+        capture.Resource.ShouldBe("capture");
+        capture.Metadata.ShouldBe(captureRequest.Metadata);
     }
 
     [DefaultRetryFact(Skip = "We can only test this in debug mode, because we actually have to use the PaymentUrl" +
@@ -76,12 +76,12 @@ public class CaptureTests : BaseMollieApiTestClass, IDisposable {
         var captureList = await _captureClient.GetCaptureListAsync(payment.Id);
 
         // Then
-        captureList.Count.Should().Be(1);
+        captureList.Count.ShouldBe(1);
         var capture = captureList.Items.Single();
-        capture.Status.Should().Be("succeeded");
-        capture.PaymentId.Should().Be(payment.Id);
-        capture.Resource.Should().Be("capture");
-        capture.Metadata.Should().Be(captureRequest.Metadata);
+        capture.Status.ShouldBe("succeeded");
+        capture.PaymentId.ShouldBe(payment.Id);
+        capture.Resource.ShouldBe("capture");
+        capture.Metadata.ShouldBe(captureRequest.Metadata);
     }
 
     public void Dispose()

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using FluentAssertions;
+using Shouldly;
 using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models.List.Response;
@@ -26,8 +26,8 @@ public class ShipmentTests : BaseMollieApiTestClass, IDisposable {
         ShipmentResponse result = await _shipmentClient.CreateShipmentAsync(validOrderId, shipmentRequest);
 
         // Then: Make sure we get a valid shipment response
-        result.Should().NotBeNull();
-        result.CreatedAt.Should().BeAfter(DateTime.Now);
+        result.ShouldNotBeNull();
+        result.CreatedAt.ShouldBeGreaterThan(DateTime.Now);
     }
 
     [DefaultRetryFact(Skip = "For manual testing only")]
@@ -35,8 +35,8 @@ public class ShipmentTests : BaseMollieApiTestClass, IDisposable {
         string validOrderId = "XXXXX";
         ListResponse<ShipmentResponse> result = await _shipmentClient.GetShipmentListAsync(validOrderId);
 
-        result.Should().NotBeNull();
-        result.Count.Should().BeGreaterThan(0);
+        result.ShouldNotBeNull();
+        result.Count.ShouldBeGreaterThan(0);
     }
 
     private ShipmentRequest CreateShipmentWithOnlyRequiredFields() {

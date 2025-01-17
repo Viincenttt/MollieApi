@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
+using Shouldly;
 using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
@@ -26,8 +26,8 @@ public class PaymentMethodTests : BaseMollieApiTestClass, IDisposable {
         ListResponse<PaymentMethodResponse> response = await _paymentMethodClient.GetPaymentMethodListAsync();
 
         // Then: Make sure it can be retrieved
-        response.Should().NotBeNull();
-        response.Items.Should().NotBeNull();
+        response.ShouldNotBeNull();
+        response.Items.ShouldNotBeNull();
     }
 
     [DefaultRetryFact]
@@ -36,8 +36,8 @@ public class PaymentMethodTests : BaseMollieApiTestClass, IDisposable {
         ListResponse<PaymentMethodResponse> response = await _paymentMethodClient.GetPaymentMethodListAsync(includeWallets: "applepay");
 
         // Then: Make sure it can be retrieved
-        response.Should().NotBeNull();
-        response.Items.Should().NotBeNull();
+        response.ShouldNotBeNull();
+        response.Items.ShouldNotBeNull();
     }
 
     [DefaultRetryTheory]
@@ -47,8 +47,8 @@ public class PaymentMethodTests : BaseMollieApiTestClass, IDisposable {
         PaymentMethodResponse paymentMethod = await _paymentMethodClient.GetPaymentMethodAsync(method);
 
         // Then: Make sure it can be retrieved
-        paymentMethod.Should().NotBeNull();
-        paymentMethod.Id.Should().Be(method);
+        paymentMethod.ShouldNotBeNull();
+        paymentMethod.Id.ShouldBe(method);
     }
 
     [DefaultRetryFact]
@@ -57,8 +57,8 @@ public class PaymentMethodTests : BaseMollieApiTestClass, IDisposable {
         PaymentMethodResponse paymentMethod = await _paymentMethodClient.GetPaymentMethodAsync(PaymentMethod.Kbc, true);
 
         // Then: We should have one or multiple issuers
-        paymentMethod.Should().NotBeNull();
-        paymentMethod.Issuers.Should().NotBeEmpty();
+        paymentMethod.ShouldNotBeNull();
+        paymentMethod.Issuers.ShouldNotBeEmpty();
     }
 
     [DefaultRetryFact]
@@ -67,7 +67,7 @@ public class PaymentMethodTests : BaseMollieApiTestClass, IDisposable {
         PaymentMethodResponse paymentMethod = await _paymentMethodClient.GetPaymentMethodAsync(PaymentMethod.Kbc);
 
         // Then: Issuers should not be included
-        paymentMethod.Issuers.Should().BeNull();
+        paymentMethod.Issuers.ShouldBeNull();
     }
 
     [DefaultRetryFact]
@@ -76,8 +76,8 @@ public class PaymentMethodTests : BaseMollieApiTestClass, IDisposable {
         PaymentMethodResponse paymentMethod = await _paymentMethodClient.GetPaymentMethodAsync(PaymentMethod.CreditCard, includePricing: true);
 
         // Then: We should have one or multiple issuers
-        paymentMethod.Should().NotBeNull();
-        paymentMethod.Pricing.Should().NotBeEmpty();
+        paymentMethod.ShouldNotBeNull();
+        paymentMethod.Pricing.ShouldNotBeEmpty();
     }
 
     [DefaultRetryFact]
@@ -86,7 +86,7 @@ public class PaymentMethodTests : BaseMollieApiTestClass, IDisposable {
         PaymentMethodResponse paymentMethod = await _paymentMethodClient.GetPaymentMethodAsync(PaymentMethod.CreditCard, includePricing: false);
 
         // Then: Issuers should not be included
-        paymentMethod.Pricing.Should().BeNull();
+        paymentMethod.Pricing.ShouldBeNull();
     }
 
     [DefaultRetryFact]
@@ -95,8 +95,8 @@ public class PaymentMethodTests : BaseMollieApiTestClass, IDisposable {
         ListResponse<PaymentMethodResponse> paymentMethods = await _paymentMethodClient.GetAllPaymentMethodListAsync();
 
         // Then: We should have multiple issuers
-        paymentMethods.Should().NotBeNull();
-        paymentMethods.Items.Should().NotBeEmpty();
+        paymentMethods.ShouldNotBeNull();
+        paymentMethods.Items.ShouldNotBeEmpty();
     }
 
     [DefaultRetryFact]
@@ -105,7 +105,7 @@ public class PaymentMethodTests : BaseMollieApiTestClass, IDisposable {
         ListResponse<PaymentMethodResponse> paymentMethods = await _paymentMethodClient.GetAllPaymentMethodListAsync(includePricing: true);
 
         // Then: We should have prices available
-        paymentMethods.Items.All(x => x.Pricing != null && x.Pricing.Any(y => y.Fixed.Value > 0)).Should().BeTrue();
+        paymentMethods.Items.All(x => x.Pricing != null && x.Pricing.Any(y => y.Fixed.Value > 0)).ShouldBeTrue();
     }
 
     [DefaultRetryFact]
@@ -114,7 +114,7 @@ public class PaymentMethodTests : BaseMollieApiTestClass, IDisposable {
         ListResponse<PaymentMethodResponse> paymentMethods = await _paymentMethodClient.GetAllPaymentMethodListAsync(includeIssuers: true);
 
         // Then: We should have one or multiple issuers
-        paymentMethods.Items.Should().Contain(x => x.Issuers != null);
+        paymentMethods.Items.ShouldContain(x => x.Issuers != null);
     }
 
     [DefaultRetryFact]
@@ -123,8 +123,8 @@ public class PaymentMethodTests : BaseMollieApiTestClass, IDisposable {
         ListResponse<PaymentMethodResponse> paymentMethods = await _paymentMethodClient.GetAllPaymentMethodListAsync(includeIssuers: true, includePricing: true);
 
         // Then: We should have one or multiple issuers
-        paymentMethods.Items.Should().Contain(x => x.Issuers != null);
-        paymentMethods.Items.Should().Contain(x => x.Pricing != null && x.Pricing.Any(y => y.Fixed.Value > 0));
+        paymentMethods.Items.ShouldContain(x => x.Issuers != null);
+        paymentMethods.Items.ShouldContain(x => x.Pricing != null && x.Pricing.Any(y => y.Fixed.Value > 0));
     }
 
     [DefaultRetryTheory]
@@ -136,7 +136,7 @@ public class PaymentMethodTests : BaseMollieApiTestClass, IDisposable {
         var paymentMethods = await _paymentMethodClient.GetPaymentMethodListAsync(amount: amount);
 
         // Then: We should have multiple payment methods
-        paymentMethods.Count.Should().BeGreaterThan(0);
+        paymentMethods.Count.ShouldBeGreaterThan(0);
     }
 
     public void Dispose()

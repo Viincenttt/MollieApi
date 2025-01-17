@@ -1,5 +1,5 @@
 ﻿using System;
-using FluentAssertions;
+using Shouldly;
 using Mollie.Api.Framework.Factories;
 using Mollie.Api.Models.Balance.Response.BalanceTransaction;
 using Mollie.Api.Models.Balance.Response.BalanceTransaction.Specific;
@@ -34,7 +34,7 @@ namespace Mollie.Tests.Unit.Framework.Factories {
             var result = sut.Create(type);
 
             // Then
-            result.Should().BeOfType(expectedType);
+            result.ShouldBeOfType(expectedType);
         }
     }
 }

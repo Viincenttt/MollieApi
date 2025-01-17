@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using FluentAssertions;
+using Shouldly;
 using Mollie.Api.Client;
 using Mollie.Api.Models.Mandate.Request;
 using Mollie.Api.Models.Payment;
@@ -29,7 +29,7 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
-            result.Should().NotBeNull();
+            result.ShouldNotBeNull();
         }
 
         [Theory]
@@ -51,7 +51,7 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
-            result.Should().NotBeNull();
+            result.ShouldNotBeNull();
         }
 
         [Fact]
@@ -89,7 +89,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await mandateClient.GetMandateAsync(mandateId, "mandate-id"));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'customerId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'customerId' is null or empty");
         }
 
         [Theory]
@@ -106,7 +106,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await mandateClient.GetMandateAsync("customer-id", mandateId));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'mandateId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'mandateId' is null or empty");
         }
 
         [Theory]
@@ -123,7 +123,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await mandateClient.GetMandateListAsync(mandateId));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'customerId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'customerId' is null or empty");
         }
 
         [Theory]
@@ -144,7 +144,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await mandateClient.CreateMandateAsync(mandateId, mandateRequest));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'customerId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'customerId' is null or empty");
         }
 
         private const string DefaultMandateJsonToReturn = @"{

@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+﻿using Shouldly;
 using Mollie.Api.Models;
 using Xunit;
 
@@ -13,9 +13,9 @@ namespace Mollie.Tests.Unit.Models {
         public void CreateAmount_DecimalIsConverted_ValueHasCorrectFormat(string currency, decimal value, string expectedResult) {
             // Arrange & act
             Amount amount = new Amount(currency, value);
-            
+
             // Assert
-            amount.Value.Should().Be(expectedResult);
+            amount.Value.ShouldBe(expectedResult);
         }
     }
 }

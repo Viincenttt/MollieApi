@@ -3,7 +3,7 @@ using Mollie.Api.Client;
 using Mollie.Api.Models;
 using System.Net.Http;
 using System.Threading.Tasks;
-using FluentAssertions;
+using Shouldly;
 using RichardSzalay.MockHttp;
 using Xunit;
 
@@ -94,7 +94,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await paymentMethodClient.GetPaymentMethodAsync(paymentLinkId));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'paymentMethod' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'paymentMethod' is null or empty");
         }
     }
 }
