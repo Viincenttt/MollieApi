@@ -1,5 +1,5 @@
 ﻿using System;
-using FluentAssertions;
+using Shouldly;
 using Mollie.Api.Framework.Factories;
 using Mollie.Api.Models.Payment;
 using Mollie.Api.Models.Payment.Response;
@@ -51,7 +51,7 @@ namespace Mollie.Tests.Unit.Framework.Factories {
             var result = sut.Create(paymentMethod);
 
             // Then
-            result.Should().BeOfType(expectedType);
+            result.ShouldBeOfType(expectedType);
         }
     }
 }

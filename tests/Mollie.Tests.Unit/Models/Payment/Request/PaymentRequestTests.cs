@@ -1,5 +1,5 @@
 ﻿using System;
-using FluentAssertions;
+using Shouldly;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Payment;
 using Mollie.Api.Models.Payment.Request;
@@ -32,8 +32,8 @@ public class PaymentRequestTests {
                 break;
         }
 
-        paymentRequest.Should().BeOfType(expectedType);
-        paymentRequest.Amount.Should().Be(amount);
-        paymentRequest.Description.Should().Be(description);
+        paymentRequest.ShouldBeOfType(expectedType);
+        paymentRequest.Amount.ShouldBe(amount);
+        paymentRequest.Description.ShouldBe(description);
     }
 }

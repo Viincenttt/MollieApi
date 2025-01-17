@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using FluentAssertions;
+using Shouldly;
 using Mollie.Api.Client;
 using Mollie.Api.Models;
 using Mollie.Api.Models.List.Response;
@@ -12,6 +12,8 @@ using Mollie.Api.Models.PaymentLink.Request;
 using Mollie.Api.Models.PaymentLink.Response;
 using RichardSzalay.MockHttp;
 using Xunit;
+
+using SortDirection = Mollie.Api.Models.SortDirection;
 
 namespace Mollie.Tests.Unit.Client {
     public class PaymentLinkClientTests : BaseClientTests {
@@ -75,7 +77,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await paymentLinkClient.GetPaymentLinkAsync(paymentLinkId));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'paymentLinkId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'paymentLinkId' is null or empty");
         }
 
         [Theory]
@@ -121,22 +123,22 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then
             mockHttp.VerifyNoOutstandingRequest();
-            result.Should().NotBeNull();
-            result.Count.Should().Be(1);
+            result.ShouldNotBeNull();
+            result.Count.ShouldBe(1);
             PaymentResponse payment = result.Items.Single();
-            payment.Id.Should().Be("tr_7UhSN1zuXS");
-            payment.Amount.Value.Should().Be(DefaultPaymentAmount.ToString(CultureInfo.InvariantCulture));
-            payment.Description.Should().Be(DefaultDescription);
-            payment.RedirectUrl.Should().Be(DefaultRedirectUrl);
-            payment.WebhookUrl.Should().Be(DefaultWebhookUrl);
+            payment.Id.ShouldBe("tr_7UhSN1zuXS");
+            payment.Amount.Value.ShouldBe(DefaultPaymentAmount.ToString(CultureInfo.InvariantCulture));
+            payment.Description.ShouldBe(DefaultDescription);
+            payment.RedirectUrl.ShouldBe(DefaultRedirectUrl);
+            payment.WebhookUrl.ShouldBe(DefaultWebhookUrl);
         }
 
         private void VerifyPaymentLinkResponse(PaymentLinkResponse response) {
-            response.Amount.Value.Should().Be(DefaultPaymentAmount.ToString(CultureInfo.InvariantCulture));
-            response.Description.Should().Be(DefaultDescription);
-            response.Id.Should().Be(DefaultPaymentLinkId);
-            response.RedirectUrl.Should().Be(DefaultRedirectUrl);
-            response.WebhookUrl.Should().Be(DefaultWebhookUrl);
+            response.Amount.Value.ShouldBe(DefaultPaymentAmount.ToString(CultureInfo.InvariantCulture));
+            response.Description.ShouldBe(DefaultDescription);
+            response.Id.ShouldBe(DefaultPaymentLinkId);
+            response.RedirectUrl.ShouldBe(DefaultRedirectUrl);
+            response.WebhookUrl.ShouldBe(DefaultWebhookUrl);
         }
 
         private readonly string _defaultPaymentLinkPaymentsJsonResponse = $@"{{

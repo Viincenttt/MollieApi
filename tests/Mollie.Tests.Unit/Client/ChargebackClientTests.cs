@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using FluentAssertions;
+using Shouldly;
 using Mollie.Api.Client;
 using Mollie.Api.Models.Chargeback.Response;
 using RichardSzalay.MockHttp;
@@ -61,11 +61,11 @@ namespace Mollie.Tests.Unit.Client {
             ChargebackResponse chargebackResponse = await chargebackClient.GetChargebackAsync(defaultPaymentId, defaultChargebackId);
 
             // Then
-            chargebackResponse.PaymentId.Should().Be(defaultPaymentId);
-            chargebackResponse.Id.Should().Be(defaultChargebackId);
-            chargebackResponse.Reason.Should().NotBeNull();
-            chargebackResponse.Reason!.Code.Should().Be(defaultChargebackReasonCode);
-            chargebackResponse.Reason.Description.Should().Be(defaultChargebackReason);
+            chargebackResponse.PaymentId.ShouldBe(defaultPaymentId);
+            chargebackResponse.Id.ShouldBe(defaultChargebackId);
+            chargebackResponse.Reason.ShouldNotBeNull();
+            chargebackResponse.Reason!.Code.ShouldBe(defaultChargebackReasonCode);
+            chargebackResponse.Reason.Description.ShouldBe(defaultChargebackReason);
         }
 
         [Theory]
@@ -139,7 +139,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await chargebackClient.GetChargebackAsync(paymentId, "chargeback-id"));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'paymentId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'paymentId' is null or empty");
         }
 
         [Theory]
@@ -156,7 +156,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await chargebackClient.GetChargebackAsync("payment-id", chargebackId));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'chargebackId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'chargebackId' is null or empty");
         }
 
         [Theory]
@@ -173,7 +173,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await chargebackClient.GetChargebackListAsync(paymentId: paymentId));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'paymentId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'paymentId' is null or empty");
         }
     }
 }

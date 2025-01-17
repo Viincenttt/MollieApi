@@ -8,11 +8,12 @@ using RichardSzalay.MockHttp;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using FluentAssertions;
-using FluentAssertions.Extensions;
+using Shouldly;
 using Mollie.Api.Models.Payment.Request.PaymentSpecificParameters;
 using Mollie.Api.Models.Payment.Response.PaymentSpecificParameters;
 using Xunit;
+
+using SortDirection = Mollie.Api.Models.SortDirection;
 
 namespace Mollie.Tests.Unit.Client;
 
@@ -76,27 +77,27 @@ public class PaymentClientTests : BaseClientTests {
 
         // Then
         AssertPaymentIsEqual(paymentRequest, paymentResponse);
-        paymentResponse.AuthorizedAt!.Value.ToUniversalTime().Should().Be(DateTime.SpecifyKind(19.March(2018).At(13, 28, 37), DateTimeKind.Utc));
-        paymentResponse.CreatedAt!.ToUniversalTime().Should().Be(DateTime.SpecifyKind(20.March(2018).At(13, 13, 37), DateTimeKind.Utc));
-        paymentResponse.PaidAt!.Value.ToUniversalTime().Should().Be(DateTime.SpecifyKind(21.March(2018).At(13, 28, 37), DateTimeKind.Utc));
-        paymentResponse.CanceledAt!.Value.ToUniversalTime().Should().Be(DateTime.SpecifyKind(22.March(2018).At(13, 28, 37), DateTimeKind.Utc));
-        paymentResponse.ExpiredAt!.Value.ToUniversalTime().Should().Be(DateTime.SpecifyKind(23.March(2018).At(13, 28, 37), DateTimeKind.Utc));
-        paymentResponse.FailedAt!.Value.ToUniversalTime().Should().Be(DateTime.SpecifyKind(24.March(2018).At(13, 28, 37), DateTimeKind.Utc));
-        paymentResponse.CaptureBefore!.Value.ToUniversalTime().Should().Be(DateTime.SpecifyKind(25.March(2018).At(13, 28, 37), DateTimeKind.Utc));
-        paymentResponse.AmountRefunded!.Value.Should().Be("10.00");
-        paymentResponse.AmountRefunded.Currency.Should().Be(Currency.EUR);
-        paymentResponse.AmountRemaining!.Value.Should().Be("90.00");
-        paymentResponse.AmountRemaining.Currency.Should().Be(Currency.EUR);
-        paymentResponse.AmountChargedBack!.Value.Should().Be("10.00");
-        paymentResponse.AmountChargedBack.Currency.Should().Be(Currency.EUR);
-        paymentResponse.CancelUrl.Should().Be("https://webshop.example.org/order/12345/cancel");
-        paymentResponse.CountryCode.Should().Be("NL");
-        paymentResponse.SettlementId.Should().Be("stl_jDk30akdN");
-        paymentResponse.SubscriptionId.Should().Be("sub_rVKGtNd6s3");
-        paymentResponse.ApplicationFee.Should().NotBeNull();
-        paymentResponse.ApplicationFee!.Amount.Value.Should().Be("1.00");
-        paymentResponse.ApplicationFee.Amount.Currency.Should().Be(Currency.EUR);
-        paymentResponse.ApplicationFee.Description.Should().Be("description");
+        paymentResponse.AuthorizedAt!.Value.ToUniversalTime().ShouldBe(DateTime.SpecifyKind(new DateTime(2018, 3, 19, 13, 28, 37), DateTimeKind.Utc));
+        paymentResponse.CreatedAt!.ToUniversalTime().ShouldBe(DateTime.SpecifyKind(new DateTime(2018, 3, 20, 13, 13, 37), DateTimeKind.Utc));
+        paymentResponse.PaidAt!.Value.ToUniversalTime().ShouldBe(DateTime.SpecifyKind(new DateTime(2018, 3, 21, 13, 28, 37), DateTimeKind.Utc));
+        paymentResponse.CanceledAt!.Value.ToUniversalTime().ShouldBe(DateTime.SpecifyKind(new DateTime(2018, 3, 22, 13, 28, 37), DateTimeKind.Utc));
+        paymentResponse.ExpiredAt!.Value.ToUniversalTime().ShouldBe(DateTime.SpecifyKind(new DateTime(2018, 3, 23, 13, 28, 37), DateTimeKind.Utc));
+        paymentResponse.FailedAt!.Value.ToUniversalTime().ShouldBe(DateTime.SpecifyKind(new DateTime(2018, 3, 24, 13, 28, 37), DateTimeKind.Utc));
+        paymentResponse.CaptureBefore!.Value.ToUniversalTime().ShouldBe(DateTime.SpecifyKind(new DateTime(2018, 3, 25, 13, 28, 37), DateTimeKind.Utc));
+        paymentResponse.AmountRefunded!.Value.ShouldBe("10.00");
+        paymentResponse.AmountRefunded.Currency.ShouldBe(Currency.EUR);
+        paymentResponse.AmountRemaining!.Value.ShouldBe("90.00");
+        paymentResponse.AmountRemaining.Currency.ShouldBe(Currency.EUR);
+        paymentResponse.AmountChargedBack!.Value.ShouldBe("10.00");
+        paymentResponse.AmountChargedBack.Currency.ShouldBe(Currency.EUR);
+        paymentResponse.CancelUrl.ShouldBe("https://webshop.example.org/order/12345/cancel");
+        paymentResponse.CountryCode.ShouldBe("NL");
+        paymentResponse.SettlementId.ShouldBe("stl_jDk30akdN");
+        paymentResponse.SubscriptionId.ShouldBe("sub_rVKGtNd6s3");
+        paymentResponse.ApplicationFee.ShouldNotBeNull();
+        paymentResponse.ApplicationFee!.Amount.Value.ShouldBe("1.00");
+        paymentResponse.ApplicationFee.Amount.Currency.ShouldBe(Currency.EUR);
+        paymentResponse.ApplicationFee.Description.ShouldBe("description");
     }
 
     [Fact]
@@ -127,7 +128,7 @@ public class PaymentClientTests : BaseClientTests {
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
         AssertPaymentIsEqual(paymentRequest, paymentResponse);
-        paymentResponse.Method.Should().Be(paymentRequest.Method);
+        paymentResponse.Method.ShouldBe(paymentRequest.Method);
     }
 
     [Fact]
@@ -162,7 +163,7 @@ public class PaymentClientTests : BaseClientTests {
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
         AssertPaymentIsEqual(paymentRequest, paymentResponse);
-        paymentResponse.Method.Should().BeNull();
+        paymentResponse.Method.ShouldBeNull();
     }
 
     [Fact]
@@ -215,7 +216,7 @@ public class PaymentClientTests : BaseClientTests {
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
         AssertPaymentIsEqual(paymentRequest, paymentResponse);
-        paymentResponse.Method.Should().BeNull();
+        paymentResponse.Method.ShouldBeNull();
     }
 
     [Fact]
@@ -251,29 +252,29 @@ public class PaymentClientTests : BaseClientTests {
 
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
-        payment.Resource.Should().Be("payment");
-        payment.Id.Should().Be(paymentId);
-        payment.Amount.Value.Should().Be("100.00");
-        payment.Amount.Currency.Should().Be(Currency.EUR);
-        payment.Description.Should().Be("Description");
-        payment.Method.Should().BeNull();
-        payment.Status.Should().Be(PaymentStatus.Open);
-        payment.IsCancelable.Should().BeFalse();
-        payment.Locale.Should().Be("nl_NL");
-        payment.ExpiresAt!.Value.ToUniversalTime().Should().Be(DateTime.SpecifyKind(20.March(2018).At(13, 28, 37), DateTimeKind.Utc));
-        payment.ProfileId.Should().Be("pfl_QkEhN94Ba");
-        payment.SequenceType.Should().Be(SequenceType.OneOff);
-        payment.RedirectUrl.Should().Be("https://webshop.example.org/order/12345/");
-        payment.WebhookUrl.Should().Be("https://webshop.example.org/payments/webhook/");
-        payment.Links.Should().NotBeNull();
-        payment.Links.Self.Href.Should().Be("https://api.mollie.com/v2/payments/tr_WDqYK6vllg");
-        payment.Links.Self.Type.Should().Be("application/hal+json");
-        payment.Links.Checkout!.Href.Should().Be("https://www.mollie.com/payscreen/select-method/WDqYK6vllg");
-        payment.Links.Checkout.Type.Should().Be("text/html");
-        payment.Links.Dashboard.Href.Should().Be("https://www.mollie.com/dashboard/org_12345678/payments/tr_WDqYK6vllg");
-        payment.Links.Dashboard.Type.Should().Be("text/html");
-        payment.Links.Documentation.Href.Should().Be("https://docs.mollie.com/reference/v2/payments-api/get-payment");
-        payment.Links.Documentation.Type.Should().Be("text/html");
+        payment.Resource.ShouldBe("payment");
+        payment.Id.ShouldBe(paymentId);
+        payment.Amount.Value.ShouldBe("100.00");
+        payment.Amount.Currency.ShouldBe(Currency.EUR);
+        payment.Description.ShouldBe("Description");
+        payment.Method.ShouldBeNull();
+        payment.Status.ShouldBe(PaymentStatus.Open);
+        payment.IsCancelable.ShouldBe(false);
+        payment.Locale.ShouldBe("nl_NL");
+        payment.ExpiresAt!.Value.ToUniversalTime().ShouldBe(DateTime.SpecifyKind(new DateTime(2018, 3, 20, 13, 28, 37), DateTimeKind.Utc));
+        payment.ProfileId.ShouldBe("pfl_QkEhN94Ba");
+        payment.SequenceType.ShouldBe(SequenceType.OneOff);
+        payment.RedirectUrl.ShouldBe("https://webshop.example.org/order/12345/");
+        payment.WebhookUrl.ShouldBe("https://webshop.example.org/payments/webhook/");
+        payment.Links.ShouldNotBeNull();
+        payment.Links.Self.Href.ShouldBe("https://api.mollie.com/v2/payments/tr_WDqYK6vllg");
+        payment.Links.Self.Type.ShouldBe("application/hal+json");
+        payment.Links.Checkout!.Href.ShouldBe("https://www.mollie.com/payscreen/select-method/WDqYK6vllg");
+        payment.Links.Checkout.Type.ShouldBe("text/html");
+        payment.Links.Dashboard.Href.ShouldBe("https://www.mollie.com/dashboard/org_12345678/payments/tr_WDqYK6vllg");
+        payment.Links.Dashboard.Type.ShouldBe("text/html");
+        payment.Links.Documentation.Href.ShouldBe("https://docs.mollie.com/reference/v2/payments-api/get-payment");
+        payment.Links.Documentation.Type.ShouldBe("text/html");
     }
 
     [Fact]
@@ -328,27 +329,27 @@ public class PaymentClientTests : BaseClientTests {
         var payment = await paymentClient.GetPaymentAsync(paymentId);
 
         // Then
-        payment.Should().BeOfType<BankTransferPaymentResponse>();
+        payment.ShouldBeOfType<BankTransferPaymentResponse>();
         var bankTransferPayment = payment as BankTransferPaymentResponse;
-        bankTransferPayment.Details.BankName.Should().Be("bank-name");
-        bankTransferPayment.Details.BankAccount.Should().Be("bank-account");
-        bankTransferPayment.Details.BankBic.Should().Be("bank-bic");
-        bankTransferPayment.Details.TransferReference.Should().Be("transfer-reference");
-        bankTransferPayment.Details.ConsumerName.Should().Be("consumer-name");
-        bankTransferPayment.Details.ConsumerAccount.Should().Be("consumer-account");
-        bankTransferPayment.Details.ConsumerBic.Should().Be("consumer-bic");
-        bankTransferPayment.Details.BillingEmail.Should().Be("billing-email");
-        bankTransferPayment.Details.QrCode.Should().NotBeNull();
-        bankTransferPayment.Details.QrCode.Height.Should().Be(5);
-        bankTransferPayment.Details.QrCode.Width.Should().Be(10);
-        bankTransferPayment.Details.QrCode.Src.Should().Be("https://www.mollie.com/qr/12345678.png");
-        bankTransferPayment.Links.Should().NotBeNull();
-        bankTransferPayment.Links.Status.Should().NotBeNull();
-        bankTransferPayment.Links.Status.Href.Should().Be("https://api.mollie.com/v2/payments/tr_WDqYK6vllg");
-        bankTransferPayment.Links.Status.Type.Should().Be("application/hal+json");
-        bankTransferPayment.Links.PayOnline.Should().NotBeNull();
-        bankTransferPayment.Links.PayOnline.Href.Should().Be("https://www.mollie.com/payscreen/select-method/WDqYK6vllg");
-        bankTransferPayment.Links.PayOnline.Type.Should().Be("text/html");
+        bankTransferPayment.Details.BankName.ShouldBe("bank-name");
+        bankTransferPayment.Details.BankAccount.ShouldBe("bank-account");
+        bankTransferPayment.Details.BankBic.ShouldBe("bank-bic");
+        bankTransferPayment.Details.TransferReference.ShouldBe("transfer-reference");
+        bankTransferPayment.Details.ConsumerName.ShouldBe("consumer-name");
+        bankTransferPayment.Details.ConsumerAccount.ShouldBe("consumer-account");
+        bankTransferPayment.Details.ConsumerBic.ShouldBe("consumer-bic");
+        bankTransferPayment.Details.BillingEmail.ShouldBe("billing-email");
+        bankTransferPayment.Details.QrCode.ShouldNotBeNull();
+        bankTransferPayment.Details.QrCode.Height.ShouldBe(5);
+        bankTransferPayment.Details.QrCode.Width.ShouldBe(10);
+        bankTransferPayment.Details.QrCode.Src.ShouldBe("https://www.mollie.com/qr/12345678.png");
+        bankTransferPayment.Links.ShouldNotBeNull();
+        bankTransferPayment.Links.Status.ShouldNotBeNull();
+        bankTransferPayment.Links.Status.Href.ShouldBe("https://api.mollie.com/v2/payments/tr_WDqYK6vllg");
+        bankTransferPayment.Links.Status.Type.ShouldBe("application/hal+json");
+        bankTransferPayment.Links.PayOnline.ShouldNotBeNull();
+        bankTransferPayment.Links.PayOnline.Href.ShouldBe("https://www.mollie.com/payscreen/select-method/WDqYK6vllg");
+        bankTransferPayment.Links.PayOnline.Type.ShouldBe("text/html");
     }
 
     [Fact]
@@ -390,17 +391,17 @@ public class PaymentClientTests : BaseClientTests {
         var result = await paymentClient.GetPaymentAsync(paymentId);
 
         // Then
-        result.Should().BeOfType<BancontactPaymentResponse>();
+        result.ShouldBeOfType<BancontactPaymentResponse>();
         var banContactPayment = result as BancontactPaymentResponse;
-        banContactPayment.Details.CardNumber.Should().Be("1234567890123456");
-        banContactPayment.Details.QrCode.Should().NotBeNull();
-        banContactPayment.Details.QrCode.Height.Should().Be(5);
-        banContactPayment.Details.QrCode.Width.Should().Be(10);
-        banContactPayment.Details.QrCode.Src.Should().Be("https://www.mollie.com/qr/12345678.png");
-        banContactPayment.Details.ConsumerName.Should().Be("consumer-name");
-        banContactPayment.Details.ConsumerAccount.Should().Be("consumer-account");
-        banContactPayment.Details.ConsumerBic.Should().Be("consumer-bic");
-        banContactPayment.Details.FailureReason.Should().Be("failure-reason");
+        banContactPayment.Details.CardNumber.ShouldBe("1234567890123456");
+        banContactPayment.Details.QrCode.ShouldNotBeNull();
+        banContactPayment.Details.QrCode.Height.ShouldBe(5);
+        banContactPayment.Details.QrCode.Width.ShouldBe(10);
+        banContactPayment.Details.QrCode.Src.ShouldBe("https://www.mollie.com/qr/12345678.png");
+        banContactPayment.Details.ConsumerName.ShouldBe("consumer-name");
+        banContactPayment.Details.ConsumerAccount.ShouldBe("consumer-account");
+        banContactPayment.Details.ConsumerBic.ShouldBe("consumer-bic");
+        banContactPayment.Details.FailureReason.ShouldBe("failure-reason");
     }
 
     [Fact]
@@ -470,21 +471,21 @@ public class PaymentClientTests : BaseClientTests {
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
         var specificPaymentResponse = result as SepaDirectDebitResponse;
-        specificPaymentResponse.Should().NotBeNull();
-        specificPaymentResponse.Details.ConsumerName.Should().Be("consumer-name");
-        specificPaymentResponse.Details.ConsumerAccount.Should().Be("consumer-account");
-        specificPaymentResponse.Details.ConsumerBic.Should().Be("consumer-bic");
-        specificPaymentResponse.Details.TransferReference.Should().Be("transfer-reference");
-        specificPaymentResponse.Details.BankReasonCode.Should().Be("bank-reason-code");
-        specificPaymentResponse.Details.BankReason.Should().Be("bank-reason");
-        specificPaymentResponse.Details.BatchReference.Should().Be("batch-reference");
-        specificPaymentResponse.Details.MandateReference.Should().Be("mandate-reference");
-        specificPaymentResponse.Details.CreditorIdentifier.Should().Be("creditor-identifier");
-        specificPaymentResponse.Details.DueDate.Should().Be("03/20/2018 00:00:00");
-        specificPaymentResponse.Details.SignatureDate.Should().Be("03/20/2018 00:00:00");
-        specificPaymentResponse.Details.EndToEndIdentifier.Should().Be("end-to-end-identifier");
-        specificPaymentResponse.Details.BatchReference.Should().Be("batch-reference");
-        specificPaymentResponse.Details.FileReference.Should().Be("file-reference");
+        specificPaymentResponse.ShouldNotBeNull();
+        specificPaymentResponse.Details.ConsumerName.ShouldBe("consumer-name");
+        specificPaymentResponse.Details.ConsumerAccount.ShouldBe("consumer-account");
+        specificPaymentResponse.Details.ConsumerBic.ShouldBe("consumer-bic");
+        specificPaymentResponse.Details.TransferReference.ShouldBe("transfer-reference");
+        specificPaymentResponse.Details.BankReasonCode.ShouldBe("bank-reason-code");
+        specificPaymentResponse.Details.BankReason.ShouldBe("bank-reason");
+        specificPaymentResponse.Details.BatchReference.ShouldBe("batch-reference");
+        specificPaymentResponse.Details.MandateReference.ShouldBe("mandate-reference");
+        specificPaymentResponse.Details.CreditorIdentifier.ShouldBe("creditor-identifier");
+        specificPaymentResponse.Details.DueDate.ShouldBe("03/20/2018 00:00:00");
+        specificPaymentResponse.Details.SignatureDate.ShouldBe("03/20/2018 00:00:00");
+        specificPaymentResponse.Details.EndToEndIdentifier.ShouldBe("end-to-end-identifier");
+        specificPaymentResponse.Details.BatchReference.ShouldBe("batch-reference");
+        specificPaymentResponse.Details.FileReference.ShouldBe("file-reference");
     }
 
     [Fact]
@@ -533,23 +534,23 @@ public class PaymentClientTests : BaseClientTests {
         var result = await paymentClient.GetPaymentAsync(paymentId);
 
         // Then
-        result.Should().BeOfType<PayPalPaymentResponse>();
+        result.ShouldBeOfType<PayPalPaymentResponse>();
         var payPalPayment = result as PayPalPaymentResponse;
-        payPalPayment.Details.ConsumerName.Should().Be("consumer-name");
-        payPalPayment.Details.ConsumerAccount.Should().Be("consumer-account");
-        payPalPayment.Details.PayPalReference.Should().Be("paypal-ref");
-        payPalPayment.Details.PaypalPayerId.Should().Be("paypal-payer-id");
-        payPalPayment.Details.SellerProtection.Should().Be("Eligible");
-        payPalPayment.Details.ShippingAddress.Should().NotBeNull();
-        payPalPayment.Details.ShippingAddress.StreetAndNumber.Should().Be("street-and-number");
-        payPalPayment.Details.ShippingAddress.StreetAdditional.Should().Be("street-additional");
-        payPalPayment.Details.ShippingAddress.PostalCode.Should().Be("postal-code");
-        payPalPayment.Details.ShippingAddress.City.Should().Be("city");
-        payPalPayment.Details.ShippingAddress.Region.Should().Be("region");
-        payPalPayment.Details.ShippingAddress.Country.Should().Be("country");
-        payPalPayment.Details.PaypalFee.Should().NotBeNull();
-        payPalPayment.Details.PaypalFee.Currency.Should().Be("EUR");
-        payPalPayment.Details.PaypalFee.Value.Should().Be("100.00");
+        payPalPayment.Details.ConsumerName.ShouldBe("consumer-name");
+        payPalPayment.Details.ConsumerAccount.ShouldBe("consumer-account");
+        payPalPayment.Details.PayPalReference.ShouldBe("paypal-ref");
+        payPalPayment.Details.PaypalPayerId.ShouldBe("paypal-payer-id");
+        payPalPayment.Details.SellerProtection.ShouldBe("Eligible");
+        payPalPayment.Details.ShippingAddress.ShouldNotBeNull();
+        payPalPayment.Details.ShippingAddress.StreetAndNumber.ShouldBe("street-and-number");
+        payPalPayment.Details.ShippingAddress.StreetAdditional.ShouldBe("street-additional");
+        payPalPayment.Details.ShippingAddress.PostalCode.ShouldBe("postal-code");
+        payPalPayment.Details.ShippingAddress.City.ShouldBe("city");
+        payPalPayment.Details.ShippingAddress.Region.ShouldBe("region");
+        payPalPayment.Details.ShippingAddress.Country.ShouldBe("country");
+        payPalPayment.Details.PaypalFee.ShouldNotBeNull();
+        payPalPayment.Details.PaypalFee.Currency.ShouldBe("EUR");
+        payPalPayment.Details.PaypalFee.Value.ShouldBe("100.00");
     }
 
     [Fact]
@@ -644,18 +645,18 @@ public class PaymentClientTests : BaseClientTests {
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
         var specificPaymentResponse = result as CreditCardPaymentResponse;
-        specificPaymentResponse.Should().NotBeNull();
-        specificPaymentResponse.Details.CardNumber.Should().Be("1234567890123456");
-        specificPaymentResponse.Details.CardHolder.Should().Be("John Doe");
-        specificPaymentResponse.Details.CardFingerprint.Should().Be("fingerprint");
-        specificPaymentResponse.Details.CardAudience.Should().Be("audience");
-        specificPaymentResponse.Details.CardLabel.Should().Be("American Express");
-        specificPaymentResponse.Details.CardCountryCode.Should().Be("NL");
-        specificPaymentResponse.Details.CardSecurity.Should().Be("security");
-        specificPaymentResponse.Details.FeeRegion.Should().Be("american-express");
-        specificPaymentResponse.Details.FailureReason.Should().Be("unknown_reason");
-        specificPaymentResponse.Details.FailureMessage.Should().Be("faulure-message");
-        specificPaymentResponse.Details.Wallet.Should().Be("applepay");
+        specificPaymentResponse.ShouldNotBeNull();
+        specificPaymentResponse.Details.CardNumber.ShouldBe("1234567890123456");
+        specificPaymentResponse.Details.CardHolder.ShouldBe("John Doe");
+        specificPaymentResponse.Details.CardFingerprint.ShouldBe("fingerprint");
+        specificPaymentResponse.Details.CardAudience.ShouldBe("audience");
+        specificPaymentResponse.Details.CardLabel.ShouldBe("American Express");
+        specificPaymentResponse.Details.CardCountryCode.ShouldBe("NL");
+        specificPaymentResponse.Details.CardSecurity.ShouldBe("security");
+        specificPaymentResponse.Details.FeeRegion.ShouldBe("american-express");
+        specificPaymentResponse.Details.FailureReason.ShouldBe("unknown_reason");
+        specificPaymentResponse.Details.FailureMessage.ShouldBe("faulure-message");
+        specificPaymentResponse.Details.Wallet.ShouldBe("applepay");
     }
 
     [Fact]
@@ -729,19 +730,19 @@ public class PaymentClientTests : BaseClientTests {
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
         var specificPaymentResponse = result as GiftcardPaymentResponse;
-        specificPaymentResponse.Should().NotBeNull();
-        specificPaymentResponse.Details.VoucherNumber.Should().Be("voucher-number");
-        specificPaymentResponse.Details.Giftcards.Should().NotBeNull();
-        specificPaymentResponse.Details.Giftcards.Count.Should().Be(1);
-        specificPaymentResponse.Details.Giftcards[0].Issuer.Should().Be("issuer");
-        specificPaymentResponse.Details.Giftcards[0].Amount.Should().NotBeNull();
-        specificPaymentResponse.Details.Giftcards[0].Amount.Currency.Should().Be("EUR");
-        specificPaymentResponse.Details.Giftcards[0].Amount.Value.Should().Be("100.00");
-        specificPaymentResponse.Details.Giftcards[0].VoucherNumber.Should().Be("voucher-number");
-        specificPaymentResponse.Details.RemainderAmount.Should().NotBeNull();
-        specificPaymentResponse.Details.RemainderAmount.Currency.Should().Be("EUR");
-        specificPaymentResponse.Details.RemainderAmount.Value.Should().Be("100.00");
-        specificPaymentResponse.Details.RemainderMethod.Should().Be("ideal");
+        specificPaymentResponse.ShouldNotBeNull();
+        specificPaymentResponse.Details.VoucherNumber.ShouldBe("voucher-number");
+        specificPaymentResponse.Details.Giftcards.ShouldNotBeNull();
+        specificPaymentResponse.Details.Giftcards.Count.ShouldBe(1);
+        specificPaymentResponse.Details.Giftcards[0].Issuer.ShouldBe("issuer");
+        specificPaymentResponse.Details.Giftcards[0].Amount.ShouldNotBeNull();
+        specificPaymentResponse.Details.Giftcards[0].Amount.Currency.ShouldBe("EUR");
+        specificPaymentResponse.Details.Giftcards[0].Amount.Value.ShouldBe("100.00");
+        specificPaymentResponse.Details.Giftcards[0].VoucherNumber.ShouldBe("voucher-number");
+        specificPaymentResponse.Details.RemainderAmount.ShouldNotBeNull();
+        specificPaymentResponse.Details.RemainderAmount.Currency.ShouldBe("EUR");
+        specificPaymentResponse.Details.RemainderAmount.Value.ShouldBe("100.00");
+        specificPaymentResponse.Details.RemainderMethod.ShouldBe("ideal");
     }
 
     [Fact]
@@ -775,11 +776,11 @@ public class PaymentClientTests : BaseClientTests {
         var result = await paymentClient.GetPaymentAsync(paymentId);
 
         // Then
-        result.Should().BeOfType<BelfiusPaymentResponse>();
+        result.ShouldBeOfType<BelfiusPaymentResponse>();
         var belfiusPayment = result as BelfiusPaymentResponse;
-        belfiusPayment!.Details.ConsumerName.Should().Be("consumer-name");
-        belfiusPayment.Details.ConsumerAccount.Should().Be("consumer-account");
-        belfiusPayment.Details.ConsumerBic.Should().Be("consumer-bic");
+        belfiusPayment!.Details.ConsumerName.ShouldBe("consumer-name");
+        belfiusPayment.Details.ConsumerAccount.ShouldBe("consumer-account");
+        belfiusPayment.Details.ConsumerBic.ShouldBe("consumer-bic");
     }
 
     [Fact]
@@ -814,11 +815,11 @@ public class PaymentClientTests : BaseClientTests {
         var result = await paymentClient.GetPaymentAsync(paymentId);
 
         // Then
-        result.Should().BeOfType<IngHomePayPaymentResponse>();
+        result.ShouldBeOfType<IngHomePayPaymentResponse>();
         var ingHomePayPayment = result as IngHomePayPaymentResponse;
-        ingHomePayPayment!.Details.ConsumerName.Should().Be("consumer-name");
-        ingHomePayPayment.Details.ConsumerAccount.Should().Be("consumer-account");
-        ingHomePayPayment.Details.ConsumerBic.Should().Be("consumer-bic");
+        ingHomePayPayment!.Details.ConsumerName.ShouldBe("consumer-name");
+        ingHomePayPayment.Details.ConsumerAccount.ShouldBe("consumer-account");
+        ingHomePayPayment.Details.ConsumerBic.ShouldBe("consumer-bic");
     }
 
     [Fact]
@@ -853,11 +854,11 @@ public class PaymentClientTests : BaseClientTests {
         var result = await paymentClient.GetPaymentAsync(paymentId);
 
         // Then
-        result.Should().BeOfType<KbcPaymentResponse>();
+        result.ShouldBeOfType<KbcPaymentResponse>();
         var kbcPayment = result as KbcPaymentResponse;
-        kbcPayment!.Details.ConsumerName.Should().Be("consumer-name");
-        kbcPayment.Details.ConsumerAccount.Should().Be("consumer-account");
-        kbcPayment.Details.ConsumerBic.Should().Be("consumer-bic");
+        kbcPayment!.Details.ConsumerName.ShouldBe("consumer-name");
+        kbcPayment.Details.ConsumerAccount.ShouldBe("consumer-account");
+        kbcPayment.Details.ConsumerBic.ShouldBe("consumer-bic");
     }
 
     [Fact]
@@ -919,13 +920,13 @@ public class PaymentClientTests : BaseClientTests {
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
         var specificPaymentResponse = result as IdealPaymentResponse;
-        specificPaymentResponse!.Details.ConsumerName.Should().Be("consumer-name");
-        specificPaymentResponse.Details.ConsumerAccount.Should().Be("consumer-account");
-        specificPaymentResponse.Details.ConsumerBic.Should().Be("consumer-bic");
-        specificPaymentResponse.Details.QrCode.Should().NotBeNull();
-        specificPaymentResponse.Details.QrCode.Height.Should().Be(5);
-        specificPaymentResponse.Details.QrCode.Width.Should().Be(10);
-        specificPaymentResponse.Details.QrCode.Src.Should().Be("https://www.mollie.com/qr/12345678.png");
+        specificPaymentResponse!.Details.ConsumerName.ShouldBe("consumer-name");
+        specificPaymentResponse.Details.ConsumerAccount.ShouldBe("consumer-account");
+        specificPaymentResponse.Details.ConsumerBic.ShouldBe("consumer-bic");
+        specificPaymentResponse.Details.QrCode.ShouldNotBeNull();
+        specificPaymentResponse.Details.QrCode.Height.ShouldBe(5);
+        specificPaymentResponse.Details.QrCode.Width.ShouldBe(10);
+        specificPaymentResponse.Details.QrCode.Src.ShouldBe("https://www.mollie.com/qr/12345678.png");
     }
 
     [Fact]
@@ -960,11 +961,11 @@ public class PaymentClientTests : BaseClientTests {
         var result = await paymentClient.GetPaymentAsync(paymentId);
 
         // Then
-        result.Should().BeOfType<SofortPaymentResponse>();
+        result.ShouldBeOfType<SofortPaymentResponse>();
         var sofortPayment = result as SofortPaymentResponse;
-        sofortPayment!.Details.ConsumerName.Should().Be("consumer-name");
-        sofortPayment.Details.ConsumerAccount.Should().Be("consumer-account");
-        sofortPayment.Details.ConsumerBic.Should().Be("consumer-bic");
+        sofortPayment!.Details.ConsumerName.ShouldBe("consumer-name");
+        sofortPayment.Details.ConsumerAccount.ShouldBe("consumer-account");
+        sofortPayment.Details.ConsumerBic.ShouldBe("consumer-bic");
     }
 
     [Theory]
@@ -981,7 +982,7 @@ public class PaymentClientTests : BaseClientTests {
         var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await paymentClient.GetPaymentAsync(paymentId));
 
         // Then
-        exception.Message.Should().Be("Required URL argument 'paymentId' is null or empty");
+        exception.Message.ShouldBe("Required URL argument 'paymentId' is null or empty");
     }
 
     [Fact]
@@ -1016,12 +1017,12 @@ public class PaymentClientTests : BaseClientTests {
 
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
-        result.Should().BeOfType<IdealPaymentResponse>();
+        result.ShouldBeOfType<IdealPaymentResponse>();
         var paymentResponse = result as IdealPaymentResponse;
-        paymentResponse.Details.QrCode.Should().NotBeNull();
-        paymentResponse.Details.QrCode.Height.Should().Be(5);
-        paymentResponse.Details.QrCode.Width.Should().Be(5);
-        paymentResponse.Details.QrCode.Src.Should().Be("https://www.mollie.com/qr/12345678.png");
+        paymentResponse.Details.QrCode.ShouldNotBeNull();
+        paymentResponse.Details.QrCode.Height.ShouldBe(5);
+        paymentResponse.Details.QrCode.Width.ShouldBe(5);
+        paymentResponse.Details.QrCode.Src.ShouldBe("https://www.mollie.com/qr/12345678.png");
     }
 
     [Fact]
@@ -1163,7 +1164,7 @@ public class PaymentClientTests : BaseClientTests {
         var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await paymentClient.CancelPaymentAsync(paymentId));
 
         // Then
-        exception.Message.Should().Be("Required URL argument 'paymentId' is null or empty");
+        exception.Message.ShouldBe("Required URL argument 'paymentId' is null or empty");
     }
 
     [Theory]
@@ -1180,22 +1181,22 @@ public class PaymentClientTests : BaseClientTests {
         var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await paymentClient.UpdatePaymentAsync(paymentId, new PaymentUpdateRequest()));
 
         // Then
-        exception.Message.Should().Be("Required URL argument 'paymentId' is null or empty");
+        exception.Message.ShouldBe("Required URL argument 'paymentId' is null or empty");
     }
 
     private void AssertPaymentIsEqual(PaymentRequest paymentRequest, PaymentResponse paymentResponse) {
-        paymentResponse.Amount.Value.Should().Be(paymentRequest.Amount.Value);
-        paymentResponse.Amount.Currency.Should().Be(paymentRequest.Amount.Currency);
-        paymentResponse.Description.Should().Be(paymentRequest.Description);
+        paymentResponse.Amount.Value.ShouldBe(paymentRequest.Amount.Value);
+        paymentResponse.Amount.Currency.ShouldBe(paymentRequest.Amount.Currency);
+        paymentResponse.Description.ShouldBe(paymentRequest.Description);
         if (paymentRequest.Routings != null) {
-            paymentResponse.Routings.Count.Should().Be(paymentRequest.Routings.Count);
+            paymentResponse.Routings.Count.ShouldBe(paymentRequest.Routings.Count);
             for (int i = 0; i < paymentRequest.Routings.Count; i++) {
                 var paymentRequestRouting = paymentRequest.Routings[i];
                 var paymentResponseRouting = paymentResponse.Routings[i];
-                paymentResponseRouting.Amount.Should().Be(paymentRequestRouting.Amount);
-                paymentResponseRouting.Destination.Type.Should().Be(paymentRequestRouting.Destination.Type);
-                paymentResponseRouting.Destination.OrganizationId.Should().Be(paymentRequestRouting.Destination.OrganizationId);
-                paymentResponseRouting.ReleaseDate.Should().Be(paymentRequestRouting.ReleaseDate);
+                paymentResponseRouting.Amount.ShouldBe(paymentRequestRouting.Amount);
+                paymentResponseRouting.Destination.Type.ShouldBe(paymentRequestRouting.Destination.Type);
+                paymentResponseRouting.Destination.OrganizationId.ShouldBe(paymentRequestRouting.Destination.OrganizationId);
+                paymentResponseRouting.ReleaseDate.ShouldBe(paymentRequestRouting.ReleaseDate);
             }
         }
     }

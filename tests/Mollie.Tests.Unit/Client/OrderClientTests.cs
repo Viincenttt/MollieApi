@@ -6,12 +6,14 @@ using Mollie.Api.Models.Payment;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using FluentAssertions;
+using Shouldly;
 using Mollie.Api.Models.Order.Request;
 using Mollie.Api.Models.Order.Request.ManageOrderLines;
 using Mollie.Api.Models.Order.Response;
 using RichardSzalay.MockHttp;
 using Xunit;
+
+using SortDirection = Mollie.Api.Models.SortDirection;
 
 namespace Mollie.Tests.Unit.Client {
     public class OrderClientTests : BaseClientTests {
@@ -118,7 +120,7 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
-            orderResponse.Method.Should().Be(orderRequest.Method);
+            orderResponse.Method.ShouldBe(orderRequest.Method);
         }
 
         [Fact]
@@ -209,7 +211,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await orderClient.GetOrderAsync(orderId));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'orderId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'orderId' is null or empty");
         }
 
         [Theory]
@@ -226,7 +228,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await orderClient.UpdateOrderAsync(orderId, new OrderUpdateRequest()));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'orderId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'orderId' is null or empty");
         }
 
         [Theory]
@@ -243,7 +245,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await orderClient.UpdateOrderLinesAsync(orderId, "order-line-id", new OrderLineUpdateRequest()));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'orderId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'orderId' is null or empty");
         }
 
         [Theory]
@@ -260,7 +262,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await orderClient.UpdateOrderLinesAsync("order-id", orderLineId, new OrderLineUpdateRequest()));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'orderLineId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'orderLineId' is null or empty");
         }
 
         [Theory]
@@ -288,7 +290,7 @@ namespace Mollie.Tests.Unit.Client {
                 await orderClient.ManageOrderLinesAsync(orderId, request));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'orderId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'orderId' is null or empty");
         }
 
         [Theory]
@@ -305,7 +307,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await orderClient.CancelOrderAsync(orderId));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'orderId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'orderId' is null or empty");
         }
 
         [Theory]
@@ -322,7 +324,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await orderClient.CreateOrderPaymentAsync(orderId, new OrderPaymentRequest()));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'orderId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'orderId' is null or empty");
         }
 
         private OrderRequest CreateOrderRequestWithOnlyRequiredFields() {

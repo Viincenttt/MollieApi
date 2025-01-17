@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Mollie.Api.Client;
 using System.Net.Http;
 using System.Threading.Tasks;
-using FluentAssertions;
-using FluentAssertions.Extensions;
+using Shouldly;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Order.Request;
 using Mollie.Api.Models.Payment;
@@ -64,7 +64,7 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
-            refundResponse.Should().NotBeNull();
+            refundResponse.ShouldNotBeNull();
         }
 
         [Theory]
@@ -84,7 +84,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await refundClient.CreatePaymentRefundAsync(paymentId, refund));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'paymentId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'paymentId' is null or empty");
         }
 
         [Theory]
@@ -126,8 +126,8 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
-            refundResponse.ReverseRouting.Should().Be(reverseRouting);
-            refundResponse.RoutingReversals.Should().BeNull();
+            refundResponse.ReverseRouting.ShouldBe(reverseRouting);
+            refundResponse.RoutingReversals.ShouldBeNull();
         }
 
         [Fact]
@@ -186,8 +186,8 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
-            refundResponse.RoutingReversals.Should().BeEquivalentTo(refundRequest.RoutingReversals);
-            refundResponse.ReverseRouting.Should().BeNull();
+            refundResponse.RoutingReversals.ShouldBeEquivalentTo(refundRequest.RoutingReversals);
+            refundResponse.ReverseRouting.ShouldBeNull();
         }
 
         [Theory]
@@ -204,7 +204,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await refundClient.GetPaymentRefundListAsync(paymentId: paymentId));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'paymentId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'paymentId' is null or empty");
         }
 
         [Theory]
@@ -221,7 +221,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await refundClient.GetPaymentRefundAsync(paymentId, "refund-id"));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'paymentId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'paymentId' is null or empty");
         }
 
         [Theory]
@@ -238,7 +238,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await refundClient.GetPaymentRefundAsync("payment-id", refundId));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'refundId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'refundId' is null or empty");
         }
 
         [Theory]
@@ -255,7 +255,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await refundClient.CancelPaymentRefundAsync(paymentId, "refund-id"));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'paymentId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'paymentId' is null or empty");
         }
 
         [Theory]
@@ -272,7 +272,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await refundClient.CancelPaymentRefundAsync("payment-id", refundId));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'refundId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'refundId' is null or empty");
         }
 
         [Theory]
@@ -323,14 +323,14 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
-            response.Resource.Should().Be("refund");
-            response.Id.Should().Be("re_4qqhO89gsT");
-            response.Description.Should().Be("description");
-            response.Status.Should().Be("pending");
-            response.CreatedAt!.Value.ToUniversalTime().Should().Be(DateTime.SpecifyKind(14.March(2018).At(17, 09, 02), DateTimeKind.Utc));
-            response.PaymentId.Should().Be("tr_WDqYK6vllg");
-            response.OrderId.Should().Be(orderId);
-            response.Lines.Should().HaveCount(1);
+            response.Resource.ShouldBe("refund");
+            response.Id.ShouldBe("re_4qqhO89gsT");
+            response.Description.ShouldBe("description");
+            response.Status.ShouldBe("pending");
+            response.CreatedAt!.Value.ToUniversalTime().ShouldBe(DateTime.SpecifyKind(new DateTime(2018, 3, 14, 17, 09, 02), DateTimeKind.Utc));
+            response.PaymentId.ShouldBe("tr_WDqYK6vllg");
+            response.OrderId.ShouldBe(orderId);
+            response.Lines.Count().ShouldBe(1);
         }
 
         [Theory]
@@ -351,7 +351,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await refundClient.CreateOrderRefundAsync(orderId, request));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'orderId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'orderId' is null or empty");
         }
 
         [Theory]
@@ -368,7 +368,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await refundClient.GetOrderRefundListAsync(orderId));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'orderId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'orderId' is null or empty");
         }
 
         private const string defaultOrderJsonResponse = @"{

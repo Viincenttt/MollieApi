@@ -3,7 +3,7 @@ using Mollie.Api.Client;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using FluentAssertions;
+using Shouldly;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Capture.Request;
 using Mollie.Api.Models.Capture.Response;
@@ -114,13 +114,13 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then: Response should be parsed
             mockHttp.VerifyNoOutstandingExpectation();
-            captureResponse.Should().NotBeNull();
-            captureResponse.PaymentId.Should().Be(defaultPaymentId);
-            captureResponse.ShipmentId.Should().Be(defaultShipmentId);
-            captureResponse.SettlementId.Should().Be(defaultSettlementId);
-            captureResponse.Amount.Value.Should().Be(defaultAmountValue);
-            captureResponse.Amount.Currency.Should().Be(defaultAmountCurrency);
-            captureResponse.Status.Should().Be(defaultStatus);
+            captureResponse.ShouldNotBeNull();
+            captureResponse.PaymentId.ShouldBe(defaultPaymentId);
+            captureResponse.ShipmentId.ShouldBe(defaultShipmentId);
+            captureResponse.SettlementId.ShouldBe(defaultSettlementId);
+            captureResponse.Amount.Value.ShouldBe(defaultAmountValue);
+            captureResponse.Amount.Currency.ShouldBe(defaultAmountCurrency);
+            captureResponse.Status.ShouldBe(defaultStatus);
         }
 
         [Fact]
@@ -136,15 +136,15 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then: Response should be parsed
             mockHttp.VerifyNoOutstandingExpectation();
-            listCaptureResponse.Should().NotBeNull();
-            listCaptureResponse.Count.Should().Be(1);
+            listCaptureResponse.ShouldNotBeNull();
+            listCaptureResponse.Count.ShouldBe(1);
             CaptureResponse captureResponse = listCaptureResponse.Items.First();
-            captureResponse.PaymentId.Should().Be(defaultPaymentId);
-            captureResponse.ShipmentId.Should().Be(defaultShipmentId);
-            captureResponse.SettlementId.Should().Be(defaultSettlementId);
-            captureResponse.Amount.Value.Should().Be(defaultAmountValue);
-            captureResponse.Amount.Currency.Should().Be(defaultAmountCurrency);
-            captureResponse.Status.Should().Be(defaultStatus);
+            captureResponse.PaymentId.ShouldBe(defaultPaymentId);
+            captureResponse.ShipmentId.ShouldBe(defaultShipmentId);
+            captureResponse.SettlementId.ShouldBe(defaultSettlementId);
+            captureResponse.Amount.Value.ShouldBe(defaultAmountValue);
+            captureResponse.Amount.Currency.ShouldBe(defaultAmountCurrency);
+            captureResponse.Status.ShouldBe(defaultStatus);
         }
 
         [Theory]
@@ -161,7 +161,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await captureClient.GetCaptureAsync(paymentId, "capture-id"));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'paymentId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'paymentId' is null or empty");
         }
 
         [Theory]
@@ -178,7 +178,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await captureClient.GetCaptureAsync("payment-id", captureId));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'captureId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'captureId' is null or empty");
         }
 
         [Theory]
@@ -195,7 +195,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await captureClient.GetCaptureListAsync(paymentId));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'paymentId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'paymentId' is null or empty");
         }
 
         [Theory]
@@ -216,7 +216,7 @@ namespace Mollie.Tests.Unit.Client {
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await captureClient.CreateCapture(paymentId, captureRequest));
 
             // Then
-            exception.Message.Should().Be("Required URL argument 'paymentId' is null or empty");
+            exception.Message.ShouldBe("Required URL argument 'paymentId' is null or empty");
         }
 
         [Fact]
@@ -238,8 +238,8 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then
             mockHttp.VerifyNoOutstandingRequest();
-            response.Id.Should().Be(defaultCaptureId);
-            response.PaymentId.Should().Be(defaultPaymentId);
+            response.Id.ShouldBe(defaultCaptureId);
+            response.PaymentId.ShouldBe(defaultPaymentId);
         }
     }
 }

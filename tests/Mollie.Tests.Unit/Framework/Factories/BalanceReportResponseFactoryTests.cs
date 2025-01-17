@@ -1,5 +1,5 @@
 ﻿using System;
-using FluentAssertions;
+using Shouldly;
 using Mollie.Api.Framework.Factories;
 using Mollie.Api.Models.Balance.Response.BalanceReport;
 using Mollie.Api.Models.Balance.Response.BalanceReport.Specific.StatusBalance;
@@ -20,7 +20,7 @@ namespace Mollie.Tests.Unit.Framework.Factories {
             var result = factory.Create(grouping);
 
             // Then
-            result.Should().BeOfType(expectedType);
+            result.ShouldBeOfType(expectedType);
         }
     }
 }

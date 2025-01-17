@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using FluentAssertions;
+using Shouldly;
 using Mollie.Api.Client;
 using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Terminal.Response;
@@ -25,7 +25,7 @@ public class TerminalClientTests : BaseClientTests {
         var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await terminalClient.GetTerminalAsync(terminalId));
 
         // Then
-        exception.Message.Should().Be("Required URL argument 'terminalId' is null or empty");
+        exception.Message.ShouldBe("Required URL argument 'terminalId' is null or empty");
     }
 
     [Fact]
@@ -49,15 +49,15 @@ public class TerminalClientTests : BaseClientTests {
 
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
-        response.Id.Should().Be(terminalId);
-        response.Description.Should().Be(description);
-        response.SerialNumber.Should().Be(serialNumber);
-        response.Brand.Should().Be(brand);
-        response.Model.Should().Be(model);
-        response.Links.Should().NotBeNull();
-        response.Links.Self.Should().NotBeNull();
-        response.Links.Self.Href.Should().Be($"https://api.mollie.com/v2/terminals/{terminalId}");
-        response.Links.Documentation.Should().NotBeNull();
+        response.Id.ShouldBe(terminalId);
+        response.Description.ShouldBe(description);
+        response.SerialNumber.ShouldBe(serialNumber);
+        response.Brand.ShouldBe(brand);
+        response.Model.ShouldBe(model);
+        response.Links.ShouldNotBeNull();
+        response.Links.Self.ShouldNotBeNull();
+        response.Links.Self.Href.ShouldBe($"https://api.mollie.com/v2/terminals/{terminalId}");
+        response.Links.Documentation.ShouldNotBeNull();
     }
 
     [Theory]
@@ -98,10 +98,10 @@ public class TerminalClientTests : BaseClientTests {
         ListResponse<TerminalResponse> response = await terminalClient.GetTerminalListAsync();
 
         // Then
-        response.Count.Should().Be(1);
-        response.Items.Count.Should().Be(response.Count);
-        response.Links.Should().NotBeNull();
-        response.Links.Self.Href.Should().NotBeNull();
+        response.Count.ShouldBe(1);
+        response.Items.Count.ShouldBe(response.Count);
+        response.Links.ShouldNotBeNull();
+        response.Links.Self.Href.ShouldNotBeNull();
     }
 
     private string CreateTerminalListJsonResponse() {

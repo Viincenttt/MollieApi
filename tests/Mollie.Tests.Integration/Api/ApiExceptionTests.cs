@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using FluentAssertions;
+using Shouldly;
 using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
@@ -22,10 +22,10 @@ public class ApiExceptionTests : BaseMollieApiTestClass {
 
         // Then: Send the payment request to the Mollie Api, this should throw a mollie api exception
         MollieApiException apiException = await Assert.ThrowsAsync<MollieApiException>(() => paymentClient.CreatePaymentAsync(paymentRequest));
-        apiException.Should().NotBeNull();
-        apiException.Details.Should().NotBeNull();
-        apiException.Details.Status.Should().Be(422);
-        apiException.Details.Title.Should().Be("Unprocessable Entity");
-        apiException.Details.Detail.Should().Be("The description is invalid");
+        apiException.ShouldNotBeNull();
+        apiException.Details.ShouldNotBeNull();
+        apiException.Details.Status.ShouldBe(422);
+        apiException.Details.Title.ShouldBe("Unprocessable Entity");
+        apiException.Details.Detail.ShouldBe("The description is invalid");
     }
 }

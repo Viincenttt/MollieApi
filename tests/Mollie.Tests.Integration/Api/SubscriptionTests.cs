@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
+using Shouldly;
 using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
@@ -34,8 +34,8 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
         ListResponse<SubscriptionResponse> response = await _subscriptionClient.GetSubscriptionListAsync(customerId);
 
         // Then
-        response.Should().NotBeNull();
-        response.Items.Should().NotBeNull();
+        response.ShouldNotBeNull();
+        response.Items.ShouldNotBeNull();
     }
 
     [DefaultRetryFact]
@@ -46,8 +46,8 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
         ListResponse<SubscriptionResponse> response = await _subscriptionClient.GetAllSubscriptionList();
 
         // Then
-        response.Should().NotBeNull();
-        response.Items.Should().NotBeNull();
+        response.ShouldNotBeNull();
+        response.Items.ShouldNotBeNull();
     }
 
     [DefaultRetryFact]
@@ -60,7 +60,7 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
         ListResponse<SubscriptionResponse> response = await _subscriptionClient.GetSubscriptionListAsync(customerId, null, numberOfSubscriptions);
 
         // Then
-        response.Items.Count.Should().BeLessOrEqualTo(numberOfSubscriptions);
+        response.Items.Count.ShouldBeLessThanOrEqualTo(numberOfSubscriptions);
     }
 
     [DefaultRetryFact]
@@ -80,12 +80,12 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
         SubscriptionResponse subscriptionResponse = await _subscriptionClient.CreateSubscriptionAsync(customerId, subscriptionRequest);
 
         // Then
-        subscriptionResponse.Amount.Should().Be(subscriptionRequest.Amount);
-        subscriptionResponse.Times.Should().Be(subscriptionRequest.Times);
-        subscriptionResponse.Interval.Should().Be(subscriptionRequest.Interval);
-        subscriptionResponse.Description.Should().Be(subscriptionRequest.Description);
-        subscriptionResponse.WebhookUrl.Should().Be(subscriptionRequest.WebhookUrl);
-        subscriptionResponse.StartDate.Should().Be(subscriptionRequest.StartDate.Value.Date);
+        subscriptionResponse.Amount.ShouldBe(subscriptionRequest.Amount);
+        subscriptionResponse.Times.ShouldBe(subscriptionRequest.Times);
+        subscriptionResponse.Interval.ShouldBe(subscriptionRequest.Interval);
+        subscriptionResponse.Description.ShouldBe(subscriptionRequest.Description);
+        subscriptionResponse.WebhookUrl.ShouldBe(subscriptionRequest.WebhookUrl);
+        subscriptionResponse.StartDate.ShouldBe(subscriptionRequest.StartDate.Value.Date);
     }
 
     [DefaultRetryFact]
@@ -102,7 +102,7 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
             SubscriptionResponse response = await _subscriptionClient.UpdateSubscriptionAsync(customerId, activeSubscription.Id, request);
 
             // Then
-            response.Description.Should().Be(request.Description);
+            response.Description.ShouldBe(request.Description);
         }
     }
 
@@ -120,7 +120,7 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
             SubscriptionResponse cancelledSubscription = await _subscriptionClient.GetSubscriptionAsync(customerId, subscriptionToCancel.Id);
 
             // Then
-            cancelledSubscription.Status.Should().Be(SubscriptionStatus.Canceled);
+            cancelledSubscription.Status.ShouldBe(SubscriptionStatus.Canceled);
         }
     }
 
@@ -144,7 +144,7 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
             SubscriptionResponse result = await _subscriptionClient.CreateSubscriptionAsync(customerId, subscriptionRequest);
 
             // Then: Make sure we get the same json result as metadata
-            IsJsonResultEqual(result.Metadata, json).Should().BeTrue();
+            IsJsonResultEqual(result.Metadata, json).ShouldBeTrue();
         }
     }
 

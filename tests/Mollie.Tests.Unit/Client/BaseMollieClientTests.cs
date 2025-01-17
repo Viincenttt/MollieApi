@@ -2,7 +2,7 @@
 using System.Net.Http;
 using System.Net.Mime;
 using System.Threading.Tasks;
-using FluentAssertions;
+using Shouldly;
 using Mollie.Api.Client;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Payment.Request;
@@ -45,8 +45,8 @@ public class BaseMollieClientTests : BaseClientTests {
         var exception = await Assert.ThrowsAsync<MollieApiException>(() => paymentClient.CreatePaymentAsync(paymentRequest));
 
         // Assert
-        exception.Details.Detail.Should().Be(errorMessage);
-        exception.Details.Status.Should().Be(errorStatus);
+        exception.Details.Detail.ShouldBe(errorMessage);
+        exception.Details.Status.ShouldBe(errorStatus);
     }
 
     [Fact]
@@ -71,7 +71,7 @@ public class BaseMollieClientTests : BaseClientTests {
         var exception = await Assert.ThrowsAsync<MollieApiException>(() => paymentClient.CreatePaymentAsync(paymentRequest));
 
         // Assert
-        exception.Details.Detail.Should().Be(responseBody);
-        exception.Details.Status.Should().Be((int)HttpStatusCode.UnprocessableEntity);
+        exception.Details.Detail.ShouldBe(responseBody);
+        exception.Details.Status.ShouldBe((int)HttpStatusCode.UnprocessableEntity);
     }
 }

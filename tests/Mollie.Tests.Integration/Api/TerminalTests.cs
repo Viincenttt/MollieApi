@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
+using Shouldly;
 using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models.List.Response;
@@ -25,8 +25,8 @@ public class TerminalTests : BaseMollieApiTestClass, IDisposable {
         ListResponse<TerminalResponse> response = await _terminalClient.GetTerminalListAsync();
 
         // Then
-        response.Should().NotBeNull();
-        response.Items.Should().NotBeNull();
+        response.ShouldNotBeNull();
+        response.Items.ShouldNotBeNull();
     }
 
     [DefaultRetryFact(Skip = "Not implemented by Mollie yet")]
@@ -40,8 +40,8 @@ public class TerminalTests : BaseMollieApiTestClass, IDisposable {
             TerminalResponse response = await _terminalClient.GetTerminalAsync(firstTerminal.Id);
 
             // Then
-            response.Should().NotBeNull();
-            response.Id.Should().Be(firstTerminal.Id);
+            response.ShouldNotBeNull();
+            response.Id.ShouldBe(firstTerminal.Id);
         }
     }
 

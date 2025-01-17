@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using FluentAssertions;
+using Shouldly;
 using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
@@ -41,7 +41,7 @@ public class RefundTests : BaseMollieApiTestClass, IDisposable {
         RefundResponse refundResponse = await _refundClient.CreatePaymentRefundAsync(payment.Id, refundRequest);
 
         // Then
-        refundResponse.Should().NotBeNull();
+        refundResponse.ShouldNotBeNull();
     }
 
     [DefaultRetryFact(Skip = "We can only test this in debug mode, because we actually have to use the PaymentUrl to make the payment, since Mollie can only refund payments that have been paid")]
@@ -60,7 +60,7 @@ public class RefundTests : BaseMollieApiTestClass, IDisposable {
         RefundResponse refundResponse = await _refundClient.CreatePaymentRefundAsync(payment.Id, refundRequest);
 
         // Then
-        refundResponse.Amount.Should().Be(refundRequest.Amount);
+        refundResponse.Amount.ShouldBe(refundRequest.Amount);
     }
 
     [DefaultRetryFact(Skip = "We can only test this in debug mode, because we actually have to use the PaymentUrl to make the payment, since Mollie can only refund payments that have been paid")]
@@ -80,9 +80,9 @@ public class RefundTests : BaseMollieApiTestClass, IDisposable {
         RefundResponse result = await _refundClient.GetPaymentRefundAsync(payment.Id, refundResponse.Id);
 
         // Then
-        result.Should().NotBeNull();
-        result.Id.Should().Be(refundResponse.Id);
-        refundResponse.Amount.Should().Be(refundRequest.Amount);
+        result.ShouldNotBeNull();
+        result.Id.ShouldBe(refundResponse.Id);
+        refundResponse.Amount.ShouldBe(refundRequest.Amount);
     }
 
     [DefaultRetryFact]
@@ -94,8 +94,8 @@ public class RefundTests : BaseMollieApiTestClass, IDisposable {
         ListResponse<RefundResponse> refundList = await _refundClient.GetPaymentRefundListAsync(payment.Id);
 
         // Then
-        refundList.Should().NotBeNull();
-        refundList.Items.Should().NotBeNull();
+        refundList.ShouldNotBeNull();
+        refundList.Items.ShouldNotBeNull();
     }
 
     [DefaultRetryFact(Skip = "We can only test this in debug mode, because we actually have to use the PaymentUrl to make the payment, since Mollie can only refund payments that have been paid")]
@@ -117,7 +117,7 @@ public class RefundTests : BaseMollieApiTestClass, IDisposable {
         RefundResponse refundResponse = await _refundClient.CreatePaymentRefundAsync(payment.Id, refundRequest);
 
         // Then: Make sure we get the same json result as metadata
-        refundResponse.Metadata.Should().Be(metadata);
+        refundResponse.Metadata.ShouldBe(metadata);
     }
 
     private async Task<PaymentResponse> CreatePayment(string amount = "100.00") {

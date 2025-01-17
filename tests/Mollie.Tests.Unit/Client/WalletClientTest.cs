@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using FluentAssertions;
+using Shouldly;
 using Mollie.Api.Client;
 using Mollie.Api.Models.Wallet.Request;
 using Xunit;
@@ -37,13 +37,13 @@ public class WalletClientTest : BaseClientTests {
         var response = await walletClient.RequestApplePayPaymentSessionAsync(request);
 
         // Assert
-        response.EpochTimestamp.Should().Be(DateTimeOffset.FromUnixTimeMilliseconds(1555507053169).UtcDateTime);
-        response.ExpiresAt.Should().Be(DateTimeOffset.FromUnixTimeMilliseconds(1555510653169).UtcDateTime);
-        response.MerchantSessionIdentifier.Should().Be("SSH2EAF8AFAEAA94DEEA898162A5DAFD36E_916523AAED1343F5BC5815E12BEE9250AFFDC1A17C46B0DE5A943F0F94927C24");
-        response.Nonce.Should().Be("0206b8db");
-        response.MerchantIdentifier.Should().Be("BD62FEB196874511C22DB28A9E14A89E3534C93194F73EA417EC566368D391EB");
-        response.DomainName.Should().Be("pay.example.org");
-        response.DisplayName.Should().Be("Chuck Norris's Store");
-        response.Signature.Should().Be("308006092a864886f7...8cc030ad3000000000000");
+        response.EpochTimestamp.ShouldBe(DateTimeOffset.FromUnixTimeMilliseconds(1555507053169).UtcDateTime);
+        response.ExpiresAt.ShouldBe(DateTimeOffset.FromUnixTimeMilliseconds(1555510653169).UtcDateTime);
+        response.MerchantSessionIdentifier.ShouldBe("SSH2EAF8AFAEAA94DEEA898162A5DAFD36E_916523AAED1343F5BC5815E12BEE9250AFFDC1A17C46B0DE5A943F0F94927C24");
+        response.Nonce.ShouldBe("0206b8db");
+        response.MerchantIdentifier.ShouldBe("BD62FEB196874511C22DB28A9E14A89E3534C93194F73EA417EC566368D391EB");
+        response.DomainName.ShouldBe("pay.example.org");
+        response.DisplayName.ShouldBe("Chuck Norris's Store");
+        response.Signature.ShouldBe("308006092a864886f7...8cc030ad3000000000000");
     }
 }

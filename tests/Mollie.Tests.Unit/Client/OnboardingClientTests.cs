@@ -4,7 +4,7 @@ using Mollie.Api.Models.Onboarding.Request;
 using Mollie.Api.Models.Onboarding.Response;
 using System.Net.Http;
 using System.Threading.Tasks;
-using FluentAssertions;
+using Shouldly;
 using Xunit;
 
 namespace Mollie.Tests.Unit.Client {
@@ -37,11 +37,11 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then: Response should be parsed
             mockHttp.VerifyNoOutstandingExpectation();
-            onboardingResponse.Should().NotBeNull();
-            onboardingResponse.Name.Should().Be(defaultName);
-            onboardingResponse.Status.Should().Be(defaultStatus);
-            onboardingResponse.CanReceivePayments.ToString().ToLower().Should().Be(canReceivePayments);
-            onboardingResponse.CanReceiveSettlements.ToString().ToLower().Should().Be(canReceiveSettlements);
+            onboardingResponse.ShouldNotBeNull();
+            onboardingResponse.Name.ShouldBe(defaultName);
+            onboardingResponse.Status.ShouldBe(defaultStatus);
+            onboardingResponse.CanReceivePayments.ToString().ToLower().ShouldBe(canReceivePayments);
+            onboardingResponse.CanReceiveSettlements.ToString().ToLower().ShouldBe(canReceiveSettlements);
         }
 
         [Fact]
