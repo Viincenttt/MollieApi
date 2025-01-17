@@ -16,11 +16,11 @@ namespace Mollie.Tests.Integration.Api;
 public class PaymentMethodTests : BaseMollieApiTestClass, IDisposable {
     private readonly IPaymentMethodClient _paymentMethodClient;
 
-    public PaymentMethodTests() {
-        _paymentMethodClient = new PaymentMethodClient(ApiKey);
+    public PaymentMethodTests(IPaymentMethodClient paymentMethodClient) {
+        _paymentMethodClient = paymentMethodClient;
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanRetrievePaymentMethodList() {
         // When: Retrieve payment list with default settings
         ListResponse<PaymentMethodResponse> response = await _paymentMethodClient.GetPaymentMethodListAsync();
@@ -30,7 +30,7 @@ public class PaymentMethodTests : BaseMollieApiTestClass, IDisposable {
         response.Items.ShouldNotBeNull();
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanRetrievePaymentMethodListIncludeWallets() {
         // When: Retrieve payment list with default settings
         ListResponse<PaymentMethodResponse> response = await _paymentMethodClient.GetPaymentMethodListAsync(includeWallets: "applepay");
@@ -40,7 +40,7 @@ public class PaymentMethodTests : BaseMollieApiTestClass, IDisposable {
         response.Items.ShouldNotBeNull();
     }
 
-    [DefaultRetryTheory]
+    [Theory]
     [InlineData(PaymentMethod.GooglePay)]
     public async Task CanRetrieveSinglePaymentMethod(string method) {
         // When: retrieving a payment method
@@ -51,7 +51,7 @@ public class PaymentMethodTests : BaseMollieApiTestClass, IDisposable {
         paymentMethod.Id.ShouldBe(method);
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanRetrieveKbcIssuers() {
         // When: retrieving the ideal method we can include the issuers
         PaymentMethodResponse paymentMethod = await _paymentMethodClient.GetPaymentMethodAsync(PaymentMethod.Kbc, true);
@@ -61,7 +61,7 @@ public class PaymentMethodTests : BaseMollieApiTestClass, IDisposable {
         paymentMethod.Issuers.ShouldNotBeEmpty();
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task DoNotRetrieveIssuersWhenIncludeIsFalse() {
         // When: retrieving the ideal method with the include parameter set to false
         PaymentMethodResponse paymentMethod = await _paymentMethodClient.GetPaymentMethodAsync(PaymentMethod.Kbc);
@@ -70,7 +70,7 @@ public class PaymentMethodTests : BaseMollieApiTestClass, IDisposable {
         paymentMethod.Issuers.ShouldBeNull();
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanRetrievePricing() {
         // When: retrieving the ideal method we can include the issuers
         PaymentMethodResponse paymentMethod = await _paymentMethodClient.GetPaymentMethodAsync(PaymentMethod.CreditCard, includePricing: true);
@@ -80,7 +80,7 @@ public class PaymentMethodTests : BaseMollieApiTestClass, IDisposable {
         paymentMethod.Pricing.ShouldNotBeEmpty();
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task DoNotRetrievePricingWhenIncludeIsFalse() {
         // When: retrieving the ideal method with the include parameter set to false
         PaymentMethodResponse paymentMethod = await _paymentMethodClient.GetPaymentMethodAsync(PaymentMethod.CreditCard, includePricing: false);
@@ -89,7 +89,7 @@ public class PaymentMethodTests : BaseMollieApiTestClass, IDisposable {
         paymentMethod.Pricing.ShouldBeNull();
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanRetrieveAllMethods() {
         // When: retrieving the all mollie payment methods
         ListResponse<PaymentMethodResponse> paymentMethods = await _paymentMethodClient.GetAllPaymentMethodListAsync();
@@ -99,7 +99,7 @@ public class PaymentMethodTests : BaseMollieApiTestClass, IDisposable {
         paymentMethods.Items.ShouldNotBeEmpty();
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanRetrievePricingForAllMethods() {
         // When: retrieving the ideal method we can include the issuers
         ListResponse<PaymentMethodResponse> paymentMethods = await _paymentMethodClient.GetAllPaymentMethodListAsync(includePricing: true);
@@ -108,7 +108,7 @@ public class PaymentMethodTests : BaseMollieApiTestClass, IDisposable {
         paymentMethods.Items.All(x => x.Pricing != null && x.Pricing.Any(y => y.Fixed.Value > 0)).ShouldBeTrue();
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanRetrieveIssuersForAllMethods() {
         // When: retrieving the all mollie payment methods we can include the issuers
         ListResponse<PaymentMethodResponse> paymentMethods = await _paymentMethodClient.GetAllPaymentMethodListAsync(includeIssuers: true);
@@ -117,7 +117,7 @@ public class PaymentMethodTests : BaseMollieApiTestClass, IDisposable {
         paymentMethods.Items.ShouldContain(x => x.Issuers != null);
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanRetrieveIssuersAndPricingInformation() {
         // When: retrieving the all mollie payment methods we can include the issuers
         ListResponse<PaymentMethodResponse> paymentMethods = await _paymentMethodClient.GetAllPaymentMethodListAsync(includeIssuers: true, includePricing: true);
@@ -127,7 +127,7 @@ public class PaymentMethodTests : BaseMollieApiTestClass, IDisposable {
         paymentMethods.Items.ShouldContain(x => x.Pricing != null && x.Pricing.Any(y => y.Fixed.Value > 0));
     }
 
-    [DefaultRetryTheory]
+    [Theory]
     [InlineData("JPY", 249)]
     [InlineData("EUR", 50.25)]
     public async Task GetPaymentMethodListAsync_WithVariousCurrencies_ReturnsAvailablePaymentMethods(string currency, decimal value) {

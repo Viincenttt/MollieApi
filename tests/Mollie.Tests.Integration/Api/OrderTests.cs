@@ -22,11 +22,11 @@ namespace Mollie.Tests.Integration.Api;
 public class OrderTests : BaseMollieApiTestClass, IDisposable {
     private readonly IOrderClient _orderClient;
 
-    public OrderTests() {
-        _orderClient = new OrderClient(ApiKey);
+    public OrderTests(IOrderClient orderClient) {
+        _orderClient = orderClient;
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task GetOrderListAsync_WithoutSortOrder_ReturnsOrdersInDescendingOrder()
     {
         // Act
@@ -39,7 +39,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         }
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task GetOrderListAsync_InDescendingOrder_ReturnsOrdersInDescendingOrder()
     {
         // Act
@@ -52,7 +52,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         }
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task GetOrderListAsync_InAscendingOrder_ReturnsOrdersInAscendingOrder()
     {
         // Act
@@ -65,7 +65,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         }
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CreateOrderAsync_OrderWithRequiredFields_OrderIsCreated() {
         // If: we create a order request with only the required parameters
         OrderRequest orderRequest = CreateOrder();
@@ -88,7 +88,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         orderResponseLine.Metadata.ShouldBe(expectedMetadataString);
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CreateOrderAsync_OrderWithApplicationFee_OrderIsCreated() {
         // If: we create a order request with only the required parameters
         OrderRequest orderRequest = CreateOrder() with {
@@ -118,7 +118,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         orderResponseLine.Metadata.ShouldBe(expectedMetadataString);
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CreateOrderAsync_WithMultiplePaymentMethods_OrderIsCreated() {
         // When: we create a order request and specify multiple payment methods
         OrderRequest orderRequest = CreateOrder();
@@ -137,7 +137,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         result.OrderNumber.ShouldBe(orderRequest.OrderNumber);
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CreateOrderAsync_WithSinglePaymentMethod_OrderIsCreated() {
         // When: we create a order request and specify a single payment method
         OrderRequest orderRequest = CreateOrder();
@@ -207,7 +207,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
             }
         };
 
-    [DefaultRetryTheory]
+    [Theory]
     [MemberData(nameof(PaymentSpecificParameters))]
     public async Task CreateOrderAsync_WithPaymentSpecificParameters_OrderIsCreated(
         OrderPaymentParameters paymentSpecificParameters) {
@@ -227,7 +227,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         result.OrderNumber.ShouldBe(orderRequest.OrderNumber);
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task GetOrderAsync_OrderIsCreated_OrderCanBeRetrieved() {
         // If: we create a new order
         OrderRequest orderRequest = CreateOrder();
@@ -241,7 +241,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         retrievedOrder.Id.ShouldBe(createdOrder.Id);
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task GetOrderAsync_WithIncludeParameters_OrderIsRetrievedWithEmbeddedData() {
         // If: we create a new order
         OrderRequest orderRequest = CreateOrder();
@@ -259,7 +259,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         retrievedOrder.Embedded.Refunds.ShouldNotBeNull();
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task UpdateOrderAsync_OrderIsUpdated_OrderIsUpdated() {
         // If: we create a new order
         OrderRequest orderRequest = CreateOrder();
@@ -276,7 +276,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         updatedOrder.OrderNumber.ShouldBe(orderUpdateRequest.OrderNumber);
     }
 
-    [DefaultRetryFact(Skip = "Broken - Reported to Mollie: https://discordapp.com/channels/1037712581407817839/1180467187677401198/1180467187677401198")]
+    [Fact(Skip = "Broken - Reported to Mollie: https://discordapp.com/channels/1037712581407817839/1180467187677401198/1180467187677401198")]
     public async Task UpdateOrderLinesAsync_WhenOrderLineIsUpdated_UpdatedPropertiesCanBeRetrieved() {
         // If: we create a new order
         OrderRequest orderRequest = CreateOrder();
@@ -292,7 +292,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         updatedOrder.Lines.First().Name.ShouldBe(updateRequest.Name);
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task ManageOrderLinesAsync_AddOperation_OrderLineIsAdded() {
         // If: we create a new order
         OrderRequest orderRequest = CreateOrder();
@@ -337,7 +337,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         newMetaData.ShouldBe(newOrderLineRequest.Metadata);
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task ManageOrderLinesAsync_UpdateOperation_OrderLineIsUpdated() {
         // If: we create a new order
         OrderRequest orderRequest = CreateOrder();
@@ -382,7 +382,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
             .ShouldBe(orderLineUpdateRequest.Metadata);
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task ManageOrderLinesAsync_CancelOperation_OrderLineIsCanceled() {
         // If: we create a new order
         OrderRequest orderRequest = CreateOrder();
@@ -408,7 +408,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         updatedOrderLineRequest.Status.ShouldBe(OrderStatus.Canceled);
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task GetOrderListAsync_NoParameters_OrderListIsRetrieved() {
         // When: Retrieve payment list with default settings
         ListResponse<OrderResponse> response = await _orderClient.GetOrderListAsync();
@@ -418,7 +418,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         response.Items.ShouldNotBeNull();
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task GetOrderListAsync_WithMaximumNumberOfItems_MaximumNumberOfOrdersIsReturned() {
         // If: Number of orders requested is 5
         int numberOfOrders = 5;

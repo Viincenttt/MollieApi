@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Threading;
 using Microsoft.Extensions.Configuration;
 using Mollie.Api.Options;
 
@@ -8,18 +7,13 @@ namespace Mollie.Tests.Integration.Framework {
     public abstract class BaseMollieApiTestClass {
         protected readonly string DefaultRedirectUrl = "http://mysite.com";
         protected readonly string DefaultWebhookUrl = "http://mysite.com/webhook";
-        protected readonly MollieOptions Configuration = ConfigurationFactory.GetConfiguration().GetSection("Mollie").Get<MollieOptions>();
+        private readonly MollieOptions Configuration = ConfigurationFactory.GetConfiguration().GetSection("Mollie").Get<MollieOptions>();
         protected string ApiKey => Configuration.ApiKey;
         protected string ClientId => Configuration.ClientId ?? "client-id";
         protected string ClientSecret => Configuration.ClientSecret ?? "client-secret";
 
         protected BaseMollieApiTestClass() {
             EnsureTestApiKey(ApiKey);
-
-            // Mollie returns a 429 response code (Too many requests) if we send a lot of requests in a short timespan.
-            // In order to avoid hitting their rate limit, we add a small delay between each tests.
-            TimeSpan timeBetweenTests = TimeSpan.FromMilliseconds(1500);
-            Thread.Sleep(timeBetweenTests);
         }
 
         private void EnsureTestApiKey(string apiKey) {

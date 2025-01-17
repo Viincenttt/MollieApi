@@ -7,17 +7,18 @@ using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Terminal.Response;
 using Mollie.Tests.Integration.Framework;
+using Xunit;
 
 namespace Mollie.Tests.Integration.Api;
 
 public class TerminalTests : BaseMollieApiTestClass, IDisposable {
     private readonly ITerminalClient _terminalClient;
 
-    public TerminalTests() {
-        _terminalClient = new TerminalClient(ApiKey);
+    public TerminalTests(ITerminalClient terminalClient) {
+        _terminalClient = terminalClient;
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanRetrieveTerminalList() {
         // Given
 
@@ -29,7 +30,7 @@ public class TerminalTests : BaseMollieApiTestClass, IDisposable {
         response.Items.ShouldNotBeNull();
     }
 
-    [DefaultRetryFact(Skip = "Not implemented by Mollie yet")]
+    [Fact(Skip = "Not implemented by Mollie yet")]
     public async Task CanRetrieveSingleTerminal() {
         // Given
         ListResponse<TerminalResponse> allTerminals = await _terminalClient.GetTerminalListAsync();

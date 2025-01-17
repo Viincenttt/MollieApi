@@ -20,11 +20,11 @@ namespace Mollie.Tests.Integration.Api;
 public class CustomerTests : BaseMollieApiTestClass, IDisposable {
     private readonly ICustomerClient _customerClient;
 
-    public CustomerTests() {
-        _customerClient = new CustomerClient(ApiKey);
+    public CustomerTests(ICustomerClient customerClient) {
+        _customerClient = customerClient;
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanRetrieveCustomerList() {
         // When: Retrieve customer list with default settings
         ListResponse<CustomerResponse> response = await _customerClient.GetCustomerListAsync();
@@ -34,7 +34,7 @@ public class CustomerTests : BaseMollieApiTestClass, IDisposable {
         response.Items.ShouldNotBeNull();
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task ListCustomersNeverReturnsMoreCustomersThenTheNumberOfRequestedCustomers() {
         // If: Number of customers requested is 5
         int numberOfCustomers = 5;
@@ -46,7 +46,7 @@ public class CustomerTests : BaseMollieApiTestClass, IDisposable {
         numberOfCustomers.ShouldBe(response.Items.Count);
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanCreateNewCustomer() {
         // If: We create a customer request with only the required parameters
         string name = "Smit";
@@ -61,7 +61,7 @@ public class CustomerTests : BaseMollieApiTestClass, IDisposable {
         result.Email.ShouldBe(email);
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanUpdateCustomer() {
         // If: We retrieve the customer list
         ListResponse<CustomerResponse> response = await _customerClient.GetCustomerListAsync();
@@ -79,7 +79,7 @@ public class CustomerTests : BaseMollieApiTestClass, IDisposable {
         result.Name.ShouldBe(newCustomerName);
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanDeleteCustomer() {
         // If: We retrieve the customer list
         ListResponse<CustomerResponse> response = await _customerClient.GetCustomerListAsync();
@@ -93,7 +93,7 @@ public class CustomerTests : BaseMollieApiTestClass, IDisposable {
         apiException.Details.Status.ShouldBe((int)HttpStatusCode.Gone);
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanGetCustomerByUrlObject() {
         // If: We create a customer request with only the required parameters
         string name = "Smit";
@@ -108,7 +108,7 @@ public class CustomerTests : BaseMollieApiTestClass, IDisposable {
         retrievedCustomer.Email.ShouldBe(createdCustomer.Email);
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanCreateCustomerWithJsonMetadata() {
         // If: We create a customer request with json metadata
         CustomerRequest customerRequest = new CustomerRequest() {
@@ -125,7 +125,7 @@ public class CustomerTests : BaseMollieApiTestClass, IDisposable {
         IsJsonResultEqual(customerRequest.Metadata, retrievedCustomer.Metadata).ShouldBeTrue();
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanCreateCustomerWithStringMetadata() {
         // If: We create a customer request with string metadata
         CustomerRequest customerRequest = new CustomerRequest() {
@@ -142,7 +142,7 @@ public class CustomerTests : BaseMollieApiTestClass, IDisposable {
         retrievedCustomer.Metadata.ShouldBe(customerRequest.Metadata);
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanCreateNewCustomerPayment() {
         // If: We create a customer request with only the required parameters
         string name = "Smit";

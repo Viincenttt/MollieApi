@@ -16,11 +16,11 @@ namespace Mollie.Tests.Integration.Api;
 public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
     private readonly IPaymentLinkClient _paymentLinkClient;
 
-    public PaymentLinkTests() {
-        _paymentLinkClient = new PaymentLinkClient(ApiKey);
+    public PaymentLinkTests(IPaymentLinkClient paymentLinkClient) {
+        _paymentLinkClient = paymentLinkClient;
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanRetrievePaymentLinkList() {
         // When: Retrieve payment list with default settings
         ListResponse<PaymentLinkResponse> response = await _paymentLinkClient.GetPaymentLinkListAsync();
@@ -30,7 +30,7 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
         response.Items.ShouldNotBeNull();
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanCreatePaymentLinkAndRetrieveIt() {
         // Given: We create a new payment link
         PaymentLinkRequest paymentLinkRequest = new() {
@@ -60,7 +60,7 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
         verifyPaymentLinkResponse(retrievePaymentLinkResponse);
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanCreatePaymentLinkWithNullAmount() {
         // Given: We create a new payment link
         PaymentLinkRequest paymentLinkRequest = new() {
@@ -89,7 +89,7 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
         verifyPaymentLinkResponse(retrievePaymentLinkResponse);
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanUpdatePaymentLink() {
         // Given: We create a new payment link
         PaymentLinkRequest paymentLinkRequest = new() {
@@ -115,7 +115,7 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
         updatedPaymentLinkResponse.Archived.ShouldBe(paymentLinkUpdateRequest.Archived);
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanDeletePaymentLink() {
         // Given: We create a new payment link
         PaymentLinkRequest paymentLinkRequest = new() {
@@ -137,7 +137,7 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
         exception.Details.Detail.ShouldBe("Payment link does not exists.");
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanListPaymentLinkPayments() {
         // Given: We create a new payment link
         PaymentLinkRequest paymentLinkRequest = new() {

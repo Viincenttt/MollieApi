@@ -33,15 +33,20 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
     private readonly ITerminalClient _terminalClient;
     private readonly ICaptureClient _captureClient;
 
-    public PaymentTests() {
-        _paymentClient = new PaymentClient(ApiKey);
-        _customerClient = new CustomerClient(ApiKey);
-        _mandateClient = new MandateClient(ApiKey);
-        _terminalClient = new TerminalClient(ApiKey);
-        _captureClient = new CaptureClient(ApiKey);
+    public PaymentTests(
+        IPaymentClient paymentClient,
+        ICustomerClient customerClient,
+        IMandateClient mandateClient,
+        ITerminalClient terminalClient,
+        ICaptureClient captureClient) {
+        _paymentClient = paymentClient;
+        _customerClient = customerClient;
+        _mandateClient = mandateClient;
+        _terminalClient = terminalClient;
+        _captureClient = captureClient;
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanRetrievePaymentList() {
         // When: Retrieve payment list with default settings
         ListResponse<PaymentResponse> response = await _paymentClient.GetPaymentListAsync();
@@ -52,7 +57,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         response.Items.Select(x => x.CreatedAt).ShouldBeInOrder(Shouldly.SortDirection.Descending);
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanRetrievePaymentListInDescendingOrder()
     {
         // When: Retrieve payment list in ascending order
@@ -64,7 +69,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         response.Items.Select(x => x.CreatedAt).ShouldBeInOrder(Shouldly.SortDirection.Descending);
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanRetrievePaymentListInAscendingOrder()
     {
         // When: Retrieve payment list in ascending order
@@ -76,7 +81,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         response.Items.Select(x => x.CreatedAt).ShouldBeInOrder(Shouldly.SortDirection.Ascending);
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task ListPaymentsNeverReturnsMorePaymentsThenTheNumberOfRequestedPayments() {
         // Given: Number of payments requested is 5
         int numberOfPayments = 5;
@@ -88,7 +93,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         response.Items.Count.ShouldBeLessThanOrEqualTo(numberOfPayments);
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanCreateDefaultPaymentWithOnlyRequiredFields() {
         // Given: we create a payment request with only the required parameters
         PaymentRequest paymentRequest = new KbcPaymentRequest {
@@ -107,7 +112,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         result.RedirectUrl.ShouldBe(paymentRequest.RedirectUrl);
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanCreateDefaultPaymentWithCustomIdempotencyKey() {
         // Given: we create a payment request with only the required parameters
         PaymentRequest paymentRequest = new PaymentRequest() {
@@ -127,7 +132,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         }
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanCreateDefaultPaymentWithAllFields() {
         // Given: we create a payment request where all parameters have a value
         PaymentRequest paymentRequest = new PaymentRequest() {
@@ -153,7 +158,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         IsJsonResultEqual(result.Metadata, paymentRequest.Metadata).ShouldBeTrue();
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanUpdatePayment() {
         // Given: We create a payment with only the required parameters
         PaymentRequest paymentRequest = new PaymentRequest() {
@@ -175,7 +180,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         updatedPayment.Metadata.ShouldBe(paymentUpdateRequest.Metadata);
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanCreatePaymentWithSinglePaymentMethod() {
         // Given: we create a payment request and specify multiple payment methods
         PaymentRequest paymentRequest = new PaymentRequest() {
@@ -196,7 +201,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         result.Method.ShouldBe(paymentRequest.Method);
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanCreatePaymentWithMultiplePaymentMethods() {
         // When: we create a payment request and specify multiple payment methods
         PaymentRequest paymentRequest = new PaymentRequest() {
@@ -221,7 +226,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         result.Method.ShouldBeNull();
     }
 
-    [DefaultRetryTheory]
+    [Theory]
     [InlineData(typeof(PaymentRequest), PaymentMethod.Bancontact, typeof(BancontactPaymentResponse))]
     [InlineData(typeof(BankTransferPaymentRequest), PaymentMethod.BankTransfer, typeof(BankTransferPaymentResponse))]
     [InlineData(typeof(PayPalPaymentRequest), PaymentMethod.PayPal, typeof(PayPalPaymentResponse))]
@@ -254,7 +259,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         result.Method.ShouldBe(paymentRequest.Method);
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanCreatePaymentAndRetrieveIt() {
         // When: we create a new payment request
         PaymentRequest paymentRequest = new PaymentRequest() {
@@ -277,7 +282,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         result.Method.ShouldBe(paymentRequest.Method);
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanCreateRecurringPaymentAndRetrieveIt() {
         // When: we create a new recurring payment
         MandateResponse mandate = await GetFirstValidMandate();
@@ -300,7 +305,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         }
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanCreatePaymentWithMetaData() {
         // When: We create a payment with meta data
         string metadata = "this is my metadata";
@@ -318,7 +323,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         result.Metadata.ShouldBe(metadata);
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanCreatePaymentWithJsonMetaData() {
         // When: We create a payment with meta data
         string json = "{\"order_id\":\"4.40\"}";
@@ -336,7 +341,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         IsJsonResultEqual(result.Metadata, json).ShouldBeTrue();
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanCreatePaymentWithCustomMetaDataClass() {
         // When: We create a payment with meta data
         CustomMetadataClass metadataRequest = new CustomMetadataClass() {
@@ -361,7 +366,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         metadataResponse.Description.ShouldBe(metadataRequest.Description);
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanCreatePaymentWithLines() {
         // Arrange
         var address = new PaymentAddressDetails {
@@ -410,7 +415,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         result.ShippingAddress.ShouldBeEquivalentTo(paymentRequest.ShippingAddress);
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanCreatePaymentWithMandate() {
         // When: We create a payment with a mandate id
         MandateResponse validMandate = await GetFirstValidMandate();
@@ -435,12 +440,12 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         }
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task PaymentWithDifferentHttpInstance() {
         // When: We create a PaymentClient with our own HttpClient instance
-        HttpClient myHttpClientInstance = new HttpClient();
-        PaymentClient paymentClient = new PaymentClient(ApiKey, myHttpClientInstance);
-        PaymentRequest paymentRequest = new PaymentRequest() {
+        HttpClient myHttpClientInstance = new();
+        PaymentClient paymentClient = new(ApiKey, myHttpClientInstance);
+        PaymentRequest paymentRequest = new() {
             Amount = new Amount(Currency.EUR, "100.00"),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl
@@ -456,7 +461,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         result.RedirectUrl.ShouldBe(paymentRequest.RedirectUrl);
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanCreatePaymentWithDecimalAmountAndRetrieveIt() {
         // When: we create a new payment request
         PaymentRequest paymentRequest = new PaymentRequest() {
@@ -478,7 +483,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         result.RedirectUrl.ShouldBe(paymentRequest.RedirectUrl);
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanCreatePaymentWithImplicitAmountCastAndRetrieveIt() {
         var initialAmount = 100.75m;
 
@@ -507,7 +512,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         resultAmount.ShouldBe(initialAmount);
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanCreatePointOfSalePayment() {
         // Given
         ListResponse<TerminalResponse> terminals = await _terminalClient.GetTerminalListAsync();
@@ -541,7 +546,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         }
     }
 
-    [DefaultRetryFact(Skip = "We can only test this in debug mode, because we have to set the payment status to authorized")]
+    [Fact(Skip = "We can only test this in debug mode, because we have to set the payment status to authorized")]
     public async Task CanCreatePaymentWithManualCaptureMode() {
         // Given
         PaymentRequest paymentRequest = new PaymentRequest() {
@@ -568,7 +573,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         paymentResponse.CaptureBefore.ShouldNotBeNull();
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanCreatePaymentWithCaptureDelay() {
         // Given
         PaymentRequest paymentRequest = new PaymentRequest() {

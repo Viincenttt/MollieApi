@@ -12,17 +12,18 @@ using Mollie.Api.Models;
 using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.PaymentMethod.Response;
 using Mollie.Api.Models.Profile.Request;
+using Xunit;
 
 namespace Mollie.Tests.Integration.Api;
 
 public class ProfileTests : BaseMollieApiTestClass, IDisposable {
     private readonly IProfileClient _profileClient;
 
-    public ProfileTests() {
-        _profileClient = new ProfileClient(ApiKey);
+    public ProfileTests(IProfileClient profileClient) {
+        _profileClient = profileClient;
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task GetCurrentProfileAsync_ReturnsCurrentProfile() {
         // Given
 
@@ -36,7 +37,7 @@ public class ProfileTests : BaseMollieApiTestClass, IDisposable {
         profileResponse.Status.ShouldNotBeNullOrEmpty();
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task EnablePaymentMethodAsync_WhenEnablingPaymentMethodForCurrentProfile_PaymentMethodIsReturned() {
         // Given
 
@@ -48,7 +49,7 @@ public class ProfileTests : BaseMollieApiTestClass, IDisposable {
         paymentMethodResponse.Id.ShouldBe(PaymentMethod.CreditCard);
     }
 
-    [DefaultRetryFact(Skip = "We can only test this in debug mode, because we need to retrieve a oauth access token to test this method")]
+    [Fact(Skip = "We can only test this in debug mode, because we need to retrieve a oauth access token to test this method")]
     public async Task EnablePaymentMethodAsync_WhenEnablingPaymentMethodForProfile_PaymentMethodIsReturned() {
         // Given: We retrieve the profile from the API
         ProfileClient profileClient = new ProfileClient("abcde"); // Set access token
@@ -65,7 +66,7 @@ public class ProfileTests : BaseMollieApiTestClass, IDisposable {
         }
     }
 
-    [DefaultRetryFact(Skip = "We can only test this in debug mode, because we need to retrieve a oauth access token to test this method")]
+    [Fact(Skip = "We can only test this in debug mode, because we need to retrieve a oauth access token to test this method")]
     public async Task CreateProfileAsync_WithDefaultParameters_CreatesProfile() {
         // Given
         ProfileRequest profileRequest = new ProfileRequest {
@@ -85,7 +86,7 @@ public class ProfileTests : BaseMollieApiTestClass, IDisposable {
         profileResponse.ShouldNotBeNull();
     }
 
-    [DefaultRetryFact(Skip = "Don't disable payment methods, other tests might break")]
+    [Fact(Skip = "Don't disable payment methods, other tests might break")]
     public async Task DisablePaymentMethodAsync_WhenDisablingPaymentMethodForCurrentProfile_NoErrorIsThrown() {
         // Given
 
@@ -95,7 +96,7 @@ public class ProfileTests : BaseMollieApiTestClass, IDisposable {
         // Then
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task DisableGiftCardIssuerAsync_WhenDisablingGiftCardIssuerForCurrentProfile_NoErrorIsThrown() {
         // Given
 

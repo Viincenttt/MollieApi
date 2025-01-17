@@ -10,6 +10,7 @@ using Mollie.Api.Models.Capture.Request;
 using Mollie.Api.Models.Payment;
 using Mollie.Api.Models.Payment.Request;
 using Mollie.Tests.Integration.Framework;
+using Xunit;
 
 namespace Mollie.Tests.Integration.Api;
 
@@ -17,12 +18,14 @@ public class CaptureTests : BaseMollieApiTestClass, IDisposable {
     private readonly ICaptureClient _captureClient;
     private readonly IPaymentClient _paymentClient;
 
-    public CaptureTests() {
-        _captureClient = new CaptureClient(ApiKey);
-        _paymentClient = new PaymentClient(ApiKey);
+    public CaptureTests(
+        ICaptureClient captureClient,
+        IPaymentClient paymentClient) {
+        _captureClient = captureClient;
+        _paymentClient = paymentClient;
     }
 
-    [DefaultRetryFact(Skip = "We can only test this in debug mode, because we actually have to use the PaymentUrl" +
+    [Fact(Skip = "We can only test this in debug mode, because we actually have to use the PaymentUrl" +
                              " to make the payment, since Mollie can only capture payments that have been authorized")]
     public async Task CanCreateCaptureForPaymentWithManualCaptureMode() {
         // Given: We create a payment with captureMode set to manual
@@ -51,7 +54,7 @@ public class CaptureTests : BaseMollieApiTestClass, IDisposable {
         capture.Metadata.ShouldBe(captureRequest.Metadata);
     }
 
-    [DefaultRetryFact(Skip = "We can only test this in debug mode, because we actually have to use the PaymentUrl" +
+    [Fact(Skip = "We can only test this in debug mode, because we actually have to use the PaymentUrl" +
                              " to make the payment, since Mollie can only capture payments that have been authorized")]
     public async Task CanRetrieveCaptureListForPayment()
     {

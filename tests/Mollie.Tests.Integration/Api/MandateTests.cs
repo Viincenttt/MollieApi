@@ -13,6 +13,7 @@ using Mollie.Api.Models.Mandate.Response.PaymentSpecificParameters;
 using Mollie.Api.Models.Payment;
 using Mollie.Api.Models.Payment.Response.PaymentSpecificParameters;
 using Mollie.Tests.Integration.Framework;
+using Xunit;
 
 namespace Mollie.Tests.Integration.Api;
 
@@ -20,12 +21,12 @@ public class MandateTests : BaseMollieApiTestClass, IDisposable {
     private readonly IMandateClient _mandateClient;
     private readonly ICustomerClient _customerClient;
 
-    public MandateTests() {
-        _mandateClient = new MandateClient(ApiKey);
-        _customerClient = new CustomerClient(ApiKey);
+    public MandateTests(IMandateClient mandateClient, ICustomerClient customerClient) {
+        _mandateClient = mandateClient;
+        _customerClient = customerClient;
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanRetrieveMandateList() {
         // We can only test this if there are customers
         ListResponse<CustomerResponse> customers = await _customerClient.GetCustomerListAsync();
@@ -40,7 +41,7 @@ public class MandateTests : BaseMollieApiTestClass, IDisposable {
         }
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task ListMandatesNeverReturnsMoreCustomersThenTheNumberOfRequestedMandates() {
         // We can only test this if there are customers
         ListResponse<CustomerResponse> customers = await _customerClient.GetCustomerListAsync();
@@ -57,7 +58,7 @@ public class MandateTests : BaseMollieApiTestClass, IDisposable {
         }
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanCreateSepaDirectDebitMandate() {
         // We can only test this if there are customers
         ListResponse<CustomerResponse> customers = await _customerClient.GetCustomerListAsync();

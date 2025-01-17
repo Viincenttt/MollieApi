@@ -11,6 +11,7 @@ using Mollie.Api.Models.Mandate.Response;
 using Mollie.Api.Models.Subscription.Request;
 using Mollie.Api.Models.Subscription.Response;
 using Mollie.Tests.Integration.Framework;
+using Xunit;
 
 namespace Mollie.Tests.Integration.Api;
 
@@ -19,13 +20,16 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
     private readonly ICustomerClient _customerClient;
     private readonly IMandateClient _mandateClient;
 
-    public SubscriptionTests() {
-        _subscriptionClient = new SubscriptionClient(ApiKey);
-        _customerClient = new CustomerClient(ApiKey);
-        _mandateClient = new MandateClient(ApiKey);
+    public SubscriptionTests(
+        ISubscriptionClient subscriptionClient,
+        ICustomerClient customerClient,
+        IMandateClient mandateClient) {
+        _subscriptionClient = subscriptionClient;
+        _customerClient = customerClient;
+        _mandateClient = mandateClient;
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanRetrieveSubscriptionList() {
         // Given
         string customerId = await GetFirstCustomerWithValidMandate();
@@ -38,7 +42,7 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
         response.Items.ShouldNotBeNull();
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanRetrieveAllSubscriptionList() {
         // Given
 
@@ -50,7 +54,7 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
         response.Items.ShouldNotBeNull();
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task ListSubscriptionsNeverReturnsMoreCustomersThenTheNumberOfRequestedSubscriptions() {
         // Given: Number of customers requested is 5
         string customerId = await GetFirstCustomerWithValidMandate();
@@ -63,7 +67,7 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
         response.Items.Count.ShouldBeLessThanOrEqualTo(numberOfSubscriptions);
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanCreateSubscription() {
         // Given
         string customerId = await GetFirstCustomerWithValidMandate();
@@ -88,7 +92,7 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
         subscriptionResponse.StartDate.ShouldBe(subscriptionRequest.StartDate.Value.Date);
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanUpdateSubscription() {
         // Given
         var activeSubscription = await GetActiveSubscription();
@@ -106,7 +110,7 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
         }
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanCancelSubscription() {
         // Given
         string customerId = await GetFirstCustomerWithValidMandate();
@@ -124,7 +128,7 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
         }
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanCreateSubscriptionWithMetaData() {
         // If: We create a subscription with meta data
         string json = "{\"order_id\":\"4.40\"}";

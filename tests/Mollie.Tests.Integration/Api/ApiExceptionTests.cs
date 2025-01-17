@@ -10,10 +10,15 @@ using Xunit;
 namespace Mollie.Tests.Integration.Api;
 
 public class ApiExceptionTests : BaseMollieApiTestClass {
-    [DefaultRetryFact]
+    private readonly IPaymentClient _paymentClient;
+
+    public ApiExceptionTests(IPaymentClient paymentClient) {
+        _paymentClient = paymentClient;
+    }
+
+    [Fact]
     public async Task ShouldThrowMollieApiExceptionWhenInvalidParametersAreGiven() {
         // If: we create a payment request with invalid parameters
-        using IPaymentClient paymentClient = new PaymentClient(ApiKey);
         PaymentRequest paymentRequest = new PaymentRequest() {
             Amount = new Amount(Currency.EUR, "100.00"),
             Description = null,
@@ -21,7 +26,7 @@ public class ApiExceptionTests : BaseMollieApiTestClass {
         };
 
         // Then: Send the payment request to the Mollie Api, this should throw a mollie api exception
-        MollieApiException apiException = await Assert.ThrowsAsync<MollieApiException>(() => paymentClient.CreatePaymentAsync(paymentRequest));
+        MollieApiException apiException = await Assert.ThrowsAsync<MollieApiException>(() => _paymentClient.CreatePaymentAsync(paymentRequest));
         apiException.ShouldNotBeNull();
         apiException.Details.ShouldNotBeNull();
         apiException.Details.Status.ShouldBe(422);
