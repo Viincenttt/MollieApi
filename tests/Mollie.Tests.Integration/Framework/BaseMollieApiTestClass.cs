@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Threading;
 using Microsoft.Extensions.Configuration;
 using Mollie.Api.Options;
 
@@ -14,6 +15,13 @@ namespace Mollie.Tests.Integration.Framework {
 
         protected BaseMollieApiTestClass() {
             EnsureTestApiKey(ApiKey);
+
+            // Mollie returns a 429 response code (Too many requests) if we send a lot of requests in a short timespan.
+            // this is partially mitigated by using a custom http retry policy. However, the RetryAfter header gets
+            // exceedingly long if we do too many requests without any delay. This is why we add a small delay between
+            // each test.
+            TimeSpan timeBetweenTests = TimeSpan.FromMilliseconds(500);
+            Thread.Sleep(timeBetweenTests);
         }
 
         private void EnsureTestApiKey(string apiKey) {

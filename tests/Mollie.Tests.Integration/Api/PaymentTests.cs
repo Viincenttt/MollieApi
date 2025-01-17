@@ -33,17 +33,21 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
     private readonly ITerminalClient _terminalClient;
     private readonly ICaptureClient _captureClient;
 
+    private readonly IHttpClientFactory _httpClientFactory;
+
     public PaymentTests(
         IPaymentClient paymentClient,
         ICustomerClient customerClient,
         IMandateClient mandateClient,
         ITerminalClient terminalClient,
-        ICaptureClient captureClient) {
+        ICaptureClient captureClient,
+        IHttpClientFactory httpClientFactory) {
         _paymentClient = paymentClient;
         _customerClient = customerClient;
         _mandateClient = mandateClient;
         _terminalClient = terminalClient;
         _captureClient = captureClient;
+        _httpClientFactory = httpClientFactory;
     }
 
     [Fact]
@@ -443,7 +447,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
     [Fact]
     public async Task PaymentWithDifferentHttpInstance() {
         // When: We create a PaymentClient with our own HttpClient instance
-        HttpClient myHttpClientInstance = new();
+        HttpClient myHttpClientInstance = _httpClientFactory.CreateClient();
         PaymentClient paymentClient = new(ApiKey, myHttpClientInstance);
         PaymentRequest paymentRequest = new() {
             Amount = new Amount(Currency.EUR, "100.00"),

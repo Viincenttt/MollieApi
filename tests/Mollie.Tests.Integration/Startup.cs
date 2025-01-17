@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Mollie.Api;
-using Mollie.Api.Framework;
 using Mollie.Tests.Integration.Framework;
 
 namespace Mollie.Tests.Integration;
@@ -20,7 +19,7 @@ public class Startup
         .ConfigureServices((context, services) => {
             services.AddMollieApi(options => {
                 options.ApiKey = context.Configuration["Mollie:ApiKey"]!;
-                options.RetryPolicy = MollieHttpRetryPolicies.TooManyRequestRetryPolicy();
+                options.RetryPolicy = MollieIntegrationTestHttpRetryPolicies.TooManyRequestRetryPolicy();
             });
         });
 }

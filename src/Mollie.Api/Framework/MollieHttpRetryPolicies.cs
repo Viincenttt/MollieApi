@@ -19,19 +19,5 @@ namespace Mollie.Api.Framework {
                 .WaitAndRetryAsync(numberOfRetries, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2,
                     retryAttempt)));
         }
-
-        public static IAsyncPolicy<HttpResponseMessage> TooManyRequestRetryPolicy() {
-            var retryPolicy = Policy<HttpResponseMessage>
-                .Handle<MollieApiException>(x => x.Details.Status == 429)
-                .OrResult(r =>  r?.Headers?.RetryAfter != null)
-                .WaitAndRetryAsync(
-                    3,
-                    sleepDurationProvider: (_, response, _) =>
-                        response.Result.Headers.RetryAfter.Delta ?? TimeSpan.FromSeconds(5),
-                    onRetryAsync: (_, _, _, _) => Task.CompletedTask
-                );
-
-            return retryPolicy;
-        }
     }
 }
