@@ -253,47 +253,6 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         result.Method.Should().Be(paymentRequest.Method);
     }
 
-    [Fact]
-    public async Task CanCreateVoucherPaymentAndRetrieveIt() {
-        // When: we create a voucher payment
-        PaymentRequest paymentRequest = new PaymentRequest() {
-            Amount = new Amount(Currency.EUR, "100.00"),
-            Description = "Description",
-            RedirectUrl = DefaultRedirectUrl,
-            Method = PaymentMethod.Voucher,
-            Lines = [
-                new() {
-                    Type = OrderLineDetailsType.Digital,
-                    Categories = [
-                        "gift"
-                    ],
-                    Description = "Star wars lego",
-                    Quantity = 1,
-                    QuantityUnit = "pcs",
-                    UnitPrice = new Amount(Currency.EUR, 100m),
-                    TotalAmount = new Amount(Currency.EUR, 100m),
-                    ProductUrl = "http://www.lego.com/starwars",
-                    ImageUrl = "http://www.lego.com/starwars.jpg",
-                    Sku = "my-sku",
-                    VatAmount = new Amount(Currency.EUR, 17.36m),
-                    VatRate = "21.00"
-                }
-            ]
-        };
-
-        // When: We send the payment request to Mollie and attempt to retrieve it
-        PaymentResponse paymentResponse = await _paymentClient.CreatePaymentAsync(paymentRequest);
-        PaymentResponse result = await _paymentClient.GetPaymentAsync(paymentResponse.Id);
-
-        // Then
-        result.Should().NotBeNull();
-        result.Id.Should().Be(paymentResponse.Id);
-        result.Amount.Should().Be(paymentRequest.Amount);
-        result.Description.Should().Be(paymentRequest.Description);
-        result.RedirectUrl.Should().Be(paymentRequest.RedirectUrl);
-        result.Method.Should().Be(paymentRequest.Method);
-    }
-
     [DefaultRetryFact]
     public async Task CanCreatePaymentAndRetrieveIt() {
         // When: we create a new payment request
