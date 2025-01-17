@@ -16,11 +16,11 @@ namespace Mollie.Tests.Integration.Api;
 public class BalanceTests : BaseMollieApiTestClass, IDisposable {
     private readonly IBalanceClient _balanceClient;
 
-    public BalanceTests() {
-        _balanceClient = new BalanceClient(ApiKey);
+    public BalanceTests(IBalanceClient balanceClient) {
+        _balanceClient = balanceClient;
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task GetPrimaryBalanceAsync_IsParsedCorrectly() {
         // When: We retrieve the primary balance from the Mollie API
         var result = await _balanceClient.GetPrimaryBalanceAsync();
@@ -38,7 +38,7 @@ public class BalanceTests : BaseMollieApiTestClass, IDisposable {
         result.TransferThreshold.ShouldNotBeNull();
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task GetBalanceAsync_IsParsedCorrectly() {
         // Given: We get a balance id from the list balances endpoint
         var balanceList = await _balanceClient.GetBalanceListAsync();
@@ -64,7 +64,7 @@ public class BalanceTests : BaseMollieApiTestClass, IDisposable {
         result.TransferThreshold.ShouldBe(firstBalance.TransferThreshold);
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task ListBalancesAsync_IsParsedCorrectly() {
         // When: We retrieve the list of balances
         var result = await _balanceClient.GetBalanceListAsync();
@@ -74,7 +74,7 @@ public class BalanceTests : BaseMollieApiTestClass, IDisposable {
         result.Items.Count.ShouldBe(result.Count);
     }
 
-    [DefaultRetryTheory]
+    [Theory]
     [InlineData(ReportGrouping.TransactionCategories, typeof(TransactionCategoriesReportResponse))]
     [InlineData(ReportGrouping.StatusBalances, typeof(StatusBalanceReportResponse))]
     public async Task GetBalanceReportAsync_IsParsedCorrectly(string grouping, Type expectedObjectType) {
@@ -100,7 +100,7 @@ public class BalanceTests : BaseMollieApiTestClass, IDisposable {
         result.Grouping.ShouldBe(grouping);
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task ListBalanceTransactionsAsync_IsParsedCorrectly() {
         // Given
         var balanceId = "bal_CKjKwQdjCwCSArXFAJNFH";
@@ -117,7 +117,7 @@ public class BalanceTests : BaseMollieApiTestClass, IDisposable {
         result.Links.Self.Href.ShouldBe($"https://api.mollie.com/v2/balances/{balanceId}/transactions?from={from}&limit={limit}");
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task ListPrimaryBalanceTransactionsAsync_IsParsedCorrectly() {
         // Given
         var from = "baltr_9S8yk4FFqqi2Qm6K3rqRH";

@@ -12,6 +12,7 @@ using Mollie.Api.Models.Payment.Response;
 using Mollie.Api.Models.Refund.Request;
 using Mollie.Api.Models.Refund.Response;
 using Mollie.Tests.Integration.Framework;
+using Xunit;
 
 namespace Mollie.Tests.Integration.Api;
 
@@ -19,12 +20,12 @@ public class RefundTests : BaseMollieApiTestClass, IDisposable {
     private readonly IRefundClient _refundClient;
     private readonly IPaymentClient _paymentClient;
 
-    public RefundTests() {
-        _refundClient = new RefundClient(ApiKey);
-        _paymentClient = new PaymentClient(ApiKey);
+    public RefundTests(IRefundClient refundClient, IPaymentClient paymentClient) {
+        _refundClient = refundClient;
+        _paymentClient = paymentClient;
     }
 
-    [DefaultRetryFact(Skip = "We can only test this in debug mode, because we actually have to use the PaymentUrl to make the payment, since Mollie can only refund payments that have been paid")]
+    [Fact(Skip = "We can only test this in debug mode, because we actually have to use the PaymentUrl to make the payment, since Mollie can only refund payments that have been paid")]
     public async Task CanCreateRefund() {
         // If: We create a payment
         string amount = "100.00";
@@ -44,7 +45,7 @@ public class RefundTests : BaseMollieApiTestClass, IDisposable {
         refundResponse.ShouldNotBeNull();
     }
 
-    [DefaultRetryFact(Skip = "We can only test this in debug mode, because we actually have to use the PaymentUrl to make the payment, since Mollie can only refund payments that have been paid")]
+    [Fact(Skip = "We can only test this in debug mode, because we actually have to use the PaymentUrl to make the payment, since Mollie can only refund payments that have been paid")]
     public async Task CanCreatePartialRefund() {
         // If: We create a payment of 250 euro
         PaymentResponse payment = await CreatePayment("250.00");
@@ -63,7 +64,7 @@ public class RefundTests : BaseMollieApiTestClass, IDisposable {
         refundResponse.Amount.ShouldBe(refundRequest.Amount);
     }
 
-    [DefaultRetryFact(Skip = "We can only test this in debug mode, because we actually have to use the PaymentUrl to make the payment, since Mollie can only refund payments that have been paid")]
+    [Fact(Skip = "We can only test this in debug mode, because we actually have to use the PaymentUrl to make the payment, since Mollie can only refund payments that have been paid")]
     public async Task CanRetrieveSingleRefund() {
         // If: We create a payment
         PaymentResponse payment = await CreatePayment();
@@ -85,7 +86,7 @@ public class RefundTests : BaseMollieApiTestClass, IDisposable {
         refundResponse.Amount.ShouldBe(refundRequest.Amount);
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public async Task CanRetrieveRefundList() {
         // If: We create a payment
         PaymentResponse payment = await CreatePayment();
@@ -98,7 +99,7 @@ public class RefundTests : BaseMollieApiTestClass, IDisposable {
         refundList.Items.ShouldNotBeNull();
     }
 
-    [DefaultRetryFact(Skip = "We can only test this in debug mode, because we actually have to use the PaymentUrl to make the payment, since Mollie can only refund payments that have been paid")]
+    [Fact(Skip = "We can only test this in debug mode, because we actually have to use the PaymentUrl to make the payment, since Mollie can only refund payments that have been paid")]
     public async Task CanCreateRefundWithMetaData() {
         // If: We create a payment
         string amount = "100.00";

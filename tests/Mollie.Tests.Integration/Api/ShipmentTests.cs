@@ -8,17 +8,18 @@ using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Shipment.Request;
 using Mollie.Api.Models.Shipment.Response;
 using Mollie.Tests.Integration.Framework;
+using Xunit;
 
 namespace Mollie.Tests.Integration.Api;
 
 public class ShipmentTests : BaseMollieApiTestClass, IDisposable {
     private readonly IShipmentClient _shipmentClient;
 
-    public ShipmentTests() {
-        _shipmentClient = new ShipmentClient(ApiKey);
+    public ShipmentTests(IShipmentClient shipmentClient) {
+        _shipmentClient = shipmentClient;
     }
 
-    [DefaultRetryFact(Skip = "For manual testing only")]
+    [Fact(Skip = "For manual testing only")]
     public async Task CanCreateShipmentWithOnlyRequiredFields() {
         // the order needs to be autorized to do a shipment on. this can only be done by waiting.
         string validOrderId = "XXXXX";
@@ -30,7 +31,7 @@ public class ShipmentTests : BaseMollieApiTestClass, IDisposable {
         result.CreatedAt.ShouldBeGreaterThan(DateTime.Now);
     }
 
-    [DefaultRetryFact(Skip = "For manual testing only")]
+    [Fact(Skip = "For manual testing only")]
     public async Task CanListShipmentsForOrder(){
         string validOrderId = "XXXXX";
         ListResponse<ShipmentResponse> result = await _shipmentClient.GetShipmentListAsync(validOrderId);

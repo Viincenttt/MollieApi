@@ -2,33 +2,35 @@
 using Mollie.Tests.Integration.Framework;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Mollie.Api.Client.Abstract;
 using Shouldly;
 using Mollie.Api.Models.Connect.Request;
 using Mollie.Api.Models.Connect.Response;
+using Xunit;
 
 namespace Mollie.Tests.Integration.Api;
 
 public class ConnectTests : BaseMollieApiTestClass {
-    [DefaultRetryFact]
-    public void GetAuthorizationUrl_WithSingleScope_GeneratesAuthorizationUrl() {
-        // Given: We create a new connect client
-        using ConnectClient connectClient = new ConnectClient(ClientId, ClientSecret);
+    private readonly IConnectClient _connectClient;
 
+    public ConnectTests(IConnectClient connectClient) {
+        _connectClient = connectClient;
+    }
+
+    [Fact]
+    public void GetAuthorizationUrl_WithSingleScope_GeneratesAuthorizationUrl() {
         // When: We get the authorization URL
-        string authorizationUrl = connectClient.GetAuthorizationUrl("abcde", new List<string>() { AppPermissions.PaymentsRead });
+        string authorizationUrl = _connectClient.GetAuthorizationUrl("abcde", new List<string>() { AppPermissions.PaymentsRead });
 
         // Then:
         string expectedUrl = $"https://my.mollie.com/oauth2/authorize?client_id={ClientId}&state=abcde&scope=payments.read&response_type=code&approval_prompt=auto";
         authorizationUrl.ShouldBe(expectedUrl);
     }
 
-    [DefaultRetryFact]
+    [Fact]
     public void GetAuthorizationUrl_WithMultipleScopes_GeneratesAuthorizationUrl() {
-        // Given: We create a new connect client
-        using ConnectClient connectClient = new ConnectClient(ClientId, ClientSecret);
-
         // When: We get the authorization URL
-        string authorizationUrl = connectClient.GetAuthorizationUrl("abcdef", new List<string>() {
+        string authorizationUrl = _connectClient.GetAuthorizationUrl("abcdef", new List<string>() {
             AppPermissions.PaymentsRead,
             AppPermissions.PaymentsWrite,
             AppPermissions.ProfilesRead,
@@ -41,7 +43,7 @@ public class ConnectTests : BaseMollieApiTestClass {
         authorizationUrl.ShouldBe(expectedUrl);
     }
 
-    [DefaultRetryFact(Skip = "We can only test this in debug mode, because we login to the mollie dashboard and login to get the auth token")]
+    [Fact(Skip = "We can only test this in debug mode, because we login to the mollie dashboard and login to get the auth token")]
     public async Task GetAccessTokenAsync_WithValidTokenRequest_ReturnsAccessToken() {
         // Given: We fetch create a token request
         string authCode = "abcde"; // Set a valid access token here
@@ -55,7 +57,7 @@ public class ConnectTests : BaseMollieApiTestClass {
         tokenResponse.AccessToken.ShouldNotBeNullOrEmpty();
     }
 
-    [DefaultRetryFact(Skip = "We can only test this in debug mode, because we need a valid access token")]
+    [Fact(Skip = "We can only test this in debug mode, because we need a valid access token")]
     public async Task RevokeAccessTokenAsync_WithValidToken_DoesNotThrowError() {
         // Given: We create a revoke token request
         string accessToken = "abcde";

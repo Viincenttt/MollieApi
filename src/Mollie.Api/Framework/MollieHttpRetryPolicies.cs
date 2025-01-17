@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
+using Mollie.Api.Client;
 using Polly;
 using Polly.Extensions.Http;
+using Polly.Retry;
 
 namespace Mollie.Api.Framework {
     public static class MollieHttpRetryPolicies {
