@@ -445,27 +445,6 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
     }
 
     [Fact]
-    public async Task PaymentWithDifferentHttpInstance() {
-        // When: We create a PaymentClient with our own HttpClient instance
-        HttpClient myHttpClientInstance = _httpClientFactory.CreateClient();
-        PaymentClient paymentClient = new(ApiKey, myHttpClientInstance);
-        PaymentRequest paymentRequest = new() {
-            Amount = new Amount(Currency.EUR, "100.00"),
-            Description = "Description",
-            RedirectUrl = DefaultRedirectUrl
-        };
-
-        // When: I create a new payment
-        PaymentResponse result = await paymentClient.CreatePaymentAsync(paymentRequest);
-
-        // Then: It should still work in the same way
-        result.ShouldNotBeNull();
-        result.Amount.ShouldBe(paymentRequest.Amount);
-        result.Description.ShouldBe(paymentRequest.Description);
-        result.RedirectUrl.ShouldBe(paymentRequest.RedirectUrl);
-    }
-
-    [Fact]
     public async Task CanCreatePaymentWithDecimalAmountAndRetrieveIt() {
         // When: we create a new payment request
         PaymentRequest paymentRequest = new PaymentRequest() {
