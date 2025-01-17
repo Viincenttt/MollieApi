@@ -19,6 +19,8 @@ public class Startup
         .ConfigureServices((context, services) => {
             services.AddMollieApi(options => {
                 options.ApiKey = context.Configuration["Mollie:ApiKey"]!;
+                options.ClientId = context.Configuration["Mollie:ClientId"]!;
+                options.ClientSecret = context.Configuration["Mollie:ClientSecret"]!;
                 options.RetryPolicy = MollieIntegrationTestHttpRetryPolicies.TooManyRequestRetryPolicy();
             });
         });
