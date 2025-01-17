@@ -31,9 +31,9 @@ public class ProfileTests : BaseMollieApiTestClass, IDisposable {
 
         // Then: Make sure we get a valid response
         profileResponse.ShouldNotBeNull();
-        profileResponse.Id.ShouldBeNullOrEmpty();
-        profileResponse.Email.ShouldBeNullOrEmpty();
-        profileResponse.Status.ShouldBeNullOrEmpty();
+        profileResponse.Id.ShouldNotBeNullOrEmpty();
+        profileResponse.Email.ShouldNotBeNullOrEmpty();
+        profileResponse.Status.ShouldNotBeNullOrEmpty();
     }
 
     [DefaultRetryFact]
