@@ -33,5 +33,6 @@
         public const string BacsDirectDebit = "bacs";
         public const string Alma = "alma";
         public const string GooglePay = "googlepay";
+        public const string Voucher = "voucher";
     }
 }

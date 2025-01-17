@@ -89,6 +89,13 @@ namespace Mollie.Api.Models.Payment.Request {
         }
 
         /// <summary>
+        /// Only relevant for iDEAL, KBC/CBC, gift card, and voucher payments.
+        /// Some payment methods are a network of connected banks or card issuers. In these cases, after selecting the payment method,
+        /// the customer may still need to select the appropriate issuer before the payment can proceed.
+        /// </summary>
+        public string? Issuer { get; set; }
+
+        /// <summary>
         /// Normally, a payment method screen is shown. However, when using this parameter, you can choose a specific payment method
         /// and your customer will skip the selection screen and is sent directly to the chosen payment method. The parameter
         /// enables you to fully integrate the payment method selection into your website.

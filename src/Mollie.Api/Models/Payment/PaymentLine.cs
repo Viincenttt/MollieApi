@@ -1,4 +1,6 @@
-﻿namespace Mollie.Api.Models.Payment;
+﻿using System.Collections.Generic;
+
+namespace Mollie.Api.Models.Payment;
 
 public record PaymentLine {
     /// <summary>
@@ -48,6 +50,12 @@ public record PaymentLine {
     /// calculated with the formula totalAmount × (vatRate / (100 + vatRate)).
     /// </summary>
     public Amount? VatAmount { get; set; }
+
+    /// <summary>
+    /// An array with the voucher categories, in case of a line eligible for a voucher. See the Integrating
+    /// Vouchers guide for more information. Use the Mollie.Api.Models.VoucherCategory class for a full list of known values.
+    /// </summary>
+    public IEnumerable<string>? Categories { get; set; }
 
     /// <summary>
     /// The SKU, EAN, ISBN or UPC of the product sold.

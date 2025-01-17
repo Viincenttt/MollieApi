@@ -301,7 +301,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         ManageOrderLinesAddOperationData newOrderLineRequest = new ManageOrderLinesAddOperationData {
             Name = "LEGO Batman mobile",
             Type = OrderLineDetailsType.Physical,
-            Category = OrderLineDetailsCategory.Gift,
+            Category = VoucherCategory.Gift,
             Quantity = 1,
             UnitPrice = new Amount(Currency.EUR, 100.00m),
             TotalAmount = new Amount(Currency.EUR, 100.00m),
@@ -434,10 +434,10 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
             Amount = new Amount(Currency.EUR, "100.00"),
             OrderNumber = "16738",
             Lines = new List<OrderLineRequest>() {
-                new OrderLineRequest() {
+                new() {
                     Name = "A box of chocolates",
                     Type = OrderLineDetailsType.Physical,
-                    Category = OrderLineDetailsCategory.Gift,
+                    Category = VoucherCategory.Gift,
                     Quantity = 1,
                     UnitPrice = new Amount(Currency.EUR, "100.00"),
                     TotalAmount = new Amount(Currency.EUR, "100.00"),
