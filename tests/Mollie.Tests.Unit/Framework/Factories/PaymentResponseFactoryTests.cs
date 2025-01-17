@@ -42,6 +42,7 @@ namespace Mollie.Tests.Unit.Framework.Factories {
         [InlineData(PaymentMethod.BacsDirectDebit, typeof(PaymentResponse))]
         [InlineData(PaymentMethod.Alma, typeof(PaymentResponse))]
         [InlineData(PaymentMethod.GooglePay, typeof(PaymentResponse))]
+        [InlineData(PaymentMethod.Voucher, typeof(PaymentResponse))]
         [InlineData("UnknownPaymentMethod", typeof(PaymentResponse))]
         public void Create_CreatesTypeBasedOnPaymentMethod(string paymentMethod, Type expectedType) {
             // Given
