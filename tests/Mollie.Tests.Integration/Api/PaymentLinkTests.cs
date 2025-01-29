@@ -138,7 +138,8 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
         // When: We update the payment link
         PaymentLinkUpdateRequest paymentLinkUpdateRequest = new() {
             Description = "Updated description",
-            Archived = true
+            Archived = true,
+            AllowedMethods = [PaymentMethod.CreditCard]
         };
         var updatedPaymentLinkResponse = await _paymentLinkClient.UpdatePaymentLinkAsync(
             createdPaymentLinkResponse.Id,
@@ -147,6 +148,7 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
         // Then: We expect the payment link to be updated
         updatedPaymentLinkResponse.Description.ShouldBe(paymentLinkUpdateRequest.Description);
         updatedPaymentLinkResponse.Archived.ShouldBe(paymentLinkUpdateRequest.Archived);
+        updatedPaymentLinkResponse.AllowedMethods.ShouldBe(paymentLinkUpdateRequest.AllowedMethods);
     }
 
     [Fact]
