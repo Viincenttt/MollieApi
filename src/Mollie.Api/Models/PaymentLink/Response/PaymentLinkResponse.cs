@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.PaymentLink.Response
@@ -17,20 +18,15 @@ namespace Mollie.Api.Models.PaymentLink.Response
         public required string Id { get; set; }
 
         /// <summary>
-        ///A short description of the payment link. The description is visible in the Dashboard and will be shown on the
-        ///customer’s bank or card statement when possible. This description will eventual been used as payment description.
-        /// </summary>
-        public required string Description { get; set; }
-
-        /// <summary>
         /// The mode used to create this payment link. Mode determines whether a payment link is real (live mode) or a test payment link.
         /// </summary>
         public Mode Mode { get; set; }
 
         /// <summary>
-        /// The identifier referring to the profile this payment link was created on. For example, pfl_QkEhN94Ba.
+        ///A short description of the payment link. The description is visible in the Dashboard and will be shown on the
+        ///customer’s bank or card statement when possible. This description will eventual been used as payment description.
         /// </summary>
-        public string? ProfileId { get; set; }
+        public required string Description { get; set; }
 
         /// <summary>
         /// The amount of the payment link, e.g. {"currency":"EUR", "value":"100.00"} for a €100.00 payment link.
@@ -53,6 +49,11 @@ namespace Mollie.Api.Models.PaymentLink.Response
         public string? WebhookUrl { get; set; }
 
         /// <summary>
+        /// The identifier referring to the profile this payment link was created on. For example, pfl_QkEhN94Ba.
+        /// </summary>
+        public string? ProfileId { get; set; }
+
+        /// <summary>
         /// The payment link’s date and time of creation, in ISO 8601 format.
         /// </summary>
         public DateTime? CreatedAt { get; set; }
@@ -71,6 +72,13 @@ namespace Mollie.Api.Models.PaymentLink.Response
         /// The expiry date and time of the payment link, in ISO 8601 format.
         /// </summary>
         public DateTime? ExpiresAt { get; set; }
+
+        /// <summary>
+        /// An array of payment methods that are allowed to be used for this payment link. When this parameter is not
+        /// provided or is an empty array, all enabled payment methods will be available.
+        /// See the Mollie.Api.Models.Payment.PaymentMethod class for a full list of known values.
+        /// </summary>
+        public IEnumerable<string>? AllowedMethods { get; set; }
 
         /// <summary>
         /// An object with several URL objects relevant to the payment. Every URL object will contain an href and a type field.

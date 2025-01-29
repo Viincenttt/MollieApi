@@ -6,6 +6,7 @@ using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
 using Mollie.Api.Models;
 using Mollie.Api.Models.List.Response;
+using Mollie.Api.Models.Payment;
 using Mollie.Api.Models.PaymentLink.Request;
 using Mollie.Api.Models.PaymentLink.Response;
 using Mollie.Tests.Integration.Framework;
@@ -83,6 +84,39 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
             response.ExpiresAt.ShouldBe(expiresAtWithoutMs);
             response.Description.ShouldBe(paymentLinkRequest.Description);
             response.RedirectUrl.ShouldBe(paymentLinkRequest.RedirectUrl);
+        });
+
+        verifyPaymentLinkResponse(createdPaymentLinkResponse);
+        verifyPaymentLinkResponse(retrievePaymentLinkResponse);
+    }
+
+
+    [Fact]
+    public async Task CanCreatePaymentLinkWithSpecificPaymentMethods() {
+        // Given: We create a new payment link
+        PaymentLinkRequest paymentLinkRequest = new() {
+            Description = "Test",
+            Amount = new Amount(Currency.EUR, 50),
+            WebhookUrl = DefaultWebhookUrl,
+            RedirectUrl = DefaultRedirectUrl,
+            ExpiresAt = DateTime.Now.AddDays(1),
+            AllowedMethods = [PaymentMethod.Ideal, PaymentMethod.CreditCard]
+        };
+        var createdPaymentLinkResponse = await _paymentLinkClient.CreatePaymentLinkAsync(paymentLinkRequest);
+
+        // When: We retrieve it
+        var retrievePaymentLinkResponse = await _paymentLinkClient.GetPaymentLinkAsync(createdPaymentLinkResponse.Id);
+
+        // Then: We expect a payment link with the expected properties
+        var verifyPaymentLinkResponse = new Action<PaymentLinkResponse>(response => {
+            var expiresAtWithoutMs = paymentLinkRequest.ExpiresAt.Value.Truncate(TimeSpan.FromSeconds(1));
+
+            response.Amount.ShouldBe(paymentLinkRequest.Amount);
+            response.ExpiresAt.ShouldBe(expiresAtWithoutMs);
+            response.Description.ShouldBe(paymentLinkRequest.Description);
+            response.RedirectUrl.ShouldBe(paymentLinkRequest.RedirectUrl);
+            response.Archived.ShouldBeFalse();
+            response.AllowedMethods.ShouldBe(paymentLinkRequest.AllowedMethods);
         });
 
         verifyPaymentLinkResponse(createdPaymentLinkResponse);
