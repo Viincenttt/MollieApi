@@ -39,6 +39,7 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
             Amount = new Amount(Currency.EUR, 50),
             WebhookUrl = DefaultWebhookUrl,
             RedirectUrl = DefaultRedirectUrl,
+            Reusable = true,
             ExpiresAt = DateTime.Now.AddDays(1)
         };
         var createdPaymentLinkResponse = await _paymentLinkClient.CreatePaymentLinkAsync(paymentLinkRequest);
@@ -55,6 +56,7 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
             response.Description.ShouldBe(paymentLinkRequest.Description);
             response.RedirectUrl.ShouldBe(paymentLinkRequest.RedirectUrl);
             response.Archived.ShouldBeFalse();
+            response.Reusable.ShouldBe(paymentLinkRequest.Reusable);
         });
 
         verifyPaymentLinkResponse(createdPaymentLinkResponse);

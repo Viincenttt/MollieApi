@@ -33,6 +33,13 @@ namespace Mollie.Api.Models.PaymentLink.Request {
         public string? ProfileId { get; set; }
 
         /// <summary>
+        /// Indicates whether the payment link is reusable. If this field is set to true, customers can make multiple
+        /// payments using the same link. If no value is specified, the field defaults to false, allowing only a single
+        /// payment per link.
+        /// </summary>
+        public bool? Reusable { get; set; }
+
+        /// <summary>
         /// The expiry date of the payment link in ISO 8601 format. For example: 2021-12-24T12:00:16+01:00.
         /// </summary>
         [JsonConverter(typeof(Iso8601DateTimeConverter))]

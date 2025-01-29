@@ -54,6 +54,13 @@ namespace Mollie.Api.Models.PaymentLink.Response
         public string? ProfileId { get; set; }
 
         /// <summary>
+        /// Indicates whether the payment link is reusable. If this field is set to true, customers can make multiple
+        /// payments using the same link. If no value is specified, the field defaults to false, allowing only a single
+        /// payment per link.
+        /// </summary>
+        public bool? Reusable { get; set; }
+
+        /// <summary>
         /// The payment link’s date and time of creation, in ISO 8601 format.
         /// </summary>
         public DateTime? CreatedAt { get; set; }
