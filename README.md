@@ -45,6 +45,8 @@ This library is built using .NET standard 2.0. This means that the package suppo
 | Xamarin.Mac | 3.8, 5.16 |
 | Xamarin.Android | 8.0, 10.0 |
 
+Note: This library does use the `required` keyword is some of it's model classes. That means you'll need to a project that is using language version 11 or higher. 
+
 Source: https://docs.microsoft.com/en-us/dotnet/standard/net-standard?tabs=net-standard-2-0
 
 ## Supported API's
