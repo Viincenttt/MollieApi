@@ -34,11 +34,12 @@ namespace Mollie.Api.Client.Abstract {
         /// removing payment links that have been incorrectly configured or that are no longer relevant.
         /// </summary>
         /// <param name="paymentLinkId">Provide the ID of the item you want to perform this operation on.</param>
+        /// <param name="profileId">The website profile’s unique identifier, for example pfl_3RkSN1zuPE.</param>
         /// <param name="testmode">Most API credentials are specifically created for either live mode or test mode.
         /// In those cases the testmode query parameter can be omitted. For organization-level credentials such as
         /// OAuth access tokens, you can enable test mode by setting the testmode query parameter to true.</param>
         /// <returns></returns>
-        Task DeletePaymentLinkAsync(string paymentLinkId, bool testmode = false);
+        Task DeletePaymentLinkAsync(string paymentLinkId, string? profileId = null, bool testmode = false);
 
         /// <summary>
         ///	Retrieve a single payment link object by its token.

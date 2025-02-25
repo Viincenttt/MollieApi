@@ -25,7 +25,7 @@ namespace Mollie.Tests.Unit.Client {
         [Fact]
         public async Task CreatePaymentLinkAsync_PaymentLinkWithRequiredParameters_ResponseIsDeserializedInExpectedFormat() {
             // Given: we create a payment link request with only the required parameters
-            PaymentLinkRequest paymentLinkRequest = new PaymentLinkRequest() {
+            PaymentLinkRequest paymentLinkRequest = new() {
                 Description = "Test",
                 Amount = new Amount(Currency.EUR, 50),
                 WebhookUrl = "https://www.mollie.com",
@@ -81,6 +81,29 @@ namespace Mollie.Tests.Unit.Client {
         }
 
         [Theory]
+        [InlineData(false, null, "")]
+        [InlineData(false, "abcde", "?profileId=abcde")]
+        [InlineData(true, "abcde", "?profileId=abcde&testmode=true")]
+        public async Task DeletePaymentLinkAsync_QueryParameterOptions_CorrectParametersAreAdded(
+            bool testMode,
+            string? profileId,
+            string expectedQueryString) {
+            // Given: We make a request to delete a payment link
+            var mockHttp = CreateMockHttpMessageHandler(
+                HttpMethod.Delete,
+                $"{BaseMollieClient.ApiEndPoint}payment-links/{DefaultPaymentLinkId}{expectedQueryString}",
+                _defaultPaymentLinkPaymentsJsonResponse);
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            var paymentLinkClient = new PaymentLinkClient("access_abcde", httpClient);
+
+            // When: We send the request
+            await paymentLinkClient.DeletePaymentLinkAsync(DefaultPaymentLinkId, profileId, testMode);
+
+            // Then
+            mockHttp.VerifyNoOutstandingRequest();
+        }
+
+        [Theory]
         [InlineData(null, null,  false, null, "")]
         [InlineData("from", null,  false, null, "?from=from")]
         [InlineData("from", 50,  false, null, "?from=from&limit=50")]
@@ -93,7 +116,7 @@ namespace Mollie.Tests.Unit.Client {
             bool testmode,
             SortDirection? sortDirection,
             string expectedQueryString) {
-            // Given: We make a request to retrieve the list of orders
+            // Given: We make a request to retrieve the list of payment links
             var mockHttp = CreateMockHttpMessageHandler(
                 HttpMethod.Get,
                 $"{BaseMollieClient.ApiEndPoint}payment-links/{DefaultPaymentLinkId}/payments{expectedQueryString}",
@@ -110,7 +133,7 @@ namespace Mollie.Tests.Unit.Client {
 
         [Fact]
         public async Task GetPaymentLinkPaymentListAsync_ResponseIsDeserializedInExpectedFormat() {
-            // Given: We make a request to retrieve the list of orders
+            // Given: We make a request to retrieve the list of payment links
             var mockHttp = CreateMockHttpMessageHandler(
                 HttpMethod.Get,
                 $"{BaseMollieClient.ApiEndPoint}payment-links/{DefaultPaymentLinkId}/payments",
