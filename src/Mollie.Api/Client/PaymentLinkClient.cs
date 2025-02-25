@@ -40,9 +40,11 @@ namespace Mollie.Api.Client
             return await PatchAsync<PaymentLinkResponse>(relativeUri, paymentLinkUpdateRequest).ConfigureAwait(false);
         }
 
-        public async Task DeletePaymentLinkAsync(string paymentLinkId, bool testmode = false) {
+        public async Task DeletePaymentLinkAsync(string paymentLinkId, string? profileId = null, bool testmode = false) {
             ValidateRequiredUrlParameter(nameof(paymentLinkId), paymentLinkId);
-            var queryParameters = BuildQueryParameters(testmode);
+            var queryParameters = BuildQueryParameters(
+                profileId: profileId,
+                testmode: testmode);
             string relativeUri = $"payment-links/{paymentLinkId}{queryParameters.ToQueryString()}";
             await DeleteAsync(relativeUri).ConfigureAwait(false);
         }
