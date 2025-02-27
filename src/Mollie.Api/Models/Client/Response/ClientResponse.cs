@@ -16,7 +16,7 @@ namespace Mollie.Api.Models.Client.Response {
         /// <summary>
         /// The commission object.
         /// </summary>
-        public ClientCommisionResponse? Commision { get; set; }
+        public ClientCommissionResponse? Commission { get; set; }
 
         /// <summary>
         /// The date and time the client organization was created.

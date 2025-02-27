@@ -1,5 +1,5 @@
 ﻿namespace Mollie.Api.Models.Client.Response {
-    public record ClientCommisionResponse {
+    public record ClientCommissionResponse {
         /// <summary>
         /// The commission count.
         /// </summary>
