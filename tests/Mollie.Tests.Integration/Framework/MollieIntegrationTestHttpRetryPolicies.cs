@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client;
@@ -10,7 +11,7 @@ public static class MollieIntegrationTestHttpRetryPolicies {
 
     public static IAsyncPolicy<HttpResponseMessage> TooManyRequestRetryPolicy() {
         var retryPolicy = Policy<HttpResponseMessage>
-            .Handle<MollieApiException>(x => x.Details.Status == 429)
+            .Handle<MollieApiException>(x => x.Details.Status == (int)HttpStatusCode.TooManyRequests)
             .OrResult(r =>  r?.Headers?.RetryAfter != null)
             .WaitAndRetryAsync(
                 3,
@@ -22,6 +23,14 @@ public static class MollieIntegrationTestHttpRetryPolicies {
                     return Task.CompletedTask;
                 }
             );
+
+        return retryPolicy;
+    }
+
+    public static IAsyncPolicy<HttpResponseMessage> NotFoundRetryPolicy() {
+        var retryPolicy = Policy<HttpResponseMessage>
+            .Handle<MollieApiException>(x => x.Details.Status == (int)HttpStatusCode.NotFound)
+            .WaitAndRetryAsync(3, _ => TimeSpan.FromMilliseconds(500));
 
         return retryPolicy;
     }

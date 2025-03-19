@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Mollie.Api;
 using Mollie.Tests.Integration.Framework;
+using Polly;
 
 namespace Mollie.Tests.Integration;
 
@@ -21,7 +22,9 @@ public class Startup
                 options.ApiKey = context.Configuration["Mollie:ApiKey"]!;
                 options.ClientId = context.Configuration["Mollie:ClientId"]!;
                 options.ClientSecret = context.Configuration["Mollie:ClientSecret"]!;
-                options.RetryPolicy = MollieIntegrationTestHttpRetryPolicies.TooManyRequestRetryPolicy();
+                options.RetryPolicy = Policy.WrapAsync(
+                    MollieIntegrationTestHttpRetryPolicies.TooManyRequestRetryPolicy(),
+                    MollieIntegrationTestHttpRetryPolicies.NotFoundRetryPolicy());
             });
         });
 }
