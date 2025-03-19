@@ -26,12 +26,4 @@ public static class MollieIntegrationTestHttpRetryPolicies {
 
         return retryPolicy;
     }
-
-    public static IAsyncPolicy<HttpResponseMessage> NotFoundRetryPolicy() {
-        var retryPolicy = Policy<HttpResponseMessage>
-            .Handle<MollieApiException>(x => x.Details.Status == (int)HttpStatusCode.NotFound)
-            .WaitAndRetryAsync(3, _ => TimeSpan.FromMilliseconds(500));
-
-        return retryPolicy;
-    }
 }

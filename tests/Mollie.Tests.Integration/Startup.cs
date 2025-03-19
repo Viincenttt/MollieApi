@@ -22,9 +22,7 @@ public class Startup
                 options.ApiKey = context.Configuration["Mollie:ApiKey"]!;
                 options.ClientId = context.Configuration["Mollie:ClientId"]!;
                 options.ClientSecret = context.Configuration["Mollie:ClientSecret"]!;
-                options.RetryPolicy = Policy.WrapAsync(
-                    MollieIntegrationTestHttpRetryPolicies.TooManyRequestRetryPolicy(),
-                    MollieIntegrationTestHttpRetryPolicies.NotFoundRetryPolicy());
+                options.RetryPolicy = MollieIntegrationTestHttpRetryPolicies.TooManyRequestRetryPolicy();
             });
         });
 }

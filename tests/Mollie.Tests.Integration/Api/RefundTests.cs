@@ -91,7 +91,8 @@ public class RefundTests : BaseMollieApiTestClass, IDisposable {
         // If: We create a payment
         PaymentResponse payment = await CreatePayment();
 
-        // When: Retrieve refund list for this payment
+        // When: Retrieve refund list for this payment after one second
+        var test = await ExecuteWithRetry(() => _refundClient.GetPaymentRefundListAsync(payment.Id));
         ListResponse<RefundResponse> refundList = await _refundClient.GetPaymentRefundListAsync(payment.Id);
 
         // Then

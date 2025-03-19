@@ -102,7 +102,7 @@ public class CustomerTests : BaseMollieApiTestClass, IDisposable {
         CustomerResponse createdCustomer = await CreateCustomer(name, email);
 
         // When: We try to retrieve the customer by Url object
-        CustomerResponse retrievedCustomer = await _customerClient.GetCustomerAsync(createdCustomer.Links.Self);
+        CustomerResponse retrievedCustomer = await ExecuteWithRetry(() => _customerClient.GetCustomerAsync(createdCustomer.Links.Self));
 
         // Then: Make sure it's retrieved
         retrievedCustomer.Name.ShouldBe(createdCustomer.Name);
