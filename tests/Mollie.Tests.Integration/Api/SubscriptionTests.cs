@@ -112,18 +112,19 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
 
     [Fact]
     public async Task CanCancelSubscription() {
-        // Given
+        // Given: We have a customer with a mandate
         string customerId = await GetFirstCustomerWithValidMandate();
         ListResponse<SubscriptionResponse> subscriptions = await _subscriptionClient.GetSubscriptionListAsync(customerId);
 
-        // When
+        // When: That customer has a subscription that we can cancel
         SubscriptionResponse subscriptionToCancel = subscriptions.Items
             .FirstOrDefault(s => s.Status != SubscriptionStatus.Canceled);
         if (subscriptionToCancel != null) {
             await _subscriptionClient.CancelSubscriptionAsync(customerId, subscriptionToCancel.Id);
-            SubscriptionResponse cancelledSubscription = await _subscriptionClient.GetSubscriptionAsync(customerId, subscriptionToCancel.Id);
 
-            // Then
+            // Then: Make sure its canceled after one second
+            await Task.Delay(TimeSpan.FromSeconds(1));
+            SubscriptionResponse cancelledSubscription = await _subscriptionClient.GetSubscriptionAsync(customerId, subscriptionToCancel.Id);
             cancelledSubscription.Status.ShouldBe(SubscriptionStatus.Canceled);
         }
     }

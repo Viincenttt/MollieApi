@@ -88,7 +88,8 @@ public class CustomerTests : BaseMollieApiTestClass, IDisposable {
         string customerIdToDelete = response.Items.First().Id;
         await _customerClient.DeleteCustomerAsync(customerIdToDelete);
 
-        // Then: Make sure its deleted
+        // Then: Make sure its deleted after one second
+        await Task.Delay(TimeSpan.FromSeconds(1));
         MollieApiException apiException = await Assert.ThrowsAsync<MollieApiException>(() => _customerClient.GetCustomerAsync(customerIdToDelete));
         apiException.Details.Status.ShouldBe((int)HttpStatusCode.Gone);
     }
@@ -101,7 +102,7 @@ public class CustomerTests : BaseMollieApiTestClass, IDisposable {
         CustomerResponse createdCustomer = await CreateCustomer(name, email);
 
         // When: We try to retrieve the customer by Url object
-        CustomerResponse retrievedCustomer = await _customerClient.GetCustomerAsync(createdCustomer.Links.Self);
+        CustomerResponse retrievedCustomer = await ExecuteWithRetry(() => _customerClient.GetCustomerAsync(createdCustomer.Links.Self));
 
         // Then: Make sure it's retrieved
         retrievedCustomer.Name.ShouldBe(createdCustomer.Name);

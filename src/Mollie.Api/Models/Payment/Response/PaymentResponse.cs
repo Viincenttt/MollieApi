@@ -34,6 +34,11 @@ namespace Mollie.Api.Models.Payment.Response {
         public required string Status { get; set; }
 
         /// <summary>
+        /// This object offers details about the status of a payment. Currently it is only available for point-of-sale payments.
+        /// </summary>
+        public StatusReason? StatusReason { get; set; }
+
+        /// <summary>
         /// Whether or not the payment can be canceled.
         /// </summary>
         public bool? IsCancelable { get; set; }

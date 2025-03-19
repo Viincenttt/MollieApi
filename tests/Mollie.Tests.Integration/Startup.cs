@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Mollie.Api;
 using Mollie.Tests.Integration.Framework;
+using Polly;
 
 namespace Mollie.Tests.Integration;
 
