@@ -18,5 +18,10 @@ namespace Mollie.Api.Models.Client.Response {
         /// The API resource URL of the client's onboarding status.
         /// </summary>
         public required UrlObjectLink<OnboardingStatusResponse> Onboarding { get; set; }
+
+        /// <summary>
+        /// The URL to the client retrieval endpoint documentation.
+        /// </summary>
+        public required UrlLink Documentation { get; set; }
     }
 }
