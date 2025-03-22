@@ -19,7 +19,7 @@ public class CapabilityClient : BaseMollieClient, ICapabilityClient {
     }
 
     public async Task<ListResponse<CapabilityResponse>> GetCapabilitiesListAsync() {
-        return await GetListAsync<ListResponse<CapabilityResponse>>($"clients", from: null, limit: null)
+        return await GetListAsync<ListResponse<CapabilityResponse>>("capabilities", from: null, limit: null)
             .ConfigureAwait(false);
     }
 }
