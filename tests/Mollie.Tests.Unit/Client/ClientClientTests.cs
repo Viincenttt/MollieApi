@@ -56,11 +56,13 @@ public class ClientClientTests : BaseClientTests {
     }
 
     [Theory]
-    [InlineData(false, false, "")]
-    [InlineData(true, true, "?embed=organization,onboarding")]
-    [InlineData(true, false, "?embed=organization")]
-    [InlineData(false, true, "?embed=onboarding")]
-    public async Task GetClientAsync_WithEmbeddedParameters_GeneratesExpectedUrl(bool embedOrganization, bool embedOnboarding, string expectedQueryString)
+    [InlineData(false, false, false, "")]
+    [InlineData(true, true, true, "?embed=organization,onboarding,capabilities")]
+    [InlineData(true, false, false, "?embed=organization")]
+    [InlineData(false, true, false, "?embed=onboarding")]
+    [InlineData(false, false, true, "?embed=capabilities")]
+    public async Task GetClientAsync_WithEmbeddedParameters_GeneratesExpectedUrl(
+        bool embedOrganization, bool embedOnboarding, bool embedCapabilities, string expectedQueryString)
     {
         // Arrange
         const string clientId = "org_12345678";
@@ -72,20 +74,21 @@ public class ClientClientTests : BaseClientTests {
         using var clientClient = new ClientClient("access_1234", httpClient);
 
         // Act
-        await clientClient.GetClientAsync(clientId, embedOrganization, embedOnboarding);
+        await clientClient.GetClientAsync(clientId, embedOrganization, embedOnboarding, embedCapabilities);
 
         // Assert
         mockHttp.VerifyNoOutstandingRequest();
     }
 
     [Theory]
-    [InlineData(null, null, false, false, "")]
-    [InlineData("from", null, false, false, "?from=from")]
-    [InlineData("from", 50, false, false, "?from=from&limit=50")]
-    [InlineData("from", 50, true, false, "?from=from&limit=50&embed=organization")]
-    [InlineData("from", 50, true, true, "?from=from&limit=50&embed=organization,onboarding")]
+    [InlineData(null, null, false, false, false, "")]
+    [InlineData("from", null, false, false, false, "?from=from")]
+    [InlineData("from", 50, false, false, false, "?from=from&limit=50")]
+    [InlineData("from", 50, true, false, false, "?from=from&limit=50&embed=organization")]
+    [InlineData("from", 50, true, true, false, "?from=from&limit=50&embed=organization,onboarding")]
+    [InlineData("from", 50, true, true, true, "?from=from&limit=50&embed=organization,onboarding,capabilities")]
     public async Task GetClientListAsync_WithQueryParameters_QueryStringOnlyContainsTestModeParameterIfTrue(
-        string from, int? limit, bool embedOrganization, bool embedOnboarding, string expectedQueryString) {
+        string from, int? limit, bool embedOrganization, bool embedOnboarding, bool embedCapabilities, string expectedQueryString) {
         // Given: We retrieve a list of clients
         var mockHttp = new MockHttpMessageHandler();
         mockHttp.When($"{BaseMollieClient.ApiEndPoint}clients{expectedQueryString}")
@@ -94,7 +97,8 @@ public class ClientClientTests : BaseClientTests {
         using var clientClient = new ClientClient("access_1234", httpClient);
 
         // When: We send the request
-        var result = await clientClient.GetClientListAsync(from, limit, embedOrganization, embedOnboarding);
+        var result = await clientClient.GetClientListAsync(
+            from, limit, embedOrganization, embedOnboarding, embedCapabilities);
 
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
