@@ -6,9 +6,9 @@ namespace Mollie.Api.Client.Abstract {
     public interface IClientClient : IBaseMollieClient
     {
         Task<ClientResponse> GetClientAsync(
-            string clientId, bool embedOrganization = false, bool embedOnboarding = false);
+            string clientId, bool embedOrganization = false, bool embedOnboarding = false, bool embedCapabilities = false);
 
         Task<ListResponse<ClientResponse>> GetClientListAsync(
-            string? from = null, int? limit = null, bool embedOrganization = false, bool embedOnboarding = false);
+            string? from = null, int? limit = null, bool embedOrganization = false, bool embedOnboarding = false, bool embedCapabilities = false);
     }
 }
