@@ -71,6 +71,8 @@ namespace Mollie.Api {
                 new WalletClient(provider.GetRequiredService<IMollieSecretManager>(), httpClient), mollieOptions.RetryPolicy);
             RegisterMollieApiClient<IClientClient, ClientClient>(services, (httpClient, provider) =>
                 new ClientClient(provider.GetRequiredService<IMollieSecretManager>(), httpClient), mollieOptions.RetryPolicy);
+            RegisterMollieApiClient<ICapabilityClient, CapabilityClient>(services, (httpClient, provider) =>
+                new CapabilityClient(provider.GetRequiredService<IMollieSecretManager>(), httpClient), mollieOptions.RetryPolicy);
 
             return services;
         }
