@@ -6,10 +6,10 @@ public record RoutingReversal {
     /// <summary>
     /// The amount that will be pulled back.
     /// </summary>
-    public required Amount Amount { get; init; }
+    public required Amount Amount { get; set; }
 
     /// <summary>
     /// Where the funds will be pulled back from.
     /// </summary>
-    public required RoutingDestination Source { get; init; }
+    public required RoutingDestination Source { get; set; }
 }

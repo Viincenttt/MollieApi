@@ -37,7 +37,7 @@ namespace Mollie.Api.Models.Refund.Request {
         /// reversed from which merchant(s). If you simply want to fully reverse the routed funds, you can also use the
         /// reverseRouting parameter instead.
         /// </summary>
-        public IList<RoutingReversal>? RoutingReversals { get; init; }
+        public IList<RoutingReversal>? RoutingReversals { get; set; }
 
         /// <summary>
         /// Set this to true to refund a test mode payment.

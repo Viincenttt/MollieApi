@@ -7,27 +7,27 @@ public record PaymentLine {
     /// The type of product purchased. For example, a physical or a digital product.
     /// Use the Mollie.Api.Models.Order.Request.OrderLineDetailsType class for a full list of known values.
     /// </summary>
-    public required string Type { get; init; }
+    public required string Type { get; set; }
 
     /// <summary>
     /// A description of the line item. For example LEGO 4440 Forest Police Station.
     /// </summary>
-    public required string Description { get; init; }
+    public required string Description { get; set; }
 
     /// <summary>
     /// The number of items.
     /// </summary>
-    public required int Quantity { get; init; }
+    public required int Quantity { get; set; }
 
     /// <summary>
     /// The unit for the quantity. For example pcs, kg, or cm.
     /// </summary>
-    public string? QuantityUnit { get; init; }
+    public string? QuantityUnit { get; set; }
 
     /// <summary>
     /// The price of a single item including VAT. The unit price can be zero in case of free items.
     /// </summary>
-    public required Amount UnitPrice { get; init; }
+    public required Amount UnitPrice { get; set; }
 
     /// <summary>
     /// Any line-specific discounts, as a positive amount. Not relevant if the line itself is already a discount type.
@@ -37,7 +37,7 @@ public record PaymentLine {
     /// <summary>
     /// The total amount of the line, including VAT and discounts.
     /// </summary>
-    public required Amount TotalAmount { get; init; }
+    public required Amount TotalAmount { get; set; }
 
     /// <summary>
     /// The VAT rate applied to the line, for example 21.00 for 21%. The vatRate should be passed as a string and not

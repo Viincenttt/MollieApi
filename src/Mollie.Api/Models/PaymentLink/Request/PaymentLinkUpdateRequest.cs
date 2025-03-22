@@ -9,12 +9,12 @@ public record PaymentLinkUpdateRequest {
     ///
     /// Updating the description does not affect any previously existing payments created for this payment link.
     /// </summary>
-    public required string Description { get; init; }
+    public required string Description { get; set; }
 
     /// <summary>
     /// Whether the payment link is archived. Customers will not be able to complete payments on archived payment links.
     /// </summary>
-    public required bool Archived { get; init; }
+    public required bool Archived { get; set; }
 
     /// <summary>
     /// An array of payment methods that are allowed to be used for this payment link. When this parameter is not

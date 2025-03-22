@@ -61,7 +61,7 @@ namespace Mollie.Api.Models.Refund.Response {
         /// reversed from which merchant(s). If you simply want to fully reverse the routed funds, you can also use the
         /// reverseRouting parameter instead.
         /// </summary>
-        public IList<RoutingReversal>? RoutingReversals { get; init; }
+        public IList<RoutingReversal>? RoutingReversals { get; set; }
 
         /// <summary>
         /// The unique identifier of the payment this refund was created for. For example: tr_7UhSN1zuXS. The full
