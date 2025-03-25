@@ -34,5 +34,7 @@
         public const string Alma = "alma";
         public const string GooglePay = "googlepay";
         public const string Voucher = "voucher";
+        public const string MbWay = "mbway";
+        public const string Multibanco = "multibanco";
     }
 }
