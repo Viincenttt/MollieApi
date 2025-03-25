@@ -31,7 +31,7 @@ public class CapabilityClientTests {
         result.Count.ShouldBe(1);
         var capability = result.Items[0];
         capability.Resource.ShouldBe("capability");
-        //capability.Id.ShouldBe("payments"); // TODO: Figure out if this is name or id
+        capability.Name.ShouldBe("payments");
         capability.Status.ShouldBe(CapabilityStatus.Pending);
         capability.StatusReason.ShouldBe(CapabilityStatusReason.OnboardingInformtionNeeded);
         capability.Requirements.Count().ShouldBe(2);
@@ -57,7 +57,7 @@ public class CapabilityClientTests {
     ""capabilities"": [
       {
         ""resource"": ""capability"",
-        ""id"": ""payments"",
+        ""name"": ""payments"",
         ""status"": ""pending"",
         ""statusReason"": ""onboarding-information-needed"",
         ""requirements"": [
