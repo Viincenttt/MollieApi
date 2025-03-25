@@ -34,7 +34,7 @@ namespace Mollie.Tests.Integration.Framework {
                 throw new ArgumentException("Please enter you API key in the BaseMollieApiTestClass class");
             }
 
-            if (!apiKey.StartsWith("test")) {
+            if (!apiKey.StartsWith("access") && !apiKey.StartsWith("test")) {
                 throw new ArgumentException("You should not run these tests on your live key!");
             }
         }
