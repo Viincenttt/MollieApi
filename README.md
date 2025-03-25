@@ -71,3 +71,5 @@ This library currently supports the following API's:
 - Terminal API
 - ClientLink API
 - Wallet API
+- Client API
+- Capability API
