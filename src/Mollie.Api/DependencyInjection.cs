@@ -73,6 +73,8 @@ namespace Mollie.Api {
                 new ClientClient(provider.GetRequiredService<IMollieSecretManager>(), httpClient), mollieOptions.RetryPolicy);
             RegisterMollieApiClient<ICapabilityClient, CapabilityClient>(services, (httpClient, provider) =>
                 new CapabilityClient(provider.GetRequiredService<IMollieSecretManager>(), httpClient), mollieOptions.RetryPolicy);
+            RegisterMollieApiClient<ISalesInvoiceClient, SalesInvoiceClient>(services, (httpClient, provider) =>
+                new SalesInvoiceClient(provider.GetRequiredService<IMollieSecretManager>(), httpClient), mollieOptions.RetryPolicy);
 
             return services;
         }
