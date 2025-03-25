@@ -675,7 +675,6 @@ public class PaymentClientTests : BaseClientTests {
             VoucherPin = "voucher-pin"
         };
         const string jsonRequest = @"{
-  ""issuer"": ""issuer"",
   ""voucherNumber"": ""voucher-number"",
   ""voucherPin"": ""voucher-pin"",
   ""amount"": {
@@ -685,6 +684,7 @@ public class PaymentClientTests : BaseClientTests {
   ""description"": ""Description"",
   ""redirectUrl"": ""http://www.mollie.com"",
   ""webhookUrl"": ""http://www.mollie.com/webhook"",
+  ""issuer"": ""issuer"",
   ""method"": [
     ""ideal""
   ]
@@ -875,7 +875,6 @@ public class PaymentClientTests : BaseClientTests {
             Issuer = "ideal_INGBNL2A"
         };
         const string jsonRequest = @"{
-  ""issuer"": ""ideal_INGBNL2A"",
   ""amount"": {
     ""currency"": ""EUR"",
     ""value"": ""100.00""
@@ -883,6 +882,7 @@ public class PaymentClientTests : BaseClientTests {
   ""description"": ""Description"",
   ""redirectUrl"": ""http://www.mollie.com"",
   ""webhookUrl"": ""http://www.mollie.com/webhook"",
+  ""issuer"": ""ideal_INGBNL2A"",
   ""method"": [
     ""ideal""
   ]
