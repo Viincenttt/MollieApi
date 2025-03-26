@@ -39,7 +39,7 @@ public record SalesInvoiceRequest {
     /// <summary>
     /// The payment term to be set on the invoice.
     /// </summary>
-    public string? PaymentTerm { get; set; }
+    public required string PaymentTerm { get; set; }
 
     /// <summary>
     /// Used when setting an invoice to status of paid, and will store a payment that fully pays the invoice with
