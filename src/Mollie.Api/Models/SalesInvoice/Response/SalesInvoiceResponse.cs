@@ -138,7 +138,8 @@ public record SalesInvoiceResponse {
     /// <summary>
     /// If issued, the date when the sales invoice payment is due.
     /// </summary>
-    public DateTime? DueAt { get; set; }
+    // TODO: Report weird format in response
+    //public DateTime? DueAt { get; set; }
 
     /// <summary>
     /// An object with several relevant URLs. Every URL object will contain an href and a type field.
