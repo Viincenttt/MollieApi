@@ -25,6 +25,7 @@ public class SalesInvoiceTests : BaseMollieApiTestClass, IDisposable {
         var request = new SalesInvoiceRequest {
             Currency = Currency.EUR,
             Status = "issued",
+            PaymentTerm = "7 days",
             Lines = new[] {
                 new SalesInvoiceLine() {
                     Description = "Test product",
@@ -37,6 +38,8 @@ public class SalesInvoiceTests : BaseMollieApiTestClass, IDisposable {
             Recipient = new Recipient {
                 Type = "consumer",
                 Email = "example@example.com",
+                FamilyName = "Smit",
+                GivenName = "Jan",
                 StreetAndNumber = "Keizersgracht 313",
                 PostalCode = "1234AB",
                 City = "Amsterdam",
