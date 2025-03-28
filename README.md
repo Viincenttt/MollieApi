@@ -51,23 +51,23 @@ Source: https://docs.microsoft.com/en-us/dotnet/standard/net-standard?tabs=net-s
 
 ## Supported API's
 This library currently supports the following API's:
-- Payment API
-- PaymentMethod API
-- PaymentLink API
-- Customer API
-- Mandate API
-- Subscription API
-- Refund API
-- Connect API
+- [Payment API](https://github.com/Viincenttt/MollieApi/wiki/02.-Payment-API)
+- [PaymentMethod API](https://github.com/Viincenttt/MollieApi/wiki/03.-Payment-method-API)
+- [PaymentLink API](https://github.com/Viincenttt/MollieApi/wiki/14.-Payment-link-Api)
+- [Customer API](https://github.com/Viincenttt/MollieApi/wiki/05.-Customer-API)
+- [Mandate API](https://github.com/Viincenttt/MollieApi/wiki/06.-Mandate-API)
+- [Subscription API](https://github.com/Viincenttt/MollieApi/wiki/07.-Subscription-API)
+- [Refund API](https://github.com/Viincenttt/MollieApi/wiki/04.-Refund-API)
+- [Connect API](https://github.com/Viincenttt/MollieApi/wiki/10.-Connect-Api)
 - Chargeback API
 - Invoice API
 - Permissions API
-- Profile API
-- Organizations API
-- Order API
-- Capture API
-- Onboarding API
-- Balances API
+- [Profile API](https://github.com/Viincenttt/MollieApi/wiki/11.-Profile-Api)
+- [Organizations API](https://github.com/Viincenttt/MollieApi/wiki/09.-Organization-API)
+- [Order API](https://github.com/Viincenttt/MollieApi/wiki/08.-Order-API)
+- [Capture API](https://github.com/Viincenttt/MollieApi/wiki/12.-Captures-API)
+- [Onboarding API](https://github.com/Viincenttt/MollieApi/wiki/13.-Onboarding-Api)
+- [Balances API](https://github.com/Viincenttt/MollieApi/wiki/15.-Balances-Api)
 - Terminal API
 - ClientLink API
 - Wallet API
