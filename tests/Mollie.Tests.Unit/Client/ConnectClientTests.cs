@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -30,6 +30,43 @@ public class ConnectClientTests : BaseClientTests
         // Assert
         string expectedUrl = $"https://my.mollie.com/oauth2/authorize?client_id={ClientId}&state=abcde&scope=payments.read&response_type=code&approval_prompt=auto";
         authorizationUrl.ShouldBe(expectedUrl);
+    }
+
+    [Fact]
+    public void GetAuthorizationUrl_WithUserSuppliedValue_ReturnsSuppliedValue()
+    {
+        // Arrange
+        var userSuppliedUrl = "https://test.com/oauth2/authorize";
+        HttpClient httpClient = new HttpClient();
+        ConnectClient connectClient = new ConnectClient(ClientId, ClientSecret, httpClient, authorizeEndPoint: userSuppliedUrl);
+        var scopes = new List<string> { AppPermissions.PaymentsRead };
+
+        // Act
+        string authorizationUrl = connectClient.GetAuthorizationUrl("abcde", scopes);
+
+        // Assert
+        string expectedUrl = $"{userSuppliedUrl}?client_id={ClientId}&state=abcde&scope=payments.read&response_type=code&approval_prompt=auto";
+        authorizationUrl.ShouldBe(expectedUrl);
+    }
+
+    [Fact]
+    public async Task GetAccessTokenAsync_WithUserSuppliedEndpoint_CallsTheCorrectEndpoint()
+    {
+        // Arrange
+        var userSuppliedUrl = "https://test.com/oauth2/";
+
+        var mockHttp = new MockHttpMessageHandler();
+        mockHttp.Expect(HttpMethod.Post, $"{userSuppliedUrl}tokens")
+            .Respond("application/json", defaultGetTokenResponse);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        ConnectClient connectClient = new ConnectClient(ClientId, ClientSecret, httpClient, tokenEndPoint: userSuppliedUrl);
+        var tokenRequest = new TokenRequest("refresh_abcde", DefaultRedirectUrl);
+
+        // Act
+        await connectClient.GetAccessTokenAsync(tokenRequest);
+
+        // Assert
+        mockHttp.VerifyNoOutstandingExpectation();
     }
 
     [Theory]
