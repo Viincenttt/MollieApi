@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -11,13 +11,13 @@ using Mollie.Api.Models.Connect.Response;
 
 namespace Mollie.Api.Client {
     public class ConnectClient : BaseMollieClient, IConnectClient {
-        private const string AuthorizeEndPoint = "https://my.mollie.com/oauth2/authorize";
-        private const string TokenEndPoint = "https://api.mollie.com/oauth2/";
+        private readonly string AuthorizeEndPoint;
+        private readonly string TokenEndPoint;
 
         private readonly string _clientId;
         private readonly string _clientSecret;
 
-        public ConnectClient(string clientId, string clientSecret, HttpClient? httpClient = null): base(httpClient, ConnectClient.TokenEndPoint) {
+        public ConnectClient(string clientId, string clientSecret, HttpClient? httpClient = null, string tokenEndPoint = "https://api.mollie.com/oauth2/", string authorizeEndPoint = "https://my.mollie.com/oauth2/authorize") : base(httpClient, tokenEndPoint) {
             if (string.IsNullOrWhiteSpace(clientId)) {
                 throw new ArgumentNullException(nameof(clientId));
             }
@@ -26,6 +26,8 @@ namespace Mollie.Api.Client {
                 throw new ArgumentNullException(nameof(clientSecret));
             }
 
+            AuthorizeEndPoint = authorizeEndPoint;
+            TokenEndPoint = tokenEndPoint;
             _clientSecret = clientSecret;
             _clientId = clientId;
         }
@@ -61,7 +63,7 @@ namespace Mollie.Api.Client {
         }
 
         protected override HttpRequestMessage CreateHttpRequest(HttpMethod method, string relativeUri, HttpContent? content = null) {
-            HttpRequestMessage httpRequest = new HttpRequestMessage(method, new Uri(new Uri(ConnectClient.TokenEndPoint), relativeUri));
+            HttpRequestMessage httpRequest = new HttpRequestMessage(method, new Uri(new Uri(TokenEndPoint), relativeUri));
             httpRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Basic", Base64Encode($"{_clientId}:{_clientSecret}"));
             httpRequest.Content = content;
