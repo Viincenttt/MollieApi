@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
@@ -53,6 +54,31 @@ public class SalesInvoiceTests : BaseMollieApiTestClass, IDisposable {
 
         // Then
         response.ShouldNotBeNull();
+        response.Id.ShouldNotBeNullOrEmpty();
+        response.Resource.ShouldBe("sales-invoice");
+        response.InvoiceNumber.ShouldStartWith("I-");
+        response.ProfileId.ShouldStartWith("pfl_");
+        response.Currency.ShouldBe(request.Currency);
+        response.Status.ShouldBe(request.Status);
+        response.PaymentTerm.ShouldBe(request.PaymentTerm);
+        response.Lines.ShouldNotBeNull();
+        response.Lines.ShouldHaveSingleItem();
+        response.Lines.ShouldContain(l =>
+            l.Description == "Test product" &&
+            l.Quantity == 1 &&
+            l.VatRate == "21" && // TODO: Report this to Mollie, should be "21.00"
+            l.UnitPrice == 50m);
+        response.Recipient.ShouldNotBeNull();
+        response.Recipient.Type.ShouldBeNull(); // TODO: Report to Mollie, should be consumer
+        response.Recipient.Email.ShouldBe(request.Recipient.Email);
+        response.Recipient.FamilyName.ShouldBe(request.Recipient.FamilyName);
+        response.Recipient.GivenName.ShouldBe(request.Recipient.GivenName);
+        response.Recipient.StreetAndNumber.ShouldBe(request.Recipient.StreetAndNumber);
+        response.Recipient.PostalCode.ShouldBe(request.Recipient.PostalCode);
+        response.Recipient.City.ShouldBe(request.Recipient.City);
+        response.Recipient.Country.ShouldBe(request.Recipient.Country);
+        response.Recipient.Locale.ShouldBeNull(); // TODO: Report to Mollie, should be nl_NL
+        response.RecipientIdentifier.ShouldBe(request.RecipientIdentifier);
     }
 
     public void Dispose() {
