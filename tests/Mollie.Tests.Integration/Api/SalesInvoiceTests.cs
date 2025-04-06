@@ -17,6 +17,7 @@ using Xunit;
 
 namespace Mollie.Tests.Integration.Api;
 
+[Trait("TestCategory", "LocalIntegrationTests")]
 public class SalesInvoiceTests : BaseMollieApiTestClass, IDisposable {
     private readonly ISalesInvoiceClient _salesInvoiceClient;
 
