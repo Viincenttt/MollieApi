@@ -10,6 +10,7 @@ using Mollie.Api.Models.Payment;
 using Mollie.Api.Models.SalesInvoice;
 using Mollie.Api.Models.SalesInvoice.Request;
 using Mollie.Api.Models.SalesInvoice.Response;
+using Mollie.Api.Models.Url;
 using Mollie.Tests.Integration.Framework;
 using Shouldly;
 using Xunit;
@@ -48,6 +49,22 @@ public class SalesInvoiceTests : BaseMollieApiTestClass, IDisposable {
     }
 
     [Fact]
+    public async Task GetSalesInvoiceListAsync_WithObjectUrlLink_SalesInvoiceListIsRetrieved() {
+        // When: Retrieve sales invoice list with object URL link
+        var urlObjectLink = new UrlObjectLink<ListResponse<SalesInvoiceResponse>> {
+            Href = "https://api.mollie.com/v2/sales-invoices",
+            Type = "application/hal+json"
+        };
+        ListResponse<SalesInvoiceResponse> response = await _salesInvoiceClient.GetSalesInvoiceListAsync(urlObjectLink);
+
+        // Then
+        response.ShouldNotBeNull();
+        response.Items.ShouldNotBeNull();
+        response.Links.ShouldNotBeNull();
+        response.Links.Self.Href.ShouldEndWith("sales-invoices");
+    }
+
+    [Fact]
     public async Task GetSalesInvoiceListAsync_WithMaximumNumberOfItems_MaximumNumberOfSalesInvoicesIsReturned() {
         // Given: Number of sales invoices requested is 5
         int numberOfSalesInvoices = 5;
@@ -60,13 +77,26 @@ public class SalesInvoiceTests : BaseMollieApiTestClass, IDisposable {
     }
 
     [Fact]
-    public async Task GetSalesInvoiceAsync_OrderCanBeRetrieved() {
+    public async Task GetSalesInvoiceAsync_SalesInvoiceCanBeRetrieved() {
         // Given: We create a new sales invoice
         var salesInvoiceRequest = CreateSalesInvoiceRequest();
         var createdSalesInvoice = await _salesInvoiceClient.CreateSalesInvoiceAsync(salesInvoiceRequest);
 
         // When: We retrieve the sales invoice
         var retrievedSalesInvoice = await _salesInvoiceClient.GetSalesInvoiceAsync(createdSalesInvoice.Id);
+
+        // Then: The retrieved sales invoice should match the created one
+        AssertSalesInvoice(salesInvoiceRequest, retrievedSalesInvoice);
+    }
+
+    [Fact]
+    public async Task GetSalesInvoiceAsync_WithObjectUrlLink_SalesInvoiceCanBeRetrieved() {
+        // Given: We create a new sales invoice
+        var salesInvoiceRequest = CreateSalesInvoiceRequest();
+        var createdSalesInvoice = await _salesInvoiceClient.CreateSalesInvoiceAsync(salesInvoiceRequest);
+
+        // When: We retrieve the sales invoice
+        var retrievedSalesInvoice = await _salesInvoiceClient.GetSalesInvoiceAsync(createdSalesInvoice.Links.Self);
 
         // Then: The retrieved sales invoice should match the created one
         AssertSalesInvoice(salesInvoiceRequest, retrievedSalesInvoice);
@@ -115,7 +145,7 @@ public class SalesInvoiceTests : BaseMollieApiTestClass, IDisposable {
             VatMode = VatMode.Exclusive,
             VatScheme = VatScheme.Standard,
             Lines = new[] {
-                new SalesInvoiceLine() {
+                new SalesInvoiceLine {
                     Description = "Lego Batman",
                     Quantity = 1,
                     VatRate = "21.00",
