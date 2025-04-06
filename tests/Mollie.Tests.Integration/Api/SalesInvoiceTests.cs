@@ -94,7 +94,9 @@ public class SalesInvoiceTests : BaseMollieApiTestClass, IDisposable {
         return new SalesInvoiceRequest {
             Currency = Currency.EUR,
             Status = SalesInvoiceStatus.Draft,
-            PaymentTerm = "7 days",
+            PaymentTerm = PaymentTerm.Days30,
+            VatMode = VatMode.Exclusive,
+            VatScheme = VatScheme.Standard,
             Lines = new[] {
                 new SalesInvoiceLine() {
                     Description = "Lego Batman",
@@ -105,7 +107,7 @@ public class SalesInvoiceTests : BaseMollieApiTestClass, IDisposable {
             },
             RecipientIdentifier = Guid.NewGuid().ToString(),
             Recipient = new Recipient {
-                Type = "consumer",
+                Type = RecipientType.Consumer,
                 Email = "example@example.com",
                 FamilyName = "Smit",
                 GivenName = "Jan",

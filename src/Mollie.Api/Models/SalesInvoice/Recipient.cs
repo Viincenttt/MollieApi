@@ -3,7 +3,8 @@
 public record Recipient {
     /// <summary>
     /// The type of recipient, either consumer or business. This will determine what further fields are required on
-    /// the recipient object.
+    /// the recipient object. See the Mollie.Api.Models.SalesInvoice.RecipientType class for a full list of known
+    /// values.
     /// </summary>
     public required string Type { get; set; }
 

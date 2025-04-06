@@ -2,7 +2,8 @@
 
 public record PaymentDetails {
     /// <summary>
-    /// The way through which the invoice is to be set to paid.
+    /// The way through which the invoice is to be set to paid. See the
+    /// Mollie.Api.Models.SalesInvoice.PaymentDetailSource class for a full list of known values.
     /// </summary>
     public required string Source { get; set; }
 
