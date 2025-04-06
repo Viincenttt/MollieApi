@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Framework.Authentication.Abstract;
+using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.SalesInvoice.Request;
 using Mollie.Api.Models.SalesInvoice.Response;
 using Mollie.Api.Options;
@@ -19,10 +20,17 @@ public class SalesInvoiceClient : BaseMollieClient, ISalesInvoiceClient {
     }
 
     public async Task<SalesInvoiceResponse> CreateSalesInvoiceAsync(SalesInvoiceRequest salesInvoiceRequest) {
-        return await PostAsync<SalesInvoiceResponse>($"sales-invoices", salesInvoiceRequest).ConfigureAwait(false);
+        return await PostAsync<SalesInvoiceResponse>($"sales-invoices", salesInvoiceRequest)
+            .ConfigureAwait(false);
+    }
+
+    public async Task<ListResponse<SalesInvoiceResponse>> GetSalesInvoiceListAsync(string? from = null, int? limit = null) {
+        return await GetListAsync<ListResponse<SalesInvoiceResponse>>("sales-invoices", from, limit)
+            .ConfigureAwait(false);
     }
 
     public async Task<SalesInvoiceResponse> GetSalesInvoiceAsync(string salesInvoiceId) {
-        return await GetAsync<SalesInvoiceResponse>($"sales-invoices/{salesInvoiceId}").ConfigureAwait(false);
+        return await GetAsync<SalesInvoiceResponse>($"sales-invoices/{salesInvoiceId}")
+            .ConfigureAwait(false);
     }
 }
