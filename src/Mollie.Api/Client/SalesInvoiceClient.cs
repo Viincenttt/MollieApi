@@ -8,6 +8,7 @@ using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.SalesInvoice.Request;
 using Mollie.Api.Models.SalesInvoice.Response;
 using Mollie.Api.Options;
+using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client;
 
@@ -32,11 +33,21 @@ public class SalesInvoiceClient : BaseMollieClient, ISalesInvoiceClient {
             .ConfigureAwait(false);
     }
 
+    public async Task<ListResponse<SalesInvoiceResponse>> GetSalesInvoiceListAsync(
+        UrlObjectLink<ListResponse<SalesInvoiceResponse>> url, CancellationToken cancellationToken = default) {
+        return await GetAsync(url).ConfigureAwait(false);
+    }
+
     public async Task<SalesInvoiceResponse> GetSalesInvoiceAsync(
         string salesInvoiceId, CancellationToken cancellationToken = default) {
         ValidateRequiredUrlParameter(nameof(salesInvoiceId), salesInvoiceId);
         return await GetAsync<SalesInvoiceResponse>($"sales-invoices/{salesInvoiceId}", cancellationToken: cancellationToken)
             .ConfigureAwait(false);
+    }
+
+    public async Task<SalesInvoiceResponse> GetSalesInvoiceAsync(
+        UrlObjectLink<SalesInvoiceResponse> url, CancellationToken cancellationToken = default) {
+        return await GetAsync(url).ConfigureAwait(false);
     }
 
     public async Task<SalesInvoiceResponse> UpdateSalesInvoiceAsync(
