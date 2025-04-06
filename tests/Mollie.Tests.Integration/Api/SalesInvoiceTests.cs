@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
+using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
+using Mollie.Api.Models.Invoice.Response;
 using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Payment;
 using Mollie.Api.Models.SalesInvoice;
@@ -70,10 +73,27 @@ public class SalesInvoiceTests : BaseMollieApiTestClass, IDisposable {
         AssertSalesInvoice(salesInvoiceRequest, retrievedSalesInvoice);
     }
 
+    [Fact]
+    public async Task DeleteSalesInvoiceAsync_DeletesSalesInvoice() {
+        // If: We retrieve a list of sales invoices
+        ListResponse<SalesInvoiceResponse> response = await _salesInvoiceClient.GetSalesInvoiceListAsync();
+
+        // When: We delete one of the sales invoices in the list
+        var salesInvoiceToDelete = response.Items.FirstOrDefault(x => x.Status == "draft");
+        if (salesInvoiceToDelete != null) {
+            await _salesInvoiceClient.DeleteSalesInvoiceAsync(salesInvoiceToDelete.Id);
+
+            // Then: Make sure the sales invoice is deleted
+            MollieApiException apiException = await Assert.ThrowsAsync<MollieApiException>(() =>
+                _salesInvoiceClient.GetSalesInvoiceAsync(salesInvoiceToDelete.Id));
+            apiException.Details.Status.ShouldBe((int)HttpStatusCode.NotFound);
+        }
+    }
+
     private SalesInvoiceRequest CreateSalesInvoiceRequest() {
         return new SalesInvoiceRequest {
             Currency = Currency.EUR,
-            Status = "issued",
+            Status = "draft",
             PaymentTerm = "7 days",
             Lines = new[] {
                 new SalesInvoiceLine() {
@@ -102,7 +122,6 @@ public class SalesInvoiceTests : BaseMollieApiTestClass, IDisposable {
         response.ShouldNotBeNull();
         response.Id.ShouldNotBeNullOrEmpty();
         response.Resource.ShouldBe("sales-invoice");
-        response.InvoiceNumber.ShouldStartWith("I-");
         response.ProfileId.ShouldStartWith("pfl_");
         response.Currency.ShouldBe(request.Currency);
         response.Status.ShouldBe(request.Status);
