@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
-using Mollie.Api.Models.Invoice.Response;
 using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Payment;
 using Mollie.Api.Models.SalesInvoice;
@@ -74,6 +73,24 @@ public class SalesInvoiceTests : BaseMollieApiTestClass, IDisposable {
     }
 
     [Fact]
+    public async Task UpdateSalesInvoiceAsync_UpdatesSalesInvoice() {
+        // Given: We create a new sales invoice
+        var salesInvoiceRequest = CreateSalesInvoiceRequest();
+        var createdSalesInvoice = await _salesInvoiceClient.CreateSalesInvoiceAsync(salesInvoiceRequest);
+
+        // When: We update the sales invoice
+        var updatedSalesInvoiceRequest = new SalesInvoiceUpdateRequest {
+            Memo = "Updated memo"
+        };
+        var updatedSalesInvoice = await _salesInvoiceClient.UpdateSalesInvoiceAsync(createdSalesInvoice.Id, updatedSalesInvoiceRequest);
+
+        // Then: The updated sales invoice should match the updated request
+        updatedSalesInvoice.ShouldNotBeNull();
+        updatedSalesInvoice.Memo.ShouldBe(updatedSalesInvoiceRequest.Memo);
+        updatedSalesInvoice.Lines!.Count().ShouldBe(1);
+    }
+
+    [Fact]
     public async Task DeleteSalesInvoiceAsync_DeletesSalesInvoice() {
         // If: We retrieve a list of sales invoices
         ListResponse<SalesInvoiceResponse> response = await _salesInvoiceClient.GetSalesInvoiceListAsync();
@@ -137,7 +154,6 @@ public class SalesInvoiceTests : BaseMollieApiTestClass, IDisposable {
             l.VatRate == "21" && // TODO: Report this to Mollie, should be "21.00"
             l.UnitPrice == 50m);
         response.Recipient.ShouldNotBeNull();
-        response.Recipient.Type.ShouldBeNull(); // TODO: Report to Mollie, should be consumer
         response.Recipient.Email.ShouldBe(request.Recipient.Email);
         response.Recipient.FamilyName.ShouldBe(request.Recipient.FamilyName);
         response.Recipient.GivenName.ShouldBe(request.Recipient.GivenName);
@@ -145,8 +161,9 @@ public class SalesInvoiceTests : BaseMollieApiTestClass, IDisposable {
         response.Recipient.PostalCode.ShouldBe(request.Recipient.PostalCode);
         response.Recipient.City.ShouldBe(request.Recipient.City);
         response.Recipient.Country.ShouldBe(request.Recipient.Country);
-        response.Recipient.Locale.ShouldBeNull(); // TODO: Report to Mollie, should be nl_NL
         response.RecipientIdentifier.ShouldBe(request.RecipientIdentifier);
+        response.Recipient.Type.ShouldBeNull(); // TODO: Report to Mollie, should be consumer
+        response.Recipient.Locale.ShouldBeNull(); // TODO: Report to Mollie, should be nl_NL
     }
 
     public void Dispose() {
