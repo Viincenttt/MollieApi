@@ -32,10 +32,10 @@ public record SalesInvoiceResponse {
     public string? Currency { get; set; }
 
     /// <summary>
-    /// The status for the invoice to end up in.
+    /// The status for the invoice to end up in. See the Mollie.Api.Models.SalesInvoice.SalesInvoiceStatus class for
+    /// a full list of known values.
     /// </summary>
     public required string Status { get; set; }
-
 
     /// <summary>
     /// The VAT scheme to create the invoice for. You must be enrolled with One Stop Shop enabled to use it.

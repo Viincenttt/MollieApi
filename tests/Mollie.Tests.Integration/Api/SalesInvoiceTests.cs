@@ -79,7 +79,7 @@ public class SalesInvoiceTests : BaseMollieApiTestClass, IDisposable {
         ListResponse<SalesInvoiceResponse> response = await _salesInvoiceClient.GetSalesInvoiceListAsync();
 
         // When: We delete one of the sales invoices in the list
-        var salesInvoiceToDelete = response.Items.FirstOrDefault(x => x.Status == "draft");
+        var salesInvoiceToDelete = response.Items.FirstOrDefault(x => x.Status == SalesInvoiceStatus.Draft);
         if (salesInvoiceToDelete != null) {
             await _salesInvoiceClient.DeleteSalesInvoiceAsync(salesInvoiceToDelete.Id);
 
@@ -93,7 +93,7 @@ public class SalesInvoiceTests : BaseMollieApiTestClass, IDisposable {
     private SalesInvoiceRequest CreateSalesInvoiceRequest() {
         return new SalesInvoiceRequest {
             Currency = Currency.EUR,
-            Status = "draft",
+            Status = SalesInvoiceStatus.Draft,
             PaymentTerm = "7 days",
             Lines = new[] {
                 new SalesInvoiceLine() {
