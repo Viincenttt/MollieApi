@@ -30,6 +30,10 @@ namespace Mollie.Api.Client {
             return await GetAsync<OrderResponse>($"orders/{orderId}{queryParameters.ToQueryString()}").ConfigureAwait(false);
         }
 
+        public async Task<OrderResponse> GetOrderAsync(UrlObjectLink<OrderResponse> url) {
+            return await GetAsync(url).ConfigureAwait(false);
+        }
+
         public async Task<OrderResponse> UpdateOrderAsync(string orderId, OrderUpdateRequest orderUpdateRequest) {
             ValidateRequiredUrlParameter(nameof(orderId), orderId);
             return await PatchAsync<OrderResponse>($"orders/{orderId}", orderUpdateRequest).ConfigureAwait(false);

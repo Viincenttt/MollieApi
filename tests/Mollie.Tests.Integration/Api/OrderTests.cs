@@ -242,6 +242,20 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
     }
 
     [Fact]
+    public async Task GetOrderAsync_WithUrlObject_OrderCanBeRetrieved() {
+        // If: we create a new order
+        OrderRequest orderRequest = CreateOrder();
+        OrderResponse createdOrder = await _orderClient.CreateOrderAsync(orderRequest);
+
+        // When: We attempt to retrieve the order
+        OrderResponse retrievedOrder = await _orderClient.GetOrderAsync(createdOrder.Links.Self);
+
+        // Then: Make sure we get a valid response
+        retrievedOrder.ShouldNotBeNull();
+        retrievedOrder.Id.ShouldBe(createdOrder.Id);
+    }
+
+    [Fact]
     public async Task GetOrderAsync_WithIncludeParameters_OrderIsRetrievedWithEmbeddedData() {
         // If: we create a new order
         OrderRequest orderRequest = CreateOrder();
