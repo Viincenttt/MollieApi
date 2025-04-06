@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
+using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Payment;
 using Mollie.Api.Models.SalesInvoice;
 using Mollie.Api.Models.SalesInvoice.Request;
@@ -30,6 +31,30 @@ public class SalesInvoiceTests : BaseMollieApiTestClass, IDisposable {
 
         // Then
         AssertSalesInvoice(request, response);
+    }
+
+    [Fact]
+    public async Task GetSalesInvoiceListAsync_NoParameters_SalesInvoiceListIsRetrieved() {
+        // When: Retrieve sales invoice list with default settings
+        ListResponse<SalesInvoiceResponse> response = await _salesInvoiceClient.GetSalesInvoiceListAsync();
+
+        // Then
+        response.ShouldNotBeNull();
+        response.Items.ShouldNotBeNull();
+        response.Links.ShouldNotBeNull();
+        response.Links.Self.Href.ShouldEndWith("sales-invoices");
+    }
+
+    [Fact]
+    public async Task GetSalesInvoiceListAsync_WithMaximumNumberOfItems_MaximumNumberOfSalesInvoicesIsReturned() {
+        // Given: Number of sales invoices requested is 5
+        int numberOfSalesInvoices = 5;
+
+        // When: Retrieve 5 sales invoices
+        ListResponse<SalesInvoiceResponse> response = await _salesInvoiceClient.GetSalesInvoiceListAsync(null, numberOfSalesInvoices);
+
+        // Then
+        response.Items.Count.ShouldBeLessThanOrEqualTo(numberOfSalesInvoices);
     }
 
     [Fact]
