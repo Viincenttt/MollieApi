@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
@@ -18,7 +19,10 @@ namespace Mollie.Api.Client {
         public PaymentClient(IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null) : base(mollieSecretManager, httpClient) {
         }
 
-        public async Task<PaymentResponse> CreatePaymentAsync(PaymentRequest paymentRequest, bool includeQrCode = false) {
+        public async Task<PaymentResponse> CreatePaymentAsync(
+            PaymentRequest paymentRequest,
+            bool includeQrCode = false,
+            CancellationToken cancellationToken = default) {
             if (!string.IsNullOrWhiteSpace(paymentRequest.ProfileId) || paymentRequest.Testmode.HasValue || paymentRequest.ApplicationFee != null) {
                 ValidateApiKeyIsOauthAccesstoken();
             }
@@ -26,7 +30,10 @@ namespace Mollie.Api.Client {
             var queryParameters = BuildQueryParameters(
                 includeQrCode: includeQrCode);
 
-            return await PostAsync<PaymentResponse>($"payments{queryParameters.ToQueryString()}", paymentRequest).ConfigureAwait(false);
+            return await PostAsync<PaymentResponse>(
+                $"payments{queryParameters.ToQueryString()}",
+                paymentRequest,
+                cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
         public async Task<PaymentResponse> GetPaymentAsync(
@@ -35,7 +42,8 @@ namespace Mollie.Api.Client {
             bool includeQrCode = false,
             bool includeRemainderDetails = false,
             bool embedRefunds = false,
-            bool embedChargebacks = false) {
+            bool embedChargebacks = false,
+            CancellationToken cancellationToken = default) {
 
 	        if (testmode) {
 	            ValidateApiKeyIsOauthAccesstoken();
@@ -50,22 +58,34 @@ namespace Mollie.Api.Client {
                 embedRefunds: embedRefunds,
                 embedChargebacks: embedChargebacks
             );
-			return await GetAsync<PaymentResponse>($"payments/{paymentId}{queryParameters.ToQueryString()}").ConfigureAwait(false);
+			return await GetAsync<PaymentResponse>(
+                $"payments/{paymentId}{queryParameters.ToQueryString()}",
+                cancellationToken: cancellationToken).ConfigureAwait(false);
 		}
 
-		public async Task CancelPaymentAsync(string paymentId, bool testmode = false) {
+		public async Task CancelPaymentAsync(
+            string paymentId,
+            bool testmode = false,
+            CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(paymentId), paymentId);
 
             var data = TestmodeModel.Create(testmode);
-		    await DeleteAsync($"payments/{paymentId}", data).ConfigureAwait(false);
+		    await DeleteAsync(
+                $"payments/{paymentId}",
+                data,
+                cancellationToken: cancellationToken).ConfigureAwait(false);
 		}
 
-        public async Task<PaymentResponse> GetPaymentAsync(UrlObjectLink<PaymentResponse> url) {
-            return await GetAsync(url).ConfigureAwait(false);
+        public async Task<PaymentResponse> GetPaymentAsync(
+            UrlObjectLink<PaymentResponse> url,
+            CancellationToken cancellationToken = default) {
+            return await GetAsync(url, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<PaymentResponse>> GetPaymentListAsync(UrlObjectLink<ListResponse<PaymentResponse>> url) {
-            return await GetAsync(url).ConfigureAwait(false);
+        public async Task<ListResponse<PaymentResponse>> GetPaymentListAsync(
+            UrlObjectLink<ListResponse<PaymentResponse>> url,
+            CancellationToken cancellationToken = default) {
+            return await GetAsync(url, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
         public async Task<ListResponse<PaymentResponse>> GetPaymentListAsync(
@@ -76,7 +96,8 @@ namespace Mollie.Api.Client {
             bool includeQrCode = false,
             bool embedRefunds = false,
             bool embedChargebacks = false,
-            SortDirection? sort = null) {
+            SortDirection? sort = null,
+            CancellationToken cancellationToken = default) {
 
 	        if (!string.IsNullOrWhiteSpace(profileId) || testmode) {
 	            ValidateApiKeyIsOauthAccesstoken();
@@ -90,13 +111,24 @@ namespace Mollie.Api.Client {
                 embedChargebacks: embedChargebacks,
                 sort: sort);
 
-            return await GetListAsync<ListResponse<PaymentResponse>>($"payments", from, limit, queryParameters).ConfigureAwait(false);
+            return await GetListAsync<ListResponse<PaymentResponse>>(
+                $"payments",
+                from,
+                limit,
+                queryParameters,
+                cancellationToken: cancellationToken).ConfigureAwait(false);
 		}
 
-        public async Task<PaymentResponse> UpdatePaymentAsync(string paymentId, PaymentUpdateRequest paymentUpdateRequest) {
+        public async Task<PaymentResponse> UpdatePaymentAsync(
+            string paymentId,
+            PaymentUpdateRequest paymentUpdateRequest,
+            CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(paymentId), paymentId);
 
-            return await PatchAsync<PaymentResponse>($"payments/{paymentId}", paymentUpdateRequest).ConfigureAwait(false);
+            return await PatchAsync<PaymentResponse>(
+                $"payments/{paymentId}",
+                paymentUpdateRequest,
+                cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
         private Dictionary<string, string> BuildQueryParameters(
