@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Mollie.Api.Extensions;
 using Mollie.Api.Framework;
@@ -58,7 +59,8 @@ namespace Mollie.Api.Client {
             return _idempotencyKey;
         }
 
-        private async Task<T> SendHttpRequest<T>(HttpMethod httpMethod, string relativeUri, object? data = null) {
+        private async Task<T> SendHttpRequest<T>(
+            HttpMethod httpMethod, string relativeUri, object? data = null, CancellationToken cancellationToken = default) {
             HttpRequestMessage httpRequest = CreateHttpRequest(httpMethod, relativeUri);
             if (data != null) {
                 var jsonData = _jsonConverterService.Serialize(data);
@@ -66,34 +68,42 @@ namespace Mollie.Api.Client {
                 httpRequest.Content = content;
             }
 
-            var response = await _httpClient.SendAsync(httpRequest).ConfigureAwait(false);
+            var response = await _httpClient.SendAsync(httpRequest, cancellationToken).ConfigureAwait(false);
             return await ProcessHttpResponseMessage<T>(response).ConfigureAwait(false);
         }
 
-        protected async Task<T> GetListAsync<T>(string relativeUri, string? from, int? limit, IDictionary<string, string>? otherParameters = null) {
+        protected async Task<T> GetListAsync<T>(
+            string relativeUri, string? from, int? limit, IDictionary<string, string>? otherParameters = null, CancellationToken cancellationToken = default) {
             string url = relativeUri + BuildListQueryString(from, limit, otherParameters);
-            return await SendHttpRequest<T>(HttpMethod.Get, url).ConfigureAwait(false);
+            return await SendHttpRequest<T>(HttpMethod.Get, url, cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
         }
 
-        protected async Task<T> GetAsync<T>(string relativeUri) {
-            return await SendHttpRequest<T>(HttpMethod.Get, relativeUri).ConfigureAwait(false);
+        protected async Task<T> GetAsync<T>(string relativeUri, CancellationToken cancellationToken = default) {
+            return await SendHttpRequest<T>(HttpMethod.Get, relativeUri, cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
         }
 
-        protected async Task<T> GetAsync<T>(UrlObjectLink<T> urlObject) {
+        protected async Task<T> GetAsync<T>(UrlObjectLink<T> urlObject, CancellationToken cancellationToken = default) {
             ValidateUrlLink(urlObject);
-            return await GetAsync<T>(urlObject.Href).ConfigureAwait(false);
+            return await GetAsync<T>(urlObject.Href, cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
         }
 
-        protected async Task<T> PostAsync<T>(string relativeUri, object? data) {
-            return await SendHttpRequest<T>(HttpMethod.Post, relativeUri, data).ConfigureAwait(false);
+        protected async Task<T> PostAsync<T>(
+            string relativeUri, object? data, CancellationToken cancellationToken = default) {
+            return await SendHttpRequest<T>(HttpMethod.Post, relativeUri, data, cancellationToken)
+                .ConfigureAwait(false);
         }
 
-        protected async Task<T> PatchAsync<T>(string relativeUri, object? data) {
-            return await SendHttpRequest<T>(new HttpMethod("PATCH"), relativeUri, data).ConfigureAwait(false);
+        protected async Task<T> PatchAsync<T>(string relativeUri, object? data, CancellationToken cancellationToken = default) {
+            return await SendHttpRequest<T>(new HttpMethod("PATCH"), relativeUri, data, cancellationToken)
+                .ConfigureAwait(false);
         }
 
-        protected async Task DeleteAsync(string relativeUri, object? data = null) {
-            await SendHttpRequest<object>(HttpMethod.Delete, relativeUri, data).ConfigureAwait(false);
+        protected async Task DeleteAsync(string relativeUri, object? data = null, CancellationToken cancellationToken = default) {
+            await SendHttpRequest<object>(HttpMethod.Delete, relativeUri, data, cancellationToken)
+                .ConfigureAwait(false);
         }
 
         private async Task<T> ProcessHttpResponseMessage<T>(HttpResponseMessage response) {
@@ -133,7 +143,7 @@ namespace Mollie.Api.Client {
         }
 
         protected virtual HttpRequestMessage CreateHttpRequest(HttpMethod method, string relativeUri, HttpContent? content = null) {
-            HttpRequestMessage httpRequest = new HttpRequestMessage(method, new Uri(new Uri(_apiEndpoint), relativeUri));
+            var httpRequest = new HttpRequestMessage(method, new Uri(new Uri(_apiEndpoint), relativeUri));
             httpRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _mollieSecretManager.GetBearerToken());
             httpRequest.Headers.Add("User-Agent", GetUserAgent());
@@ -145,7 +155,7 @@ namespace Mollie.Api.Client {
         }
 
         private string BuildListQueryString(string? from, int? limit, IDictionary<string, string>? otherParameters = null) {
-            Dictionary<string, string> queryParameters = new Dictionary<string, string>();
+            var queryParameters = new Dictionary<string, string>();
             queryParameters.AddValueIfNotNullOrEmpty(nameof(from), from);
             queryParameters.AddValueIfNotNullOrEmpty(nameof(limit), Convert.ToString(limit));
 
