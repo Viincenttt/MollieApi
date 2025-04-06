@@ -7,4 +7,5 @@ namespace Mollie.Api.Client.Abstract;
 
 public interface ISalesInvoiceClient : IDisposable {
     Task<SalesInvoiceResponse> CreateSalesInvoiceAsync(SalesInvoiceRequest salesInvoiceRequest);
+    Task<SalesInvoiceResponse> GetSalesInvoiceAsync(string salesInvoiceId);
 }
