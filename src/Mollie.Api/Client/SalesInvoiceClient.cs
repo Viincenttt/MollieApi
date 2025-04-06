@@ -35,6 +35,12 @@ public class SalesInvoiceClient : BaseMollieClient, ISalesInvoiceClient {
             .ConfigureAwait(false);
     }
 
+    public async Task<SalesInvoiceResponse> UpdateSalesInvoiceAsync(string salesInvoiceId, SalesInvoiceUpdateRequest salesInvoiceRequest) {
+        ValidateRequiredUrlParameter(nameof(salesInvoiceId), salesInvoiceId);
+        return await PatchAsync<SalesInvoiceResponse>($"sales-invoices/{salesInvoiceId}", salesInvoiceRequest)
+            .ConfigureAwait(false);
+    }
+
     public async Task DeleteSalesInvoiceAsync(string salesInvoiceId) {
         ValidateRequiredUrlParameter(nameof(salesInvoiceId), salesInvoiceId);
         await DeleteAsync($"sales-invoices/{salesInvoiceId}").ConfigureAwait(false);
