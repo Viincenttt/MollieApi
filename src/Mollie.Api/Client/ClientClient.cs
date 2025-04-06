@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
@@ -23,10 +24,14 @@ namespace Mollie.Api.Client {
             string clientId,
             bool embedOrganization = false,
             bool embedOnboarding = false,
-            bool embedCapabilities = false) {
+            bool embedCapabilities = false,
+            CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(clientId), clientId);
             var queryParameters = BuildQueryParameters(embedOrganization, embedOnboarding, embedCapabilities);
-            return await GetAsync<ClientResponse>($"clients/{clientId}{queryParameters.ToQueryString()}").ConfigureAwait(false);
+            return await GetAsync<ClientResponse>(
+                $"clients/{clientId}{queryParameters.ToQueryString()}",
+                cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
         }
 
         public async Task<ListResponse<ClientResponse>> GetClientListAsync(
@@ -34,9 +39,12 @@ namespace Mollie.Api.Client {
             int? limit = null,
             bool embedOrganization = false,
             bool embedOnboarding = false,
-            bool embedCapabilities = false) {
+            bool embedCapabilities = false,
+            CancellationToken cancellationToken = default) {
             var queryParameters = BuildQueryParameters(embedOrganization, embedOnboarding, embedCapabilities);
-            return await GetListAsync<ListResponse<ClientResponse>>($"clients", from, limit, queryParameters).ConfigureAwait(false);
+            return await GetListAsync<ListResponse<ClientResponse>>(
+                "clients", from, limit, queryParameters, cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
         }
 
         private Dictionary<string, string> BuildQueryParameters(

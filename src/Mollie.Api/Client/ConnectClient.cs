@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
@@ -52,16 +53,23 @@ namespace Mollie.Api.Client {
             return AuthorizeEndPoint + parameters.ToQueryString();
         }
 
-        public async Task<TokenResponse> GetAccessTokenAsync(TokenRequest request) {
-            return await PostAsync<TokenResponse>("tokens", request).ConfigureAwait(false);
+        public async Task<TokenResponse> GetAccessTokenAsync(
+            TokenRequest request, CancellationToken cancellationToken = default) {
+            return await PostAsync<TokenResponse>(
+                "tokens", request, cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
         }
 
-        public async Task RevokeTokenAsync(RevokeTokenRequest request) {
-            await DeleteAsync("tokens", request).ConfigureAwait(false);
+        public async Task RevokeTokenAsync(
+            RevokeTokenRequest request, CancellationToken cancellationToken = default) {
+            await DeleteAsync(
+                "tokens", request, cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
         }
 
-        protected override HttpRequestMessage CreateHttpRequest(HttpMethod method, string relativeUri, HttpContent? content = null) {
-            HttpRequestMessage httpRequest = new HttpRequestMessage(method, new Uri(new Uri(ConnectClient.TokenEndPoint), relativeUri));
+        protected override HttpRequestMessage CreateHttpRequest(
+            HttpMethod method, string relativeUri, HttpContent? content = null) {
+            var httpRequest = new HttpRequestMessage(method, new Uri(new Uri(TokenEndPoint), relativeUri));
             httpRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Basic", Base64Encode($"{_clientId}:{_clientSecret}"));
             httpRequest.Content = content;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Mollie.Api.Models.Connect.Request;
 using Mollie.Api.Models.Connect.Response;
@@ -47,14 +48,16 @@ namespace Mollie.Api.Client.Abstract {
         /// communicate with the Mollie API. Or Refresh the accestoken
         /// </summary>
         /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns>An token object.</returns>
-        Task<TokenResponse> GetAccessTokenAsync(TokenRequest request);
+        Task<TokenResponse> GetAccessTokenAsync(TokenRequest request, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Revoke an access- or a refresh token. Once revoked the token can not be used anymore.
         /// </summary>
         /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task RevokeTokenAsync(RevokeTokenRequest request);
+        Task RevokeTokenAsync(RevokeTokenRequest request, CancellationToken cancellationToken = default);
     }
 }
