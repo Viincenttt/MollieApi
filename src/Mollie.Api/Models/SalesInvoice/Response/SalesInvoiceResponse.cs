@@ -38,13 +38,15 @@ public record SalesInvoiceResponse {
     public required string Status { get; set; }
 
     /// <summary>
-    /// The VAT scheme to create the invoice for. You must be enrolled with One Stop Shop enabled to use it.
+    /// The VAT scheme to create the invoice for. You must be enrolled with One Stop Shop enabled to use it. See the
+    /// Mollie.Api.Models.VatScheme class for a full list of known values.
     /// </summary>
     public string? VatScheme { get; set; }
 
     /// <summary>
     /// The VAT mode to use for VAT calculation. exclusive mode means we will apply the relevant VAT on top of the
-    /// price. inclusive means the prices you are providing to us already contain the VAT you want to apply.
+    /// price. inclusive means the prices you are providing to us already contain the VAT you want to apply. See the
+    /// Mollie.Api.Models.VatMode class for a full list of known values.
     /// </summary>
     public string? VatMode { get; set; }
 
@@ -54,7 +56,8 @@ public record SalesInvoiceResponse {
     public string? Memo { get; set; }
 
     /// <summary>
-    /// The payment term to be set on the invoice.
+    /// The payment term to be set on the invoice. See the Mollie.Api.Models.SalesInvoice.PaymentTerm class for a full
+    /// list of known values.
     /// </summary>
     public string? PaymentTerm { get; set; }
 
