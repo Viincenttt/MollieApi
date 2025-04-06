@@ -35,7 +35,7 @@ public class SalesInvoiceClient : BaseMollieClient, ISalesInvoiceClient {
 
     public async Task<ListResponse<SalesInvoiceResponse>> GetSalesInvoiceListAsync(
         UrlObjectLink<ListResponse<SalesInvoiceResponse>> url, CancellationToken cancellationToken = default) {
-        return await GetAsync(url).ConfigureAwait(false);
+        return await GetAsync(url, cancellationToken: cancellationToken).ConfigureAwait(false);
     }
 
     public async Task<SalesInvoiceResponse> GetSalesInvoiceAsync(
@@ -47,7 +47,7 @@ public class SalesInvoiceClient : BaseMollieClient, ISalesInvoiceClient {
 
     public async Task<SalesInvoiceResponse> GetSalesInvoiceAsync(
         UrlObjectLink<SalesInvoiceResponse> url, CancellationToken cancellationToken = default) {
-        return await GetAsync(url).ConfigureAwait(false);
+        return await GetAsync(url, cancellationToken: cancellationToken).ConfigureAwait(false);
     }
 
     public async Task<SalesInvoiceResponse> UpdateSalesInvoiceAsync(
