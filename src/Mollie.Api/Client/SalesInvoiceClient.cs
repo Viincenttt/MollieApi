@@ -22,7 +22,7 @@ public class SalesInvoiceClient : BaseMollieClient, ISalesInvoiceClient {
 
     public async Task<SalesInvoiceResponse> CreateSalesInvoiceAsync(
         SalesInvoiceRequest salesInvoiceRequest, CancellationToken cancellationToken = default) {
-        return await PostAsync<SalesInvoiceResponse>($"sales-invoices", salesInvoiceRequest, cancellationToken)
+        return await PostAsync<SalesInvoiceResponse>($"sales-invoices", salesInvoiceRequest, cancellationToken: cancellationToken)
             .ConfigureAwait(false);
     }
 
@@ -35,14 +35,14 @@ public class SalesInvoiceClient : BaseMollieClient, ISalesInvoiceClient {
     public async Task<SalesInvoiceResponse> GetSalesInvoiceAsync(
         string salesInvoiceId, CancellationToken cancellationToken = default) {
         ValidateRequiredUrlParameter(nameof(salesInvoiceId), salesInvoiceId);
-        return await GetAsync<SalesInvoiceResponse>($"sales-invoices/{salesInvoiceId}", cancellationToken)
+        return await GetAsync<SalesInvoiceResponse>($"sales-invoices/{salesInvoiceId}", cancellationToken: cancellationToken)
             .ConfigureAwait(false);
     }
 
     public async Task<SalesInvoiceResponse> UpdateSalesInvoiceAsync(
         string salesInvoiceId, SalesInvoiceUpdateRequest salesInvoiceRequest, CancellationToken cancellationToken = default) {
         ValidateRequiredUrlParameter(nameof(salesInvoiceId), salesInvoiceId);
-        return await PatchAsync<SalesInvoiceResponse>($"sales-invoices/{salesInvoiceId}", salesInvoiceRequest, cancellationToken)
+        return await PatchAsync<SalesInvoiceResponse>($"sales-invoices/{salesInvoiceId}", salesInvoiceRequest, cancellationToken: cancellationToken)
             .ConfigureAwait(false);
     }
 
