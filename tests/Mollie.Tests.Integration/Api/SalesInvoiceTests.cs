@@ -6,6 +6,7 @@ using Mollie.Api.Models;
 using Mollie.Api.Models.Payment;
 using Mollie.Api.Models.SalesInvoice;
 using Mollie.Api.Models.SalesInvoice.Request;
+using Mollie.Api.Models.SalesInvoice.Response;
 using Mollie.Tests.Integration.Framework;
 using Shouldly;
 using Xunit;
@@ -19,17 +20,39 @@ public class SalesInvoiceTests : BaseMollieApiTestClass, IDisposable {
         _salesInvoiceClient = salesInvoiceClient;
     }
 
+    [Fact]
+    public async Task CreateSalesInvoiceAsync_WithRequiredFields_SalesInvoiceIsCreated() {
+        // Given: We create a new sales invoice
+        var request = CreateSalesInvoiceRequest();
+
+        // When
+        var response = await _salesInvoiceClient.CreateSalesInvoiceAsync(request);
+
+        // Then
+        AssertSalesInvoice(request, response);
+    }
 
     [Fact]
-    public async Task CanCreateSalesInvoice() {
-        // Given
-        var request = new SalesInvoiceRequest {
+    public async Task GetSalesInvoiceAsync_OrderCanBeRetrieved() {
+        // Given: We create a new sales invoice
+        var salesInvoiceRequest = CreateSalesInvoiceRequest();
+        var createdSalesInvoice = await _salesInvoiceClient.CreateSalesInvoiceAsync(salesInvoiceRequest);
+
+        // When: We retrieve the sales invoice
+        var retrievedSalesInvoice = await _salesInvoiceClient.GetSalesInvoiceAsync(createdSalesInvoice.Id);
+
+        // Then: The retrieved sales invoice should match the created one
+        AssertSalesInvoice(salesInvoiceRequest, retrievedSalesInvoice);
+    }
+
+    private SalesInvoiceRequest CreateSalesInvoiceRequest() {
+        return new SalesInvoiceRequest {
             Currency = Currency.EUR,
             Status = "issued",
             PaymentTerm = "7 days",
             Lines = new[] {
                 new SalesInvoiceLine() {
-                    Description = "Test product",
+                    Description = "Lego Batman",
                     Quantity = 1,
                     VatRate = "21.00",
                     UnitPrice = new Amount(Currency.EUR, 50m)
@@ -48,11 +71,9 @@ public class SalesInvoiceTests : BaseMollieApiTestClass, IDisposable {
                 Locale = Locale.nl_NL
             }
         };
+    }
 
-        // When
-        var response = await _salesInvoiceClient.CreateSalesInvoiceAsync(request);
-
-        // Then
+    private void AssertSalesInvoice(SalesInvoiceRequest request, SalesInvoiceResponse response) {
         response.ShouldNotBeNull();
         response.Id.ShouldNotBeNullOrEmpty();
         response.Resource.ShouldBe("sales-invoice");
@@ -63,8 +84,9 @@ public class SalesInvoiceTests : BaseMollieApiTestClass, IDisposable {
         response.PaymentTerm.ShouldBe(request.PaymentTerm);
         response.Lines.ShouldNotBeNull();
         response.Lines.ShouldHaveSingleItem();
+        //response.Lines.Single().ShouldBeEquivalentTo(response.Lines.Single());
         response.Lines.ShouldContain(l =>
-            l.Description == "Test product" &&
+            l.Description == "Lego Batman" &&
             l.Quantity == 1 &&
             l.VatRate == "21" && // TODO: Report this to Mollie, should be "21.00"
             l.UnitPrice == 50m);

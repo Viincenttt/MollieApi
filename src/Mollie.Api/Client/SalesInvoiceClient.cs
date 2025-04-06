@@ -21,4 +21,8 @@ public class SalesInvoiceClient : BaseMollieClient, ISalesInvoiceClient {
     public async Task<SalesInvoiceResponse> CreateSalesInvoiceAsync(SalesInvoiceRequest salesInvoiceRequest) {
         return await PostAsync<SalesInvoiceResponse>($"sales-invoices", salesInvoiceRequest).ConfigureAwait(false);
     }
+
+    public async Task<SalesInvoiceResponse> GetSalesInvoiceAsync(string salesInvoiceId) {
+        return await GetAsync<SalesInvoiceResponse>($"sales-invoices/{salesInvoiceId}").ConfigureAwait(false);
+    }
 }
