@@ -424,7 +424,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
 
     [Fact]
     public async Task GetOrderListAsync_NoParameters_OrderListIsRetrieved() {
-        // When: Retrieve payment list with default settings
+        // When: Retrieve orders list with default settings
         ListResponse<OrderResponse> response = await _orderClient.GetOrderListAsync();
 
         // Then
