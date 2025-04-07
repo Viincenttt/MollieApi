@@ -1,4 +1,5 @@
 ﻿using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Framework.Authentication.Abstract;
@@ -14,17 +15,25 @@ namespace Mollie.Api.Client {
         public PermissionClient(IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null) : base(mollieSecretManager, httpClient) {
         }
 
-        public async Task<PermissionResponse> GetPermissionAsync(string permissionId) {
+        public async Task<PermissionResponse> GetPermissionAsync(
+            string permissionId, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(permissionId), permissionId);
-            return await GetAsync<PermissionResponse>($"permissions/{permissionId}").ConfigureAwait(false);
+            return await GetAsync<PermissionResponse>(
+                $"permissions/{permissionId}", cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
         }
 
-        public async Task<PermissionResponse> GetPermissionAsync(UrlObjectLink<PermissionResponse> url) {
-            return await GetAsync(url).ConfigureAwait(false);
+        public async Task<PermissionResponse> GetPermissionAsync(
+            UrlObjectLink<PermissionResponse> url, CancellationToken cancellationToken = default) {
+            return await GetAsync(url, cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<PermissionResponse>> GetPermissionListAsync() {
-            return await GetListAsync<ListResponse<PermissionResponse>>("permissions", null, null).ConfigureAwait(false);
+        public async Task<ListResponse<PermissionResponse>> GetPermissionListAsync(
+            CancellationToken cancellationToken = default) {
+            return await GetListAsync<ListResponse<PermissionResponse>>(
+                "permissions", null, null, cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
         }
     }
 }

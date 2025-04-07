@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
 using Mollie.Api.Framework.Authentication.Abstract;
 using Mollie.Api.Models.ClientLink.Request;
 using Mollie.Api.Models.ClientLink.Response;
+using System.Threading;
 
 namespace Mollie.Api.Client {
     public class ClientLinkClient : OauthBaseMollieClient, IClientLinkClient
@@ -24,9 +24,10 @@ namespace Mollie.Api.Client {
             _clientId = clientId;
         }
 
-        public async Task<ClientLinkResponse> CreateClientLinkAsync(ClientLinkRequest request)
+        public async Task<ClientLinkResponse> CreateClientLinkAsync(ClientLinkRequest request, CancellationToken cancellationToken = default)
         {
-            return await PostAsync<ClientLinkResponse>($"client-links", request)
+            return await PostAsync<ClientLinkResponse>(
+                    "client-links", request, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 

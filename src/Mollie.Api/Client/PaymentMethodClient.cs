@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
+﻿﻿using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
@@ -27,7 +28,8 @@ namespace Mollie.Api.Client
             bool includePricing = false,
             string? profileId = null,
             bool testmode = false,
-            string? currency = null) {
+            string? currency = null,
+            CancellationToken cancellationToken = default) {
 
             ValidateRequiredUrlParameter(nameof(paymentMethod), paymentMethod);
 
@@ -39,7 +41,9 @@ namespace Mollie.Api.Client
                 includeIssuers: includeIssuers,
                 includePricing: includePricing);
 
-            return await GetAsync<PaymentMethodResponse>($"methods/{paymentMethod.ToLower()}{queryParameters.ToQueryString()}").ConfigureAwait(false);
+            return await GetAsync<PaymentMethodResponse>(
+                $"methods/{paymentMethod.ToLower()}{queryParameters.ToQueryString()}",
+                cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
         public async Task<ListResponse<PaymentMethodResponse>> GetAllPaymentMethodListAsync(
@@ -47,7 +51,8 @@ namespace Mollie.Api.Client
             Amount? amount = null,
             bool includeIssuers = false,
             bool includePricing = false,
-            string? profileId = null) {
+            string? profileId = null,
+            CancellationToken cancellationToken = default) {
 
             Dictionary<string, string> queryParameters = BuildQueryParameters(
                locale: locale,
@@ -56,7 +61,9 @@ namespace Mollie.Api.Client
                includePricing: includePricing,
                profileId: profileId);
 
-            return await GetListAsync<ListResponse<PaymentMethodResponse>>("methods/all", null, null, queryParameters).ConfigureAwait(false);
+            return await GetListAsync<ListResponse<PaymentMethodResponse>>(
+                "methods/all", null, null, queryParameters,
+                cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
         public async Task<ListResponse<PaymentMethodResponse>> GetPaymentMethodListAsync(
@@ -69,7 +76,8 @@ namespace Mollie.Api.Client
             bool testmode = false,
             Resource? resource = null,
             string? billingCountry = null,
-            string? includeWallets = null) {
+            string? includeWallets = null,
+            CancellationToken cancellationToken = default) {
 
             Dictionary<string, string> queryParameters = BuildQueryParameters(
                sequenceType: sequenceType,
@@ -83,11 +91,15 @@ namespace Mollie.Api.Client
                billingCountry: billingCountry,
                includeWallets: includeWallets);
 
-            return await GetListAsync<ListResponse<PaymentMethodResponse>>("methods", null, null, queryParameters).ConfigureAwait(false);
+            return await GetListAsync<ListResponse<PaymentMethodResponse>>(
+                "methods", null, null, queryParameters,
+                cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<PaymentMethodResponse> GetPaymentMethodAsync(UrlObjectLink<PaymentMethodResponse> url) {
-            return await GetAsync(url).ConfigureAwait(false);
+        public async Task<PaymentMethodResponse> GetPaymentMethodAsync(
+            UrlObjectLink<PaymentMethodResponse> url,
+            CancellationToken cancellationToken = default) {
+            return await GetAsync(url, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
         private Dictionary<string, string> BuildQueryParameters(

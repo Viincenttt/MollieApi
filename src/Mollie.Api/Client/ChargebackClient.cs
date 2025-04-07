@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
 using Mollie.Api.Framework.Authentication.Abstract;
@@ -17,29 +17,34 @@ namespace Mollie.Api.Client {
         public ChargebackClient(IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null) : base(mollieSecretManager, httpClient) {
         }
 
-        public async Task<ChargebackResponse> GetChargebackAsync(string paymentId, string chargebackId, bool testmode = false) {
+        public async Task<ChargebackResponse> GetChargebackAsync(string paymentId, string chargebackId, bool testmode = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(paymentId), paymentId);
             ValidateRequiredUrlParameter(nameof(chargebackId), chargebackId);
             var queryParameters = BuildQueryParameters(testmode);
-            return await GetAsync<ChargebackResponse>($"payments/{paymentId}/chargebacks/{chargebackId}{queryParameters.ToQueryString()}")
+            return await GetAsync<ChargebackResponse>(
+                    $"payments/{paymentId}/chargebacks/{chargebackId}{queryParameters.ToQueryString()}",
+                    cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<ChargebackResponse>> GetChargebackListAsync(string paymentId, string? from = null, int? limit = null, bool testmode = false) {
+        public async Task<ListResponse<ChargebackResponse>> GetChargebackListAsync(string paymentId, string? from = null, int? limit = null, bool testmode = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(paymentId), paymentId);
             var queryParameters = BuildQueryParameters(testmode);
-            return await this
-                .GetListAsync<ListResponse<ChargebackResponse>>($"payments/{paymentId}/chargebacks", from, limit, queryParameters)
+            return await GetListAsync<ListResponse<ChargebackResponse>>(
+                    $"payments/{paymentId}/chargebacks", from, limit, queryParameters, cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<ChargebackResponse>> GetChargebackListAsync(string? profileId = null, bool testmode = false) {
+        public async Task<ListResponse<ChargebackResponse>> GetChargebackListAsync(string? profileId = null, bool testmode = false, CancellationToken cancellationToken = default) {
             var queryParameters = BuildQueryParameters(profileId, testmode);
-            return await GetListAsync<ListResponse<ChargebackResponse>>($"chargebacks", null, null, queryParameters).ConfigureAwait(false);
+            return await GetListAsync<ListResponse<ChargebackResponse>>(
+                "chargebacks", null, null, queryParameters, cancellationToken)
+                .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<ChargebackResponse>> GetChargebackListAsync(UrlObjectLink<ListResponse<ChargebackResponse>> url) {
-            return await GetAsync(url).ConfigureAwait(false);
+        public async Task<ListResponse<ChargebackResponse>> GetChargebackListAsync(UrlObjectLink<ListResponse<ChargebackResponse>> url, CancellationToken cancellationToken = default) {
+            return await GetAsync(url, cancellationToken)
+                .ConfigureAwait(false);
         }
 
         private Dictionary<string, string> BuildQueryParameters(string? profileId, bool testmode) {

@@ -1,18 +1,12 @@
-﻿using Mollie.Api.Models.Onboarding.Request;
-using Mollie.Api.Models.Onboarding.Response;
+﻿using System.Threading;
 using System.Threading.Tasks;
+using Mollie.Api.Models.Onboarding.Request;
+using Mollie.Api.Models.Onboarding.Response;
 
 namespace Mollie.Api.Client.Abstract {
     public interface IOnboardingClient : IBaseMollieClient {
-        /// <summary>
-        /// Get the status of onboarding of the authenticated organization.
-        /// </summary>
-        Task<OnboardingStatusResponse> GetOnboardingStatusAsync();
+        Task<OnboardingStatusResponse> GetOnboardingStatusAsync(CancellationToken cancellationToken = default);
 
-        /// <summary>
-        /// Submit data that will be prefilled in the merchant’s onboarding. Please note that the data
-        /// you submit will only be processed when the onboarding status is needs-data.
-        /// </summary>
-        Task SubmitOnboardingDataAsync(SubmitOnboardingDataRequest request);
+        Task SubmitOnboardingDataAsync(SubmitOnboardingDataRequest request, CancellationToken cancellationToken = default);
     }
 }

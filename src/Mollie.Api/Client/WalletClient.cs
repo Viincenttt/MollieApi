@@ -1,4 +1,5 @@
 ﻿using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Framework.Authentication.Abstract;
@@ -13,8 +14,11 @@ namespace Mollie.Api.Client {
         public WalletClient(IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null) : base(mollieSecretManager, httpClient) {
         }
 
-        public async Task<ApplePayPaymentSessionResponse> RequestApplePayPaymentSessionAsync(ApplePayPaymentSessionRequest request) {
-            return await PostAsync<ApplePayPaymentSessionResponse>("wallets/applepay/sessions", request).ConfigureAwait(false);
+        public async Task<ApplePayPaymentSessionResponse> RequestApplePayPaymentSessionAsync(
+            ApplePayPaymentSessionRequest request, CancellationToken cancellationToken = default) {
+            return await PostAsync<ApplePayPaymentSessionResponse>(
+                "wallets/applepay/sessions", request, cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
         }
     }
 }

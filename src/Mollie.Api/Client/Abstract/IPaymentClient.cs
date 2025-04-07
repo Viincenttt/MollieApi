@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Mollie.Api.Models;
 using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Payment.Request;
@@ -7,7 +8,10 @@ using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client.Abstract {
     public interface IPaymentClient : IBaseMollieClient {
-        Task<PaymentResponse> CreatePaymentAsync(PaymentRequest paymentRequest, bool includeQrCode = false);
+        Task<PaymentResponse> CreatePaymentAsync(
+            PaymentRequest paymentRequest,
+            bool includeQrCode = false,
+            CancellationToken cancellationToken = default);
 
         /// <summary>
         ///	Retrieve a single payment object by its payment identifier.
@@ -30,7 +34,8 @@ namespace Mollie.Api.Client.Abstract {
             bool includeQrCode = false,
             bool includeRemainderDetails = false,
             bool embedRefunds = false,
-            bool embedChargebacks = false);
+            bool embedChargebacks = false,
+            CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Some payment methods are cancellable for an amount of time, usually until the next day. Or as long as the payment status is open. Payments may be cancelled manually from the Dashboard, or automatically by using this endpoint.
@@ -38,7 +43,10 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="paymentId"></param>
         /// <param name="testmode">Oauth - Optional – Set this to true to cancel a test mode payment.</param>
         /// <returns></returns>
-        Task CancelPaymentAsync(string paymentId, bool testmode = false);
+        Task CancelPaymentAsync(
+            string paymentId,
+            bool testmode = false,
+            CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieve all payments created with the current payment profile, ordered from newest to oldest.
@@ -65,21 +73,26 @@ namespace Mollie.Api.Client.Abstract {
             bool includeQrCode = false,
             bool embedRefunds = false,
             bool embedChargebacks = false,
-            SortDirection? sort = null);
+            SortDirection? sort = null,
+            CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieve a list of payments by URL
         /// </summary>
         /// <param name="url">The URL from which to retrieve the payments</param>
         /// <returns></returns>
-        Task<ListResponse<PaymentResponse>> GetPaymentListAsync(UrlObjectLink<ListResponse<PaymentResponse>> url);
+        Task<ListResponse<PaymentResponse>> GetPaymentListAsync(
+            UrlObjectLink<ListResponse<PaymentResponse>> url,
+            CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieve a single payment by URL
         /// </summary>
         /// <param name="url">The URL from which to retrieve the payment</param>
         /// <returns></returns>
-        Task<PaymentResponse> GetPaymentAsync(UrlObjectLink<PaymentResponse> url);
+        Task<PaymentResponse> GetPaymentAsync(
+            UrlObjectLink<PaymentResponse> url,
+            CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint can be used to update some details of a created payment.
@@ -87,6 +100,10 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="paymentId">The payment id to update</param>
         /// <param name="paymentUpdateRequest">The payment parameters to update</param>
         /// <returns></returns>
-        Task<PaymentResponse> UpdatePaymentAsync(string paymentId, PaymentUpdateRequest paymentUpdateRequest);
+        Task<PaymentResponse> UpdatePaymentAsync(
+            string paymentId,
+            PaymentUpdateRequest paymentUpdateRequest,
+            CancellationToken cancellationToken = default);
     }
 }
+

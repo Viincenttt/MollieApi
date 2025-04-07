@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Mollie.Api.Models.Balance.Response;
 using Mollie.Api.Models.Balance.Response.BalanceReport;
@@ -12,22 +13,22 @@ namespace Mollie.Api.Client.Abstract {
         /// Retrieve a single balance object by its balance identifier.
         /// </summary>
         /// <param name="balanceId">The balance identifier to retrieve</param>
-        /// <returns></returns>
-        Task<BalanceResponse> GetBalanceAsync(string balanceId);
+        /// <param name="cancellationToken">Optional cancellation token</param>
+        Task<BalanceResponse> GetBalanceAsync(string balanceId, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieve a single balance object using an URL
         /// </summary>
         /// <param name="url">The URL of the balance object</param>
-        /// <returns></returns>
-        Task<BalanceResponse> GetBalanceAsync(UrlObjectLink<BalanceResponse> url);
+        /// <param name="cancellationToken">Optional cancellation token</param>
+        Task<BalanceResponse> GetBalanceAsync(UrlObjectLink<BalanceResponse> url, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieve the primary balance. This is the balance of your account’s primary currency, where all payments are
         /// settled to by default.
         /// </summary>
-        /// <returns></returns>
-        Task<BalanceResponse> GetPrimaryBalanceAsync();
+        /// <param name="cancellationToken">Optional cancellation token</param>
+        Task<BalanceResponse> GetPrimaryBalanceAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieve all the organization’s balances, including the primary balance, ordered from newest to oldest.
@@ -37,15 +38,18 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="limit">The number of balances to return (with a maximum of 250).</param>
         /// <param name="currency">Currency filter that will make it so only balances in given currency are returned.
         /// For example EUR.</param>
+        /// <param name="cancellationToken">Optional cancellation token</param>
         /// <returns></returns>
-        Task<ListResponse<BalanceResponse>> GetBalanceListAsync(string? from = null, int? limit = null, string? currency = null);
+        Task<ListResponse<BalanceResponse>> GetBalanceListAsync(
+            string? from = null, int? limit = null, string? currency = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieve all the organization’s balances by URL
         /// </summary>
         /// <param name="url">The URL of the balance objects</param>
-        /// <returns></returns>
-        Task<ListResponse<BalanceResponse>> GetBalanceListAsync(UrlObjectLink<ListResponse<BalanceResponse>> url);
+        /// <param name="cancellationToken">Optional cancellation token</param>
+        Task<ListResponse<BalanceResponse>> GetBalanceListAsync(
+            UrlObjectLink<ListResponse<BalanceResponse>> url, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// With the Get balance report endpoint you can retrieve a summarized report for all movements on a given
@@ -60,8 +64,9 @@ namespace Mollie.Api.Client.Abstract {
         /// until 2020-01-31 23:59:59 CET.</param>
         /// <param name="grouping">You can retrieve reports in two different formats: status-balances and
         /// transaction-categories</param>
-        /// <returns></returns>
-        Task<BalanceReportResponse> GetBalanceReportAsync(string balanceId, DateTime from, DateTime until, string? grouping = null);
+        /// <param name="cancellationToken">Optional cancellation token</param>
+        Task<BalanceReportResponse> GetBalanceReportAsync(
+            string balanceId, DateTime from, DateTime until, string? grouping = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// With the Get primary balance report endpoint you can retrieve a summarized report for all movements on your
@@ -75,8 +80,9 @@ namespace Mollie.Api.Client.Abstract {
         /// until 2020-01-31 23:59:59 CET.</param>
         /// <param name="grouping">You can retrieve reports in two different formats: status-balances and
         /// transaction-categories</param>
-        /// <returns></returns>
-        Task<BalanceReportResponse> GetPrimaryBalanceReportAsync(DateTime from, DateTime until, string? grouping = null);
+        /// <param name="cancellationToken">Optional cancellation token</param>
+        Task<BalanceReportResponse> GetPrimaryBalanceReportAsync(
+            DateTime from, DateTime until, string? grouping = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// With the List balance transactions endpoint you can retrieve a list of all the movements on your balance.
@@ -86,8 +92,9 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="from">Offset the result set to the balance transactions with this ID. The balance transaction
         /// with this ID is included in the result set as well.</param>
         /// <param name="limit">The number of balance transactions to return (with a maximum of 250).</param>
-        /// <returns></returns>
-        Task<ListResponse<BalanceTransactionResponse>> GetBalanceTransactionListAsync(string balanceId, string? from = null, int? limit = null);
+        /// <param name="cancellationToken">Optional cancellation token</param>
+        Task<ListResponse<BalanceTransactionResponse>> GetBalanceTransactionListAsync(
+            string balanceId, string? from = null, int? limit = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// With the List primary balance transactions endpoint you can retrieve a list of all the movements on your
@@ -96,14 +103,16 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="from">Offset the result set to the balance transactions with this ID. The balance transaction
         /// with this ID is included in the result set as well.</param>
         /// <param name="limit">The number of balance transactions to return (with a maximum of 250).</param>
-        /// <returns></returns>
-        Task<ListResponse<BalanceTransactionResponse>> GetPrimaryBalanceTransactionListAsync(string? from = null, int? limit = null);
+        /// <param name="cancellationToken">Optional cancellation token</param>
+        Task<ListResponse<BalanceTransactionResponse>> GetPrimaryBalanceTransactionListAsync(
+            string? from = null, int? limit = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieve a list of balance transactions by URL
         /// </summary>
         /// <param name="url">The URL from which to retrieve the balance transactions</param>
-        /// <returns></returns>
-        Task<ListResponse<BalanceTransactionResponse>> GetBalanceTransactionListAsync(UrlObjectLink<ListResponse<BalanceTransactionResponse>> url);
+        /// <param name="cancellationToken">Optional cancellation token</param>
+        Task<ListResponse<BalanceTransactionResponse>> GetBalanceTransactionListAsync(
+            UrlObjectLink<ListResponse<BalanceTransactionResponse>> url, CancellationToken cancellationToken = default);
     }
 }

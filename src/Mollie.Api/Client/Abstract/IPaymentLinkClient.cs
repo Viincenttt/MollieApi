@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Mollie.Api.Models;
 using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Payment.Response;
@@ -12,8 +13,11 @@ namespace Mollie.Api.Client.Abstract {
         /// Create a new payment link
         /// </summary>
         /// <param name="paymentLinkRequest">The payment link request</param>
+        /// <param name="cancellationToken">Token to cancel the operation</param>
         /// <returns></returns>
-        Task<PaymentLinkResponse> CreatePaymentLinkAsync(PaymentLinkRequest paymentLinkRequest);
+        Task<PaymentLinkResponse> CreatePaymentLinkAsync(
+            PaymentLinkRequest paymentLinkRequest,
+            CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Update a payment link
@@ -23,11 +27,13 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="testmode">Most API credentials are specifically created for either live mode or test mode.
         /// In those cases the testmode query parameter can be omitted. For organization-level credentials such as
         /// OAuth access tokens, you can enable test mode by setting the testmode query parameter to true.</param>
+        /// <param name="cancellationToken">Token to cancel the operation</param>
         /// <returns>The updated payment link response</returns>
         Task<PaymentLinkResponse> UpdatePaymentLinkAsync(
             string paymentLinkId,
             PaymentLinkUpdateRequest paymentLinkUpdateRequest,
-            bool testmode = false);
+            bool testmode = false,
+            CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Payment links for which no payments have been made yet can be deleted entirely. This can be useful for
@@ -38,8 +44,13 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="testmode">Most API credentials are specifically created for either live mode or test mode.
         /// In those cases the testmode query parameter can be omitted. For organization-level credentials such as
         /// OAuth access tokens, you can enable test mode by setting the testmode query parameter to true.</param>
+        /// <param name="cancellationToken">Token to cancel the operation</param>
         /// <returns></returns>
-        Task DeletePaymentLinkAsync(string paymentLinkId, string? profileId = null, bool testmode = false);
+        Task DeletePaymentLinkAsync(
+            string paymentLinkId,
+            string? profileId = null,
+            bool testmode = false,
+            CancellationToken cancellationToken = default);
 
         /// <summary>
         ///	Retrieve a single payment link object by its token.
@@ -47,7 +58,11 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="paymentLinkId">The payment link to retrieve</param>
         /// <param name="testmode">Oauth - Optional – Set this to true to get a payment links made in test mode. If you omit
         /// this parameter, you can only retrieve live mode payments.</param>
-        Task<PaymentLinkResponse> GetPaymentLinkAsync(string paymentLinkId, bool testmode = false);
+        /// <param name="cancellationToken">Token to cancel the operation</param>
+        Task<PaymentLinkResponse> GetPaymentLinkAsync(
+            string paymentLinkId,
+            bool testmode = false,
+            CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieve all payment links created with the current payment link profile, ordered from newest to oldest.
@@ -59,23 +74,34 @@ namespace Mollie.Api.Client.Abstract {
         /// parameter to retrieve the payment links of all profiles of the current organization.</param>
         /// <param name="testmode">Set this to true to only retrieve payment links made in test mode. By default, only
         /// live payment links are returned.</param>
+        /// <param name="cancellationToken">Token to cancel the operation</param>
         /// <returns></returns>
 		Task<ListResponse<PaymentLinkResponse>> GetPaymentLinkListAsync(
-            string? from = null, int? limit = null, string? profileId = null, bool testmode = false);
+            string? from = null,
+            int? limit = null,
+            string? profileId = null,
+            bool testmode = false,
+            CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieve a list of payment links by URL
         /// </summary>
         /// <param name="url">The URL from which to retrieve the payment links</param>
+        /// <param name="cancellationToken">Token to cancel the operation</param>
         /// <returns></returns>
-        Task<ListResponse<PaymentLinkResponse>> GetPaymentLinkListAsync(UrlObjectLink<ListResponse<PaymentLinkResponse>> url);
+        Task<ListResponse<PaymentLinkResponse>> GetPaymentLinkListAsync(
+            UrlObjectLink<ListResponse<PaymentLinkResponse>> url,
+            CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieve a single payment link by URL
         /// </summary>
         /// <param name="url">The URL from which to retrieve the payment link</param>
+        /// <param name="cancellationToken">Token to cancel the operation</param>
         /// <returns></returns>
-        Task<PaymentLinkResponse> GetPaymentLinkAsync(UrlObjectLink<PaymentLinkResponse> url);
+        Task<PaymentLinkResponse> GetPaymentLinkAsync(
+            UrlObjectLink<PaymentLinkResponse> url,
+            CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieve the list of payments for a specific payment link.
@@ -90,8 +116,14 @@ namespace Mollie.Api.Client.Abstract {
         /// retrieved when the endpoint is set to live mode, and vice versa.</param>
         /// <param name="sort">Used for setting the direction of the result set. Defaults to descending order, meaning
         /// the results are ordered from newest to oldest.</param>
+        /// <param name="cancellationToken">Token to cancel the operation</param>
         /// <returns></returns>
         Task<ListResponse<PaymentResponse>> GetPaymentLinkPaymentListAsync(
-            string paymentLinkId, string? from = null, int? limit = null, bool testmode = false, SortDirection? sort = null);
+            string paymentLinkId,
+            string? from = null,
+            int? limit = null,
+            bool testmode = false,
+            SortDirection? sort = null,
+            CancellationToken cancellationToken = default);
     }
 }

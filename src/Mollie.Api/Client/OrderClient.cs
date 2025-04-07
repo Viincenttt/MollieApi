@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
@@ -20,60 +21,89 @@ namespace Mollie.Api.Client {
         public OrderClient(IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null) : base(mollieSecretManager, httpClient) {
         }
 
-        public async Task<OrderResponse> CreateOrderAsync(OrderRequest orderRequest) {
-            return await PostAsync<OrderResponse>("orders", orderRequest).ConfigureAwait(false);
+        public async Task<OrderResponse> CreateOrderAsync(
+
+            OrderRequest orderRequest, CancellationToken cancellationToken = default) {
+            return await PostAsync<OrderResponse>("orders", orderRequest, cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
         }
 
-        public async Task<OrderResponse> GetOrderAsync(string orderId, bool embedPayments = false, bool embedRefunds = false, bool embedShipments = false, bool testmode = false) {
+        public async Task<OrderResponse> GetOrderAsync(
+            string orderId, bool embedPayments = false, bool embedRefunds = false, bool embedShipments = false, bool testmode = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(orderId), orderId);
             var queryParameters = BuildQueryParameters(embedPayments, embedRefunds, embedShipments, testmode);
-            return await GetAsync<OrderResponse>($"orders/{orderId}{queryParameters.ToQueryString()}").ConfigureAwait(false);
+            return await GetAsync<OrderResponse>(
+                $"orders/{orderId}{queryParameters.ToQueryString()}", cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
         }
 
-        public async Task<OrderResponse> GetOrderAsync(UrlObjectLink<OrderResponse> url) {
-            return await GetAsync(url).ConfigureAwait(false);
+        public async Task<OrderResponse> GetOrderAsync(
+            UrlObjectLink<OrderResponse> url, CancellationToken cancellationToken = default) {
+            return await GetAsync(url, cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
         }
 
-        public async Task<OrderResponse> UpdateOrderAsync(string orderId, OrderUpdateRequest orderUpdateRequest) {
+        public async Task<OrderResponse> UpdateOrderAsync(
+            string orderId, OrderUpdateRequest orderUpdateRequest, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(orderId), orderId);
-            return await PatchAsync<OrderResponse>($"orders/{orderId}", orderUpdateRequest).ConfigureAwait(false);
+            return await PatchAsync<OrderResponse>(
+                $"orders/{orderId}", orderUpdateRequest, cancellationToken: cancellationToken
+                ).ConfigureAwait(false);
         }
 
-        public async Task<OrderResponse> UpdateOrderLinesAsync(string orderId, string orderLineId, OrderLineUpdateRequest orderLineUpdateRequest) {
+        public async Task<OrderResponse> UpdateOrderLinesAsync(
+            string orderId, string orderLineId, OrderLineUpdateRequest orderLineUpdateRequest, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(orderId), orderId);
             ValidateRequiredUrlParameter(nameof(orderLineId), orderLineId);
-            return await PatchAsync<OrderResponse>($"orders/{orderId}/lines/{orderLineId}", orderLineUpdateRequest).ConfigureAwait(false);
+            return await PatchAsync<OrderResponse>(
+                $"orders/{orderId}/lines/{orderLineId}", orderLineUpdateRequest, cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
         }
 
-        public async Task<OrderResponse> ManageOrderLinesAsync(string orderId, ManageOrderLinesRequest manageOrderLinesRequest) {
+        public async Task<OrderResponse> ManageOrderLinesAsync(
+            string orderId, ManageOrderLinesRequest manageOrderLinesRequest, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(orderId), orderId);
-            return await PatchAsync<OrderResponse>($"orders/{orderId}/lines", manageOrderLinesRequest).ConfigureAwait(false);
+            return await PatchAsync<OrderResponse>(
+                $"orders/{orderId}/lines", manageOrderLinesRequest, cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
         }
 
-        public async Task CancelOrderAsync(string orderId, bool testmode = false) {
+        public async Task CancelOrderAsync(
+            string orderId, bool testmode = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(orderId), orderId);
             var data = TestmodeModel.Create(testmode);
-            await DeleteAsync($"orders/{orderId}", data).ConfigureAwait(false);
+            await DeleteAsync(
+                $"orders/{orderId}", data, cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
         }
 
         public async Task<ListResponse<OrderResponse>> GetOrderListAsync(
-            string? from = null, int? limit = null, string? profileId = null, bool testmode = false, SortDirection? sort = null) {
+            string? from = null, int? limit = null, string? profileId = null, bool testmode = false, SortDirection? sort = null, CancellationToken cancellationToken = default) {
             var queryParameters = BuildQueryParameters(profileId, testmode, sort);
-            return await GetListAsync<ListResponse<OrderResponse>>($"orders", from, limit, queryParameters).ConfigureAwait(false);
+            return await GetListAsync<ListResponse<OrderResponse>>(
+                "orders", from, limit, queryParameters, cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<OrderResponse>> GetOrderListAsync(UrlObjectLink<ListResponse<OrderResponse>> url) {
-            return await GetAsync(url).ConfigureAwait(false);
+        public async Task<ListResponse<OrderResponse>> GetOrderListAsync(
+            UrlObjectLink<ListResponse<OrderResponse>> url, CancellationToken cancellationToken = default) {
+            return await GetAsync(url, cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
         }
 
-        public async Task CancelOrderLinesAsync(string orderId, OrderLineCancellationRequest cancelationRequest) {
+        public async Task CancelOrderLinesAsync(
+            string orderId, OrderLineCancellationRequest cancelationRequest, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(orderId), orderId);
-            await DeleteAsync($"orders/{orderId}/lines", cancelationRequest).ConfigureAwait(false);
+            await DeleteAsync($"orders/{orderId}/lines", cancelationRequest, cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
         }
 
-        public async Task<PaymentResponse> CreateOrderPaymentAsync(string orderId, OrderPaymentRequest createOrderPaymentRequest) {
+        public async Task<PaymentResponse> CreateOrderPaymentAsync(
+            string orderId, OrderPaymentRequest createOrderPaymentRequest, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(orderId), orderId);
-            return await PostAsync<PaymentResponse>($"orders/{orderId}/payments", createOrderPaymentRequest).ConfigureAwait(false);
+            return await PostAsync<PaymentResponse>(
+                $"orders/{orderId}/payments", createOrderPaymentRequest, cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
         }
 
         private Dictionary<string, string> BuildQueryParameters(string? profileId = null, bool testmode = false, SortDirection? sort = null) {

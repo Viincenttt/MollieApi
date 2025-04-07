@@ -1,4 +1,5 @@
 ﻿using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Framework.Authentication.Abstract;
@@ -18,8 +19,9 @@ public class CapabilityClient : BaseMollieClient, ICapabilityClient {
     {
     }
 
-    public async Task<ListResponse<CapabilityResponse>> GetCapabilitiesListAsync() {
-        return await GetListAsync<ListResponse<CapabilityResponse>>("capabilities", from: null, limit: null)
+    public async Task<ListResponse<CapabilityResponse>> GetCapabilitiesListAsync(CancellationToken cancellationToken = default) {
+        return await GetListAsync<ListResponse<CapabilityResponse>>(
+                "capabilities", from: null, limit: null, cancellationToken: cancellationToken)
             .ConfigureAwait(false);
     }
 }

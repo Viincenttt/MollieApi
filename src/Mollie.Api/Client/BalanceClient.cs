@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Mollie.Api.Client.Abstract;
@@ -21,59 +22,69 @@ namespace Mollie.Api.Client {
         public BalanceClient(IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null) : base(mollieSecretManager, httpClient) {
         }
 
-        public async Task<BalanceResponse> GetBalanceAsync(string balanceId) {
+        public async Task<BalanceResponse> GetBalanceAsync(string balanceId, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(balanceId), balanceId);
-            return await GetAsync<BalanceResponse>($"balances/{balanceId}").ConfigureAwait(false);
+            return await GetAsync<BalanceResponse>($"balances/{balanceId}", cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
         }
 
-        public async Task<BalanceResponse> GetBalanceAsync(UrlObjectLink<BalanceResponse> url) {
-            return await GetAsync(url).ConfigureAwait(false);
+        public async Task<BalanceResponse> GetBalanceAsync(UrlObjectLink<BalanceResponse> url, CancellationToken cancellationToken = default) {
+            return await GetAsync(url, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<BalanceResponse> GetPrimaryBalanceAsync() {
-            return await GetAsync<BalanceResponse>("balances/primary").ConfigureAwait(false);
+        public async Task<BalanceResponse> GetPrimaryBalanceAsync(CancellationToken cancellationToken = default) {
+            return await GetAsync<BalanceResponse>("balances/primary", cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<BalanceResponse>> GetBalanceListAsync(string? from = null, int? limit = null, string? currency = null) {
+        public async Task<ListResponse<BalanceResponse>> GetBalanceListAsync(
+            string? from = null, int? limit = null, string? currency = null, CancellationToken cancellationToken = default) {
             var queryParameters = BuildListBalanceQueryParameters(currency);
-            return await GetListAsync<ListResponse<BalanceResponse>>($"balances", from, limit, queryParameters).ConfigureAwait(false);
-        }
-
-        public async Task<ListResponse<BalanceResponse>> GetBalanceListAsync(UrlObjectLink<ListResponse<BalanceResponse>> url) {
-            return await GetAsync(url).ConfigureAwait(false);
-        }
-
-        public async Task<BalanceReportResponse> GetBalanceReportAsync(string balanceId, DateTime from, DateTime until, string? grouping = null) {
-            ValidateRequiredUrlParameter(nameof(balanceId), balanceId);
-            var queryParameters = BuildGetBalanceReportQueryParameters(from, until, grouping);
-            return await GetAsync<BalanceReportResponse>($"balances/{balanceId}/report{queryParameters.ToQueryString()}").ConfigureAwait(false);
-        }
-
-        public async Task<BalanceReportResponse> GetPrimaryBalanceReportAsync(DateTime from, DateTime until, string? grouping = null) {
-            var queryParameters = BuildGetBalanceReportQueryParameters(from, until, grouping);
-            return await GetAsync<BalanceReportResponse>($"balances/primary/report{queryParameters.ToQueryString()}").ConfigureAwait(false);
-        }
-
-        public async Task<ListResponse<BalanceTransactionResponse>> GetBalanceTransactionListAsync(string balanceId, string? from = null, int? limit = null) {
-            ValidateRequiredUrlParameter(nameof(balanceId), balanceId);
-            return await GetListAsync<ListResponse<BalanceTransactionResponse>>($"balances/{balanceId}/transactions", from, limit)
+            return await GetListAsync<ListResponse<BalanceResponse>>(
+                $"balances", from, limit, queryParameters, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<BalanceTransactionResponse>>  GetPrimaryBalanceTransactionListAsync(string? from = null, int? limit = null) {
-            return await GetListAsync<ListResponse<BalanceTransactionResponse>>($"balances/primary/transactions", from, limit)
+        public async Task<ListResponse<BalanceResponse>> GetBalanceListAsync(
+            UrlObjectLink<ListResponse<BalanceResponse>> url, CancellationToken cancellationToken = default) {
+            return await GetAsync(url, cancellationToken: cancellationToken).ConfigureAwait(false);
+        }
+
+        public async Task<BalanceReportResponse> GetBalanceReportAsync(
+            string balanceId, DateTime from, DateTime until, string? grouping = null, CancellationToken cancellationToken = default) {
+            ValidateRequiredUrlParameter(nameof(balanceId), balanceId);
+            var queryParameters = BuildGetBalanceReportQueryParameters(from, until, grouping);
+            return await GetAsync<BalanceReportResponse>(
+                $"balances/{balanceId}/report{queryParameters.ToQueryString()}", cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<BalanceTransactionResponse>> GetBalanceTransactionListAsync(UrlObjectLink<ListResponse<BalanceTransactionResponse>> url) {
-            return await GetAsync(url).ConfigureAwait(false);
+        public async Task<BalanceReportResponse> GetPrimaryBalanceReportAsync(
+            DateTime from, DateTime until, string? grouping = null, CancellationToken cancellationToken = default) {
+            var queryParameters = BuildGetBalanceReportQueryParameters(from, until, grouping);
+            return await GetAsync<BalanceReportResponse>(
+                $"balances/primary/report{queryParameters.ToQueryString()}", cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
         }
 
-        private Dictionary<string, string> BuildListBalanceTransactionsQueryParameters(string? from, int? limit) {
-            var result = new Dictionary<string, string>();
-            result.AddValueIfNotNullOrEmpty("from", from);
-            result.AddValueIfNotNullOrEmpty("limit", limit?.ToString(CultureInfo.InvariantCulture));
-            return result;
+        public async Task<ListResponse<BalanceTransactionResponse>> GetBalanceTransactionListAsync(
+            string balanceId, string? from = null, int? limit = null, CancellationToken cancellationToken = default) {
+            ValidateRequiredUrlParameter(nameof(balanceId), balanceId);
+            return await GetListAsync<ListResponse<BalanceTransactionResponse>>(
+                    $"balances/{balanceId}/transactions", from, limit, cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        public async Task<ListResponse<BalanceTransactionResponse>> GetPrimaryBalanceTransactionListAsync(
+            string? from = null, int? limit = null, CancellationToken cancellationToken = default) {
+            return await GetListAsync<ListResponse<BalanceTransactionResponse>>(
+                    $"balances/primary/transactions", from, limit, cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        public async Task<ListResponse<BalanceTransactionResponse>> GetBalanceTransactionListAsync(
+            UrlObjectLink<ListResponse<BalanceTransactionResponse>> url, CancellationToken cancellationToken = default) {
+            return await GetAsync(url, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
         private Dictionary<string, string> BuildGetBalanceReportQueryParameters(DateTime from, DateTime until, string? grouping = null) {
