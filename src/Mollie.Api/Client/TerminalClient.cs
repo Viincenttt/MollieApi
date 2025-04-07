@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
@@ -16,22 +17,31 @@ namespace Mollie.Api.Client {
         public TerminalClient(IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null) : base(mollieSecretManager, httpClient) {
         }
 
-        public async Task<TerminalResponse> GetTerminalAsync(string terminalId) {
+        public async Task<TerminalResponse> GetTerminalAsync(
+            string terminalId, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(terminalId), terminalId);
-            return await GetAsync<TerminalResponse>($"terminals/{terminalId}").ConfigureAwait(false);
+            return await GetAsync<TerminalResponse>(
+                $"terminals/{terminalId}", cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
         }
 
-        public async Task<TerminalResponse> GetTerminalAsync(UrlObjectLink<TerminalResponse> url) {
-            return await GetAsync(url).ConfigureAwait(false);
+        public async Task<TerminalResponse> GetTerminalAsync(
+            UrlObjectLink<TerminalResponse> url, CancellationToken cancellationToken = default) {
+            return await GetAsync(url, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<TerminalResponse>> GetTerminalListAsync(string? from = null, int? limit = null, string? profileId = null, bool testmode = false) {
+        public async Task<ListResponse<TerminalResponse>> GetTerminalListAsync(
+            string? from = null, int? limit = null, string? profileId = null, bool testmode = false, CancellationToken cancellationToken = default) {
             var queryParameters = BuildQueryParameters(profileId, testmode);
-            return await GetListAsync<ListResponse<TerminalResponse>>("terminals", from, limit, queryParameters).ConfigureAwait(false);
+            return await GetListAsync<ListResponse<TerminalResponse>>(
+                "terminals", from, limit, queryParameters, cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<TerminalResponse>> GetTerminalListAsync(UrlObjectLink<ListResponse<TerminalResponse>> url) {
-            return await GetAsync(url).ConfigureAwait(false);
+        public async Task<ListResponse<TerminalResponse>> GetTerminalListAsync(
+            UrlObjectLink<ListResponse<TerminalResponse>> url, CancellationToken cancellationToken = default) {
+            return await GetAsync(url, cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
         }
 
         private Dictionary<string, string> BuildQueryParameters(string? profileId, bool testmode) {

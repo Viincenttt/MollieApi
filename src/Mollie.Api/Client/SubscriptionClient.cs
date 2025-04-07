@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
@@ -19,59 +20,86 @@ namespace Mollie.Api.Client {
         public SubscriptionClient(IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null) : base(mollieSecretManager, httpClient) {
         }
 
-        public async Task<ListResponse<SubscriptionResponse>> GetSubscriptionListAsync(string customerId, string? from = null, int? limit = null, string? profileId = null, bool testmode = false) {
+        public async Task<ListResponse<SubscriptionResponse>> GetSubscriptionListAsync(
+            string customerId, string? from = null, int? limit = null, string? profileId = null, bool testmode = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(customerId), customerId);
             var queryParameters = BuildQueryParameters(profileId, testmode);
-            return await GetListAsync<ListResponse<SubscriptionResponse>>($"customers/{customerId}/subscriptions", from, limit, queryParameters)
+            return await GetListAsync<ListResponse<SubscriptionResponse>>(
+                    $"customers/{customerId}/subscriptions", from, limit, queryParameters,
+                    cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<SubscriptionResponse>> GetAllSubscriptionList(string? from = null, int? limit = null, string? profileId = null, bool testmode = false) {
+        public async Task<ListResponse<SubscriptionResponse>> GetAllSubscriptionList(
+            string? from = null, int? limit = null, string? profileId = null, bool testmode = false, CancellationToken cancellationToken = default) {
             var queryParameters = BuildQueryParameters(profileId, testmode);
-            return await GetListAsync<ListResponse<SubscriptionResponse>>($"subscriptions", from, limit, queryParameters)
+            return await GetListAsync<ListResponse<SubscriptionResponse>>(
+                    "subscriptions", from, limit, queryParameters, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<SubscriptionResponse>> GetSubscriptionListAsync(UrlObjectLink<ListResponse<SubscriptionResponse>> url) {
-            return await GetAsync(url).ConfigureAwait(false);
+        public async Task<ListResponse<SubscriptionResponse>> GetSubscriptionListAsync(
+            UrlObjectLink<ListResponse<SubscriptionResponse>> url, CancellationToken cancellationToken = default) {
+            return await GetAsync(url, cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
         }
 
-        public async Task<SubscriptionResponse> GetSubscriptionAsync(UrlObjectLink<SubscriptionResponse> url) {
-            return await GetAsync(url).ConfigureAwait(false);
+        public async Task<SubscriptionResponse> GetSubscriptionAsync(
+            UrlObjectLink<SubscriptionResponse> url, CancellationToken cancellationToken = default) {
+            return await GetAsync(url, cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
         }
 
-        public async Task<SubscriptionResponse> GetSubscriptionAsync(string customerId, string subscriptionId, bool testmode = false) {
+        public async Task<SubscriptionResponse> GetSubscriptionAsync(
+            string customerId, string subscriptionId, bool testmode = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(customerId), customerId);
             ValidateRequiredUrlParameter(nameof(subscriptionId), subscriptionId);
             var queryParameters = BuildQueryParameters(testmode);
-            return await GetAsync<SubscriptionResponse>($"customers/{customerId}/subscriptions/{subscriptionId}{queryParameters.ToQueryString()}")
+            return await GetAsync<SubscriptionResponse>(
+                    $"customers/{customerId}/subscriptions/{subscriptionId}{queryParameters.ToQueryString()}",
+                    cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<SubscriptionResponse> CreateSubscriptionAsync(string customerId, SubscriptionRequest request) {
+        public async Task<SubscriptionResponse> CreateSubscriptionAsync(
+            string customerId, SubscriptionRequest request, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(customerId), customerId);
-            return await PostAsync<SubscriptionResponse>($"customers/{customerId}/subscriptions", request)
+            return await PostAsync<SubscriptionResponse>(
+                    $"customers/{customerId}/subscriptions", request,
+                    cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task CancelSubscriptionAsync(string customerId, string subscriptionId, bool testmode = false) {
+        public async Task CancelSubscriptionAsync(
+            string customerId, string subscriptionId, bool testmode = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(customerId), customerId);
             ValidateRequiredUrlParameter(nameof(subscriptionId), subscriptionId);
             var data = TestmodeModel.Create(testmode);
-            await DeleteAsync($"customers/{customerId}/subscriptions/{subscriptionId}", data).ConfigureAwait(false);
+            await DeleteAsync(
+                $"customers/{customerId}/subscriptions/{subscriptionId}", data,
+                cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
         }
 
-        public async Task<SubscriptionResponse> UpdateSubscriptionAsync(string customerId, string subscriptionId, SubscriptionUpdateRequest request) {
+        public async Task<SubscriptionResponse> UpdateSubscriptionAsync(
+            string customerId, string subscriptionId, SubscriptionUpdateRequest request, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(customerId), customerId);
             ValidateRequiredUrlParameter(nameof(subscriptionId), subscriptionId);
-            return await PatchAsync<SubscriptionResponse>($"customers/{customerId}/subscriptions/{subscriptionId}", request).ConfigureAwait(false);
+            return await PatchAsync<SubscriptionResponse>(
+                $"customers/{customerId}/subscriptions/{subscriptionId}", request,
+                cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<PaymentResponse>> GetSubscriptionPaymentListAsync(string customerId, string subscriptionId, string? from = null, int? limit = null, bool testmode = false) {
+        public async Task<ListResponse<PaymentResponse>> GetSubscriptionPaymentListAsync(
+            string customerId, string subscriptionId, string? from = null, int? limit = null, bool testmode = false,
+            CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(customerId), customerId);
             ValidateRequiredUrlParameter(nameof(subscriptionId), subscriptionId);
             var queryParameters = BuildQueryParameters(testmode);
-            return await GetListAsync<ListResponse<PaymentResponse>>($"customers/{customerId}/subscriptions/{subscriptionId}/payments", from, limit, queryParameters)
+            return await GetListAsync<ListResponse<PaymentResponse>>(
+                    $"customers/{customerId}/subscriptions/{subscriptionId}/payments", from, limit,
+                    queryParameters, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
