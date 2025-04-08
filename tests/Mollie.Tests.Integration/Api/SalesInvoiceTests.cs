@@ -178,12 +178,7 @@ public class SalesInvoiceTests : BaseMollieApiTestClass, IDisposable {
         response.PaymentTerm.ShouldBe(request.PaymentTerm);
         response.Lines.ShouldNotBeNull();
         response.Lines.ShouldHaveSingleItem();
-        //response.Lines.Single().ShouldBeEquivalentTo(response.Lines.Single());
-        response.Lines.ShouldContain(l =>
-            l.Description == "Lego Batman" &&
-            l.Quantity == 1 &&
-            l.VatRate == "21" && // TODO: Report this to Mollie, should be "21.00"
-            l.UnitPrice == 50m);
+        response.Lines.Single().ShouldBeEquivalentTo(response.Lines.Single());
         response.Recipient.ShouldNotBeNull();
         response.Recipient.Email.ShouldBe(request.Recipient.Email);
         response.Recipient.FamilyName.ShouldBe(request.Recipient.FamilyName);
@@ -193,8 +188,7 @@ public class SalesInvoiceTests : BaseMollieApiTestClass, IDisposable {
         response.Recipient.City.ShouldBe(request.Recipient.City);
         response.Recipient.Country.ShouldBe(request.Recipient.Country);
         response.RecipientIdentifier.ShouldBe(request.RecipientIdentifier);
-        response.Recipient.Type.ShouldBeNull(); // TODO: Report to Mollie, should be consumer
-        response.Recipient.Locale.ShouldBeNull(); // TODO: Report to Mollie, should be nl_NL
+        response.Recipient.Type.ShouldBe(RecipientType.Consumer);
     }
 
     public void Dispose() {
