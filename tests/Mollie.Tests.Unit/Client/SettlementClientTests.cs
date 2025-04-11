@@ -138,14 +138,16 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task GetSettlementAsync_NoSettlementIdIsGiven_ArgumentExceptionIsThrown(string settlementId) {
+        public async Task GetSettlementAsync_NoSettlementIdIsGiven_ArgumentExceptionIsThrown(string? settlementId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             SettlementClient settlementClient = new SettlementClient("api-key", httpClient);
 
             // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await settlementClient.GetSettlementAsync(settlementId));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'settlementId' is null or empty");
@@ -155,14 +157,16 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task GetSettlementPaymentsListAsync_NoSettlementIdIsGiven_ArgumentExceptionIsThrown(string settlementId) {
+        public async Task GetSettlementPaymentsListAsync_NoSettlementIdIsGiven_ArgumentExceptionIsThrown(string? settlementId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             SettlementClient settlementClient = new SettlementClient("api-key", httpClient);
 
             // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await settlementClient.GetSettlementPaymentListAsync(settlementId));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'settlementId' is null or empty");
@@ -172,14 +176,16 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task GetSettlementRefundsListAsync_NoSettlementIdIsGiven_ArgumentExceptionIsThrown(string settlementId) {
+        public async Task GetSettlementRefundsListAsync_NoSettlementIdIsGiven_ArgumentExceptionIsThrown(string? settlementId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             SettlementClient settlementClient = new SettlementClient("api-key", httpClient);
 
             // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await settlementClient.GetSettlementRefundListAsync(settlementId));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'settlementId' is null or empty");
@@ -189,14 +195,16 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task GetSettlementChargebacksListAsync_NoSettlementIdIsGiven_ArgumentExceptionIsThrown(string settlementId) {
+        public async Task GetSettlementChargebacksListAsync_NoSettlementIdIsGiven_ArgumentExceptionIsThrown(string? settlementId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             SettlementClient settlementClient = new SettlementClient("api-key", httpClient);
 
             // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await settlementClient.GetSettlementChargebackListAsync(settlementId));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'settlementId' is null or empty");
@@ -206,14 +214,16 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task GetSettlementCapturesListAsync_NoSettlementIdIsGiven_ArgumentExceptionIsThrown(string settlementId) {
+        public async Task GetSettlementCapturesListAsync_NoSettlementIdIsGiven_ArgumentExceptionIsThrown(string? settlementId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
-            SettlementClient settlementClient = new SettlementClient("api-key", httpClient);
+            var settlementClient = new SettlementClient("api-key", httpClient);
 
             // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await settlementClient.GetSettlementCaptureListAsync(settlementId));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'settlementId' is null or empty");

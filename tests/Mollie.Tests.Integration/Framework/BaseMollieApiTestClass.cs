@@ -11,14 +11,14 @@ namespace Mollie.Tests.Integration.Framework {
         protected readonly string DefaultRedirectUrl = "http://mysite.com";
         protected readonly string DefaultWebhookUrl = "http://mysite.com/webhook";
 
-        private readonly MollieOptions Configuration =
-            ConfigurationFactory.GetConfiguration().GetSection("Mollie").Get<MollieOptions>();
+        private readonly MollieOptions _configuration;
 
-        protected string ApiKey => Configuration.ApiKey;
-        protected string ClientId => Configuration.ClientId ?? "client-id";
-        protected string ClientSecret => Configuration.ClientSecret ?? "client-secret";
+        protected string ApiKey => _configuration.ApiKey;
+        protected string ClientId => _configuration.ClientId ?? "client-id";
+        protected string ClientSecret => _configuration.ClientSecret ?? "client-secret";
 
         protected BaseMollieApiTestClass() {
+            _configuration = ConfigurationFactory.GetConfiguration().GetSection("Mollie").Get<MollieOptions>()!;
             EnsureTestApiKey(ApiKey);
 
             // Mollie returns a 429 response code (Too many requests) if we send a lot of requests in a short timespan.
@@ -39,30 +39,16 @@ namespace Mollie.Tests.Integration.Framework {
             }
         }
 
-        protected bool IsJsonResultEqual(string json1, string json2) {
+        protected bool IsJsonResultEqual(string? json1, string? json2) {
             return string.Compare(json1, json2, CultureInfo.CurrentCulture,
                 CompareOptions.IgnoreCase | CompareOptions.IgnoreSymbols) == 0;
         }
 
         protected async Task<TResult> ExecuteWithRetry<TResult>(Func<Task<TResult>> apiAction, int numberOfRetries = 3) {
-            MollieApiException exception = null;
+            MollieApiException? exception = null;
             for (int i = 0; i < numberOfRetries; i++) {
                 try {
                     return await apiAction.Invoke();
-                } catch (MollieApiException ex) {
-                    exception = ex;
-                    await Task.Delay(TimeSpan.FromSeconds(1));
-                }
-            }
-
-            throw exception!;
-        }
-
-        protected async Task ExecuteWithRetry(Func<Task> apiAction, int numberOfRetries = 3) {
-            MollieApiException exception = null;
-            for (int i = 0; i < numberOfRetries; i++) {
-                try {
-                    await apiAction.Invoke();
                 } catch (MollieApiException ex) {
                     exception = ex;
                     await Task.Delay(TimeSpan.FromSeconds(1));

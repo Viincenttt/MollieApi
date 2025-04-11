@@ -112,7 +112,7 @@ public class CustomerTests : BaseMollieApiTestClass, IDisposable {
     [Fact]
     public async Task CanCreateCustomerWithJsonMetadata() {
         // If: We create a customer request with json metadata
-        CustomerRequest customerRequest = new CustomerRequest() {
+        var customerRequest = new CustomerRequest() {
             Email =  "johnsmit@mollie.com",
             Name = "Smit",
             Metadata =  "{\"order_id\":\"4.40\"}",

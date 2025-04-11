@@ -86,9 +86,9 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData(null, null, "profile-id", true, SortDirection.Desc, "?profileId=profile-id&testmode=true&sort=desc")]
         [InlineData(null, null, "profile-id", true, SortDirection.Asc, "?profileId=profile-id&testmode=true&sort=asc")]
         public async Task GetOrderListAsync_QueryParameterOptions_CorrectParametersAreAdded(
-            string from,
+            string? from,
             int? limit,
-            string profileId,
+            string? profileId,
             bool testmode,
             SortDirection? sortDirection,
             string expectedQueryString) {
@@ -201,14 +201,16 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task GetOrderAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string orderId) {
+        public async Task GetOrderAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string? orderId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             OrderClient orderClient = new OrderClient("api-key", httpClient);
 
             // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await orderClient.GetOrderAsync(orderId));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'orderId' is null or empty");
@@ -218,14 +220,16 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task UpdateOrderAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string orderId) {
+        public async Task UpdateOrderAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string? orderId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             OrderClient orderClient = new OrderClient("api-key", httpClient);
 
             // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await orderClient.UpdateOrderAsync(orderId, new OrderUpdateRequest()));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'orderId' is null or empty");
@@ -235,14 +239,16 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task UpdateOrderLinesAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string orderId) {
+        public async Task UpdateOrderLinesAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string? orderId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             OrderClient orderClient = new OrderClient("api-key", httpClient);
 
             // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await orderClient.UpdateOrderLinesAsync(orderId, "order-line-id", new OrderLineUpdateRequest()));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'orderId' is null or empty");
@@ -252,14 +258,16 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task UpdateOrderLinesAsync_NoOrderLineIdIsGiven_ArgumentExceptionIsThrown(string orderLineId) {
+        public async Task UpdateOrderLinesAsync_NoOrderLineIdIsGiven_ArgumentExceptionIsThrown(string? orderLineId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             OrderClient orderClient = new OrderClient("api-key", httpClient);
 
             // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await orderClient.UpdateOrderLinesAsync("order-id", orderLineId, new OrderLineUpdateRequest()));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'orderLineId' is null or empty");
@@ -269,7 +277,7 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task ManageOrderLinesAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string orderId) {
+        public async Task ManageOrderLinesAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string? orderId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
@@ -287,7 +295,9 @@ namespace Mollie.Tests.Unit.Client {
 
             // When: We send the request
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () =>
+#pragma warning disable CS8604 // Possible null reference argument.
                 await orderClient.ManageOrderLinesAsync(orderId, request));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'orderId' is null or empty");
@@ -297,14 +307,16 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task CancelOrderAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string orderId) {
+        public async Task CancelOrderAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string? orderId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             OrderClient orderClient = new OrderClient("api-key", httpClient);
 
             // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await orderClient.CancelOrderAsync(orderId));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'orderId' is null or empty");
@@ -314,14 +326,16 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task CreateOrderPaymentAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string orderId) {
+        public async Task CreateOrderPaymentAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string? orderId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             OrderClient orderClient = new OrderClient("api-key", httpClient);
 
             // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await orderClient.CreateOrderPaymentAsync(orderId, new OrderPaymentRequest()));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'orderId' is null or empty");

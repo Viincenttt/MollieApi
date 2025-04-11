@@ -29,7 +29,7 @@ public class DependencyInjectionTests
 
         // Assert
         var assembly = Assembly.GetAssembly(typeof(IPaymentClient));
-        var apiClientInterfaces = assembly
+        var apiClientInterfaces = assembly!
             .GetTypes()
             .Where(type => type.Namespace == typeof(IPaymentClient).Namespace);
         foreach (var apiClientInterface in apiClientInterfaces)

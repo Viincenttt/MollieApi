@@ -15,14 +15,16 @@ public class TerminalClientTests : BaseClientTests {
     [InlineData("")]
     [InlineData(" ")]
     [InlineData(null)]
-    public async Task GetTerminalAsync_NoTerminalIdIsGiven_ArgumentExceptionIsThrown(string terminalId) {
+    public async Task GetTerminalAsync_NoTerminalIdIsGiven_ArgumentExceptionIsThrown(string? terminalId) {
         // Given
         var mockHttp = new MockHttpMessageHandler();
         HttpClient httpClient = mockHttp.ToHttpClient();
         var terminalClient = new TerminalClient("api-key", httpClient);
 
         // When
+#pragma warning disable CS8604 // Possible null reference argument.
         var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await terminalClient.GetTerminalAsync(terminalId));
+#pragma warning restore CS8604 // Possible null reference argument.
 
         // Then
         exception.Message.ShouldBe("Required URL argument 'terminalId' is null or empty");
@@ -66,7 +68,7 @@ public class TerminalClientTests : BaseClientTests {
     [InlineData("from", 50, null, false, "?from=from&limit=50")]
     [InlineData(null, null, "profile-id", false, "?profileId=profile-id")]
     [InlineData(null, null, "profile-id", true, "?profileId=profile-id&testmode=true")]
-    public async Task GetTerminalListAsync_QueryParameterOptions_CorrectParametersAreAdded(string from, int? limit, string profileId, bool testmode, string expectedQueryString) {
+    public async Task GetTerminalListAsync_QueryParameterOptions_CorrectParametersAreAdded(string? from, int? limit, string? profileId, bool testmode, string expectedQueryString) {
         // Given
         string jsonToReturnInMockResponse = CreateTerminalListJsonResponse();
         var mockHttp = CreateMockHttpMessageHandler(

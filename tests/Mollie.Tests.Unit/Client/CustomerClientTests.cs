@@ -23,7 +23,7 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.When($"{BaseMollieClient.ApiEndPoint}{expectedUrl}")
                 .Respond("application/json", DefaultCustomerJsonToReturn);
             HttpClient httpClient = mockHttp.ToHttpClient();
-            CustomerClient customerClient = new CustomerClient("abcde", httpClient);
+            var customerClient = new CustomerClient("abcde", httpClient);
 
             // When: We send the request
             CustomerResponse customerResponse = await customerClient.GetCustomerAsync(customerId, testModeParameter);
@@ -38,13 +38,13 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("from", null, false, "?from=from")]
         [InlineData("from", 50, false, "?from=from&limit=50")]
         [InlineData(null, null, true, "?testmode=true")]
-        public async Task GetCustomerListAsync_TestModeParameterCase_QueryStringOnlyContainsTestModeParameterIfTrue(string from, int? limit, bool testmode, string expectedQueryString) {
+        public async Task GetCustomerListAsync_TestModeParameterCase_QueryStringOnlyContainsTestModeParameterIfTrue(string? from, int? limit, bool testmode, string expectedQueryString) {
             // Given: We retrieve a list of customers
             var mockHttp = new MockHttpMessageHandler();
             mockHttp.When($"{BaseMollieClient.ApiEndPoint}customers{expectedQueryString}")
                 .Respond("application/json", DefaultCustomerJsonToReturn);
             HttpClient httpClient = mockHttp.ToHttpClient();
-            CustomerClient customerClient = new CustomerClient("abcde", httpClient);
+            var customerClient = new CustomerClient("abcde", httpClient);
 
             // When: We send the request
             var result = await customerClient.GetCustomerListAsync(from, limit, testmode);
@@ -60,14 +60,14 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("from", 50, null, false, "?from=from&limit=50")]
         [InlineData(null, null, null, true, "?testmode=true")]
         [InlineData(null, null, "profile-id", true, "?profileId=profile-id")]
-        public async Task GetCustomerPaymentListAsync_TestModeParameterCase_QueryStringOnlyContainsTestModeParameterIfTrue(string from, int? limit, string profileId, bool testmode, string expectedQueryString) {
+        public async Task GetCustomerPaymentListAsync_TestModeParameterCase_QueryStringOnlyContainsTestModeParameterIfTrue(string? from, int? limit, string? profileId, bool testmode, string expectedQueryString) {
             // Given: We retrieve a list of customers
             const string customerId = "customer-id";
             var mockHttp = new MockHttpMessageHandler();
             mockHttp.When($"{BaseMollieClient.ApiEndPoint}customers/{customerId}/payments{expectedQueryString}")
                 .Respond("application/json", DefaultCustomerJsonToReturn);
             HttpClient httpClient = mockHttp.ToHttpClient();
-            CustomerClient customerClient = new CustomerClient("abcde", httpClient);
+            var customerClient = new CustomerClient("abcde", httpClient);
 
             // When: We send the request
             var result = await customerClient.GetCustomerPaymentListAsync(customerId, from, limit, profileId, testmode);
@@ -84,7 +84,7 @@ namespace Mollie.Tests.Unit.Client {
             string expectedContent = "\"testmode\":true";
             var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Delete, $"{BaseMollieClient.ApiEndPoint}customers/{customerId}", DefaultCustomerJsonToReturn, expectedContent);
             HttpClient httpClient = mockHttp.ToHttpClient();
-            CustomerClient customerClient = new CustomerClient("abcde", httpClient);
+            var customerClient = new CustomerClient("abcde", httpClient);
 
             // When: We send the request
             await customerClient.DeleteCustomerAsync(customerId, true);
@@ -97,14 +97,16 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task UpdateCustomerAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string customerId) {
+        public async Task UpdateCustomerAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string? customerId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
-            CustomerClient customerClient = new CustomerClient("api-key", httpClient);
+            var customerClient = new CustomerClient("api-key", httpClient);
 
             // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await customerClient.UpdateCustomerAsync(customerId, new CustomerRequest()));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'customerId' is null or empty");
@@ -114,14 +116,16 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task DeleteCustomerAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string customerId) {
+        public async Task DeleteCustomerAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string? customerId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
-            CustomerClient customerClient = new CustomerClient("api-key", httpClient);
+            var customerClient = new CustomerClient("api-key", httpClient);
 
             // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await customerClient.DeleteCustomerAsync(customerId));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'customerId' is null or empty");
@@ -131,14 +135,16 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task GetCustomerAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string customerId) {
+        public async Task GetCustomerAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string? customerId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
-            CustomerClient customerClient = new CustomerClient("api-key", httpClient);
+            var customerClient = new CustomerClient("api-key", httpClient);
 
             // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await customerClient.GetCustomerAsync(customerId));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'customerId' is null or empty");
@@ -148,14 +154,16 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task GetCustomerPaymentListAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string customerId) {
+        public async Task GetCustomerPaymentListAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string? customerId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
-            CustomerClient customerClient = new CustomerClient("api-key", httpClient);
+            var customerClient = new CustomerClient("api-key", httpClient);
 
             // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await customerClient.GetCustomerPaymentListAsync(customerId));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'customerId' is null or empty");
@@ -165,11 +173,11 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task CreateCustomerPayment_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string customerId) {
+        public async Task CreateCustomerPayment_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string? customerId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
-            CustomerClient customerClient = new CustomerClient("api-key", httpClient);
+            var customerClient = new CustomerClient("api-key", httpClient);
             var paymentRequest = new PaymentRequest()
             {
                 Amount = new Amount(Currency.EUR, 100),
@@ -177,7 +185,9 @@ namespace Mollie.Tests.Unit.Client {
             };
 
             // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await customerClient.CreateCustomerPayment(customerId, paymentRequest));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'customerId' is null or empty");

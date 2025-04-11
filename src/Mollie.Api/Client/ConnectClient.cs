@@ -18,7 +18,7 @@ namespace Mollie.Api.Client {
         private readonly string _clientId;
         private readonly string _clientSecret;
 
-        public ConnectClient(string clientId, string clientSecret, HttpClient? httpClient = null): base(httpClient, ConnectClient.TokenEndPoint) {
+        public ConnectClient(string? clientId, string? clientSecret, HttpClient? httpClient = null): base(httpClient, ConnectClient.TokenEndPoint) {
             if (string.IsNullOrWhiteSpace(clientId)) {
                 throw new ArgumentNullException(nameof(clientId));
             }
@@ -27,8 +27,8 @@ namespace Mollie.Api.Client {
                 throw new ArgumentNullException(nameof(clientSecret));
             }
 
-            _clientSecret = clientSecret;
-            _clientId = clientId;
+            _clientSecret = clientSecret!;
+            _clientId = clientId!;
         }
 
         public string GetAuthorizationUrl(

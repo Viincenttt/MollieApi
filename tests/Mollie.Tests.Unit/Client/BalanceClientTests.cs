@@ -58,14 +58,16 @@ namespace Mollie.Tests.Unit.Client {
       [InlineData("")]
       [InlineData(" ")]
       [InlineData(null)]
-      public async Task GetBalanceAsync_NoBalanceIdIsGiven_ArgumentExceptionIsThrown(string balanceId) {
+      public async Task GetBalanceAsync_NoBalanceIdIsGiven_ArgumentExceptionIsThrown(string? balanceId) {
           // Arrange
           var mockHttp = new MockHttpMessageHandler();
           HttpClient httpClient = mockHttp.ToHttpClient();
           BalanceClient balanceClient = new BalanceClient("api-key", httpClient);
 
           // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
           var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await balanceClient.GetBalanceAsync(balanceId));
+#pragma warning restore CS8604 // Possible null reference argument.
 
           // Then
           exception.Message.ShouldBe("Required URL argument 'balanceId' is null or empty");
@@ -159,7 +161,7 @@ namespace Mollie.Tests.Unit.Client {
           var childSubTotals = specificBalanceReport.Totals.Payments.Pending.Subtotals.First();
           childSubTotals.TransactionType.ShouldBe("payment");
           childSubTotals.Count.ShouldBe(36);
-          var childChildSubTotals = childSubTotals.Subtotals.First();
+          var childChildSubTotals = childSubTotals.Subtotals!.First();
           childChildSubTotals.Method.ShouldBe("ideal");
       }
 
@@ -167,7 +169,7 @@ namespace Mollie.Tests.Unit.Client {
       [InlineData("")]
       [InlineData(" ")]
       [InlineData(null)]
-      public async Task GetBalanceReportAsync_NoBalanceIdIsGiven_ArgumentExceptionIsThrown(string balanceId) {
+      public async Task GetBalanceReportAsync_NoBalanceIdIsGiven_ArgumentExceptionIsThrown(string? balanceId) {
           // Arrange
           var mockHttp = new MockHttpMessageHandler();
           HttpClient httpClient = mockHttp.ToHttpClient();
@@ -176,7 +178,9 @@ namespace Mollie.Tests.Unit.Client {
           DateTime until = new DateTime(2022, 11, 30);
 
           // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
           var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await balanceClient.GetBalanceReportAsync(balanceId, from, until));
+#pragma warning restore CS8604 // Possible null reference argument.
 
           // Then
           exception.Message.ShouldBe("Required URL argument 'balanceId' is null or empty");
@@ -216,7 +220,7 @@ namespace Mollie.Tests.Unit.Client {
           specificBalanceReport.Totals.AvailableBalance.MovedFromPending.Amount.Currency.ShouldBe(Currency.EUR);
           var childSubTotals = specificBalanceReport.Totals.AvailableBalance.MovedFromPending.Subtotals.First();
           childSubTotals.TransactionType.ShouldBe("payment");
-          var childChildSubtotals = childSubTotals.Subtotals.First();
+          var childChildSubtotals = childSubTotals.Subtotals!.First();
           childChildSubtotals.Method.ShouldBe("ideal");
       }
 
@@ -234,8 +238,7 @@ namespace Mollie.Tests.Unit.Client {
 
           // Then: Response should be parsed
           mockHttp.VerifyNoOutstandingExpectation();
-          balanceTransactions?.Items?.ShouldNotBeNull();
-          balanceTransactions.Count.ShouldBe(balanceTransactions.Items.Count());
+          balanceTransactions.Count.ShouldBe(balanceTransactions.Items.Count);
           var transaction = balanceTransactions.Items.First();
           transaction.Resource.ShouldBe("balance_transactions");
           transaction.Id.ShouldBe("baltr_9S8yk4FFqqi2Qm6K3rqRH");
@@ -254,14 +257,16 @@ namespace Mollie.Tests.Unit.Client {
       [InlineData("")]
       [InlineData(" ")]
       [InlineData(null)]
-      public async Task ListBalanceTransactionsAsync_NoBalanceIdIsGiven_ArgumentExceptionIsThrown(string balanceId) {
+      public async Task ListBalanceTransactionsAsync_NoBalanceIdIsGiven_ArgumentExceptionIsThrown(string? balanceId) {
           // Arrange
           var mockHttp = new MockHttpMessageHandler();
           HttpClient httpClient = mockHttp.ToHttpClient();
           BalanceClient balanceClient = new BalanceClient("api-key", httpClient);
 
           // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
           var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await balanceClient.GetBalanceTransactionListAsync(balanceId));
+#pragma warning restore CS8604 // Possible null reference argument.
 
           // Then
           exception.Message.ShouldBe("Required URL argument 'balanceId' is null or empty");
@@ -280,8 +285,7 @@ namespace Mollie.Tests.Unit.Client {
 
           // Then: Response should be parsed
           mockHttp.VerifyNoOutstandingExpectation();
-          balanceTransactions?.Items?.ShouldNotBeNull();
-          balanceTransactions.Count.ShouldBe(balanceTransactions.Items.Count());
+          balanceTransactions.Count.ShouldBe(balanceTransactions.Items.Count);
       }
 
       private readonly string DefaultListBalanceTransactionsResponse = @"

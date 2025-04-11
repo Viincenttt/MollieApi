@@ -88,7 +88,7 @@ public class ClientClientTests : BaseClientTests {
     [InlineData("from", 50, true, true, false, "?from=from&limit=50&embed=organization,onboarding")]
     [InlineData("from", 50, true, true, true, "?from=from&limit=50&embed=organization,onboarding,capabilities")]
     public async Task GetClientListAsync_WithQueryParameters_QueryStringOnlyContainsTestModeParameterIfTrue(
-        string from, int? limit, bool embedOrganization, bool embedOnboarding, bool embedCapabilities, string expectedQueryString) {
+        string? from, int? limit, bool embedOrganization, bool embedOnboarding, bool embedCapabilities, string expectedQueryString) {
         // Given: We retrieve a list of clients
         var mockHttp = new MockHttpMessageHandler();
         mockHttp.When($"{BaseMollieClient.ApiEndPoint}clients{expectedQueryString}")

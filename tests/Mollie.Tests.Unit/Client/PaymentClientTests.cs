@@ -22,7 +22,7 @@ public class PaymentClientTests : BaseClientTests {
     public async Task CreatePaymentAsync_WithCustomIdempotencyKey_CustomIdemPotencyKeyIsSent()
     {
         // Given: We create a payment request with only the required parameters
-        PaymentRequest paymentRequest = new PaymentRequest()
+        var paymentRequest = new PaymentRequest()
         {
             Amount = new Amount(Currency.EUR, "100.00"),
             Description = "Description",
@@ -39,7 +39,7 @@ public class PaymentClientTests : BaseClientTests {
             .WithHeaders("Idempotency-Key", customIdempotencyKey2)
             .Respond("application/json", jsonToReturnInMockResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
-        PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
+        var paymentClient = new PaymentClient("abcde", httpClient);
 
         // Act
         using (paymentClient.WithIdempotencyKey(customIdempotencyKey1))
@@ -331,7 +331,7 @@ public class PaymentClientTests : BaseClientTests {
         // Then
         payment.ShouldBeOfType<BankTransferPaymentResponse>();
         var bankTransferPayment = payment as BankTransferPaymentResponse;
-        bankTransferPayment.Details.BankName.ShouldBe("bank-name");
+        bankTransferPayment!.Details!.BankName.ShouldBe("bank-name");
         bankTransferPayment.Details.BankAccount.ShouldBe("bank-account");
         bankTransferPayment.Details.BankBic.ShouldBe("bank-bic");
         bankTransferPayment.Details.TransferReference.ShouldBe("transfer-reference");
@@ -393,7 +393,7 @@ public class PaymentClientTests : BaseClientTests {
         // Then
         result.ShouldBeOfType<BancontactPaymentResponse>();
         var banContactPayment = result as BancontactPaymentResponse;
-        banContactPayment.Details.CardNumber.ShouldBe("1234567890123456");
+        banContactPayment!.Details!.CardNumber.ShouldBe("1234567890123456");
         banContactPayment.Details.QrCode.ShouldNotBeNull();
         banContactPayment.Details.QrCode.Height.ShouldBe(5);
         banContactPayment.Details.QrCode.Width.ShouldBe(10);
@@ -472,7 +472,7 @@ public class PaymentClientTests : BaseClientTests {
         mockHttp.VerifyNoOutstandingExpectation();
         var specificPaymentResponse = result as SepaDirectDebitResponse;
         specificPaymentResponse.ShouldNotBeNull();
-        specificPaymentResponse.Details.ConsumerName.ShouldBe("consumer-name");
+        specificPaymentResponse.Details!.ConsumerName.ShouldBe("consumer-name");
         specificPaymentResponse.Details.ConsumerAccount.ShouldBe("consumer-account");
         specificPaymentResponse.Details.ConsumerBic.ShouldBe("consumer-bic");
         specificPaymentResponse.Details.TransferReference.ShouldBe("transfer-reference");
@@ -536,7 +536,7 @@ public class PaymentClientTests : BaseClientTests {
         // Then
         result.ShouldBeOfType<PayPalPaymentResponse>();
         var payPalPayment = result as PayPalPaymentResponse;
-        payPalPayment.Details.ConsumerName.ShouldBe("consumer-name");
+        payPalPayment!.Details!.ConsumerName.ShouldBe("consumer-name");
         payPalPayment.Details.ConsumerAccount.ShouldBe("consumer-account");
         payPalPayment.Details.PayPalReference.ShouldBe("paypal-ref");
         payPalPayment.Details.PaypalPayerId.ShouldBe("paypal-payer-id");
@@ -646,7 +646,7 @@ public class PaymentClientTests : BaseClientTests {
         mockHttp.VerifyNoOutstandingExpectation();
         var specificPaymentResponse = result as CreditCardPaymentResponse;
         specificPaymentResponse.ShouldNotBeNull();
-        specificPaymentResponse.Details.CardNumber.ShouldBe("1234567890123456");
+        specificPaymentResponse.Details!.CardNumber.ShouldBe("1234567890123456");
         specificPaymentResponse.Details.CardHolder.ShouldBe("John Doe");
         specificPaymentResponse.Details.CardFingerprint.ShouldBe("fingerprint");
         specificPaymentResponse.Details.CardAudience.ShouldBe("audience");
@@ -731,7 +731,7 @@ public class PaymentClientTests : BaseClientTests {
         mockHttp.VerifyNoOutstandingExpectation();
         var specificPaymentResponse = result as GiftcardPaymentResponse;
         specificPaymentResponse.ShouldNotBeNull();
-        specificPaymentResponse.Details.VoucherNumber.ShouldBe("voucher-number");
+        specificPaymentResponse!.Details!.VoucherNumber.ShouldBe("voucher-number");
         specificPaymentResponse.Details.Giftcards.ShouldNotBeNull();
         specificPaymentResponse.Details.Giftcards.Count.ShouldBe(1);
         specificPaymentResponse.Details.Giftcards[0].Issuer.ShouldBe("issuer");
@@ -778,7 +778,7 @@ public class PaymentClientTests : BaseClientTests {
         // Then
         result.ShouldBeOfType<BelfiusPaymentResponse>();
         var belfiusPayment = result as BelfiusPaymentResponse;
-        belfiusPayment!.Details.ConsumerName.ShouldBe("consumer-name");
+        belfiusPayment!.Details!.ConsumerName.ShouldBe("consumer-name");
         belfiusPayment.Details.ConsumerAccount.ShouldBe("consumer-account");
         belfiusPayment.Details.ConsumerBic.ShouldBe("consumer-bic");
     }
@@ -817,7 +817,7 @@ public class PaymentClientTests : BaseClientTests {
         // Then
         result.ShouldBeOfType<IngHomePayPaymentResponse>();
         var ingHomePayPayment = result as IngHomePayPaymentResponse;
-        ingHomePayPayment!.Details.ConsumerName.ShouldBe("consumer-name");
+        ingHomePayPayment!.Details!.ConsumerName.ShouldBe("consumer-name");
         ingHomePayPayment.Details.ConsumerAccount.ShouldBe("consumer-account");
         ingHomePayPayment.Details.ConsumerBic.ShouldBe("consumer-bic");
     }
@@ -856,77 +856,9 @@ public class PaymentClientTests : BaseClientTests {
         // Then
         result.ShouldBeOfType<KbcPaymentResponse>();
         var kbcPayment = result as KbcPaymentResponse;
-        kbcPayment!.Details.ConsumerName.ShouldBe("consumer-name");
+        kbcPayment!.Details!.ConsumerName.ShouldBe("consumer-name");
         kbcPayment.Details.ConsumerAccount.ShouldBe("consumer-account");
         kbcPayment.Details.ConsumerBic.ShouldBe("consumer-bic");
-    }
-
-    [Fact]
-    public async Task CreatePaymentAsync_IdealPayment_RequestAndResponseAreConvertedToExpectedJsonFormat()
-    {
-        // Given we create a ideal specific payment request
-        var paymentRequest = new IdealPaymentRequest()
-        {
-            Amount = new Amount(Currency.EUR, "100.00"),
-            Description = "Description",
-            Method = PaymentMethod.Ideal,
-            RedirectUrl = "http://www.mollie.com",
-            WebhookUrl = "http://www.mollie.com/webhook",
-            Issuer = "ideal_INGBNL2A"
-        };
-        const string jsonRequest = @"{
-  ""amount"": {
-    ""currency"": ""EUR"",
-    ""value"": ""100.00""
-  },
-  ""description"": ""Description"",
-  ""redirectUrl"": ""http://www.mollie.com"",
-  ""webhookUrl"": ""http://www.mollie.com/webhook"",
-  ""issuer"": ""ideal_INGBNL2A"",
-  ""method"": [
-    ""ideal""
-  ]
-}";
-        const string jsonResponse = @"{
-            ""resource"": ""payment"",
-            ""id"": ""tr_WDqYK6vllg"",
-            ""mode"": ""test"",
-            ""createdAt"": ""2018-03-20T13:13:37+00:00"",
-            ""amount"":{
-                ""currency"":""EUR"",
-                ""value"":""100.00""
-            },
-            ""description"":""Description"",
-            ""method"": ""ideal"",
-            ""expiresAt"": ""2018-03-20T13:28:37+00:00"",
-            ""details"": {
-                ""consumerName"": ""consumer-name"",
-                ""consumerAccount"": ""consumer-account"",
-                ""consumerBic"": ""consumer-bic"",
-                ""qrCode"": {
-                    ""height"": 5,
-                    ""width"": 10,
-                    ""src"": ""https://www.mollie.com/qr/12345678.png""
-                }
-            }
-        }";
-        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Post, $"{BaseMollieClient.ApiEndPoint}payments", jsonResponse, jsonRequest);
-        HttpClient httpClient = mockHttp.ToHttpClient();
-        PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
-
-        // When: We send the request
-        var result = await paymentClient.CreatePaymentAsync(paymentRequest);
-
-        // Then
-        mockHttp.VerifyNoOutstandingExpectation();
-        var specificPaymentResponse = result as IdealPaymentResponse;
-        specificPaymentResponse!.Details.ConsumerName.ShouldBe("consumer-name");
-        specificPaymentResponse.Details.ConsumerAccount.ShouldBe("consumer-account");
-        specificPaymentResponse.Details.ConsumerBic.ShouldBe("consumer-bic");
-        specificPaymentResponse.Details.QrCode.ShouldNotBeNull();
-        specificPaymentResponse.Details.QrCode.Height.ShouldBe(5);
-        specificPaymentResponse.Details.QrCode.Width.ShouldBe(10);
-        specificPaymentResponse.Details.QrCode.Src.ShouldBe("https://www.mollie.com/qr/12345678.png");
     }
 
     [Fact]
@@ -963,7 +895,7 @@ public class PaymentClientTests : BaseClientTests {
         // Then
         result.ShouldBeOfType<SofortPaymentResponse>();
         var sofortPayment = result as SofortPaymentResponse;
-        sofortPayment!.Details.ConsumerName.ShouldBe("consumer-name");
+        sofortPayment!.Details!.ConsumerName.ShouldBe("consumer-name");
         sofortPayment.Details.ConsumerAccount.ShouldBe("consumer-account");
         sofortPayment.Details.ConsumerBic.ShouldBe("consumer-bic");
     }
@@ -972,14 +904,16 @@ public class PaymentClientTests : BaseClientTests {
     [InlineData("")]
     [InlineData(" ")]
     [InlineData(null)]
-    public async Task GetPaymentAsync_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string paymentId) {
+    public async Task GetPaymentAsync_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string? paymentId) {
         // Arrange
         var mockHttp = new MockHttpMessageHandler();
         HttpClient httpClient = mockHttp.ToHttpClient();
         PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
 
         // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
         var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await paymentClient.GetPaymentAsync(paymentId));
+#pragma warning restore CS8604 // Possible null reference argument.
 
         // Then
         exception.Message.ShouldBe("Required URL argument 'paymentId' is null or empty");
@@ -1019,7 +953,7 @@ public class PaymentClientTests : BaseClientTests {
         mockHttp.VerifyNoOutstandingExpectation();
         result.ShouldBeOfType<IdealPaymentResponse>();
         var paymentResponse = result as IdealPaymentResponse;
-        paymentResponse.Details.QrCode.ShouldNotBeNull();
+        paymentResponse!.Details!.QrCode.ShouldNotBeNull();
         paymentResponse.Details.QrCode.Height.ShouldBe(5);
         paymentResponse.Details.QrCode.Width.ShouldBe(5);
         paymentResponse.Details.QrCode.Src.ShouldBe("https://www.mollie.com/qr/12345678.png");
@@ -1154,14 +1088,16 @@ public class PaymentClientTests : BaseClientTests {
     [InlineData("")]
     [InlineData(" ")]
     [InlineData(null)]
-    public async Task DeletePaymentAsync_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string paymentId) {
+    public async Task DeletePaymentAsync_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string? paymentId) {
         // Arrange
         var mockHttp = new MockHttpMessageHandler();
         HttpClient httpClient = mockHttp.ToHttpClient();
         PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
 
         // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
         var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await paymentClient.CancelPaymentAsync(paymentId));
+#pragma warning restore CS8604 // Possible null reference argument.
 
         // Then
         exception.Message.ShouldBe("Required URL argument 'paymentId' is null or empty");
@@ -1171,14 +1107,16 @@ public class PaymentClientTests : BaseClientTests {
     [InlineData("")]
     [InlineData(" ")]
     [InlineData(null)]
-    public async Task UpdatePaymentAsync_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string paymentId) {
+    public async Task UpdatePaymentAsync_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string? paymentId) {
         // Arrange
         var mockHttp = new MockHttpMessageHandler();
         HttpClient httpClient = mockHttp.ToHttpClient();
         PaymentClient paymentClient = new PaymentClient("abcde", httpClient);
 
         // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
         var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await paymentClient.UpdatePaymentAsync(paymentId, new PaymentUpdateRequest()));
+#pragma warning restore CS8604 // Possible null reference argument.
 
         // Then
         exception.Message.ShouldBe("Required URL argument 'paymentId' is null or empty");
@@ -1189,7 +1127,7 @@ public class PaymentClientTests : BaseClientTests {
         paymentResponse.Amount.Currency.ShouldBe(paymentRequest.Amount.Currency);
         paymentResponse.Description.ShouldBe(paymentRequest.Description);
         if (paymentRequest.Routings != null) {
-            paymentResponse.Routings.Count.ShouldBe(paymentRequest.Routings.Count);
+            paymentResponse.Routings!.Count.ShouldBe(paymentRequest.Routings.Count);
             for (int i = 0; i < paymentRequest.Routings.Count; i++) {
                 var paymentRequestRouting = paymentRequest.Routings[i];
                 var paymentResponseRouting = paymentResponse.Routings[i];

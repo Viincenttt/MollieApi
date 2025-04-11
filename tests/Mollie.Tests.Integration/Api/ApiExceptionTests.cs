@@ -19,9 +19,9 @@ public class ApiExceptionTests : BaseMollieApiTestClass {
     [Fact]
     public async Task ShouldThrowMollieApiExceptionWhenInvalidParametersAreGiven() {
         // If: we create a payment request with invalid parameters
-        PaymentRequest paymentRequest = new PaymentRequest() {
+        var paymentRequest = new PaymentRequest() {
             Amount = new Amount(Currency.EUR, "100.00"),
-            Description = null,
+            Description = string.Empty,
             RedirectUrl = null
         };
 

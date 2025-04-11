@@ -48,7 +48,7 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.VerifyNoOutstandingExpectation();
             shipmentResponse.ShouldNotBeNull();
             shipmentResponse.OrderId.ShouldBe(orderId);
-            shipmentResponse.Tracking.Carrier.ShouldBe(shipmentRequest.Tracking.Carrier);
+            shipmentResponse.Tracking!.Carrier.ShouldBe(shipmentRequest.Tracking.Carrier);
             shipmentResponse.Tracking.Code.ShouldBe(shipmentRequest.Tracking.Code);
             shipmentResponse.Tracking.Url.ShouldBe(shipmentRequest.Tracking.Url);
         }
@@ -125,7 +125,7 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.VerifyNoOutstandingExpectation();
             shipmentResponse.ShouldNotBeNull();
             shipmentResponse.OrderId.ShouldBe(orderId);
-            shipmentResponse.Tracking.Carrier.ShouldBe(updateShipmentRequest.Tracking.Carrier);
+            shipmentResponse.Tracking!.Carrier.ShouldBe(updateShipmentRequest.Tracking.Carrier);
             shipmentResponse.Tracking.Code.ShouldBe(updateShipmentRequest.Tracking.Code);
             shipmentResponse.Tracking.Url.ShouldBe(updateShipmentRequest.Tracking.Url);
         }
@@ -134,14 +134,16 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task CreateShipmentAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string orderId) {
+        public async Task CreateShipmentAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string? orderId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             ShipmentClient shipmentClient = new ShipmentClient("api-key", httpClient);
 
             // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await shipmentClient.CreateShipmentAsync(orderId, new ShipmentRequest()));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'orderId' is null or empty");
@@ -151,14 +153,16 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task GetShipmentAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string orderId) {
+        public async Task GetShipmentAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string? orderId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             ShipmentClient shipmentClient = new ShipmentClient("api-key", httpClient);
 
             // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await shipmentClient.GetShipmentAsync(orderId, "shipment-id"));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'orderId' is null or empty");
@@ -168,14 +172,16 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task GetShipmentAsync_NoShipmentIdIsGiven_ArgumentExceptionIsThrown(string shipmentId) {
+        public async Task GetShipmentAsync_NoShipmentIdIsGiven_ArgumentExceptionIsThrown(string? shipmentId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             ShipmentClient shipmentClient = new ShipmentClient("api-key", httpClient);
 
             // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await shipmentClient.GetShipmentAsync("order-id", shipmentId));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'shipmentId' is null or empty");
@@ -185,14 +191,16 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task GetShipmentsListAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string orderId) {
+        public async Task GetShipmentsListAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string? orderId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             ShipmentClient shipmentClient = new ShipmentClient("api-key", httpClient);
 
             // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await shipmentClient.GetShipmentListAsync(orderId));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'orderId' is null or empty");
@@ -202,7 +210,7 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task UpdateShipmentAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string orderId) {
+        public async Task UpdateShipmentAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string? orderId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
@@ -216,7 +224,9 @@ namespace Mollie.Tests.Unit.Client {
 
             // When: We send the request
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () =>
+#pragma warning disable CS8604 // Possible null reference argument.
                 await shipmentClient.UpdateShipmentAsync(orderId, "shipment-id", updateRequest));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'orderId' is null or empty");
@@ -226,7 +236,7 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task UpdateShipmentAsync_NoShipmentIdIsGiven_ArgumentExceptionIsThrown(string shipmentId) {
+        public async Task UpdateShipmentAsync_NoShipmentIdIsGiven_ArgumentExceptionIsThrown(string? shipmentId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
@@ -240,7 +250,9 @@ namespace Mollie.Tests.Unit.Client {
 
             // When: We send the request
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () =>
+#pragma warning disable CS8604 // Possible null reference argument.
                 await shipmentClient.UpdateShipmentAsync("order-id", shipmentId, updateRequest));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'shipmentId' is null or empty");

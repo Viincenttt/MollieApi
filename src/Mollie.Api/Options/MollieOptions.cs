@@ -13,13 +13,13 @@ namespace Mollie.Api.Options {
         /// <summary>
         /// (Optional) ClientId used by Connect API
         /// </summary>
-        public string ClientId { get; set; } = string.Empty;
+        public string? ClientId { get; set; } = string.Empty;
 
         /// <summary>
         /// (Optional) ClientSecret used by Connect API
         /// </summary>
         /// <returns></returns>
-        public string ClientSecret { get; set; } = string.Empty;
+        public string? ClientSecret { get; set; } = string.Empty;
 
         /// <summary>
         /// (Optional) Polly retry policy for failed requests
