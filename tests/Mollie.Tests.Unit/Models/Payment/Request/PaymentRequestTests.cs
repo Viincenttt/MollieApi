@@ -11,7 +11,7 @@ namespace Mollie.Tests.Unit.Models.Payment.Request;
 public class PaymentRequestTests {
     [Theory]
     [InlineData(PaymentMethod.CreditCard, typeof(CreditCardPaymentRequest))]
-    [InlineData(PaymentMethod.Ideal, typeof(IdealPaymentRequest))]
+    [InlineData(PaymentMethod.PayPal, typeof(PayPalPaymentRequest))]
     public void CreatePaymentRequest(string paymentMethod, Type expectedType) {
         var amount = new Amount(Currency.EUR, 50m);
         var description = "my-description";
@@ -25,9 +25,9 @@ public class PaymentRequestTests {
                     CardToken = "card-token"
                 };
                 break;
-            case PaymentMethod.Ideal:
-                paymentRequest = new IdealPaymentRequest(paymentRequest) {
-                    Issuer = "ideal_issuer"
+            case PaymentMethod.PayPal:
+                paymentRequest = new PayPalPaymentRequest(paymentRequest) {
+                    DigitalGoods = true
                 };
                 break;
         }

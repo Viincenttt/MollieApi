@@ -35,7 +35,7 @@ namespace Mollie.Tests.Integration.Framework {
             }
 
             if (!apiKey.StartsWith("access") && !apiKey.StartsWith("test")) {
-                //throw new ArgumentException("You should not run these tests on your live key!");
+                throw new ArgumentException("You should not run these tests on your live key!");
             }
         }
 
