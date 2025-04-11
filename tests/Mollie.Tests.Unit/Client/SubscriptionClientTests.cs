@@ -16,7 +16,7 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("from", 50, null, false, "?from=from&limit=50")]
         [InlineData(null, null,null, true, "?testmode=true")]
         [InlineData(null, null,"profile-id", true, "?profileId=profile-id")]
-        public async Task GetSubscriptionListAsync_TestModeParameterCase_QueryStringOnlyContainsTestModeParameterIfTrue(string from, int? limit, string profileId, bool testmode, string expectedQueryString) {
+        public async Task GetSubscriptionListAsync_TestModeParameterCase_QueryStringOnlyContainsTestModeParameterIfTrue(string? from, int? limit, string? profileId, bool testmode, string expectedQueryString) {
             // Given: We retrieve a list of subscriptions
             const string customerId = "customer-id";
 
@@ -24,7 +24,7 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.When($"{BaseMollieClient.ApiEndPoint}customers/customer-id/subscriptions{expectedQueryString}")
                 .Respond("application/json", DefaultSubscriptionJsonToReturn);
             HttpClient httpClient = mockHttp.ToHttpClient();
-            SubscriptionClient subscriptionClient = new SubscriptionClient("abcde", httpClient);
+            var subscriptionClient = new SubscriptionClient("abcde", httpClient);
 
             // When: We send the request
             var result = await subscriptionClient.GetSubscriptionListAsync(customerId, from, limit, profileId, testmode);
@@ -40,13 +40,13 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("from", 50, null, false, "?from=from&limit=50")]
         [InlineData(null, null,null, true, "?testmode=true")]
         [InlineData(null, null,"profile-id", true, "?profileId=profile-id")]
-        public async Task GetAllSubscriptionList_TestModeParameterCase_QueryStringOnlyContainsTestModeParameterIfTrue(string from, int? limit, string profileId, bool testmode, string expectedQueryString) {
+        public async Task GetAllSubscriptionList_TestModeParameterCase_QueryStringOnlyContainsTestModeParameterIfTrue(string? from, int? limit, string? profileId, bool testmode, string expectedQueryString) {
             // Given: We retrieve a list of subscriptions
             var mockHttp = new MockHttpMessageHandler();
             mockHttp.When($"{BaseMollieClient.ApiEndPoint}subscriptions{expectedQueryString}")
                 .Respond("application/json", DefaultSubscriptionJsonToReturn);
             HttpClient httpClient = mockHttp.ToHttpClient();
-            SubscriptionClient subscriptionClient = new SubscriptionClient("abcde", httpClient);
+            var subscriptionClient = new SubscriptionClient("abcde", httpClient);
 
             // When: We send the request
             var result = await subscriptionClient.GetAllSubscriptionList(from, limit, profileId, testmode);
@@ -68,7 +68,7 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.When($"{BaseMollieClient.ApiEndPoint}{expectedUrl}")
                 .Respond("application/json", DefaultSubscriptionJsonToReturn);
             HttpClient httpClient = mockHttp.ToHttpClient();
-            SubscriptionClient subscriptionClient = new SubscriptionClient("abcde", httpClient);
+            var subscriptionClient = new SubscriptionClient("abcde", httpClient);
 
             // When: We send the request
             var result = await subscriptionClient.GetSubscriptionAsync(customerId, subscriptionId, testModeParameter);
@@ -91,7 +91,7 @@ namespace Mollie.Tests.Unit.Client {
                 DefaultSubscriptionJsonToReturn,
                 expectedContent);
             HttpClient httpClient = mockHttp.ToHttpClient();
-            SubscriptionClient subscriptionClient = new SubscriptionClient("abcde", httpClient);
+            var subscriptionClient = new SubscriptionClient("abcde", httpClient);
 
             // When: We send the request
             await subscriptionClient.CancelSubscriptionAsync(customerId, subscriptionId, true);
@@ -105,7 +105,7 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("from", null, false, "?from=from")]
         [InlineData("from", 50, false, "?from=from&limit=50")]
         [InlineData(null, null,true, "?testmode=true")]
-        public async Task GetSubscriptionPaymentListAsync_TestModeParameterCase_QueryStringOnlyContainsTestModeParameterIfTrue(string from, int? limit, bool testmode, string expectedQueryString) {
+        public async Task GetSubscriptionPaymentListAsync_TestModeParameterCase_QueryStringOnlyContainsTestModeParameterIfTrue(string? from, int? limit, bool testmode, string expectedQueryString) {
             // Given: We retrieve a list of subscriptions
             const string customerId = "customer-id";
             const string subscriptionId = "subscription-id";
@@ -113,7 +113,7 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.When($"{BaseMollieClient.ApiEndPoint}customers/{customerId}/subscriptions/{subscriptionId}/payments{expectedQueryString}")
                 .Respond("application/json", DefaultSubscriptionJsonToReturn);
             HttpClient httpClient = mockHttp.ToHttpClient();
-            SubscriptionClient subscriptionClient = new SubscriptionClient("abcde", httpClient);
+            var subscriptionClient = new SubscriptionClient("abcde", httpClient);
 
             // When: We send the request
             var result = await subscriptionClient.GetSubscriptionPaymentListAsync(customerId, subscriptionId, from, limit, testmode);
@@ -127,14 +127,16 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task GetSubscriptionListAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string customerId) {
+        public async Task GetSubscriptionListAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string? customerId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
-            SubscriptionClient subscriptionClient = new SubscriptionClient("api-key", httpClient);
+            var subscriptionClient = new SubscriptionClient("api-key", httpClient);
 
             // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await subscriptionClient.GetSubscriptionListAsync(customerId));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'customerId' is null or empty");
@@ -144,14 +146,16 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task GetSubscriptionAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string customerId) {
+        public async Task GetSubscriptionAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string? customerId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
-            SubscriptionClient subscriptionClient = new SubscriptionClient("api-key", httpClient);
+            var subscriptionClient = new SubscriptionClient("api-key", httpClient);
 
             // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await subscriptionClient.GetSubscriptionAsync(customerId, "subscription-id"));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'customerId' is null or empty");
@@ -161,14 +165,16 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task GetSubscriptionAsync_NoSubscriptionIdIsGiven_ArgumentExceptionIsThrown(string subscriptionId) {
+        public async Task GetSubscriptionAsync_NoSubscriptionIdIsGiven_ArgumentExceptionIsThrown(string? subscriptionId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
-            SubscriptionClient subscriptionClient = new SubscriptionClient("api-key", httpClient);
+            var subscriptionClient = new SubscriptionClient("api-key", httpClient);
 
             // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await subscriptionClient.GetSubscriptionAsync("customer-Id", subscriptionId));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'subscriptionId' is null or empty");
@@ -178,12 +184,12 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task CreateSubscriptionAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string customerId) {
+        public async Task CreateSubscriptionAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string? customerId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
-            SubscriptionClient subscriptionClient = new SubscriptionClient("api-key", httpClient);
-            SubscriptionRequest subscriptionRequest = new SubscriptionRequest {
+            var subscriptionClient = new SubscriptionClient("api-key", httpClient);
+            var subscriptionRequest = new SubscriptionRequest {
                 Amount = new Amount(Currency.EUR, "100.00"),
                 Times = 5,
                 Interval = "1 month",
@@ -194,7 +200,9 @@ namespace Mollie.Tests.Unit.Client {
 
             // When: We send the request
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () =>
+#pragma warning disable CS8604 // Possible null reference argument.
                 await subscriptionClient.CreateSubscriptionAsync(customerId, subscriptionRequest));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'customerId' is null or empty");
@@ -204,14 +212,16 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task CancelSubscriptionAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string customerId) {
+        public async Task CancelSubscriptionAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string? customerId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
-            SubscriptionClient subscriptionClient = new SubscriptionClient("api-key", httpClient);
+            var subscriptionClient = new SubscriptionClient("api-key", httpClient);
 
             // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await subscriptionClient.CancelSubscriptionAsync(customerId, "subscription-id"));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'customerId' is null or empty");
@@ -221,14 +231,16 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task CancelSubscriptionAsync_NoSubscriptionIdIsGiven_ArgumentExceptionIsThrown(string subscriptionId) {
+        public async Task CancelSubscriptionAsync_NoSubscriptionIdIsGiven_ArgumentExceptionIsThrown(string? subscriptionId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
-            SubscriptionClient subscriptionClient = new SubscriptionClient("api-key", httpClient);
+            var subscriptionClient = new SubscriptionClient("api-key", httpClient);
 
             // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await subscriptionClient.CancelSubscriptionAsync("customer-Id", subscriptionId));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'subscriptionId' is null or empty");
@@ -238,14 +250,16 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task UpdateSubscriptionAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string customerId) {
+        public async Task UpdateSubscriptionAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string? customerId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
-            SubscriptionClient subscriptionClient = new SubscriptionClient("api-key", httpClient);
+            var subscriptionClient = new SubscriptionClient("api-key", httpClient);
 
             // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await subscriptionClient.UpdateSubscriptionAsync(customerId, "subscription-id", new SubscriptionUpdateRequest()));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'customerId' is null or empty");
@@ -255,14 +269,16 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task UpdateSubscriptionAsync_NoSubscriptionIdIsGiven_ArgumentExceptionIsThrown(string subscriptionId) {
+        public async Task UpdateSubscriptionAsync_NoSubscriptionIdIsGiven_ArgumentExceptionIsThrown(string? subscriptionId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
-            SubscriptionClient subscriptionClient = new SubscriptionClient("api-key", httpClient);
+            var subscriptionClient = new SubscriptionClient("api-key", httpClient);
 
             // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await subscriptionClient.UpdateSubscriptionAsync("customer-Id", subscriptionId, new SubscriptionUpdateRequest()));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'subscriptionId' is null or empty");
@@ -272,14 +288,16 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task GetSubscriptionPaymentListAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string customerId) {
+        public async Task GetSubscriptionPaymentListAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string? customerId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
-            SubscriptionClient subscriptionClient = new SubscriptionClient("api-key", httpClient);
+            var subscriptionClient = new SubscriptionClient("api-key", httpClient);
 
             // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await subscriptionClient.GetSubscriptionPaymentListAsync(customerId, "subscription-id"));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'customerId' is null or empty");
@@ -289,14 +307,16 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task GetSubscriptionPaymentListAsync_NoSubscriptionIdIsGiven_ArgumentExceptionIsThrown(string subscriptionId) {
+        public async Task GetSubscriptionPaymentListAsync_NoSubscriptionIdIsGiven_ArgumentExceptionIsThrown(string? subscriptionId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
-            SubscriptionClient subscriptionClient = new SubscriptionClient("api-key", httpClient);
+            var subscriptionClient = new SubscriptionClient("api-key", httpClient);
 
             // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await subscriptionClient.GetSubscriptionPaymentListAsync("customer-Id", subscriptionId));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'subscriptionId' is null or empty");

@@ -91,7 +91,7 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("from", null, false, "?from=from")]
         [InlineData("from", 50, false, "?from=from&limit=50")]
         [InlineData(null, null, true, "?testmode=true")]
-        public async Task GetChargebacksListAsync_FromLimitTestmodeQueryParameterOptions_CorrectParametersAreAdded(string from, int? limit, bool testmode, string expectedQueryString) {
+        public async Task GetChargebacksListAsync_FromLimitTestmodeQueryParameterOptions_CorrectParametersAreAdded(string? from, int? limit, bool testmode, string expectedQueryString) {
             // Given: we retrieve the chargeback by id and payment id
             var mockHttp = new MockHttpMessageHandler();
             mockHttp.When($"{BaseMollieClient.ApiEndPoint}payments/{defaultPaymentId}/chargebacks{expectedQueryString}")
@@ -110,7 +110,7 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData(null, false, "")]
         [InlineData("profileId", false, "?profileId=profileId")]
         [InlineData("profileId", true, "?profileId=profileId&testmode=true")]
-        public async Task GetChargebacksListAsync_ProfileTestModeQueryParameterOptions_CorrectParametersAreAdded(string profileId, bool testmode, string expectedQueryString) {
+        public async Task GetChargebacksListAsync_ProfileTestModeQueryParameterOptions_CorrectParametersAreAdded(string? profileId, bool testmode, string expectedQueryString) {
             // Given: we retrieve the chargeback by id and payment id
             var mockHttp = new MockHttpMessageHandler();
             mockHttp.When($"{BaseMollieClient.ApiEndPoint}chargebacks{expectedQueryString}")
@@ -129,14 +129,16 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task GetChargebackAsync_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string paymentId) {
+        public async Task GetChargebackAsync_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string? paymentId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             ChargebackClient chargebackClient = new ChargebackClient("api-key", httpClient);
 
             // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await chargebackClient.GetChargebackAsync(paymentId, "chargeback-id"));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'paymentId' is null or empty");
@@ -146,14 +148,16 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task GetChargebackAsync_NoChargeBackIdIsGiven_ArgumentExceptionIsThrown(string chargebackId) {
+        public async Task GetChargebackAsync_NoChargeBackIdIsGiven_ArgumentExceptionIsThrown(string? chargebackId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             ChargebackClient chargebackClient = new ChargebackClient("api-key", httpClient);
 
             // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await chargebackClient.GetChargebackAsync("payment-id", chargebackId));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'chargebackId' is null or empty");
@@ -163,14 +167,16 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task GetChargebacksListAsync_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string paymentId) {
+        public async Task GetChargebacksListAsync_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string? paymentId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             ChargebackClient chargebackClient = new ChargebackClient("api-key", httpClient);
 
             // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await chargebackClient.GetChargebackListAsync(paymentId: paymentId));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'paymentId' is null or empty");

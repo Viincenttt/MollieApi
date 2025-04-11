@@ -100,7 +100,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
     [Fact]
     public async Task CanCreateDefaultPaymentWithOnlyRequiredFields() {
         // Given: we create a payment request with only the required parameters
-        PaymentRequest paymentRequest = new KbcPaymentRequest {
+        var paymentRequest = new PaymentRequest() {
             Amount = new Amount(Currency.EUR, "100.00"),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl
@@ -289,7 +289,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
     [Fact]
     public async Task CanCreateRecurringPaymentAndRetrieveIt() {
         // When: we create a new recurring payment
-        MandateResponse mandate = await GetFirstValidMandate();
+        MandateResponse? mandate = await GetFirstValidMandate();
         if (mandate != null) {
             CustomerResponse customer = await _customerClient.GetCustomerAsync(mandate.Links.Customer);
             PaymentRequest paymentRequest = new PaymentRequest() {
@@ -362,7 +362,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
 
         // When: We send the payment request to Mollie
         PaymentResponse result = await _paymentClient.CreatePaymentAsync(paymentRequest);
-        CustomMetadataClass metadataResponse = result.GetMetadata<CustomMetadataClass>();
+        CustomMetadataClass? metadataResponse = result.GetMetadata<CustomMetadataClass>();
 
         // Then: Make sure we get the same json result as metadata
         metadataResponse.ShouldNotBeNull();
@@ -422,7 +422,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
     [Fact]
     public async Task CanCreatePaymentWithMandate() {
         // When: We create a payment with a mandate id
-        MandateResponse validMandate = await GetFirstValidMandate();
+        MandateResponse? validMandate = await GetFirstValidMandate();
         if (validMandate != null) {
             CustomerResponse customer = await _customerClient.GetCustomerAsync(validMandate.Links.Customer);
             PaymentRequest paymentRequest = new PaymentRequest() {
@@ -499,7 +499,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
     public async Task CanCreatePointOfSalePayment() {
         // Given
         ListResponse<TerminalResponse> terminals = await _terminalClient.GetTerminalListAsync();
-        TerminalResponse terminal = terminals.Items.FirstOrDefault();
+        TerminalResponse? terminal = terminals.Items.FirstOrDefault();
         if (terminal != null) {
             string terminalId = terminals.Items.First().Id;
             PaymentRequest paymentRequest = new PaymentRequest() {
@@ -519,7 +519,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
             response.RedirectUrl.ShouldBe(paymentRequest.RedirectUrl);
             response.ShouldBeOfType<PointOfSalePaymentResponse>();
             PointOfSalePaymentResponse posResponse = (PointOfSalePaymentResponse)response;
-            posResponse.Details.TerminalId.ShouldBe(paymentRequest.TerminalId);
+            posResponse.Details!.TerminalId.ShouldBe(paymentRequest.TerminalId);
             posResponse.Details.CardNumber.ShouldBeNull();
             posResponse.Details.CardFingerprint.ShouldBeNull();
             posResponse.Details.CardAudience.ShouldBeNull();
@@ -574,12 +574,12 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         paymentResponse.CaptureDelay.ShouldBe(paymentRequest.CaptureDelay);
     }
 
-    private async Task<MandateResponse> GetFirstValidMandate() {
+    private async Task<MandateResponse?> GetFirstValidMandate() {
         ListResponse<CustomerResponse> customers = await _customerClient.GetCustomerListAsync();
 
         foreach (CustomerResponse customer in customers.Items) {
             ListResponse<MandateResponse> customerMandates = await _mandateClient.GetMandateListAsync(customer.Id);
-            MandateResponse firstValidMandate = customerMandates.Items.FirstOrDefault(x => x.Status == MandateStatus.Valid);
+            MandateResponse? firstValidMandate = customerMandates.Items.FirstOrDefault(x => x.Status == MandateStatus.Valid);
             if (firstValidMandate != null) {
                 return firstValidMandate;
             }
@@ -590,15 +590,15 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
 
     public void Dispose()
     {
-        _paymentClient?.Dispose();
-        _customerClient?.Dispose();
-        _mandateClient?.Dispose();
-        _terminalClient?.Dispose();
-        _captureClient?.Dispose();
+        _paymentClient.Dispose();
+        _customerClient.Dispose();
+        _mandateClient.Dispose();
+        _terminalClient.Dispose();
+        _captureClient.Dispose();
     }
 }
 
-public class CustomMetadataClass {
-    public int OrderId { get; set; }
-    public string Description { get; set; }
+public record CustomMetadataClass {
+    public required int OrderId { get; init; }
+    public required string Description { get; init; }
 }

@@ -37,7 +37,8 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("from", null, false, "?from=from")]
         [InlineData("from", 50, false, "?from=from&limit=50")]
         [InlineData(null, null, true, "?testmode=true")]
-        public async Task GetMandateListAsync_TestModeParameterCase_QueryStringOnlyContainsTestModeParameterIfTrue(string from, int? limit, bool testmode, string expectedQueryString) {
+        public async Task GetMandateListAsync_TestModeParameterCase_QueryStringOnlyContainsTestModeParameterIfTrue(
+            string? from, int? limit, bool testmode, string expectedQueryString) {
             // Given: We retrieve a list of mandates
             const string customerId = "customer-id";
             var mockHttp = new MockHttpMessageHandler();
@@ -79,14 +80,17 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task GetMandateAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string mandateId) {
+        public async Task GetMandateAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string? mandateId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             MandateClient mandateClient = new MandateClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await mandateClient.GetMandateAsync(mandateId, "mandate-id"));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () =>
+#pragma warning disable CS8604 // Possible null reference argument.
+                await mandateClient.GetMandateAsync(mandateId, "mandate-id"));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'customerId' is null or empty");
@@ -96,14 +100,17 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task GetMandateAsync_NoMandateIdIsGiven_ArgumentExceptionIsThrown(string mandateId) {
+        public async Task GetMandateAsync_NoMandateIdIsGiven_ArgumentExceptionIsThrown(string? mandateId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             MandateClient mandateClient = new MandateClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await mandateClient.GetMandateAsync("customer-id", mandateId));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () =>
+#pragma warning disable CS8604 // Possible null reference argument.
+                await mandateClient.GetMandateAsync("customer-id", mandateId));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'mandateId' is null or empty");
@@ -113,14 +120,16 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task GetMandateListAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string mandateId) {
+        public async Task GetMandateListAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string? mandateId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             MandateClient mandateClient = new MandateClient("api-key", httpClient);
 
             // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await mandateClient.GetMandateListAsync(mandateId));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'customerId' is null or empty");
@@ -130,7 +139,7 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task CreateMandateAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string mandateId) {
+        public async Task CreateMandateAsync_NoCustomerIdIsGiven_ArgumentExceptionIsThrown(string? mandateId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
@@ -141,7 +150,9 @@ namespace Mollie.Tests.Unit.Client {
             };
 
             // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await mandateClient.CreateMandateAsync(mandateId, mandateRequest));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'customerId' is null or empty");

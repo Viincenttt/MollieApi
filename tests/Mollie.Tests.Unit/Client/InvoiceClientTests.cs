@@ -40,7 +40,7 @@ public class InvoiceClientTests : BaseClientTests
     [InlineData("my-reference", 2023, "abcde", null, "?reference=my-reference&year=2023&from=abcde")]
     [InlineData("my-reference", 2023, "abcde", 10, "?reference=my-reference&year=2023&from=abcde&limit=10")]
     public async Task GetInvoiceListAsync_WithVariousParameters_QueryStringMatchesExpectedValue(
-        string reference, int? year, string from, int? limit, string expectedQueryString) {
+        string? reference, int? year, string? from, int? limit, string expectedQueryString) {
         // Given: We retrieve a list of customers
         var mockHttp = new MockHttpMessageHandler();
         mockHttp.When($"{BaseMollieClient.ApiEndPoint}invoices{expectedQueryString}")

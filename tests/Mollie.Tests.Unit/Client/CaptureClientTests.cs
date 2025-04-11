@@ -151,14 +151,16 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task GetCaptureAsync_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string paymentId) {
+        public async Task GetCaptureAsync_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string? paymentId) {
             // Given
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             CaptureClient captureClient = new CaptureClient("abcde", httpClient);
 
             // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await captureClient.GetCaptureAsync(paymentId, "capture-id"));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'paymentId' is null or empty");
@@ -168,14 +170,17 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task GetCaptureAsync_NoCaptureIdIsGiven_ArgumentExceptionIsThrown(string captureId) {
+        public async Task GetCaptureAsync_NoCaptureIdIsGiven_ArgumentExceptionIsThrown(string? captureId) {
             // Given
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             CaptureClient captureClient = new CaptureClient("abcde", httpClient);
 
             // When: We send the request
-            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await captureClient.GetCaptureAsync("payment-id", captureId));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () =>
+#pragma warning disable CS8604 // Possible null reference argument.
+                await captureClient.GetCaptureAsync("payment-id", captureId));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'captureId' is null or empty");
@@ -185,14 +190,16 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task GetCapturesListAsync_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string paymentId) {
+        public async Task GetCapturesListAsync_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string? paymentId) {
             // Given
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             CaptureClient captureClient = new CaptureClient("abcde", httpClient);
 
             // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await captureClient.GetCaptureListAsync(paymentId));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'paymentId' is null or empty");
@@ -202,7 +209,7 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task CreateCapture_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string paymentId) {
+        public async Task CreateCapture_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string? paymentId) {
             // Given
             var captureRequest = new CaptureRequest {
                 Amount = new Amount(Currency.EUR, 10m),
@@ -213,7 +220,9 @@ namespace Mollie.Tests.Unit.Client {
             CaptureClient captureClient = new CaptureClient("abcde", httpClient);
 
             // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await captureClient.CreateCapture(paymentId, captureRequest));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'paymentId' is null or empty");

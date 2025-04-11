@@ -71,7 +71,7 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task CreateRefundAsync_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string paymentId) {
+        public async Task CreateRefundAsync_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string? paymentId) {
             // Given: We create a refund without specifying a paymentId
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
@@ -81,7 +81,9 @@ namespace Mollie.Tests.Unit.Client {
             };
 
             // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await refundClient.CreatePaymentRefundAsync(paymentId, refund));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'paymentId' is null or empty");
@@ -194,14 +196,16 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task GetRefundListAsync_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string paymentId) {
+        public async Task GetRefundListAsync_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string? paymentId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             RefundClient refundClient = new RefundClient("api-key", httpClient);
 
             // When: We send the request
-            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await refundClient.GetPaymentRefundListAsync(paymentId: paymentId));
+#pragma warning disable CS8604 // Possible null reference argument.
+            var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await refundClient.GetPaymentRefundListAsync(paymentId));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'paymentId' is null or empty");
@@ -211,14 +215,16 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task GetRefundAsync_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string paymentId) {
+        public async Task GetRefundAsync_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string? paymentId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             RefundClient refundClient = new RefundClient("api-key", httpClient);
 
             // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await refundClient.GetPaymentRefundAsync(paymentId, "refund-id"));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'paymentId' is null or empty");
@@ -228,14 +234,16 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task GetRefundAsync_NoRefundIsGiven_ArgumentExceptionIsThrown(string refundId) {
+        public async Task GetRefundAsync_NoRefundIsGiven_ArgumentExceptionIsThrown(string? refundId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             RefundClient refundClient = new RefundClient("api-key", httpClient);
 
             // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await refundClient.GetPaymentRefundAsync("payment-id", refundId));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'refundId' is null or empty");
@@ -245,14 +253,16 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task CancelRefundAsync_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string paymentId) {
+        public async Task CancelRefundAsync_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string? paymentId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             RefundClient refundClient = new RefundClient("api-key", httpClient);
 
             // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await refundClient.CancelPaymentRefundAsync(paymentId, "refund-id"));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'paymentId' is null or empty");
@@ -262,14 +272,16 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task CancelRefundAsync_NoRefundIsGiven_ArgumentExceptionIsThrown(string refundId) {
+        public async Task CancelRefundAsync_NoRefundIsGiven_ArgumentExceptionIsThrown(string? refundId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             RefundClient refundClient = new RefundClient("api-key", httpClient);
 
             // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await refundClient.CancelPaymentRefundAsync("payment-id", refundId));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'refundId' is null or empty");
@@ -280,7 +292,7 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("from", null, false, "?from=from")]
         [InlineData("from", 50, false, "?from=from&limit=50")]
         [InlineData(null, null, true, "?testmode=true")]
-        public async Task GetOrderRefundListAsync_QueryParameterOptions_CorrectParametersAreAdded(string from, int? limit, bool testmode, string expectedQueryString) {
+        public async Task GetOrderRefundListAsync_QueryParameterOptions_CorrectParametersAreAdded(string? from, int? limit, bool testmode, string expectedQueryString) {
             // Given: We make a request to retrieve the list of orders
             const string orderId = "abcde";
             var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}orders/{orderId}/refunds{expectedQueryString}", defaultOrderJsonResponse);
@@ -337,7 +349,7 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task CreateOrderRefundAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string orderId) {
+        public async Task CreateOrderRefundAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string? orderId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
@@ -348,7 +360,9 @@ namespace Mollie.Tests.Unit.Client {
             };
 
             // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await refundClient.CreateOrderRefundAsync(orderId, request));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'orderId' is null or empty");
@@ -358,14 +372,16 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task GetOrderRefundListAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string orderId) {
+        public async Task GetOrderRefundListAsync_NoOrderIdIsGiven_ArgumentExceptionIsThrown(string? orderId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             RefundClient refundClient = new RefundClient("api-key", httpClient);
 
             // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await refundClient.GetOrderRefundListAsync(orderId));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'orderId' is null or empty");

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
@@ -19,9 +20,13 @@ namespace Mollie.Api.Client {
             _clientId = clientId;
         }
 
-        public ClientLinkClient(string clientId, IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null)
+        public ClientLinkClient(string? clientId, IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null)
             : base(mollieSecretManager, httpClient) {
-            _clientId = clientId;
+            if (string.IsNullOrWhiteSpace(clientId)) {
+                throw new ArgumentNullException(nameof(clientId));
+            }
+
+            _clientId = clientId!;
         }
 
         public async Task<ClientLinkResponse> CreateClientLinkAsync(ClientLinkRequest request, CancellationToken cancellationToken = default)

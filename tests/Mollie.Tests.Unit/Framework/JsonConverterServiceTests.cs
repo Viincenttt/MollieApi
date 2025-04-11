@@ -38,7 +38,7 @@ namespace Mollie.Tests.Unit.Framework {
             string paymentJson = @"{""metadata"":" + metadataJson + "}";
 
             // When: We deserialize the JSON
-            PaymentResponse payments = jsonConverterService.Deserialize<PaymentResponse>(paymentJson);
+            PaymentResponse payments = jsonConverterService.Deserialize<PaymentResponse>(paymentJson)!;
 
             // Then:
             payments.Metadata.ShouldBe(metadataJson);
@@ -52,7 +52,7 @@ namespace Mollie.Tests.Unit.Framework {
             string paymentJson = @"{""metadata"":""" + metadataJson + @"""}";
 
             // When: We deserialize the JSON
-            PaymentResponse payments = jsonConverterService.Deserialize<PaymentResponse>(paymentJson);
+            PaymentResponse payments = jsonConverterService.Deserialize<PaymentResponse>(paymentJson)!;
 
             // Then:
             payments.Metadata.ShouldBe(metadataJson);
@@ -61,12 +61,12 @@ namespace Mollie.Tests.Unit.Framework {
         [Fact]
         public void Deserialize_JsonDataWithNullValues_IsDeserialized() {
             // Given: A JSON metadata value
-            JsonConverterService jsonConverterService = new JsonConverterService();
+            var jsonConverterService = new JsonConverterService();
             string metadataJson = @"null";
             string paymentJson = @"{""metadata"":" + metadataJson + "}";
 
             // When: We deserialize the JSON
-            PaymentResponse payments = jsonConverterService.Deserialize<PaymentResponse>(paymentJson);
+            PaymentResponse payments = jsonConverterService.Deserialize<PaymentResponse>(paymentJson)!;
 
             // Then:
             payments.Metadata.ShouldBeNull();

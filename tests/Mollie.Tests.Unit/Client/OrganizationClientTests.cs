@@ -80,13 +80,13 @@ public class OrganizationClientTests : BaseClientTests
         response.VatNumber.ShouldBe("NL815839091B01");
         response.VatRegulation.ShouldBeNullOrEmpty();
         response.Links.Self.Href.ShouldBe("https://api.mollie.com/v2/organizations/me");
-        response.Links.Chargebacks.Href.ShouldBe("https://api.mollie.com/v2/chargebacks");
-        response.Links.Customers.Href.ShouldBe("https://api.mollie.com/v2/customers");
-        response.Links.Invoices.Href.ShouldBe("https://api.mollie.com/v2/invoices");
-        response.Links.Payments.Href.ShouldBe("https://api.mollie.com/v2/payments");
-        response.Links.Profiles.Href.ShouldBe("https://api.mollie.com/v2/profiles");
-        response.Links.Refunds.Href.ShouldBe("https://api.mollie.com/v2/refunds");
-        response.Links.Settlements.Href.ShouldBe("https://api.mollie.com/v2/settlements");
+        response.Links.Chargebacks!.Href.ShouldBe("https://api.mollie.com/v2/chargebacks");
+        response.Links.Customers!.Href.ShouldBe("https://api.mollie.com/v2/customers");
+        response.Links.Invoices!.Href.ShouldBe("https://api.mollie.com/v2/invoices");
+        response.Links.Payments!.Href.ShouldBe("https://api.mollie.com/v2/payments");
+        response.Links.Profiles!.Href.ShouldBe("https://api.mollie.com/v2/profiles");
+        response.Links.Refunds!.Href.ShouldBe("https://api.mollie.com/v2/refunds");
+        response.Links.Settlements!.Href.ShouldBe("https://api.mollie.com/v2/settlements");
         response.Links.Dashboard.Href.ShouldBe("https://mollie.com/dashboard/org_12345678");
         response.Links.Documentation.Href.ShouldBe("https://docs.mollie.com/reference/v2/organizations-api/current-organization");
     }

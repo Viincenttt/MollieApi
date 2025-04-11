@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
-using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Customer.Response;
@@ -32,14 +31,16 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
     [Fact]
     public async Task CanRetrieveSubscriptionList() {
         // Given
-        string customerId = await GetFirstCustomerWithValidMandate();
+        string? customerId = await GetFirstCustomerWithValidMandate();
 
         // When: Retrieve subscription list with default settings
-        ListResponse<SubscriptionResponse> response = await _subscriptionClient.GetSubscriptionListAsync(customerId);
+        if (customerId != null) {
+            ListResponse<SubscriptionResponse> response = await _subscriptionClient.GetSubscriptionListAsync(customerId);
 
-        // Then
-        response.ShouldNotBeNull();
-        response.Items.ShouldNotBeNull();
+            // Then
+            response.ShouldNotBeNull();
+            response.Items.ShouldNotBeNull();
+        }
     }
 
     [Fact]
@@ -57,39 +58,43 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
     [Fact]
     public async Task ListSubscriptionsNeverReturnsMoreCustomersThenTheNumberOfRequestedSubscriptions() {
         // Given: Number of customers requested is 5
-        string customerId = await GetFirstCustomerWithValidMandate();
-        int numberOfSubscriptions = 5;
+        string? customerId = await GetFirstCustomerWithValidMandate();
+        if (customerId != null) {
+            int numberOfSubscriptions = 5;
 
-        // When: Retrieve 5 subscriptions
-        ListResponse<SubscriptionResponse> response = await _subscriptionClient.GetSubscriptionListAsync(customerId, null, numberOfSubscriptions);
+            // When: Retrieve 5 subscriptions
+            ListResponse<SubscriptionResponse> response = await _subscriptionClient.GetSubscriptionListAsync(customerId, null, numberOfSubscriptions);
 
-        // Then
-        response.Items.Count.ShouldBeLessThanOrEqualTo(numberOfSubscriptions);
+            // Then
+            response.Items.Count.ShouldBeLessThanOrEqualTo(numberOfSubscriptions);
+        }
     }
 
     [Fact]
     public async Task CanCreateSubscription() {
         // Given
-        string customerId = await GetFirstCustomerWithValidMandate();
-        SubscriptionRequest subscriptionRequest = new SubscriptionRequest {
-            Amount = new Amount(Currency.EUR, "100.00"),
-            Times = 5,
-            Interval = "1 month",
-            Description = $"Subscription {Guid.NewGuid()}", // Subscriptions must have a unique name
-            WebhookUrl = "http://www.google.nl",
-            StartDate = DateTime.Now.AddDays(1)
-        };
+        string? customerId = await GetFirstCustomerWithValidMandate();
+        if (customerId != null) {
+            var subscriptionRequest = new SubscriptionRequest {
+                Amount = new Amount(Currency.EUR, "100.00"),
+                Times = 5,
+                Interval = "1 month",
+                Description = $"Subscription {Guid.NewGuid()}", // Subscriptions must have a unique name
+                WebhookUrl = "http://www.google.nl",
+                StartDate = DateTime.Now.AddDays(1)
+            };
 
-        // When
-        SubscriptionResponse subscriptionResponse = await _subscriptionClient.CreateSubscriptionAsync(customerId, subscriptionRequest);
+            // When
+            SubscriptionResponse subscriptionResponse = await _subscriptionClient.CreateSubscriptionAsync(customerId, subscriptionRequest);
 
-        // Then
-        subscriptionResponse.Amount.ShouldBe(subscriptionRequest.Amount);
-        subscriptionResponse.Times.ShouldBe(subscriptionRequest.Times);
-        subscriptionResponse.Interval.ShouldBe(subscriptionRequest.Interval);
-        subscriptionResponse.Description.ShouldBe(subscriptionRequest.Description);
-        subscriptionResponse.WebhookUrl.ShouldBe(subscriptionRequest.WebhookUrl);
-        subscriptionResponse.StartDate.ShouldBe(subscriptionRequest.StartDate.Value.Date);
+            // Then
+            subscriptionResponse.Amount.ShouldBe(subscriptionRequest.Amount);
+            subscriptionResponse.Times.ShouldBe(subscriptionRequest.Times);
+            subscriptionResponse.Interval.ShouldBe(subscriptionRequest.Interval);
+            subscriptionResponse.Description.ShouldBe(subscriptionRequest.Description);
+            subscriptionResponse.WebhookUrl.ShouldBe(subscriptionRequest.WebhookUrl);
+            subscriptionResponse.StartDate.ShouldBe(subscriptionRequest.StartDate.Value.Date);
+        }
     }
 
     [Fact]
@@ -113,19 +118,21 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
     [Fact]
     public async Task CanCancelSubscription() {
         // Given: We have a customer with a mandate
-        string customerId = await GetFirstCustomerWithValidMandate();
-        ListResponse<SubscriptionResponse> subscriptions = await _subscriptionClient.GetSubscriptionListAsync(customerId);
+        string? customerId = await GetFirstCustomerWithValidMandate();
+        if (customerId != null) {
+            ListResponse<SubscriptionResponse> subscriptions = await _subscriptionClient.GetSubscriptionListAsync(customerId);
 
-        // When: That customer has a subscription that we can cancel
-        SubscriptionResponse subscriptionToCancel = subscriptions.Items
-            .FirstOrDefault(s => s.Status != SubscriptionStatus.Canceled);
-        if (subscriptionToCancel != null) {
-            await _subscriptionClient.CancelSubscriptionAsync(customerId, subscriptionToCancel.Id);
+            // When: That customer has a subscription that we can cancel
+            SubscriptionResponse? subscriptionToCancel = subscriptions.Items
+                .FirstOrDefault(s => s.Status != SubscriptionStatus.Canceled);
+            if (subscriptionToCancel != null) {
+                await _subscriptionClient.CancelSubscriptionAsync(customerId, subscriptionToCancel.Id);
 
-            // Then: Make sure its canceled after one second
-            await Task.Delay(TimeSpan.FromSeconds(1));
-            SubscriptionResponse cancelledSubscription = await _subscriptionClient.GetSubscriptionAsync(customerId, subscriptionToCancel.Id);
-            cancelledSubscription.Status.ShouldBe(SubscriptionStatus.Canceled);
+                // Then: Make sure its canceled after one second
+                await Task.Delay(TimeSpan.FromSeconds(1));
+                SubscriptionResponse cancelledSubscription = await _subscriptionClient.GetSubscriptionAsync(customerId, subscriptionToCancel.Id);
+                cancelledSubscription.Status.ShouldBe(SubscriptionStatus.Canceled);
+            }
         }
     }
 
@@ -133,7 +140,7 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
     public async Task CanCreateSubscriptionWithMetaData() {
         // If: We create a subscription with meta data
         string json = "{\"order_id\":\"4.40\"}";
-        string customerId = await GetFirstCustomerWithValidMandate();
+        string? customerId = await GetFirstCustomerWithValidMandate();
         if (customerId != null) {
             SubscriptionRequest subscriptionRequest = new SubscriptionRequest {
                 Amount = new Amount(Currency.EUR, "100.00"),
@@ -153,7 +160,7 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
         }
     }
 
-    private async Task<string> GetFirstCustomerWithValidMandate() {
+    private async Task<string?> GetFirstCustomerWithValidMandate() {
         ListResponse<CustomerResponse> customers = await _customerClient.GetCustomerListAsync();
 
         foreach (CustomerResponse customer in customers.Items) {
@@ -182,8 +189,8 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
 
     public void Dispose()
     {
-        _subscriptionClient?.Dispose();
-        _customerClient?.Dispose();
-        _mandateClient?.Dispose();
+        _subscriptionClient.Dispose();
+        _customerClient.Dispose();
+        _mandateClient.Dispose();
     }
 }

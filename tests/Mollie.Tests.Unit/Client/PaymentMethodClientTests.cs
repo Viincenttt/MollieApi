@@ -84,14 +84,16 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task GetPaymentMethodAsync_NoPaymentMethodIsGiven_ArgumentExceptionIsThrown(string paymentLinkId) {
+        public async Task GetPaymentMethodAsync_NoPaymentMethodIsGiven_ArgumentExceptionIsThrown(string? paymentLinkId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             PaymentMethodClient paymentMethodClient = new PaymentMethodClient("api-key", httpClient);
 
             // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await paymentMethodClient.GetPaymentMethodAsync(paymentLinkId));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'paymentMethod' is null or empty");

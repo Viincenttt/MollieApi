@@ -67,14 +67,16 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public async Task GetPaymentLinkAsync_NoPaymentLinkIdIsGiven_ArgumentExceptionIsThrown(string paymentLinkId) {
+        public async Task GetPaymentLinkAsync_NoPaymentLinkIdIsGiven_ArgumentExceptionIsThrown(string? paymentLinkId) {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             PaymentLinkClient paymentLinkClient = new PaymentLinkClient("api-key", httpClient);
 
             // When: We send the request
+#pragma warning disable CS8604 // Possible null reference argument.
             var exception = await Assert.ThrowsAsync<ArgumentException>(async () => await paymentLinkClient.GetPaymentLinkAsync(paymentLinkId));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             // Then
             exception.Message.ShouldBe("Required URL argument 'paymentLinkId' is null or empty");
@@ -111,7 +113,7 @@ namespace Mollie.Tests.Unit.Client {
         [InlineData(null, null,  true, SortDirection.Desc, "?testmode=true&sort=desc")]
         [InlineData(null, null,  true, SortDirection.Asc, "?testmode=true&sort=asc")]
         public async Task GetPaymentLinkPaymentListAsync_QueryParameterOptions_CorrectParametersAreAdded(
-            string from,
+            string? from,
             int? limit,
             bool testmode,
             SortDirection? sortDirection,
@@ -157,7 +159,7 @@ namespace Mollie.Tests.Unit.Client {
         }
 
         private void VerifyPaymentLinkResponse(PaymentLinkResponse response) {
-            response.Amount.Value.ShouldBe(DefaultPaymentAmount.ToString(CultureInfo.InvariantCulture));
+            response.Amount!.Value.ShouldBe(DefaultPaymentAmount.ToString(CultureInfo.InvariantCulture));
             response.Description.ShouldBe(DefaultDescription);
             response.Id.ShouldBe(DefaultPaymentLinkId);
             response.RedirectUrl.ShouldBe(DefaultRedirectUrl);

@@ -11,7 +11,7 @@ namespace Mollie.Tests.Unit.Client {
             HttpMethod httpMethod,
             string url,
             string response,
-            string expectedPartialContent = null,
+            string? expectedPartialContent = null,
             string responseContentType =  MediaTypeNames.Application.Json,
             HttpStatusCode responseStatusCode = HttpStatusCode.OK) {
 
