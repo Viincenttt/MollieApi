@@ -47,13 +47,12 @@ namespace Mollie.Api.Models {
         public static implicit operator decimal(Amount amount)
             => decimal.TryParse(amount.Value, NumberStyles.Number, CultureInfo.InvariantCulture, out var a) ? a : throw new InvalidCastException($"Cannot convert {amount.Value} to decimal");
 
-        public static implicit operator decimal?(Amount? amount) {
-            if (amount == null) {
-                return null;
-            }
-
-            return (decimal)amount;
-        }
+        /// <summary>
+        /// Implicit cast operator from Amount? to decimal?.
+        /// </summary>
+        /// <param name="amount"></param>
+        public static implicit operator decimal?(Amount? amount)
+            => amount == null ? null : (decimal)amount;
 
         private static string ConvertDecimalAmountToStringAmount(string currency, decimal value) {
             if (CurrenciesWithAlternativeDecimalPrecision.TryGetValue(currency, out string? format)) {
