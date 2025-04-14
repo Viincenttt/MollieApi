@@ -38,7 +38,9 @@ namespace Mollie.Api.Client.Abstract {
             CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Some payment methods are cancellable for an amount of time, usually until the next day. Or as long as the payment status is open. Payments may be cancelled manually from the Dashboard, or automatically by using this endpoint.
+        /// Some payment methods are cancellable for an amount of time, usually until the next day. Or as long as the
+        /// payment status is open. Payments may be cancelled manually from the Dashboard, or automatically by using
+        /// this endpoint.
         /// </summary>
         /// <param name="paymentId"></param>
         /// <param name="testmode">Oauth - Optional – Set this to true to cancel a test mode payment.</param>
@@ -47,6 +49,17 @@ namespace Mollie.Api.Client.Abstract {
             string paymentId,
             bool testmode = false,
             CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Releases the full remaining authorized amount. Call this endpoint when you will not be making any additional
+        /// captures. Payment authorizations may also be released manually from the Mollie Dashboard.
+        /// </summary>
+        /// <param name="paymentId">Provide the ID of the related payment.</param>
+        /// <param name="testmode">Oauth - Optional – Set this to true to release the authorization of a test mode payment.</param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task ReleasePaymentAuthorization(
+            string paymentId, bool testmode = false, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieve all payments created with the current payment profile, ordered from newest to oldest.

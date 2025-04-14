@@ -76,6 +76,17 @@ namespace Mollie.Api.Client {
                 cancellationToken: cancellationToken).ConfigureAwait(false);
 		}
 
+        public async Task ReleasePaymentAuthorization(
+            string paymentId, bool testmode = false, CancellationToken cancellationToken = default) {
+            ValidateRequiredUrlParameter(nameof(paymentId), paymentId);
+
+            var queryParameters = BuildQueryParameters(testmode);
+            await PostAsync<object>(
+                $"payments/{paymentId}/release-authorization{queryParameters.ToQueryString()}",
+                null,
+                cancellationToken: cancellationToken).ConfigureAwait(false);
+        }
+
         public async Task<PaymentResponse> GetPaymentAsync(
             UrlObjectLink<PaymentResponse> url,
             CancellationToken cancellationToken = default) {
@@ -129,6 +140,12 @@ namespace Mollie.Api.Client {
                 $"payments/{paymentId}",
                 paymentUpdateRequest,
                 cancellationToken: cancellationToken).ConfigureAwait(false);
+        }
+
+        private Dictionary<string, string> BuildQueryParameters(bool testmode = false) {
+            var result = new Dictionary<string, string>();
+            result.AddValueIfTrue(nameof(testmode), testmode);
+            return result;
         }
 
         private Dictionary<string, string> BuildQueryParameters(
