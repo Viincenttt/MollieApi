@@ -1,6 +1,6 @@
-# MollieApi
-![Build](https://github.com/Viincenttt/MollieApi/workflows/Run%20automated%20tests/badge.svg)
+# Mollie Api Client for .NET
 [![NuGet](https://img.shields.io/nuget/v/Mollie.Api.svg)](https://www.nuget.org/packages/Mollie.Api)
+![Build](https://github.com/Viincenttt/MollieApi/workflows/Run%20automated%20tests/badge.svg)
 [![GitHub Repo stars](https://img.shields.io/github/stars/Viincenttt/MollieApi)](https://github.com/Viincenttt/MollieApi/stargazers)
 [![GitHub contributors](https://img.shields.io/github/contributors/Viincenttt/MollieApi)](https://github.com/Viincenttt/MollieApi/graphs/contributors)
 [![GitHub last commit](https://img.shields.io/github/last-commit/Viincenttt/MollieApi)](https://github.com/Viincenttt/MollieApi)
@@ -35,8 +35,10 @@ Have feedback or ideas? Join the [official Mollie Developer Discord](https://dis
 ---
 
 ## 💖 Sponsor This Project
-If this library has helped you or saved you time, please consider [sponsoring me on GitHub](https://github.com/sponsors/Viincenttt).
-Your support allows me to maintain this project, add new features, and help more developers like you integrate with Mollie!
+This project is proudly sponsored by Mollie — thank you for supporting open source and developer tooling!
+
+If this library has helped you or saved you time, please consider [sponsoring me on GitHub](https://github.com/sponsors/Viincenttt) as well.
+Your support helps me keep improving the library and providing integration help to the community!
 
 ---
 
