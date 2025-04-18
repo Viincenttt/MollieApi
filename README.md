@@ -80,7 +80,7 @@ After registering via DI, inject the interface you need in your services or cont
 
 ### Manual Instantiation
 If you prefer not to use DI, you can manually instantiate a client:
-```
+``` csharp
 using IPaymentClient paymentClient = new PaymentClient("{yourApiKey}", new HttpClient());
 ```
 If you do not provide a HttpClient, one will be created automatically — in that case, remember to dispose the client properly.
