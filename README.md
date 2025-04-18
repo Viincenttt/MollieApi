@@ -28,6 +28,7 @@ Have feedback or ideas? Join the [official Mollie Developer Discord](https://dis
   - [Dependency Injection](#dependency-injection)
   - [Manual Instantiation](#manual-instantiation)
   - [Create a Payment in under a minute](#-create-a-payment-in-under-a-minute)
+  - [Example Project (Blazor)](#-blazor-example-project)
 - [Supported APIs](#-supported-apis)
 - [Contributions](#-contributions)
 - [Supported .NET Versions](#-supported-net-versions)
@@ -54,7 +55,7 @@ You'll find:
 
 --- 
 
-## 🧰 Getting started
+## 🛠 Getting started
 Install via NuGet:
 ```bash
 Install-Package Mollie.Api
@@ -100,7 +101,19 @@ PaymentResponse paymentResponse = await paymentClient.CreatePaymentAsync(payment
 // Redirect your user to the checkout URL
 string checkoutUrl = paymentResponse.Links.Checkout.Href;
 ```
-Need a full example? Check out the [.NET Blazor demo project](https://github.com/Viincenttt/MollieApi/tree/development/samples/Mollie.WebApplication.Blazor).
+
+### 🧪 Blazor Example Project
+Want to see the library in action? Check out the full-featured .NET Blazor example project, which demonstrates real-world usage of several APIs:
+* Payments
+* Orders
+* Customers
+* Mandates
+* Subscriptions
+* Payment Methods
+* Terminals
+
+🔗 [View the Example Project on GitHub](https://github.com/Viincenttt/MollieApi/tree/development/samples/Mollie.WebApplication.Blazor)
+> It’s a great starting point if you’re new to Mollie or want to explore advanced scenarios like multi-step checkouts or managing recurring payments.
 
 ---
 
