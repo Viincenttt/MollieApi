@@ -91,12 +91,13 @@ using IPaymentClient paymentClient = new PaymentClient("{yourApiKey}", new HttpC
 
 var paymentRequest = new PaymentRequest {
     Amount = new Amount(Currency.EUR, 100.00m),
-    Description = "Test payment of the example project",
-    RedirectUrl = "http://google.com",
+    Description = "The .NET library makes creating payments so easy!",
+    RedirectUrl = "https://github.com/Viincenttt/MollieApi",
     Method = PaymentMethod.Ideal
 };
 
 PaymentResponse paymentResponse = await paymentClient.CreatePaymentAsync(paymentRequest);
+// Redirect your user to the checkout URL
 string checkoutUrl = paymentResponse.Links.Checkout.Href;
 ```
 Need a full example? Check out the [.NET Blazor demo project](https://github.com/Viincenttt/MollieApi/tree/development/samples/Mollie.WebApplication.Blazor).
