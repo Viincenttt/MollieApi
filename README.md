@@ -1,55 +1,107 @@
 # MollieApi
-![](https://github.com/Viincenttt/MollieApi/workflows/Run%20automated%20tests/badge.svg)
+![Build](https://github.com/Viincenttt/MollieApi/workflows/Run%20automated%20tests/badge.svg)
+[![NuGet](https://img.shields.io/nuget/v/Mollie.Api.svg)](https://www.nuget.org/packages/Mollie.Api)
+[![GitHub Repo stars](https://img.shields.io/github/stars/Viincenttt/MollieApi)](https://github.com/Viincenttt/MollieApi/stargazers)
+[![GitHub contributors](https://img.shields.io/github/contributors/Viincenttt/MollieApi)](https://github.com/Viincenttt/MollieApi/graphs/contributors)
+[![GitHub last commit](https://img.shields.io/github/last-commit/Viincenttt/MollieApi)](https://github.com/Viincenttt/MollieApi)
+[![GitHub commit activity](https://img.shields.io/github/commit-activity/m/Viincenttt/MollieApi)](https://github.com/Viincenttt/MollieApi/graphs/commit-activity)
+[![open issues](https://img.shields.io/github/issues/Viincenttt/MollieApi)](https://github.com/Viincenttt/MollieApi/issues)
+[![Read the Wiki](https://img.shields.io/badge/docs-Wiki-blue)](https://github.com/Viincenttt/MollieApi/wiki)
 
-This project allows you to easily add the [Mollie payment provider](https://www.mollie.com) to your application. Mollie has excellent [documentation](https://docs.mollie.com/) which I highly recommend you read before using this library. 
+Easily integrate the [Mollie payment provider](https://www.mollie.com) into your .NET application.
 
-## Support
-If you have encounter any issues while using this library or have any feature requests, feel free to open an issue on GitHub. If you need help integrating the Mollie API into your .NET application, please contact me on [LinkedIn](https://www.linkedin.com/in/vincent-kok-4aa44211/). 
+Full documentation of this library is available on the [Wiki](https://github.com/Viincenttt/MollieApi/wiki) — including usage examples, API references, and integration tips.
 
-Want to chat with other developers regarding the Mollie API? The official Mollie developer Discord is a great place to provide feedback, ask questions and chat with other developers: [Mollie Developer Discord](https://discord.gg/Pdy49HxCWZ)
+Mollie offers excellent [API documentation](https://docs.mollie.com/) that we highly recommend reviewing before using this library. If you encounter any issues or have feature requests, feel free to [open an issue](https://github.com/Viincenttt/MollieApi/issues). 
 
-## Contributions
-Have you spotted a bug or want to add a missing feature? All pull requests are welcome! Please provide a description of the bug or feature you have fixed/added. Make sure to target the latest development branch. 
+> 💬 **Need help with integration?**  
+> I’m happy to assist you with your implementation or questions. Feel free to [connect with me on LinkedIn](https://www.linkedin.com/in/vincent-kok-4aa44211/) — I’d love to help!
 
-## Getting started and documentation
-The library is easy and simple to use. Take a look at the [getting started guide](https://github.com/Viincenttt/MollieApi/wiki/01.-Getting-started) and create your first payment using the Mollie API in no time. For the full documentation of all library functions, please take a look at the [documentation on the Wiki](https://github.com/Viincenttt/MollieApi/wiki/). There is also a [.NET Blazor example project](https://github.com/Viincenttt/MollieApi/tree/development/samples/Mollie.WebApplication.Blazor) available that displays various features of the library. 
+Have feedback or ideas? Join the [official Mollie Developer Discord](https://discord.gg/Pdy49HxCWZ) or [open an issue](https://github.com/Viincenttt/MollieApi/issues).
 
-### Creating a payment in under a minute
-Install the [NuGet package](https://www.nuget.org/packages/Mollie.Api)
-```
+---
+
+## 📚 Table of Contents
+- [Sponsor This Project](#-sponsor-this-project)
+- [Full documentation](#-full-documentation)
+- [Getting Started](#-getting-started)
+  - [Dependency Injection](#dependency-injection)
+  - [Manual Instantiation](#manual-instantiation)
+  - [Create a Payment in under a minute](#-create-a-payment-in-under-a-minute)
+- [Supported APIs](#-supported-apis)
+- [Contributions](#-contributions)
+- [Supported .NET Versions](#-supported-net-versions)
+
+---
+
+## 💖 Sponsor This Project
+If this library has helped you or saved you time, please consider [sponsoring me on GitHub](https://github.com/sponsors/Viincenttt).
+Your support allows me to maintain this project, add new features, and help more developers like you integrate with Mollie!
+
+---
+
+## 📖 Full Documentation
+Looking for the full API docs, usage examples, and advanced guides?
+
+👉 **Check out the full Wiki here:**  
+➡️ [https://github.com/Viincenttt/MollieApi/wiki](https://github.com/Viincenttt/MollieApi/wiki)
+You'll find:
+- Getting started walkthroughs
+- All supported APIs and code samples
+- Best practices for integration
+
+--- 
+
+## 🧰 Getting started
+Install via NuGet:
+```bash
 Install-Package Mollie.Api
 ```
 
-Example code to create a iDeal payment for €100
-```c#
+### Dependency Injection
+You can register all API client interfaces using the built-in DI extension:
+```csharp
+builder.Services.AddMollieApi(options => {
+    options.ApiKey = builder.Configuration["Mollie:ApiKey"];
+    options.RetryPolicy = MollieHttpRetryPolicies.TransientHttpErrorRetryPolicy();
+});
+```
+Each API (e.g. payments, customers, mandates) has its own dedicated API client class and interface:
+* `IPaymentClient`, `PaymentClient`
+* `ICustomerClient`, `CustomerClient`
+* `ISubscriptionClient`, `SubscriptionClient`
+* `IMandateClient`, `MandateClient`
+* ... and more
+
+After registering via DI, inject the interface you need in your services or controllers.
+
+### Manual Instantiation
+If you prefer not to use DI, you can manually instantiate a client:
+```
 using IPaymentClient paymentClient = new PaymentClient("{yourApiKey}", new HttpClient());
-PaymentRequest paymentRequest = new PaymentRequest() {
+```
+If you do not provide a HttpClient, one will be created automatically — in that case, remember to dispose the client properly.
+
+### 🚀 Create a Payment in under a minute
+Here’s a quick example of how to create an **iDEAL** payment for €100:
+```csharp
+using IPaymentClient paymentClient = new PaymentClient("{yourApiKey}", new HttpClient());
+
+var paymentRequest = new PaymentRequest {
     Amount = new Amount(Currency.EUR, 100.00m),
     Description = "Test payment of the example project",
     RedirectUrl = "http://google.com",
-	Method = Mollie.Api.Models.Payment.PaymentMethod.Ideal
+    Method = PaymentMethod.Ideal
 };
+
 PaymentResponse paymentResponse = await paymentClient.CreatePaymentAsync(paymentRequest);
 string checkoutUrl = paymentResponse.Links.Checkout.Href;
 ```
+Need a full example? Check out the [.NET Blazor demo project](https://github.com/Viincenttt/MollieApi/tree/development/samples/Mollie.WebApplication.Blazor).
 
-## Supported .NET versions
-This library is built using .NET standard 2.0. This means that the package supports the following .NET implementations:
-| .NET implementation  | Version support |
-| ------------- | ------------- |
-| .NET and .NET Core | 2.0, 2.1, 2.2, 3.0, 3.1, 5.0, 6.0, 7.0, 8.0  |
-| .NET Framework  | 4.6.1, 4.6.2, 4.7, 4.7.1, 4.7.2, 4.8, 4.8.1  |
-| Mono | 5.4, 6.4  |
-| Universal Windows Platform | 10.0.16299, TBD |
-| Xamarin.iOS | 10.14, 12.16 |
-| Xamarin.Mac | 3.8, 5.16 |
-| Xamarin.Android | 8.0, 10.0 |
+---
 
-Note: This library does use the `required` keyword is some of it's model classes. That means you'll need to a project that is using language version 11 or higher. 
-
-Source: https://docs.microsoft.com/en-us/dotnet/standard/net-standard?tabs=net-standard-2-0
-
-## Supported API's
+## 📦 Supported API's
 This library currently supports the following API's:
 - [Payment API](https://github.com/Viincenttt/MollieApi/wiki/02.-Payment-API)
 - [PaymentMethod API](https://github.com/Viincenttt/MollieApi/wiki/03.-Payment-method-API)
@@ -59,17 +111,40 @@ This library currently supports the following API's:
 - [Subscription API](https://github.com/Viincenttt/MollieApi/wiki/07.-Subscription-API)
 - [Refund API](https://github.com/Viincenttt/MollieApi/wiki/04.-Refund-API)
 - [Connect API](https://github.com/Viincenttt/MollieApi/wiki/10.-Connect-Api)
-- Chargeback API
-- Invoice API
-- Permissions API
+- Chargeback API (documentation coming soon)
+- Invoice API (documentation coming soon)
+- Permissions API (documentation coming soon)
 - [Profile API](https://github.com/Viincenttt/MollieApi/wiki/11.-Profile-Api)
 - [Organizations API](https://github.com/Viincenttt/MollieApi/wiki/09.-Organization-API)
 - [Order API](https://github.com/Viincenttt/MollieApi/wiki/08.-Order-API)
 - [Capture API](https://github.com/Viincenttt/MollieApi/wiki/12.-Captures-API)
 - [Onboarding API](https://github.com/Viincenttt/MollieApi/wiki/13.-Onboarding-Api)
 - [Balances API](https://github.com/Viincenttt/MollieApi/wiki/15.-Balances-Api)
-- Terminal API
-- ClientLink API
-- Wallet API
-- Client API
-- Capability API
+- Terminal API (documentation coming soon)
+- ClientLink API (documentation coming soon)
+- Wallet API (documentation coming soon)
+- Client API (documentation coming soon)
+- Capability API (documentation coming soon)
+
+---
+
+## 🤝 Contributions
+Spotted a bug or want to add a new feature? Contributions are welcome! Please target the latest `development` branch and include a clear description of your changes.
+
+---
+
+## ✅ Supported .NET Versions
+This library targets [.NET Standard 2.0](https://docs.microsoft.com/en-us/dotnet/standard/net-standard?tabs=net-standard-2-0), making it compatible with a wide range of platforms:
+| .NET implementation  | Version support |
+| ------------- | ------------- |
+| .NET and .NET Core | 2.0, 2.1, 2.2, 3.0, 3.1, 5.0, 6.0, 7.0, 8.0, 9.0 |
+| .NET Framework  | 4.6.1, 4.6.2, 4.7, 4.7.1, 4.7.2, 4.8, 4.8.1  |
+| Mono | 5.4, 6.4  |
+| Universal Windows Platform | 10.0.16299, TBD |
+| Xamarin.iOS | 10.14, 12.16 |
+| Xamarin.Mac | 3.8, 5.16 |
+| Xamarin.Android | 8.0, 10.0 |
+| Unity | 2018.1 |
+
+> ⚠️ Note: This library uses the required keyword in some model classes. Your project must target **C# 11 or higher**.
+
