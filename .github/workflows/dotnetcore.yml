@@ -22,7 +22,7 @@ jobs:
     - name: Build integration test project
       run: dotnet build tests/Mollie.Tests.Integration --configuration Release --no-restore
     - name: Run integration tests
-      run: dotnet test tests/Mollie.Tests.Integration --filter "TestCategory!=AccessKeyIntegrationTest" --no-restore --verbosity normal 
+      run: dotnet test tests/Mollie.Tests.Integration --filter "TestCategory!=LocalIntegrationTests" --no-restore --verbosity normal 
       env:
         Mollie__ApiKey: ${{ secrets.Mollie__ApiKey }}
         Mollie__AccessKey: ${{ secrets.Mollie__AccessKey }}
