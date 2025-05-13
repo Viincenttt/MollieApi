@@ -19,8 +19,9 @@ using Newtonsoft.Json;
 
 namespace Mollie.Api.Client {
     public abstract class BaseMollieClient : IDisposable {
-        public const string ApiEndPoint = "https://api.mollie.com/v2/";
-        private readonly string _apiEndpoint = ApiEndPoint;
+        public const string DefaultBaseApiEndPoint = "https://api.mollie.com/v2/";
+
+        private readonly string _apiEndpoint = DefaultBaseApiEndPoint;
         private readonly IMollieSecretManager _mollieSecretManager;
         private readonly MollieClientOptions _options;
         private readonly HttpClient _httpClient;
@@ -50,9 +51,10 @@ namespace Mollie.Api.Client {
             _httpClient = httpClient ?? new HttpClient();
             _mollieSecretManager = mollieSecretManager;
             _options = options;
+            _apiEndpoint = options.ApiBaseUrl;
         }
 
-        protected BaseMollieClient(HttpClient? httpClient = null, string apiEndpoint = ApiEndPoint) {
+        protected BaseMollieClient(HttpClient? httpClient = null, string apiEndpoint = DefaultBaseApiEndPoint) {
             _apiEndpoint = apiEndpoint;
             _jsonConverterService = new JsonConverterService();
             _createdHttpClient = httpClient == null;

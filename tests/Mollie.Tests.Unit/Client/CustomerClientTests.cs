@@ -20,7 +20,7 @@ namespace Mollie.Tests.Unit.Client {
             const string customerId = "customer-id";
 
             var mockHttp = new MockHttpMessageHandler();
-            mockHttp.When($"{BaseMollieClient.ApiEndPoint}{expectedUrl}")
+            mockHttp.When($"{BaseMollieClient.DefaultBaseApiEndPoint}{expectedUrl}")
                 .Respond("application/json", DefaultCustomerJsonToReturn);
             HttpClient httpClient = mockHttp.ToHttpClient();
             var customerClient = new CustomerClient("abcde", httpClient);
@@ -41,7 +41,7 @@ namespace Mollie.Tests.Unit.Client {
         public async Task GetCustomerListAsync_TestModeParameterCase_QueryStringOnlyContainsTestModeParameterIfTrue(string? from, int? limit, bool testmode, string expectedQueryString) {
             // Given: We retrieve a list of customers
             var mockHttp = new MockHttpMessageHandler();
-            mockHttp.When($"{BaseMollieClient.ApiEndPoint}customers{expectedQueryString}")
+            mockHttp.When($"{BaseMollieClient.DefaultBaseApiEndPoint}customers{expectedQueryString}")
                 .Respond("application/json", DefaultCustomerJsonToReturn);
             HttpClient httpClient = mockHttp.ToHttpClient();
             var customerClient = new CustomerClient("abcde", httpClient);
@@ -64,7 +64,7 @@ namespace Mollie.Tests.Unit.Client {
             // Given: We retrieve a list of customers
             const string customerId = "customer-id";
             var mockHttp = new MockHttpMessageHandler();
-            mockHttp.When($"{BaseMollieClient.ApiEndPoint}customers/{customerId}/payments{expectedQueryString}")
+            mockHttp.When($"{BaseMollieClient.DefaultBaseApiEndPoint}customers/{customerId}/payments{expectedQueryString}")
                 .Respond("application/json", DefaultCustomerJsonToReturn);
             HttpClient httpClient = mockHttp.ToHttpClient();
             var customerClient = new CustomerClient("abcde", httpClient);
@@ -82,7 +82,7 @@ namespace Mollie.Tests.Unit.Client {
             // Given: We make a request to retrieve a payment with embedded refunds
             const string customerId = "customer-id";
             string expectedContent = "\"testmode\":true";
-            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Delete, $"{BaseMollieClient.ApiEndPoint}customers/{customerId}", DefaultCustomerJsonToReturn, expectedContent);
+            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Delete, $"{BaseMollieClient.DefaultBaseApiEndPoint}customers/{customerId}", DefaultCustomerJsonToReturn, expectedContent);
             HttpClient httpClient = mockHttp.ToHttpClient();
             var customerClient = new CustomerClient("abcde", httpClient);
 

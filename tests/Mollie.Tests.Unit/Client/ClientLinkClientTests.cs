@@ -21,7 +21,7 @@ public class ClientLinkClientTests : BaseClientTests
         const string clientLinkUrl = "myurl";
         string clientLinkResponseJson = CreateClientLinkResponseJson(clientLinkId, clientLinkUrl);
         var mockHttp = new MockHttpMessageHandler();
-        mockHttp.When( HttpMethod.Post, $"{BaseMollieClient.ApiEndPoint}client-links")
+        mockHttp.When( HttpMethod.Post, $"{BaseMollieClient.DefaultBaseApiEndPoint}client-links")
             .Respond("application/json", clientLinkResponseJson);
         HttpClient httpClient = mockHttp.ToHttpClient();
         ClientLinkClient clientLinkClient = new ClientLinkClient("clientId", "access_1234", httpClient);

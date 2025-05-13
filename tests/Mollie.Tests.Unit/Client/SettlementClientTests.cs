@@ -15,7 +15,7 @@ namespace Mollie.Tests.Unit.Client {
         [Fact]
         public async Task ListSettlementCaptures_DefaultBehaviour_ResponseIsParsed() {
             // Given: We request a list of captures
-            string expectedUrl = $"{BaseMollieClient.ApiEndPoint}settlements/{defaultSettlementId}/captures";
+            string expectedUrl = $"{BaseMollieClient.DefaultBaseApiEndPoint}settlements/{defaultSettlementId}/captures";
             var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, defaultCaptureListJsonResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
             SettlementClient settlementClient = new SettlementClient("api-key", httpClient);
@@ -53,7 +53,7 @@ namespace Mollie.Tests.Unit.Client {
         [Fact]
         public async Task GetOpenSettlement_DefaultBehaviour_ResponseIsParsed() {
             // Given: We request a list of captures
-            string expectedUrl = $"{BaseMollieClient.ApiEndPoint}settlements/open";
+            string expectedUrl = $"{BaseMollieClient.DefaultBaseApiEndPoint}settlements/open";
             var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, defaultGetSettlementResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
             SettlementClient settlementClient = new SettlementClient("api-key", httpClient);
@@ -120,7 +120,7 @@ namespace Mollie.Tests.Unit.Client {
         [Fact]
         public async Task GetOpenSettlement_ResponseWithEmptyPeriods_ResponseIsParsed() {
             // Given: We request a list of captures
-            string expectedUrl = $"{BaseMollieClient.ApiEndPoint}settlements/open";
+            string expectedUrl = $"{BaseMollieClient.DefaultBaseApiEndPoint}settlements/open";
             var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, emptyPeriodsSettlementResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
             SettlementClient settlementClient = new SettlementClient("api-key", httpClient);

@@ -35,7 +35,7 @@ namespace Mollie.Tests.Unit.Client {
             const string expectedPartialRequest = @"{""tracking"":{""carrier"":""tracking-carrier"",""code"":""tracking-code"",""url"":""tracking-url""},""lines"":[{""id"":""shipment-line-id"",""quantity"":1,""amount"":{""currency"":""EUR"",""value"":""50.00""}}],""testmode"":true}";
             var mockHttp = CreateMockHttpMessageHandler(
                 HttpMethod.Post,
-                $"{BaseMollieClient.ApiEndPoint}orders/{orderId}/shipments",
+                $"{BaseMollieClient.DefaultBaseApiEndPoint}orders/{orderId}/shipments",
                 DefaultShipmentJsonToReturn,
                 expectedPartialRequest);
             HttpClient httpClient = mockHttp.ToHttpClient();
@@ -62,7 +62,7 @@ namespace Mollie.Tests.Unit.Client {
             const string shipmentId = "shipment-id";
 
             var mockHttp = new MockHttpMessageHandler();
-            mockHttp.When($"{BaseMollieClient.ApiEndPoint}{expectedUrl}")
+            mockHttp.When($"{BaseMollieClient.DefaultBaseApiEndPoint}{expectedUrl}")
                 .Respond("application/json", DefaultShipmentJsonToReturn);
             HttpClient httpClient = mockHttp.ToHttpClient();
             ShipmentClient shipmentClient = new ShipmentClient("abcde", httpClient);
@@ -83,7 +83,7 @@ namespace Mollie.Tests.Unit.Client {
             const string orderId = "order-id";
 
             var mockHttp = new MockHttpMessageHandler();
-            mockHttp.When($"{BaseMollieClient.ApiEndPoint}{expectedUrl}")
+            mockHttp.When($"{BaseMollieClient.DefaultBaseApiEndPoint}{expectedUrl}")
                 .Respond("application/json", DefaultShipmentJsonToReturn);
             HttpClient httpClient = mockHttp.ToHttpClient();
             ShipmentClient shipmentClient = new ShipmentClient("abcde", httpClient);
@@ -112,7 +112,7 @@ namespace Mollie.Tests.Unit.Client {
             const string expectedPartialRequest = @"{""tracking"":{""carrier"":""tracking-carrier"",""code"":""tracking-code"",""url"":""tracking-url""},""testmode"":true}";
             var mockHttp = CreateMockHttpMessageHandler(
                 HttpMethod.Patch,
-                $"{BaseMollieClient.ApiEndPoint}orders/{orderId}/shipments/{shipmentId}",
+                $"{BaseMollieClient.DefaultBaseApiEndPoint}orders/{orderId}/shipments/{shipmentId}",
                 DefaultShipmentJsonToReturn,
                 expectedPartialRequest);
             HttpClient httpClient = mockHttp.ToHttpClient();

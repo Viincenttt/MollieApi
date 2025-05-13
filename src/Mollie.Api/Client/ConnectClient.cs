@@ -14,13 +14,17 @@ using Mollie.Api.Options;
 
 namespace Mollie.Api.Client {
     public class ConnectClient : BaseMollieClient, IConnectClient {
-        private const string AuthorizeEndPoint = "https://my.mollie.com/oauth2/authorize";
-        private const string TokenEndPoint = "https://api.mollie.com/oauth2/";
+        public const string DefaultAuthorizeEndpoint = "https://my.mollie.com/oauth2/authorize";
+        public const string DefaultTokenEndpoint = "https://api.mollie.com/oauth2/";
+
+        private readonly string _authorizeEndPoint;
+        private readonly string _tokenEndPoint;
 
         private readonly string _clientId;
         private readonly string _clientSecret;
 
-        public ConnectClient(string? clientId, string? clientSecret, HttpClient? httpClient = null): base(httpClient, ConnectClient.TokenEndPoint) {
+        public ConnectClient(string? clientId, string? clientSecret, HttpClient? httpClient = null)
+            : base(httpClient, DefaultTokenEndpoint) {
             if (string.IsNullOrWhiteSpace(clientId)) {
                 throw new ArgumentNullException(nameof(clientId));
             }
@@ -31,10 +35,13 @@ namespace Mollie.Api.Client {
 
             _clientSecret = clientSecret!;
             _clientId = clientId!;
+            _authorizeEndPoint = DefaultAuthorizeEndpoint;
+            _tokenEndPoint = DefaultTokenEndpoint;
         }
 
         [ActivatorUtilitiesConstructor]
-        public ConnectClient(MollieClientOptions options, HttpClient? httpClient = null): base(httpClient, ConnectClient.TokenEndPoint) {
+        public ConnectClient(MollieClientOptions options, HttpClient? httpClient = null)
+            : base(httpClient, options.ConnectTokenEndPoint) {
             if (string.IsNullOrWhiteSpace(options.ClientId)) {
                 throw new ArgumentNullException(nameof(options.ClientId));
             }
@@ -45,6 +52,8 @@ namespace Mollie.Api.Client {
 
             _clientSecret = options.ClientSecret!;
             _clientId = options.ClientId!;
+            _authorizeEndPoint = options.ConnectOAuthAuthorizeEndPoint;
+            _tokenEndPoint = options.ConnectTokenEndPoint;
         }
 
         public string GetAuthorizationUrl(
@@ -66,7 +75,7 @@ namespace Mollie.Api.Client {
             parameters.AddValueIfNotNullOrEmpty("locale", locale);
             parameters.AddValueIfNotNullOrEmpty("landing_page", landingPage);
 
-            return AuthorizeEndPoint + parameters.ToQueryString();
+            return _authorizeEndPoint + parameters.ToQueryString();
         }
 
         public async Task<TokenResponse> GetAccessTokenAsync(
@@ -85,7 +94,7 @@ namespace Mollie.Api.Client {
 
         protected override HttpRequestMessage CreateHttpRequest(
             HttpMethod method, string relativeUri, HttpContent? content = null) {
-            var httpRequest = new HttpRequestMessage(method, new Uri(new Uri(TokenEndPoint), relativeUri));
+            var httpRequest = new HttpRequestMessage(method, new Uri(new Uri(_tokenEndPoint), relativeUri));
             httpRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Basic", Base64Encode($"{_clientId}:{_clientSecret}"));
             httpRequest.Content = content;

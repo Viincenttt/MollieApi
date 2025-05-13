@@ -32,7 +32,7 @@ public class BaseMollieClientTests : BaseClientTests {
     ""status"": {errorStatus},
     ""title"": ""Error""
 }}";
-        const string expectedUrl = $"{BaseMollieClient.ApiEndPoint}payments";
+        const string expectedUrl = $"{BaseMollieClient.DefaultBaseApiEndPoint}payments";
         var mockHttp = CreateMockHttpMessageHandler(
             HttpMethod.Post,
             expectedUrl,
@@ -57,7 +57,7 @@ public class BaseMollieClientTests : BaseClientTests {
     public async Task HttpResponseStatusCodeIsNotSuccesfull_ResponseBodyContainsHtml_MollieApiExceptionIsThrown() {
         // Arrange
         string responseBody = "<html><body>Whoops!</body></html>";
-        const string expectedUrl = $"{BaseMollieClient.ApiEndPoint}payments";
+        const string expectedUrl = $"{BaseMollieClient.DefaultBaseApiEndPoint}payments";
         var mockHttp = CreateMockHttpMessageHandler(
             HttpMethod.Post,
             expectedUrl,
@@ -84,7 +84,7 @@ public class BaseMollieClientTests : BaseClientTests {
         // Arrange
         const string customUserAgent = "my-user-agent";
         var mockHttp = new MockHttpMessageHandler();
-        mockHttp.Expect(HttpMethod.Get,$"{BaseMollieClient.ApiEndPoint}methods")
+        mockHttp.Expect(HttpMethod.Get,$"{BaseMollieClient.DefaultBaseApiEndPoint}methods")
             .With(request => {
                 var userAgent = request.Headers.UserAgent.ToArray();
                 userAgent.ShouldNotBeNull();
@@ -114,7 +114,7 @@ public class BaseMollieClientTests : BaseClientTests {
     public async Task NoustomUserAgentIsSetInOptions_UserAgentIsAppendedToDefaultUserAgent() {
         // Arrange
         var mockHttp = new MockHttpMessageHandler();
-        mockHttp.Expect(HttpMethod.Get,$"{BaseMollieClient.ApiEndPoint}methods")
+        mockHttp.Expect(HttpMethod.Get,$"{BaseMollieClient.DefaultBaseApiEndPoint}methods")
             .With(request => {
                 var userAgent = request.Headers.UserAgent.ToArray();
                 userAgent.ShouldNotBeNull();

@@ -52,7 +52,7 @@ namespace Mollie.Tests.Unit.Client {
         public async Task GetChargebackAsync_ResponseIsDeserializedInExpectedFormat() {
             // Given: we retrieve the chargeback by id and payment id
             var mockHttp = new MockHttpMessageHandler();
-            mockHttp.When($"{BaseMollieClient.ApiEndPoint}*")
+            mockHttp.When($"{BaseMollieClient.DefaultBaseApiEndPoint}*")
                 .Respond("application/json", defaultGetChargebacksResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
             ChargebackClient chargebackClient = new ChargebackClient("abcde", httpClient);
@@ -74,7 +74,7 @@ namespace Mollie.Tests.Unit.Client {
         public async Task GetOrderRefundListAsync_QueryParameterOptions_CorrectParametersAreAdded(bool testmode, string expectedQueryString) {
             // Given: we retrieve the chargeback by id and payment id
             var mockHttp = new MockHttpMessageHandler();
-            mockHttp.When($"{BaseMollieClient.ApiEndPoint}payments/{defaultPaymentId}/chargebacks/{defaultChargebackId}{expectedQueryString}")
+            mockHttp.When($"{BaseMollieClient.DefaultBaseApiEndPoint}payments/{defaultPaymentId}/chargebacks/{defaultChargebackId}{expectedQueryString}")
                 .Respond("application/json", defaultGetChargebacksResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
             ChargebackClient chargebackClient = new ChargebackClient("abcde", httpClient);
@@ -94,7 +94,7 @@ namespace Mollie.Tests.Unit.Client {
         public async Task GetChargebacksListAsync_FromLimitTestmodeQueryParameterOptions_CorrectParametersAreAdded(string? from, int? limit, bool testmode, string expectedQueryString) {
             // Given: we retrieve the chargeback by id and payment id
             var mockHttp = new MockHttpMessageHandler();
-            mockHttp.When($"{BaseMollieClient.ApiEndPoint}payments/{defaultPaymentId}/chargebacks{expectedQueryString}")
+            mockHttp.When($"{BaseMollieClient.DefaultBaseApiEndPoint}payments/{defaultPaymentId}/chargebacks{expectedQueryString}")
                 .Respond("application/json", defaultGetChargebacksResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
             ChargebackClient chargebackClient = new ChargebackClient("abcde", httpClient);
@@ -113,7 +113,7 @@ namespace Mollie.Tests.Unit.Client {
         public async Task GetChargebacksListAsync_ProfileTestModeQueryParameterOptions_CorrectParametersAreAdded(string? profileId, bool testmode, string expectedQueryString) {
             // Given: we retrieve the chargeback by id and payment id
             var mockHttp = new MockHttpMessageHandler();
-            mockHttp.When($"{BaseMollieClient.ApiEndPoint}chargebacks{expectedQueryString}")
+            mockHttp.When($"{BaseMollieClient.DefaultBaseApiEndPoint}chargebacks{expectedQueryString}")
                 .Respond("application/json", defaultGetChargebacksResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
             ChargebackClient chargebackClient = new ChargebackClient("abcde", httpClient);

@@ -21,7 +21,7 @@ namespace Mollie.Tests.Unit.Client {
             const string customerId = "customer-id";
 
             var mockHttp = new MockHttpMessageHandler();
-            mockHttp.When($"{BaseMollieClient.ApiEndPoint}customers/customer-id/subscriptions{expectedQueryString}")
+            mockHttp.When($"{BaseMollieClient.DefaultBaseApiEndPoint}customers/customer-id/subscriptions{expectedQueryString}")
                 .Respond("application/json", DefaultSubscriptionJsonToReturn);
             HttpClient httpClient = mockHttp.ToHttpClient();
             var subscriptionClient = new SubscriptionClient("abcde", httpClient);
@@ -43,7 +43,7 @@ namespace Mollie.Tests.Unit.Client {
         public async Task GetAllSubscriptionList_TestModeParameterCase_QueryStringOnlyContainsTestModeParameterIfTrue(string? from, int? limit, string? profileId, bool testmode, string expectedQueryString) {
             // Given: We retrieve a list of subscriptions
             var mockHttp = new MockHttpMessageHandler();
-            mockHttp.When($"{BaseMollieClient.ApiEndPoint}subscriptions{expectedQueryString}")
+            mockHttp.When($"{BaseMollieClient.DefaultBaseApiEndPoint}subscriptions{expectedQueryString}")
                 .Respond("application/json", DefaultSubscriptionJsonToReturn);
             HttpClient httpClient = mockHttp.ToHttpClient();
             var subscriptionClient = new SubscriptionClient("abcde", httpClient);
@@ -65,7 +65,7 @@ namespace Mollie.Tests.Unit.Client {
             const string subscriptionId = "subscription-id";
 
             var mockHttp = new MockHttpMessageHandler();
-            mockHttp.When($"{BaseMollieClient.ApiEndPoint}{expectedUrl}")
+            mockHttp.When($"{BaseMollieClient.DefaultBaseApiEndPoint}{expectedUrl}")
                 .Respond("application/json", DefaultSubscriptionJsonToReturn);
             HttpClient httpClient = mockHttp.ToHttpClient();
             var subscriptionClient = new SubscriptionClient("abcde", httpClient);
@@ -87,7 +87,7 @@ namespace Mollie.Tests.Unit.Client {
             string expectedContent = "\"testmode\":true";
             var mockHttp = CreateMockHttpMessageHandler(
                 HttpMethod.Delete,
-                $"{BaseMollieClient.ApiEndPoint}customers/{customerId}/subscriptions/{subscriptionId}",
+                $"{BaseMollieClient.DefaultBaseApiEndPoint}customers/{customerId}/subscriptions/{subscriptionId}",
                 DefaultSubscriptionJsonToReturn,
                 expectedContent);
             HttpClient httpClient = mockHttp.ToHttpClient();
@@ -110,7 +110,7 @@ namespace Mollie.Tests.Unit.Client {
             const string customerId = "customer-id";
             const string subscriptionId = "subscription-id";
             var mockHttp = new MockHttpMessageHandler();
-            mockHttp.When($"{BaseMollieClient.ApiEndPoint}customers/{customerId}/subscriptions/{subscriptionId}/payments{expectedQueryString}")
+            mockHttp.When($"{BaseMollieClient.DefaultBaseApiEndPoint}customers/{customerId}/subscriptions/{subscriptionId}/payments{expectedQueryString}")
                 .Respond("application/json", DefaultSubscriptionJsonToReturn);
             HttpClient httpClient = mockHttp.ToHttpClient();
             var subscriptionClient = new SubscriptionClient("abcde", httpClient);
