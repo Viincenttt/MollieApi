@@ -40,9 +40,7 @@ namespace Mollie.Api.Client {
             _httpClient = httpClient ?? new HttpClient();
             _mollieSecretManager = new DefaultMollieSecretManager(apiKey);
             _options = new MollieClientOptions {
-                ApiKey = apiKey,
-                ClientId = string.Empty,
-                ClientSecret = string.Empty,
+                ApiKey = apiKey
             };
         }
 
@@ -60,11 +58,7 @@ namespace Mollie.Api.Client {
             _createdHttpClient = httpClient == null;
             _httpClient = httpClient ?? new HttpClient();
             _mollieSecretManager = new DefaultMollieSecretManager(string.Empty);
-            _options = new MollieClientOptions {
-                ApiKey = string.Empty,
-                ClientId = string.Empty,
-                ClientSecret = string.Empty,
-            };
+            _options = new();
         }
 
         public IDisposable WithIdempotencyKey(string value) {
@@ -184,7 +178,13 @@ namespace Mollie.Api.Client {
         private string GetUserAgent() {
             const string packageName = "Mollie.Api.NET";
             string versionNumber = typeof(BaseMollieClient).GetTypeInfo().Assembly.GetName().Version.ToString();
-            return $"{packageName}/{versionNumber}";
+            string userAgent = $"{packageName}/{versionNumber}";
+
+            if (!string.IsNullOrEmpty(_options.CustomUserAgent)) {
+                userAgent = $"{userAgent} {_options.CustomUserAgent}";
+            }
+
+            return userAgent;
         }
 
         private MollieErrorMessage ParseMollieErrorMessage(HttpStatusCode responseStatusCode, string responseBody) {
