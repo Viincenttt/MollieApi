@@ -2,19 +2,23 @@
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
 using Mollie.Api.Framework.Authentication.Abstract;
 using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Terminal.Response;
 using Mollie.Api.Models.Url;
+using Mollie.Api.Options;
 
 namespace Mollie.Api.Client {
     public class TerminalClient : BaseMollieClient, ITerminalClient
     {
         public TerminalClient(string apiKey, HttpClient? httpClient = null) : base(apiKey, httpClient) { }
 
-        public TerminalClient(IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null) : base(mollieSecretManager, httpClient) {
+        [ActivatorUtilitiesConstructor]
+        public TerminalClient(MollieClientOptions options, IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null)
+            : base(options, mollieSecretManager, httpClient) {
         }
 
         public async Task<TerminalResponse> GetTerminalAsync(

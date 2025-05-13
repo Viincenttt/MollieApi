@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
 using Mollie.Api.Framework.Authentication.Abstract;
@@ -10,6 +11,7 @@ using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Payment;
 using Mollie.Api.Models.PaymentMethod.Response;
 using Mollie.Api.Models.Url;
+using Mollie.Api.Options;
 
 namespace Mollie.Api.Client
 {
@@ -18,7 +20,9 @@ namespace Mollie.Api.Client
         public PaymentMethodClient(string apiKey, HttpClient? httpClient = null) : base(apiKey, httpClient) {
         }
 
-        public PaymentMethodClient(IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null) : base(mollieSecretManager, httpClient) {
+        [ActivatorUtilitiesConstructor]
+        public PaymentMethodClient(MollieClientOptions options, IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null)
+            : base(options, mollieSecretManager, httpClient) {
         }
 
         public async Task<PaymentMethodResponse> GetPaymentMethodAsync(

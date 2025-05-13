@@ -13,13 +13,16 @@ using Mollie.Api.Models.Balance.Response.BalanceReport;
 using Mollie.Api.Models.Balance.Response.BalanceTransaction;
 using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Url;
+using Mollie.Api.Options;
 
 namespace Mollie.Api.Client {
     public class BalanceClient : BaseMollieClient, IBalanceClient {
         public BalanceClient(string apiKey, HttpClient? httpClient = null) : base(apiKey, httpClient) {
         }
 
-        public BalanceClient(IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null) : base(mollieSecretManager, httpClient) {
+        [ActivatorUtilitiesConstructor]
+        public BalanceClient(MollieClientOptions options, IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null)
+            : base(options, mollieSecretManager, httpClient) {
         }
 
         public async Task<BalanceResponse> GetBalanceAsync(string balanceId, CancellationToken cancellationToken = default) {

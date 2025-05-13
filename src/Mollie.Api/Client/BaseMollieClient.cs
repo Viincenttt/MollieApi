@@ -14,6 +14,7 @@ using Mollie.Api.Framework.Authentication.Abstract;
 using Mollie.Api.Framework.Idempotency;
 using Mollie.Api.Models.Error;
 using Mollie.Api.Models.Url;
+using Mollie.Api.Options;
 using Newtonsoft.Json;
 
 namespace Mollie.Api.Client {
@@ -21,6 +22,7 @@ namespace Mollie.Api.Client {
         public const string ApiEndPoint = "https://api.mollie.com/v2/";
         private readonly string _apiEndpoint = ApiEndPoint;
         private readonly IMollieSecretManager _mollieSecretManager;
+        private readonly MollieClientOptions _options;
         private readonly HttpClient _httpClient;
         private readonly JsonConverterService _jsonConverterService;
 
@@ -37,13 +39,19 @@ namespace Mollie.Api.Client {
             _createdHttpClient = httpClient == null;
             _httpClient = httpClient ?? new HttpClient();
             _mollieSecretManager = new DefaultMollieSecretManager(apiKey);
+            _options = new MollieClientOptions {
+                ApiKey = apiKey,
+                ClientId = string.Empty,
+                ClientSecret = string.Empty,
+            };
         }
 
-        protected BaseMollieClient(IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null) {
+        protected BaseMollieClient(MollieClientOptions options, IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null) {
             _jsonConverterService = new JsonConverterService();
             _createdHttpClient = httpClient == null;
             _httpClient = httpClient ?? new HttpClient();
             _mollieSecretManager = mollieSecretManager;
+            _options = options;
         }
 
         protected BaseMollieClient(HttpClient? httpClient = null, string apiEndpoint = ApiEndPoint) {
@@ -52,6 +60,11 @@ namespace Mollie.Api.Client {
             _createdHttpClient = httpClient == null;
             _httpClient = httpClient ?? new HttpClient();
             _mollieSecretManager = new DefaultMollieSecretManager(string.Empty);
+            _options = new MollieClientOptions {
+                ApiKey = string.Empty,
+                ClientId = string.Empty,
+                ClientSecret = string.Empty,
+            };
         }
 
         public IDisposable WithIdempotencyKey(string value) {
