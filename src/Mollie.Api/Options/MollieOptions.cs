@@ -25,17 +25,17 @@ namespace Mollie.Api.Options {
         /// <summary>
         /// The base URL for all API requests. Can be overridden for testing purposes.
         /// </summary>
-        public string ApiBaseUrl { get; init; } = BaseMollieClient.DefaultBaseApiEndPoint;
+        public string ApiBaseUrl { get; set; } = BaseMollieClient.DefaultBaseApiEndPoint;
 
         /// <summary>
         /// The authorize endpoint for the Connect client. Can be overridden for testing purposes.
         /// </summary>
-        public string ConnectOAuthAuthorizeEndPoint { get; init; } = ConnectClient.DefaultAuthorizeEndpoint;
+        public string ConnectOAuthAuthorizeEndPoint { get; set; } = ConnectClient.DefaultAuthorizeEndpoint;
 
         /// <summary>
         /// The token endpoint for the Connect client. Can be overridden for testing purposes.
         /// </summary>
-        public string ConnectTokenEndPoint { get; init; } = ConnectClient.DefaultTokenEndpoint;
+        public string ConnectTokenEndPoint { get; set; } = ConnectClient.DefaultTokenEndpoint;
 
         /// <summary>
         /// (Optional) Polly retry policy for failed requests
