@@ -29,7 +29,7 @@ public class WalletClientTest : BaseClientTests {
         };
         var mockHttp = CreateMockHttpMessageHandler(
             HttpMethod.Post,
-            $"{BaseMollieClient.ApiEndPoint}wallets/applepay/sessions",
+            $"{BaseMollieClient.DefaultBaseApiEndPoint}wallets/applepay/sessions",
             defaultApplePayPaymentSessionResponse);
         using var walletClient = new WalletClient("abcde", mockHttp.ToHttpClient());
 

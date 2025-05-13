@@ -6,6 +6,7 @@ using Shouldly;
 using Mollie.Api.Client;
 using Mollie.Api.Models.Connect.Request;
 using Mollie.Api.Models.Connect.Response;
+using Mollie.Api.Options;
 using RichardSzalay.MockHttp;
 using Xunit;
 
@@ -15,6 +16,28 @@ public class ConnectClientTests : BaseClientTests
 {
     private const string ClientId = "client-id";
     private const string ClientSecret = "client-secret";
+
+    [Fact]
+    public void GetAuthorizationUrl_WithCustomWithSingleScope_GeneratesAuthorizationUrl()
+    {
+        // Arrange
+        var mollieClientOptions = new MollieClientOptions {
+            ApiKey = string.Empty,
+            ConnectOAuthAuthorizeEndPoint = "https://custom-authorize-endpoint.mollie.com/oauth2/authorize",
+            ClientId = ClientId,
+            ClientSecret = ClientSecret
+        };
+        HttpClient httpClient = new();
+        ConnectClient connectClient = new(mollieClientOptions, httpClient);
+        var scopes = new List<string> {AppPermissions.PaymentsRead};
+
+        // Act
+        string authorizationUrl = connectClient.GetAuthorizationUrl("abcde", scopes);
+
+        // Assert
+        string expectedUrl = $"{mollieClientOptions.ConnectOAuthAuthorizeEndPoint}?client_id={ClientId}&state=abcde&scope=payments.read&response_type=code&approval_prompt=auto";
+        authorizationUrl.ShouldBe(expectedUrl);
+    }
 
     [Fact]
     public void GetAuthorizationUrl_WithSingleScope_GeneratesAuthorizationUrl()
@@ -68,6 +91,34 @@ public class ConnectClientTests : BaseClientTests
             .Respond(HttpStatusCode.NoContent);
         HttpClient httpClient = mockHttp.ToHttpClient();
         ConnectClient connectClient = new ConnectClient(ClientId, ClientSecret, httpClient);
+        var revokeTokenRequest = new RevokeTokenRequest
+        {
+            Token = "access_46EUJ6x8jFJZZeAvhNH4JVey6qVpqR",
+            TokenTypeHint = "refresh_token"
+        };
+
+        // Act
+        await connectClient.RevokeTokenAsync(revokeTokenRequest);
+
+        // Assert
+        mockHttp.VerifyNoOutstandingExpectation();
+    }
+
+    [Fact]
+    public async Task RevokeTokenAsync_WithCustomTokenEndpoints_SendsRequestToCustomEndpoint()
+    {
+        // Arrange
+        var mollieClientOptions = new MollieClientOptions {
+            ApiKey = string.Empty,
+            ConnectTokenEndPoint = "https://custom-token-endpoint.mollie.com/oauth2/",
+            ClientId = ClientId,
+            ClientSecret = ClientSecret
+        };
+        var mockHttp = new MockHttpMessageHandler();
+        mockHttp.Expect(HttpMethod.Delete, $"{mollieClientOptions.ConnectTokenEndPoint}tokens")
+            .Respond(HttpStatusCode.NoContent);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        ConnectClient connectClient = new(mollieClientOptions, httpClient);
         var revokeTokenRequest = new RevokeTokenRequest
         {
             Token = "access_46EUJ6x8jFJZZeAvhNH4JVey6qVpqR",

@@ -40,7 +40,7 @@ public class TerminalClientTests : BaseClientTests {
         const string model = "model";
         string jsonToReturnInMockResponse = CreateTerminalJsonResponse(terminalId, description, serialNumber, brand, model);
         var mockHttp = new MockHttpMessageHandler();
-        mockHttp.When($"{BaseMollieClient.ApiEndPoint}terminals/{terminalId}")
+        mockHttp.When($"{BaseMollieClient.DefaultBaseApiEndPoint}terminals/{terminalId}")
             .With(request => request.Headers.Contains("Idempotency-Key"))
             .Respond("application/json", jsonToReturnInMockResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
@@ -73,7 +73,7 @@ public class TerminalClientTests : BaseClientTests {
         string jsonToReturnInMockResponse = CreateTerminalListJsonResponse();
         var mockHttp = CreateMockHttpMessageHandler(
             HttpMethod.Get,
-            $"{BaseMollieClient.ApiEndPoint}terminals{expectedQueryString}",
+            $"{BaseMollieClient.DefaultBaseApiEndPoint}terminals{expectedQueryString}",
             jsonToReturnInMockResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
         var terminalClient = new TerminalClient("abcde", httpClient);
@@ -91,7 +91,7 @@ public class TerminalClientTests : BaseClientTests {
         string jsonToReturnInMockResponse = CreateTerminalListJsonResponse();
         var mockHttp = CreateMockHttpMessageHandler(
             HttpMethod.Get,
-            $"{BaseMollieClient.ApiEndPoint}terminals",
+            $"{BaseMollieClient.DefaultBaseApiEndPoint}terminals",
             jsonToReturnInMockResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
         var terminalClient = new TerminalClient("abcde", httpClient);

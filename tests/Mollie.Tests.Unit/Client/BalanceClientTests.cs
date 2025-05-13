@@ -20,7 +20,7 @@ namespace Mollie.Tests.Unit.Client {
           // Given: We request a specific balance
           var getBalanceResponseFactory = new GetBalanceResponseFactory();
           var getBalanceResponse = getBalanceResponseFactory.CreateGetBalanceResponse();
-          string expectedUrl = $"{BaseMollieClient.ApiEndPoint}balances/{getBalanceResponseFactory.BalanceId}";
+          string expectedUrl = $"{BaseMollieClient.DefaultBaseApiEndPoint}balances/{getBalanceResponseFactory.BalanceId}";
           var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, getBalanceResponse);
           HttpClient httpClient = mockHttp.ToHttpClient();
           BalanceClient balanceClient = new BalanceClient("api-key", httpClient);
@@ -78,7 +78,7 @@ namespace Mollie.Tests.Unit.Client {
           // Given: We request the primary balance
           var getBalanceResponseFactory = new GetBalanceResponseFactory();
           var getBalanceResponse = getBalanceResponseFactory.CreateGetBalanceResponse();
-          string expectedUrl = $"{BaseMollieClient.ApiEndPoint}balances/primary";
+          string expectedUrl = $"{BaseMollieClient.DefaultBaseApiEndPoint}balances/primary";
           var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, getBalanceResponse);
           HttpClient httpClient = mockHttp.ToHttpClient();
           BalanceClient balanceClient = new BalanceClient("api-key", httpClient);
@@ -111,7 +111,7 @@ namespace Mollie.Tests.Unit.Client {
       [Fact]
       public async Task ListBalancesAsync_DefaultBehaviour_ResponseIsParsed() {
           // Given: We request a list of balances
-          string expectedUrl = $"{BaseMollieClient.ApiEndPoint}balances";
+          string expectedUrl = $"{BaseMollieClient.DefaultBaseApiEndPoint}balances";
           var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, DefaultListBalancesResponse);
           HttpClient httpClient = mockHttp.ToHttpClient();
           BalanceClient balanceClient = new BalanceClient("api-key", httpClient);
@@ -134,7 +134,7 @@ namespace Mollie.Tests.Unit.Client {
           DateTime until = new DateTime(2022, 11, 30);
           string grouping = ReportGrouping.TransactionCategories;
 
-          string expectedUrl = $"{BaseMollieClient.ApiEndPoint}balances/{balanceId}/report" +
+          string expectedUrl = $"{BaseMollieClient.DefaultBaseApiEndPoint}balances/{balanceId}/report" +
                                $"?from={from.ToString("yyyy-MM-dd")}&until={until.ToString("yyyy-MM-dd")}&grouping={grouping}";
           var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, DefaultGetBalanceReportTransactionCategoriesResponse);
           HttpClient httpClient = mockHttp.ToHttpClient();
@@ -194,7 +194,7 @@ namespace Mollie.Tests.Unit.Client {
           DateTime until = new DateTime(2022, 11, 30);
           string grouping = ReportGrouping.StatusBalances;
 
-          string expectedUrl = $"{BaseMollieClient.ApiEndPoint}balances/{balanceId}/report" +
+          string expectedUrl = $"{BaseMollieClient.DefaultBaseApiEndPoint}balances/{balanceId}/report" +
                                $"?from={from.ToString("yyyy-MM-dd")}&until={until.ToString("yyyy-MM-dd")}&grouping={grouping}";
           var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, DefaultGetBalanceReportStatusBalancesResponse);
           HttpClient httpClient = mockHttp.ToHttpClient();
@@ -228,7 +228,7 @@ namespace Mollie.Tests.Unit.Client {
       public async Task ListBalanceTransactionsAsync_StatusBalances_ResponseIsParsed() {
           // Given
           string balanceId = "bal_CKjKwQdjCwCSArXFAJNFH";
-          string expectedUrl = $"{BaseMollieClient.ApiEndPoint}balances/{balanceId}/transactions";
+          string expectedUrl = $"{BaseMollieClient.DefaultBaseApiEndPoint}balances/{balanceId}/transactions";
           var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, DefaultListBalanceTransactionsResponse);
           HttpClient httpClient = mockHttp.ToHttpClient();
           BalanceClient balanceClient = new BalanceClient("api-key", httpClient);
@@ -275,7 +275,7 @@ namespace Mollie.Tests.Unit.Client {
       [Fact]
       public async Task ListPrimaryBalanceTransactionsAsync_StatusBalances_ResponseIsParsed() {
           // Given
-          string expectedUrl = $"{BaseMollieClient.ApiEndPoint}balances/primary/transactions";
+          string expectedUrl = $"{BaseMollieClient.DefaultBaseApiEndPoint}balances/primary/transactions";
           var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, DefaultListBalanceTransactionsResponse);
           HttpClient httpClient = mockHttp.ToHttpClient();
           BalanceClient balanceClient = new BalanceClient("api-key", httpClient);

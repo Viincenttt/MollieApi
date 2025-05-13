@@ -29,7 +29,7 @@ public class ClientClientTests : BaseClientTests {
         // Arrange
         const string clientId = "org_12345678";
         var mockHttp = new MockHttpMessageHandler();
-        mockHttp.Expect(HttpMethod.Get,$"{BaseMollieClient.ApiEndPoint}clients/{clientId}")
+        mockHttp.Expect(HttpMethod.Get,$"{BaseMollieClient.DefaultBaseApiEndPoint}clients/{clientId}")
             .With(request => request.Headers.Contains("Idempotency-Key"))
             .Respond("application/json", DefaultGetClientResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
@@ -67,7 +67,7 @@ public class ClientClientTests : BaseClientTests {
         // Arrange
         const string clientId = "org_12345678";
         var mockHttp = new MockHttpMessageHandler();
-        mockHttp.Expect(HttpMethod.Get,$"{BaseMollieClient.ApiEndPoint}clients/{clientId}{expectedQueryString}")
+        mockHttp.Expect(HttpMethod.Get,$"{BaseMollieClient.DefaultBaseApiEndPoint}clients/{clientId}{expectedQueryString}")
             .With(request => request.Headers.Contains("Idempotency-Key"))
             .Respond("application/json", DefaultGetClientResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
@@ -91,7 +91,7 @@ public class ClientClientTests : BaseClientTests {
         string? from, int? limit, bool embedOrganization, bool embedOnboarding, bool embedCapabilities, string expectedQueryString) {
         // Given: We retrieve a list of clients
         var mockHttp = new MockHttpMessageHandler();
-        mockHttp.When($"{BaseMollieClient.ApiEndPoint}clients{expectedQueryString}")
+        mockHttp.When($"{BaseMollieClient.DefaultBaseApiEndPoint}clients{expectedQueryString}")
             .Respond("application/json", DefaultGetClientListResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
         using var clientClient = new ClientClient("access_1234", httpClient);
@@ -110,7 +110,7 @@ public class ClientClientTests : BaseClientTests {
     {
         // Arrange
         var mockHttp = new MockHttpMessageHandler();
-        mockHttp.Expect(HttpMethod.Get,$"{BaseMollieClient.ApiEndPoint}clients")
+        mockHttp.Expect(HttpMethod.Get,$"{BaseMollieClient.DefaultBaseApiEndPoint}clients")
             .With(request => request.Headers.Contains("Idempotency-Key"))
             .Respond("application/json", DefaultGetClientListResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();

@@ -21,7 +21,7 @@ namespace Mollie.Tests.Unit.Client {
         public async Task GetOrderAsync_NoEmbedParameters_QueryStringIsEmpty() {
             // Given: We make a request to retrieve a order without wanting any extra data
             const string orderId = "abcde";
-            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}orders/{orderId}", defaultOrderJsonResponse);
+            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.DefaultBaseApiEndPoint}orders/{orderId}", defaultOrderJsonResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
             OrderClient orderClient = new OrderClient("abcde", httpClient);
 
@@ -36,7 +36,7 @@ namespace Mollie.Tests.Unit.Client {
         public async Task GetOrderAsync_SingleEmbedParameters_QueryStringContainsEmbedParameter() {
             // Given: We make a request to retrieve a order with a single embed parameter
             const string orderId = "abcde";
-            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}orders/{orderId}?embed=payments", defaultOrderJsonResponse);
+            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.DefaultBaseApiEndPoint}orders/{orderId}?embed=payments", defaultOrderJsonResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
             OrderClient orderClient = new OrderClient("abcde", httpClient);
 
@@ -51,7 +51,7 @@ namespace Mollie.Tests.Unit.Client {
         public async Task GetOrderAsync_MultipleEmbedParameters_QueryStringContainsMultipleParameters() {
             // Given: We make a request to retrieve a order with a single embed parameter
             const string orderId = "abcde";
-            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}orders/{orderId}?embed=payments,refunds,shipments", defaultOrderJsonResponse);
+            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.DefaultBaseApiEndPoint}orders/{orderId}?embed=payments,refunds,shipments", defaultOrderJsonResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
             OrderClient orderClient = new OrderClient("abcde", httpClient);
 
@@ -66,7 +66,7 @@ namespace Mollie.Tests.Unit.Client {
         public async Task GetOrderAsync_WithTestModeParameter_QueryStringContainsTestModeParameter() {
             // Given: We make a request to retrieve a order with a single embed parameter
             const string orderId = "abcde";
-            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}orders/{orderId}?testmode=true", defaultOrderJsonResponse);
+            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.DefaultBaseApiEndPoint}orders/{orderId}?testmode=true", defaultOrderJsonResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
             OrderClient orderClient = new OrderClient("abcde", httpClient);
 
@@ -93,7 +93,7 @@ namespace Mollie.Tests.Unit.Client {
             SortDirection? sortDirection,
             string expectedQueryString) {
             // Given: We make a request to retrieve the list of orders
-            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}orders{expectedQueryString}", defaultOrderJsonResponse);
+            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.DefaultBaseApiEndPoint}orders{expectedQueryString}", defaultOrderJsonResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
             OrderClient orderClient = new OrderClient("abcde", httpClient);
 
@@ -111,7 +111,7 @@ namespace Mollie.Tests.Unit.Client {
             orderRequest.Method = PaymentMethod.Ideal;
             string expectedPaymentMethodJson = $"\"method\":[\"{PaymentMethod.Ideal}";
             const string jsonResponse = defaultOrderJsonResponse;
-            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Post, $"{BaseMollieClient.ApiEndPoint}orders", jsonResponse, expectedPaymentMethodJson);
+            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Post, $"{BaseMollieClient.DefaultBaseApiEndPoint}orders", jsonResponse, expectedPaymentMethodJson);
             HttpClient httpClient = mockHttp.ToHttpClient();
             OrderClient orderClient = new OrderClient("abcde", httpClient);
 
@@ -134,7 +134,7 @@ namespace Mollie.Tests.Unit.Client {
             };
             string expectedPaymentMethodJson = $"\"method\":[\"{PaymentMethod.Ideal}\",\"{PaymentMethod.CreditCard}\",\"{PaymentMethod.DirectDebit}\"]";
             const string jsonResponse = defaultOrderJsonResponse;
-            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Post, $"{BaseMollieClient.ApiEndPoint}orders", jsonResponse, expectedPaymentMethodJson);
+            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Post, $"{BaseMollieClient.DefaultBaseApiEndPoint}orders", jsonResponse, expectedPaymentMethodJson);
             HttpClient httpClient = mockHttp.ToHttpClient();
             OrderClient orderClient = new OrderClient("abcde", httpClient);
 
@@ -157,7 +157,7 @@ namespace Mollie.Tests.Unit.Client {
                 }
             };
             const string orderId = "order-id";
-            string url = $"{BaseMollieClient.ApiEndPoint}orders/{orderId}/payments";
+            string url = $"{BaseMollieClient.DefaultBaseApiEndPoint}orders/{orderId}/payments";
             string expectedPaymentMethodJson = $"\"method\":[\"{PaymentMethod.Ideal}\"]";
             var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Post, url, defaultPaymentJsonResponse, expectedPaymentMethodJson);
             HttpClient httpClient = mockHttp.ToHttpClient();
@@ -184,7 +184,7 @@ namespace Mollie.Tests.Unit.Client {
                 }
             };
             const string orderId = "order-id";
-            string url = $"{BaseMollieClient.ApiEndPoint}orders/{orderId}/payments";
+            string url = $"{BaseMollieClient.DefaultBaseApiEndPoint}orders/{orderId}/payments";
             string expectedPaymentMethodJson = $"\"method\":[\"{PaymentMethod.Ideal}\",\"{PaymentMethod.CreditCard}\",\"{PaymentMethod.DirectDebit}\"]";
             var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Post, url, defaultPaymentJsonResponse, expectedPaymentMethodJson);
             HttpClient httpClient = mockHttp.ToHttpClient();

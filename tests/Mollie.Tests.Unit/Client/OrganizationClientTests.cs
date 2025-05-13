@@ -15,7 +15,7 @@ public class OrganizationClientTests : BaseClientTests
     {
         // Arrange
         var mockHttp = new MockHttpMessageHandler();
-        mockHttp.When($"{BaseMollieClient.ApiEndPoint}organizations/me")
+        mockHttp.When($"{BaseMollieClient.DefaultBaseApiEndPoint}organizations/me")
             .With(request => request.Headers.Contains("Idempotency-Key"))
             .Respond("application/json", defaultOrganizationResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
@@ -34,7 +34,7 @@ public class OrganizationClientTests : BaseClientTests
         // Arrange
         const string organizationId = "organization-id";
         var mockHttp = new MockHttpMessageHandler();
-        mockHttp.When($"{BaseMollieClient.ApiEndPoint}organizations/{organizationId}")
+        mockHttp.When($"{BaseMollieClient.DefaultBaseApiEndPoint}organizations/{organizationId}")
             .With(request => request.Headers.Contains("Idempotency-Key"))
             .Respond("application/json", defaultOrganizationResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
@@ -52,7 +52,7 @@ public class OrganizationClientTests : BaseClientTests
     {
         // Arrange
         var mockHttp = new MockHttpMessageHandler();
-        mockHttp.When($"{BaseMollieClient.ApiEndPoint}organizations")
+        mockHttp.When($"{BaseMollieClient.DefaultBaseApiEndPoint}organizations")
             .With(request => request.Headers.Contains("Idempotency-Key"))
             .Respond("application/json", defaultOrganizationListResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();

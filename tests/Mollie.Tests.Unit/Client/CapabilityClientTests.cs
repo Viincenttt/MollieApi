@@ -17,7 +17,7 @@ public class CapabilityClientTests {
     {
         // Arrange
         var mockHttp = new MockHttpMessageHandler();
-        mockHttp.Expect(HttpMethod.Get,$"{BaseMollieClient.ApiEndPoint}capabilities")
+        mockHttp.Expect(HttpMethod.Get,$"{BaseMollieClient.DefaultBaseApiEndPoint}capabilities")
             .With(request => request.Headers.Contains("Idempotency-Key"))
             .Respond("application/json", DefaultListCapabilitiesResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();

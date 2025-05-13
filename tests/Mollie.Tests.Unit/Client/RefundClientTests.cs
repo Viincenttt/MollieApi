@@ -55,7 +55,7 @@ namespace Mollie.Tests.Unit.Client {
         public async Task GetRefundAsync_TestModeParameterCase_QueryStringOnlyContainsTestModeParameterIfTrue(string expectedUrl, bool? testModeParameter) {
             // Given: We make a request to retrieve a payment without wanting any extra data
             bool testMode = testModeParameter ?? false;
-            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}{expectedUrl}", defaultGetRefundResponse);
+            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.DefaultBaseApiEndPoint}{expectedUrl}", defaultGetRefundResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
             RefundClient refundClient = new RefundClient("abcde", httpClient);
 
@@ -117,7 +117,7 @@ namespace Mollie.Tests.Unit.Client {
 }}";
             var mockHttp = CreateMockHttpMessageHandler(
                 HttpMethod.Post,
-                $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}/refunds",
+                $"{BaseMollieClient.DefaultBaseApiEndPoint}payments/{paymentId}/refunds",
                 expectedJsonResponse,
                 expectedRoutingInformation);
             HttpClient httpClient = mockHttp.ToHttpClient();
@@ -177,7 +177,7 @@ namespace Mollie.Tests.Unit.Client {
 }}";
             var mockHttp = CreateMockHttpMessageHandler(
                 HttpMethod.Post,
-                $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}/refunds",
+                $"{BaseMollieClient.DefaultBaseApiEndPoint}payments/{paymentId}/refunds",
                 expectedJsonResponse,
                 expectedRoutingInformation);
             HttpClient httpClient = mockHttp.ToHttpClient();
@@ -295,7 +295,7 @@ namespace Mollie.Tests.Unit.Client {
         public async Task GetOrderRefundListAsync_QueryParameterOptions_CorrectParametersAreAdded(string? from, int? limit, bool testmode, string expectedQueryString) {
             // Given: We make a request to retrieve the list of orders
             const string orderId = "abcde";
-            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}orders/{orderId}/refunds{expectedQueryString}", defaultOrderJsonResponse);
+            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.DefaultBaseApiEndPoint}orders/{orderId}/refunds{expectedQueryString}", defaultOrderJsonResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
             RefundClient refundClient = new RefundClient("api-key", httpClient);
 
@@ -325,7 +325,7 @@ namespace Mollie.Tests.Unit.Client {
                 },
                 Metadata = "my-metadata"
             };
-            string url = $"{BaseMollieClient.ApiEndPoint}orders/{orderId}/refunds";
+            string url = $"{BaseMollieClient.DefaultBaseApiEndPoint}orders/{orderId}/refunds";
             var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Post, url, defaultOrderRefundJsonResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
             RefundClient refundClient = new RefundClient("api-key", httpClient);

@@ -19,7 +19,7 @@ namespace Mollie.Tests.Unit.Client {
             const string mandateId = "mandate-id";
 
             var mockHttp = new MockHttpMessageHandler();
-            mockHttp.When($"{BaseMollieClient.ApiEndPoint}{expectedUrl}")
+            mockHttp.When($"{BaseMollieClient.DefaultBaseApiEndPoint}{expectedUrl}")
                 .Respond("application/json", DefaultMandateJsonToReturn);
             HttpClient httpClient = mockHttp.ToHttpClient();
             MandateClient mandateClient = new MandateClient("abcde", httpClient);
@@ -42,7 +42,7 @@ namespace Mollie.Tests.Unit.Client {
             // Given: We retrieve a list of mandates
             const string customerId = "customer-id";
             var mockHttp = new MockHttpMessageHandler();
-            mockHttp.When($"{BaseMollieClient.ApiEndPoint}customers/{customerId}/mandates{expectedQueryString}")
+            mockHttp.When($"{BaseMollieClient.DefaultBaseApiEndPoint}customers/{customerId}/mandates{expectedQueryString}")
                 .Respond("application/json", DefaultMandateJsonToReturn);
             HttpClient httpClient = mockHttp.ToHttpClient();
             MandateClient mandateClient = new MandateClient("abcde", httpClient);
@@ -63,7 +63,7 @@ namespace Mollie.Tests.Unit.Client {
             string expectedContent = "\"testmode\":true";
             var mockHttp = CreateMockHttpMessageHandler(
                 HttpMethod.Delete,
-                $"{BaseMollieClient.ApiEndPoint}customers/{customerId}/mandates/{mandateId}",
+                $"{BaseMollieClient.DefaultBaseApiEndPoint}customers/{customerId}/mandates/{mandateId}",
                 DefaultMandateJsonToReturn,
                 expectedContent);
             HttpClient httpClient = mockHttp.ToHttpClient();

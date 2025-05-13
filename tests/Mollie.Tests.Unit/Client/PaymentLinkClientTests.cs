@@ -33,7 +33,7 @@ namespace Mollie.Tests.Unit.Client {
                 ExpiresAt = DateTime.Now.AddDays(1)
             };
             var mockHttp = new MockHttpMessageHandler();
-            mockHttp.When($"{BaseMollieClient.ApiEndPoint}*")
+            mockHttp.When($"{BaseMollieClient.DefaultBaseApiEndPoint}*")
                 .Respond("application/json", _defaultPaymentLinkJsonResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
             PaymentLinkClient paymentLinkClient = new PaymentLinkClient("api-key", httpClient);
@@ -50,7 +50,7 @@ namespace Mollie.Tests.Unit.Client {
         public async Task GetPaymentLinkAsync_ResponseIsDeserializedInExpectedFormat() {
             // Given: we retrieve a payment link
             var mockHttp = new MockHttpMessageHandler();
-            mockHttp.When($"{BaseMollieClient.ApiEndPoint}*")
+            mockHttp.When($"{BaseMollieClient.DefaultBaseApiEndPoint}*")
                 .Respond("application/json", _defaultPaymentLinkJsonResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
             PaymentLinkClient paymentLinkClient = new PaymentLinkClient("api-key", httpClient);
@@ -93,7 +93,7 @@ namespace Mollie.Tests.Unit.Client {
             // Given: We make a request to delete a payment link
             var mockHttp = CreateMockHttpMessageHandler(
                 HttpMethod.Delete,
-                $"{BaseMollieClient.ApiEndPoint}payment-links/{DefaultPaymentLinkId}{expectedQueryString}",
+                $"{BaseMollieClient.DefaultBaseApiEndPoint}payment-links/{DefaultPaymentLinkId}{expectedQueryString}",
                 _defaultPaymentLinkPaymentsJsonResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
             var paymentLinkClient = new PaymentLinkClient("access_abcde", httpClient);
@@ -121,7 +121,7 @@ namespace Mollie.Tests.Unit.Client {
             // Given: We make a request to retrieve the list of payment links
             var mockHttp = CreateMockHttpMessageHandler(
                 HttpMethod.Get,
-                $"{BaseMollieClient.ApiEndPoint}payment-links/{DefaultPaymentLinkId}/payments{expectedQueryString}",
+                $"{BaseMollieClient.DefaultBaseApiEndPoint}payment-links/{DefaultPaymentLinkId}/payments{expectedQueryString}",
                 _defaultPaymentLinkPaymentsJsonResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
             var paymentLinkClient = new PaymentLinkClient("access_abcde", httpClient);
@@ -138,7 +138,7 @@ namespace Mollie.Tests.Unit.Client {
             // Given: We make a request to retrieve the list of payment links
             var mockHttp = CreateMockHttpMessageHandler(
                 HttpMethod.Get,
-                $"{BaseMollieClient.ApiEndPoint}payment-links/{DefaultPaymentLinkId}/payments",
+                $"{BaseMollieClient.DefaultBaseApiEndPoint}payment-links/{DefaultPaymentLinkId}/payments",
                 _defaultPaymentLinkPaymentsJsonResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
             var paymentLinkClient = new PaymentLinkClient("abcde", httpClient);

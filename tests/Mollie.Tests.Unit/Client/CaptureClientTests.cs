@@ -73,7 +73,7 @@ namespace Mollie.Tests.Unit.Client {
             // Given: We make a request to retrieve a capture
             const string paymentId = "payment-id";
             const string captureId = "capture-id";
-            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}/captures/{captureId}{expectedQueryString}", defaultCaptureJsonResponse);
+            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.DefaultBaseApiEndPoint}payments/{paymentId}/captures/{captureId}{expectedQueryString}", defaultCaptureJsonResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
             CaptureClient captureClient = new CaptureClient("abcde", httpClient);
 
@@ -90,7 +90,7 @@ namespace Mollie.Tests.Unit.Client {
         public async Task GetCapturesListAsync_CorrectQueryParametersAreAdded(bool testmode, string expectedQueryString) {
             // Given: We make a request to retrieve a capture
             const string paymentId = "payment-id";
-            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.ApiEndPoint}payments/{paymentId}/captures{expectedQueryString}", defaultCaptureJsonResponse);
+            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.DefaultBaseApiEndPoint}payments/{paymentId}/captures{expectedQueryString}", defaultCaptureJsonResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
             CaptureClient captureClient = new CaptureClient("abcde", httpClient);
 
@@ -104,7 +104,7 @@ namespace Mollie.Tests.Unit.Client {
         [Fact]
         public async Task GetCaptureAsync_DefaultBehaviour_ResponseIsParsed() {
             // Given: We request a capture with a payment id and capture id
-            string expectedUrl = $"{BaseMollieClient.ApiEndPoint}payments/{defaultPaymentId}/captures/{defaultCaptureId}";
+            string expectedUrl = $"{BaseMollieClient.DefaultBaseApiEndPoint}payments/{defaultPaymentId}/captures/{defaultCaptureId}";
             var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, defaultCaptureJsonResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
             CaptureClient captureClient = new CaptureClient("api-key", httpClient);
@@ -126,7 +126,7 @@ namespace Mollie.Tests.Unit.Client {
         [Fact]
         public async Task GetCapturesListAsync_DefaultBehaviour_ResponseIsParsed() {
             // Given: We request a list of captures
-            string expectedUrl = $"{BaseMollieClient.ApiEndPoint}payments/{defaultPaymentId}/captures";
+            string expectedUrl = $"{BaseMollieClient.DefaultBaseApiEndPoint}payments/{defaultPaymentId}/captures";
             var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, defaultCaptureListJsonResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
             CaptureClient captureClient = new CaptureClient("api-key", httpClient);
@@ -237,7 +237,7 @@ namespace Mollie.Tests.Unit.Client {
             };
             var mockHttp = CreateMockHttpMessageHandler(
                 HttpMethod.Post,
-                $"{BaseMollieClient.ApiEndPoint}payments/{defaultPaymentId}/captures",
+                $"{BaseMollieClient.DefaultBaseApiEndPoint}payments/{defaultPaymentId}/captures",
                 defaultCaptureJsonResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
             CaptureClient captureClient = new CaptureClient("abcde", httpClient);

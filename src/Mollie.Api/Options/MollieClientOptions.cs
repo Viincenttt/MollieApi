@@ -1,3 +1,5 @@
+using Mollie.Api.Client;
+
 namespace Mollie.Api.Options;
 
 public class MollieClientOptions {
@@ -22,4 +24,19 @@ public class MollieClientOptions {
     /// </summary>
     /// <returns></returns>
     public string? ClientSecret { get; init; }
+
+    /// <summary>
+    /// The base URL for all API requests. Can be overridden for testing purposes.
+    /// </summary>
+    public string ApiBaseUrl { get; init; } = BaseMollieClient.DefaultBaseApiEndPoint;
+
+    /// <summary>
+    /// The authorize endpoint for the Connect client. Can be overridden for testing purposes.
+    /// </summary>
+    public string ConnectOAuthAuthorizeEndPoint { get; init; } = ConnectClient.DefaultAuthorizeEndpoint;
+
+    /// <summary>
+    /// The token endpoint for the Connect client. Can be overridden for testing purposes.
+    /// </summary>
+    public string ConnectTokenEndPoint { get; init; } = ConnectClient.DefaultTokenEndpoint;
 }

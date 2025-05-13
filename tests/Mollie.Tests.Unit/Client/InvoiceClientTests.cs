@@ -15,7 +15,7 @@ public class InvoiceClientTests : BaseClientTests
         // Given
         const string invoiceId = "inv_xBEbP9rvAq";
         var mockHttp = new MockHttpMessageHandler();
-        mockHttp.When($"{BaseMollieClient.ApiEndPoint}invoices/{invoiceId}")
+        mockHttp.When($"{BaseMollieClient.DefaultBaseApiEndPoint}invoices/{invoiceId}")
             .Respond("application/json", defaultInvoice);
         HttpClient httpClient = mockHttp.ToHttpClient();
         using InvoiceClient invoiceClient = new InvoiceClient("access_abcde", httpClient);
@@ -43,7 +43,7 @@ public class InvoiceClientTests : BaseClientTests
         string? reference, int? year, string? from, int? limit, string expectedQueryString) {
         // Given: We retrieve a list of customers
         var mockHttp = new MockHttpMessageHandler();
-        mockHttp.When($"{BaseMollieClient.ApiEndPoint}invoices{expectedQueryString}")
+        mockHttp.When($"{BaseMollieClient.DefaultBaseApiEndPoint}invoices{expectedQueryString}")
             .Respond("application/json", defaultInvoiceList);
         HttpClient httpClient = mockHttp.ToHttpClient();
         using InvoiceClient invoiceClient = new InvoiceClient("access_abcde", httpClient);
