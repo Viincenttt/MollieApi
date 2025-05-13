@@ -58,7 +58,9 @@ namespace Mollie.Api.Client {
             _createdHttpClient = httpClient == null;
             _httpClient = httpClient ?? new HttpClient();
             _mollieSecretManager = new DefaultMollieSecretManager(string.Empty);
-            _options = new();
+            _options = new() {
+                ApiKey = string.Empty
+            };
         }
 
         public IDisposable WithIdempotencyKey(string value) {
