@@ -5,13 +5,17 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Framework.Authentication.Abstract;
 using System.Threading;
+using Microsoft.Extensions.DependencyInjection;
+using Mollie.Api.Options;
 
 namespace Mollie.Api.Client {
     public class OnboardingClient : BaseMollieClient, IOnboardingClient {
         public OnboardingClient(string apiKey, HttpClient? httpClient = null) : base(apiKey, httpClient) {
         }
 
-        public OnboardingClient(IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null) : base(mollieSecretManager, httpClient) {
+        [ActivatorUtilitiesConstructor]
+        public OnboardingClient(MollieClientOptions options, IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null)
+            : base(options, mollieSecretManager, httpClient) {
         }
 
         public async Task<OnboardingStatusResponse> GetOnboardingStatusAsync(

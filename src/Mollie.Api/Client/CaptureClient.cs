@@ -10,6 +10,7 @@ using Mollie.Api.Models.Capture.Request;
 using Mollie.Api.Models.Capture.Response;
 using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Url;
+using Mollie.Api.Options;
 
 namespace Mollie.Api.Client
 {
@@ -17,7 +18,9 @@ namespace Mollie.Api.Client
         public CaptureClient(string apiKey, HttpClient? httpClient = null) : base(apiKey, httpClient) {
         }
 
-        public CaptureClient(IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null) : base(mollieSecretManager, httpClient) {
+        [ActivatorUtilitiesConstructor]
+        public CaptureClient(MollieClientOptions options, IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null)
+            : base(options, mollieSecretManager, httpClient) {
         }
 
         public async Task<CaptureResponse> GetCaptureAsync(

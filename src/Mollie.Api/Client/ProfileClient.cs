@@ -1,6 +1,7 @@
 ﻿﻿using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Framework.Authentication.Abstract;
 using Mollie.Api.Models.List.Response;
@@ -8,13 +9,16 @@ using Mollie.Api.Models.PaymentMethod.Response;
 using Mollie.Api.Models.Profile.Request;
 using Mollie.Api.Models.Profile.Response;
 using Mollie.Api.Models.Url;
+using Mollie.Api.Options;
 
 namespace Mollie.Api.Client {
     public class ProfileClient : BaseMollieClient, IProfileClient {
         public ProfileClient(string apiKey, HttpClient? httpClient = null) : base(apiKey, httpClient) {
         }
 
-        public ProfileClient(IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null) : base(mollieSecretManager, httpClient) {
+        [ActivatorUtilitiesConstructor]
+        public ProfileClient(MollieClientOptions options, IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null)
+            : base(options, mollieSecretManager, httpClient) {
         }
 
         public async Task<ProfileResponse> CreateProfileAsync(

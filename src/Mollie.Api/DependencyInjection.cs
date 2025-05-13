@@ -25,66 +25,49 @@ namespace Mollie.Api {
                     new DefaultMollieSecretManager(mollieOptions.ApiKey));
             }
 
-            RegisterMollieApiClient<IBalanceClient, BalanceClient>(services, (httpClient, provider) =>
-                new BalanceClient(provider.GetRequiredService<IMollieSecretManager>(), httpClient), mollieOptions.RetryPolicy);
-            RegisterMollieApiClient<ICaptureClient, CaptureClient>(services, (httpClient, provider) =>
-                new CaptureClient(provider.GetRequiredService<IMollieSecretManager>(), httpClient), mollieOptions.RetryPolicy);
-            RegisterMollieApiClient<IChargebackClient, ChargebackClient>(services, (httpClient, provider) =>
-                new ChargebackClient(provider.GetRequiredService<IMollieSecretManager>(), httpClient), mollieOptions.RetryPolicy);
-            RegisterMollieApiClient<IConnectClient, ConnectClient>(services, (httpClient, _) =>
-                new ConnectClient(mollieOptions.ClientId, mollieOptions.ClientSecret, httpClient), mollieOptions.RetryPolicy);
-            RegisterMollieApiClient<ICustomerClient, CustomerClient>(services, (httpClient, provider) =>
-                new CustomerClient(provider.GetRequiredService<IMollieSecretManager>(), httpClient), mollieOptions.RetryPolicy);
-            RegisterMollieApiClient<IInvoiceClient, InvoiceClient>(services, (httpClient, provider) =>
-                new InvoiceClient(provider.GetRequiredService<IMollieSecretManager>(), httpClient), mollieOptions.RetryPolicy);
-            RegisterMollieApiClient<IMandateClient, MandateClient>(services, (httpClient, provider) =>
-                new MandateClient(provider.GetRequiredService<IMollieSecretManager>(), httpClient), mollieOptions.RetryPolicy);
-            RegisterMollieApiClient<IOnboardingClient, OnboardingClient>(services, (httpClient, provider) =>
-                new OnboardingClient(provider.GetRequiredService<IMollieSecretManager>(), httpClient), mollieOptions.RetryPolicy);
-            RegisterMollieApiClient<IOrderClient, OrderClient>(services,(httpClient, provider) =>
-                new OrderClient(provider.GetRequiredService<IMollieSecretManager>(), httpClient), mollieOptions.RetryPolicy);
-            RegisterMollieApiClient<IOrganizationClient, OrganizationClient>(services, (httpClient, provider) =>
-                new OrganizationClient(provider.GetRequiredService<IMollieSecretManager>(), httpClient), mollieOptions.RetryPolicy);
-            RegisterMollieApiClient<IPaymentClient, PaymentClient>(services, (httpClient, provider) =>
-                new PaymentClient(provider.GetRequiredService<IMollieSecretManager>(), httpClient), mollieOptions.RetryPolicy);
-            RegisterMollieApiClient<IPaymentLinkClient, PaymentLinkClient>(services, (httpClient, provider) =>
-                new PaymentLinkClient(provider.GetRequiredService<IMollieSecretManager>(), httpClient), mollieOptions.RetryPolicy);
-            RegisterMollieApiClient<IPaymentMethodClient, PaymentMethodClient>(services, (httpClient, provider) =>
-                new PaymentMethodClient(provider.GetRequiredService<IMollieSecretManager>(), httpClient), mollieOptions.RetryPolicy);
-            RegisterMollieApiClient<IPermissionClient, PermissionClient>(services, (httpClient, provider) =>
-                new PermissionClient(provider.GetRequiredService<IMollieSecretManager>(), httpClient), mollieOptions.RetryPolicy);
-            RegisterMollieApiClient<IProfileClient, ProfileClient>(services, (httpClient, provider) =>
-                new ProfileClient(provider.GetRequiredService<IMollieSecretManager>(), httpClient), mollieOptions.RetryPolicy);
-            RegisterMollieApiClient<IRefundClient, RefundClient>(services, (httpClient, provider) =>
-                new RefundClient(provider.GetRequiredService<IMollieSecretManager>(), httpClient), mollieOptions.RetryPolicy);
-            RegisterMollieApiClient<ISettlementClient, SettlementClient>(services, (httpClient, provider) =>
-                new SettlementClient(provider.GetRequiredService<IMollieSecretManager>(), httpClient), mollieOptions.RetryPolicy);
-            RegisterMollieApiClient<IShipmentClient, ShipmentClient>(services, (httpClient, provider) =>
-                new ShipmentClient(provider.GetRequiredService<IMollieSecretManager>(), httpClient), mollieOptions.RetryPolicy);
-            RegisterMollieApiClient<ISubscriptionClient, SubscriptionClient>(services, (httpClient, provider) =>
-                new SubscriptionClient(provider.GetRequiredService<IMollieSecretManager>(), httpClient), mollieOptions.RetryPolicy);
-            RegisterMollieApiClient<ITerminalClient, TerminalClient>(services, (httpClient, provider) =>
-                new TerminalClient(provider.GetRequiredService<IMollieSecretManager>(), httpClient), mollieOptions.RetryPolicy);
-            RegisterMollieApiClient<IClientLinkClient, ClientLinkClient>(services, (httpClient, provider) =>
-                new ClientLinkClient(mollieOptions.ClientId, provider.GetRequiredService<IMollieSecretManager>(), httpClient), mollieOptions.RetryPolicy);
-            RegisterMollieApiClient<IWalletClient, WalletClient>(services, (httpClient, provider) =>
-                new WalletClient(provider.GetRequiredService<IMollieSecretManager>(), httpClient), mollieOptions.RetryPolicy);
-            RegisterMollieApiClient<IClientClient, ClientClient>(services, (httpClient, provider) =>
-                new ClientClient(provider.GetRequiredService<IMollieSecretManager>(), httpClient), mollieOptions.RetryPolicy);
-            RegisterMollieApiClient<ICapabilityClient, CapabilityClient>(services, (httpClient, provider) =>
-                new CapabilityClient(provider.GetRequiredService<IMollieSecretManager>(), httpClient), mollieOptions.RetryPolicy);
+            MollieClientOptions mollieClientOptions = new() {
+                ApiKey = mollieOptions.ApiKey,
+                ClientId = mollieOptions.ClientId,
+                ClientSecret = mollieOptions.ClientSecret,
+                CustomUserAgent = mollieOptions.CustomUserAgent
+            };
+            services.AddSingleton(mollieClientOptions);
+
+            RegisterMollieApiClient<IBalanceClient, BalanceClient>(services, mollieOptions.RetryPolicy);
+            RegisterMollieApiClient<ICaptureClient, CaptureClient>(services, mollieOptions.RetryPolicy);
+            RegisterMollieApiClient<IChargebackClient, ChargebackClient>(services, mollieOptions.RetryPolicy);
+            RegisterMollieApiClient<IConnectClient, ConnectClient>(services,  mollieOptions.RetryPolicy);
+            RegisterMollieApiClient<ICustomerClient, CustomerClient>(services, mollieOptions.RetryPolicy);
+            RegisterMollieApiClient<IInvoiceClient, InvoiceClient>(services, mollieOptions.RetryPolicy);
+            RegisterMollieApiClient<IMandateClient, MandateClient>(services, mollieOptions.RetryPolicy);
+            RegisterMollieApiClient<IOnboardingClient, OnboardingClient>(services, mollieOptions.RetryPolicy);
+            RegisterMollieApiClient<IOrderClient, OrderClient>(services, mollieOptions.RetryPolicy);
+            RegisterMollieApiClient<IOrganizationClient, OrganizationClient>(services, mollieOptions.RetryPolicy);
+            RegisterMollieApiClient<IPaymentClient, PaymentClient>(services, mollieOptions.RetryPolicy);
+            RegisterMollieApiClient<IPaymentLinkClient, PaymentLinkClient>(services, mollieOptions.RetryPolicy);
+            RegisterMollieApiClient<IPaymentMethodClient, PaymentMethodClient>(services, mollieOptions.RetryPolicy);
+            RegisterMollieApiClient<IPermissionClient, PermissionClient>(services, mollieOptions.RetryPolicy);
+            RegisterMollieApiClient<IProfileClient, ProfileClient>(services, mollieOptions.RetryPolicy);
+            RegisterMollieApiClient<IRefundClient, RefundClient>(services, mollieOptions.RetryPolicy);
+            RegisterMollieApiClient<ISettlementClient, SettlementClient>(services, mollieOptions.RetryPolicy);
+            RegisterMollieApiClient<IShipmentClient, ShipmentClient>(services, mollieOptions.RetryPolicy);
+            RegisterMollieApiClient<ISubscriptionClient, SubscriptionClient>(services, mollieOptions.RetryPolicy);
+            RegisterMollieApiClient<ITerminalClient, TerminalClient>(services, mollieOptions.RetryPolicy);
+            RegisterMollieApiClient<IClientLinkClient, ClientLinkClient>(services, mollieOptions.RetryPolicy);
+            RegisterMollieApiClient<IWalletClient, WalletClient>(services, mollieOptions.RetryPolicy);
+            RegisterMollieApiClient<IClientClient, ClientClient>(services, mollieOptions.RetryPolicy);
+            RegisterMollieApiClient<ICapabilityClient, CapabilityClient>(services, mollieOptions.RetryPolicy);
 
             return services;
         }
 
         static void RegisterMollieApiClient<TInterface, TImplementation>(
             IServiceCollection services,
-            Func<HttpClient, IServiceProvider, TImplementation> factory,
             IAsyncPolicy<HttpResponseMessage>? retryPolicy = null)
             where TInterface : class
             where TImplementation : class, TInterface {
 
-            IHttpClientBuilder clientBuilder = services.AddHttpClient<TInterface, TImplementation>(factory);
+            IHttpClientBuilder clientBuilder = services.AddHttpClient<TInterface, TImplementation>();
             if (retryPolicy != null) {
                 clientBuilder.AddPolicyHandler(retryPolicy);
             }

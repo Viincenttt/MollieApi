@@ -27,7 +27,13 @@ namespace Mollie.Api.Options {
         public IAsyncPolicy<HttpResponseMessage>? RetryPolicy { get; set; }
 
         /// <summary>
-        /// A custom secret manager that you can override to implement advanced multi-tenant scenario's
+        /// (Optional) The default user agent is "Mollie.Api.NET {version}". When this property is set, the custom user
+        /// agent will be appended to the default user agent.
+        /// </summary>
+        public string? CustomUserAgent { get; init; }
+
+        /// <summary>
+        /// (Optional) A custom secret manager that you can override to implement advanced multi-tenant scenario's
         /// </summary>
         public Type? CustomMollieSecretManager { get; private set; }
 

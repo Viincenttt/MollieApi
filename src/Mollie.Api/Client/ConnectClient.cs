@@ -5,10 +5,12 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
 using Mollie.Api.Models.Connect.Request;
 using Mollie.Api.Models.Connect.Response;
+using Mollie.Api.Options;
 
 namespace Mollie.Api.Client {
     public class ConnectClient : BaseMollieClient, IConnectClient {
@@ -29,6 +31,20 @@ namespace Mollie.Api.Client {
 
             _clientSecret = clientSecret!;
             _clientId = clientId!;
+        }
+
+        [ActivatorUtilitiesConstructor]
+        public ConnectClient(MollieClientOptions options, HttpClient? httpClient = null): base(httpClient, ConnectClient.TokenEndPoint) {
+            if (string.IsNullOrWhiteSpace(options.ClientId)) {
+                throw new ArgumentNullException(nameof(options.ClientId));
+            }
+
+            if (string.IsNullOrWhiteSpace(options.ClientSecret)) {
+                throw new ArgumentNullException(nameof(options.ClientSecret));
+            }
+
+            _clientSecret = options.ClientSecret!;
+            _clientId = options.ClientId!;
         }
 
         public string GetAuthorizationUrl(

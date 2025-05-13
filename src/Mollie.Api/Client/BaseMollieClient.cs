@@ -14,6 +14,7 @@ using Mollie.Api.Framework.Authentication.Abstract;
 using Mollie.Api.Framework.Idempotency;
 using Mollie.Api.Models.Error;
 using Mollie.Api.Models.Url;
+using Mollie.Api.Options;
 using Newtonsoft.Json;
 
 namespace Mollie.Api.Client {
@@ -21,6 +22,7 @@ namespace Mollie.Api.Client {
         public const string ApiEndPoint = "https://api.mollie.com/v2/";
         private readonly string _apiEndpoint = ApiEndPoint;
         private readonly IMollieSecretManager _mollieSecretManager;
+        private readonly MollieClientOptions _options;
         private readonly HttpClient _httpClient;
         private readonly JsonConverterService _jsonConverterService;
 
@@ -37,13 +39,17 @@ namespace Mollie.Api.Client {
             _createdHttpClient = httpClient == null;
             _httpClient = httpClient ?? new HttpClient();
             _mollieSecretManager = new DefaultMollieSecretManager(apiKey);
+            _options = new MollieClientOptions {
+                ApiKey = apiKey
+            };
         }
 
-        protected BaseMollieClient(IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null) {
+        protected BaseMollieClient(MollieClientOptions options, IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null) {
             _jsonConverterService = new JsonConverterService();
             _createdHttpClient = httpClient == null;
             _httpClient = httpClient ?? new HttpClient();
             _mollieSecretManager = mollieSecretManager;
+            _options = options;
         }
 
         protected BaseMollieClient(HttpClient? httpClient = null, string apiEndpoint = ApiEndPoint) {
@@ -52,6 +58,9 @@ namespace Mollie.Api.Client {
             _createdHttpClient = httpClient == null;
             _httpClient = httpClient ?? new HttpClient();
             _mollieSecretManager = new DefaultMollieSecretManager(string.Empty);
+            _options = new() {
+                ApiKey = string.Empty
+            };
         }
 
         public IDisposable WithIdempotencyKey(string value) {
@@ -171,7 +180,13 @@ namespace Mollie.Api.Client {
         private string GetUserAgent() {
             const string packageName = "Mollie.Api.NET";
             string versionNumber = typeof(BaseMollieClient).GetTypeInfo().Assembly.GetName().Version.ToString();
-            return $"{packageName}/{versionNumber}";
+            string userAgent = $"{packageName}/{versionNumber}";
+
+            if (!string.IsNullOrEmpty(_options.CustomUserAgent)) {
+                userAgent = $"{userAgent} {_options.CustomUserAgent}";
+            }
+
+            return userAgent;
         }
 
         private MollieErrorMessage ParseMollieErrorMessage(HttpStatusCode responseStatusCode, string responseBody) {

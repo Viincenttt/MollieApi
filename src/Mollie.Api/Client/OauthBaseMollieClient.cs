@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using Mollie.Api.Framework.Authentication.Abstract;
+using Mollie.Api.Options;
 
 namespace Mollie.Api.Client {
     public class OauthBaseMollieClient : BaseMollieClient {
@@ -9,8 +10,8 @@ namespace Mollie.Api.Client {
             ValidateApiKeyIsOauthAccesstoken(oauthAccessToken);
         }
 
-        protected OauthBaseMollieClient(IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null)
-            : base(mollieSecretManager, httpClient) {
+        protected OauthBaseMollieClient(MollieClientOptions options, IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null)
+            : base(options, mollieSecretManager, httpClient) {
             ValidateApiKeyIsOauthAccesstoken(mollieSecretManager.GetBearerToken());
         }
 

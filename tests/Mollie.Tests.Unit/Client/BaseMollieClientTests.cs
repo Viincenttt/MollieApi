@@ -1,11 +1,15 @@
-﻿using System.Net;
+﻿using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using Shouldly;
 using Mollie.Api.Client;
+using Mollie.Api.Framework.Authentication;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Payment.Request;
+using Mollie.Api.Options;
+using RichardSzalay.MockHttp;
 using Xunit;
 
 namespace Mollie.Tests.Unit.Client;
@@ -74,4 +78,77 @@ public class BaseMollieClientTests : BaseClientTests {
         exception.Details.Detail.ShouldBe(responseBody);
         exception.Details.Status.ShouldBe((int)HttpStatusCode.UnprocessableEntity);
     }
+
+    [Fact]
+    public async Task CustomUserAgentIsSetInOptions_UserAgentIsAppendedToDefaultUserAgent() {
+        // Arrange
+        const string customUserAgent = "my-user-agent";
+        var mockHttp = new MockHttpMessageHandler();
+        mockHttp.Expect(HttpMethod.Get,$"{BaseMollieClient.ApiEndPoint}methods")
+            .With(request => {
+                var userAgent = request.Headers.UserAgent.ToArray();
+                userAgent.ShouldNotBeNull();
+                userAgent.Length.ShouldBe(2);
+                userAgent[0].Product!.Name.ShouldStartWith("Mollie.Api.NET");
+                userAgent[1].Product!.Name.ShouldBe(customUserAgent);
+
+                return true;
+            })
+            .Respond("application/json", DefaultPaymentMethodJsonResponse);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        var mollieClientOptions = new MollieClientOptions {
+            CustomUserAgent = customUserAgent,
+            ApiKey = "api-key"
+        };
+        var secretManager = new DefaultMollieSecretManager(mollieClientOptions.ApiKey);
+        using var paymentMethodClient = new PaymentMethodClient(mollieClientOptions, secretManager, httpClient);
+
+        // Act
+        await paymentMethodClient.GetPaymentMethodListAsync();
+
+        // Assert
+        mockHttp.VerifyNoOutstandingExpectation();
+    }
+
+    [Fact]
+    public async Task NoustomUserAgentIsSetInOptions_UserAgentIsAppendedToDefaultUserAgent() {
+        // Arrange
+        var mockHttp = new MockHttpMessageHandler();
+        mockHttp.Expect(HttpMethod.Get,$"{BaseMollieClient.ApiEndPoint}methods")
+            .With(request => {
+                var userAgent = request.Headers.UserAgent.ToArray();
+                userAgent.ShouldNotBeNull();
+                userAgent.Length.ShouldBe(1);
+                userAgent[0].Product!.Name.ShouldStartWith("Mollie.Api.NET");
+
+                return true;
+            })
+            .Respond("application/json", DefaultPaymentMethodJsonResponse);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        var mollieClientOptions = new MollieClientOptions {
+            CustomUserAgent = null,
+            ApiKey = "api-key"
+        };
+        var secretManager = new DefaultMollieSecretManager(mollieClientOptions.ApiKey);
+        using var paymentMethodClient = new PaymentMethodClient(mollieClientOptions, secretManager, httpClient);
+
+        // Act
+        await paymentMethodClient.GetPaymentMethodListAsync();
+
+        // Assert
+        mockHttp.VerifyNoOutstandingExpectation();
+    }
+
+    private const string DefaultPaymentMethodJsonResponse = @"{
+        ""count"": 13,
+        ""_embedded"": {
+            ""methods"": [
+                {
+                     ""resource"": ""method"",
+                     ""id"": ""ideal"",
+                     ""description"": ""iDEAL""
+                }
+            ]
+        }
+    }";
 }
