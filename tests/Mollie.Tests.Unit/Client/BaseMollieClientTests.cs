@@ -111,7 +111,7 @@ public class BaseMollieClientTests : BaseClientTests {
     }
 
     [Fact]
-    public async Task NoustomUserAgentIsSetInOptions_UserAgentIsAppendedToDefaultUserAgent() {
+    public async Task NoCustomUserAgentIsSetInOptions_UserAgentIsAppendedToDefaultUserAgent() {
         // Arrange
         var mockHttp = new MockHttpMessageHandler();
         mockHttp.Expect(HttpMethod.Get,$"{BaseMollieClient.DefaultBaseApiEndPoint}methods")
@@ -129,6 +129,27 @@ public class BaseMollieClientTests : BaseClientTests {
             CustomUserAgent = null,
             ApiKey = "api-key"
         };
+        var secretManager = new DefaultMollieSecretManager(mollieClientOptions.ApiKey);
+        using var paymentMethodClient = new PaymentMethodClient(mollieClientOptions, secretManager, httpClient);
+
+        // Act
+        await paymentMethodClient.GetPaymentMethodListAsync();
+
+        // Assert
+        mockHttp.VerifyNoOutstandingExpectation();
+    }
+
+    [Fact]
+    public async Task CustomApiBaseUrlIsSetInOptions_RequestsAreRoutedToCustomApiUrl() {
+        // Arrange
+        var mockHttp = new MockHttpMessageHandler();
+        var mollieClientOptions = new MollieClientOptions {
+            ApiKey = "api-key",
+            ApiBaseUrl = "https://custom-api-base.mollie.com/v2/"
+        };
+        mockHttp.Expect(HttpMethod.Get,$"{mollieClientOptions.ApiBaseUrl}methods")
+            .Respond("application/json", DefaultPaymentMethodJsonResponse);
+        HttpClient httpClient = mockHttp.ToHttpClient();
         var secretManager = new DefaultMollieSecretManager(mollieClientOptions.ApiKey);
         using var paymentMethodClient = new PaymentMethodClient(mollieClientOptions, secretManager, httpClient);
 
