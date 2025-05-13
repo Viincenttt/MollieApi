@@ -29,6 +29,7 @@ namespace Mollie.Api {
                 ApiKey = mollieOptions.ApiKey,
                 ClientId = mollieOptions.ClientId,
                 ClientSecret = mollieOptions.ClientSecret,
+                CustomUserAgent = mollieOptions.CustomUserAgent
             };
             services.AddSingleton(mollieClientOptions);
 

@@ -7,8 +7,8 @@ public class MollieClientOptions {
     public required string ApiKey { get; init; } = string.Empty;
 
     /// <summary>
-    /// The default user agent is "Mollie.Api.NET {version}". When this property is set, the custom user agent will be
-    /// appended to the default user agent.
+    /// (Optional) The default user agent is "Mollie.Api.NET {version}". When this property is set, the custom user
+    /// agent will be appended to the default user agent.
     /// </summary>
     public string? CustomUserAgent { get; init; }
 
