@@ -46,7 +46,7 @@ namespace Mollie.Api.Options {
         /// (Optional) The default user agent is "Mollie.Api.NET {version}". When this property is set, the custom user
         /// agent will be appended to the default user agent.
         /// </summary>
-        public string? CustomUserAgent { get; init; }
+        public string? CustomUserAgent { get; set; }
 
         /// <summary>
         /// (Optional) A custom secret manager that you can override to implement advanced multi-tenant scenario's
