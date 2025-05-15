@@ -11,7 +11,7 @@
     <PackageTags>Mollie</PackageTags>
     <AssemblyVersion>4.10.2.0</AssemblyVersion>
     <FileVersion>4.10.2.0</FileVersion>
-    <PackageVersion>4.10.1.0</PackageVersion>
+    <PackageVersion>4.10.2.0</PackageVersion>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
