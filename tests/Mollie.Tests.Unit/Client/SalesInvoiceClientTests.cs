@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client;
@@ -50,6 +48,7 @@ public class SalesInvoiceClientTests : BaseClientTests {
         var result = await salesInvoiceClient.CreateSalesInvoiceAsync(request);
 
         // Then: We should get a valid response
+        mockHttp.VerifyNoOutstandingExpectation();
         result.Id.ShouldBe("invoice_4Y0eZitmBnQ6IDoMqZQKh");
         result.Status.ShouldBe(SalesInvoiceStatus.Draft);
         result.Currency.ShouldBe(Currency.EUR);
@@ -63,6 +62,74 @@ public class SalesInvoiceClientTests : BaseClientTests {
         orderLine.Discount.ShouldBeNull();
         result.AmountDue.Value.ShouldBe("107.69");
         result.AmountDue.Currency.ShouldBe(Currency.EUR);
+        result.DiscountedSubtotalAmount.Value.ShouldBe("89.00");
+        result.DiscountedSubtotalAmount.Currency.ShouldBe(Currency.EUR);
+    }
+
+    [Fact]
+    public async Task GetSalesInvoiceAsync_ShouldReturnSalesInvoiceResponse() {
+        // Given: A sales invoice ID
+        const string salesInvoiceId = "invoice_4Y0eZitmBnQ6IDoMqZQKh";
+        string expectedUrl = $"{BaseMollieClient.DefaultBaseApiEndPoint}sales-invoices/{salesInvoiceId}";
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, DefaultSalesInvoiceClientResponse);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        var salesInvoiceClient = new SalesInvoiceClient("api-key", httpClient);
+
+        // When: We retrieve the sales invoice
+        var result = await salesInvoiceClient.GetSalesInvoiceAsync(salesInvoiceId);
+
+        // Then: The response should match the expected data
+        mockHttp.VerifyNoOutstandingExpectation();
+        result.Id.ShouldBe(salesInvoiceId);
+        result.Status.ShouldBe(SalesInvoiceStatus.Draft);
+        result.Currency.ShouldBe(Currency.EUR);
+        result.Lines.ShouldNotBeEmpty();
+        var orderLine = result.Lines.Single();
+        orderLine.Description.ShouldBe("LEGO 4440 Forest Police Station");
+        orderLine.Quantity.ShouldBe(1);
+        orderLine.VatRate.ShouldBe("21.00");
+        orderLine.UnitPrice.Value.ShouldBe("89.00");
+        orderLine.UnitPrice.Currency.ShouldBe(Currency.EUR);
+        orderLine.Discount.ShouldBeNull();
+        result.AmountDue.Value.ShouldBe("107.69");
+        result.AmountDue.Currency.ShouldBe(Currency.EUR);
+        result.DiscountedSubtotalAmount.Value.ShouldBe("89.00");
+        result.DiscountedSubtotalAmount.Currency.ShouldBe(Currency.EUR);
+    }
+
+    [Fact]
+    public async Task UpdateSalesInvoiceAsync_ShouldReturnUpdatedSalesInvoiceResponse() {
+        // Given: A sales invoice ID and update request
+        const string salesInvoiceId = "invoice_4Y0eZitmBnQ6IDoMqZQKh";
+        var updateRequest = new SalesInvoiceUpdateRequest {
+            Memo = "Updated memo"
+        };
+        string expectedUrl = $"{BaseMollieClient.DefaultBaseApiEndPoint}sales-invoices/{salesInvoiceId}";
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Patch, expectedUrl, DefaultSalesInvoiceClientResponse);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        var salesInvoiceClient = new SalesInvoiceClient("api-key", httpClient);
+
+        // When: We update the sales invoice
+        await salesInvoiceClient.UpdateSalesInvoiceAsync(salesInvoiceId, updateRequest);
+
+        // Then: The update sales invoice endpoint should be called
+        mockHttp.VerifyNoOutstandingExpectation();
+    }
+
+    [Fact]
+    public async Task DeleteSalesInvoiceAsync_ShouldNotThrowException() {
+        // Given: A sales invoice ID
+        const string salesInvoiceId = "invoice_4Y0eZitmBnQ6IDoMqZQKh";
+        string expectedUrl = $"{BaseMollieClient.DefaultBaseApiEndPoint}sales-invoices/{salesInvoiceId}";
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Delete, expectedUrl, string.Empty);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        var salesInvoiceClient = new SalesInvoiceClient("api-key", httpClient);
+
+        // When: We delete the sales invoice
+        await salesInvoiceClient.DeleteSalesInvoiceAsync(salesInvoiceId);
+
+        // Then: No exception should be thrown
+        mockHttp.VerifyNoOutstandingExpectation();
     }
 
     private const string DefaultSalesInvoiceClientResponse = @"{
