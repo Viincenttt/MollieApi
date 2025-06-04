@@ -23,6 +23,12 @@ namespace Mollie.Api.Models.PaymentLink.Response
         public Mode Mode { get; set; }
 
         /// <summary>
+        /// The payment's status. Please refer to the page about statuses for more info about which statuses occur at what
+        /// point. See the Mollie.Api.Models.Payment.PaymentStatus class for a full list of known values.
+        /// </summary>
+        public required string Status { get; set; }
+
+        /// <summary>
         ///A short description of the payment link. The description is visible in the Dashboard and will be shown on the
         ///customer’s bank or card statement when possible. This description will eventual been used as payment description.
         /// </summary>
