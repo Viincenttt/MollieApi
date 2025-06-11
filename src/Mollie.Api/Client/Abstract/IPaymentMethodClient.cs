@@ -12,7 +12,6 @@ namespace Mollie.Api.Client.Abstract {
             string paymentMethod,
             bool includeIssuers = false,
             string? locale = null,
-            bool includePricing = false,
             string? profileId = null,
             bool testmode = false,
             string? currency = null,

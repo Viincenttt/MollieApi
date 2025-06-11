@@ -29,7 +29,6 @@ namespace Mollie.Api.Client
             string paymentMethod,
             bool includeIssuers = false,
             string? locale = null,
-            bool includePricing = false,
             string? profileId = null,
             bool testmode = false,
             string? currency = null,
@@ -42,8 +41,7 @@ namespace Mollie.Api.Client
                 currency: currency,
                 profileId: profileId,
                 testmode: testmode,
-                includeIssuers: includeIssuers,
-                includePricing: includePricing);
+                includeIssuers: includeIssuers);
 
             return await GetAsync<PaymentMethodResponse>(
                 $"methods/{paymentMethod.ToLower()}{queryParameters.ToQueryString()}",

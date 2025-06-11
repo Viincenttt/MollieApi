@@ -71,25 +71,6 @@ public class PaymentMethodTests : BaseMollieApiTestClass, IDisposable {
     }
 
     [Fact]
-    public async Task CanRetrievePricing() {
-        // When: retrieving the ideal method we can include the issuers
-        PaymentMethodResponse paymentMethod = await _paymentMethodClient.GetPaymentMethodAsync(PaymentMethod.CreditCard, includePricing: true);
-
-        // Then: We should have one or multiple issuers
-        paymentMethod.ShouldNotBeNull();
-        paymentMethod.Pricing.ShouldNotBeEmpty();
-    }
-
-    [Fact]
-    public async Task DoNotRetrievePricingWhenIncludeIsFalse() {
-        // When: retrieving the ideal method with the include parameter set to false
-        PaymentMethodResponse paymentMethod = await _paymentMethodClient.GetPaymentMethodAsync(PaymentMethod.CreditCard, includePricing: false);
-
-        // Then: Issuers should not be included
-        paymentMethod.Pricing.ShouldBeNull();
-    }
-
-    [Fact]
     public async Task CanRetrieveAllMethods() {
         // When: retrieving the all mollie payment methods
         ListResponse<PaymentMethodResponse> paymentMethods = await _paymentMethodClient.GetAllPaymentMethodListAsync();
