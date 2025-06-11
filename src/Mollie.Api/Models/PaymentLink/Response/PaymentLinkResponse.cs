@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Mollie.Api.Models.Payment;
 using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.PaymentLink.Response
@@ -23,8 +24,8 @@ namespace Mollie.Api.Models.PaymentLink.Response
         public Mode Mode { get; set; }
 
         /// <summary>
-        ///A short description of the payment link. The description is visible in the Dashboard and will be shown on the
-        ///customer’s bank or card statement when possible. This description will eventual been used as payment description.
+        /// A short description of the payment link. The description is visible in the Dashboard and will be shown on the
+        /// customer’s bank or card statement when possible. This description will eventual been used as payment description.
         /// </summary>
         public required string Description { get; set; }
 
@@ -32,6 +33,12 @@ namespace Mollie.Api.Models.PaymentLink.Response
         /// The amount of the payment link, e.g. {"currency":"EUR", "value":"100.00"} for a €100.00 payment link.
         /// </summary>
         public Amount? Amount { get; set; }
+
+        /// <summary>
+        /// The minimum amount of the payment link. This property is only allowed when there is no amount provided.
+        /// The customer will be prompted to enter a value greater than or equal to the minimum amount.
+        /// </summary>
+        public Amount? MinimumAmount { get; set; }
 
         /// <summary>
         /// Whether the payment link is archived. Customers will not be able to complete payments on archived payment links.
@@ -47,6 +54,22 @@ namespace Mollie.Api.Models.PaymentLink.Response
         /// The URL Mollie will call as soon an important status change takes place.
         /// </summary>
         public string? WebhookUrl { get; set; }
+
+        /// <summary>
+        /// Optionally provide the order lines for the payment. Each line contains details such as a description of the item ordered and its price.
+        /// All lines must have the same currency as the payment.
+        /// </summary>
+        public List<PaymentLine>? Lines { get; set; }
+
+        /// <summary>
+        /// The customer's billing address details. We advise to provide these details to improve fraud protection and conversion.
+        /// </summary>
+        public PaymentAddressDetails? BillingAddress { get; set; }
+
+        /// <summary>
+        /// The customer's shipping address details. We advise to provide these details to improve fraud protection and conversion.
+        /// </summary>
+        public PaymentAddressDetails? ShippingAddress { get; set; }
 
         /// <summary>
         /// The identifier referring to the profile this payment link was created on. For example, pfl_QkEhN94Ba.
@@ -86,6 +109,16 @@ namespace Mollie.Api.Models.PaymentLink.Response
         /// See the Mollie.Api.Models.Payment.PaymentMethod class for a full list of known values.
         /// </summary>
         public IEnumerable<string>? AllowedMethods { get; set; }
+
+        /// <summary>
+        /// With Mollie Connect you can charge fees on payment links that your app is processing on behalf of other
+        /// Mollie merchants.
+        ///
+        /// If you use OAuth to create payment links on a connected merchant's account, you can charge
+        /// a fee using this applicationFee parameter. If a payment on the payment link succeeds, the fee will be
+        /// deducted from the merchant's balance and sent to your own account balance.
+        /// </summary>
+        public ApplicationFee? ApplicationFee { get; set; }
 
         /// <summary>
         /// An object with several URL objects relevant to the payment. Every URL object will contain an href and a type field.

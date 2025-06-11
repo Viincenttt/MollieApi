@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Shouldly;
 using Mollie.Api.Client;
@@ -6,6 +7,7 @@ using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
 using Mollie.Api.Models;
 using Mollie.Api.Models.List.Response;
+using Mollie.Api.Models.Order.Request;
 using Mollie.Api.Models.Payment;
 using Mollie.Api.Models.PaymentLink.Request;
 using Mollie.Api.Models.PaymentLink.Response;
@@ -34,13 +36,101 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
     [Fact]
     public async Task CanCreatePaymentLinkAndRetrieveIt() {
         // Given: We create a new payment link
+        var address = CreateAddress();
         PaymentLinkRequest paymentLinkRequest = new() {
             Description = "Test",
             Amount = new Amount(Currency.EUR, 50),
             WebhookUrl = DefaultWebhookUrl,
             RedirectUrl = DefaultRedirectUrl,
             Reusable = true,
+            ExpiresAt = DateTime.Now.AddDays(1),
+            BillingAddress = address,
+            ShippingAddress = address
+        };
+        var createdPaymentLinkResponse = await _paymentLinkClient.CreatePaymentLinkAsync(paymentLinkRequest);
+
+        // When: We retrieve it
+        var retrievePaymentLinkResponse = await _paymentLinkClient.GetPaymentLinkAsync(createdPaymentLinkResponse.Id);
+
+        // Then: We expect a payment link with the expected properties
+        var verifyPaymentLinkResponse = new Action<PaymentLinkResponse>(response => {
+            var expiresAtWithoutMs = paymentLinkRequest.ExpiresAt.Value.Truncate(TimeSpan.FromSeconds(1));
+
+            response.Amount.ShouldBe(paymentLinkRequest.Amount);
+            response.MinimumAmount.ShouldBeNull();
+            response.ExpiresAt.ShouldBe(expiresAtWithoutMs);
+            response.Description.ShouldBe(paymentLinkRequest.Description);
+            response.RedirectUrl.ShouldBe(paymentLinkRequest.RedirectUrl);
+            response.Archived.ShouldBeFalse();
+            response.Reusable.ShouldBe(paymentLinkRequest.Reusable);
+            response.BillingAddress.ShouldBe(paymentLinkRequest.BillingAddress);
+            response.ShippingAddress.ShouldBe(paymentLinkRequest.ShippingAddress);
+        });
+
+        verifyPaymentLinkResponse(createdPaymentLinkResponse);
+        verifyPaymentLinkResponse(retrievePaymentLinkResponse);
+    }
+
+
+    [Fact]
+    public async Task CanCreatePaymentLinkWithMinimumAmount() {
+        // Given: We create a new payment link
+        PaymentLinkRequest paymentLinkRequest = new() {
+            Description = "Test",
+            MinimumAmount = new Amount(Currency.EUR, 50),
+            WebhookUrl = DefaultWebhookUrl,
+            RedirectUrl = DefaultRedirectUrl,
+            Reusable = true,
             ExpiresAt = DateTime.Now.AddDays(1)
+        };
+        var createdPaymentLinkResponse = await _paymentLinkClient.CreatePaymentLinkAsync(paymentLinkRequest);
+
+        // When: We retrieve it
+        var retrievePaymentLinkResponse = await _paymentLinkClient.GetPaymentLinkAsync(createdPaymentLinkResponse.Id);
+
+        // Then: We expect a payment link with the expected properties
+        var verifyPaymentLinkResponse = new Action<PaymentLinkResponse>(response => {
+            var expiresAtWithoutMs = paymentLinkRequest.ExpiresAt.Value.Truncate(TimeSpan.FromSeconds(1));
+
+            response.Amount.ShouldBeNull();
+            response.MinimumAmount.ShouldBe(paymentLinkRequest.MinimumAmount);
+            response.ExpiresAt.ShouldBe(expiresAtWithoutMs);
+            response.Description.ShouldBe(paymentLinkRequest.Description);
+            response.RedirectUrl.ShouldBe(paymentLinkRequest.RedirectUrl);
+            response.Archived.ShouldBeFalse();
+            response.Reusable.ShouldBe(paymentLinkRequest.Reusable);
+        });
+
+        verifyPaymentLinkResponse(createdPaymentLinkResponse);
+        verifyPaymentLinkResponse(retrievePaymentLinkResponse);
+    }
+
+    [Fact]
+    public async Task CanCreatePaymentLinkWithLines() {
+        // Given: We create a new payment link
+        PaymentLinkRequest paymentLinkRequest = new() {
+            Description = "Test",
+            Amount = new Amount(Currency.EUR, 90m),
+            WebhookUrl = DefaultWebhookUrl,
+            RedirectUrl = DefaultRedirectUrl,
+            Reusable = false,
+            ExpiresAt = DateTime.Now.AddDays(1),
+            Lines = new List<PaymentLine> {
+                new() {
+                    Type = OrderLineDetailsType.Digital,
+                    Description = "Star wars lego",
+                    Quantity = 1,
+                    QuantityUnit = "pcs",
+                    UnitPrice = new Amount(Currency.EUR, 100m),
+                    TotalAmount = new Amount(Currency.EUR, 90m),
+                    DiscountAmount = new Amount(Currency.EUR, 10m),
+                    ProductUrl = "http://www.lego.com/starwars",
+                    ImageUrl = "http://www.lego.com/starwars.jpg",
+                    Sku = "my-sku",
+                    VatAmount = new Amount(Currency.EUR, 15.62m),
+                    VatRate = "21.00"
+                }
+            }
         };
         var createdPaymentLinkResponse = await _paymentLinkClient.CreatePaymentLinkAsync(paymentLinkRequest);
 
@@ -57,6 +147,7 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
             response.RedirectUrl.ShouldBe(paymentLinkRequest.RedirectUrl);
             response.Archived.ShouldBeFalse();
             response.Reusable.ShouldBe(paymentLinkRequest.Reusable);
+            response.Lines.ShouldBe(paymentLinkRequest.Lines);
         });
 
         verifyPaymentLinkResponse(createdPaymentLinkResponse);
@@ -193,6 +284,22 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
         // Then: We expect the payment list to be returned
         result.ShouldNotBeNull();
         result.Items.Count.ShouldBe(0);
+    }
+
+    private PaymentAddressDetails CreateAddress() {
+        return new PaymentAddressDetails {
+            Title = "Mr",
+            GivenName = "John",
+            FamilyName = "Doe",
+            OrganizationName = "Mollie",
+            StreetAndNumber = "Keizersgracht 126",
+            Email = "johndoe@mollie.com",
+            City = "Amsterdam",
+            Country = "NL",
+            Phone = "+31600000000",
+            Region = "Zuid-Holland",
+            PostalCode = "1015CW"
+        };
     }
 
     public void Dispose()
