@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Mollie.Api.Models;
 using Mollie.Api.Models.List.Response;
@@ -9,6 +10,7 @@ using Mollie.Api.Models.Payment.Response;
 using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client.Abstract {
+    [Obsolete("Mollie no longer recommends using the Orders API. Please refer to the Payments API instead.")]
     public interface IOrderClient : IBaseMollieClient {
         Task<OrderResponse> CreateOrderAsync(OrderRequest orderRequest, CancellationToken cancellationToken = default);
         Task<OrderResponse> GetOrderAsync(

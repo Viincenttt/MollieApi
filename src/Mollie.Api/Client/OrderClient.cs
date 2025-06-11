@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,6 +17,7 @@ using Mollie.Api.Models.Url;
 using Mollie.Api.Options;
 
 namespace Mollie.Api.Client {
+    [Obsolete("Mollie no longer recommends using the Orders API. Please refer to the Payments API instead.")]
     public class OrderClient : BaseMollieClient, IOrderClient {
         public OrderClient(string apiKey, HttpClient? httpClient = null) : base(apiKey, httpClient) {
         }
