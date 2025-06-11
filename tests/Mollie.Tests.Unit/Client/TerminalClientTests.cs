@@ -63,6 +63,31 @@ public class TerminalClientTests : BaseClientTests {
     }
 
     [Theory]
+    [InlineData(true, "?testmode=true")]
+    [InlineData(false, "")]
+    public async Task GetTerminalAsync_QueryParameterOptions_CorrectParametersAreAdded(bool testMode, string expectedQueryString) {
+        // Given
+        const string terminalId = "terminal-id";
+        const string description = "terminal-description";
+        const string serialNumber = "serial-number";
+        const string brand = "brand";
+        const string model = "model";
+        string jsonToReturnInMockResponse = CreateTerminalJsonResponse(terminalId, description, serialNumber, brand, model);
+        var mockHttp = new MockHttpMessageHandler();
+        mockHttp.When($"{BaseMollieClient.DefaultBaseApiEndPoint}terminals/{terminalId}{expectedQueryString}")
+            .With(request => request.Headers.Contains("Idempotency-Key"))
+            .Respond("application/json", jsonToReturnInMockResponse);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        var terminalClient = new TerminalClient("abcde", httpClient);
+
+        // When
+        await terminalClient.GetTerminalAsync(terminalId, testMode);
+
+        // Then
+        mockHttp.VerifyNoOutstandingRequest();
+    }
+
+    [Theory]
     [InlineData(null, null, null, false, "")]
     [InlineData("from", null, null, false, "?from=from")]
     [InlineData("from", 50, null, false, "?from=from&limit=50")]

@@ -9,7 +9,7 @@ namespace Mollie.Api.Client.Abstract
      /// Calls in this class are documented in https://docs.mollie.com/reference/v2/terminals-api/overview
      /// </summary>
     public interface ITerminalClient : IBaseMollieClient {
-        Task<TerminalResponse> GetTerminalAsync(string terminalId, CancellationToken cancellationToken = default);
+        Task<TerminalResponse> GetTerminalAsync(string terminalId, bool testmode = false, CancellationToken cancellationToken = default);
         Task<TerminalResponse> GetTerminalAsync(UrlObjectLink<TerminalResponse> url, CancellationToken cancellationToken = default);
         Task<ListResponse<TerminalResponse>> GetTerminalListAsync(string? from = null, int? limit = null, string? profileId = null, bool testmode = false, CancellationToken cancellationToken = default);
         Task<ListResponse<TerminalResponse>> GetTerminalListAsync(UrlObjectLink<ListResponse<TerminalResponse>> url, CancellationToken cancellationToken = default);
