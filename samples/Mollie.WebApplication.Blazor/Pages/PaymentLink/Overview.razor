@@ -1,0 +1,68 @@
+﻿@page "/paymentlink/overview"
+@using Mollie.Api.Models.List.Response
+@using Mollie.Api.Models.PaymentLink.Response
+
+@inject IPaymentLinkClient PaymentClient
+
+<h3>Payment Links</h3>
+
+@if (_paymentLinks == null) {
+    <p>Loading...</p>
+}
+else {
+    <div class="clearfix">
+        <a href="/paymentlink/create" class="btn btn-primary float-right">Create new payment link</a>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Date created</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (PaymentLinkResponse paymentLink in _paymentLinks.Items) {
+            <tr>
+                <td>@paymentLink.Id</td>
+                <td>@paymentLink.CreatedAt</td>
+                <td>@paymentLink.Amount?.ToString() ?? @paymentLink.MinimumAmount?.ToString()</td>
+                <td>
+                    <a href="@paymentLink.Links.PaymentLink.Href" class="btn btn-outline-secondary" target="_blank">Pay</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+
+    <OverviewNavigation
+        Previous="_paymentLinks.Links.Previous"
+        Next="_paymentLinks.Links.Next">
+    </OverviewNavigation>
+}
+
+@code {
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string? Url { get; set; }
+
+    private ListResponse<PaymentLinkResponse>? _paymentLinks;
+
+    protected override async Task OnParametersSetAsync() {
+        await LoadData();
+    }
+
+    private async Task LoadData() {
+        if (string.IsNullOrEmpty(Url)) {
+            _paymentLinks = await PaymentClient.GetPaymentLinkListAsync();
+        }
+        else {
+            _paymentLinks = await PaymentClient.GetPaymentLinkListAsync(new UrlObjectLink<ListResponse<PaymentLinkResponse>>() {
+                Href = Url,
+                Type = "application/json"
+            });
+        }
+    }
+}

@@ -105,6 +105,7 @@ string checkoutUrl = paymentResponse.Links.Checkout.Href;
 ### 🧪 Blazor Example Project
 Want to see the library in action? Check out the full-featured .NET Blazor example project, which demonstrates real-world usage of several APIs:
 * Payments
+* Payment links
 * Orders
 * Customers
 * Mandates
