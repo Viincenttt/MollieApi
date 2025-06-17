@@ -1,7 +1,8 @@
 ﻿using Mollie.Api.JsonConverters;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Payment.Request {
     public record PaymentRequest
@@ -74,7 +75,7 @@ namespace Mollie.Api.Models.Payment.Request {
         /// the payment method selection into your website, however note Mollie’s country based conversion optimization is lost.
         /// See the Mollie.Api.Models.Payment.PaymentMethod class for a full list of known values.
         /// </summary>
-        [JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
         public string? Method {
             get => Methods?.FirstOrDefault();
             set {
@@ -103,14 +104,14 @@ namespace Mollie.Api.Models.Payment.Request {
         /// only show the methods specified in the array. For example, you can use this functionality to only show payment methods
         /// from a specific country to your customer.
         /// </summary>
-        [JsonProperty("method")]
+        [JsonPropertyName("method")]
         public IList<string>? Methods { get; set; }
 
         /// <summary>
         /// Provide any data you like, for example a string or a JSON object. We will save the data alongside the payment. Whenever
         /// you fetch the payment with our API, we’ll also include the metadata. You can use up to approximately 1kB.
         /// </summary>
-        [JsonConverter(typeof(RawJsonConverter))]
+        [System.Text.Json.Serialization.JsonConverter(typeof(RawJsonConverter))]
         public string? Metadata { get; set; }
 
         /// <summary>
@@ -158,7 +159,7 @@ namespace Mollie.Api.Models.Payment.Request {
         /// Oauth only - Optional - An optional routing configuration which enables you to route a successful payment, or part of the payment, to one or more connected accounts.
         /// Additionally, you can schedule (parts of) the payment to become available on the connected account on a future date.
         /// </summary>
-        [JsonProperty("routing")]
+        [JsonPropertyName("routing")]
         public IList<PaymentRoutingRequest>? Routings { get; set; }
 
         /// <summary>

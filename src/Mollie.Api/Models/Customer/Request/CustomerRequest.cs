@@ -23,7 +23,7 @@ namespace Mollie.Api.Models.Customer.Request {
         /// Optional - Provide any data you like in JSON notation, and we will save the data alongside the customer. Whenever
         /// you fetch the customer with our API, we'll also include the metadata. You can use up to 1kB of JSON.
         /// </summary>
-        [JsonConverter(typeof(RawJsonConverter))]
+        [System.Text.Json.Serialization.JsonConverter(typeof(RawJsonConverter))]
         public string? Metadata { get; set; }
 
         /// <summary>

@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.ClientLink.Response {
     public record ClientLinkResponse {
@@ -6,7 +6,7 @@ namespace Mollie.Api.Models.ClientLink.Response {
 
         public required string Resource { get; set; }
 
-        [JsonProperty("_links")]
+        [JsonPropertyName("_links")]
         public required ClientLinkResponseLinks Links { get; set; }
     }
 }

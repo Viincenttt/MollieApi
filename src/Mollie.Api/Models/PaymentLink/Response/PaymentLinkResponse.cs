@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Mollie.Api.Models.Payment;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.PaymentLink.Response
 {
@@ -123,7 +123,7 @@ namespace Mollie.Api.Models.PaymentLink.Response
         /// <summary>
         /// An object with several URL objects relevant to the payment. Every URL object will contain an href and a type field.
         /// </summary>
-        [JsonProperty("_links")]
+        [JsonPropertyName("_links")]
         public required PaymentLinkResponseLinks Links { get; set; }
 
         public override string ToString()

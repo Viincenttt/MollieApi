@@ -1,5 +1,5 @@
 ﻿using System;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.Client.Response {
     public record ClientResponse {
@@ -23,13 +23,13 @@ namespace Mollie.Api.Models.Client.Response {
         /// </summary>
         public required DateTime OrganizationCreatedAt { get; set; }
 
-        [JsonProperty("_embedded")]
+        [JsonPropertyName("_embedded")]
         public ClientEmbeddedResponse? Embedded { get; set; }
 
         /// <summary>
         /// An object with several URL objects relevant to the order line. Every URL object will contain an href and a type field.
         /// </summary>
-        [JsonProperty("_links")]
+        [JsonPropertyName("_links")]
         public required ClientResponseLinks Links { get; set; }
     }
 }

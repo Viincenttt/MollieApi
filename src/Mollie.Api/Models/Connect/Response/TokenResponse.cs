@@ -1,32 +1,32 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.Connect.Response {
     public record TokenResponse {
         /// <summary>
         ///     The access token, with which you will be able to access the Mollie API on the merchant's behalf.
         /// </summary>
-        [JsonProperty("access_token")]
+        [JsonPropertyName("access_token")]
         public required string AccessToken { get; set; }
 
         /// <summary>
         ///     The refresh token, with which you will be able to retrieve new access tokens on this endpoint. Please note that the
         ///     refresh token does not expire.
         /// </summary>
-        [JsonProperty("refresh_token")]
+        [JsonPropertyName("refresh_token")]
         public required string RefreshToken { get; set; }
 
         /// <summary>
         ///     The number of seconds left before the access token expires. Be sure to renew your access token before this reaches
         ///     zero.
         /// </summary>
-        [JsonProperty("expires_in")]
+        [JsonPropertyName("expires_in")]
         public required int ExpiresIn { get; set; }
 
         /// <summary>
         ///     As per OAuth standards, the provided access token can only be used with bearer authentication.
         ///     Possible values: bearer
         /// </summary>
-        [JsonProperty("token_type")]
+        [JsonPropertyName("token_type")]
         public required string TokenType { get; set; }
 
         /// <summary>

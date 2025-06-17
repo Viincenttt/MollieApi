@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Mollie.Api.Models.Issuer.Response;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.PaymentMethod.Response {
     public record PaymentMethodResponse {
@@ -47,7 +47,7 @@ namespace Mollie.Api.Models.PaymentMethod.Response {
 		/// <summary>
 		/// An object with several URL objects relevant to the payment method. Every URL object will contain an href and a type field.
 		/// </summary>
-		[JsonProperty("_links")]
+		[JsonPropertyName("_links")]
         public required PaymentMethodResponseLinks Links { get; set; }
 
         public override string ToString() {

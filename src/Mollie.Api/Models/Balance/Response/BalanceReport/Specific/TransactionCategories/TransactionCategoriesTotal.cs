@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.Balance.Response.BalanceReport.Specific.TransactionCategories {
     public record TransactionCategoriesTotal {
@@ -9,7 +9,7 @@ namespace Mollie.Api.Models.Balance.Response.BalanceReport.Specific.TransactionC
         public required TransactionCategoriesTransaction Chargebacks { get; set; }
         public required TransactionCategoriesTransaction Capital { get; set; }
         public required TransactionCategoriesTransaction Transfers { get; set; }
-        [JsonProperty("fee-prepayments")]
+        [JsonPropertyName("fee-prepayments")]
         public required TransactionCategoriesTransaction FeePrepayments { get; set; }
         public required TransactionCategoriesTransaction Corrections { get; set; }
     }

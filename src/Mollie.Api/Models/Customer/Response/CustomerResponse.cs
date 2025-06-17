@@ -1,5 +1,6 @@
 ﻿using System;
 using Mollie.Api.JsonConverters;
+using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -19,7 +20,7 @@ namespace Mollie.Api.Models.Customer.Response {
         /// <summary>
         /// The mode used to create this payment. Mode determines whether a payment is real or a test payment.
         /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
+        [System.Text.Json.Serialization.JsonConverter(typeof(StringEnumConverter))]
         public Mode Mode { get; set; }
 
         /// <summary>
@@ -42,7 +43,7 @@ namespace Mollie.Api.Models.Customer.Response {
         /// <summary>
         /// Optional metadata. Use this if you want Mollie to store additional info.
         /// </summary>
-        [JsonConverter(typeof(RawJsonConverter))]
+        [System.Text.Json.Serialization.JsonConverter(typeof(RawJsonConverter))]
         public string? Metadata { get; set; }
 
         /// <summary>
@@ -53,7 +54,7 @@ namespace Mollie.Api.Models.Customer.Response {
         /// <summary>
         /// An object with several URL objects relevant to the customer. Every URL object will contain an href and a type field.
         /// </summary>
-        [JsonProperty("_links")]
+        [JsonPropertyName("_links")]
         public required CustomerResponseLinks Links { get; set; }
 
         public T? GetMetadata<T>(JsonSerializerSettings? jsonSerializerSettings = null) {

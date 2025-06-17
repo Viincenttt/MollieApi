@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Mollie.Api.JsonConverters;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.Order.Request {
     public record OrderRefundRequest {

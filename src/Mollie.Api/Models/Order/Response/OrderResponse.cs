@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Mollie.Api.JsonConverters;
+using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -30,7 +31,7 @@ namespace Mollie.Api.Models.Order.Response {
         /// <summary>
         /// The mode used to create this order.
         /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
+        [System.Text.Json.Serialization.JsonConverter(typeof(StringEnumConverter))]
         public Mode Mode { get; set; }
 
         /// <summary>
@@ -88,7 +89,7 @@ namespace Mollie.Api.Models.Order.Response {
         /// alongside the order. Whenever you fetch the order with our API, we’ll also include the
         /// metadata. You can use up to approximately 1kB.
         /// </summary>
-        [JsonConverter(typeof(RawJsonConverter))]
+        [System.Text.Json.Serialization.JsonConverter(typeof(RawJsonConverter))]
         public string? Metadata { get; set; }
 
         /// <summary>
@@ -151,13 +152,13 @@ namespace Mollie.Api.Models.Order.Response {
 
         public required IEnumerable<OrderLineResponse> Lines { get; set; }
 
-        [JsonProperty("_embedded")]
+        [JsonPropertyName("_embedded")]
         public OrderEmbeddedResponse? Embedded { get; set; }
 
         /// <summary>
         /// An object with several URL objects relevant to the order. Every URL object will contain an href and a type field.
         /// </summary>
-        [JsonProperty("_links")]
+        [JsonPropertyName("_links")]
         public required OrderResponseLinks Links { get; set; }
 
         public T? GetMetadata<T>(JsonSerializerSettings? jsonSerializerSettings = null) {

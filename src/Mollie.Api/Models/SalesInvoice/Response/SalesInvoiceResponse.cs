@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.SalesInvoice.Response;
 
@@ -154,6 +154,6 @@ public record SalesInvoiceResponse {
     /// <summary>
     /// An object with several relevant URLs. Every URL object will contain an href and a type field.
     /// </summary>
-    [JsonProperty("_links")]
+    [JsonPropertyName("_links")]
     public required SalesInvoiceResponseLinks Links { get; set; }
 }

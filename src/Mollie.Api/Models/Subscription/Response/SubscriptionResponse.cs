@@ -1,5 +1,6 @@
 ﻿using System;
 using Mollie.Api.JsonConverters;
+using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -18,7 +19,7 @@ namespace Mollie.Api.Models.Subscription.Response {
         /// <summary>
         /// The mode used to create this subscription. Mode determines whether the payments are real or test payments.
         /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
+        [System.Text.Json.Serialization.JsonConverter(typeof(StringEnumConverter))]
         public Mode Mode { get; set; }
 
         /// <summary>
@@ -100,13 +101,13 @@ namespace Mollie.Api.Models.Subscription.Response {
         /// The optional metadata you provided upon subscription creation. Metadata can for example be used to link a plan to a
         /// subscription.
         /// </summary>
-        [JsonConverter(typeof(RawJsonConverter))]
+        [System.Text.Json.Serialization.JsonConverter(typeof(RawJsonConverter))]
         public string? Metadata { get; set; }
 
         /// <summary>
         /// An object with several URL objects relevant to the subscription. Every URL object will contain an href and a type field.
         /// </summary>
-        [JsonProperty("_links")]
+        [JsonPropertyName("_links")]
         public required SubscriptionResponseLinks Links { get; set; }
 
         /// <summary>

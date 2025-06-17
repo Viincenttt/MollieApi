@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.Permission.Response {
     public record PermissionResponse {
@@ -26,7 +26,7 @@ namespace Mollie.Api.Models.Permission.Response {
         /// <summary>
         /// An object with several URL objects relevant to the permission. Every URL object will contain an href and a type field.
         /// </summary>
-        [JsonProperty("_links")]
+        [JsonPropertyName("_links")]
         public required PermissionResponseLinks Links { get; set; }
     }
 }

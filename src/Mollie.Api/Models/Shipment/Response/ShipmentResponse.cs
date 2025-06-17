@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Mollie.Api.JsonConverters;
 using Mollie.Api.Models.Order.Response;
+using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Shipment.Response
@@ -37,7 +38,7 @@ namespace Mollie.Api.Models.Shipment.Response
         /// The optional metadata you provided upon subscription creation. Metadata can for example be used to link a plan to a
         /// subscription.
         /// </summary>
-        [JsonConverter(typeof(RawJsonConverter))]
+        [System.Text.Json.Serialization.JsonConverter(typeof(RawJsonConverter))]
         public string? Metadata { get; set; }
 
         /// <summary>
@@ -48,7 +49,7 @@ namespace Mollie.Api.Models.Shipment.Response
         /// <summary>
         /// An object with several URL objects relevant to the order. Every URL object will contain an href and a type field.
         /// </summary>
-        [JsonProperty("_links")]
+        [JsonPropertyName("_links")]
         public required ShipmentResponseLinks Links { get; set; }
 
         public T? GetMetadata<T>(JsonSerializerSettings? jsonSerializerSettings = null) {

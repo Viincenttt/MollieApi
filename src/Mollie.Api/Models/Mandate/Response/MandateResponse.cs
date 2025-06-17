@@ -1,5 +1,5 @@
 ﻿using System;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.Mandate.Response {
     public record MandateResponse {
@@ -42,7 +42,7 @@ namespace Mollie.Api.Models.Mandate.Response {
         /// <summary>
         /// An object with several URL objects relevant to the mandate. Every URL object will contain an href and a type field.
         /// </summary>
-        [JsonProperty("_links")]
+        [JsonPropertyName("_links")]
         public required MandateResponseLinks Links { get; set; }
     }
 }

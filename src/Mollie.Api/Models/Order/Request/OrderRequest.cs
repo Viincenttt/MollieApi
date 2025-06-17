@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Mollie.Api.JsonConverters;
 using Mollie.Api.Models.Order.Request.PaymentSpecificParameters;
+using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Order.Request {
@@ -74,7 +75,7 @@ namespace Mollie.Api.Models.Order.Request {
         /// you to fully integrate the payment method selection into your website. See the
         /// Mollie.Api.Models.Payment.PaymentMethod class for a full list of known values.
         /// </summary>
-        [JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
         public string? Method {
             get => Methods?.FirstOrDefault();
             set {
@@ -96,7 +97,7 @@ namespace Mollie.Api.Models.Order.Request {
         /// only show the methods specified in the array. For example, you can use this functionality to only show payment methods
         /// from a specific country to your customer.
         /// </summary>
-        [JsonProperty("method")]
+        [JsonPropertyName("method")]
         public IList<string>? Methods { get; set; }
 
         /// <summary>
@@ -108,7 +109,7 @@ namespace Mollie.Api.Models.Order.Request {
         /// Provide any data you like, and we will save the data alongside the subscription. Whenever you fetch the subscription
         /// with our API, we’ll also include the metadata. You can use up to 1kB of JSON.
         /// </summary>
-        [JsonConverter(typeof(RawJsonConverter))]
+        [System.Text.Json.Serialization.JsonConverter(typeof(RawJsonConverter))]
         public string? Metadata { get; set; }
 
         /// <summary>

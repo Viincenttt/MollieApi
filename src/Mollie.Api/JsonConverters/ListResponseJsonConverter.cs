@@ -4,7 +4,6 @@ using Newtonsoft.Json;
 namespace Mollie.Api.JsonConverters {
     using Newtonsoft.Json.Linq;
     internal class ListResponseConverter : JsonConverter {
-
         public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer) {
             throw new NotImplementedException("Not implemented");
         }

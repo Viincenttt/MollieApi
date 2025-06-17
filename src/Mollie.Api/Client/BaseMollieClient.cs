@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Mollie.Api.Extensions;
@@ -15,7 +16,7 @@ using Mollie.Api.Framework.Idempotency;
 using Mollie.Api.Models.Error;
 using Mollie.Api.Models.Url;
 using Mollie.Api.Options;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Client {
     public abstract class BaseMollieClient : IDisposable {
@@ -195,7 +196,7 @@ namespace Mollie.Api.Client {
             try {
                 return _jsonConverterService.Deserialize<MollieErrorMessage>(responseBody)!;
             }
-            catch (JsonReaderException) {
+            catch (JsonException) {
                 return new MollieErrorMessage {
                     Title = "Unknown error",
                     Status = (int)responseStatusCode,
