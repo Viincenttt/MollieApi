@@ -131,7 +131,7 @@ namespace Mollie.Api.Models.Payment.Response {
         /// <summary>
         /// The URL Mollie will call as soon an important status change takes place.
         /// </summary>
-        public required string WebhookUrl { get; set; }
+        public string? WebhookUrl { get; set; }
 
         /// <summary>
         /// Optionally provide the order lines for the payment. Each line contains details such as a description of the item ordered and its price.

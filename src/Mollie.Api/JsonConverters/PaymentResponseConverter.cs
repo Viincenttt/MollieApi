@@ -1,31 +1,63 @@
 ﻿using System;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Mollie.Api.Framework.Factories;
 using Mollie.Api.Models.Payment.Response;
 using Newtonsoft.Json.Linq;
 
-namespace Mollie.Api.JsonConverters {
-    internal class PaymentResponseConverter : JsonCreationConverter<PaymentResponse> {
-        private readonly PaymentResponseFactory _paymentResponseFactory;
+namespace Mollie.Api.JsonConverters;
 
-        public PaymentResponseConverter(PaymentResponseFactory paymentResponseFactory) {
-            _paymentResponseFactory = paymentResponseFactory;
-        }
+internal class PaymentResponseConverter : JsonConverter<PaymentResponse>
+{
+    private readonly PaymentResponseFactory _paymentResponseFactory;
 
-        protected override PaymentResponse Create(Type objectType, JObject jObject) {
-            string? paymentMethod = GetPaymentMethod(jObject);
+    public PaymentResponseConverter(PaymentResponseFactory paymentResponseFactory)
+    {
+        _paymentResponseFactory = paymentResponseFactory;
+    }
 
-            return _paymentResponseFactory.Create(paymentMethod);
-        }
+    public override PaymentResponse? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        // Parse the current JSON object into a JsonDocument for easy querying
+        using (JsonDocument document = JsonDocument.ParseValue(ref reader))
+        {
+            JsonElement root = document.RootElement;
 
-        private string? GetPaymentMethod(JObject jObject) {
-            if (FieldExists("method", jObject)) {
-                string paymentMethodValue = (string) jObject["method"]!;
-                if (!string.IsNullOrEmpty(paymentMethodValue)) {
-                    return paymentMethodValue;
+            // Try to get the "method" property value
+            string? paymentMethod = null;
+            if (root.TryGetProperty("method", out JsonElement methodProperty))
+            {
+                paymentMethod = methodProperty.GetString();
+            }
+
+            // Use the factory to create the right PaymentResponse instance
+            PaymentResponse paymentResponse = _paymentResponseFactory.Create(paymentMethod);
+
+            // Deserialize the JSON into the created instance, using the root element JSON
+            // Since System.Text.Json cannot deserialize into existing objects directly,
+            // we re-serialize the root JSON and deserialize again into the correct type.
+
+            var json = root.GetRawText();
+
+            // Create new options without this converter to avoid stack overflow
+            var innerOptions = new JsonSerializerOptions(options);
+            for (int i = innerOptions.Converters.Count - 1; i >= 0; i--)
+            {
+                if (innerOptions.Converters[i] is PaymentResponseConverter)
+                {
+                    innerOptions.Converters.RemoveAt(i);
                 }
             }
 
-            return null;
+            var result = (PaymentResponse)JsonSerializer.Deserialize(json, paymentResponse.GetType(), innerOptions)!;
+
+            return result;
         }
     }
+
+    public override void Write(Utf8JsonWriter writer, PaymentResponse value, JsonSerializerOptions options)
+    {
+        JsonSerializer.Serialize(writer, value, value.GetType(), options);
+    }
 }
+

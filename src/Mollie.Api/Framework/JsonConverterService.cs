@@ -1,49 +1,85 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Mollie.Api.Framework.Factories;
 using Mollie.Api.JsonConverters;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
-namespace Mollie.Api.Framework {
-    internal class JsonConverterService {
-        private readonly JsonSerializerSettings _defaultJsonDeserializerSettings;
+namespace Mollie.Api.Framework;
 
-        public JsonConverterService() {
-            _defaultJsonDeserializerSettings = CreateDefaultJsonDeserializerSettings();
-        }
+internal class JsonConverterService
+{
+    private readonly JsonSerializerOptions _defaultJsonDeserializerOptions;
 
-        public string Serialize(object objectToSerialize) {
-            return JsonConvert.SerializeObject(objectToSerialize,
-                new JsonSerializerSettings {
-                    DateFormatString = "yyyy-MM-dd",
-                    ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                    NullValueHandling = NullValueHandling.Ignore,
-                    PreserveReferencesHandling = PreserveReferencesHandling.None
-                });
-        }
+    public JsonConverterService()
+    {
+        _defaultJsonDeserializerOptions = CreateDefaultJsonDeserializerOptions();
+    }
 
-        public T? Deserialize<T>(string json) {
-            return JsonConvert.DeserializeObject<T>(json, _defaultJsonDeserializerSettings);
-        }
+    public string Serialize(object objectToSerialize)
+    {
+        var options = new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+            WriteIndented = false
+        };
+        options.Converters.Add(new JsonDateConverter("yyyy-MM-dd"));
+        return JsonSerializer.Serialize(objectToSerialize, options);
+    }
 
-        /// <summary>
-        ///     Creates the default Json serial settings for the JSON.NET parsing.
-        /// </summary>
-        private JsonSerializerSettings CreateDefaultJsonDeserializerSettings() {
-            return new JsonSerializerSettings {
-                DateFormatString = "yyyy-MM-dd",
-                NullValueHandling = NullValueHandling.Ignore,
-                Converters = new List<JsonConverter> {
-                    // Add a special converter for payment responses, because we need to create specific classes based on the payment method
-                    new PaymentResponseConverter(new PaymentResponseFactory()),
-                    // Add a special converter for the balance report responses, because we need to create specific classes based on the report grouping
-                    new BalanceReportResponseJsonConverter(new BalanceReportResponseFactory()),
-                    // Add a special converter for the balance transaction responses, because we need to create specific classes based on the transaction type
-                    new BalanceTransactionJsonConverter(new BalanceTransactionFactory()),
-                    // Add a special converter for mandate responses, because we need to create specific classes based on the payment method
-                    new MandateResponseConverter(new MandateResponseFactory())
-                }
-            };
-        }
+    public T? Deserialize<T>(string json)
+    {
+        return JsonSerializer.Deserialize<T>(json, _defaultJsonDeserializerOptions);
+    }
+
+    /// <summary>
+    /// Creates the default Json serializer options for System.Text.Json parsing.
+    /// </summary>
+    private JsonSerializerOptions CreateDefaultJsonDeserializerOptions()
+    {
+        var options = new JsonSerializerOptions
+        {
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        };
+
+        // Add date converter with the desired format
+        //options.Converters.Add(new JsonDateConverter("yyyy-MM-dd"));
+        options.Converters.Add(new JsonStringEnumConverter());
+
+        // Add your custom converters adapted for System.Text.Json here:
+        options.Converters.Add(new PaymentResponseConverter(new PaymentResponseFactory()));
+        //options.Converters.Add(new BalanceReportResponseJsonConverter(new BalanceReportResponseFactory()));
+        //options.Converters.Add(new BalanceTransactionJsonConverter(new BalanceTransactionFactory()));
+        //options.Converters.Add(new MandateResponseConverter(new MandateResponseFactory()));
+
+        return options;
+    }
+}
+
+/// <summary>
+/// Custom converter to handle date format yyyy-MM-dd in System.Text.Json.
+/// </summary>
+public class JsonDateConverter : JsonConverter<DateTime>
+{
+    private readonly string _format;
+
+    public JsonDateConverter(string format)
+    {
+        _format = format;
+    }
+
+    public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        var value = reader.GetString();
+        if (value == null)
+            throw new JsonException("Expected date string value.");
+
+        return DateTime.ParseExact(value, _format, null);
+    }
+
+    public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
+    {
+        writer.WriteStringValue(value.ToString(_format));
     }
 }

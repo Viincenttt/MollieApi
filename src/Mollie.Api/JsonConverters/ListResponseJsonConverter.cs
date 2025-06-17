@@ -1,32 +1,51 @@
 ﻿using System;
-using Newtonsoft.Json;
+using System.Collections;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
-namespace Mollie.Api.JsonConverters {
-    using Newtonsoft.Json.Linq;
-    internal class ListResponseConverter : JsonConverter {
-        public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer) {
-            throw new NotImplementedException("Not implemented");
-        }
+namespace Mollie.Api.JsonConverters;
 
-        public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer) {
-            if (reader.TokenType == JsonToken.Null) {
-                return null;
-            }
-            else {
-                // Find the first array object and deserialize it to the list we want
-                JObject obj = JObject.Load(reader);
-                if (obj.First?.First is JArray objectArray) {
-                    return objectArray.ToObject(objectType, serializer);
-                }
-            }
+internal class ListResponseConverter : JsonConverter<object>
+{
+    public override bool CanConvert(Type typeToConvert)
+    {
+        // Check if the target type is assignable from IList (List<T> implements IList)
+        return typeof(IList).IsAssignableFrom(typeToConvert);
+    }
 
+    public override object? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        if (reader.TokenType == JsonTokenType.Null)
+        {
             return null;
         }
 
-        public override bool CanWrite => false;
+        using (JsonDocument document = JsonDocument.ParseValue(ref reader))
+        {
+            JsonElement root = document.RootElement;
 
-        public override bool CanConvert(Type objectType) {
-            return false;
+            if (root.ValueKind == JsonValueKind.Object)
+            {
+                // TODO: This doesn't work
+                var test = root.EnumerateObject().Current;
+                 root.EnumerateObject().MoveNext();
+                 var firstProperty = root.EnumerateObject().Current;
+
+                if (firstProperty.Value.ValueKind == JsonValueKind.Array)
+                {
+                    string json = firstProperty.Value.GetRawText();
+
+                    // Deserialize the array JSON into the target list type
+                    return JsonSerializer.Deserialize(json, typeToConvert, options);
+                }
+            }
         }
+
+        return null;
+    }
+
+    public override void Write(Utf8JsonWriter writer, object value, JsonSerializerOptions options)
+    {
+        throw new NotImplementedException("Not implemented");
     }
 }

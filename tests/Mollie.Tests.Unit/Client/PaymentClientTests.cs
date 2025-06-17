@@ -187,6 +187,14 @@ public class PaymentClientTests : BaseClientTests {
         };
         string expectedRoutingInformation = $"\"routing\":[{{\"amount\":{{\"currency\":\"EUR\",\"value\":\"100.00\"}},\"destination\":{{\"type\":\"organization\",\"organizationId\":\"organization-id\"}},\"releaseDate\":\"2022-01-14\"}}]}}";
         const string expectedJsonResponse = @"{
+                ""resource"": ""payment"",
+                ""id"": ""tr_5B8cwPMGnU6qLbRvo7qEZo"",
+                ""mode"": ""live"",
+                ""createdAt"": ""2024-03-20T09:13:37.0Z"",
+                ""status"": ""open"",
+                ""webhookUrl"": ""https://webshop.example.org/payments/webhook/"",
+                ""profileId"": ""pfl_QkEhN94Ba"",
+                ""sequenceType"": ""oneoff"",
                 ""amount"":{
                     ""currency"":""EUR"",
                     ""value"":""100.00""
@@ -195,6 +203,8 @@ public class PaymentClientTests : BaseClientTests {
                 ""method"": null,
                 ""redirectUrl"":""http://www.mollie.com"",
                 ""routing"": [{
+                        ""resource"": ""route"",
+                        ""id"": ""crt_tntKsr6tffuVdqnEvhq3J"",
                         ""amount"": {
                             ""currency"": ""EUR"",
                             ""value"": ""100.00""
@@ -613,6 +623,10 @@ public class PaymentClientTests : BaseClientTests {
             ""resource"": ""payment"",
             ""id"": ""tr_WDqYK6vllg"",
             ""mode"": ""test"",
+            ""status"": ""open"",
+            ""webhookUrl"": ""https://webshop.example.org/payments/webhook/"",
+            ""profileId"": ""pfl_QkEhN94Ba"",
+            ""sequenceType"": ""oneoff"",
             ""createdAt"": ""2018-03-20T13:13:37+00:00"",
             ""amount"":{
                 ""currency"":""EUR"",
