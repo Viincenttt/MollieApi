@@ -28,6 +28,6 @@ namespace Mollie.Api.Models.Capture.Response {
         /// <summary>
         /// The URL to the order retrieval endpoint documentation.
         /// </summary>
-        public UrlLink? Documentation { get; set; }
+        public required UrlLink Documentation { get; set; }
     }
 }

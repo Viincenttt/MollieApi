@@ -10,6 +10,6 @@ namespace Mollie.Api.Models.Permission.Response {
         /// <summary>
         /// The URL to the permission retrieval endpoint documentation.
         /// </summary>
-        public UrlLink? Documentation { get; set; }
+        public required UrlLink Documentation { get; set; }
     }
 }

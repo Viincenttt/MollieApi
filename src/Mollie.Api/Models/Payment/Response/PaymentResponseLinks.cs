@@ -51,7 +51,7 @@ namespace Mollie.Api.Models.Payment.Response {
         /// <summary>
         /// The URL to the payment retrieval endpoint documentation.
         /// </summary>
-        public UrlLink? Documentation { get; set; }
+        public required UrlLink Documentation { get; set; }
 
         /// <summary>
         /// The API resource URL of the mandate linked to this payment. Not present if a one-off payment.

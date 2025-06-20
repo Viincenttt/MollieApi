@@ -58,6 +58,6 @@ namespace Mollie.Api.Models.Organization {
         /// <summary>
         /// The URL to the payment method retrieval endpoint documentation.
         /// </summary>
-        public UrlLink? Documentation { get; set; }
+        public required UrlLink Documentation { get; set; }
     }
 }
