@@ -93,7 +93,8 @@ namespace Mollie.Tests.Unit.Client {
             SortDirection? sortDirection,
             string expectedQueryString) {
             // Given: We make a request to retrieve the list of orders
-            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.DefaultBaseApiEndPoint}orders{expectedQueryString}", defaultOrderJsonResponse);
+            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get,
+                $"{BaseMollieClient.DefaultBaseApiEndPoint}orders{expectedQueryString}", defaultOrderListJsonResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
             OrderClient orderClient = new OrderClient("abcde", httpClient);
 
@@ -369,6 +370,28 @@ namespace Mollie.Tests.Unit.Client {
                 Locale = Locale.nl_NL
             };
         }
+
+        private const string defaultOrderListJsonResponse = @"{
+            ""count"": 5,
+            ""_embedded"": {
+                ""orders"": []
+            },
+            ""_links"": {
+            ""self"": {
+              ""href"": ""..."",
+              ""type"": ""application/hal+json""
+            },
+            ""previous"": null,
+            ""next"": {
+              ""href"": ""https://api.mollie.com/v2/orders?from=ord_vsKJpSsabw&limit=5"",
+              ""type"": ""application/hal+json""
+            },
+            ""documentation"": {
+              ""href"": ""..."",
+              ""type"": ""text/html""
+            }
+          }
+        }";
 
         private const string defaultOrderJsonResponse = @"{
             ""resource"": ""order"",

@@ -40,12 +40,12 @@ namespace Mollie.Api.Models.Organization {
         /// <summary>
         /// The VAT number of the organization, if based in the European Union. The VAT number has been checked with the VIES by Mollie.
         /// </summary>
-        public required string VatNumber { get; set; }
+        public string? VatNumber { get; set; }
 
         /// <summary>
         /// The organization’s VAT regulation, if based in the European Union. Either shifted (VAT is shifted) or dutch (Dutch VAT rate).
         /// </summary>
-        public required string VatRegulation { get; set; }
+        public string? VatRegulation { get; set; }
 
         /// <summary>
         /// An object with several URL objects relevant to the organization. Every URL object will contain an href and a type field.
