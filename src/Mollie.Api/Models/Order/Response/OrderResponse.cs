@@ -31,7 +31,6 @@ namespace Mollie.Api.Models.Order.Response {
         /// <summary>
         /// The mode used to create this order.
         /// </summary>
-        [System.Text.Json.Serialization.JsonConverter(typeof(StringEnumConverter))]
         public Mode Mode { get; set; }
 
         /// <summary>

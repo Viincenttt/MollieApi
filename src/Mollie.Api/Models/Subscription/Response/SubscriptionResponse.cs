@@ -19,7 +19,6 @@ namespace Mollie.Api.Models.Subscription.Response {
         /// <summary>
         /// The mode used to create this subscription. Mode determines whether the payments are real or test payments.
         /// </summary>
-        [System.Text.Json.Serialization.JsonConverter(typeof(StringEnumConverter))]
         public Mode Mode { get; set; }
 
         /// <summary>

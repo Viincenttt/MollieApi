@@ -27,7 +27,6 @@ namespace Mollie.Api.Models.Balance.Response {
         /// <summary>
         /// The status of the balance.
         /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
         public required BalanceResponseStatus Status { get; set; }
 
         /// <summary>

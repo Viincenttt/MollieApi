@@ -23,6 +23,6 @@ namespace Mollie.Api.Models.List.Response {
         /// <summary>
         /// The URL to the payments list endpoint documentation.
         /// </summary>
-        public required UrlLink Documentation { get; set; }
+        public UrlLink? Documentation { get; set; }
     }
 }

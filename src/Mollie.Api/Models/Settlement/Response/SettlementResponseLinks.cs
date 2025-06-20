@@ -29,6 +29,6 @@ namespace Mollie.Api.Models.Settlement.Response {
         /// <summary>
         /// The URL to the settlement retrieval endpoint documentation.
         /// </summary>
-        public required UrlLink Documentation { get; set; }
+        public UrlLink? Documentation { get; set; }
     }
 }

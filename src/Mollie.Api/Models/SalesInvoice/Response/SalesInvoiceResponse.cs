@@ -124,7 +124,7 @@ public record SalesInvoiceResponse {
     /// <summary>
     /// The total amount without VAT.
     /// </summary>
-    public required Amount SubTotalAmount { get; set; }
+    public required Amount SubtotalAmount { get; set; }
 
     /// <summary>
     /// The total amount with VAT.

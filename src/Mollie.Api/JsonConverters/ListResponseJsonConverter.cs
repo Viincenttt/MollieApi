@@ -24,19 +24,14 @@ internal class ListResponseConverter : JsonConverter<object>
         {
             JsonElement root = document.RootElement;
 
-            if (root.ValueKind == JsonValueKind.Object)
-            {
-                // TODO: This doesn't work
-                var test = root.EnumerateObject().Current;
-                 root.EnumerateObject().MoveNext();
-                 var firstProperty = root.EnumerateObject().Current;
-
-                if (firstProperty.Value.ValueKind == JsonValueKind.Array)
-                {
-                    string json = firstProperty.Value.GetRawText();
-
-                    // Deserialize the array JSON into the target list type
-                    return JsonSerializer.Deserialize(json, typeToConvert, options);
+            if (root.ValueKind == JsonValueKind.Object) {
+                var enumerator = root.EnumerateObject();
+                if (enumerator.MoveNext()) {
+                    var firstProperty = enumerator.Current;
+                    if (firstProperty.Value.ValueKind == JsonValueKind.Array) {
+                        var arrayJson = firstProperty.Value.GetRawText();
+                        return JsonSerializer.Deserialize(arrayJson, typeToConvert, options);
+                    }
                 }
             }
         }

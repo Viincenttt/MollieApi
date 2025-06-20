@@ -15,6 +15,6 @@ namespace Mollie.Api.Models.Invoice.Response {
         /// <summary>
         /// The URL to the invoice retrieval endpoint documentation.
         /// </summary>
-		public required UrlLink Documentation { get; set; }
+		public UrlLink? Documentation { get; set; }
 	}
 }

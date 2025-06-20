@@ -24,6 +24,6 @@ namespace Mollie.Api.Models.Onboarding.Response {
         /// <summary>
         /// The URL to the onboarding status retrieval endpoint documentation.
         /// </summary>
-        public required UrlLink Documentation { get; set; }
+        public UrlLink? Documentation { get; set; }
     }
 }

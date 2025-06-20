@@ -113,7 +113,7 @@ namespace Mollie.Tests.Unit.Client {
             const string jsonResponse = defaultOrderJsonResponse;
             var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Post, $"{BaseMollieClient.DefaultBaseApiEndPoint}orders", jsonResponse, expectedPaymentMethodJson);
             HttpClient httpClient = mockHttp.ToHttpClient();
-            OrderClient orderClient = new OrderClient("abcde", httpClient);
+            OrderClient orderClient = new ("abcde", httpClient);
 
             // When: We send the request
             OrderResponse orderResponse = await orderClient.CreateOrderAsync(orderRequest);
@@ -378,7 +378,7 @@ namespace Mollie.Tests.Unit.Client {
             ""amount"": {
                 ""value"": ""1027.99"",
                 ""currency"": ""EUR""
-            },
+            }
         }";
 
         private const string defaultPaymentJsonResponse = @"{

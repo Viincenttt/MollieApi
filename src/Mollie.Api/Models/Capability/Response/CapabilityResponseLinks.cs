@@ -3,5 +3,5 @@
 namespace Mollie.Api.Models.Capability.Response;
 
 public record CapabilityResponseLinks {
-    public required UrlLink Documentation { get; set; }
+    public UrlLink? Documentation { get; set; }
 }

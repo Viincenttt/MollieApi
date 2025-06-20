@@ -122,6 +122,7 @@ namespace Mollie.Api.Client {
             var resultContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode) {
+                resultContent = string.IsNullOrEmpty(resultContent) ? "{}" : resultContent;
                 return _jsonConverterService.Deserialize<T>(resultContent)!;
             }
 

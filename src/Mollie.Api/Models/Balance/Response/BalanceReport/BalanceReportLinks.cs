@@ -10,6 +10,6 @@ namespace Mollie.Api.Models.Balance.Response.BalanceReport {
         /// <summary>
         /// The URL to the order retrieval endpoint documentation.
         /// </summary>
-        public required UrlLink Documentation { get; set; }
+        public UrlLink? Documentation { get; set; }
     }
 }

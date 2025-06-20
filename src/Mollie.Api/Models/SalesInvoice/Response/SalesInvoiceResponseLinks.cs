@@ -22,5 +22,5 @@ public record SalesInvoiceResponseLinks {
     /// <summary>
     /// In v2 endpoints, URLs are commonly represented as objects with an href and type field.
     /// </summary>
-    public required UrlLink Documentation { get; set; }
+    public UrlLink? Documentation { get; set; }
 }

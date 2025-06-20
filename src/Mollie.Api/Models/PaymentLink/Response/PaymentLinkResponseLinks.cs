@@ -15,6 +15,6 @@ namespace Mollie.Api.Models.PaymentLink.Response {
         /// <summary>
         ///The URL to the payment link retrieval endpoint documentation.
         /// </summary>
-        public required UrlLink Documentation { get; set; }
+        public UrlLink? Documentation { get; set; }
     }
 }

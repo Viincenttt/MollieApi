@@ -16,6 +16,6 @@ namespace Mollie.Api.Models.Shipment.Response {
         /// <summary>
         /// The URL to the order retrieval endpoint documentation.
         /// </summary>
-        public required UrlLink Documentation { get; set; }
+        public UrlLink? Documentation { get; set; }
     }
 }

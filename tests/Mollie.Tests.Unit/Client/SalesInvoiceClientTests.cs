@@ -121,7 +121,7 @@ public class SalesInvoiceClientTests : BaseClientTests {
         // Given: A sales invoice ID
         const string salesInvoiceId = "invoice_4Y0eZitmBnQ6IDoMqZQKh";
         string expectedUrl = $"{BaseMollieClient.DefaultBaseApiEndPoint}sales-invoices/{salesInvoiceId}";
-        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Delete, expectedUrl, string.Empty);
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Delete, expectedUrl, "{}");
         HttpClient httpClient = mockHttp.ToHttpClient();
         var salesInvoiceClient = new SalesInvoiceClient("api-key", httpClient);
 

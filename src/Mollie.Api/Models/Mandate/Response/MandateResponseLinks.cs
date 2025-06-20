@@ -16,6 +16,6 @@ namespace Mollie.Api.Models.Mandate.Response {
         /// <summary>
         /// The URL to the mandate retrieval endpoint documentation.
         /// </summary>
-        public required UrlLink Documentation { get; set; }
+        public UrlLink? Documentation { get; set; }
     }
 }

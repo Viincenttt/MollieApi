@@ -14,6 +14,6 @@ namespace Mollie.Api.Models.Profile.Response {
         public UrlObjectLink<ListResponse<PaymentMethodResponse>>? Payments { get; set; }
         public UrlObjectLink<ListResponse<RefundResponse>>? Refunds { get; set; }
         public UrlLink? CheckoutPreviewUrl { get; set; }
-        public required UrlLink Documentation { get; set; }
+        public UrlLink? Documentation { get; set; }
     }
 }
