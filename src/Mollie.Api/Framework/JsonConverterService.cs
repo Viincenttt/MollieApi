@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 using Mollie.Api.Framework.Factories;
 using Mollie.Api.JsonConverters;
 
@@ -41,6 +42,27 @@ internal class JsonConverterService
         {
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            UnmappedMemberHandling = JsonUnmappedMemberHandling.Skip,
+            AllowTrailingCommas = true,
+            RespectNullableAnnotations = false,
+            TypeInfoResolver = new DefaultJsonTypeInfoResolver
+            {
+                Modifiers =
+                {
+                    static typeInfo =>
+                    {
+                        if (typeInfo.Kind != JsonTypeInfoKind.Object) {
+                            return;
+                        }
+
+                        foreach (JsonPropertyInfo propertyInfo in typeInfo.Properties)
+                        {
+                            // Strip IsRequired constraint from every property.
+                            propertyInfo.IsRequired = false;
+                        }
+                    }
+                }
+            }
         };
 
         // Add date converter with the desired format
