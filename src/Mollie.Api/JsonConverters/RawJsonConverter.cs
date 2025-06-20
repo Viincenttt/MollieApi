@@ -6,14 +6,19 @@ namespace Mollie.Api.JsonConverters;
 
 internal class RawJsonConverter : JsonConverter<string>
 {
-    public override string? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-    {
-        // Read the JSON token as a string (raw JSON or simple string)
-        using (JsonDocument document = JsonDocument.ParseValue(ref reader))
+    public override string? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
+        using JsonDocument document = JsonDocument.ParseValue(ref reader);
+        if (document.RootElement.ValueKind == JsonValueKind.Null)
         {
-            // Return the raw JSON string of the token (including objects, arrays)
-            return document.RootElement.GetRawText();
+            return null;
         }
+
+        if (document.RootElement.ValueKind == JsonValueKind.String)
+        {
+            return document.RootElement.GetString();
+        }
+
+        return document.RootElement.GetRawText();
     }
 
     public override void Write(Utf8JsonWriter writer, string? value, JsonSerializerOptions options)
@@ -26,13 +31,10 @@ internal class RawJsonConverter : JsonConverter<string>
 
         if (IsValidJson(value))
         {
-            // Write raw JSON by parsing and writing the element (since no WriteRawValue)
-            using JsonDocument doc = JsonDocument.Parse(value);
-            doc.RootElement.WriteTo(writer);
+            writer.WriteRawValue(value);
         }
         else
         {
-            // Write as a normal string value
             writer.WriteStringValue(value);
         }
     }
