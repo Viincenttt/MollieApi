@@ -20,18 +20,16 @@ internal class ListResponseConverter : JsonConverter<object>
             return null;
         }
 
-        using (JsonDocument document = JsonDocument.ParseValue(ref reader))
-        {
-            JsonElement root = document.RootElement;
+        using JsonDocument document = JsonDocument.ParseValue(ref reader);
+        JsonElement root = document.RootElement;
 
-            if (root.ValueKind == JsonValueKind.Object) {
-                var enumerator = root.EnumerateObject();
-                if (enumerator.MoveNext()) {
-                    var firstProperty = enumerator.Current;
-                    if (firstProperty.Value.ValueKind == JsonValueKind.Array) {
-                        var arrayJson = firstProperty.Value.GetRawText();
-                        return JsonSerializer.Deserialize(arrayJson, typeToConvert, options);
-                    }
+        if (root.ValueKind == JsonValueKind.Object) {
+            var enumerator = root.EnumerateObject();
+            if (enumerator.MoveNext()) {
+                var firstProperty = enumerator.Current;
+                if (firstProperty.Value.ValueKind == JsonValueKind.Array) {
+                    var arrayJson = firstProperty.Value.GetRawText();
+                    return JsonSerializer.Deserialize(arrayJson, typeToConvert, options);
                 }
             }
         }

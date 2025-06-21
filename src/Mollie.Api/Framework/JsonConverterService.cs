@@ -22,7 +22,9 @@ internal class JsonConverterService
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-            WriteIndented = false
+            WriteIndented = false,
+            AllowTrailingCommas = true,
+            RespectNullableAnnotations = false
         };
         options.Converters.Add(new JsonDateConverter("yyyy-MM-dd"));
         return JsonSerializer.Serialize(objectToSerialize, options);
@@ -73,7 +75,7 @@ internal class JsonConverterService
         options.Converters.Add(new PaymentResponseConverter(new PaymentResponseFactory()));
         //options.Converters.Add(new BalanceReportResponseJsonConverter(new BalanceReportResponseFactory()));
         //options.Converters.Add(new BalanceTransactionJsonConverter(new BalanceTransactionFactory()));
-        //options.Converters.Add(new MandateResponseConverter(new MandateResponseFactory()));
+        options.Converters.Add(new MandateResponseConverter(new MandateResponseFactory()));
 
         return options;
     }

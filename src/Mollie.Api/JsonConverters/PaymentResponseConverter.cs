@@ -3,7 +3,6 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Mollie.Api.Framework.Factories;
 using Mollie.Api.Models.Payment.Response;
-using Newtonsoft.Json.Linq;
 
 namespace Mollie.Api.JsonConverters;
 
@@ -16,7 +15,7 @@ internal class PaymentResponseConverter : JsonConverter<PaymentResponse>
         _paymentResponseFactory = paymentResponseFactory;
     }
 
-    public override PaymentResponse? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override PaymentResponse Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         // Parse the current JSON object into a JsonDocument for easy querying
         using (JsonDocument document = JsonDocument.ParseValue(ref reader))
@@ -40,16 +39,10 @@ internal class PaymentResponseConverter : JsonConverter<PaymentResponse>
             var json = root.GetRawText();
 
             // Create new options without this converter to avoid stack overflow
-            var innerOptions = new JsonSerializerOptions(options);
-            for (int i = innerOptions.Converters.Count - 1; i >= 0; i--)
-            {
-                if (innerOptions.Converters[i] is PaymentResponseConverter)
-                {
-                    innerOptions.Converters.RemoveAt(i);
-                }
-            }
+            JsonSerializerOptions newOptions = new(options);
+            newOptions.Converters.Remove(this);
 
-            var result = (PaymentResponse)JsonSerializer.Deserialize(json, paymentResponse.GetType(), innerOptions)!;
+            var result = (PaymentResponse)JsonSerializer.Deserialize(json, paymentResponse.GetType(), newOptions)!;
 
             return result;
         }
