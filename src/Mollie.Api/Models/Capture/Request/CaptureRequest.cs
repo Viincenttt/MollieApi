@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 using Mollie.Api.JsonConverters;
 
 namespace Mollie.Api.Models.Capture.Request {
@@ -18,7 +19,7 @@ namespace Mollie.Api.Models.Capture.Request {
         /// Whenever you fetch the capture with our API, we will also include the metadata. You can use up to
         /// approximately 1kB.
         /// </summary>
-        [System.Text.Json.Serialization.JsonConverter(typeof(RawJsonConverter))]
+        [JsonConverter(typeof(RawJsonConverter))]
         public string? Metadata { get; set; }
 
         /// <summary>

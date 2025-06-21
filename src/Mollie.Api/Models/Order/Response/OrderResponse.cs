@@ -87,7 +87,7 @@ namespace Mollie.Api.Models.Order.Response {
         /// alongside the order. Whenever you fetch the order with our API, we’ll also include the
         /// metadata. You can use up to approximately 1kB.
         /// </summary>
-        [System.Text.Json.Serialization.JsonConverter(typeof(RawJsonConverter))]
+        [JsonConverter(typeof(RawJsonConverter))]
         public string? Metadata { get; set; }
 
         /// <summary>

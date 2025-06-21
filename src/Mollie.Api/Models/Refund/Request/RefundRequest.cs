@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Mollie.Api.JsonConverters;
 
 namespace Mollie.Api.Models.Refund.Request {
@@ -19,7 +20,7 @@ namespace Mollie.Api.Models.Refund.Request {
         /// Provide any data you like, for example a string or a JSON object. We will save the data alongside the refund. Whenever
         /// you fetch the refund with our API, we’ll also include the metadata. You can use up to approximately 1kB.
         /// </summary>
-        [System.Text.Json.Serialization.JsonConverter(typeof(RawJsonConverter))]
+        [JsonConverter(typeof(RawJsonConverter))]
         public string? Metadata { get; set; }
 
         /// <summary>

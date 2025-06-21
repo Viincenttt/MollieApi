@@ -38,7 +38,7 @@ namespace Mollie.Api.Models.Shipment.Response
         /// The optional metadata you provided upon subscription creation. Metadata can for example be used to link a plan to a
         /// subscription.
         /// </summary>
-        [System.Text.Json.Serialization.JsonConverter(typeof(RawJsonConverter))]
+        [JsonConverter(typeof(RawJsonConverter))]
         public string? Metadata { get; set; }
 
         /// <summary>

@@ -111,7 +111,7 @@ namespace Mollie.Api.Models.Payment.Request {
         /// Provide any data you like, for example a string or a JSON object. We will save the data alongside the payment. Whenever
         /// you fetch the payment with our API, we’ll also include the metadata. You can use up to approximately 1kB.
         /// </summary>
-        [System.Text.Json.Serialization.JsonConverter(typeof(RawJsonConverter))]
+        [JsonConverter(typeof(RawJsonConverter))]
         public string? Metadata { get; set; }
 
         /// <summary>

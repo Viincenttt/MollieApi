@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 using Mollie.Api.JsonConverters;
 
 namespace Mollie.Api.Models.Order.Request {
@@ -28,7 +29,7 @@ namespace Mollie.Api.Models.Order.Request {
         /// save the data alongside the order line. Whenever you fetch the order with our API,
         /// we'll also include the metadata. You can use up to approximately 1kB.
         /// </summary>
-        [System.Text.Json.Serialization.JsonConverter(typeof(RawJsonConverter))]
+        [JsonConverter(typeof(RawJsonConverter))]
         public string? Metadata { get; set; }
 
         /// <summary>

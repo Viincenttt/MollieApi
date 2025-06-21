@@ -41,7 +41,7 @@ namespace Mollie.Api.Models.Customer.Response {
         /// <summary>
         /// Optional metadata. Use this if you want Mollie to store additional info.
         /// </summary>
-        [System.Text.Json.Serialization.JsonConverter(typeof(RawJsonConverter))]
+        [JsonConverter(typeof(RawJsonConverter))]
         public string? Metadata { get; set; }
 
         /// <summary>
