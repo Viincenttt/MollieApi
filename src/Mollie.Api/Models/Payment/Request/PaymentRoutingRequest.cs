@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text.Json.Serialization;
 using Mollie.Api.Framework;
+using Mollie.Api.JsonConverters;
 
 namespace Mollie.Api.Models.Payment.Request
 {

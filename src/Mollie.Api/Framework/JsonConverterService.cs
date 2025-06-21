@@ -2,12 +2,13 @@
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 using Mollie.Api.Framework.Factories;
+using Mollie.Api.JsonConverters;
 using Mollie.Api.Models.Balance.Response.BalanceReport;
 using Mollie.Api.Models.Balance.Response.BalanceTransaction;
 using Mollie.Api.Models.Mandate.Response;
 using Mollie.Api.Models.Payment.Response;
 
-namespace Mollie.Api.JsonConverters;
+namespace Mollie.Api.Framework;
 
 internal class JsonConverterService
 {

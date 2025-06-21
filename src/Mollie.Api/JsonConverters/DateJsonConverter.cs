@@ -2,12 +2,12 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Mollie.Api.Framework;
+namespace Mollie.Api.JsonConverters;
 
 /// <summary>
 /// Custom converter to handle date format yyyy-MM-dd in System.Text.Json.
 /// </summary>
-public class DateJsonConverter : JsonConverter<DateTime?>
+internal class DateJsonConverter : JsonConverter<DateTime?>
 {
     private const string Format = "yyyy-MM-dd";
 
