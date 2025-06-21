@@ -75,7 +75,7 @@ namespace Mollie.Api.Models.Payment.Request {
         /// the payment method selection into your website, however note Mollie’s country based conversion optimization is lost.
         /// See the Mollie.Api.Models.Payment.PaymentMethod class for a full list of known values.
         /// </summary>
-        [System.Text.Json.Serialization.JsonIgnore]
+        [JsonIgnore]
         public string? Method {
             get => Methods?.FirstOrDefault();
             set {
