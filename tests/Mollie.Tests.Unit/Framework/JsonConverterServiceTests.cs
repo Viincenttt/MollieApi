@@ -1,5 +1,6 @@
 ﻿using Shouldly;
 using Mollie.Api.Framework;
+using Mollie.Api.JsonConverters;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Payment.Request;
 using Mollie.Api.Models.Payment.Response;

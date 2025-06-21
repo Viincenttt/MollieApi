@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Text.Json;
+using System.Text.Json.Serialization;
+using Mollie.Api.Framework;
 using Mollie.Api.JsonConverters;
 
 namespace Mollie.Api.Models.Subscription.Request {
@@ -25,6 +27,7 @@ namespace Mollie.Api.Models.Subscription.Request {
         /// will be charged. When
         /// this parameter is not provided, the current date will be used instead.
         /// </summary>
+        [JsonConverter(typeof(DateJsonConverter))]
         public DateTime? StartDate { get; set; }
 
         /// <summary>

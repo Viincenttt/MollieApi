@@ -1,15 +1,13 @@
-﻿using System;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 using Mollie.Api.Framework.Factories;
-using Mollie.Api.JsonConverters;
 using Mollie.Api.Models.Balance.Response.BalanceReport;
 using Mollie.Api.Models.Balance.Response.BalanceTransaction;
 using Mollie.Api.Models.Mandate.Response;
 using Mollie.Api.Models.Payment.Response;
 
-namespace Mollie.Api.Framework;
+namespace Mollie.Api.JsonConverters;
 
 internal class JsonConverterService
 {
@@ -27,10 +25,9 @@ internal class JsonConverterService
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
             WriteIndented = false,
-            AllowTrailingCommas = true,
-            RespectNullableAnnotations = false
+            AllowTrailingCommas = true
         };
-        options.Converters.Add(new JsonDateConverter("yyyy-MM-dd"));
+
         return JsonSerializer.Serialize(objectToSerialize, options);
     }
 
@@ -50,7 +47,6 @@ internal class JsonConverterService
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             UnmappedMemberHandling = JsonUnmappedMemberHandling.Skip,
             AllowTrailingCommas = true,
-            RespectNullableAnnotations = false,
             TypeInfoResolver = new DefaultJsonTypeInfoResolver
             {
                 Modifiers =
@@ -72,7 +68,6 @@ internal class JsonConverterService
         };
 
         // Add date converter with the desired format
-        //options.Converters.Add(new JsonDateConverter("yyyy-MM-dd"));
         options.Converters.Add(new JsonStringEnumConverter());
 
         // Add your custom converters adapted for System.Text.Json here:
@@ -82,32 +77,5 @@ internal class JsonConverterService
         options.Converters.Add(new PolymorphicConverter<BalanceTransactionResponse>(new BalanceTransactionFactory(), "type"));
 
         return options;
-    }
-}
-
-/// <summary>
-/// Custom converter to handle date format yyyy-MM-dd in System.Text.Json.
-/// </summary>
-public class JsonDateConverter : JsonConverter<DateTime>
-{
-    private readonly string _format;
-
-    public JsonDateConverter(string format)
-    {
-        _format = format;
-    }
-
-    public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-    {
-        var value = reader.GetString();
-        if (value == null)
-            throw new JsonException("Expected date string value.");
-
-        return DateTime.ParseExact(value, _format, null);
-    }
-
-    public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
-    {
-        writer.WriteStringValue(value.ToString(_format));
     }
 }

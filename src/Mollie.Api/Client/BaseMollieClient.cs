@@ -17,6 +17,7 @@ using Mollie.Api.Models.Error;
 using Mollie.Api.Models.Url;
 using Mollie.Api.Options;
 using System.Text.Json.Serialization;
+using Mollie.Api.JsonConverters;
 
 namespace Mollie.Api.Client {
     public abstract class BaseMollieClient : IDisposable {

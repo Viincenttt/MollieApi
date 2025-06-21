@@ -5,6 +5,7 @@ using System.Text.Json;
 using Mollie.Api.JsonConverters;
 using Mollie.Api.Models.Order.Request.PaymentSpecificParameters;
 using System.Text.Json.Serialization;
+using Mollie.Api.Framework;
 
 namespace Mollie.Api.Models.Order.Request {
     public record OrderRequest {
@@ -40,6 +41,7 @@ namespace Mollie.Api.Models.Order.Request {
         /// The date of birth of your customer. Some payment methods need this value and if you have it, you should
         /// send it so that your customer does not have to enter it again later in the checkout process.
         /// </summary>
+        [JsonConverter(typeof(DateJsonConverter))]
         public DateTime? ConsumerDateOfBirth { get; set; }
 
         /// <summary>
