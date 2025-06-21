@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace Mollie.Api.Models.Payment.Response.PaymentSpecificParameters {
     public record PayPalPaymentResponse : PaymentResponse {
         public PayPalPaymentResponseDetails? Details { get; set; }
@@ -17,6 +19,7 @@ namespace Mollie.Api.Models.Payment.Response.PaymentSpecificParameters {
         /// <summary>
         /// PayPal’s reference for the transaction, for instance 9AL35361CF606152E.
         /// </summary>
+        [JsonPropertyName("paypalReference")]
         public string? PayPalReference { get; set; }
 
         /// <summary>
