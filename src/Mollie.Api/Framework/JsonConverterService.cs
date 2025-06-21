@@ -4,6 +4,8 @@ using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 using Mollie.Api.Framework.Factories;
 using Mollie.Api.JsonConverters;
+using Mollie.Api.Models.Mandate.Response;
+using Mollie.Api.Models.Payment.Response;
 
 namespace Mollie.Api.Framework;
 
@@ -72,10 +74,10 @@ internal class JsonConverterService
         options.Converters.Add(new JsonStringEnumConverter());
 
         // Add your custom converters adapted for System.Text.Json here:
-        options.Converters.Add(new PaymentResponseConverter(new PaymentResponseFactory()));
+        options.Converters.Add(new PolymorphicConverter<PaymentResponse>(new PaymentResponseFactory(), "method"));
         //options.Converters.Add(new BalanceReportResponseJsonConverter(new BalanceReportResponseFactory()));
         //options.Converters.Add(new BalanceTransactionJsonConverter(new BalanceTransactionFactory()));
-        options.Converters.Add(new MandateResponseConverter(new MandateResponseFactory()));
+        options.Converters.Add(new PolymorphicConverter<MandateResponse>(new MandateResponseFactory(), "method"));
 
         return options;
     }
