@@ -5,7 +5,7 @@ using Mollie.Api.Models.Payment;
 
 namespace Mollie.Api.Framework.Factories;
 
-internal class MandateResponseFactory {
+internal class MandateResponseFactory : ITypeFactory<MandateResponse> {
     public MandateResponse Create(string? paymentMethod) {
             if (string.IsNullOrEmpty(paymentMethod)) {
                 return Activator.CreateInstance<MandateResponse>();

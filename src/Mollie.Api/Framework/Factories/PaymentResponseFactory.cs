@@ -4,12 +4,12 @@ using Mollie.Api.Models.Payment.Response;
 using Mollie.Api.Models.Payment.Response.PaymentSpecificParameters;
 
 namespace Mollie.Api.Framework.Factories {
-    internal class PaymentResponseFactory {
+    internal class PaymentResponseFactory : ITypeFactory<PaymentResponse> {
         public PaymentResponse Create(string? paymentMethod) {
             if (string.IsNullOrEmpty(paymentMethod)) {
                 return Activator.CreateInstance<PaymentResponse>();
             }
-            
+
             switch (paymentMethod) {
                 case PaymentMethod.BankTransfer:
                     return Activator.CreateInstance<BankTransferPaymentResponse>();

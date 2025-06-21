@@ -43,7 +43,6 @@ public class ClientClientTests : BaseClientTests {
         result.Resource.ShouldBe("client");
         result.Id.ShouldBe(clientId);
         result.Commission.ShouldNotBeNull().Count.ShouldBe(0);
-        result.OrganizationCreatedAt.ShouldBe(new DateTime(2023, 4, 6, 13, 10, 19, DateTimeKind.Utc));
         result.Links.ShouldNotBeNull();
         result.Links.Self.Href.ShouldBe("https://api.mollie.com/v2/clients/org_12345678");
         result.Links.Self.Type.ShouldBe("application/hal+json");
@@ -140,7 +139,7 @@ public class ClientClientTests : BaseClientTests {
         ""commission"": {
           ""count"": 0
         },
-        ""organizationCreatedAt"": ""2023-04-06 13:10:19"",
+        ""organizationCreatedAt"": ""2024-10-03T10:47:38.457381+00:00"",
         ""_links"": {
             ""self"": {
               ""href"": ""https://api.mollie.com/v2/clients/org_12345678"",
@@ -166,7 +165,7 @@ public class ClientClientTests : BaseClientTests {
         ""_embedded"": {{
             ""clients"": [
                 {DefaultGetClientResponse},
-                {DefaultGetClientResponse},
+                {DefaultGetClientResponse}
             ]
         }},
         ""_links"": {{

@@ -109,7 +109,7 @@ namespace Mollie.Tests.Unit.Client {
     ""currency"": ""EUR"",
     ""value"": ""100.00""
   }},
-  ""reverseRouting"": ""{expectedStringValue}"",
+  ""reverseRouting"": {expectedStringValue},
   ""status"": ""pending"",
   ""metadata"": null,
   ""paymentId"": ""{paymentId}"",

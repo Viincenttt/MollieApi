@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Mollie.Api.JsonConverters;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.Settlement.Response {
 	public record SettlementResponse {
@@ -53,7 +53,7 @@ namespace Mollie.Api.Models.Settlement.Response {
         /// <summary>
         /// An object with several URL objects relevant to the settlement. Every URL object will contain an href and a type field.
         /// </summary>
-        [JsonProperty("_links")]
+        [JsonPropertyName("_links")]
         public required SettlementResponseLinks Links { get; set; }
     }
 }

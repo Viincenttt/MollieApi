@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Text.Json.Serialization;
+using Mollie.Api.Framework;
+using Mollie.Api.JsonConverters;
 
 namespace Mollie.Api.Models.Payment.Request
 {
@@ -17,6 +20,7 @@ namespace Mollie.Api.Models.Payment.Request
         /// <summary>
         /// Optionally, schedule this portion of the payment to be transferred to its destination on a later date. If no date is given, the funds become available to the balance as soon as the payment succeeds.
         /// </summary>
+        [JsonConverter(typeof(DateJsonConverter))]
         public DateTime? ReleaseDate { get; set; }
     }
 }

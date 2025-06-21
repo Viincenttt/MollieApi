@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 using System;
 
 namespace Mollie.Api.Models.Onboarding.Response {
@@ -37,7 +37,7 @@ namespace Mollie.Api.Models.Onboarding.Response {
         /// <summary>
         /// An object with several URL objects relevant to the organization. Every URL object will contain an href and a type field.
         /// </summary>
-        [JsonProperty("_links")]
+        [JsonPropertyName("_links")]
         public required OnboardingStatusResponseLinks Links { get; set; }
     }
 }

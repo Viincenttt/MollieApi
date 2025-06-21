@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using Mollie.Api.JsonConverters;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.Refund.Response {
     public record RefundResponse {
@@ -83,11 +84,11 @@ namespace Mollie.Api.Models.Refund.Response {
         /// <summary>
         /// An object with several URL objects relevant to the refund. Every URL object will contain an href and a type field.
         /// </summary>
-        [JsonProperty("_links")]
+        [JsonPropertyName("_links")]
         public required RefundResponseLinks Links { get; set; }
 
-        public T? GetMetadata<T>(JsonSerializerSettings? jsonSerializerSettings = null) {
-            return Metadata != null ? JsonConvert.DeserializeObject<T>(Metadata, jsonSerializerSettings) : default;
+        public T? GetMetadata<T>(JsonSerializerOptions? jsonSerializerOptions = null) {
+            return Metadata != null ? JsonSerializer.Deserialize<T>(Metadata, jsonSerializerOptions) : default;
         }
     }
 }

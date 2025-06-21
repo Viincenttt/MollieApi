@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using Mollie.Api.JsonConverters;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.Payment.Response {
     public record PaymentResponse
@@ -130,7 +131,7 @@ namespace Mollie.Api.Models.Payment.Response {
         /// <summary>
         /// The URL Mollie will call as soon an important status change takes place.
         /// </summary>
-        public required string WebhookUrl { get; set; }
+        public string? WebhookUrl { get; set; }
 
         /// <summary>
         /// Optionally provide the order lines for the payment. Each line contains details such as a description of the item ordered and its price.
@@ -154,7 +155,7 @@ namespace Mollie.Api.Models.Payment.Response {
         /// An optional routing configuration that you provided, which enables you to route a successful payment, or part of the payment, to one or more connected accounts.
         /// Additionally, you can schedule (parts of) the payment to become available on the connected account on a future date.
         /// </summary>
-        [JsonProperty("routing")]
+        [JsonPropertyName("routing")]
         public IList<PaymentRoutingResponse>? Routings { get; set; }
 
         /// <summary>
@@ -250,17 +251,17 @@ namespace Mollie.Api.Models.Payment.Response {
         /// </summary>
         public DateTime? CaptureBefore { get; set; }
 
-        [JsonProperty("_embedded")]
+        [JsonPropertyName("_embedded")]
         public PaymentEmbeddedResponse? Embedded { get; set; }
 
         /// <summary>
         /// An object with several URL objects relevant to the payment. Every URL object will contain an href and a type field.
         /// </summary>
-        [JsonProperty("_links")]
+        [JsonPropertyName("_links")]
         public PaymentResponseLinks Links { get; set; } = null!;
 
-        public T? GetMetadata<T>(JsonSerializerSettings? jsonSerializerSettings = null)  {
-            return Metadata != null ? JsonConvert.DeserializeObject<T>(Metadata, jsonSerializerSettings) : default;
+        public T? GetMetadata<T>(JsonSerializerOptions? jsonSerializerOptions = null) {
+            return Metadata != null ? JsonSerializer.Deserialize<T>(Metadata, jsonSerializerOptions) : default;
         }
 
         public override string ToString() {

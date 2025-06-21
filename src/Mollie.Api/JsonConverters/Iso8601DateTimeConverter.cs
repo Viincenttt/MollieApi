@@ -1,12 +1,18 @@
-﻿using System.Globalization;
-using Newtonsoft.Json.Converters;
+﻿using System;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Mollie.Api.JsonConverters {
-    internal class Iso8601DateTimeConverter : IsoDateTimeConverter
+    internal class Iso8601DateTimeConverter : JsonConverter<DateTime>
     {
-        public Iso8601DateTimeConverter() {
-            DateTimeStyles = DateTimeStyles.AdjustToUniversal;
-            DateTimeFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ssK";
+        public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            return DateTime.Parse(reader.GetString());
+        }
+
+        public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
+        {
+            writer.WriteStringValue(value.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ssK"));
         }
     }
 }

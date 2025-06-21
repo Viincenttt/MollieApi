@@ -187,6 +187,14 @@ public class PaymentClientTests : BaseClientTests {
         };
         string expectedRoutingInformation = $"\"routing\":[{{\"amount\":{{\"currency\":\"EUR\",\"value\":\"100.00\"}},\"destination\":{{\"type\":\"organization\",\"organizationId\":\"organization-id\"}},\"releaseDate\":\"2022-01-14\"}}]}}";
         const string expectedJsonResponse = @"{
+                ""resource"": ""payment"",
+                ""id"": ""tr_5B8cwPMGnU6qLbRvo7qEZo"",
+                ""mode"": ""live"",
+                ""createdAt"": ""2024-03-20T09:13:37.0Z"",
+                ""status"": ""open"",
+                ""webhookUrl"": ""https://webshop.example.org/payments/webhook/"",
+                ""profileId"": ""pfl_QkEhN94Ba"",
+                ""sequenceType"": ""oneoff"",
                 ""amount"":{
                     ""currency"":""EUR"",
                     ""value"":""100.00""
@@ -195,6 +203,8 @@ public class PaymentClientTests : BaseClientTests {
                 ""method"": null,
                 ""redirectUrl"":""http://www.mollie.com"",
                 ""routing"": [{
+                        ""resource"": ""route"",
+                        ""id"": ""crt_tntKsr6tffuVdqnEvhq3J"",
                         ""amount"": {
                             ""currency"": ""EUR"",
                             ""value"": ""100.00""
@@ -481,8 +491,8 @@ public class PaymentClientTests : BaseClientTests {
         specificPaymentResponse.Details.BatchReference.ShouldBe("batch-reference");
         specificPaymentResponse.Details.MandateReference.ShouldBe("mandate-reference");
         specificPaymentResponse.Details.CreditorIdentifier.ShouldBe("creditor-identifier");
-        specificPaymentResponse.Details.DueDate.ShouldBe("03/20/2018 00:00:00");
-        specificPaymentResponse.Details.SignatureDate.ShouldBe("03/20/2018 00:00:00");
+        specificPaymentResponse.Details.DueDate.ShouldBe("2018-03-20");
+        specificPaymentResponse.Details.SignatureDate.ShouldBe("2018-03-20");
         specificPaymentResponse.Details.EndToEndIdentifier.ShouldBe("end-to-end-identifier");
         specificPaymentResponse.Details.BatchReference.ShouldBe("batch-reference");
         specificPaymentResponse.Details.FileReference.ShouldBe("file-reference");
@@ -613,6 +623,10 @@ public class PaymentClientTests : BaseClientTests {
             ""resource"": ""payment"",
             ""id"": ""tr_WDqYK6vllg"",
             ""mode"": ""test"",
+            ""status"": ""open"",
+            ""webhookUrl"": ""https://webshop.example.org/payments/webhook/"",
+            ""profileId"": ""pfl_QkEhN94Ba"",
+            ""sequenceType"": ""oneoff"",
             ""createdAt"": ""2018-03-20T13:13:37+00:00"",
             ""amount"":{
                 ""currency"":""EUR"",
@@ -667,7 +681,7 @@ public class PaymentClientTests : BaseClientTests {
         {
             Amount = new Amount(Currency.EUR, "100.00"),
             Description = "Description",
-            Method = PaymentMethod.Ideal,
+            Method = PaymentMethod.GiftCard,
             RedirectUrl = "http://www.mollie.com",
             WebhookUrl = "http://www.mollie.com/webhook",
             Issuer = "issuer",
@@ -675,19 +689,17 @@ public class PaymentClientTests : BaseClientTests {
             VoucherPin = "voucher-pin"
         };
         const string jsonRequest = @"{
-  ""voucherNumber"": ""voucher-number"",
-  ""voucherPin"": ""voucher-pin"",
-  ""amount"": {
-    ""currency"": ""EUR"",
-    ""value"": ""100.00""
+  ""voucherNumber"" : ""voucher-number"",
+  ""voucherPin"" : ""voucher-pin"",
+  ""amount"" : {
+    ""currency"" : ""EUR"",
+    ""value"" : ""100.00""
   },
-  ""description"": ""Description"",
-  ""redirectUrl"": ""http://www.mollie.com"",
-  ""webhookUrl"": ""http://www.mollie.com/webhook"",
-  ""issuer"": ""issuer"",
-  ""method"": [
-    ""ideal""
-  ]
+  ""description"" : ""Description"",
+  ""redirectUrl"" : ""http://www.mollie.com"",
+  ""webhookUrl"" : ""http://www.mollie.com/webhook"",
+  ""method"" : [ ""giftcard"" ],
+  ""issuer"" : ""issuer""
 }";
         const string jsonResponse = @"{
             ""resource"": ""payment"",
@@ -713,14 +725,18 @@ public class PaymentClientTests : BaseClientTests {
                         ""voucherNumber"": ""voucher-number""
                     }
                 ],
-                ""RemainderAmount"": {
+                ""remainderAmount"": {
                     ""currency"": ""EUR"",
                     ""value"": ""100.00""
                 },
-                ""RemainderMethod"": ""ideal""
+                ""remainderMethod"": ""ideal""
             }
         }";
-        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Post, $"{BaseMollieClient.DefaultBaseApiEndPoint}payments", jsonResponse, jsonRequest);
+        var mockHttp = CreateMockHttpMessageHandler(
+            HttpMethod.Post,
+            $"{BaseMollieClient.DefaultBaseApiEndPoint}payments",
+            jsonResponse,
+            jsonRequest);
         HttpClient httpClient = mockHttp.ToHttpClient();
         var paymentClient = new PaymentClient("abcde", httpClient);
 

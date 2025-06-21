@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.Profile.Response {
     public record ProfileResponse {
@@ -84,7 +84,7 @@ namespace Mollie.Api.Models.Profile.Response {
         /// <summary>
         /// Useful URLs to related resources.
         /// </summary>
-        [JsonProperty("_links")]
+        [JsonPropertyName("_links")]
         public required ProfileResponseLinks Links { get; set; }
     }
 

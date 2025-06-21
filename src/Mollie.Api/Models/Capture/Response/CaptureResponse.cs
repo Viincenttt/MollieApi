@@ -1,6 +1,6 @@
 using System;
 using Mollie.Api.JsonConverters;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.Capture.Response
 {
@@ -65,7 +65,7 @@ namespace Mollie.Api.Models.Capture.Response
         /// <summary>
         /// The optional metadata you provided upon capture creation. Metadata can for example be used to link an bookkeeping ID to a capture.
         /// </summary>
-        [JsonProperty("_links")]
+        [JsonPropertyName("_links")]
         public required CaptureResponseLinks Links { get; set; }
     }
 }

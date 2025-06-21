@@ -93,7 +93,7 @@ public class OrganizationClientTests : BaseClientTests
 
     private const string defaultOrganizationListResponse = @$"
 {{
-    ""count"": ""2"",
+    ""count"": 2,
     ""_embedded"": {{
         ""organizations"": [
             {defaultOrganizationResponse},
@@ -107,6 +107,7 @@ public class OrganizationClientTests : BaseClientTests
      ""id"": ""org_12345678"",
      ""name"": ""Mollie B.V."",
      ""email"": ""info@mollie.com"",
+     ""locale"": ""nl_NL"",
      ""address"": {
         ""streetAndNumber"" : ""Keizersgracht 126"",
         ""postalCode"": ""1015 CW"",

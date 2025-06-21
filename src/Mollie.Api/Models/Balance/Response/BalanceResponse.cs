@@ -1,6 +1,5 @@
 ﻿using System;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.Balance.Response {
     public class BalanceResponse {
@@ -27,7 +26,6 @@ namespace Mollie.Api.Models.Balance.Response {
         /// <summary>
         /// The status of the balance.
         /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
         public required BalanceResponseStatus Status { get; set; }
 
         /// <summary>
@@ -65,7 +63,7 @@ namespace Mollie.Api.Models.Balance.Response {
         /// <summary>
         /// An object with several URL objects relevant to the balance. Every URL object will contain an href and a type field.
         /// </summary>
-        [JsonProperty("_links")]
+        [JsonPropertyName("_links")]
         public required BalanceResponseLinks Links { get; set; }
     }
 }

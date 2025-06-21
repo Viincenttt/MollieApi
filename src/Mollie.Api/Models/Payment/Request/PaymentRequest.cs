@@ -1,7 +1,8 @@
 ﻿using Mollie.Api.JsonConverters;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 
 namespace Mollie.Api.Models.Payment.Request {
     public record PaymentRequest
@@ -103,7 +104,7 @@ namespace Mollie.Api.Models.Payment.Request {
         /// only show the methods specified in the array. For example, you can use this functionality to only show payment methods
         /// from a specific country to your customer.
         /// </summary>
-        [JsonProperty("method")]
+        [JsonPropertyName("method")]
         public IList<string>? Methods { get; set; }
 
         /// <summary>
@@ -158,7 +159,7 @@ namespace Mollie.Api.Models.Payment.Request {
         /// Oauth only - Optional - An optional routing configuration which enables you to route a successful payment, or part of the payment, to one or more connected accounts.
         /// Additionally, you can schedule (parts of) the payment to become available on the connected account on a future date.
         /// </summary>
-        [JsonProperty("routing")]
+        [JsonPropertyName("routing")]
         public IList<PaymentRoutingRequest>? Routings { get; set; }
 
         /// <summary>
@@ -184,8 +185,8 @@ namespace Mollie.Api.Models.Payment.Request {
         /// </summary>
         public string? CaptureDelay { get; set; }
 
-        public void SetMetadata(object metadataObj, JsonSerializerSettings? jsonSerializerSettings = null) {
-            Metadata = JsonConvert.SerializeObject(metadataObj, jsonSerializerSettings);
+        public void SetMetadata(object metadataObj, JsonSerializerOptions? jsonSerializerOptions = null) {
+            Metadata = JsonSerializer.Serialize(metadataObj, jsonSerializerOptions);
         }
 
         public override string ToString() {

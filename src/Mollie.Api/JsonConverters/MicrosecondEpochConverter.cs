@@ -1,18 +1,19 @@
 ﻿using System;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Mollie.Api.JsonConverters {
-    internal class MicrosecondEpochConverter : DateTimeConverterBase
+    internal class MicrosecondEpochConverter : JsonConverter<DateTime>
     {
-        public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
+        public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            throw new NotImplementedException();
+            var longValue = reader.GetInt64();
+            return DateTimeOffset.FromUnixTimeMilliseconds(longValue).UtcDateTime;
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer) {
-            var longValue = long.Parse(reader.Value!.ToString());
-            return DateTimeOffset.FromUnixTimeMilliseconds(longValue).UtcDateTime;
+        public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
+        {
+            throw new NotImplementedException();
         }
     }
 }

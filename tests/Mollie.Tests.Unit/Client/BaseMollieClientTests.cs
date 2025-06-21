@@ -167,7 +167,21 @@ public class BaseMollieClientTests : BaseClientTests {
                 {
                      ""resource"": ""method"",
                      ""id"": ""ideal"",
-                     ""description"": ""iDEAL""
+                     ""description"": ""iDEAL"",
+                     ""minimumAmount"": {
+                        ""value"": ""0.01"",
+                        ""currency"": ""EUR""
+                     },
+                     ""maximumAmount"": {
+                        ""value"": ""50000.00"",
+                        ""currency"": ""EUR""
+                     },
+                     ""image"": {
+                        ""size1x"": ""https://mollie.com/external/icons/payment-methods/ideal.png"",
+                        ""size2x"": ""https://mollie.com/external/icons/payment-methods/ideal%402x.png"",
+                        ""svg"": ""https://mollie.com/external/icons/payment-methods/ideal.svg""
+                    },
+                    ""status"": ""activated""
                 }
             ]
         }

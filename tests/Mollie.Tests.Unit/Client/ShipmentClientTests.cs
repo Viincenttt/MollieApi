@@ -280,6 +280,10 @@ namespace Mollie.Tests.Unit.Client {
              ""metadata"": null,
              ""isCancelable"": true,
              ""quantity"": 1,
+             ""amountShipped"": {
+                 ""value"": ""329.99"",
+                 ""currency"": ""EUR""
+             },
              ""unitPrice"": {
                  ""value"": ""399.00"",
                  ""currency"": ""EUR""

@@ -1,5 +1,5 @@
 ﻿using System;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.Terminal.Response
 {
@@ -64,7 +64,7 @@ namespace Mollie.Api.Models.Terminal.Response
         /// <summary>
         /// An object with several URL objects relevant to the payment method. Every URL object will contain an href and a type field.
         /// </summary>
-        [JsonProperty("_links")]
+        [JsonPropertyName("_links")]
         public required TerminalResponseLinks Links { get; set; }
     }
 }

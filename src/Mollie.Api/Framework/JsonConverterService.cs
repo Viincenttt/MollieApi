@@ -1,49 +1,79 @@
-﻿using System.Collections.Generic;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 using Mollie.Api.Framework.Factories;
 using Mollie.Api.JsonConverters;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
+using Mollie.Api.Models.Balance.Response.BalanceReport;
+using Mollie.Api.Models.Balance.Response.BalanceTransaction;
+using Mollie.Api.Models.Mandate.Response;
+using Mollie.Api.Models.Payment.Response;
 
-namespace Mollie.Api.Framework {
-    internal class JsonConverterService {
-        private readonly JsonSerializerSettings _defaultJsonDeserializerSettings;
+namespace Mollie.Api.Framework;
 
-        public JsonConverterService() {
-            _defaultJsonDeserializerSettings = CreateDefaultJsonDeserializerSettings();
-        }
+internal class JsonConverterService
+{
+    private readonly JsonSerializerOptions _defaultJsonDeserializerOptions;
 
-        public string Serialize(object objectToSerialize) {
-            return JsonConvert.SerializeObject(objectToSerialize,
-                new JsonSerializerSettings {
-                    DateFormatString = "yyyy-MM-dd",
-                    ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                    NullValueHandling = NullValueHandling.Ignore,
-                    PreserveReferencesHandling = PreserveReferencesHandling.None
-                });
-        }
+    public JsonConverterService()
+    {
+        _defaultJsonDeserializerOptions = CreateDefaultJsonDeserializerOptions();
+    }
 
-        public T? Deserialize<T>(string json) {
-            return JsonConvert.DeserializeObject<T>(json, _defaultJsonDeserializerSettings);
-        }
+    public string Serialize(object objectToSerialize)
+    {
+        var options = new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+            WriteIndented = false,
+            AllowTrailingCommas = true
+        };
 
-        /// <summary>
-        ///     Creates the default Json serial settings for the JSON.NET parsing.
-        /// </summary>
-        private JsonSerializerSettings CreateDefaultJsonDeserializerSettings() {
-            return new JsonSerializerSettings {
-                DateFormatString = "yyyy-MM-dd",
-                NullValueHandling = NullValueHandling.Ignore,
-                Converters = new List<JsonConverter> {
-                    // Add a special converter for payment responses, because we need to create specific classes based on the payment method
-                    new PaymentResponseConverter(new PaymentResponseFactory()),
-                    // Add a special converter for the balance report responses, because we need to create specific classes based on the report grouping
-                    new BalanceReportResponseJsonConverter(new BalanceReportResponseFactory()),
-                    // Add a special converter for the balance transaction responses, because we need to create specific classes based on the transaction type
-                    new BalanceTransactionJsonConverter(new BalanceTransactionFactory()),
-                    // Add a special converter for mandate responses, because we need to create specific classes based on the payment method
-                    new MandateResponseConverter(new MandateResponseFactory())
+        return JsonSerializer.Serialize(objectToSerialize, options);
+    }
+
+    public T? Deserialize<T>(string json)
+    {
+        return JsonSerializer.Deserialize<T>(json, _defaultJsonDeserializerOptions);
+    }
+
+    /// <summary>
+    /// Creates the default Json serializer options for System.Text.Json parsing.
+    /// </summary>
+    private JsonSerializerOptions CreateDefaultJsonDeserializerOptions()
+    {
+        var options = new JsonSerializerOptions
+        {
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            UnmappedMemberHandling = JsonUnmappedMemberHandling.Skip,
+            AllowTrailingCommas = true,
+            TypeInfoResolver = new DefaultJsonTypeInfoResolver
+            {
+                Modifiers =
+                {
+                    static typeInfo =>
+                    {
+                        if (typeInfo.Kind != JsonTypeInfoKind.Object) {
+                            return;
+                        }
+
+                        foreach (JsonPropertyInfo propertyInfo in typeInfo.Properties)
+                        {
+                            // Strip IsRequired constraint from every property.
+                            propertyInfo.IsRequired = false;
+                        }
+                    }
                 }
-            };
-        }
+            }
+        };
+
+        options.Converters.Add(new JsonStringEnumConverter());
+        options.Converters.Add(new PolymorphicConverter<PaymentResponse>(new PaymentResponseFactory(), "method"));
+        options.Converters.Add(new PolymorphicConverter<MandateResponse>(new MandateResponseFactory(), "method"));
+        options.Converters.Add(new PolymorphicConverter<BalanceReportResponse>(new BalanceReportResponseFactory(), "grouping"));
+        options.Converters.Add(new PolymorphicConverter<BalanceTransactionResponse>(new BalanceTransactionFactory(), "type"));
+
+        return options;
     }
 }

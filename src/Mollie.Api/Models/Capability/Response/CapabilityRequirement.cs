@@ -1,5 +1,5 @@
 ﻿using System;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.Capability.Response;
 
@@ -24,6 +24,6 @@ public record CapabilityRequirement {
     /// <summary>
     /// Related links
     /// </summary>
-    [JsonProperty("_links")]
+    [JsonPropertyName("_links")]
     public required CapabilityRequirementLinks Links { get; set; }
 }

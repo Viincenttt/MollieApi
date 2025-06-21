@@ -1,5 +1,6 @@
-﻿using Mollie.Api.JsonConverters;
-using Newtonsoft.Json;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
+using Mollie.Api.JsonConverters;
 
 namespace Mollie.Api.Models.Order.Request {
     public record OrderLineUpdateRequest {
@@ -70,8 +71,8 @@ namespace Mollie.Api.Models.Order.Request {
         /// </summary>
         public bool? Testmode { get; set; }
 
-        public void SetMetadata(object metadataObj, JsonSerializerSettings? jsonSerializerSettings = null) {
-            Metadata = JsonConvert.SerializeObject(metadataObj, jsonSerializerSettings);
+        public void SetMetadata(object metadataObj, JsonSerializerOptions? jsonSerializerOptions = null) {
+            Metadata = JsonSerializer.Serialize(metadataObj, jsonSerializerOptions);
         }
     }
 }

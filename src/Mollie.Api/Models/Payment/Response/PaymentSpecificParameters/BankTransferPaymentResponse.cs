@@ -1,6 +1,6 @@
 using System.Runtime.Serialization;
 using Mollie.Api.Models.Url;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.Payment.Response.PaymentSpecificParameters {
     public record BankTransferPaymentResponse : PaymentResponse {
@@ -9,7 +9,7 @@ namespace Mollie.Api.Models.Payment.Response.PaymentSpecificParameters {
         /// <summary>
         /// For bank transfer payments, the _links object will contain some additional URL objects relevant to the payment.
         /// </summary>
-        [JsonProperty("_links")]
+        [JsonPropertyName("_links")]
         public new required BankTransferPaymentResponseLinks Links { get; set; }
 
         [OnDeserialized]
