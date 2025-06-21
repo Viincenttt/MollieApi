@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using Mollie.Api.JsonConverters;
 using System.Text.Json.Serialization;
-using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Payment.Response {
     public record PaymentResponse
@@ -260,8 +260,8 @@ namespace Mollie.Api.Models.Payment.Response {
         [JsonPropertyName("_links")]
         public PaymentResponseLinks Links { get; set; } = null!;
 
-        public T? GetMetadata<T>(JsonSerializerSettings? jsonSerializerSettings = null)  {
-            return Metadata != null ? JsonConvert.DeserializeObject<T>(Metadata, jsonSerializerSettings) : default;
+        public T? GetMetadata<T>(JsonSerializerOptions? jsonSerializerOptions = null) {
+            return Metadata != null ? JsonSerializer.Deserialize<T>(Metadata, jsonSerializerOptions) : default;
         }
 
         public override string ToString() {

@@ -2,7 +2,7 @@
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace Mollie.Api.Models.Payment.Request {
     public record PaymentRequest
@@ -185,8 +185,8 @@ namespace Mollie.Api.Models.Payment.Request {
         /// </summary>
         public string? CaptureDelay { get; set; }
 
-        public void SetMetadata(object metadataObj, JsonSerializerSettings? jsonSerializerSettings = null) {
-            Metadata = JsonConvert.SerializeObject(metadataObj, jsonSerializerSettings);
+        public void SetMetadata(object metadataObj, JsonSerializerOptions? jsonSerializerOptions = null) {
+            Metadata = JsonSerializer.Serialize(metadataObj, jsonSerializerOptions);
         }
 
         public override string ToString() {

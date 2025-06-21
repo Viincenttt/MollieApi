@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using Mollie.Api.JsonConverters;
 using Mollie.Api.Models.Order.Request.PaymentSpecificParameters;
 using System.Text.Json.Serialization;
-using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Order.Request {
     public record OrderRequest {
@@ -134,8 +134,8 @@ namespace Mollie.Api.Models.Order.Request {
         /// </summary>
         public bool? Testmode { get; set; }
 
-        public void SetMetadata(object metadataObj, JsonSerializerSettings? jsonSerializerSettings = null) {
-            Metadata = JsonConvert.SerializeObject(metadataObj, jsonSerializerSettings);
+        public void SetMetadata(object metadataObj, JsonSerializerOptions? jsonSerializerOptions = null) {
+            Metadata = JsonSerializer.Serialize(metadataObj, jsonSerializerOptions);
         }
     }
 }

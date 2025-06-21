@@ -1,8 +1,7 @@
 ﻿using System;
+using System.Text.Json;
 using Mollie.Api.JsonConverters;
 using System.Text.Json.Serialization;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 
 namespace Mollie.Api.Models.Subscription.Response {
     public record SubscriptionResponse {
@@ -115,8 +114,8 @@ namespace Mollie.Api.Models.Subscription.Response {
         /// </summary>
         public ApplicationFee? ApplicationFee { get; set; }
 
-        public T? GetMetadata<T>(JsonSerializerSettings? jsonSerializerSettings = null) {
-            return Metadata != null ? JsonConvert.DeserializeObject<T>(Metadata, jsonSerializerSettings) : default;
+        public T? GetMetadata<T>(JsonSerializerOptions? jsonSerializerOptions = null) {
+            return Metadata != null ? JsonSerializer.Deserialize<T>(Metadata, jsonSerializerOptions) : default;
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Text.Json.Serialization;
-using Newtonsoft.Json.Converters;
 
 namespace Mollie.Api.Models.Balance.Response {
     public class BalanceResponse {

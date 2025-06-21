@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using Mollie.Api.JsonConverters;
 using System.Text.Json.Serialization;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 
 namespace Mollie.Api.Models.Order.Response {
     public record OrderResponse {
@@ -160,8 +159,8 @@ namespace Mollie.Api.Models.Order.Response {
         [JsonPropertyName("_links")]
         public required OrderResponseLinks Links { get; set; }
 
-        public T? GetMetadata<T>(JsonSerializerSettings? jsonSerializerSettings = null) {
-            return Metadata != null ? JsonConvert.DeserializeObject<T>(Metadata, jsonSerializerSettings) : default;
+        public T? GetMetadata<T>(JsonSerializerOptions? jsonSerializerOptions = null) {
+            return Metadata != null ? JsonSerializer.Deserialize<T>(Metadata, jsonSerializerOptions) : default;
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Text.Json;
 using Mollie.Api.JsonConverters;
-using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Refund.Request {
     public record RefundRequest {
@@ -44,8 +44,8 @@ namespace Mollie.Api.Models.Refund.Request {
         /// </summary>
         public bool? Testmode { get; set; }
 
-        public void SetMetadata(object metadataObj, JsonSerializerSettings? jsonSerializerSettings = null) {
-            Metadata = JsonConvert.SerializeObject(metadataObj, jsonSerializerSettings);
+        public void SetMetadata(object metadataObj, JsonSerializerOptions? jsonSerializerOptions = null) {
+            Metadata = JsonSerializer.Serialize(metadataObj, jsonSerializerOptions);
         }
     }
 }
