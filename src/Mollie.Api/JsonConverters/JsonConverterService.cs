@@ -67,10 +67,7 @@ internal class JsonConverterService
             }
         };
 
-        // Add date converter with the desired format
         options.Converters.Add(new JsonStringEnumConverter());
-
-        // Add your custom converters adapted for System.Text.Json here:
         options.Converters.Add(new PolymorphicConverter<PaymentResponse>(new PaymentResponseFactory(), "method"));
         options.Converters.Add(new PolymorphicConverter<MandateResponse>(new MandateResponseFactory(), "method"));
         options.Converters.Add(new PolymorphicConverter<BalanceReportResponse>(new BalanceReportResponseFactory(), "grouping"));
