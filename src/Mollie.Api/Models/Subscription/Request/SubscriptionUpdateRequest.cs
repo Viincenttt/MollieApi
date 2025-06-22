@@ -21,6 +21,7 @@ namespace Mollie.Api.Models.Subscription.Request {
         /// will be charged. When
         /// this parameter is not provided, the current date will be used instead.
         /// </summary>
+        [JsonConverter(typeof(DateJsonConverter))]
         public DateTime? StartDate { get; set; }
 
         /// <summary>

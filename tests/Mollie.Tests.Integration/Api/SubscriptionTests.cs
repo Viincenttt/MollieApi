@@ -105,7 +105,7 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
         // When
         if (activeSubscription != null) {
             var customerId = activeSubscription.CustomerId;
-            SubscriptionUpdateRequest request = new SubscriptionUpdateRequest() {
+            SubscriptionUpdateRequest request = new () {
                 Description = $"Updated subscription {Guid.NewGuid()}"
             };
             SubscriptionResponse response = await _subscriptionClient.UpdateSubscriptionAsync(customerId, activeSubscription.Id, request);
