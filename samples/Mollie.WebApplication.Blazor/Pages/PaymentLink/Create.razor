@@ -1,0 +1,97 @@
+﻿@page "/paymentlink/create"
+
+@using Mollie.Api.Models.PaymentLink.Request
+@using Mollie.WebApplication.Blazor.Models.PaymentLink
+@using Mollie.Api.Client
+
+@inject IPaymentLinkClient PaymentLinkClient
+@inject NavigationManager NavigationManager
+
+<h3>Create new payment link</h3>
+
+<ApiExceptionDisplay Exception="_apiException"></ApiExceptionDisplay>
+
+<EditForm Model="_model" OnValidSubmit="@OnSave" class="col-md-6">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="amount">Amount</label>
+        <InputNumber
+            id="amount"
+            class="form-control"
+            @bind-Value="_model.Amount">
+        </InputNumber>
+    </div>
+
+    <div class="form-group">
+        <label for="currency">Currency</label>
+        <InputSelect
+            id="currency"
+            class="form-control"
+            @bind-Value="_model.Currency">
+            @foreach (string currency in StaticStringListBuilder.GetStaticStringList(typeof(Currency))) {
+                <option value="@currency">@currency</option>
+            }
+        </InputSelect>
+    </div>
+
+    <div class="form-group">
+        <label for="redirect-url">Redirect url</label>
+        <InputText
+            id="redirect-url"
+            class="form-control"
+            @bind-Value="_model.RedirectUrl">
+        </InputText>
+    </div>
+
+    <div class="form-group">
+        <label for="redirect-url">Webhook url</label>
+        <InputText
+            id="redirect-url"
+            class="form-control"
+            @bind-Value="_model.WebhookUrl">
+        </InputText>
+    </div>
+
+    <div class="form-group">
+        <label for="description">Description</label>
+        <InputText
+            id="description"
+            class="form-control"
+            @bind-Value="_model.Description">
+        </InputText>
+    </div>
+
+    <input type="submit" name="Save" value="Save" class="btn btn-primary mt-2"/>
+</EditForm>
+
+@code {
+    private MollieApiException? _apiException;
+
+    private CreatePaymentLinkModel _model = new() {
+        Amount = 10.00m,
+        Currency = "EUR",
+        RedirectUrl = "https://www.mollie.com/",
+        WebhookUrl = null,
+        Description = "A payment link from the example application"
+    };
+
+    private async Task OnSave() {
+        try {
+            _apiException = null;
+
+            await PaymentLinkClient.CreatePaymentLinkAsync(new PaymentLinkRequest {
+                Amount = new Amount(_model.Currency, _model.Amount),
+                RedirectUrl = _model.RedirectUrl,
+                WebhookUrl = _model.WebhookUrl,
+                Description = _model.Description
+            });
+
+            NavigationManager.NavigateTo("/paymentlink/overview");
+        }
+        catch (MollieApiException e) {
+            _apiException = e;
+        }
+    }
+}
