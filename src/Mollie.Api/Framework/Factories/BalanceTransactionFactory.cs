@@ -3,12 +3,12 @@ using Mollie.Api.Models.Balance.Response.BalanceTransaction;
 using Mollie.Api.Models.Balance.Response.BalanceTransaction.Specific;
 
 namespace Mollie.Api.Framework.Factories {
-    internal class BalanceTransactionFactory {
+    internal class BalanceTransactionFactory : ITypeFactory<BalanceTransactionResponse> {
         public BalanceTransactionResponse Create(string? type) {
             if (string.IsNullOrEmpty(type)) {
                 return Activator.CreateInstance<BalanceTransactionResponse>();
             }
-            
+
             switch (type) {
                 case BalanceTransactionContextType.Payment:
                 case BalanceTransactionContextType.UnauthorizedDirectDebit:
@@ -32,7 +32,7 @@ namespace Mollie.Api.Framework.Factories {
                     return Activator.CreateInstance<SettlementBalanceTransactionResponse>();
                 case BalanceTransactionContextType.InvoiceCompensation:
                     return Activator.CreateInstance<InvoiceBalanceTransactionResponse>();
-                default: 
+                default:
                     return Activator.CreateInstance<BalanceTransactionResponse>();
             }
         }

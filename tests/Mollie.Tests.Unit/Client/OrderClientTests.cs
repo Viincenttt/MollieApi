@@ -93,7 +93,8 @@ namespace Mollie.Tests.Unit.Client {
             SortDirection? sortDirection,
             string expectedQueryString) {
             // Given: We make a request to retrieve the list of orders
-            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.DefaultBaseApiEndPoint}orders{expectedQueryString}", defaultOrderJsonResponse);
+            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get,
+                $"{BaseMollieClient.DefaultBaseApiEndPoint}orders{expectedQueryString}", defaultOrderListJsonResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
             OrderClient orderClient = new OrderClient("abcde", httpClient);
 
@@ -113,7 +114,7 @@ namespace Mollie.Tests.Unit.Client {
             const string jsonResponse = defaultOrderJsonResponse;
             var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Post, $"{BaseMollieClient.DefaultBaseApiEndPoint}orders", jsonResponse, expectedPaymentMethodJson);
             HttpClient httpClient = mockHttp.ToHttpClient();
-            OrderClient orderClient = new OrderClient("abcde", httpClient);
+            OrderClient orderClient = new ("abcde", httpClient);
 
             // When: We send the request
             OrderResponse orderResponse = await orderClient.CreateOrderAsync(orderRequest);
@@ -173,7 +174,7 @@ namespace Mollie.Tests.Unit.Client {
         [Fact]
         public async Task CreateOrderPaymentAsync_PaymentWithMultiplePaymentMethods_RequestIsSerializedInExpectedFormat() {
             // Given: We create a payment request with multiple payment methods
-            OrderPaymentRequest orderPaymentRequest = new OrderPaymentRequest() {
+            OrderPaymentRequest orderPaymentRequest = new () {
                 CustomerId = "customer-id",
                 Testmode = true,
                 MandateId = "mandate-id",
@@ -188,7 +189,7 @@ namespace Mollie.Tests.Unit.Client {
             string expectedPaymentMethodJson = $"\"method\":[\"{PaymentMethod.Ideal}\",\"{PaymentMethod.CreditCard}\",\"{PaymentMethod.DirectDebit}\"]";
             var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Post, url, defaultPaymentJsonResponse, expectedPaymentMethodJson);
             HttpClient httpClient = mockHttp.ToHttpClient();
-            OrderClient orderClient = new OrderClient("abcde", httpClient);
+            OrderClient orderClient = new ("abcde", httpClient);
 
             // When: We send the request
             await orderClient.CreateOrderPaymentAsync(orderId, orderPaymentRequest);
@@ -370,23 +371,77 @@ namespace Mollie.Tests.Unit.Client {
             };
         }
 
+        private const string defaultOrderListJsonResponse = @"{
+            ""count"": 5,
+            ""_embedded"": {
+                ""orders"": []
+            },
+            ""_links"": {
+            ""self"": {
+              ""href"": ""..."",
+              ""type"": ""application/hal+json""
+            },
+            ""previous"": null,
+            ""next"": {
+              ""href"": ""https://api.mollie.com/v2/orders?from=ord_vsKJpSsabw&limit=5"",
+              ""type"": ""application/hal+json""
+            },
+            ""documentation"": {
+              ""href"": ""..."",
+              ""type"": ""text/html""
+            }
+          }
+        }";
+
         private const string defaultOrderJsonResponse = @"{
             ""resource"": ""order"",
             ""id"": ""ord_kEn1PlbGa"",
             ""profileId"": ""pfl_URR55HPMGx"",
             ""method"": ""ideal"",
+            ""status"": ""created"",
+            ""isCancelable"": false,
+            ""orderId"": ""ord_pbjz8x"",
+            ""createdAt"": ""2023-08-02T09:29:56.0Z"",
+            ""locale"": ""nl_NL"",
+            ""orderNumber"": ""34629"",
+            ""lines"": [],
             ""amount"": {
                 ""value"": ""1027.99"",
                 ""currency"": ""EUR""
             },
+            ""_links"": {
+                ""self"": {
+                  ""href"": ""..."",
+                  ""type"": ""application/hal+json""
+                },
+                ""checkout"": {
+                  ""href"": ""https://www.mollie.com/checkout/select-method/7UhSN1zuXS"",
+                  ""type"": ""text/html""
+                },
+                ""dashboard"": {
+                  ""href"": ""https://www.mollie.com/dashboard/org_123456789/orders/ord_pbjz8x"",
+                  ""type"": ""text/html""
+                },
+                ""documentation"": {
+                  ""href"": ""..."",
+                  ""type"": ""text/html""
+                }
+              }
         }";
 
         private const string defaultPaymentJsonResponse = @"{
+            ""resource"": ""payment"",
+            ""id"": ""tr_WDqYK6vllg"",
+            ""mode"": ""test"",
+            ""status"": ""open"",
+            ""createdAt"": ""2018-03-20T13:13:37+00:00"",
+            ""profileId"": ""pfl_QkEhN94Ba"",
             ""amount"":{
                 ""currency"":""EUR"",
                 ""value"":""100.00""
             },
             ""description"":""Description"",
+            ""sequenceType"": ""oneoff"",
             ""redirectUrl"":""http://www.mollie.com""}";
 
     }

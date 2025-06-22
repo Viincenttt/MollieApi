@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using Mollie.Api.JsonConverters;
 using Mollie.Api.Models.Order.Request.PaymentSpecificParameters;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
+using Mollie.Api.Framework;
 
 namespace Mollie.Api.Models.Order.Request {
     public record OrderRequest {
@@ -39,6 +41,7 @@ namespace Mollie.Api.Models.Order.Request {
         /// The date of birth of your customer. Some payment methods need this value and if you have it, you should
         /// send it so that your customer does not have to enter it again later in the checkout process.
         /// </summary>
+        [JsonConverter(typeof(DateJsonConverter))]
         public DateTime? ConsumerDateOfBirth { get; set; }
 
         /// <summary>
@@ -96,7 +99,7 @@ namespace Mollie.Api.Models.Order.Request {
         /// only show the methods specified in the array. For example, you can use this functionality to only show payment methods
         /// from a specific country to your customer.
         /// </summary>
-        [JsonProperty("method")]
+        [JsonPropertyName("method")]
         public IList<string>? Methods { get; set; }
 
         /// <summary>
@@ -115,7 +118,8 @@ namespace Mollie.Api.Models.Order.Request {
         /// The date the order should expire in YYYY-MM-DD format. The minimum date is tomorrow and the maximum date is 100 days
         /// after tomorrow.
         /// </summary>
-        public string? ExpiresAt { get; set; }
+        [JsonConverter(typeof(DateJsonConverter))]
+        public DateTime? ExpiresAt { get; set; }
 
         /// <summary>
         /// For digital goods, you must make sure to apply the VAT rate from your customer’s country in most jurisdictions. Use
@@ -133,8 +137,8 @@ namespace Mollie.Api.Models.Order.Request {
         /// </summary>
         public bool? Testmode { get; set; }
 
-        public void SetMetadata(object metadataObj, JsonSerializerSettings? jsonSerializerSettings = null) {
-            Metadata = JsonConvert.SerializeObject(metadataObj, jsonSerializerSettings);
+        public void SetMetadata(object metadataObj, JsonSerializerOptions? jsonSerializerOptions = null) {
+            Metadata = JsonSerializer.Serialize(metadataObj, jsonSerializerOptions);
         }
     }
 }

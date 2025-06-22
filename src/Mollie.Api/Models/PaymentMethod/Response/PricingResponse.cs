@@ -1,4 +1,7 @@
-﻿namespace Mollie.Api.Models.PaymentMethod.Response
+﻿using System.Text.Json.Serialization;
+using Mollie.Api.JsonConverters;
+
+namespace Mollie.Api.Models.PaymentMethod.Response
 {
     public record PricingResponse {
         /// <summary>
@@ -14,6 +17,7 @@
         /// <summary>
         /// A string containing the percentage what will be charged over the payment amount besides the fixed price.
         /// </summary>
+        [JsonConverter(typeof(StringToDecimalConverter))]
         public required decimal Variable { get; set; }
 
         /// <summary>

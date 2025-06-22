@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.Order.Request {
     public record OrderPaymentRequest {
@@ -32,7 +32,7 @@ namespace Mollie.Api.Models.Order.Request {
         /// only show the methods specified in the array. For example, you can use this functionality to only show payment methods
         /// from a specific country to your customer.
         /// </summary>
-        [JsonProperty("method")]
+        [JsonPropertyName("method")]
         public IList<string>? Methods { get; set; }
 
         /// <summary>

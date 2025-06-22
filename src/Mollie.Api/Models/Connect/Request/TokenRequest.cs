@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.Connect.Request {
     public record TokenRequest {
@@ -21,7 +21,7 @@ namespace Mollie.Api.Models.Connect.Request {
         ///     your access token with your refresh token, use grant type refresh_token.
         ///     Possible values: authorization_code refresh_token
         /// </summary>
-        [JsonProperty("grant_type")]
+        [JsonPropertyName("grant_type")]
         public string GrantType { get; }
 
         /// <summary>
@@ -34,14 +34,14 @@ namespace Mollie.Api.Models.Connect.Request {
         ///     Optional – The refresh token you've received when creating the authorization. Only use this field when using grant
         ///     type refresh_token.
         /// </summary>
-        [JsonProperty("refresh_token")]
+        [JsonPropertyName("refresh_token")]
         public string? RefreshToken { get; set; }
 
         /// <summary>
         ///     The URL the merchant is sent back to once the request has been authorized. It must match the URL you set when
         ///     registering your app.
         /// </summary>
-        [JsonProperty("redirect_uri")]
+        [JsonPropertyName("redirect_uri")]
         public string? RedirectUri { get; set; }
     }
 }

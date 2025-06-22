@@ -260,6 +260,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         result.Description.ShouldBe(paymentRequest.Description);
         result.RedirectUrl.ShouldBe(paymentRequest.RedirectUrl);
         result.Method.ShouldBe(paymentRequest.Method);
+        result.Links.ShouldNotBeNull();
     }
 
     [Fact]
@@ -558,7 +559,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
     [Fact]
     public async Task CanCreatePaymentWithCaptureDelay() {
         // Given
-        PaymentRequest paymentRequest = new PaymentRequest() {
+        PaymentRequest paymentRequest = new() {
             Amount = new Amount(Currency.EUR, 10m),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl,

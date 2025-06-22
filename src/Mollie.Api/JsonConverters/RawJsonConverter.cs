@@ -1,49 +1,67 @@
 ﻿using System;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
-namespace Mollie.Api.JsonConverters {
-    internal class RawJsonConverter : JsonConverter {
-        public override bool CanConvert(Type objectType) {
-            return objectType == typeof(string);
+namespace Mollie.Api.JsonConverters;
+
+internal class RawJsonConverter : JsonConverter<string>
+{
+    public override string? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
+        using JsonDocument document = JsonDocument.ParseValue(ref reader);
+        if (document.RootElement.ValueKind == JsonValueKind.Null)
+        {
+            return null;
         }
 
-        public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer) {
-            string valueToParse = value!.ToString();
-            if (IsValidJson(valueToParse)) {
-                writer.WriteRawValue(valueToParse);
-            }
-            else {
-                writer.WriteValue(valueToParse);
-            }
+        if (document.RootElement.ValueKind == JsonValueKind.String)
+        {
+            return document.RootElement.GetString();
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer) {
-            return JToken.Load(reader).ToString();
+        return document.RootElement.GetRawText();
+    }
+
+    public override void Write(Utf8JsonWriter writer, string? value, JsonSerializerOptions options)
+    {
+        if (string.IsNullOrEmpty(value))
+        {
+            writer.WriteNullValue();
+            return;
         }
 
-        /// <summary>
-        /// Source: https://stackoverflow.com/questions/14977848/how-to-make-sure-that-string-is-valid-json-using-json-net
-        /// </summary>
-        private bool IsValidJson(string strInput) {
-            strInput = strInput.Trim();
-            if ((strInput.StartsWith("{") && strInput.EndsWith("}")) ||
-                (strInput.StartsWith("[") && strInput.EndsWith("]")))
+        if (IsValidJson(value))
+        {
+            writer.WriteRawValue(value);
+        }
+        else
+        {
+            writer.WriteStringValue(value);
+        }
+    }
+
+    private bool IsValidJson(string strInput)
+    {
+        strInput = strInput.Trim();
+        if ((strInput.StartsWith("{") && strInput.EndsWith("}")) ||
+            (strInput.StartsWith("[") && strInput.EndsWith("]")))
+        {
+            try
             {
-                try {
-                    JToken.Parse(strInput);
-                    return true;
-                }
-                catch (JsonReaderException) {
-                    return false;
-                }
-                catch (Exception) {
-                    return false;
-                }
+                JsonDocument.Parse(strInput);
+                return true;
             }
-            else {
+            catch (JsonException)
+            {
                 return false;
             }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
         }
     }
 }

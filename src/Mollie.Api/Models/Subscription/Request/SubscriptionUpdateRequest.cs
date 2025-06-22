@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Mollie.Api.JsonConverters;
-using Newtonsoft.Json;
 
 namespace Mollie.Api.Models.Subscription.Request {
     public record SubscriptionUpdateRequest {
@@ -20,6 +21,7 @@ namespace Mollie.Api.Models.Subscription.Request {
         /// will be charged. When
         /// this parameter is not provided, the current date will be used instead.
         /// </summary>
+        [JsonConverter(typeof(DateJsonConverter))]
         public DateTime? StartDate { get; set; }
 
         /// <summary>
@@ -55,8 +57,8 @@ namespace Mollie.Api.Models.Subscription.Request {
         /// </summary>
         public bool? Testmode { get; set; }
 
-        public void SetMetadata(object metadataObj, JsonSerializerSettings? jsonSerializerSettings = null) {
-            Metadata = JsonConvert.SerializeObject(metadataObj, jsonSerializerSettings);
+        public void SetMetadata(object metadataObj, JsonSerializerOptions? jsonSerializerOptions = null) {
+            Metadata = JsonSerializer.Serialize(metadataObj, jsonSerializerOptions);
         }
     }
 }

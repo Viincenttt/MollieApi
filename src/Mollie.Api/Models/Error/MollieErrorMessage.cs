@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.Error {
     public record MollieErrorMessage {
@@ -11,10 +11,12 @@ namespace Mollie.Api.Models.Error {
         /// In order to use the same object, we just map private properties to the public properties
         /// that are used by the public api
         /// </summary>
-        [JsonProperty("error")]
+        [JsonPropertyName("error")]
+        [JsonInclude]
         private string Error { init { Title = value; } }
 
-        [JsonProperty("error_description")]
+        [JsonPropertyName("error_description")]
+        [JsonInclude]
         private string ErrorDescription { init { Detail = value; } }
 
         public override string ToString() {

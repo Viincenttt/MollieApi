@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Text.Json.Serialization;
+using Mollie.Api.Framework;
+using Mollie.Api.JsonConverters;
 
 namespace Mollie.Api.Models.Mandate.Request {
     public record MandateRequest {
@@ -15,6 +18,7 @@ namespace Mollie.Api.Models.Mandate.Request {
         /// <summary>
         /// Optional - The date when the mandate was signed.
         /// </summary>
+        [JsonConverter(typeof(DateJsonConverter))]
         public DateTime? SignatureDate { get; set; }
 
         /// <summary>

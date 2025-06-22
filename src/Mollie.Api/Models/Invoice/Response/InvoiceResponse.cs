@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.Invoice.Response {
 	public record InvoiceResponse {
@@ -69,7 +69,7 @@ namespace Mollie.Api.Models.Invoice.Response {
 		/// <summary>
 		/// Useful URLs to related resources.
 		/// </summary>
-		[JsonProperty("_links")]
+		[JsonPropertyName("_links")]
 		public required InvoiceResponseLinks Links { get; set; }
 	}
 }

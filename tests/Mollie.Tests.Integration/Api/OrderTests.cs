@@ -89,6 +89,22 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
     }
 
     [Fact]
+    public async Task CreateOrderAsync_OrderWithExtendedFields_OrderIsCreated() {
+        // If: we create a order request
+        OrderRequest orderRequest = CreateOrder();
+        orderRequest.ConsumerDateOfBirth = new DateTime(1980, 1, 1);
+        orderRequest.ExpiresAt = DateTime.Now.AddDays(2);
+
+        // When: We send the order request to Mollie
+        OrderResponse result = await _orderClient.CreateOrderAsync(orderRequest);
+
+        // Then: Make sure we get a valid response
+        result.ShouldNotBeNull();
+        result.ConsumerDateOfBirth.ShouldBe(orderRequest.ConsumerDateOfBirth);
+        result.ExpiresAt!.Value.Date.ShouldBe(orderRequest.ExpiresAt.Value.Date);
+    }
+
+    [Fact]
     public async Task CreateOrderAsync_OrderWithApplicationFee_OrderIsCreated() {
         // If: we create a order request with only the required parameters
         OrderRequest orderRequest = CreateOrder() with {
@@ -297,7 +313,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         OrderResponse createdOrder = await _orderClient.CreateOrderAsync(orderRequest);
 
         // When: We update the order line
-        OrderLineUpdateRequest updateRequest = new OrderLineUpdateRequest() {
+        OrderLineUpdateRequest updateRequest = new() {
             Name = "A fluffy bear"
         };
         OrderResponse updatedOrder = await _orderClient.UpdateOrderLinesAsync(createdOrder.Id, createdOrder.Lines.First().Id, updateRequest);
@@ -313,7 +329,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         OrderResponse createdOrder = await _orderClient.CreateOrderAsync(orderRequest);
 
         // When: We use the manager order lines endpoint to add a order line
-        ManageOrderLinesAddOperationData newOrderLineRequest = new ManageOrderLinesAddOperationData {
+        ManageOrderLinesAddOperationData newOrderLineRequest = new() {
             Name = "LEGO Batman mobile",
             Type = OrderLineDetailsType.Physical,
             Category = VoucherCategory.Gift,
@@ -326,7 +342,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
             ProductUrl = "http://www.mollie.nl/legobatmanproduct",
             Metadata = "{\"is_lego_awesome\":\"fosho\"}",
         };
-        ManageOrderLinesRequest manageOrderLinesRequest = new ManageOrderLinesRequest() {
+        ManageOrderLinesRequest manageOrderLinesRequest = new() {
             Operations = new List<ManageOrderLinesOperation> {
                 new ManageOrderLinesAddOperation {
                     Data = newOrderLineRequest
@@ -358,7 +374,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         OrderResponse createdOrder = await _orderClient.CreateOrderAsync(orderRequest);
 
         // When: We use the manager order lines endpoint to update a order line
-        ManageOrderLinesUpdateOperationData orderLineUpdateRequest = new ManageOrderLinesUpdateOperationData {
+        ManageOrderLinesUpdateOperationData orderLineUpdateRequest = new() {
             Id = createdOrder.Lines.First().Id,
             Name = "LEGO Batman mobile",
             Quantity = 1,
@@ -372,7 +388,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
             Sku = "Sku",
             DiscountAmount = new Amount(Currency.EUR, 10m)
         };
-        ManageOrderLinesRequest manageOrderLinesRequest = new ManageOrderLinesRequest() {
+        ManageOrderLinesRequest manageOrderLinesRequest = new() {
             Operations = new List<ManageOrderLinesOperation> {
                 new ManageOrderLinesUpdateOperation {
                     Data = orderLineUpdateRequest
@@ -403,11 +419,11 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         OrderResponse createdOrder = await _orderClient.CreateOrderAsync(orderRequest);
 
         // When: We use the manager order lines endpoint to cancel a order line
-        ManagerOrderLinesCancelOperationData orderLineCancelRequest = new ManagerOrderLinesCancelOperationData {
+        ManagerOrderLinesCancelOperationData orderLineCancelRequest = new() {
             Id = createdOrder.Lines.First().Id,
             Quantity = 1
         };
-        ManageOrderLinesRequest manageOrderLinesRequest = new ManageOrderLinesRequest() {
+        ManageOrderLinesRequest manageOrderLinesRequest = new() {
             Operations = new List<ManageOrderLinesOperation> {
                 new ManageOrderLinesCancelOperation {
                     Data = orderLineCancelRequest

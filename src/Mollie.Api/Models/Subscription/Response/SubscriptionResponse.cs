@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Text.Json;
 using Mollie.Api.JsonConverters;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.Subscription.Response {
     public record SubscriptionResponse {
@@ -18,7 +18,6 @@ namespace Mollie.Api.Models.Subscription.Response {
         /// <summary>
         /// The mode used to create this subscription. Mode determines whether the payments are real or test payments.
         /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
         public Mode Mode { get; set; }
 
         /// <summary>
@@ -106,7 +105,7 @@ namespace Mollie.Api.Models.Subscription.Response {
         /// <summary>
         /// An object with several URL objects relevant to the subscription. Every URL object will contain an href and a type field.
         /// </summary>
-        [JsonProperty("_links")]
+        [JsonPropertyName("_links")]
         public required SubscriptionResponseLinks Links { get; set; }
 
         /// <summary>
@@ -115,8 +114,8 @@ namespace Mollie.Api.Models.Subscription.Response {
         /// </summary>
         public ApplicationFee? ApplicationFee { get; set; }
 
-        public T? GetMetadata<T>(JsonSerializerSettings? jsonSerializerSettings = null) {
-            return Metadata != null ? JsonConvert.DeserializeObject<T>(Metadata, jsonSerializerSettings) : default;
+        public T? GetMetadata<T>(JsonSerializerOptions? jsonSerializerOptions = null) {
+            return Metadata != null ? JsonSerializer.Deserialize<T>(Metadata, jsonSerializerOptions) : default;
         }
     }
 }
