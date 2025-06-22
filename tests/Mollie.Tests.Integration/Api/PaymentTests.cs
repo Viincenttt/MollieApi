@@ -260,6 +260,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         result.Description.ShouldBe(paymentRequest.Description);
         result.RedirectUrl.ShouldBe(paymentRequest.RedirectUrl);
         result.Method.ShouldBe(paymentRequest.Method);
+        result.Links.ShouldNotBeNull();
     }
 
     [Fact]
