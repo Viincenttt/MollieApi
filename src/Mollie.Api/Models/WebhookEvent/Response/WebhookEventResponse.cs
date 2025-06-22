@@ -32,6 +32,7 @@ public class WebhookEventResponse<T> {
     /// <summary>
     /// Full payload of the event. Contains a null value for simple payloads.
     /// </summary>
+    // TODO: Does not work because it should be _embedded.entity
     [JsonPropertyName("_embedded")]
     public T? Embedded { get; set; }
 
