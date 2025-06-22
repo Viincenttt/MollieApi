@@ -12,9 +12,11 @@ namespace Mollie.Api.Models.Error {
         /// that are used by the public api
         /// </summary>
         [JsonPropertyName("error")]
+        [JsonInclude]
         private string Error { init { Title = value; } }
 
         [JsonPropertyName("error_description")]
+        [JsonInclude]
         private string ErrorDescription { init { Detail = value; } }
 
         public override string ToString() {
