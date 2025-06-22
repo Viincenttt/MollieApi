@@ -1,5 +1,5 @@
 using System;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.WebhookEvent.Response;
 
@@ -32,13 +32,13 @@ public class WebhookEventResponse<T> {
     /// <summary>
     /// Full payload of the event. Contains a null value for simple payloads.
     /// </summary>
-    [JsonProperty("_embedded")]
+    [JsonPropertyName("_embedded")]
     public T? Embedded { get; set; }
 
     /// <summary>
     /// An object with several relevant URLs. Every URL object will contain an href and a type field.
     /// </summary>
     /// <returns></returns>
-    [JsonProperty("_links")]
+    [JsonPropertyName("_links")]
     public required WebhookEventResponseLinks<T> Links { get; set; }
 }
