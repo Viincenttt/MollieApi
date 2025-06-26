@@ -1,4 +1,4 @@
-﻿namespace Mollie.Api.Models.Connect.Request {
+namespace Mollie.Api.Models.Connect.Request {
     public static class AppPermissions {
         public const string PaymentsRead = "payments.read";
         public const string PaymentsWrite = "payments.write";
@@ -13,6 +13,7 @@
         public const string ProfilesRead = "profiles.read";
         public const string ProfilesWrite = "profiles.write";
         public const string InvoicesRead = "invoices.read";
+        public const string SettlementsRead = "settlements.read";
         public const string OrdersRead = "orders.read";
         public const string OrdersWrite = "orders.write";
         public const string ShipmentsRead = "shipments.read";
@@ -21,6 +22,14 @@
         public const string OrganizationWrite = "organizations.write";
         public const string OnboardingRead = "onboarding.read";
         public const string OnboardingWrite = "onboarding.write";
-        public const string SettlementsRead = "settlements.read";
+        public const string PaymentLinksRead = "payment-links.read";
+        public const string PaymentLinksWrite = "payment-links.write";
+        public const string BalancesRead = "balances.read";
+        public const string TerminalsRead = "terminals.read";
+        public const string TerminalsWrite = "terminals.write";
+        public const string ExternalAccountsRead = "external-accounts.read";
+        public const string ExternalAccountsWrite = "external-accounts.write";
+        public const string PersonsRead = "persons.read";
+        public const string PersonsWrite = "persons.write";
     }
 }
