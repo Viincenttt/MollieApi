@@ -138,5 +138,6 @@
         public const string Mastercard = nameof(Mastercard);
         public const string Unionpay = nameof(Unionpay);
         public const string Visa = nameof(Visa);
+        public const string Vpay = nameof(Vpay);
     }
 }
