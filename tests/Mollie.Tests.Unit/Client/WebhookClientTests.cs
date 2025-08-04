@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Mollie.Api.Client;
 using Mollie.Api.Models;

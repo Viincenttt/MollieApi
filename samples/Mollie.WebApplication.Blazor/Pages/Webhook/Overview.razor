@@ -1,0 +1,64 @@
+﻿@page "/webhook/overview"
+@using Mollie.Api.Models.List.Response
+@using Mollie.Api.Models.Webhook.Response
+
+@inject IWebhookClient WebhookClient
+
+<h3>Webhooks</h3>
+
+@if (_webhooks == null) {
+    <p>Loading...</p>
+}
+else {
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Date created</th>
+            <th scope="col">Status</th>
+            <th scope="col">Url</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (WebhookResponse webhook in _webhooks.Items) {
+            <tr>
+                <td>@webhook.Id</td>
+                <td>@webhook.Name</td>
+                <td>@webhook.CreatedAt</td>
+                <td>@webhook.Status</td>
+                <td>@webhook.Url</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+
+    <OverviewNavigation
+        Previous="_webhooks.Links.Previous"
+        Next="_webhooks.Links.Next">
+    </OverviewNavigation>
+}
+
+@code {
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string? Url { get; set; }
+
+    private ListResponse<WebhookResponse>? _webhooks;
+
+    protected override async Task OnParametersSetAsync() {
+        await LoadData();
+    }
+
+    private async Task LoadData() {
+        if (string.IsNullOrEmpty(Url)) {
+            _webhooks = await WebhookClient.GetWebhookListAsync();
+        }
+        else {
+            _webhooks = await WebhookClient.GetWebhookListAsync(new UrlObjectLink<ListResponse<WebhookResponse>>() {
+                Href = Url,
+                Type = "application/json"
+            });
+        }
+    }
+}
