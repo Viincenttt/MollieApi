@@ -65,6 +65,14 @@ public class WebhookClient : BaseMollieClient, IWebhookClient {
             .ConfigureAwait(false);
     }
 
+    public async Task TestWebhookAsync(string webhookId, bool testmode = false, CancellationToken cancellationToken = default) {
+        ValidateRequiredUrlParameter(nameof(webhookId), webhookId);
+        var queryParameters = BuildQueryParameters(testmode);
+
+        await PostAsync<object>($"webhooks/{webhookId}/{queryParameters.ToQueryString()}/ping", null,
+            cancellationToken: cancellationToken);
+    }
+
     private Dictionary<string, string> BuildQueryParameters(bool testmode = false) {
         var result = new Dictionary<string, string>();
         result.AddValueIfTrue("testmode", testmode);

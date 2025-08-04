@@ -22,4 +22,6 @@ public interface IWebhookClient {
     Task<WebhookResponse> UpdateWebhookAsync(string webhookId, WebhookRequest request, CancellationToken cancellationToken = default);
 
     Task DeleteWebhookAsync(string webhookId, bool testmode = false, CancellationToken cancellationToken = default);
+
+    Task TestWebhookAsync(string webhookId, bool testmode = false, CancellationToken cancellationToken = default);
 }
