@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Mollie.Api.Models.Webhook.Response;
 
@@ -37,7 +38,7 @@ public record WebhookResponse {
     /// <summary>
     /// The events types that are subscribed.
     /// </summary>
-    public required string EventTypes { get; set; }
+    public required IEnumerable<string> EventTypes { get; set; }
 
     /// <summary>
     /// The subscription's current status.
@@ -47,5 +48,5 @@ public record WebhookResponse {
     /// <summary>
     /// The subscription's mode.
     /// </summary>
-    public required string Mode { get; set; }
+    public required Mode Mode { get; set; }
 }
