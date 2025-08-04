@@ -30,7 +30,6 @@
         /// </summary>
         public string? ConsumerBic { get; set; }
 
-
         /// <summary>
         /// Estimated date the payment is debited from the consumer's bank account, in YYYY-MM-DD format.
         /// </summary>
