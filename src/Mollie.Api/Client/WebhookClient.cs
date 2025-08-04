@@ -1,0 +1,54 @@
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using Mollie.Api.Client.Abstract;
+using Mollie.Api.Extensions;
+using Mollie.Api.Models.List.Response;
+using Mollie.Api.Models.Webhook.Request;
+using Mollie.Api.Models.Webhook.Response;
+
+namespace Mollie.Api.Client;
+
+public class WebhookClient : BaseMollieClient, IWebhookClient {
+    public async Task<WebhookResponse> CreateWebhookAsync(WebhookRequest request, CancellationToken cancellationToken = default) {
+        return await PostAsync<WebhookResponse>("webhooks", request, cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
+    }
+
+    public async Task<ListResponse<WebhookResponse>> GetWebhookListAsync(string? from = null, int? limit = null,
+        bool testmode = false, CancellationToken cancellationToken = default) {
+        var queryParameters = BuildQueryParameters(testmode);
+        return await GetListAsync<ListResponse<WebhookResponse>>(
+                "webhooks", from, limit, queryParameters, cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
+    }
+
+    public async Task<WebhookResponse> GetWebhookAsync(string webhookId, bool testmode = false, CancellationToken cancellationToken = default) {
+        ValidateRequiredUrlParameter(nameof(webhookId), webhookId);
+        var queryParameters = BuildQueryParameters(testmode);
+
+        return await GetAsync<WebhookResponse>($"webhooks/{webhookId}{queryParameters.ToQueryString()}", cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
+    }
+
+    public async Task<WebhookResponse> UpdateWebhookAsync(string webhookId, WebhookRequest request, CancellationToken cancellationToken = default) {
+        ValidateRequiredUrlParameter(nameof(webhookId), webhookId);
+
+        return await PatchAsync<WebhookResponse>($"webhooks/{webhookId}", request, cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
+    }
+
+    public async Task DeleteWebhookAsync(string webhookId, bool testmode = false, CancellationToken cancellationToken = default) {
+        ValidateRequiredUrlParameter(nameof(webhookId), webhookId);
+        var queryParameters = BuildQueryParameters(testmode);
+
+        await DeleteAsync($"webhooks/{webhookId}{queryParameters.ToQueryString()}", cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
+    }
+
+    private Dictionary<string, string> BuildQueryParameters(bool testmode = false) {
+        var result = new Dictionary<string, string>();
+        result.AddValueIfTrue("testmode", testmode);
+        return result;
+    }
+}

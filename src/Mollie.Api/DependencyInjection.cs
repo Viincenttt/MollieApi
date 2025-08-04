@@ -61,6 +61,7 @@ namespace Mollie.Api {
             RegisterMollieApiClient<IClientClient, ClientClient>(services, mollieOptions.RetryPolicy);
             RegisterMollieApiClient<ICapabilityClient, CapabilityClient>(services, mollieOptions.RetryPolicy);
             RegisterMollieApiClient<ISalesInvoiceClient, SalesInvoiceClient>(services, mollieOptions.RetryPolicy);
+            RegisterMollieApiClient<IWebhookClient, WebhookClient>(services, mollieOptions.RetryPolicy);
 
             return services;
         }
