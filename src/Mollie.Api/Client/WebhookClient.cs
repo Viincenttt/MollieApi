@@ -7,6 +7,7 @@ using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
 using Mollie.Api.Framework.Authentication.Abstract;
 using Mollie.Api.Models.List.Response;
+using Mollie.Api.Models.Url;
 using Mollie.Api.Models.Webhook.Request;
 using Mollie.Api.Models.Webhook.Response;
 using Mollie.Api.Options;
@@ -32,6 +33,12 @@ public class WebhookClient : BaseMollieClient, IWebhookClient {
         var queryParameters = BuildQueryParameters(testmode);
         return await GetListAsync<ListResponse<WebhookResponse>>(
                 "webhooks", from, limit, queryParameters, cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
+    }
+
+    public async Task<ListResponse<WebhookResponse>> GetWebhookListAsync(
+        UrlObjectLink<ListResponse<WebhookResponse>> url, CancellationToken cancellationToken = default) {
+        return await GetAsync(url, cancellationToken: cancellationToken)
             .ConfigureAwait(false);
     }
 
