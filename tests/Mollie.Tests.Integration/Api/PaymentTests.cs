@@ -33,21 +33,17 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
     private readonly ITerminalClient _terminalClient;
     private readonly ICaptureClient _captureClient;
 
-    private readonly IHttpClientFactory _httpClientFactory;
-
     public PaymentTests(
         IPaymentClient paymentClient,
         ICustomerClient customerClient,
         IMandateClient mandateClient,
         ITerminalClient terminalClient,
-        ICaptureClient captureClient,
-        IHttpClientFactory httpClientFactory) {
+        ICaptureClient captureClient) {
         _paymentClient = paymentClient;
         _customerClient = customerClient;
         _mandateClient = mandateClient;
         _terminalClient = terminalClient;
         _captureClient = captureClient;
-        _httpClientFactory = httpClientFactory;
     }
 
     [Fact]

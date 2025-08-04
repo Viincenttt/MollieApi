@@ -17,11 +17,5 @@ namespace Mollie.Api.Models.Payment.Request.PaymentSpecificParameters {
         /// email will be sent in English, as we haven't yet been able to detect the consumer's browser language.
         /// </summary>
         public string? BillingEmail { get; set; }
-
-        /// <summary>
-        /// Optional - The date the payment should expire, in YYYY-MM-DD format. Please note: The minimum date is tomorrow and
-        /// the maximum date is 100 days.
-        /// </summary>
-        public string? DueDate { get; set; }
     }
 }
