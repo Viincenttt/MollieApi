@@ -8,9 +8,10 @@
 
     public record CreditCardPaymentResponseDetails {
         /// <summary>
-        /// The card holder's name.
+        /// Only available if the payment has been completed - Unique alphanumeric representation of card, usable for identifying
+        /// returning customers.
         /// </summary>
-        public string? CardHolder { get; set; }
+        public string? CardFingerprint { get; set; }
 
         /// <summary>
         /// The last four digits of the card number.
@@ -18,10 +19,9 @@
         public string? CardNumber { get; set; }
 
         /// <summary>
-        /// Only available if the payment has been completed - Unique alphanumeric representation of card, usable for identifying
-        /// returning customers.
+        /// The card holder's name.
         /// </summary>
-        public string? CardFingerprint { get; set; }
+        public string? CardHolder { get; set; }
 
         /// <summary>
         /// Not always available. – The card's target audience. See the Mollie.Api.Models.Payment.Response.CreditCardAudience
@@ -41,6 +41,17 @@
         public string? CardCountryCode { get; set; }
 
         /// <summary>
+        /// The expiry date (MM/YY) of the card as displayed on the card.
+        /// </summary>
+        public string? CardExpiryDate { get; set; }
+
+        /// <summary>
+        /// The card type. See the Mollie.Api.Models.Payment.Response.CreditCardFunding class for a full list of known
+        /// values.
+        /// </summary>
+        public string? CardFunding { get; set; }
+
+        /// <summary>
         /// Only available if the payment succeeded. – The payment's security type. See the
         /// Mollie.Api.Models.Payment.Response.CreditCardSecurity class for a full list of known values
         /// </summary>
@@ -52,6 +63,27 @@
         /// Mollie.Api.Models.Payment.Response.CreditCardFeeRegion class for a full list of known values
         /// </summary>
         public string? FeeRegion { get; set; }
+
+        /// <summary>
+        /// The first6 and last4 digits of the card number.
+        /// </summary>
+        public string? CardMaskedNumber { get; set; }
+
+        /// <summary>
+        /// The outcome of authentication attempted on transactions enforced by 3DS (ie valid only for oneoff and
+        /// first).
+        /// </summary>
+        public string? Card3dsEci { get; set; }
+
+        /// <summary>
+        /// The first6 digit of the card bank identification number.
+        /// </summary>
+        public string? CardBin { get; set; }
+
+        /// <summary>
+        /// The issuer of the Card.
+        /// </summary>
+        public string? CardIssuer { get; set; }
 
         /// <summary>
         /// Only available for failed payments. Contains a failure reason code. See the
@@ -139,5 +171,15 @@
         public const string Unionpay = nameof(Unionpay);
         public const string Visa = nameof(Visa);
         public const string Vpay = nameof(Vpay);
+    }
+
+    /// <summary>
+    /// The card type.
+    /// </summary>
+    public static class CreditCardFunding {
+        public const string Debit = "debit";
+        public const string Credit = "credit";
+        public const string Prepaid = "prepaid";
+        public const string DeferredDebit = "deferred-debit";
     }
 }
