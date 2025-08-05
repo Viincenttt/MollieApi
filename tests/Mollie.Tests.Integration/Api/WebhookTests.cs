@@ -50,7 +50,7 @@ public class WebhookTests : IAsyncLifetime {
         // Given
 
         // When: Retrieve webhook list
-        ListResponse<WebhookResponse> response = await _webhookClient.GetWebhookListAsync(testmode: true);
+        ListResponse<WebhookResponse> response = await _webhookClient.GetWebhookListAsync();
 
         // Then
         response.ShouldNotBeNull();

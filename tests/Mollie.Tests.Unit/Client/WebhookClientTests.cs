@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client;
 using Mollie.Api.Models;
 using Mollie.Api.Models.List.Response;
+using Mollie.Api.Models.Webhook.Request;
 using Mollie.Api.Models.Webhook.Response;
 using RichardSzalay.MockHttp;
 using Shouldly;
@@ -12,6 +14,82 @@ using Xunit;
 namespace Mollie.Tests.Unit.Client;
 
 public class WebhookClientTests : BaseClientTests {
+    [Fact]
+    public async Task CreateWebhookAsync_WebhookWithRequiredParameters_ResponseIsDeserializedInExpectedFormat() {
+        // Given: we create a webhook request with only the required parameters
+        string webhookId = "webhook-id";
+        WebhookRequest request = new() {
+            Name = "my-webhook",
+            Url = "https://github.com/Viincenttt/MollieApi/-updated",
+            EventTypes = "payment-link.paid",
+            Testmode = true
+        };
+        string jsonToReturnInMockResponse = CreateWebhookJsonResponse(webhookId, request.Name, request.Url, ["payment-link.paid"]);
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Post,
+            $"{BaseMollieClient.DefaultBaseApiEndPoint}webhooks", jsonToReturnInMockResponse);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        var client = new WebhookClient("abcde", httpClient);
+
+        // When: We send the request
+        WebhookResponse response = await client.CreateWebhookAsync(request);
+
+        // Then
+        mockHttp.VerifyNoOutstandingExpectation();
+        response.ShouldNotBeNull();
+        response.Id.ShouldBe(webhookId);
+        response.Resource.ShouldBe("webhook");
+        response.Name.ShouldBe(request.Name);
+        response.Url.ShouldBe(request.Url);
+        response.EventTypes.ShouldNotBeNull();
+        response.EventTypes.ShouldBe(new[] { "payment-link.paid" });
+    }
+
+    [Fact]
+    public async Task UpdateWebhookAsync_WebhookWithRequiredParameters_ResponseIsDeserializedInExpectedFormat() {
+        // Given: we update webhook with only the required parameters
+        string webhookId = "webhook-id";
+        WebhookRequest request = new() {
+            Name = "my-webhook",
+            Url = "https://github.com/Viincenttt/MollieApi/-updated",
+            EventTypes = "payment-link.paid",
+            Testmode = true
+        };
+        string jsonToReturnInMockResponse = CreateWebhookJsonResponse(webhookId, request.Name, request.Url, ["payment-link.paid"]);
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Patch,
+            $"{BaseMollieClient.DefaultBaseApiEndPoint}webhooks/{webhookId}", jsonToReturnInMockResponse);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        var client = new WebhookClient("abcde", httpClient);
+
+        // When: We send the request
+        WebhookResponse response = await client.UpdateWebhookAsync(webhookId, request);
+
+        // Then
+        mockHttp.VerifyNoOutstandingExpectation();
+        response.ShouldNotBeNull();
+        response.Id.ShouldBe(webhookId);
+        response.Resource.ShouldBe("webhook");
+        response.Name.ShouldBe(request.Name);
+        response.Url.ShouldBe(request.Url);
+        response.EventTypes.ShouldNotBeNull();
+        response.EventTypes.ShouldBe(new[] { "payment-link.paid" });
+    }
+
+    [Fact]
+    public async Task DeleteWebhookAsync_WebhookWithRequiredParameters_ResponseIsDeserializedInExpectedFormat() {
+        // Given
+        string webhookId = "webhook-id";
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Delete,
+            $"{BaseMollieClient.DefaultBaseApiEndPoint}webhooks/{webhookId}", "");
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        var client = new WebhookClient("abcde", httpClient);
+
+        // When: We send the request
+        await client.DeleteWebhookAsync(webhookId);
+
+        // Then
+        mockHttp.VerifyNoOutstandingExpectation();
+    }
+
     [Theory]
     [InlineData("")]
     [InlineData(" ")]
@@ -40,8 +118,7 @@ public class WebhookClientTests : BaseClientTests {
         const string name = "webhook-name";
         const string url = "https://mollie.com/webhook";
         string[] eventTypes = ["payment-link.paid", "sales-invoice.created"];
-        string jsonToReturnInMockResponse = CreateWebhookJsonResponse(webhookId, name, url,
-            $"\"{eventTypes[0]}\", \"{eventTypes[1]}\"");
+        string jsonToReturnInMockResponse = CreateWebhookJsonResponse(webhookId, name, url, eventTypes);
         var mockHttp = new MockHttpMessageHandler();
         mockHttp.When($"{BaseMollieClient.DefaultBaseApiEndPoint}webhooks/{webhookId}")
             .With(request => request.Headers.Contains("Idempotency-Key"))
@@ -75,8 +152,7 @@ public class WebhookClientTests : BaseClientTests {
         const string name = "webhook-name";
         const string url = "https://mollie.com/webhook";
         string[] eventTypes = ["payment-link.paid", "sales-invoice.created"];
-        string jsonToReturnInMockResponse = CreateWebhookJsonResponse(webhookId, name, url,
-            $"\"{eventTypes[0]}\", \"{eventTypes[1]}\"");
+        string jsonToReturnInMockResponse = CreateWebhookJsonResponse(webhookId, name, url, eventTypes);
         var mockHttp = new MockHttpMessageHandler();
         mockHttp.When($"{BaseMollieClient.DefaultBaseApiEndPoint}webhooks/{webhookId}{expectedQueryString}")
             .With(request => request.Headers.Contains("Idempotency-Key"))
@@ -90,7 +166,6 @@ public class WebhookClientTests : BaseClientTests {
         // Then
         mockHttp.VerifyNoOutstandingRequest();
     }
-
 
     [Theory]
     [InlineData(null, null, false, "")]
@@ -136,7 +211,7 @@ public class WebhookClientTests : BaseClientTests {
 
     private string CreateWebhookListJsonResponse() {
         string webhookJson = CreateWebhookJsonResponse("hook_5foxphpBru4xNPCDJJPzH", "Webhook 1",
-            "https://mollie.com/webhook1", "\"payment-link.paid\"");
+            "https://mollie.com/webhook1", ["payment-link.paid "]);
 
         return $@"{{
   ""_embedded"": {{
@@ -166,7 +241,9 @@ public class WebhookClientTests : BaseClientTests {
 }}";
     }
 
-    private string CreateWebhookJsonResponse(string webhookId, string name, string url, string eventTypes) {
+    private string CreateWebhookJsonResponse(string webhookId, string name, string url, string[] eventTypes) {
+        var jsonToReturnInMockResponse = string.Join(",", eventTypes.Select(x => $"\"{x}\""));
+
         return $@"{{
   ""resource"": ""webhook"",
   ""id"": ""{webhookId}"",
@@ -176,7 +253,7 @@ public class WebhookClientTests : BaseClientTests {
   ""name"": ""{name}"",
   ""status"": ""enabled"",
   ""mode"": ""test"",
-  ""eventTypes"": [{eventTypes}],
+  ""eventTypes"": [{jsonToReturnInMockResponse}],
   ""_links"": {{
     ""documentation"": {{
       ""href"": ""https://docs.mollie.com/reference/get-webhook"",
