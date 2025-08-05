@@ -38,7 +38,7 @@ public class WebhookTests : IAsyncLifetime {
         created.Id.ShouldNotBeNullOrEmpty();
 
         // Then: The webhook can be retrieved
-        WebhookResponse retrieved = await _webhookClient.GetWebhookAsync(created.Id);
+        WebhookResponse retrieved = await _webhookClient.GetWebhookAsync(created.Id, testmode: true);
         retrieved.ShouldBeEquivalentTo(created);
 
         // Then: The webhook can be deleted

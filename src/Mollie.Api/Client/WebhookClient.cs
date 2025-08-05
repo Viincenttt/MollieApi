@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
 using Mollie.Api.Framework.Authentication.Abstract;
+using Mollie.Api.Models;
 using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Url;
 using Mollie.Api.Models.Webhook.Request;
@@ -59,9 +60,8 @@ public class WebhookClient : BaseMollieClient, IWebhookClient {
 
     public async Task DeleteWebhookAsync(string webhookId, bool testmode = false, CancellationToken cancellationToken = default) {
         ValidateRequiredUrlParameter(nameof(webhookId), webhookId);
-        var queryParameters = BuildQueryParameters(testmode);
-
-        await DeleteAsync($"webhooks/{webhookId}{queryParameters.ToQueryString()}", cancellationToken: cancellationToken)
+        var data = TestmodeModel.Create(testmode);
+        await DeleteAsync($"webhooks/{webhookId}", data, cancellationToken: cancellationToken)
             .ConfigureAwait(false);
     }
 
