@@ -52,7 +52,7 @@ else {
 
     private async Task LoadData() {
         if (string.IsNullOrEmpty(Url)) {
-            _webhooks = await WebhookClient.GetWebhookListAsync();
+            _webhooks = await WebhookClient.GetWebhookListAsync(testmode: true);
         }
         else {
             _webhooks = await WebhookClient.GetWebhookListAsync(new UrlObjectLink<ListResponse<WebhookResponse>>() {
