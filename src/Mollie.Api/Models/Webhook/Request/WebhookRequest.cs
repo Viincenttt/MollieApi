@@ -1,3 +1,7 @@
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
+using Mollie.Api.JsonConverters;
+
 namespace Mollie.Api.Models.Webhook.Request;
 
 public record WebhookRequest {
@@ -16,7 +20,8 @@ public record WebhookRequest {
     /// explicit selection. Separate multiple event types with a comma. See the Mollie.Api.Models.Webhook.WebhookEventTypes
     /// class for a full list of known values
     /// </summary>
-    public required string EventTypes { get; set; }
+    [JsonConverter(typeof(CollectionToCommaSeparatedListConverter))]
+    public required IList<string> EventTypes { get; set; }
 
     /// <summary>
     /// Whether to create the entity in test mode or live mode. Most API credentials are specifically created for

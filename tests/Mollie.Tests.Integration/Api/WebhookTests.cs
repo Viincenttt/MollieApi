@@ -23,7 +23,7 @@ public class WebhookTests : IAsyncLifetime {
         var request = new WebhookRequest {
             Name = "my-webhook",
             Url = "https://github.com/Viincenttt/MollieApi/",
-            EventTypes = "payment-link.paid,sales-invoice.created",
+            EventTypes = [WebhookEventTypes.PaymentLinkPaid, WebhookEventTypes.SalesInvoiceCreated],
             Testmode = true
         };
 
@@ -64,14 +64,14 @@ public class WebhookTests : IAsyncLifetime {
         var createRequest = new WebhookRequest {
             Name = "my-webhook",
             Url = "https://github.com/Viincenttt/MollieApi/",
-            EventTypes = "payment-link.paid,sales-invoice.created",
+            EventTypes = [WebhookEventTypes.PaymentLinkPaid, WebhookEventTypes.SalesInvoiceCreated],
             Testmode = true
         };
         WebhookResponse created = await _webhookClient.CreateWebhookAsync(createRequest);
         var updateRequest = new WebhookRequest {
             Name = "my-webhook-updated",
             Url = "https://github.com/Viincenttt/MollieApi/-updated",
-            EventTypes = WebhookEventTypes.PaymentLinkPaid,
+            EventTypes = [WebhookEventTypes.PaymentLinkPaid],
             Testmode = true
         };
 

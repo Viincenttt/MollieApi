@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -22,7 +23,7 @@ public class WebhookClientTests : BaseClientTests {
         WebhookRequest request = new() {
             Name = "my-webhook",
             Url = "https://github.com/Viincenttt/MollieApi/-updated",
-            EventTypes = WebhookEventTypes.PaymentLinkPaid,
+            EventTypes = [WebhookEventTypes.PaymentLinkPaid],
             Testmode = true
         };
         string jsonToReturnInMockResponse = CreateWebhookJsonResponse(webhookId, request.Name, request.Url, [WebhookEventTypes.PaymentLinkPaid]);
@@ -52,7 +53,7 @@ public class WebhookClientTests : BaseClientTests {
         WebhookRequest request = new() {
             Name = "my-webhook",
             Url = "https://github.com/Viincenttt/MollieApi/-updated",
-            EventTypes = WebhookEventTypes.PaymentLinkPaid,
+            EventTypes = [WebhookEventTypes.PaymentLinkPaid],
             Testmode = true
         };
         string jsonToReturnInMockResponse = CreateWebhookJsonResponse(webhookId, request.Name, request.Url, [WebhookEventTypes.PaymentLinkPaid]);
