@@ -36,7 +36,8 @@ public record WebhookResponse {
     public required string Name { get; set; }
 
     /// <summary>
-    /// The events types that are subscribed.
+    /// The events types that are subscribed. See the Mollie.Api.Models.Webhook.WebhookEventTypes class for a full
+    /// list of known values
     /// </summary>
     public required IEnumerable<string> EventTypes { get; set; }
 

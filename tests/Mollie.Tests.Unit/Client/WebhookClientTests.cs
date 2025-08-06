@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Mollie.Api.Client;
 using Mollie.Api.Models;
 using Mollie.Api.Models.List.Response;
+using Mollie.Api.Models.Webhook;
 using Mollie.Api.Models.Webhook.Request;
 using Mollie.Api.Models.Webhook.Response;
 using RichardSzalay.MockHttp;
@@ -21,10 +22,10 @@ public class WebhookClientTests : BaseClientTests {
         WebhookRequest request = new() {
             Name = "my-webhook",
             Url = "https://github.com/Viincenttt/MollieApi/-updated",
-            EventTypes = "payment-link.paid",
+            EventTypes = WebhookEventTypes.PaymentLinkPaid,
             Testmode = true
         };
-        string jsonToReturnInMockResponse = CreateWebhookJsonResponse(webhookId, request.Name, request.Url, ["payment-link.paid"]);
+        string jsonToReturnInMockResponse = CreateWebhookJsonResponse(webhookId, request.Name, request.Url, [WebhookEventTypes.PaymentLinkPaid]);
         var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Post,
             $"{BaseMollieClient.DefaultBaseApiEndPoint}webhooks", jsonToReturnInMockResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
@@ -41,7 +42,7 @@ public class WebhookClientTests : BaseClientTests {
         response.Name.ShouldBe(request.Name);
         response.Url.ShouldBe(request.Url);
         response.EventTypes.ShouldNotBeNull();
-        response.EventTypes.ShouldBe(new[] { "payment-link.paid" });
+        response.EventTypes.ShouldBe(new[] { WebhookEventTypes.PaymentLinkPaid });
     }
 
     [Fact]
@@ -51,10 +52,10 @@ public class WebhookClientTests : BaseClientTests {
         WebhookRequest request = new() {
             Name = "my-webhook",
             Url = "https://github.com/Viincenttt/MollieApi/-updated",
-            EventTypes = "payment-link.paid",
+            EventTypes = WebhookEventTypes.PaymentLinkPaid,
             Testmode = true
         };
-        string jsonToReturnInMockResponse = CreateWebhookJsonResponse(webhookId, request.Name, request.Url, ["payment-link.paid"]);
+        string jsonToReturnInMockResponse = CreateWebhookJsonResponse(webhookId, request.Name, request.Url, [WebhookEventTypes.PaymentLinkPaid]);
         var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Patch,
             $"{BaseMollieClient.DefaultBaseApiEndPoint}webhooks/{webhookId}", jsonToReturnInMockResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
@@ -71,7 +72,7 @@ public class WebhookClientTests : BaseClientTests {
         response.Name.ShouldBe(request.Name);
         response.Url.ShouldBe(request.Url);
         response.EventTypes.ShouldNotBeNull();
-        response.EventTypes.ShouldBe(new[] { "payment-link.paid" });
+        response.EventTypes.ShouldBe(new[] { WebhookEventTypes.PaymentLinkPaid });
     }
 
     [Fact]
@@ -117,7 +118,7 @@ public class WebhookClientTests : BaseClientTests {
         const string webhookId = "webhook-id";
         const string name = "webhook-name";
         const string url = "https://mollie.com/webhook";
-        string[] eventTypes = ["payment-link.paid", "sales-invoice.created"];
+        string[] eventTypes = [WebhookEventTypes.PaymentLinkPaid, WebhookEventTypes.SalesInvoiceCreated];
         string jsonToReturnInMockResponse = CreateWebhookJsonResponse(webhookId, name, url, eventTypes);
         var mockHttp = new MockHttpMessageHandler();
         mockHttp.When($"{BaseMollieClient.DefaultBaseApiEndPoint}webhooks/{webhookId}")
@@ -151,7 +152,7 @@ public class WebhookClientTests : BaseClientTests {
         const string webhookId = "webhook-id";
         const string name = "webhook-name";
         const string url = "https://mollie.com/webhook";
-        string[] eventTypes = ["payment-link.paid", "sales-invoice.created"];
+        string[] eventTypes = [WebhookEventTypes.PaymentLinkPaid, WebhookEventTypes.SalesInvoiceCreated];
         string jsonToReturnInMockResponse = CreateWebhookJsonResponse(webhookId, name, url, eventTypes);
         var mockHttp = new MockHttpMessageHandler();
         mockHttp.When($"{BaseMollieClient.DefaultBaseApiEndPoint}webhooks/{webhookId}{expectedQueryString}")

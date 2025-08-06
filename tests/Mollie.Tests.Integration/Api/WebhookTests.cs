@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
 using Mollie.Api.Models.List.Response;
+using Mollie.Api.Models.Webhook;
 using Mollie.Api.Models.Webhook.Request;
 using Mollie.Api.Models.Webhook.Response;
 using Shouldly;
@@ -32,7 +33,7 @@ public class WebhookTests : IAsyncLifetime {
         // Then
         created.Name.ShouldBe(request.Name);
         created.Url.ShouldBe(request.Url);
-        created.EventTypes.ShouldBe(new [] { "payment-link.paid", "sales-invoice.created" });
+        created.EventTypes.ShouldBe(new [] { WebhookEventTypes.PaymentLinkPaid, WebhookEventTypes.SalesInvoiceCreated });
         created.Mode.ShouldBe(Mode.Test);
         created.Resource.ShouldBe("webhook");
         created.Id.ShouldNotBeNullOrEmpty();
@@ -70,7 +71,7 @@ public class WebhookTests : IAsyncLifetime {
         var updateRequest = new WebhookRequest {
             Name = "my-webhook-updated",
             Url = "https://github.com/Viincenttt/MollieApi/-updated",
-            EventTypes = "payment-link.paid",
+            EventTypes = WebhookEventTypes.PaymentLinkPaid,
             Testmode = true
         };
 
@@ -80,7 +81,7 @@ public class WebhookTests : IAsyncLifetime {
         // Then
         updated.Name.ShouldBe(updateRequest.Name);
         updated.Url.ShouldBe(updateRequest.Url);
-        updated.EventTypes.ShouldBe(new[] { "payment-link.paid" });
+        updated.EventTypes.ShouldBe(new[] { WebhookEventTypes.PaymentLinkPaid });
         updated.Mode.ShouldBe(Mode.Test);
     }
 
