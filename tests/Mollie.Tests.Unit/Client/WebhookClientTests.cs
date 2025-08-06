@@ -213,7 +213,7 @@ public class WebhookClientTests : BaseClientTests {
 
     private string CreateWebhookListJsonResponse() {
         string webhookJson = CreateWebhookJsonResponse("hook_5foxphpBru4xNPCDJJPzH", "Webhook 1",
-            "https://mollie.com/webhook1", ["payment-link.paid "]);
+            "https://mollie.com/webhook1", [WebhookEventTypes.PaymentLinkPaid]);
 
         return $@"{{
   ""_embedded"": {{

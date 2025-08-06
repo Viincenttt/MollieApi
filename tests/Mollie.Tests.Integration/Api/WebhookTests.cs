@@ -10,6 +10,7 @@ using Xunit;
 
 namespace Mollie.Tests.Integration.Api;
 
+[Trait("TestCategory", "LocalIntegrationTests")]
 public class WebhookTests : IAsyncLifetime {
     private readonly IWebhookClient _webhookClient;
 
@@ -33,7 +34,7 @@ public class WebhookTests : IAsyncLifetime {
         // Then
         created.Name.ShouldBe(request.Name);
         created.Url.ShouldBe(request.Url);
-        created.EventTypes.ShouldBe(new [] { WebhookEventTypes.PaymentLinkPaid, WebhookEventTypes.SalesInvoiceCreated });
+        created.EventTypes.ShouldBe([WebhookEventTypes.PaymentLinkPaid, WebhookEventTypes.SalesInvoiceCreated]);
         created.Mode.ShouldBe(Mode.Test);
         created.Resource.ShouldBe("webhook");
         created.Id.ShouldNotBeNullOrEmpty();
@@ -64,14 +65,14 @@ public class WebhookTests : IAsyncLifetime {
         var createRequest = new WebhookRequest {
             Name = "my-webhook",
             Url = "https://github.com/Viincenttt/MollieApi/",
-            EventTypes = [WebhookEventTypes.PaymentLinkPaid, WebhookEventTypes.SalesInvoiceCreated],
+            EventTypes = [WebhookEventTypes.PaymentLinkPaid],
             Testmode = true
         };
         WebhookResponse created = await _webhookClient.CreateWebhookAsync(createRequest);
         var updateRequest = new WebhookRequest {
             Name = "my-webhook-updated",
             Url = "https://github.com/Viincenttt/MollieApi/-updated",
-            EventTypes = [WebhookEventTypes.PaymentLinkPaid],
+            EventTypes = [WebhookEventTypes.PaymentLinkPaid, WebhookEventTypes.SalesInvoiceCreated],
             Testmode = true
         };
 
@@ -81,7 +82,7 @@ public class WebhookTests : IAsyncLifetime {
         // Then
         updated.Name.ShouldBe(updateRequest.Name);
         updated.Url.ShouldBe(updateRequest.Url);
-        updated.EventTypes.ShouldBe(new[] { WebhookEventTypes.PaymentLinkPaid });
+        updated.EventTypes.ShouldBe([WebhookEventTypes.PaymentLinkPaid, WebhookEventTypes.SalesInvoiceCreated]);
         updated.Mode.ShouldBe(Mode.Test);
     }
 
