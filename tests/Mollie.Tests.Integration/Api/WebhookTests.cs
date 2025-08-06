@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
 using Mollie.Api.Models.List.Response;
@@ -52,7 +53,7 @@ public class WebhookTests : IAsyncLifetime {
         // Given
 
         // When: Retrieve webhook list
-        ListResponse<WebhookResponse> response = await _webhookClient.GetWebhookListAsync();
+        ListResponse<WebhookResponse> response = await _webhookClient.GetWebhookListAsync(testmode: true);
 
         // Then
         response.ShouldNotBeNull();
@@ -84,6 +85,24 @@ public class WebhookTests : IAsyncLifetime {
         updated.Url.ShouldBe(updateRequest.Url);
         updated.EventTypes.ShouldBe([WebhookEventTypes.PaymentLinkPaid, WebhookEventTypes.SalesInvoiceCreated]);
         updated.Mode.ShouldBe(Mode.Test);
+    }
+
+    [Fact]
+    public async Task CanTestWebhook() {
+        // Given: Create a webhook
+        var createRequest = new WebhookRequest {
+            Name = "my-webhook",
+            Url = "https://github.com/Viincenttt/MollieApi/",
+            EventTypes = [WebhookEventTypes.PaymentLinkPaid],
+            Testmode = true
+        };
+        WebhookResponse created = await _webhookClient.CreateWebhookAsync(createRequest);
+
+        // When: The webhook is updated
+        MollieApiException exception = await Assert.ThrowsAsync<MollieApiException>(() => _webhookClient.TestWebhookAsync(created.Id, testmode: true));
+
+        // Then: An exception is thrown as the URL can't be reached
+        exception.Message.ShouldBe("Unprocessable Entity - Failed to ping the webhook subscription.");
     }
 
     public async Task InitializeAsync() {

@@ -69,7 +69,7 @@ public class WebhookClient : BaseMollieClient, IWebhookClient {
         ValidateRequiredUrlParameter(nameof(webhookId), webhookId);
         var queryParameters = BuildQueryParameters(testmode);
 
-        await PostAsync<object>($"webhooks/{webhookId}/{queryParameters.ToQueryString()}/ping", null,
+        await PostAsync<object>($"webhooks/{webhookId}/ping{queryParameters.ToQueryString()}", null,
             cancellationToken: cancellationToken);
     }
 
