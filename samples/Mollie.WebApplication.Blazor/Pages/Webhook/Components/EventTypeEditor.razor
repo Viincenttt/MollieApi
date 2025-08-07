@@ -1,0 +1,71 @@
+﻿@using Mollie.Api.Models.Webhook
+
+<EditForm Model="EventTypes" OnValidSubmit="@OnAddEventType">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Event</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (string eventType in EventTypes) {
+            <tr>
+                <td>@eventType</td>
+                <td>
+                    <button
+                        class="btn btn-outline-secondary"
+                        type="button"
+                        @onclick="() => OnRemoveEventType(eventType)">
+                        Remove
+                    </button>
+                </td>
+            </tr>
+        }
+        <tr>
+            <td>
+                <InputSelect
+                    id="event-types"
+                    class="form-control"
+                    @bind-Value="_selectedEventType">
+                    @foreach (string eventType in StaticStringListBuilder.GetStaticStringList(typeof(WebhookEventTypes))) {
+                        <option value="@eventType">@eventType</option>
+                    }
+                </InputSelect>
+            </td>
+            <td>
+                <button name="add-event-type" class="btn btn-outline-secondary" type="submit">Add</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</EditForm>
+
+@code {
+    [Parameter, EditorRequired]
+    public required IList<string> EventTypes { get; set; }
+
+    private string? _selectedEventType = WebhookEventTypes.PaymentLinkPaid;
+
+    private void OnAddEventType() {
+        if (_selectedEventType == null)
+        {
+            return;
+        }
+
+        if (EventTypes.Any(x => x == _selectedEventType))
+        {
+            return;
+        }
+
+        EventTypes.Add(_selectedEventType);
+    }
+
+    private void OnRemoveEventType(string eventType)
+    {
+        EventTypes.Remove(eventType);
+    }
+}

@@ -112,6 +112,7 @@ Want to see the library in action? Check out the full-featured .NET Blazor examp
 * Subscriptions
 * Payment Methods
 * Terminals
+* Webhooks
 
 🔗 [View the Example Project on GitHub](https://github.com/Viincenttt/MollieApi/tree/development/samples/Mollie.WebApplication.Blazor)
 > It’s a great starting point if you’re new to Mollie or want to explore advanced scenarios like multi-step checkouts or managing recurring payments.
@@ -142,6 +143,7 @@ This library currently supports the following API's:
 - Wallet API (documentation coming soon)
 - Client API (documentation coming soon)
 - Capability API (documentation coming soon)
+- [Webhooks API](https://github.com/Viincenttt/MollieApi/wiki/19.-Webhook-Api) 
 
 ---
 

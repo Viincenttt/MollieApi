@@ -1,0 +1,78 @@
+﻿@page "/webhook/create"
+
+@using Mollie.WebApplication.Blazor.Models.Webhook
+@using Mollie.Api.Models.Webhook.Request
+@using Mollie.Api.Models.Webhook
+@using Mollie.Api.Client
+@using Mollie.WebApplication.Blazor.Pages.Webhook.Components
+
+@inject IWebhookClient WebhookClient
+@inject NavigationManager NavigationManager
+
+<h3>Create new webhook</h3>
+
+<ApiExceptionDisplay Exception="_apiException"></ApiExceptionDisplay>
+
+<EditForm Model="_model" OnValidSubmit="@OnSave" class="col-md-6">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="name">Name</label>
+        <InputText
+            id="name"
+            class="form-control"
+            @bind-Value="_model.Name">
+        </InputText>
+    </div>
+
+    <div class="form-group">
+        <label for="url">Url</label>
+        <InputText
+            id="url"
+            class="form-control"
+            @bind-Value="_model.Url">
+        </InputText>
+    </div>
+
+    <EventTypeEditor EventTypes="_model.EventTypes"></EventTypeEditor>
+
+    <div class="form-group">
+        <InputCheckbox
+            id="test-mode"
+            @bind-Value="_model.Testmode">
+        </InputCheckbox>
+        <label for="test-mode">Test mode</label>
+    </div>
+
+    <input type="submit" name="Save" value="Save" class="btn btn-primary mt-2"/>
+</EditForm>
+
+@code {
+    private MollieApiException? _apiException;
+
+    private CreateWebhookModel _model = new() {
+        Name = "Test webhook",
+        Url = "https://example.com/webhook",
+        EventTypes = [WebhookEventTypes.PaymentLinkPaid],
+        Testmode = true
+    };
+
+    private async Task OnSave() {
+        try {
+            _apiException = null;
+
+            await WebhookClient.CreateWebhookAsync(new WebhookRequest {
+                Name = _model.Name,
+                Url = _model.Url,
+                EventTypes = _model.EventTypes,
+                Testmode = _model.Testmode
+            });
+
+            NavigationManager.NavigateTo("/webhook/overview");
+        }
+        catch (MollieApiException e) {
+            _apiException = e;
+        }
+    }
+}
