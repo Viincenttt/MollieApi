@@ -2,7 +2,9 @@
 
 @using Mollie.WebApplication.Blazor.Models.Webhook
 @using Mollie.Api.Models.Webhook.Request
+@using Mollie.Api.Models.Webhook
 @using Mollie.Api.Client
+@using Mollie.WebApplication.Blazor.Pages.Webhook.Components
 
 @inject IWebhookClient WebhookClient
 @inject NavigationManager NavigationManager
@@ -33,12 +35,14 @@
         </InputText>
     </div>
 
+    <EventTypeEditor EventTypes="_model.EventTypes"></EventTypeEditor>
+
     <div class="form-group">
         <InputCheckbox
-            id="event-types"
+            id="test-mode"
             @bind-Value="_model.Testmode">
         </InputCheckbox>
-        <label for="event-types">Test mode</label>
+        <label for="test-mode">Test mode</label>
     </div>
 
     <input type="submit" name="Save" value="Save" class="btn btn-primary mt-2"/>
@@ -50,7 +54,7 @@
     private CreateWebhookModel _model = new() {
         Name = "Test webhook",
         Url = "https://example.com/webhook",
-        EventTypes = WebhookEventTypes.PaymentLinkPaid,
+        EventTypes = [WebhookEventTypes.PaymentLinkPaid],
         Testmode = true
     };
 

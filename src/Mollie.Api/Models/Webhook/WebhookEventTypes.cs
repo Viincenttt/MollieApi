@@ -25,4 +25,9 @@ public static class WebhookEventTypes {
     /// A sales invoice has been paid.
     /// </summary>
     public const string SalesInvoicePaid = "sales-invoice.paid";
+
+    /// <summary>
+    /// All event types
+    /// </summary>
+    public const string All = "*";
 }

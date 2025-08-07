@@ -1,10 +1,13 @@
 ﻿@page "/webhook/overview"
+@using Mollie.Api.Client
 @using Mollie.Api.Models.List.Response
 @using Mollie.Api.Models.Webhook.Response
 
 @inject IWebhookClient WebhookClient
 
 <h3>Webhooks</h3>
+
+<ApiExceptionDisplay Exception="_apiException"></ApiExceptionDisplay>
 
 @if (_webhooks == null) {
     <p>Loading...</p>
@@ -21,7 +24,9 @@ else {
             <th scope="col">Name</th>
             <th scope="col">Date created</th>
             <th scope="col">Status</th>
+            <th scope="col">Event types</th>
             <th scope="col">Url</th>
+            <th scope="col">Actions</th>
         </tr>
         </thead>
         <tbody>
@@ -31,7 +36,24 @@ else {
                 <td>@webhook.Name</td>
                 <td>@webhook.CreatedAt</td>
                 <td>@webhook.Status</td>
+                <td>
+                    @foreach(string eventType in webhook.EventTypes) {
+                        <span class="badge bg-secondary">@eventType</span>
+                    }
+                </td>
                 <td>@webhook.Url</td>
+                <td>
+                    <button
+                        class="btn btn-outline-secondary"
+                        @onclick="@(async () => await TestWebhook(webhook.Id))">
+                        Test webhook
+                    </button>
+                    <button
+                        class="btn btn-outline-danger"
+                        @onclick="@(async () => await DeleteWebhook(webhook.Id))">
+                        Delete webhook
+                    </button>
+                </td>
             </tr>
         }
         </tbody>
@@ -49,6 +71,7 @@ else {
     public string? Url { get; set; }
 
     private ListResponse<WebhookResponse>? _webhooks;
+    private MollieApiException? _apiException;
 
     protected override async Task OnParametersSetAsync() {
         await LoadData();
@@ -63,6 +86,31 @@ else {
                 Href = Url,
                 Type = "application/json"
             });
+        }
+    }
+
+    private async Task TestWebhook(string webhookId)
+    {
+        try
+        {
+            await WebhookClient.TestWebhookAsync(webhookId, testmode: true);
+        }
+        catch (MollieApiException e)
+        {
+            _apiException = e;
+        }
+    }
+
+    private async Task DeleteWebhook(string webhookId)
+    {
+        try
+        {
+            await WebhookClient.DeleteWebhookAsync(webhookId, testmode: true);
+            await LoadData();
+        }
+        catch (MollieApiException e)
+        {
+            _apiException = e;
         }
     }
 }
