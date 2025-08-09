@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.Organization {
-    public record OrganizationResponse {
+    public record OrganizationResponse : IEntity {
         /// <summary>
         /// Indicates the response contains a organization object.
         /// </summary>

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.Profile.Response {
-    public record ProfileResponse {
+    public record ProfileResponse : IEntity {
         /// <summary>
         /// Indicates the response contains a profile object. Will always contain profile for this endpoint.
         /// </summary>

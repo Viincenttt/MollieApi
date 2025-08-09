@@ -4,7 +4,7 @@ using Mollie.Api.JsonConverters;
 using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.Customer.Response {
-    public record CustomerResponse {
+    public record CustomerResponse : IEntity {
         /// <summary>
         /// Indicates the response contains a customer object. Will always contain customer for this endpoint.
         /// </summary>

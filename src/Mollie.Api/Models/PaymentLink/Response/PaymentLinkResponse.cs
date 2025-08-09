@@ -5,8 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.PaymentLink.Response
 {
-    public record PaymentLinkResponse
-    {
+    public record PaymentLinkResponse : IEntity {
         /// <summary>
         /// Indicates the response contains a payment object. Will always contain payment-link for this endpoint.
         /// </summary>

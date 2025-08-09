@@ -5,7 +5,7 @@ using Mollie.Api.JsonConverters;
 using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.Refund.Response {
-    public record RefundResponse {
+    public record RefundResponse : IEntity {
         /// <summary>
         /// Indicates the response contains a refund object. Will always contain refund for this endpoint.
         /// </summary>

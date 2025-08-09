@@ -6,8 +6,12 @@ namespace Mollie.Api.Models.Terminal.Response
     /// <summary>
     /// Full documentation for this class can be found at https://docs.mollie.com/reference/v2/terminals-api/overview
     /// </summary>
-    public record TerminalResponse
-    {
+    public record TerminalResponse : IEntity {
+        /// <summary>
+        /// Indicates the response contains a terminal object. Will always contain the string terminal for this endpoint.
+        /// </summary>
+        public required string Resource { get; set; }
+
         /// <summary>
         /// The unique identifier used for referring to a terminal. Mollie assigns this identifier at terminal creation time.
         /// For example term_7MgL4wea46qkRcoTZjWEH. This ID will be used by Mollie to refer to a certain terminal and will be used for assigning a payment to a specific terminal.

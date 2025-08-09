@@ -2,7 +2,7 @@
 using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.Invoice.Response {
-	public record InvoiceResponse {
+	public record InvoiceResponse : IEntity {
         /// <summary>
         /// Indicates the response contains an invoice object. Will always contain invoice for this endpoint.
         /// </summary>

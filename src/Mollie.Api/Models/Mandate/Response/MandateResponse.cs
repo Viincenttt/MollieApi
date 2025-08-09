@@ -2,7 +2,7 @@
 using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.Mandate.Response {
-    public record MandateResponse {
+    public record MandateResponse : IEntity {
         /// <summary>
         /// Indicates the response contains a mandate object. Will always contain mandate for this endpoint.
         /// </summary>

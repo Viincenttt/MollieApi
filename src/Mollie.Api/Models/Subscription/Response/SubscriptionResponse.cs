@@ -4,7 +4,7 @@ using Mollie.Api.JsonConverters;
 using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.Subscription.Response {
-    public record SubscriptionResponse {
+    public record SubscriptionResponse : IEntity {
         /// <summary>
         /// Indicates the response contains a subscription object.
         /// </summary>

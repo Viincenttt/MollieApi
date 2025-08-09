@@ -2,7 +2,7 @@
 using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.Client.Response {
-    public record ClientResponse {
+    public record ClientResponse : IEntity {
         /// <summary>
         /// Indicates the response contains a client object. Will always contain the string client for this resource type.
         /// </summary>

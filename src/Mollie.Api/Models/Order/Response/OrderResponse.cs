@@ -5,7 +5,7 @@ using Mollie.Api.JsonConverters;
 using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.Order.Response {
-    public record OrderResponse {
+    public record OrderResponse : IEntity {
         /// <summary>
         /// Indicates the response contains an order object. Will always contain order for this endpoint.
         /// </summary>
