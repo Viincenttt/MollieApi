@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.SalesInvoice.Response;
 
-public record SalesInvoiceResponse {
+public record SalesInvoiceResponse : IEntity {
     /// <summary>
     /// Indicates the response contains a sales invoice object. Will always contain the string sales-invoice for
     /// this endpoint.
