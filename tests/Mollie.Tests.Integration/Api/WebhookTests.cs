@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
@@ -6,13 +7,14 @@ using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Webhook;
 using Mollie.Api.Models.Webhook.Request;
 using Mollie.Api.Models.Webhook.Response;
+using Mollie.Tests.Integration.Framework;
 using Shouldly;
 using Xunit;
 
 namespace Mollie.Tests.Integration.Api;
 
 [Trait("TestCategory", "LocalIntegrationTests")]
-public class WebhookTests : IAsyncLifetime {
+public class WebhookTests : BaseMollieApiTestClass, IDisposable, IAsyncLifetime {
     private readonly IWebhookClient _webhookClient;
 
     public WebhookTests(IWebhookClient webhookClient) {
@@ -113,4 +115,6 @@ public class WebhookTests : IAsyncLifetime {
     }
 
     public Task DisposeAsync() => Task.CompletedTask;
+
+    public void Dispose() => _webhookClient.Dispose();
 }
