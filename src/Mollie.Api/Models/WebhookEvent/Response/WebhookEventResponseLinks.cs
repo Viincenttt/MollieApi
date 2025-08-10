@@ -2,19 +2,22 @@ using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Models.WebhookEvent.Response;
 
-public class WebhookEventResponseLinks<T> {
+/// <summary>
+/// An object with several relevant URLs. Every URL object will contain an href and a type field.
+/// </summary>
+public record WebhookEventResponseLinks {
     /// <summary>
-    /// The API resource URL of the payment method itself.
+    /// In v2 endpoints, URLs are commonly represented as objects with an href and type field.
     /// </summary>
-    public required UrlObjectLink<WebhookEventResponse<T>> Self { get; set; }
+    public required UrlObjectLink<SimpleWebhookEventResponse> Self { get; set; }
 
     /// <summary>
-    /// The URL to the webhook documentation.
+    /// In v2 endpoints, URLs are commonly represented as objects with an href and type field.
     /// </summary>
     public required UrlLink Documentation { get; set; }
 
     /// <summary>
     /// The API resource URL of the entity that this event belongs to.
     /// </summary>
-    public required UrlObjectLink<T> Entity { get; set; }
+    public required UrlObjectLink<IEntity> Entity { get; set; }
 }

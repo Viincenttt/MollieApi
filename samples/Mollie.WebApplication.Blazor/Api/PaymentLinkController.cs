@@ -22,7 +22,7 @@ public class PaymentLinkController : ControllerBase {
     }
 
     [HttpPost]
-    public async Task<ActionResult> Webhook([FromWebhookJson] WebhookEventResponse<PaymentLinkResponse> data) {
+    public async Task<ActionResult> Webhook([FromWebhookJson] FullWebhookEventResponse<PaymentLinkResponse> data) {
         using var reader = new StreamReader(Request.Body);
         _logger.LogInformation("Content-Type: {ContentType}", Request.ContentType);
         var content = await reader.ReadToEndAsync();
