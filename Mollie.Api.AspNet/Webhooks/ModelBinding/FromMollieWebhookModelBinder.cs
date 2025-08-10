@@ -2,12 +2,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Mollie.Api.Framework;
 
-namespace Mollie.Api.AspNet.Webhooks.Nextgen;
+namespace Mollie.Api.AspNet.Webhooks.ModelBinding;
 
-public class WebhookJsonModelBinder : IModelBinder {
+public class FromMollieWebhookModelBinder : IModelBinder {
     private readonly JsonConverterService _jsonConverterService;
 
-    public WebhookJsonModelBinder() {
+    public FromMollieWebhookModelBinder() {
         _jsonConverterService = new();
     }
 
