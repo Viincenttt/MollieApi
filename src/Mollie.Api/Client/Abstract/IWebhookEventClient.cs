@@ -5,7 +5,7 @@ using Mollie.Api.Models.WebhookEvent.Response;
 
 namespace Mollie.Api.Client.Abstract;
 
-public interface IWebhookEventClient {
+public interface IWebhookEventClient : IBaseMollieClient {
     Task<FullWebhookEventResponse<T>> GetWebhookEventAsync<T>(string webhookEventId, bool testmode = false,
         CancellationToken cancellationToken = default) where T : IEntity;
 
