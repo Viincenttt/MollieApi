@@ -2,8 +2,22 @@ using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Mollie.Api.Models;
+using Mollie.Api.Models.Balance.Response;
+using Mollie.Api.Models.Capture.Response;
+using Mollie.Api.Models.Chargeback.Response;
+using Mollie.Api.Models.Customer.Response;
+using Mollie.Api.Models.Invoice.Response;
+using Mollie.Api.Models.Issuer.Response;
+using Mollie.Api.Models.Mandate.Response;
+using Mollie.Api.Models.Order.Response;
+using Mollie.Api.Models.Payment.Response;
 using Mollie.Api.Models.PaymentLink.Response;
+using Mollie.Api.Models.Refund.Response;
 using Mollie.Api.Models.SalesInvoice.Response;
+using Mollie.Api.Models.Settlement.Response;
+using Mollie.Api.Models.Shipment.Response;
+using Mollie.Api.Models.Subscription.Response;
+using Mollie.Api.Models.Terminal.Response;
 
 namespace Mollie.Api.JsonConverters;
 
@@ -55,6 +69,20 @@ internal class WebhookEventEntityJsonConverter : JsonConverter<object> {
             string? resource = resourceProperty.GetString();
 
             switch (resource) {
+                case "balance": return typeof(BalanceResponse);
+                case "capture": return typeof(CaptureResponse);
+                case "chargeback": return typeof(ChargebackResponse);
+                case "customer": return typeof(CustomerResponse);
+                case "invoice": return typeof(InvoiceResponse);
+                case "issuer": return typeof(IssuerResponse);
+                case "mandate": return typeof(MandateResponse);
+                case "order": return typeof(OrderResponse);
+                case "refund": return typeof(RefundResponse);
+                case "settlement": return typeof(SettlementResponse);
+                case "shipment": return typeof(ShipmentResponse);
+                case "subscription": return typeof(SubscriptionResponse);
+                case "terminal": return typeof(TerminalResponse);
+                case "payment": return typeof(PaymentResponse);
                 case "payment-link": return typeof(PaymentLinkResponse);
                 case "sales-invoice": return typeof(SalesInvoiceResponse);
                 default:
