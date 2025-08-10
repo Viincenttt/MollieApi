@@ -2,6 +2,8 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client;
+using Mollie.Api.Models;
+using Mollie.Api.Models.PaymentLink.Response;
 using RichardSzalay.MockHttp;
 using Shouldly;
 using Xunit;
@@ -52,6 +54,45 @@ public class WebhookEventClientTests : BaseClientTests {
 
         // Then
         mockHttp.VerifyNoOutstandingRequest();
+    }
+
+    [Fact]
+    public async Task GetWebhookEventAsync_With_Generic_Parameter_ResponseIsDeserializedInExpectedFormat() {
+        // Given
+        const string webhookEventId = "webhook-event-id";
+        const string type = "payment-link.paid";
+        const string paymentLinkEntityId = "pl_qng5gbbv8NAZ5gpM5ZYgx";
+        string entityJson = CreatePaymentLinkJsonResponse(paymentLinkEntityId);
+        string jsonToReturnInMockResponse = CreateWebhookEventJsonResponse(webhookEventId, type, paymentLinkEntityId, entityJson);
+        var mockHttp = new MockHttpMessageHandler();
+        mockHttp.When($"{BaseMollieClient.DefaultBaseApiEndPoint}events/{webhookEventId}")
+            .With(request => request.Headers.Contains("Idempotency-Key"))
+            .Respond("application/json", jsonToReturnInMockResponse);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        var webhookClient = new WebhookEventClient("abcde", httpClient);
+
+        // When
+        var response = await webhookClient.GetWebhookEventAsync<PaymentLinkResponse>(webhookEventId);
+
+        // Then
+        mockHttp.VerifyNoOutstandingRequest();
+        response.Id.ShouldBe(webhookEventId);
+        response.Type.ShouldBe(type);
+        response.CreatedAt.ShouldBe(new DateTime(2024, 12, 16, 15, 57, 04, DateTimeKind.Utc));
+        response.EntityId.ShouldBe(paymentLinkEntityId);
+        response.Links.Documentation.Href.ShouldBe("https://docs.mollie.com/guides/webhooks");
+        response.Links.Entity.Href.ShouldBe($"/v2/payment-links/{paymentLinkEntityId}");
+        response.Links.Self.Href.ShouldBe($"https://api.mollie.com/v2/events/{webhookEventId}");
+        response.Entity.ShouldNotBeNull();
+        response.Entity.Id.ShouldBe(paymentLinkEntityId);
+        response.Entity.Resource.ShouldBe("payment-link");
+        response.Entity.ProfileId.ShouldBe("pfl_D96wnsu869");
+        response.Entity.Mode.ShouldBe(Mode.Live);
+        response.Entity.Description.ShouldBe("Bicycle tires");
+        response.Entity.Amount!.Currency.ShouldBe("EUR");
+        response.Entity.Amount!.Value.ShouldBe("24.95");
+        response.Entity.MinimumAmount.ShouldBeNull();
+        response.Entity.Archived.ShouldBeFalse();
     }
 
     [Fact]

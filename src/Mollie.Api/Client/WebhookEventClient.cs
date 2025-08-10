@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
 using Mollie.Api.Framework.Authentication.Abstract;
+using Mollie.Api.Models;
 using Mollie.Api.Models.WebhookEvent.Response;
 using Mollie.Api.Options;
 
@@ -20,12 +21,22 @@ public class WebhookEventClient : BaseMollieClient, IWebhookEventClient {
         : base(options, mollieSecretManager, httpClient) {
     }
 
-    public async Task<SimpleWebhookEventResponse> GetWebhookEventAsync(string webhookEventId, bool testmode = false,
+    public async Task<FullWebhookEventResponse> GetWebhookEventAsync(string webhookEventId, bool testmode = false,
         CancellationToken cancellationToken = default) {
         ValidateRequiredUrlParameter(nameof(webhookEventId), webhookEventId);
         var queryParameters = BuildQueryParameters(testmode);
 
-        return await GetAsync<SimpleWebhookEventResponse>($"events/{webhookEventId}{queryParameters.ToQueryString()}",
+        return await GetAsync<FullWebhookEventResponse>($"events/{webhookEventId}{queryParameters.ToQueryString()}",
+                cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
+    }
+
+    public async Task<FullWebhookEventResponse<T>> GetWebhookEventAsync<T>(string webhookEventId, bool testmode = false,
+        CancellationToken cancellationToken = default) where T : IEntity {
+        ValidateRequiredUrlParameter(nameof(webhookEventId), webhookEventId);
+        var queryParameters = BuildQueryParameters(testmode);
+
+        return await GetAsync<FullWebhookEventResponse<T>>($"events/{webhookEventId}{queryParameters.ToQueryString()}",
                 cancellationToken: cancellationToken)
             .ConfigureAwait(false);
     }
