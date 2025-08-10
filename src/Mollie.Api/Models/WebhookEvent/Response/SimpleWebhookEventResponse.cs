@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.WebhookEvent.Response;
 
-public record WebhookEventResponse : IEntity {
+public record SimpleWebhookEventResponse : IEntity {
     /// <summary>
     /// Indicates the response contains a webhook event object. Will always contain the string event for this endpoint.
     /// </summary>

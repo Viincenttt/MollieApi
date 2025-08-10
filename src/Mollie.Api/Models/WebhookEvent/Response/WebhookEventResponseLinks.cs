@@ -9,7 +9,7 @@ public record WebhookEventResponseLinks {
     /// <summary>
     /// In v2 endpoints, URLs are commonly represented as objects with an href and type field.
     /// </summary>
-    public required UrlObjectLink<WebhookEventResponse> Self { get; set; }
+    public required UrlObjectLink<SimpleWebhookEventResponse> Self { get; set; }
 
     /// <summary>
     /// In v2 endpoints, URLs are commonly represented as objects with an href and type field.

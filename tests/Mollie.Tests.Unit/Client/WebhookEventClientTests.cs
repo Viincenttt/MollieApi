@@ -80,7 +80,7 @@ public class WebhookEventClientTests : BaseClientTests {
         response.EntityId.ShouldBe(paymentLinkEntityId);
         response.Links.Documentation.Href.ShouldBe("https://docs.mollie.com/guides/webhooks");
         response.Links.Entity.Href.ShouldBe($"/v2/payment-links/{paymentLinkEntityId}");
-        response.Links.Self.Href.ShouldBe($"https://api.mollie.com/v2/events/event_GvJ8WHrp5isUdRub9CJyH");
+        response.Links.Self.Href.ShouldBe($"https://api.mollie.com/v2/events/{webhookEventId}");
     }
 
     private string CreateWebhookEventJsonResponse(string webhookEventId, string type, string entityId, string entityJson) {
@@ -95,7 +95,7 @@ public class WebhookEventClientTests : BaseClientTests {
   }},
   ""_links"": {{
     ""self"": {{
-      ""href"": ""https://api.mollie.com/v2/events/event_GvJ8WHrp5isUdRub9CJyH"",
+      ""href"": ""https://api.mollie.com/v2/events/{webhookEventId}"",
       ""type"": ""application/hal+json""
     }},
     ""documentation"": {{
@@ -103,7 +103,7 @@ public class WebhookEventClientTests : BaseClientTests {
       ""type"": ""text/html""
     }},
     ""entity"": {{
-      ""href"": ""/v2/payment-links/pl_qng5gbbv8NAZ5gpM5ZYgx"",
+      ""href"": ""/v2/payment-links/{entityId}"",
       ""type"": ""application/hal+json""
     }}
   }}
@@ -133,7 +133,7 @@ public class WebhookEventClientTests : BaseClientTests {
       ""applicationFee"": null,
       ""_links"": {{
         ""self"": {{
-          ""href"": ""https://api.mollie.com/v2/payment-links/pl_qng5gbbv8NAZ5gpM5ZYgx"",
+          ""href"": ""https://api.mollie.com/v2/payment-links/{entityId}"",
           ""type"": ""application/hal+json""
         }},
         ""paymentLink"": {{
