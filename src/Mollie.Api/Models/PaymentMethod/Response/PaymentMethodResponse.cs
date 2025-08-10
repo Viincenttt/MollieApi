@@ -3,7 +3,7 @@ using Mollie.Api.Models.Issuer.Response;
 using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.PaymentMethod.Response {
-    public record PaymentMethodResponse {
+    public record PaymentMethodResponse : IEntity {
         /// <summary>
         /// Indicates the response contains a method object. Will always contain method for this endpoint.
         /// </summary>

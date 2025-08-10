@@ -7,7 +7,7 @@ using Mollie.Api.Models.Webhook.Response;
 
 namespace Mollie.Api.Client.Abstract;
 
-public interface IWebhookClient {
+public interface IWebhookClient : IBaseMollieClient {
     Task<WebhookResponse> CreateWebhookAsync(WebhookRequest request, CancellationToken cancellationToken = default);
 
     Task<ListResponse<WebhookResponse>> GetWebhookListAsync(string? from = null, int? limit = null,

@@ -4,7 +4,7 @@ using Mollie.Api.JsonConverters;
 using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.Settlement.Response {
-	public record SettlementResponse {
+	public record SettlementResponse : IEntity {
         /// <summary>
         /// Indicates the response contains a settlement object. Will always contain settlement for this endpoint.
         /// </summary>

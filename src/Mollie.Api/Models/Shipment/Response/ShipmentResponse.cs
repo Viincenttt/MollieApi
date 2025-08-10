@@ -7,8 +7,7 @@ using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.Shipment.Response
 {
-    public record ShipmentResponse
-    {
+    public record ShipmentResponse : IEntity {
         /// <summary>
         /// Indicates the response contains a shipment object. Will always contain shipment for this endpoint.
         /// </summary>

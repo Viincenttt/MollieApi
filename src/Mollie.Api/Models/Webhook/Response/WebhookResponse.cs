@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Mollie.Api.Models.Webhook.Response;
 
-public record WebhookResponse {
+public record WebhookResponse : IEntity {
     /// <summary>
     /// Indicates the response contains a webhook subscription object. Will always contain the string webhook for this
     /// endpoint.

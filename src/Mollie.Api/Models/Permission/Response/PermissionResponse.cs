@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.Permission.Response {
-    public record PermissionResponse {
+    public record PermissionResponse : IEntity {
         /// <summary>
         /// Indicates the response contains a permission object.
         /// Possible values: permission

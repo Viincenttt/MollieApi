@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.Capture.Response
 {
-    public record CaptureResponse {
+    public record CaptureResponse : IEntity {
         /// <summary>
         /// Indicates the response contains a capture object. Will always contain capture for this endpoint.
         /// </summary>

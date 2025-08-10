@@ -2,7 +2,12 @@
 using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.Chargeback.Response {
-    public record ChargebackResponse {
+    public record ChargebackResponse : IEntity {
+        /// <summary>
+        /// Indicates the response contains a chargeback object. Will always contain the string chargeback for this endpoint.
+        /// </summary>
+        public required string Resource { get; set; }
+
 		/// <summary>
 		/// The chargeback's unique identifier, for example chb_n9z0tp.
 		/// </summary>

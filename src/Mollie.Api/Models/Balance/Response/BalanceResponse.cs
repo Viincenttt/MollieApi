@@ -2,7 +2,7 @@
 using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.Balance.Response {
-    public class BalanceResponse {
+    public class BalanceResponse : IEntity {
         /// <summary>
         /// Indicates the response contains a balance object. Will always contain balance for this endpoint.
         /// </summary>
