@@ -144,6 +144,7 @@ This library currently supports the following API's:
 - Client API (documentation coming soon)
 - Capability API (documentation coming soon)
 - [Webhooks API](https://github.com/Viincenttt/MollieApi/wiki/19.-Webhook-Api) 
+- [WebhooksEvents API](https://github.com/Viincenttt/MollieApi/wiki/20.-Webhook-Api) 
 
 ---
 
