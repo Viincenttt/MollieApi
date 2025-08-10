@@ -96,7 +96,7 @@ public class WebhookClientTests : BaseClientTests {
     [InlineData("")]
     [InlineData(" ")]
     [InlineData(null)]
-    public async Task GetWebhookAsync_NoWebhookIdIsGiven_ArgumentExceptionIsThrown(string? terminalId) {
+    public async Task GetWebhookAsync_NoWebhookIdIsGiven_ArgumentExceptionIsThrown(string? webhookId) {
         // Given
         var mockHttp = new MockHttpMessageHandler();
         HttpClient httpClient = mockHttp.ToHttpClient();
@@ -105,7 +105,7 @@ public class WebhookClientTests : BaseClientTests {
         // When
 #pragma warning disable CS8604 // Possible null reference argument.
         var exception =
-            await Assert.ThrowsAsync<ArgumentException>(async () => await client.GetWebhookAsync(terminalId));
+            await Assert.ThrowsAsync<ArgumentException>(async () => await client.GetWebhookAsync(webhookId));
 #pragma warning restore CS8604 // Possible null reference argument.
 
         // Then
