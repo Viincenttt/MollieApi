@@ -40,5 +40,8 @@
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
       <_Parameter1>Mollie.Tests.Integration</_Parameter1>
     </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>Mollie.Api.AspNet</_Parameter1>
+    </AssemblyAttribute>
   </ItemGroup>
 </Project>
