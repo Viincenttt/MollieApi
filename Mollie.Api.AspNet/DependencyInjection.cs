@@ -14,8 +14,11 @@ public static class DependencyInjection {
 
         services.AddSingleton(options);
 
-        services.AddScoped<MollieSignatureFilter>();
         services.AddSingleton<MollieSignatureValidator>();
+#if NET7_0_OR_GREATER
+        services.AddScoped<MollieSignatureEndpointFilter>();
+#endif
+        services.AddScoped<MollieSignatureFilter>();
 
         return services;
     }

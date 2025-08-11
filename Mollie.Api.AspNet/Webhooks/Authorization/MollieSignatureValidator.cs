@@ -1,11 +1,50 @@
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.AspNetCore.Http;
+using Mollie.Api.AspNet.Webhooks.Options;
 
 namespace Mollie.Api.AspNet.Webhooks.Authorization;
 
 public class MollieSignatureValidator
 {
-    public bool Validate(string headerValue, byte[] bodyBytes, string secret)
+    private readonly MollieWebhookOptions _options;
+
+    public MollieSignatureValidator(MollieWebhookOptions options) {
+        _options = options;
+
+        if (options == null) {
+            throw new ArgumentNullException(nameof(options));
+        }
+
+        if (string.IsNullOrWhiteSpace(options.Secret)) {
+            throw new ArgumentException("Webhook signing secret cannot be null or empty.", nameof(MollieWebhookOptions.Secret));
+        }
+    }
+
+    /// <summary>
+    /// Validates the Mollie HMAC webhook signature in the given HTTP request.
+    /// </summary>
+    /// <param name="request">Incoming HTTP request.</param>
+    /// <returns>True if the signature is valid; otherwise false.</returns>
+    public async Task<bool> Validate(HttpRequest request) {
+        if (!request.Headers.TryGetValue("X-Mollie-Signature", out var headerValues))
+        {
+            return false;
+        }
+
+        var headerValue = headerValues.FirstOrDefault();
+        if (string.IsNullOrWhiteSpace(headerValue))
+        {
+            return false;
+        }
+
+        var bodyBytes = await GetRequestBodyBytes(request);
+        var isValid = ValidateHmacSignature(headerValue, bodyBytes, _options.Secret);
+
+        return isValid;
+    }
+
+    private bool ValidateHmacSignature(string headerValue, byte[] bodyBytes, string secret)
     {
         if (string.IsNullOrWhiteSpace(headerValue) || string.IsNullOrWhiteSpace(secret)) {
             return false;
@@ -45,8 +84,22 @@ public class MollieSignatureValidator
     {
         var len = hex.Length / 2;
         var bytes = new byte[len];
-        for (int i = 0; i < len; i++)
+        for (int i = 0; i < len; i++) {
             bytes[i] = Convert.ToByte(hex.Substring(i * 2, 2), 16);
+        }
         return bytes;
+    }
+
+    private async Task<byte[]> GetRequestBodyBytes(HttpRequest request)
+    {
+        request.EnableBuffering();
+
+        request.Body.Seek(0, SeekOrigin.Begin);
+        using var ms = new MemoryStream();
+        await request.Body.CopyToAsync(ms);
+        var bodyBytes = ms.ToArray();
+        request.Body.Seek(0, SeekOrigin.Begin);
+
+        return bodyBytes;
     }
 }
