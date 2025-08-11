@@ -1,6 +1,7 @@
 using Mollie.Api;
 using Mollie.Api.AspNet;
 using Mollie.Api.Framework;
+using Mollie.WebApplication.Blazor.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,5 +33,6 @@ app.UseRouting();
 app.MapControllers();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
+WebhookHandler.RegisterEndpoints(app);
 
 app.Run();
