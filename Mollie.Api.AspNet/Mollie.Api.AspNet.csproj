@@ -5,7 +5,11 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <LangVersion>11</LangVersion>
-    <UserSecretsId>4275b223-d889-4573-94e5-1a044e61954e</UserSecretsId>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Description>
+      ASP.NET Core extensions for the official Mollie.Api client.
+      Provides ready-to-use model binders, filters, and middleware to securely process Mollie webhooks and integrate payments into your ASP.NET Core MVC or Minimal API applications.
+    </Description>
   </PropertyGroup>
 
   <ItemGroup>

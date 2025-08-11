@@ -1,22 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Version>4.14.0.0</Version>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Authors>Vincent Kok</Authors>
-    <Description>This is a wrapper for the Mollie REST webservice. All payment methods and webservice calls are supported.</Description>
-    <Company>Vincent Kok</Company>
-    <Product>Mollie Payment API</Product>
-    <PackageProjectUrl>https://github.com/Viincenttt/MollieApi</PackageProjectUrl>
-    <PackageTags>Mollie</PackageTags>
-    <AssemblyVersion>4.14.0.0</AssemblyVersion>
-    <FileVersion>4.14.0.0</FileVersion>
-    <PackageVersion>4.14.0.0</PackageVersion>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <LangVersion>12</LangVersion>
     <Nullable>enable</Nullable>
+    <LangVersion>12</LangVersion>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Description>This is a wrapper for the Mollie REST webservice. All payment methods and webservice calls are supported.</Description>
   </PropertyGroup>
 
   <ItemGroup>
