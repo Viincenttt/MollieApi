@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Mollie.Api.AspNet.Webhooks.Authorization;
 using Mollie.Api.AspNet.Webhooks.ModelBinding;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models.PaymentLink.Response;
@@ -18,6 +19,7 @@ public class PaymentLinkController : ControllerBase {
     }
 
     [HttpPost]
+    [ServiceFilter(typeof(MollieSignatureFilter))]
     public async Task<ActionResult> Webhook([FromMollieWebhook] FullWebhookEventResponse<PaymentLinkResponse> data) {
         return Ok();
     }
