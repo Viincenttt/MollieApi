@@ -13,11 +13,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\Mollie.Api\Mollie.Api.csproj"/>
+    <FrameworkReference Include="Microsoft.AspNetCore.App"/>
   </ItemGroup>
 
   <ItemGroup>
-    <FrameworkReference Include="Microsoft.AspNetCore.App"/>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    <None Include="..\..\LICENSE" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Mollie.Api\Mollie.Api.csproj" />
   </ItemGroup>
 
 </Project>

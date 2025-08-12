@@ -15,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{17397A2E
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{6E02EF59-F625-492C-9950-B8AEF7852D65}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mollie.Api.AspNet", "Mollie.Api.AspNet\Mollie.Api.AspNet.csproj", "{42E40A4A-E949-4E5B-BAF6-A455A966B99E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mollie.Api.AspNet", "src\Mollie.Api.AspNet\Mollie.Api.AspNet.csproj", "{8982D24F-AC99-43A1-A429-3BCCC96FA110}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,10 +39,10 @@ Global
 		{ECE7EA04-09CA-44A4-8CD4-622A4631BF85}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ECE7EA04-09CA-44A4-8CD4-622A4631BF85}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ECE7EA04-09CA-44A4-8CD4-622A4631BF85}.Release|Any CPU.Build.0 = Release|Any CPU
-		{42E40A4A-E949-4E5B-BAF6-A455A966B99E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{42E40A4A-E949-4E5B-BAF6-A455A966B99E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{42E40A4A-E949-4E5B-BAF6-A455A966B99E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{42E40A4A-E949-4E5B-BAF6-A455A966B99E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8982D24F-AC99-43A1-A429-3BCCC96FA110}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8982D24F-AC99-43A1-A429-3BCCC96FA110}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8982D24F-AC99-43A1-A429-3BCCC96FA110}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8982D24F-AC99-43A1-A429-3BCCC96FA110}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

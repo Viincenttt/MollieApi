@@ -8,8 +8,8 @@
     <PackageTags>Mollie;Payment;Payments;Webhook</PackageTags>
     <AssemblyVersion>4.13.0.0</AssemblyVersion>
     <FileVersion>4.13.0.0</FileVersion>
-    <PackageVersion>4.13.0.0</PackageVersion>
-	<PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageVersion>4.13.0.0</PackageVersion>	
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 </Project>

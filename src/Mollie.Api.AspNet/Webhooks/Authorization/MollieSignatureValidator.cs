@@ -95,7 +95,7 @@ public class MollieSignatureValidator
         request.EnableBuffering();
 
         request.Body.Position = 0;
-        using var ms = new MemoryStream();
+        var ms = new MemoryStream();
 
         await request.Body.CopyToAsync(ms);
         var bodyBytes = ms.ToArray();

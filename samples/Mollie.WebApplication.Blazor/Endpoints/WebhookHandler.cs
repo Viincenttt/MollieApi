@@ -10,12 +10,9 @@ public static class WebhookHandler {
     public static void RegisterEndpoints(IEndpointRouteBuilder app)
     {
         app
-            .MapPost(
-                "api/webhook/minimalapi/example",
-                async (MollieModelBinder<FullWebhookEventResponse<PaymentLinkResponse>> data, CancellationToken cancellationToken) =>
-                {
-                    return Results.Ok();
-                })
+            .MapPost("api/webhook/minimalapi/example",
+                (MollieModelBinder<FullWebhookEventResponse<PaymentLinkResponse>> data, CancellationToken cancellationToken) =>
+                    Task.FromResult(Results.Ok()))
             .AddEndpointFilter<MollieSignatureEndpointFilter>();
     }
 }
