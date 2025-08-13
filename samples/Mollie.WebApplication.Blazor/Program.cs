@@ -1,7 +1,7 @@
 using Mollie.Api;
 using Mollie.Api.AspNet;
 using Mollie.Api.Framework;
-using Mollie.WebApplication.Blazor.Endpoints;
+using Mollie.WebApplication.Blazor.Webhooks.Nextgen.MinimalApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
