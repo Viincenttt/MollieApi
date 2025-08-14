@@ -15,7 +15,6 @@ public class SalesInvoiceClientTests : BaseClientTests {
     public async Task CreateSalesInvoiceAsync_ShouldReturnSalesInvoiceResponse() {
         // Given: We create a new sales invoice
         var request = new SalesInvoiceRequest {
-            Currency = Currency.EUR,
             Status = SalesInvoiceStatus.Draft,
             PaymentTerm = PaymentTerm.Days30,
             RecipientIdentifier = "123532354",
