@@ -65,6 +65,12 @@ public record PointOfSalePaymentResponseDetails {
     /// The Point of sale receipt object.
     /// </summary>
     public PointOfSaleReceipt? Receipt { get; set; }
+
+    /// <summary>
+    /// Beta feature: The entrymode of the payment. See the Mollie.Api.Models.Payment.EntryMode class for a full
+    /// list of known values
+    /// </summary>
+    public string? EntryMode { get; set; }
 }
 
 public record PointOfSaleReceipt {

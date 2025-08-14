@@ -16,5 +16,11 @@ namespace Mollie.Api.Models.Payment.Request.PaymentSpecificParameters {
         /// (such as card holder, card number and expiry date) needed to complete the payment.
         /// </summary>
         public string? CardToken { get; set; }
+
+        /// <summary>
+        /// Beta feature: The entrymode of the payment. See the Mollie.Api.Models.Payment.EntryMode class for a full
+        /// list of known values
+        /// </summary>
+        public string? EntryMode { get; set; }
     }
 }
