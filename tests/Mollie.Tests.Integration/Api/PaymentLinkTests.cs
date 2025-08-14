@@ -106,6 +106,40 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
     }
 
     [Fact]
+    public async Task CanCreatePaymentLinkForRecurringPayments() {
+        // Given: We create a new payment link
+        PaymentLinkRequest paymentLinkRequest = new() {
+            Description = "Test",
+            Amount = new Amount(Currency.EUR, 50),
+            WebhookUrl = DefaultWebhookUrl,
+            RedirectUrl = DefaultRedirectUrl,
+            Reusable = true,
+            ExpiresAt = DateTime.Now.AddDays(1),
+            SequenceType = SequenceType.First
+        };
+        var createdPaymentLinkResponse = await _paymentLinkClient.CreatePaymentLinkAsync(paymentLinkRequest);
+
+        // When: We retrieve it
+        var retrievePaymentLinkResponse = await _paymentLinkClient.GetPaymentLinkAsync(createdPaymentLinkResponse.Id);
+
+        // Then: We expect a payment link with the expected properties
+        var verifyPaymentLinkResponse = new Action<PaymentLinkResponse>(response => {
+            var expiresAtWithoutMs = paymentLinkRequest.ExpiresAt.Value.Truncate(TimeSpan.FromSeconds(1));
+
+            response.Amount.ShouldBe(paymentLinkRequest.Amount);
+            response.ExpiresAt.ShouldBe(expiresAtWithoutMs);
+            response.Description.ShouldBe(paymentLinkRequest.Description);
+            response.RedirectUrl.ShouldBe(paymentLinkRequest.RedirectUrl);
+            response.Archived.ShouldBeFalse();
+            response.Reusable.ShouldBe(paymentLinkRequest.Reusable);
+            response.SequenceType.ShouldBe(paymentLinkRequest.SequenceType);
+        });
+
+        verifyPaymentLinkResponse(createdPaymentLinkResponse);
+        verifyPaymentLinkResponse(retrievePaymentLinkResponse);
+    }
+
+    [Fact]
     public async Task CanCreatePaymentLinkWithLines() {
         // Given: We create a new payment link
         PaymentLinkRequest paymentLinkRequest = new() {

@@ -86,7 +86,23 @@ namespace Mollie.Api.Models.PaymentLink.Request {
         public ApplicationFee? ApplicationFee { get; set; }
 
         /// <summary>
-        ///	Oauth only - Optional – 	Set this to true to only retrieve payment links made in test mode. By default, only live payment links are returned.
+        /// If set to first, a payment mandate is established right after a payment is made by the customer.
+        /// Defaults to oneoff, which is a regular payment link and will not establish a mandate after payment.
+        /// The mandate ID can be retrieved by making a call to the Payment Link Payments Endpoint.
+        /// See the Mollie.Api.Models.Payment.SequenceType class for a full list of known values.
+        /// </summary>
+        public string? SequenceType { get; set; }
+
+        /// <summary>
+        /// The ID of the customer the payment link is being created for. If a value is not provided, the customer
+        /// will be required to input relevant information which will be used to establish a mandate after the payment
+        /// is made.
+        /// </summary>
+        public string? CustomerId { get; set; }
+
+        /// <summary>
+        ///	Oauth only - Optional – Set this to true to only retrieve payment links made in test mode. By default, only
+        /// live payment links are returned.
         /// </summary>
         public bool? Testmode { get; set; }
 
