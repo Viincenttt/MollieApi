@@ -498,7 +498,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         TerminalResponse? terminal = terminals.Items.FirstOrDefault();
         if (terminal != null) {
             string terminalId = terminals.Items.First().Id;
-            PaymentRequest paymentRequest = new PaymentRequest() {
+            PointOfSalePaymentRequest paymentRequest = new() {
                 Amount = new Amount(Currency.EUR, 10m),
                 Description = "Description",
                 Method = PaymentMethod.PointOfSale,
