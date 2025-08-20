@@ -150,12 +150,6 @@ namespace Mollie.Api.Models.Payment.Request {
 		/// </summary>
 		public bool? Testmode { get; set; }
 
-        /// <summary>
-        /// Id of the physical POS terminal that will be used for the payment.
-        /// Only required when method = POS
-        /// </summary>
-        public string? TerminalId { get; set; }
-
 		/// <summary>
 		///	Oauth only - Optional – Adding an Application Fee allows you to charge the merchant a small sum for the payment and transfer
 		/// this to your own account.
