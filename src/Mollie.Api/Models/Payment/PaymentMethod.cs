@@ -16,6 +16,7 @@
         public const string Sofort = "sofort";
         public const string Refund = "refund";
         public const string KlarnaPayLater = "klarnapaylater";
+        public const string KlarnaPayNow  = "klarnapaynow ";
         public const string KlarnaSliceIt = "klarnasliceit";
         public const string KlarnaOne = "klarna";
         public const string Przelewy24 = "przelewy24";
@@ -36,5 +37,6 @@
         public const string Voucher = "voucher";
         public const string MbWay = "mbway";
         public const string Multibanco = "multibanco";
+        public const string Swish = "swish";
     }
 }
