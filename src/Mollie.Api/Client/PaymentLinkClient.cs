@@ -14,10 +14,8 @@ using Mollie.Api.Models.PaymentLink.Response;
 using Mollie.Api.Models.Url;
 using Mollie.Api.Options;
 
-namespace Mollie.Api.Client
-{
-    public class PaymentLinkClient : BaseMollieClient, IPaymentLinkClient
-    {
+namespace Mollie.Api.Client {
+    public class PaymentLinkClient : BaseMollieClient, IPaymentLinkClient {
         public PaymentLinkClient(string apiKey, HttpClient? httpClient = null) : base(apiKey, httpClient) { }
 
         [ActivatorUtilitiesConstructor]
@@ -27,10 +25,8 @@ namespace Mollie.Api.Client
 
         public async Task<PaymentLinkResponse> CreatePaymentLinkAsync(
             PaymentLinkRequest paymentLinkRequest,
-            CancellationToken cancellationToken = default)
-        {
-            if (!string.IsNullOrWhiteSpace(paymentLinkRequest.ProfileId) || paymentLinkRequest.Testmode.HasValue)
-            {
+            CancellationToken cancellationToken = default) {
+            if (!string.IsNullOrWhiteSpace(paymentLinkRequest.ProfileId) || paymentLinkRequest.Testmode.HasValue) {
                 ValidateApiKeyIsOauthAccesstoken();
             }
             return await PostAsync<PaymentLinkResponse>(
@@ -42,12 +38,15 @@ namespace Mollie.Api.Client
         public async Task<PaymentLinkResponse> UpdatePaymentLinkAsync(
             string paymentLinkId,
             PaymentLinkUpdateRequest paymentLinkUpdateRequest,
-            bool testmode = false,
             CancellationToken cancellationToken = default) {
 
             ValidateRequiredUrlParameter(nameof(paymentLinkId), paymentLinkId);
-            var queryParameters = BuildQueryParameters(testmode);
-            string relativeUri = $"payment-links/{paymentLinkId}{queryParameters.ToQueryString()}";
+
+            if (paymentLinkUpdateRequest.Testmode.HasValue) {
+                ValidateApiKeyIsOauthAccesstoken();
+            }
+
+            string relativeUri = $"payment-links/{paymentLinkId}";
             return await PatchAsync<PaymentLinkResponse>(
                 relativeUri,
                 paymentLinkUpdateRequest,
@@ -72,11 +71,9 @@ namespace Mollie.Api.Client
         public async Task<PaymentLinkResponse> GetPaymentLinkAsync(
             string paymentLinkId,
             bool testmode = false,
-            CancellationToken cancellationToken = default)
-        {
+            CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(paymentLinkId), paymentLinkId);
-            if (testmode)
-            {
+            if (testmode) {
                 ValidateApiKeyIsOauthAccesstoken();
             }
 
@@ -90,15 +87,13 @@ namespace Mollie.Api.Client
 
         public async Task<PaymentLinkResponse> GetPaymentLinkAsync(
             UrlObjectLink<PaymentLinkResponse> url,
-            CancellationToken cancellationToken = default)
-        {
+            CancellationToken cancellationToken = default) {
             return await GetAsync(url, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
         public async Task<ListResponse<PaymentLinkResponse>> GetPaymentLinkListAsync(
             UrlObjectLink<ListResponse<PaymentLinkResponse>> url,
-            CancellationToken cancellationToken = default)
-        {
+            CancellationToken cancellationToken = default) {
             return await GetAsync(url, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
@@ -107,10 +102,8 @@ namespace Mollie.Api.Client
             int? limit = null,
             string? profileId = null,
             bool testmode = false,
-            CancellationToken cancellationToken = default)
-        {
-            if (!string.IsNullOrWhiteSpace(profileId) || testmode)
-            {
+            CancellationToken cancellationToken = default) {
+            if (!string.IsNullOrWhiteSpace(profileId) || testmode) {
                 ValidateApiKeyIsOauthAccesstoken();
             }
 
@@ -132,11 +125,9 @@ namespace Mollie.Api.Client
             int? limit = null,
             bool testmode = false,
             SortDirection? sort = null,
-            CancellationToken cancellationToken = default)
-        {
+            CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(paymentLinkId), paymentLinkId);
-            if (testmode)
-            {
+            if (testmode) {
                 ValidateApiKeyIsOauthAccesstoken();
             }
 
@@ -158,8 +149,7 @@ namespace Mollie.Api.Client
             return result;
         }
 
-        private Dictionary<string, string> BuildQueryParameters(string? profileId = null, bool testmode = false, SortDirection? sort = null)
-        {
+        private Dictionary<string, string> BuildQueryParameters(string? profileId = null, bool testmode = false, SortDirection? sort = null) {
             var result = new Dictionary<string, string>();
             result.AddValueIfTrue(nameof(testmode), testmode);
             result.AddValueIfNotNullOrEmpty(nameof(profileId), profileId);
