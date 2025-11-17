@@ -16,11 +16,10 @@ using Mollie.Api.Framework.Idempotency;
 using Mollie.Api.Models.Error;
 using Mollie.Api.Models.Url;
 using Mollie.Api.Options;
-using System.Text.Json.Serialization;
-using Mollie.Api.JsonConverters;
+using Mollie.Api.Client.Abstract;
 
 namespace Mollie.Api.Client {
-    public abstract class BaseMollieClient : IDisposable {
+    public abstract class BaseMollieClient : IBaseMollieClient {
         public const string DefaultBaseApiEndPoint = "https://api.mollie.com/v2/";
 
         private readonly string _apiEndpoint = DefaultBaseApiEndPoint;
