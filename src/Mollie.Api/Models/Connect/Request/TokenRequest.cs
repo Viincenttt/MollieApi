@@ -9,9 +9,6 @@ namespace Mollie.Api.Models.Connect.Request {
                 GrantType = "refresh_token";
                 RefreshToken = code;
             }
-            else if (code.StartsWith("auth_")) {
-                GrantType = "refresh_token";
-            }
             else {
                 GrantType = "authorization_code";
                 Code = code;
