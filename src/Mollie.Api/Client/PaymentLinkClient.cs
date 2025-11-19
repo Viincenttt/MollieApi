@@ -19,7 +19,8 @@ namespace Mollie.Api.Client {
         public PaymentLinkClient(string apiKey, HttpClient? httpClient = null) : base(apiKey, httpClient) { }
 
         [ActivatorUtilitiesConstructor]
-        public PaymentLinkClient(MollieClientOptions options, IMollieSecretManager mollieSecretManager, HttpClient? httpClient = null)
+        public PaymentLinkClient(MollieClientOptions options, IMollieSecretManager mollieSecretManager,
+            HttpClient? httpClient = null)
             : base(options, mollieSecretManager, httpClient) {
         }
 
@@ -29,6 +30,7 @@ namespace Mollie.Api.Client {
             if (!string.IsNullOrWhiteSpace(paymentLinkRequest.ProfileId) || paymentLinkRequest.Testmode.HasValue) {
                 ValidateApiKeyIsOauthAccesstoken();
             }
+
             return await PostAsync<PaymentLinkResponse>(
                 $"payment-links",
                 paymentLinkRequest,
@@ -39,7 +41,6 @@ namespace Mollie.Api.Client {
             string paymentLinkId,
             PaymentLinkUpdateRequest paymentLinkUpdateRequest,
             CancellationToken cancellationToken = default) {
-
             ValidateRequiredUrlParameter(nameof(paymentLinkId), paymentLinkId);
 
             if (paymentLinkUpdateRequest.Testmode.HasValue) {
@@ -108,8 +109,8 @@ namespace Mollie.Api.Client {
             }
 
             var queryParameters = BuildQueryParameters(
-               profileId: profileId,
-               testmode: testmode);
+                profileId: profileId,
+                testmode: testmode);
 
             return await GetListAsync<ListResponse<PaymentLinkResponse>>(
                 "payment-links",
@@ -149,7 +150,8 @@ namespace Mollie.Api.Client {
             return result;
         }
 
-        private Dictionary<string, string> BuildQueryParameters(string? profileId = null, bool testmode = false, SortDirection? sort = null) {
+        private Dictionary<string, string> BuildQueryParameters(string? profileId = null, bool testmode = false,
+            SortDirection? sort = null) {
             var result = new Dictionary<string, string>();
             result.AddValueIfTrue(nameof(testmode), testmode);
             result.AddValueIfNotNullOrEmpty(nameof(profileId), profileId);
@@ -158,4 +160,3 @@ namespace Mollie.Api.Client {
         }
     }
 }
-

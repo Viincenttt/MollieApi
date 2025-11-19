@@ -297,7 +297,7 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
         MollieApiException exception = await Assert.ThrowsAsync<MollieApiException>(() =>
             _paymentLinkClient.GetPaymentLinkAsync(createdPaymentLinkResponse.Id));
         exception.Details.Status.ShouldBe(404);
-        exception.Details.Detail.ShouldBe("Payment link does not exists.");
+        exception.Details.Detail.ShouldBe("Resource not found");
     }
 
     [Fact]

@@ -32,7 +32,6 @@ namespace Mollie.Api.Client.Abstract {
         Task<PaymentLinkResponse> UpdatePaymentLinkAsync(
             string paymentLinkId,
             PaymentLinkUpdateRequest paymentLinkUpdateRequest,
-            bool testmode = false,
             CancellationToken cancellationToken = default);
 
         /// <summary>
