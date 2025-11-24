@@ -22,6 +22,9 @@ namespace Mollie.Api.Models {
         /// </summary>
         public required string Value { get; set; }
 
+        public Amount() {
+        }
+        
         [JsonConstructor]
         [SetsRequiredMembers]
         public Amount(string currency, string value) {
