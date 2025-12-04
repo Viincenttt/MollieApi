@@ -39,5 +39,10 @@ namespace Mollie.Api.Client {
         public async Task<ListResponse<OrganizationResponse>> GetOrganizationListAsync(UrlObjectLink<ListResponse<OrganizationResponse>> url, CancellationToken cancellationToken = default) {
             return await GetAsync(url, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
+
+        public async Task<PartnerResponse> GetPartnerStatus(CancellationToken cancellationToken = default) {
+            return await GetAsync<PartnerResponse>($"organizations/me/partner", cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
+        }
     }
 }
