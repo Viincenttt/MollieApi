@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Shouldly;
 using Mollie.Api.Client;
@@ -66,6 +67,31 @@ public class OrganizationClientTests : BaseClientTests
         result.Items.Count.ShouldBe(2);
     }
 
+    [Fact]
+    public async Task GetPartnerStatusAsync_ResponseIsDeserializedInExpectedFormat() {
+        // Arrange
+        var mockHttp = new MockHttpMessageHandler();
+        mockHttp.When($"{BaseMollieClient.DefaultBaseApiEndPoint}organizations/me/partner")
+            .With(request => request.Headers.Contains("Idempotency-Key"))
+            .Respond("application/json", defaultGetPartnerStatusResponse);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        var organizationsClient = new OrganizationClient("access_abcde", httpClient);
+
+        // Act
+        var result = await organizationsClient.GetPartnerStatusAsync();
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.Resource.ShouldBe("partner");
+        result.PartnerType.ShouldBe(PartnerTypes.SignupLink);
+        result.PartnerContractSignedAt.ShouldBe(new DateTimeOffset(2024, 3, 20, 13, 59, 02, TimeSpan.FromHours(0)));
+        result.PartnerContractExpiresAt.ShouldBe(new DateTimeOffset(2024, 4, 19, 23, 59, 59, TimeSpan.FromHours(0)));
+        result.Links.ShouldNotBeNull();
+        result.Links.Self.Href.ShouldBe("https://docs.mollie.com/reference/get-partner-status");
+        result.Links.Documentation.Href.ShouldBe("https://docs.mollie.com/reference/get-partner-status");
+        result.Links.Signuplink!.Href.ShouldBe("https://www.mollie.com/dashboard/signup/exampleCode");
+    }
+
     private void AssertDefaultOrganization(OrganizationResponse response)
     {
         response.Resource.ShouldBe("organization");
@@ -101,6 +127,27 @@ public class OrganizationClientTests : BaseClientTests
         ]
     }}
 }}";
+
+    private const string defaultGetPartnerStatusResponse = @"{
+  ""resource"": ""partner"",
+  ""partnerType"": ""signuplink"",
+  ""partnerContractSignedAt"": ""2024-03-20T13:59:02+00:00"",
+  ""partnerContractExpiresAt"": ""2024-04-19T23:59:59+00:00"",
+  ""_links"": {
+    ""self"": {
+      ""href"": ""https://docs.mollie.com/reference/get-partner-status"",
+      ""type"": ""application/hal+json""
+    },
+    ""signuplink"": {
+      ""href"": ""https://www.mollie.com/dashboard/signup/exampleCode"",
+      ""type"": ""text/html""
+    },
+    ""documentation"": {
+      ""href"": ""https://docs.mollie.com/reference/get-partner-status"",
+      ""type"": ""text/html""
+    }
+  }
+}";
 
     private const string defaultOrganizationResponse = @"{
      ""resource"": ""organization"",
