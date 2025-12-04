@@ -30,7 +30,6 @@ namespace Mollie.Api.Client.Abstract {
             string? locale = null,
             Amount? amount = null,
             bool includeIssuers = false,
-            bool includePricing = false,
             string? profileId = null,
             bool testmode = false,
             Resource? resource = null,
