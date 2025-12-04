@@ -11,5 +11,6 @@ namespace Mollie.Api.Client.Abstract {
         Task<ListResponse<OrganizationResponse>> GetOrganizationListAsync(string? from = null, int? limit = null, CancellationToken cancellationToken = default);
         Task<ListResponse<OrganizationResponse>> GetOrganizationListAsync(UrlObjectLink<ListResponse<OrganizationResponse>> url, CancellationToken cancellationToken = default);
         Task<OrganizationResponse> GetOrganizationAsync(UrlObjectLink<OrganizationResponse> url, CancellationToken cancellationToken = default);
+        Task<PartnerResponse> GetPartnerStatusAsync(CancellationToken cancellationToken = default);
     }
 }
