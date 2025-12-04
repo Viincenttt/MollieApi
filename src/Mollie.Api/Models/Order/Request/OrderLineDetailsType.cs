@@ -7,5 +7,6 @@
         public const string StoreCredit = "gift_card";
         public const string GiftCard = "gift_card";
         public const string Surcharge = "surcharge";
+        public const string Tip = "tip";
     }
 }
