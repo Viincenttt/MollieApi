@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 using Mollie.Api.Framework.Factories;
@@ -35,6 +36,11 @@ internal class JsonConverterService
     public T? Deserialize<T>(string json)
     {
         return JsonSerializer.Deserialize<T>(json, _defaultJsonDeserializerOptions);
+    }
+
+    public object? Deserialize(string json, Type type)
+    {
+        return JsonSerializer.Deserialize(json, type, _defaultJsonDeserializerOptions);
     }
 
     /// <summary>

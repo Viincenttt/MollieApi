@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net6.0;net8.0</TargetFrameworks>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>11</LangVersion>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Description>
+      ASP.NET Core extensions for the Mollie.Api client.
+      Provides ready-to-use model binders, filters, and middleware to securely process Mollie webhooks and integrate payments into your ASP.NET Core MVC or Minimal API applications.
+    </Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    <None Include="..\..\LICENSE" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Mollie.Api\Mollie.Api.csproj" />
+  </ItemGroup>
+
+</Project>

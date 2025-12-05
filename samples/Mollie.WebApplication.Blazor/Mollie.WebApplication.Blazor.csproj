@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\src\Mollie.Api.AspNet\Mollie.Api.AspNet.csproj" />
       <ProjectReference Include="..\..\src\Mollie.Api\Mollie.Api.csproj" />
     </ItemGroup>
 

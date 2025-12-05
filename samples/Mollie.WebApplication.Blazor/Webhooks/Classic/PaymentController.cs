@@ -2,10 +2,10 @@
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models.Payment.Response;
 
-namespace Mollie.WebApplication.Blazor.Api;
+namespace Mollie.WebApplication.Blazor.Webhooks.Classic;
 
 [ApiController]
-[Route("api/payment")]
+[Route("api/webhook/classic/controllers")]
 public class PaymentController : ControllerBase {
     private readonly ILogger<PaymentController> _logger;
     private readonly IPaymentClient _paymentClient;

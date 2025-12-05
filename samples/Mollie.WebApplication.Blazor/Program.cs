@@ -1,5 +1,7 @@
 using Mollie.Api;
+using Mollie.Api.AspNet;
 using Mollie.Api.Framework;
+using Mollie.WebApplication.Blazor.Webhooks.Nextgen.MinimalApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +11,9 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddMollieApi(options => {
     options.ApiKey = builder.Configuration["Mollie:ApiKey"]!;
     options.RetryPolicy = MollieHttpRetryPolicies.TransientHttpErrorRetryPolicy();
+});
+builder.Services.AddMollieWebhook(options => {
+    options.Secret = builder.Configuration["Mollie:WebhookSecret"]!;
 });
 
 var app = builder.Build();
@@ -28,5 +33,6 @@ app.UseRouting();
 app.MapControllers();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
+WebhookHandler.RegisterEndpoints(app);
 
 app.Run();
