@@ -38,5 +38,8 @@
         public const string MbWay = "mbway";
         public const string Multibanco = "multibanco";
         public const string Swish = "swish";
+        public const string MobilePay = "mobilepay";
+        public const string MyBank = "mybank";
+        public const string PayByBank = "paybybank";
     }
 }
