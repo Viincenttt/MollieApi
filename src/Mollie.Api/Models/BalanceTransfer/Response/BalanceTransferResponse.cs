@@ -1,6 +1,8 @@
-﻿using System.Text.Json;
+﻿using System;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using Mollie.Api.JsonConverters;
+using Mollie.Api.Models.Payment.Response;
 
 namespace Mollie.Api.Models.BalanceTransfer.Response;
 
@@ -43,9 +45,25 @@ public record BalanceTransferResponse {
     public required string Status { get; set; }
 
     /// <summary>
-    /// The type of the transfer. Different fees may apply to different types of transfers.
+    /// The reason for the current status of the transfer, if applicable
     /// </summary>
-    public string? Category { get; set; }
+    public required StatusReason StatusReason { get; set; }
+
+    /// <summary>
+    /// The entity's date and time of creation, in ISO 8601 format.
+    /// </summary>
+    public required DateTime CreatedAt { get; set; }
+
+    /// <summary>
+    /// The date and time when the transfer was completed, in ISO 8601 format.
+    /// This parameter is omitted if the transfer is not executed (yet).
+    /// </summary>
+    public DateTime? ExecutedAt { get; set; }
+
+    /// <summary>
+    /// Whether this entity was created in live mode or in test mode.
+    /// </summary>
+    public required Mode Mode { get; set; }
 
     /// <summary>
     /// A JSON object that you can attach to a balance transfer. This can be useful for storing additional
