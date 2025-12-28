@@ -1,11 +1,12 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client;
 using Mollie.Api.Models;
 using Mollie.Api.Models.BalanceTransfer;
 using Mollie.Api.Models.BalanceTransfer.Request;
 using Mollie.Api.Models.BalanceTransfer.Response;
-using Mollie.Api.Models.Webhook;
+using RichardSzalay.MockHttp;
 using Shouldly;
 using Xunit;
 
@@ -30,7 +31,7 @@ public class BalanceTransferClientTests : BaseClientTests {
                 Type = "organization"
             }
         };
-        string jsonToReturnInMockResponse = CreateWebhookJsonResponse(balanceTransferId, request);
+        string jsonToReturnInMockResponse = CreateBalanceTransferJsonResponse(balanceTransferId, request);
         var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Post,
             $"{BaseMollieClient.DefaultBaseApiEndPoint}connect/balance-transfers", jsonToReturnInMockResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
@@ -49,9 +50,144 @@ public class BalanceTransferClientTests : BaseClientTests {
         response.Status.ShouldBe("succeeded");
         response.StatusReason.Code.ShouldBe("success");
         response.StatusReason.Message.ShouldBe("Balance transfer completed successfully.");
+        response.CreatedAt.ToUniversalTime().ShouldBe(new DateTime(2025, 5, 1, 10, 0, 0, DateTimeKind.Utc));
+        response.ExecutedAt!.Value.ToUniversalTime().ShouldBe(new DateTime(2025, 5, 1, 10, 5, 0, DateTimeKind.Utc));
+        response.Mode.ShouldBe(Mode.Live);
     }
 
-    private string CreateWebhookJsonResponse(string balanceTransferId, BalanceTransferRequest request) {
+    [Theory]
+    [InlineData(null, null, false, "")]
+    [InlineData("from", null, false, "?from=from")]
+    [InlineData("from", 50, false, "?from=from&limit=50")]
+    [InlineData(null, null, true, "?testmode=true")]
+    public async Task GetBalanceTransferListAsync_TestModeParameterCase_QueryStringOnlyContainsTestModeParameterIfTrue(string? from, int? limit, bool testmode, string expectedQueryString) {
+        // Given: We retrieve a list of customers
+        var mockHttp = new MockHttpMessageHandler();
+        mockHttp.When($"{BaseMollieClient.DefaultBaseApiEndPoint}connect/balance-transfers{expectedQueryString}")
+            .Respond("application/json", CreateBalanceTransferListJsonResponse());
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        var client = new BalanceTransferClient("abcde", httpClient);
+
+        // When: We send the request
+        var result = await client.GetBalanceTransferListAsync(from, limit, testmode);
+
+        // Then
+        mockHttp.VerifyNoOutstandingExpectation();
+        result.ShouldNotBeNull();
+    }
+
+    [Fact]
+    public async Task GetBalanceTransferAsync_WithValidBalanceTransferId_ResponseIsDeserializedInExpectedFormat() {
+        // Given: We have a valid balance transfer ID
+        const string balanceTransferId = "balance-transfer-id";
+        BalanceTransferRequest request = new() {
+            Description = "Test Description",
+            Amount = new Amount(Currency.EUR, 50),
+            Source = new BalanceTransferParty {
+                Id = "source",
+                Description = "Test Source",
+                Type = "organization"
+            },
+            Destination = new BalanceTransferParty {
+                Id = "destination",
+                Description = "Test Destination",
+                Type = "organization"
+            }
+        };
+        string jsonToReturnInMockResponse = CreateBalanceTransferJsonResponse(balanceTransferId, request);
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get,
+            $"{BaseMollieClient.DefaultBaseApiEndPoint}connect/balance-transfers/{balanceTransferId}", jsonToReturnInMockResponse);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        var client = new BalanceTransferClient("abcde", httpClient);
+
+        // When: We attempt to retrieve the balance transfer
+        BalanceTransferResponse response = await client.GetBalanceTransferAsync(balanceTransferId);
+
+        // Then
+        mockHttp.VerifyNoOutstandingExpectation();
+        response.ShouldNotBeNull();
+        response.Id.ShouldBe(balanceTransferId);
+        response.Description.ShouldBe(request.Description);
+    }
+
+    [Fact]
+    public async Task GetBalanceTransferAsync_WithTestmodeTrue_QueryStringContainsTestmodeParameter() {
+        // Given: We have a valid balance transfer ID
+        const string balanceTransferId = "balance-transfer-id";
+        BalanceTransferRequest request = new() {
+            Description = "Test Description",
+            Amount = new Amount(Currency.EUR, 50),
+            Source = new BalanceTransferParty {
+                Id = "source",
+                Description = "Test Source",
+                Type = "organization"
+            },
+            Destination = new BalanceTransferParty {
+                Id = "destination",
+                Description = "Test Destination",
+                Type = "organization"
+            }
+        };
+        string jsonToReturnInMockResponse = CreateBalanceTransferJsonResponse(balanceTransferId, request);
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get,
+            $"{BaseMollieClient.DefaultBaseApiEndPoint}connect/balance-transfers/{balanceTransferId}?testmode=true", jsonToReturnInMockResponse);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        var client = new BalanceTransferClient("abcde", httpClient);
+
+        // When: We attempt to retrieve the balance transfer
+        BalanceTransferResponse response = await client.GetBalanceTransferAsync(balanceTransferId, testmode: true);
+
+        // Then
+        mockHttp.VerifyNoOutstandingExpectation();
+        response.ShouldNotBeNull();
+        response.Id.ShouldBe(balanceTransferId);
+        response.Description.ShouldBe(request.Description);
+    }
+
+    [Fact]
+    public async Task GetBalanceTransferAsync_WithEmptyBalanceTransferId_ThrowsException() {
+        // Given: We have an empty balance transfer ID
+        var client = new BalanceTransferClient("abcde", new HttpClient());
+
+        // When: We attempt to retrieve the balance transfer
+        ArgumentException exception = await Should.ThrowAsync<ArgumentException>(async () => {
+            await client.GetBalanceTransferAsync("");
+        });
+
+        // Then
+        exception.Message.ShouldContain("balanceTransferId");
+    }
+
+
+    private string CreateBalanceTransferListJsonResponse() {
+        BalanceTransferRequest request = new() {
+            Description = "Test Description",
+            Amount = new Amount(Currency.EUR, 50),
+            Source = new BalanceTransferParty {
+                Id = "source",
+                Description = "Test Source",
+                Type = "organization"
+            },
+            Destination = new BalanceTransferParty {
+                Id = "destination",
+                Description = "Test Destination",
+                Type = "organization"
+            }
+        };
+
+        return $@"{{
+          ""count"": 1,
+          ""_embedded"": {{
+            ""connect-balance-transfers"": [
+                {CreateBalanceTransferJsonResponse("balance-transfer-id-1", request)},
+                {CreateBalanceTransferJsonResponse("balance-transfer-id-2", request)},
+            ]
+          }}
+        }}";
+    }
+
+
+    private string CreateBalanceTransferJsonResponse(string balanceTransferId, BalanceTransferRequest request) {
         return $@"{{
   ""resource"": ""connect-balance-transfer"",
   ""id"": ""{balanceTransferId}"",

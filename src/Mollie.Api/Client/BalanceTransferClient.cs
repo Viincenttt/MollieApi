@@ -45,7 +45,7 @@ public class BalanceTransferClient : BaseMollieClient, IBalanceTransferClient {
         ValidateRequiredUrlParameter(nameof(balanceTransferId), balanceTransferId);
         var queryParameters = BuildQueryParameters(testmode);
         return await GetAsync<BalanceTransferResponse>(
-                $"connect//balance-transfers/{balanceTransferId}{queryParameters.ToQueryString()}", cancellationToken: cancellationToken)
+                $"connect/balance-transfers/{balanceTransferId}{queryParameters.ToQueryString()}", cancellationToken: cancellationToken)
             .ConfigureAwait(false);
     }
 
