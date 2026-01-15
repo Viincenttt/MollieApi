@@ -155,7 +155,7 @@ namespace Mollie.Api.Client {
             bool embedChargebacks = false,
             SortDirection? sort = null) {
 
-            var result = base.BuildQueryParameters(testmode: testmode, profileId: profileId);
+            var result = base.BuildQueryParameters(profileId, testmode);
             result.AddValueIfNotNullOrEmpty("include", BuildIncludeParameter(includeQrCode, includeRemainderDetails));
             result.AddValueIfNotNullOrEmpty("embed", BuildEmbedParameter(embedRefunds, embedChargebacks));
             result.AddValueIfNotNullOrEmpty(nameof(sort), sort?.ToString()?.ToLowerInvariant());

@@ -54,6 +54,7 @@ namespace Mollie.Api.Client
             bool includeIssuers = false,
             bool includePricing = false,
             string? profileId = null,
+            bool testmode = false,
             CancellationToken cancellationToken = default) {
 
             Dictionary<string, string> queryParameters = BuildQueryParameters(
@@ -61,7 +62,8 @@ namespace Mollie.Api.Client
                amount: amount,
                includeIssuers: includeIssuers,
                includePricing: includePricing,
-               profileId: profileId);
+               profileId: profileId,
+               testmode: testmode);
 
             return await GetListAsync<ListResponse<PaymentMethodResponse>>(
                 "methods/all", null, null, queryParameters,

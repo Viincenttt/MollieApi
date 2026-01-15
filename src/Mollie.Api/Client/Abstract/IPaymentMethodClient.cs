@@ -23,6 +23,7 @@ namespace Mollie.Api.Client.Abstract {
             bool includeIssuers = false,
             bool includePricing = false,
             string? profileId = null,
+            bool testmode = false,
             CancellationToken cancellationToken = default);
 
         Task<ListResponse<PaymentMethodResponse>> GetPaymentMethodListAsync(
