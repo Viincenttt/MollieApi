@@ -49,6 +49,16 @@ namespace Mollie.Api.Options {
         public string? CustomUserAgent { get; set; }
 
         /// <summary>
+        /// (Optional) Enable test mode for all requests
+        /// </summary>
+        public bool? TestMode { get; set; }
+
+        /// <summary>
+        /// (Optional) The profile ID to be used for all requests
+        /// </summary>
+        public string? ProfileId { get; set; }
+
+        /// <summary>
         /// (Optional) A custom secret manager that you can override to implement advanced multi-tenant scenario's
         /// </summary>
         public Type? CustomMollieSecretManager { get; private set; }
