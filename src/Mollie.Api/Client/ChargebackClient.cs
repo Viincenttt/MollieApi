@@ -24,7 +24,7 @@ namespace Mollie.Api.Client {
         public async Task<ChargebackResponse> GetChargebackAsync(string paymentId, string chargebackId, bool testmode = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(paymentId), paymentId);
             ValidateRequiredUrlParameter(nameof(chargebackId), chargebackId);
-            var queryParameters = BuildQueryParameters(testmode);
+            var queryParameters = BuildQueryParameters(testmode: testmode);
             return await GetAsync<ChargebackResponse>(
                     $"payments/{paymentId}/chargebacks/{chargebackId}{queryParameters.ToQueryString()}",
                     cancellationToken)
@@ -33,7 +33,7 @@ namespace Mollie.Api.Client {
 
         public async Task<ListResponse<ChargebackResponse>> GetChargebackListAsync(string paymentId, string? from = null, int? limit = null, bool testmode = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(paymentId), paymentId);
-            var queryParameters = BuildQueryParameters(testmode);
+            var queryParameters = BuildQueryParameters(testmode: testmode);
             return await GetListAsync<ListResponse<ChargebackResponse>>(
                     $"payments/{paymentId}/chargebacks", from, limit, queryParameters, cancellationToken)
                 .ConfigureAwait(false);
@@ -49,19 +49,6 @@ namespace Mollie.Api.Client {
         public async Task<ListResponse<ChargebackResponse>> GetChargebackListAsync(UrlObjectLink<ListResponse<ChargebackResponse>> url, CancellationToken cancellationToken = default) {
             return await GetAsync(url, cancellationToken)
                 .ConfigureAwait(false);
-        }
-
-        private Dictionary<string, string> BuildQueryParameters(string? profileId, bool testmode) {
-            var result = new Dictionary<string, string>();
-            result.AddValueIfNotNullOrEmpty(nameof(profileId), profileId);
-            result.AddValueIfTrue(nameof(testmode), testmode);
-            return result;
-        }
-
-        private Dictionary<string, string> BuildQueryParameters(bool testmode) {
-            var result = new Dictionary<string, string>();
-            result.AddValueIfTrue(nameof(testmode), testmode);
-            return result;
         }
     }
 }

@@ -43,7 +43,7 @@ namespace Mollie.Api.Client {
         public async Task DeleteCustomerAsync(
             string customerId, bool testmode = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(customerId), customerId);
-            var data = TestmodeModel.Create(testmode);
+            var data = CreateTestmodeModel(testmode);
             await DeleteAsync(
                 $"customers/{customerId}", data, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
@@ -52,7 +52,7 @@ namespace Mollie.Api.Client {
         public async Task<CustomerResponse> GetCustomerAsync(
             string customerId, bool testmode = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(customerId), customerId);
-            var queryParameters = BuildQueryParameters(testmode);
+            var queryParameters = BuildQueryParameters(testmode: testmode);
             return await GetAsync<CustomerResponse>(
                 $"customers/{customerId}{queryParameters.ToQueryString()}", cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
@@ -68,7 +68,7 @@ namespace Mollie.Api.Client {
 
         public async Task<ListResponse<CustomerResponse>> GetCustomerListAsync(
             string? from = null, int? limit = null, bool testmode = false, CancellationToken cancellationToken = default) {
-            var queryParameters = BuildQueryParameters(testmode);
+            var queryParameters = BuildQueryParameters(testmode: testmode);
             return await GetListAsync<ListResponse<CustomerResponse>>(
                     "customers", from, limit, queryParameters, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
@@ -89,19 +89,6 @@ namespace Mollie.Api.Client {
             return await PostAsync<PaymentResponse>(
                 $"customers/{customerId}/payments", paymentRequest, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
-        }
-
-        private Dictionary<string, string> BuildQueryParameters(bool testmode = false) {
-            var result = new Dictionary<string, string>();
-            result.AddValueIfTrue("testmode", testmode);
-            return result;
-        }
-
-        private Dictionary<string, string> BuildQueryParameters(string? profileId, bool testmode) {
-            var result = new Dictionary<string, string>();
-            result.AddValueIfNotNullOrEmpty("profileId", profileId);
-            result.AddValueIfTrue("testmode", testmode);
-            return result;
         }
     }
 }

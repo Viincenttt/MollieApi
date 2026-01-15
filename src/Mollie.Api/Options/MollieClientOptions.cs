@@ -17,7 +17,7 @@ public class MollieClientOptions {
     /// <summary>
     /// (Optional) Enable test mode for all requests
     /// </summary>
-    public bool? TestMode { get; set; }
+    public bool? Testmode { get; set; }
 
     /// <summary>
     /// (Optional) The profile ID to be used for all requests

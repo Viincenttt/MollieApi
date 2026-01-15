@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 using Mollie.Api.JsonConverters;
 
 namespace Mollie.Api.Models.Customer.Request {
-    public record CustomerRequest {
+    public record CustomerRequest : ITestModeRequest {
         /// <summary>
         /// The full name of the customer.
         /// </summary>

@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 using Mollie.Api.JsonConverters;
 
 namespace Mollie.Api.Models.Order.Request {
-    public record OrderLineUpdateRequest {
+    public record OrderLineUpdateRequest : ITestModeRequest {
         /// <summary>
         /// A description of the order line, for example LEGO 4440 Forest Police Station.
         /// </summary>

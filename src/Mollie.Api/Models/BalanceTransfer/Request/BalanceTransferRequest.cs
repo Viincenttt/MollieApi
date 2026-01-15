@@ -4,7 +4,7 @@ using Mollie.Api.JsonConverters;
 
 namespace Mollie.Api.Models.BalanceTransfer.Request;
 
-public record BalanceTransferRequest {
+public record BalanceTransferRequest : ITestModeRequest {
     /// <summary>
     /// The amount to be transferred, e.g. {"currency":"EUR", "value":"1000.00"} if you would like to transfer €1000.00.
     /// </summary>
@@ -36,6 +36,11 @@ public record BalanceTransferRequest {
     /// </summary>
     [JsonConverter(typeof(RawJsonConverter))]
     public string? Metadata { get; set; }
+
+    /// <summary>
+    /// Whether to create the entity in test mode or live mode. You can enable test mode by setting testmode to true.
+    /// </summary>
+    public bool? Testmode { get; set; }
 
     public void SetMetadata(object metadataObj, JsonSerializerOptions? jsonSerializerOptions = null) {
         Metadata = JsonSerializer.Serialize(metadataObj, jsonSerializerOptions);

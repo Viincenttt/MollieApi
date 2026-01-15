@@ -37,7 +37,9 @@ namespace Mollie.Api.Client {
         public async Task<OrderResponse> GetOrderAsync(
             string orderId, bool embedPayments = false, bool embedRefunds = false, bool embedShipments = false, bool testmode = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(orderId), orderId);
-            var queryParameters = BuildQueryParameters(embedPayments, embedRefunds, embedShipments, testmode);
+            var queryParameters = BuildQueryParameters(testmode: testmode);
+            queryParameters.AddValueIfNotNullOrEmpty("embed", BuildEmbedParameter(embedPayments, embedRefunds, embedShipments));
+
             return await GetAsync<OrderResponse>(
                 $"orders/{orderId}{queryParameters.ToQueryString()}", cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
@@ -77,7 +79,7 @@ namespace Mollie.Api.Client {
         public async Task CancelOrderAsync(
             string orderId, bool testmode = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(orderId), orderId);
-            var data = TestmodeModel.Create(testmode);
+            var data = CreateTestmodeModel(testmode);
             await DeleteAsync(
                 $"orders/{orderId}", data, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
@@ -110,21 +112,6 @@ namespace Mollie.Api.Client {
             return await PostAsync<PaymentResponse>(
                 $"orders/{orderId}/payments", createOrderPaymentRequest, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
-        }
-
-        private Dictionary<string, string> BuildQueryParameters(string? profileId = null, bool testmode = false, SortDirection? sort = null) {
-            var result = new Dictionary<string, string>();
-            result.AddValueIfNotNullOrEmpty(nameof(profileId), profileId);
-            result.AddValueIfTrue(nameof(testmode), testmode);
-            result.AddValueIfNotNullOrEmpty(nameof(sort), sort?.ToString()?.ToLowerInvariant());
-            return result;
-        }
-
-        private Dictionary<string, string> BuildQueryParameters(bool embedPayments = false, bool embedRefunds = false, bool embedShipments = false, bool testmode = false) {
-            var result = new Dictionary<string, string>();
-            result.AddValueIfNotNullOrEmpty("embed", BuildEmbedParameter(embedPayments, embedRefunds, embedShipments));
-            result.AddValueIfTrue("testmode", testmode);
-            return result;
         }
 
         private string BuildEmbedParameter(bool embedPayments = false, bool embedRefunds = false, bool embedShipments = false) {

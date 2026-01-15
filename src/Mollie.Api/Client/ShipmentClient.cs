@@ -35,7 +35,7 @@ namespace Mollie.Api.Client
             string orderId, string shipmentId, bool testmode = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(orderId), orderId);
             ValidateRequiredUrlParameter(nameof(shipmentId), shipmentId);
-            var queryParameters = BuildQueryParameters(testmode);
+            var queryParameters = BuildQueryParameters(testmode: testmode);
             return await GetAsync<ShipmentResponse>(
                     $"orders/{orderId}/shipments/{shipmentId}{queryParameters.ToQueryString()}",
                     cancellationToken: cancellationToken)
@@ -50,7 +50,7 @@ namespace Mollie.Api.Client
         public async Task<ListResponse<ShipmentResponse>> GetShipmentListAsync(
             string orderId, bool testmode = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(orderId), orderId);
-            var queryParameters = BuildQueryParameters(testmode);
+            var queryParameters = BuildQueryParameters(testmode: testmode);
             return await GetAsync<ListResponse<ShipmentResponse>>(
                     $"orders/{orderId}/shipments{queryParameters.ToQueryString()}",
                     cancellationToken: cancellationToken)
@@ -70,12 +70,6 @@ namespace Mollie.Api.Client
             return await PatchAsync<ShipmentResponse>(
                 $"orders/{orderId}/shipments/{shipmentId}", shipmentUpdateRequest, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
-        }
-
-        private Dictionary<string, string> BuildQueryParameters(bool testmode = false) {
-            var result = new Dictionary<string, string>();
-            result.AddValueIfTrue("testmode", testmode);
-            return result;
         }
     }
 }

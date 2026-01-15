@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using Mollie.Api.Models;
 using Mollie.Api.Models.BalanceTransfer.Request;
 using Mollie.Api.Models.BalanceTransfer.Response;
 using Mollie.Api.Models.List.Response;
@@ -23,7 +24,7 @@ public interface IBalanceTransferClient {
     /// If no balance transfers are available, the resulting array will be empty. This request should never throw an error.
     /// </summary>
     Task<ListResponse<BalanceTransferResponse>> GetBalanceTransferListAsync(
-        string? from = null, int? limit = null, bool testmode = false, CancellationToken cancellationToken = default);
+        string? from = null, int? limit = null, SortDirection? sort = null, bool testmode = false, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Retrieve a single Connect balance transfer object by its ID.

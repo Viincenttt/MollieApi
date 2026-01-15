@@ -96,16 +96,10 @@ namespace Mollie.Api.Client {
         public async Task<ListResponse<RefundResponse>> GetOrderRefundListAsync(
             string orderId, string? from = null, int? limit = null, bool testmode = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(orderId), orderId);
-            var queryParameters = BuildQueryParameters(testmode);
+            var queryParameters = BuildQueryParameters(testmode: testmode);
             return await GetListAsync<ListResponse<RefundResponse>>(
                 $"orders/{orderId}/refunds", from, limit, queryParameters, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
-        }
-
-        private Dictionary<string, string> BuildQueryParameters(bool testmode = false) {
-            var result = new Dictionary<string, string>();
-            result.AddValueIfTrue(nameof(testmode), testmode);
-            return result;
         }
     }
 }

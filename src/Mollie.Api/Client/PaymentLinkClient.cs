@@ -143,20 +143,5 @@ namespace Mollie.Api.Client {
                 queryParameters,
                 cancellationToken: cancellationToken).ConfigureAwait(false);
         }
-
-        private Dictionary<string, string> BuildQueryParameters(bool testmode = false) {
-            var result = new Dictionary<string, string>();
-            result.AddValueIfTrue("testmode", testmode);
-            return result;
-        }
-
-        private Dictionary<string, string> BuildQueryParameters(string? profileId = null, bool testmode = false,
-            SortDirection? sort = null) {
-            var result = new Dictionary<string, string>();
-            result.AddValueIfTrue(nameof(testmode), testmode);
-            result.AddValueIfNotNullOrEmpty(nameof(profileId), profileId);
-            result.AddValueIfNotNullOrEmpty(nameof(sort), sort?.ToString()?.ToLowerInvariant());
-            return result;
-        }
     }
 }

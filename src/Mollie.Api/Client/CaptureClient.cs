@@ -27,7 +27,7 @@ namespace Mollie.Api.Client
             string paymentId, string captureId, bool testmode = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(paymentId), paymentId);
             ValidateRequiredUrlParameter(nameof(captureId), captureId);
-            var queryParameters = BuildQueryParameters(testmode);
+            var queryParameters = BuildQueryParameters(testmode: testmode);
             return await GetAsync<CaptureResponse>(
                     $"payments/{paymentId}/captures/{captureId}{queryParameters.ToQueryString()}", cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
@@ -42,7 +42,7 @@ namespace Mollie.Api.Client
         public async Task<ListResponse<CaptureResponse>> GetCaptureListAsync(
             string paymentId, bool testmode = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(paymentId), paymentId);
-            var queryParameters = BuildQueryParameters(testmode);
+            var queryParameters = BuildQueryParameters(testmode: testmode);
             return await GetAsync<ListResponse<CaptureResponse>>(
                     $"payments/{paymentId}/captures{queryParameters.ToQueryString()}",
                     cancellationToken: cancellationToken)
@@ -60,12 +60,6 @@ namespace Mollie.Api.Client
                     $"payments/{paymentId}/captures", captureRequest,
                     cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
-        }
-
-        private Dictionary<string, string> BuildQueryParameters(bool testmode) {
-            var result = new Dictionary<string, string>();
-            result.AddValueIfTrue("testmode", testmode);
-            return result;
         }
     }
 }

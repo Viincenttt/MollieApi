@@ -2,7 +2,7 @@
 
 namespace Mollie.Api.Models.SalesInvoice.Request;
 
-public record SalesInvoiceRequest {
+public record SalesInvoiceRequest : ITestModeRequest, IProfileRequest {
     /// <summary>
     ///	Whether to create the entity in test mode or live mode. Most API credentials are specifically created for
     /// either live mode or test mode, in which case this parameter can be omitted. For organization-level credentials

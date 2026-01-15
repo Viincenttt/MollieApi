@@ -58,7 +58,7 @@ namespace Mollie.Api.Client {
             string customerId, string subscriptionId, bool testmode = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(customerId), customerId);
             ValidateRequiredUrlParameter(nameof(subscriptionId), subscriptionId);
-            var queryParameters = BuildQueryParameters(testmode);
+            var queryParameters = BuildQueryParameters(testmode: testmode);
             return await GetAsync<SubscriptionResponse>(
                     $"customers/{customerId}/subscriptions/{subscriptionId}{queryParameters.ToQueryString()}",
                     cancellationToken: cancellationToken)
@@ -78,7 +78,7 @@ namespace Mollie.Api.Client {
             string customerId, string subscriptionId, bool testmode = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(customerId), customerId);
             ValidateRequiredUrlParameter(nameof(subscriptionId), subscriptionId);
-            var data = TestmodeModel.Create(testmode);
+            var data = CreateTestmodeModel(testmode);
             await DeleteAsync(
                 $"customers/{customerId}/subscriptions/{subscriptionId}", data,
                 cancellationToken: cancellationToken)
@@ -100,24 +100,11 @@ namespace Mollie.Api.Client {
             CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(customerId), customerId);
             ValidateRequiredUrlParameter(nameof(subscriptionId), subscriptionId);
-            var queryParameters = BuildQueryParameters(testmode);
+            var queryParameters = BuildQueryParameters(testmode: testmode);
             return await GetListAsync<ListResponse<PaymentResponse>>(
                     $"customers/{customerId}/subscriptions/{subscriptionId}/payments", from, limit,
                     queryParameters, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
-        }
-
-        private Dictionary<string, string> BuildQueryParameters(bool testmode = false) {
-            var result = new Dictionary<string, string>();
-            result.AddValueIfTrue("testmode", testmode);
-            return result;
-        }
-
-        private Dictionary<string, string> BuildQueryParameters(string? profileId, bool testmode) {
-            var result = new Dictionary<string, string>();
-            result.AddValueIfNotNullOrEmpty("profileId", profileId);
-            result.AddValueIfTrue("testmode", testmode);
-            return result;
         }
     }
 }

@@ -27,7 +27,7 @@ namespace Mollie.Api.Client {
             string customerId, string mandateId, bool testmode = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(customerId), customerId);
             ValidateRequiredUrlParameter(nameof(mandateId), mandateId);
-            var queryParameters = BuildQueryParameters(testmode);
+            var queryParameters = BuildQueryParameters(testmode: testmode);
             return await GetAsync<MandateResponse>(
                 $"customers/{customerId}/mandates/{mandateId}{queryParameters.ToQueryString()}", cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
@@ -36,7 +36,7 @@ namespace Mollie.Api.Client {
         public async Task<ListResponse<MandateResponse>> GetMandateListAsync(
             string customerId, string? from = null, int? limit = null, bool testmode = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(customerId), customerId);
-            var queryParameters = BuildQueryParameters(testmode);
+            var queryParameters = BuildQueryParameters(testmode: testmode);
             return await GetListAsync<ListResponse<MandateResponse>>(
                     $"customers/{customerId}/mandates", from, limit, queryParameters, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
@@ -64,15 +64,9 @@ namespace Mollie.Api.Client {
 
         public async Task RevokeMandate(
             string customerId, string mandateId, bool testmode = false, CancellationToken cancellationToken = default) {
-            var data = TestmodeModel.Create(testmode);
+            var data = CreateTestmodeModel(testmode);
             await DeleteAsync($"customers/{customerId}/mandates/{mandateId}", data, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
-        }
-
-        private Dictionary<string, string> BuildQueryParameters(bool testmode = false) {
-            var result = new Dictionary<string, string>();
-            result.AddValueIfTrue("testmode", testmode);
-            return result;
         }
     }
 }

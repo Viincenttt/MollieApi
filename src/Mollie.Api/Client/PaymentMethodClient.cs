@@ -115,10 +115,8 @@ namespace Mollie.Api.Client
             string? billingCountry = null,
             string? includeWallets = null) {
 
-            var result = new Dictionary<string, string>();
-            result.AddValueIfTrue(nameof(testmode), testmode);
+            var result = base.BuildQueryParameters(profileId, testmode);
             result.AddValueIfNotNullOrEmpty(nameof(sequenceType), sequenceType?.ToLower());
-            result.AddValueIfNotNullOrEmpty(nameof(profileId), profileId);
             result.AddValueIfNotNullOrEmpty(nameof(locale), locale);
             result.AddValueIfNotNullOrEmpty("amount[currency]", amount?.Currency);
             result.AddValueIfNotNullOrEmpty("amount[value]", amount?.Value);

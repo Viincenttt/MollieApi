@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,7 +30,7 @@ public class WebhookClient : BaseMollieClient, IWebhookClient {
 
     public async Task<ListResponse<WebhookResponse>> GetWebhookListAsync(string? from = null, int? limit = null,
         bool testmode = false, CancellationToken cancellationToken = default) {
-        var queryParameters = BuildQueryParameters(testmode);
+        var queryParameters = BuildQueryParameters(testmode: testmode);
         return await GetListAsync<ListResponse<WebhookResponse>>(
                 "webhooks", from, limit, queryParameters, cancellationToken: cancellationToken)
             .ConfigureAwait(false);
@@ -45,7 +44,7 @@ public class WebhookClient : BaseMollieClient, IWebhookClient {
 
     public async Task<WebhookResponse> GetWebhookAsync(string webhookId, bool testmode = false, CancellationToken cancellationToken = default) {
         ValidateRequiredUrlParameter(nameof(webhookId), webhookId);
-        var queryParameters = BuildQueryParameters(testmode);
+        var queryParameters = BuildQueryParameters(testmode: testmode);
 
         return await GetAsync<WebhookResponse>($"webhooks/{webhookId}{queryParameters.ToQueryString()}", cancellationToken: cancellationToken)
             .ConfigureAwait(false);
@@ -60,22 +59,16 @@ public class WebhookClient : BaseMollieClient, IWebhookClient {
 
     public async Task DeleteWebhookAsync(string webhookId, bool testmode = false, CancellationToken cancellationToken = default) {
         ValidateRequiredUrlParameter(nameof(webhookId), webhookId);
-        var data = TestmodeModel.Create(testmode);
+        var data = CreateTestmodeModel(testmode);
         await DeleteAsync($"webhooks/{webhookId}", data, cancellationToken: cancellationToken)
             .ConfigureAwait(false);
     }
 
     public async Task TestWebhookAsync(string webhookId, bool testmode = false, CancellationToken cancellationToken = default) {
         ValidateRequiredUrlParameter(nameof(webhookId), webhookId);
-        var queryParameters = BuildQueryParameters(testmode);
+        var queryParameters = BuildQueryParameters(testmode: testmode);
 
         await PostAsync<object>($"webhooks/{webhookId}/ping{queryParameters.ToQueryString()}", null,
             cancellationToken: cancellationToken);
-    }
-
-    private Dictionary<string, string> BuildQueryParameters(bool testmode = false) {
-        var result = new Dictionary<string, string>();
-        result.AddValueIfTrue("testmode", testmode);
-        return result;
     }
 }

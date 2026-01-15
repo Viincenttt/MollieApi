@@ -17,6 +17,7 @@ using Mollie.Api.Models.Error;
 using Mollie.Api.Models.Url;
 using Mollie.Api.Options;
 using Mollie.Api.Client.Abstract;
+using Mollie.Api.Models;
 
 namespace Mollie.Api.Client {
     public abstract class BaseMollieClient : IBaseMollieClient {
@@ -75,6 +76,14 @@ namespace Mollie.Api.Client {
             HttpMethod httpMethod, string relativeUri, object? data = null, CancellationToken cancellationToken = default) {
             HttpRequestMessage httpRequest = CreateHttpRequest(httpMethod, relativeUri);
             if (data != null) {
+                if (data is ITestModeRequest testModeRequest) {
+                    testModeRequest.Testmode ??= _options.Testmode;
+                }
+
+                if (data is IProfileRequest profileRequest) {
+                    profileRequest.ProfileId ??= _options.ProfileId;
+                }
+
                 var jsonData = _jsonConverterService.Serialize(data);
                 var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
                 httpRequest.Content = content;
@@ -210,6 +219,19 @@ namespace Mollie.Api.Client {
             if (string.IsNullOrWhiteSpace(parameterValue)) {
                 throw new ArgumentException($"Required URL argument '{parameterName}' is null or empty");
             }
+        }
+
+        protected Dictionary<string, string> BuildQueryParameters(
+            string? profileId = null, bool testmode = false, SortDirection? sort = null) {
+            var result = new Dictionary<string, string>();
+            result.AddValueIfTrue(nameof(testmode), testmode || _options.Testmode == true);
+            result.AddValueIfNotNullOrEmpty(nameof(profileId), profileId ?? _options.ProfileId);
+            result.AddValueIfNotNullOrEmpty(nameof(sort), sort?.ToString()?.ToLowerInvariant());
+            return result;
+        }
+
+        protected TestmodeModel? CreateTestmodeModel(bool testmode) {
+            return TestmodeModel.Create(testmode || _options.Testmode == true);
         }
 
         public void Dispose() {
