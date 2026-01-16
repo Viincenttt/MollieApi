@@ -3,7 +3,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Mollie.Api.Client.Abstract;
+using Mollie.Api.Extensions;
 using Mollie.Api.Framework.Authentication.Abstract;
+using Mollie.Api.Models;
 using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.SalesInvoice.Request;
 using Mollie.Api.Models.SalesInvoice.Response;
@@ -28,8 +30,9 @@ public class SalesInvoiceClient : BaseMollieClient, ISalesInvoiceClient {
     }
 
     public async Task<ListResponse<SalesInvoiceResponse>> GetSalesInvoiceListAsync(
-        string? from = null, int? limit = null, CancellationToken cancellationToken = default) {
-        return await GetListAsync<ListResponse<SalesInvoiceResponse>>("sales-invoices", from, limit, cancellationToken: cancellationToken)
+        string? from = null, int? limit = null, bool testmode = false, CancellationToken cancellationToken = default) {
+        var queryParameters = BuildQueryParameters(testmode: testmode);
+        return await GetListAsync<ListResponse<SalesInvoiceResponse>>("sales-invoices", from, limit, queryParameters, cancellationToken: cancellationToken)
             .ConfigureAwait(false);
     }
 
@@ -39,9 +42,10 @@ public class SalesInvoiceClient : BaseMollieClient, ISalesInvoiceClient {
     }
 
     public async Task<SalesInvoiceResponse> GetSalesInvoiceAsync(
-        string salesInvoiceId, CancellationToken cancellationToken = default) {
+        string salesInvoiceId, bool testmode = false, CancellationToken cancellationToken = default) {
         ValidateRequiredUrlParameter(nameof(salesInvoiceId), salesInvoiceId);
-        return await GetAsync<SalesInvoiceResponse>($"sales-invoices/{salesInvoiceId}", cancellationToken: cancellationToken)
+        var queryParameters = BuildQueryParameters(testmode: testmode);
+        return await GetAsync<SalesInvoiceResponse>($"sales-invoices/{salesInvoiceId}{queryParameters.ToQueryString()}", cancellationToken: cancellationToken)
             .ConfigureAwait(false);
     }
 
@@ -57,8 +61,9 @@ public class SalesInvoiceClient : BaseMollieClient, ISalesInvoiceClient {
             .ConfigureAwait(false);
     }
 
-    public async Task DeleteSalesInvoiceAsync(string salesInvoiceId, CancellationToken cancellationToken = default) {
+    public async Task DeleteSalesInvoiceAsync(string salesInvoiceId, bool testmode = false, CancellationToken cancellationToken = default) {
         ValidateRequiredUrlParameter(nameof(salesInvoiceId), salesInvoiceId);
-        await DeleteAsync($"sales-invoices/{salesInvoiceId}", cancellationToken: cancellationToken).ConfigureAwait(false);
+        var data = CreateTestmodeModel(testmode);
+        await DeleteAsync($"sales-invoices/{salesInvoiceId}", data, cancellationToken: cancellationToken).ConfigureAwait(false);
     }
 }

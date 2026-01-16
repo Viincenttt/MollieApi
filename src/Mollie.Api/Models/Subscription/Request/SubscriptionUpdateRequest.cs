@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 using Mollie.Api.JsonConverters;
 
 namespace Mollie.Api.Models.Subscription.Request {
-    public record SubscriptionUpdateRequest {
+    public record SubscriptionUpdateRequest : ITestModeRequest {
         /// <summary>
         /// The constant amount in EURO that you want to charge with each subscription payment, e.g. 100.00 if you would want
         /// to charge € 100,00.

@@ -3,7 +3,7 @@ using Mollie.Api.Models.Payment;
 
 namespace Mollie.Api.Models.PaymentLink.Request;
 
-public record PaymentLinkUpdateRequest {
+public record PaymentLinkUpdateRequest : ITestModeRequest {
     /// <summary>
     /// A short description of the payment link. The description is visible in the Dashboard and will be shown on the
     /// customer's bank or card statement when possible.

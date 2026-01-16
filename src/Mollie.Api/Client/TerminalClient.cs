@@ -24,7 +24,7 @@ namespace Mollie.Api.Client {
         public async Task<TerminalResponse> GetTerminalAsync(
             string terminalId, bool testmode = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(terminalId), terminalId);
-            var queryParameters = BuildQueryParameters(testmode);
+            var queryParameters = BuildQueryParameters(testmode: testmode);
             return await GetAsync<TerminalResponse>(
                 $"terminals/{terminalId}{queryParameters.ToQueryString()}", cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
@@ -47,19 +47,6 @@ namespace Mollie.Api.Client {
             UrlObjectLink<ListResponse<TerminalResponse>> url, CancellationToken cancellationToken = default) {
             return await GetAsync(url, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
-        }
-
-        private Dictionary<string, string> BuildQueryParameters(bool testmode) {
-            var result = new Dictionary<string, string>();
-            result.AddValueIfTrue("testmode", testmode);
-            return result;
-        }
-
-        private Dictionary<string, string> BuildQueryParameters(string? profileId, bool testmode) {
-            var result = new Dictionary<string, string>();
-            result.AddValueIfNotNullOrEmpty("profileId", profileId);
-            result.AddValueIfTrue("testmode", testmode);
-            return result;
         }
     }
 }

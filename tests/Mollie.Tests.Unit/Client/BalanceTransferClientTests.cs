@@ -9,6 +9,7 @@ using Mollie.Api.Models.BalanceTransfer.Response;
 using RichardSzalay.MockHttp;
 using Shouldly;
 using Xunit;
+using SortDirection = Mollie.Api.Models.SortDirection;
 
 namespace Mollie.Tests.Unit.Client;
 
@@ -56,11 +57,17 @@ public class BalanceTransferClientTests : BaseClientTests {
     }
 
     [Theory]
-    [InlineData(null, null, false, "")]
-    [InlineData("from", null, false, "?from=from")]
-    [InlineData("from", 50, false, "?from=from&limit=50")]
-    [InlineData(null, null, true, "?testmode=true")]
-    public async Task GetBalanceTransferListAsync_TestModeParameterCase_QueryStringOnlyContainsTestModeParameterIfTrue(string? from, int? limit, bool testmode, string expectedQueryString) {
+    [InlineData(null, null,  false, null, "")]
+    [InlineData("from", null,  false, null, "?from=from")]
+    [InlineData("from", 50,  false, null, "?from=from&limit=50")]
+    [InlineData(null, null,  true, null, "?testmode=true")]
+    [InlineData(null, null,  true, SortDirection.Desc, "?testmode=true&sort=desc")]
+    [InlineData(null, null,  true, SortDirection.Asc, "?testmode=true&sort=asc")]
+    public async Task GetBalanceTransferListAsync_TestModeParameterCase_QueryStringOnlyContainsTestModeParameterIfTrue( string? from,
+        int? limit,
+        bool testmode,
+        SortDirection? sortDirection,
+        string expectedQueryString) {
         // Given: We retrieve a list of customers
         var mockHttp = new MockHttpMessageHandler();
         mockHttp.When($"{BaseMollieClient.DefaultBaseApiEndPoint}connect/balance-transfers{expectedQueryString}")
@@ -69,7 +76,7 @@ public class BalanceTransferClientTests : BaseClientTests {
         var client = new BalanceTransferClient("abcde", httpClient);
 
         // When: We send the request
-        var result = await client.GetBalanceTransferListAsync(from, limit, testmode);
+        var result = await client.GetBalanceTransferListAsync(from, limit, sortDirection, testmode);
 
         // Then
         mockHttp.VerifyNoOutstandingExpectation();

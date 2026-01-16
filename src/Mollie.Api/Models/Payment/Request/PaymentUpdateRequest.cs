@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 using Mollie.Api.JsonConverters;
 
 namespace Mollie.Api.Models.Payment.Request {
-    public record PaymentUpdateRequest {
+    public record PaymentUpdateRequest : ITestModeRequest {
         /// <summary>
         /// The description of the payment. This will be shown to your customer on their card or bank statement
         /// when possible. We truncate the description automatically according to the limits of the used payment

@@ -30,6 +30,8 @@ namespace Mollie.Api {
                 ClientId = mollieOptions.ClientId,
                 ClientSecret = mollieOptions.ClientSecret,
                 CustomUserAgent = mollieOptions.CustomUserAgent,
+                Testmode = mollieOptions.Testmode,
+                ProfileId = mollieOptions.ProfileId,
                 ApiBaseUrl = mollieOptions.ApiBaseUrl,
                 ConnectTokenEndPoint = mollieOptions.ConnectTokenEndPoint,
                 ConnectOAuthAuthorizeEndPoint = mollieOptions.ConnectOAuthAuthorizeEndPoint

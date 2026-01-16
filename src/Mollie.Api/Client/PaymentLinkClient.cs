@@ -60,12 +60,12 @@ namespace Mollie.Api.Client {
             bool testmode = false,
             CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(paymentLinkId), paymentLinkId);
-            var queryParameters = BuildQueryParameters(
-                profileId: profileId,
-                testmode: testmode);
+            var queryParameters = BuildQueryParameters(profileId);
+            var data = CreateTestmodeModel(testmode);
             string relativeUri = $"payment-links/{paymentLinkId}{queryParameters.ToQueryString()}";
             await DeleteAsync(
                 relativeUri,
+                data,
                 cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
@@ -142,21 +142,6 @@ namespace Mollie.Api.Client {
                 limit,
                 queryParameters,
                 cancellationToken: cancellationToken).ConfigureAwait(false);
-        }
-
-        private Dictionary<string, string> BuildQueryParameters(bool testmode = false) {
-            var result = new Dictionary<string, string>();
-            result.AddValueIfTrue("testmode", testmode);
-            return result;
-        }
-
-        private Dictionary<string, string> BuildQueryParameters(string? profileId = null, bool testmode = false,
-            SortDirection? sort = null) {
-            var result = new Dictionary<string, string>();
-            result.AddValueIfTrue(nameof(testmode), testmode);
-            result.AddValueIfNotNullOrEmpty(nameof(profileId), profileId);
-            result.AddValueIfNotNullOrEmpty(nameof(sort), sort?.ToString()?.ToLowerInvariant());
-            return result;
         }
     }
 }

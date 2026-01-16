@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text.Json;
 
 namespace Mollie.Api.Models.Payment.Request {
-    public record PaymentRequest
+    public record PaymentRequest : ITestModeRequest, IProfileRequest
     {
         /// <summary>
         /// The amount that you want to charge, e.g. {"currency":"EUR", "value":"100.00"} if you would want to charge €100.00.

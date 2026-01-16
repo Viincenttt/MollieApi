@@ -4,7 +4,7 @@ using Mollie.Api.JsonConverters;
 
 namespace Mollie.Api.Models.Webhook.Request;
 
-public record WebhookRequest {
+public record WebhookRequest : ITestModeRequest {
     /// <summary>
     /// A name that identifies the webhook.
     /// </summary>

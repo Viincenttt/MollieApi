@@ -2,7 +2,7 @@
 
 namespace Mollie.Api.Models.SalesInvoice.Request;
 
-public record SalesInvoiceUpdateRequest {
+public record SalesInvoiceUpdateRequest : ITestModeRequest {
     /// <summary>
     /// The status for the invoice to end up in. Dependent parameters: paymentDetails for paid, emailDetails for issued
     /// and paid. See the Mollie.Api.Models.SalesInvoice.SalesInvoiceStatus class for a full list of known values.
@@ -63,4 +63,10 @@ public record SalesInvoiceUpdateRequest {
     /// The discount to be applied to the entire invoice, possibly on top of the line item discounts.
     /// </summary>
     public Amount? Discount { get; set; }
+
+    /// <summary>
+    /// Most API credentials are specifically created for either live mode or test mode. For organization-level
+    /// credentials such as OAuth access tokens, you can enable test mode by setting testmode to true.
+    /// </summary>
+    public bool? Testmode { get; set; }
 }

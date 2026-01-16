@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 namespace Mollie.Api.Models.Order.Request {
-    public record OrderLineCancellationRequest {
+    public record OrderLineCancellationRequest : ITestModeRequest {
         public required IEnumerable<OrderLineDetails> Lines { get; set; }
 
         /// <summary>

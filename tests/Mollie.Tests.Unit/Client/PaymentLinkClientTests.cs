@@ -85,16 +85,18 @@ namespace Mollie.Tests.Unit.Client {
         [Theory]
         [InlineData(false, null, "")]
         [InlineData(false, "abcde", "?profileId=abcde")]
-        [InlineData(true, "abcde", "?profileId=abcde&testmode=true")]
+        [InlineData(true, "abcde", "?profileId=abcde")]
         public async Task DeletePaymentLinkAsync_QueryParameterOptions_CorrectParametersAreAdded(
             bool testMode,
             string? profileId,
             string expectedQueryString) {
             // Given: We make a request to delete a payment link
+            var expectedPartialContent = testMode ? "\"testmode\":true" : null;
             var mockHttp = CreateMockHttpMessageHandler(
                 HttpMethod.Delete,
                 $"{BaseMollieClient.DefaultBaseApiEndPoint}payment-links/{DefaultPaymentLinkId}{expectedQueryString}",
-                _defaultPaymentLinkPaymentsJsonResponse);
+                _defaultPaymentLinkPaymentsJsonResponse,
+                expectedPartialContent);
             HttpClient httpClient = mockHttp.ToHttpClient();
             var paymentLinkClient = new PaymentLinkClient("access_abcde", httpClient);
 

@@ -15,6 +15,16 @@ public class MollieClientOptions {
     public string? CustomUserAgent { get; set; }
 
     /// <summary>
+    /// (Optional) Enable test mode for all requests
+    /// </summary>
+    public bool? Testmode { get; set; }
+
+    /// <summary>
+    /// (Optional) The profile ID to be used for all requests
+    /// </summary>
+    public string? ProfileId { get; set; }
+
+    /// <summary>
     /// (Optional) ClientId used by Connect API
     /// </summary>
     public string? ClientId { get; set; }

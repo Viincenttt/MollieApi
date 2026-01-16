@@ -12,14 +12,14 @@ public interface ISalesInvoiceClient : IDisposable {
     Task<SalesInvoiceResponse> CreateSalesInvoiceAsync(
         SalesInvoiceRequest salesInvoiceRequest, CancellationToken cancellationToken = default);
     Task<ListResponse<SalesInvoiceResponse>> GetSalesInvoiceListAsync(
-        string? from = null, int? limit = null, CancellationToken cancellationToken = default);
+        string? from = null, int? limit = null, bool testmode = false, CancellationToken cancellationToken = default);
     Task<ListResponse<SalesInvoiceResponse>> GetSalesInvoiceListAsync(
         UrlObjectLink<ListResponse<SalesInvoiceResponse>> url, CancellationToken cancellationToken = default);
     Task<SalesInvoiceResponse> GetSalesInvoiceAsync(
-        string salesInvoiceId, CancellationToken cancellationToken = default);
+        string salesInvoiceId, bool testmode = false, CancellationToken cancellationToken = default);
     Task<SalesInvoiceResponse> GetSalesInvoiceAsync(
         UrlObjectLink<SalesInvoiceResponse> url, CancellationToken cancellationToken = default);
     Task<SalesInvoiceResponse> UpdateSalesInvoiceAsync(
         string salesInvoiceId, SalesInvoiceUpdateRequest salesInvoiceRequest, CancellationToken cancellationToken = default);
-    Task DeleteSalesInvoiceAsync(string salesInvoiceId, CancellationToken cancellationToken = default);
+    Task DeleteSalesInvoiceAsync(string salesInvoiceId, bool testmode = false, CancellationToken cancellationToken = default);
 }

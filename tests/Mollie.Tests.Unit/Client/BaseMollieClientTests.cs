@@ -160,6 +160,58 @@ public class BaseMollieClientTests : BaseClientTests {
         mockHttp.VerifyNoOutstandingExpectation();
     }
 
+    [Fact]
+    public async Task ProfileIdIsSetInOptions_ForPostRequest_RequestProfileIdIsSet() {
+        // Arrange
+        var mockHttp = new MockHttpMessageHandler();
+        var mollieClientOptions = new MollieClientOptions {
+            ApiKey = "api-key",
+            ProfileId = "my-profile-id"
+        };
+        mockHttp.Expect(HttpMethod.Post, $"{mollieClientOptions.ApiBaseUrl}payments")
+            .WithPartialContent($"\"profileId\":\"{mollieClientOptions.ProfileId}\"")
+            .Respond("application/json", DefaultPaymentJsonResponse);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        var secretManager = new DefaultMollieSecretManager(mollieClientOptions.ApiKey);
+        using var paymentClient = new PaymentClient(mollieClientOptions, secretManager, httpClient);
+        var request = new PaymentRequest {
+            Amount = new Amount(Currency.EUR, 10m),
+            Description = "Test payment"
+        };
+
+        // Act
+        await paymentClient.CreatePaymentAsync(request);
+
+        // Assert
+        mockHttp.VerifyNoOutstandingExpectation();
+    }
+
+    [Fact]
+    public async Task TestModeIsSetInOptions_ForPostRequest_RequestTestModeIsSet() {
+        // Arrange
+        var mockHttp = new MockHttpMessageHandler();
+        var mollieClientOptions = new MollieClientOptions {
+            ApiKey = "api-key",
+            Testmode = true
+        };
+        mockHttp.Expect(HttpMethod.Post, $"{mollieClientOptions.ApiBaseUrl}payments")
+            .WithPartialContent("\"testmode\":true")
+            .Respond("application/json", DefaultPaymentJsonResponse);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        var secretManager = new DefaultMollieSecretManager(mollieClientOptions.ApiKey);
+        using var paymentClient = new PaymentClient(mollieClientOptions, secretManager, httpClient);
+        var request = new PaymentRequest {
+            Amount = new Amount(Currency.EUR, 10m),
+            Description = "Test payment"
+        };
+
+        // Act
+        await paymentClient.CreatePaymentAsync(request);
+
+        // Assert
+        mockHttp.VerifyNoOutstandingExpectation();
+    }
+
     private const string DefaultPaymentMethodJsonResponse = @"{
         ""count"": 13,
         ""_embedded"": {
@@ -186,4 +238,79 @@ public class BaseMollieClientTests : BaseClientTests {
             ]
         }
     }";
+
+
+    private const string DefaultPaymentJsonResponse = @"
+{
+    ""resource"": ""payment"",
+    ""id"": ""tr_WDqYK6vllg"",
+    ""mode"": ""test"",
+    ""createdAt"": ""2018-03-20T13:13:37+00:00"",
+    ""amount"":{
+        ""currency"":""EUR"",
+        ""value"":""100.00""
+    },
+    ""description"":""Description"",
+    ""method"": null,
+    ""metadata"": {
+        ""order_id"": ""12345""
+    },
+    ""status"": ""open"",
+    ""isCancelable"": false,
+    ""locale"": ""nl_NL"",
+    ""restrictPaymentMethodsToCountry"": ""NL"",
+    ""expiresAt"": ""2018-03-20T13:28:37+00:00"",
+    ""details"": null,
+    ""profileId"": ""pfl_QkEhN94Ba"",
+    ""sequenceType"": ""oneoff"",
+    ""redirectUrl"": ""https://webshop.example.org/order/12345/"",
+    ""webhookUrl"": ""https://webshop.example.org/payments/webhook/"",
+    ""authorizedAt"": ""2018-03-19T13:28:37+00:00"",
+    ""paidAt"": ""2018-03-21T13:28:37+00:00"",
+    ""canceledAt"": ""2018-03-22T13:28:37+00:00"",
+    ""expiredAt"": ""2018-03-23T13:28:37+00:00"",
+    ""failedAt"": ""2018-03-24T13:28:37+00:00"",
+    ""captureBefore"": ""2018-03-25T13:28:37+00:00"",
+    ""amountRefunded"": {
+        ""currency"": ""EUR"",
+        ""value"": ""10.00""
+    },
+    ""amountRemaining"": {
+        ""currency"": ""EUR"",
+        ""value"": ""90.00""
+    },
+    ""amountChargedBack"": {
+        ""currency"": ""EUR"",
+        ""value"": ""10.00""
+    },
+    ""cancelUrl"": ""https://webshop.example.org/order/12345/cancel"",
+    ""countryCode"": ""NL"",
+    ""settlementId"": ""stl_jDk30akdN"",
+    ""subscriptionId"": ""sub_rVKGtNd6s3"",
+    ""applicationFee"": {
+        ""amount"": {
+            ""currency"": ""EUR"",
+            ""value"": ""1.00""
+        },
+        ""description"": ""description""
+    },
+    ""_links"": {
+        ""self"": {
+            ""href"": ""https://api.mollie.com/v2/payments/tr_WDqYK6vllg"",
+            ""type"": ""application/hal+json""
+        },
+        ""checkout"": {
+            ""href"": ""https://www.mollie.com/payscreen/select-method/WDqYK6vllg"",
+            ""type"": ""text/html""
+        },
+        ""dashboard"": {
+            ""href"": ""https://www.mollie.com/dashboard/org_12345678/payments/tr_WDqYK6vllg"",
+            ""type"": ""text/html""
+        },
+        ""documentation"": {
+            ""href"": ""https://docs.mollie.com/reference/v2/payments-api/get-payment"",
+            ""type"": ""text/html""
+        }
+    }
+}";
 }

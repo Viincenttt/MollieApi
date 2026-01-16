@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 using Mollie.Api.JsonConverters;
 
 namespace Mollie.Api.Models.Refund.Request {
-    public record RefundRequest {
+    public record RefundRequest : ITestModeRequest {
         /// <summary>
         /// The amount to refund. For some payments, it can be up to €25.00 more than the original transaction amount.
         /// </summary>

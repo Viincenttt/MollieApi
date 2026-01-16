@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 using Mollie.Api.JsonConverters;
 
 namespace Mollie.Api.Models.Capture.Request {
-    public record CaptureRequest {
+    public record CaptureRequest : ITestModeRequest {
         /// <summary>
         /// The amount to capture.
         /// </summary>

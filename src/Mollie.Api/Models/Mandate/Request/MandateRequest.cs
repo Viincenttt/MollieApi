@@ -4,7 +4,7 @@ using Mollie.Api.Framework;
 using Mollie.Api.JsonConverters;
 
 namespace Mollie.Api.Models.Mandate.Request {
-    public record MandateRequest {
+    public record MandateRequest : ITestModeRequest {
         /// <summary>
         /// Payment method of the mandate - Possible values: `directdebit` `paypal`
         /// </summary>

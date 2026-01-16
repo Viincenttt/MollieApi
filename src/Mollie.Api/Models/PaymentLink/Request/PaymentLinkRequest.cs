@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using Mollie.Api.Models.Payment;
 
 namespace Mollie.Api.Models.PaymentLink.Request {
-    public record PaymentLinkRequest
+    public record PaymentLinkRequest : ITestModeRequest, IProfileRequest
     {
         /// <summary>
         /// This description will also be used as the payment description and will be shown to your customer on their card or bank

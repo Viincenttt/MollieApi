@@ -8,7 +8,7 @@ using System.Text.Json.Serialization;
 using Mollie.Api.Framework;
 
 namespace Mollie.Api.Models.Order.Request {
-    public record OrderRequest {
+    public record OrderRequest : ITestModeRequest, IProfileRequest {
         /// <summary>
         /// The total amount of the order, including VAT and discounts. This is the amount that will be charged
         /// to your customer.

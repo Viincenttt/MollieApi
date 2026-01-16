@@ -73,7 +73,7 @@ namespace Mollie.Api.Client {
             CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(paymentId), paymentId);
 
-            var data = TestmodeModel.Create(testmode);
+            var data = CreateTestmodeModel(testmode);
 		    await DeleteAsync(
                 $"payments/{paymentId}",
                 data,
@@ -84,7 +84,7 @@ namespace Mollie.Api.Client {
             string paymentId, bool testmode = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(paymentId), paymentId);
 
-            var queryParameters = BuildQueryParameters(testmode);
+            var queryParameters = BuildQueryParameters(testmode: testmode);
             await PostAsync<object>(
                 $"payments/{paymentId}/release-authorization{queryParameters.ToQueryString()}",
                 null,
@@ -146,12 +146,6 @@ namespace Mollie.Api.Client {
                 cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        private Dictionary<string, string> BuildQueryParameters(bool testmode = false) {
-            var result = new Dictionary<string, string>();
-            result.AddValueIfTrue(nameof(testmode), testmode);
-            return result;
-        }
-
         private Dictionary<string, string> BuildQueryParameters(
             string? profileId = null,
             bool testmode = false,
@@ -161,9 +155,7 @@ namespace Mollie.Api.Client {
             bool embedChargebacks = false,
             SortDirection? sort = null) {
 
-            var result = new Dictionary<string, string>();
-            result.AddValueIfTrue(nameof(testmode), testmode);
-            result.AddValueIfNotNullOrEmpty(nameof(profileId), profileId);
+            var result = base.BuildQueryParameters(profileId, testmode);
             result.AddValueIfNotNullOrEmpty("include", BuildIncludeParameter(includeQrCode, includeRemainderDetails));
             result.AddValueIfNotNullOrEmpty("embed", BuildEmbedParameter(embedRefunds, embedChargebacks));
             result.AddValueIfNotNullOrEmpty(nameof(sort), sort?.ToString()?.ToLowerInvariant());

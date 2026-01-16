@@ -3,7 +3,7 @@ using Mollie.Api.JsonConverters;
 using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.Order.Request {
-    public record OrderRefundRequest {
+    public record OrderRefundRequest : ITestModeRequest {
         /// <summary>
         /// An array of objects containing the order line details you want to create a refund for. If you send
         /// an empty array, the entire order will be refunded.
