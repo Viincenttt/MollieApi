@@ -60,12 +60,12 @@ namespace Mollie.Api.Client {
             bool testmode = false,
             CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(paymentLinkId), paymentLinkId);
-            var queryParameters = BuildQueryParameters(
-                profileId: profileId,
-                testmode: testmode);
+            var queryParameters = BuildQueryParameters(profileId);
+            var data = CreateTestmodeModel(testmode);
             string relativeUri = $"payment-links/{paymentLinkId}{queryParameters.ToQueryString()}";
             await DeleteAsync(
                 relativeUri,
+                data,
                 cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
