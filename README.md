@@ -102,6 +102,28 @@ PaymentResponse paymentResponse = await paymentClient.CreatePaymentAsync(payment
 string checkoutUrl = paymentResponse.Links.Checkout.Href;
 ```
 
+### Webhooks
+Mollie offers two different webhook systems:
+- [Classic Webhooks](https://docs.mollie.com/reference/webhooks)
+- [Next-gen Webhooks (beta)](https://docs.mollie.com/reference/webhooks-new)
+Both systems are supported through the Mollie.Api.AspNet NuGet package included in this library.
+
+Install via NuGet:
+```bash
+Install-Package Mollie.Api.AspNet 
+```
+
+The Mollie.Api.AspNet NuGet package has built in attributes that automatically parse and validate incoming objects in your ASP.NET application. For example:
+```C#
+[HttpPost("full/specific")]
+[ServiceFilter(typeof(MollieSignatureFilter))]
+public Task<ActionResult> WebhookWithSpecificType([FromMollieWebhook] FullWebhookEventResponse<PaymentLinkResponse> data) {
+    return Task.FromResult<ActionResult>(Ok());
+}
+```
+
+For more information about webhooks, take a look at the [full webhook documentation](https://github.com/Viincenttt/MollieApi/wiki/01.-Getting-started#webhooks) on the Wiki page.
+
 ### 🧪 Blazor Example Project
 Want to see the library in action? Check out the full-featured .NET Blazor example project, which demonstrates real-world usage of several APIs:
 * Payments
