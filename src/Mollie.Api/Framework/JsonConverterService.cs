@@ -27,8 +27,10 @@ internal class JsonConverterService
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
             WriteIndented = false,
-            AllowTrailingCommas = true
+            AllowTrailingCommas = true,
         };
+
+        options.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
 
         return JsonSerializer.Serialize(objectToSerialize, options);
     }

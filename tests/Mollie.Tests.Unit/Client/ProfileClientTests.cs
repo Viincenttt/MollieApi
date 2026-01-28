@@ -30,10 +30,12 @@ public class ProfileClientTests : BaseClientTests
             CountriesOfActivity = ["NL"],
             BusinessCategory = "OTHER_MERCHANDISE"
         };
-        var mockHttp = new MockHttpMessageHandler();
-        mockHttp.Expect(HttpMethod.Post, $"{BaseMollieClient.DefaultBaseApiEndPoint}profiles")
-            .With(request => request.Headers.Contains("Idempotency-Key"))
-            .Respond("application/json", defaultProfileJsonResponse);
+        var mockHttp = CreateMockHttpMessageHandler(
+            HttpMethod.Post,
+            $"{BaseMollieClient.DefaultBaseApiEndPoint}profiles",
+            defaultProfileJsonResponse,
+            "\"mode\": \"test\"");
+
         HttpClient httpClient = mockHttp.ToHttpClient();
         using var profileClient = new ProfileClient("abcde", httpClient);
 
