@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <LangVersion>12</LangVersion>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Description>This is a wrapper for the Mollie REST webservice. All payment methods and webservice calls are supported.</Description>
   </PropertyGroup>
 

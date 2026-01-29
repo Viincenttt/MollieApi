@@ -8,6 +8,14 @@ using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client.Abstract {
     public interface IPaymentClient : IBaseMollieClient {
+
+        /// <summary>
+        /// Create a payment object.
+        /// </summary>
+        /// <param name="paymentRequest">The payment request object containing the payment details</param>
+        /// <param name="includeQrCode">Include a QR code object for the payment. Only available for iDEAL, Bancontact and bank transfer payments.</param>
+        /// <param name="cancellationToken">Token to cancel the request</param>
+        /// <returns>The payment object created by Mollie. Once the payment is created, redirect the user to Links.Checkout.Redirect</returns>
         Task<PaymentResponse> CreatePaymentAsync(
             PaymentRequest paymentRequest,
             bool includeQrCode = false,
@@ -93,7 +101,7 @@ namespace Mollie.Api.Client.Abstract {
         /// Retrieve a list of payments by URL
         /// </summary>
         /// <param name="url">The URL from which to retrieve the payments</param>
-        /// <returns></returns>
+        /// <returns>A list of paginated payments</returns>
         Task<ListResponse<PaymentResponse>> GetPaymentListAsync(
             UrlObjectLink<ListResponse<PaymentResponse>> url,
             CancellationToken cancellationToken = default);
@@ -102,7 +110,7 @@ namespace Mollie.Api.Client.Abstract {
         /// Retrieve a single payment by URL
         /// </summary>
         /// <param name="url">The URL from which to retrieve the payment</param>
-        /// <returns></returns>
+        /// <returns>The found payment</returns>
         Task<PaymentResponse> GetPaymentAsync(
             UrlObjectLink<PaymentResponse> url,
             CancellationToken cancellationToken = default);
@@ -112,7 +120,8 @@ namespace Mollie.Api.Client.Abstract {
         /// </summary>
         /// <param name="paymentId">The payment id to update</param>
         /// <param name="paymentUpdateRequest">The payment parameters to update</param>
-        /// <returns></returns>
+        /// <returns>The changed payment</returns>
+        /// <remarks>Updating the payment details will not result in a webhook call</remarks>
         Task<PaymentResponse> UpdatePaymentAsync(
             string paymentId,
             PaymentUpdateRequest paymentUpdateRequest,

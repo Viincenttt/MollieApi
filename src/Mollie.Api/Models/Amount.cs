@@ -5,6 +5,9 @@ using System.Globalization;
 using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models {
+    /// <summary>
+    /// The amount of a payment, refund, or chargeback.
+    /// </summary>
     public record Amount {
         private static readonly IDictionary<string, string> CurrenciesWithAlternativeDecimalPrecision =
             new Dictionary<string, string>() {
@@ -22,6 +25,11 @@ namespace Mollie.Api.Models {
         /// </summary>
         public required string Value { get; set; }
 
+        /// <summary>
+        /// Constructor for constructing based on a string value
+        /// </summary>
+        /// <param name="currency">An ISO 4217 currency code. The currencies supported depend on the payment methods that are enabled on your account.</param>
+        /// <param name="value">A string containing an exact monetary amount in the given currency.</param>
         [JsonConstructor]
         [SetsRequiredMembers]
         public Amount(string currency, string value) {
@@ -32,8 +40,8 @@ namespace Mollie.Api.Models {
         /// <summary>
         /// Constructor for constructing based on a decimal value
         /// </summary>
-        /// <param name="currency"></param>
-        /// <param name="value"></param>
+        /// <param name="currency">An ISO 4217 currency code. The currencies supported depend on the payment methods that are enabled on your account.</param>
+        /// <param name="value">The amount in the specified currency.</param>
         [SetsRequiredMembers]
         public Amount(string currency, decimal value) {
             Currency = currency;

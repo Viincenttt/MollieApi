@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <LangVersion>11</LangVersion>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Description>
       ASP.NET Core extensions for the Mollie.Api client.
       Provides ready-to-use model binders, filters, and middleware to securely process Mollie webhooks and integrate payments into your ASP.NET Core MVC or Minimal API applications.
