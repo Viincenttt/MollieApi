@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using Mollie.Api.JsonConverters;
 
 namespace Mollie.Api.Models.SalesInvoice.Request;
 
@@ -40,6 +43,13 @@ public record SalesInvoiceRequest : ITestModeRequest, IProfileRequest {
     /// A free-form memo you can set on the invoice, and will be shown on the invoice PDF.
     /// </summary>
     public string? Memo { get; set; }
+
+    /// <summary>
+    /// Provide any data you like, for example a string or a JSON object. We will save the data alongside the payment. Whenever
+    /// you fetch the payment with our API, we’ll also include the metadata. You can use up to approximately 1kB.
+    /// </summary>
+    [JsonConverter(typeof(RawJsonConverter))]
+    public string? Metadata { get; set; }
 
     /// <summary>
     /// The payment term to be set on the invoice. See the Mollie.Api.Models.SalesInvoice.PaymentTerm class for a full
@@ -101,4 +111,8 @@ public record SalesInvoiceRequest : ITestModeRequest, IProfileRequest {
     /// The discount to be applied to the entire invoice, possibly on top of the line item discounts.
     /// </summary>
     public Amount? Discount { get; set; }
+
+    public void SetMetadata(object metadataObj, JsonSerializerOptions? jsonSerializerOptions = null) {
+        Metadata = JsonSerializer.Serialize(metadataObj, jsonSerializerOptions);
+    }
 }

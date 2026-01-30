@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
+using Mollie.Api.JsonConverters;
 
 namespace Mollie.Api.Models.SalesInvoice.Response;
 
@@ -54,6 +56,12 @@ public record SalesInvoiceResponse : IEntity {
     /// A free-form memo you can set on the invoice, and will be shown on the invoice PDF.
     /// </summary>
     public string? Memo { get; set; }
+
+    /// <summary>
+    /// The optional metadata you provided upon payment creation. Metadata can be used to link an order to a payment.
+    /// </summary>
+    [JsonConverter(typeof(RawJsonConverter))]
+    public string? Metadata { get; set; }
 
     /// <summary>
     /// The payment term to be set on the invoice. See the Mollie.Api.Models.SalesInvoice.PaymentTerm class for a full
@@ -156,4 +164,8 @@ public record SalesInvoiceResponse : IEntity {
     /// </summary>
     [JsonPropertyName("_links")]
     public required SalesInvoiceResponseLinks Links { get; set; }
+
+    public T? GetMetadata<T>(JsonSerializerOptions? jsonSerializerOptions = null) {
+        return Metadata != null ? JsonSerializer.Deserialize<T>(Metadata, jsonSerializerOptions) : default;
+    }
 }
