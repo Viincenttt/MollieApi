@@ -55,6 +55,7 @@ namespace Mollie.Api {
             RegisterMollieApiClient<IProfileClient, ProfileClient>(services, mollieOptions.RetryPolicy);
             RegisterMollieApiClient<IRefundClient, RefundClient>(services, mollieOptions.RetryPolicy);
             RegisterMollieApiClient<ISettlementClient, SettlementClient>(services, mollieOptions.RetryPolicy);
+            RegisterMollieApiClient<ISessionClient, SessionClient>(services, mollieOptions.RetryPolicy);
             RegisterMollieApiClient<IShipmentClient, ShipmentClient>(services, mollieOptions.RetryPolicy);
             RegisterMollieApiClient<ISubscriptionClient, SubscriptionClient>(services, mollieOptions.RetryPolicy);
             RegisterMollieApiClient<ITerminalClient, TerminalClient>(services, mollieOptions.RetryPolicy);
