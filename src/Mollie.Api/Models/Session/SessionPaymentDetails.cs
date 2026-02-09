@@ -2,9 +2,9 @@
 using System.Text.Json.Serialization;
 using Mollie.Api.JsonConverters;
 
-namespace Mollie.Api.Models.Session.Request;
+namespace Mollie.Api.Models.Session;
 
-public record SessionPaymentRequest {
+public record SessionPaymentDetails {
 
     /// <summary>
     /// The webhook URL where we will send payment status updates to.

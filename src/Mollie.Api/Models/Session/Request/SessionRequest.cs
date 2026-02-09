@@ -52,7 +52,7 @@ namespace Mollie.Api.Models.Session.Request {
         /// </summary>
         public PaymentAddressDetails? ShippingAddress { get; set; }
 
-        public SessionPaymentRequest? Payment { get; set; }
+        public SessionPaymentDetails? Payment { get; set; }
 
         /// <summary>
         /// The ID of the Customer for whom the payment is being created. This is used for recurring payments and single click payments.

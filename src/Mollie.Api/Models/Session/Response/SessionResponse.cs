@@ -55,7 +55,7 @@ namespace Mollie.Api.Models.Session.Response {
         /// </summary>
         public string? CancelUrl { get; set; }
 
-        public SessionPaymentResponse? Payment { get; set; }
+        public SessionPaymentDetails? Payment { get; set; }
 
         /// <summary>
         /// Optionally provide the order lines for the payment. Each line contains details such as a description of the item ordered and its price.
