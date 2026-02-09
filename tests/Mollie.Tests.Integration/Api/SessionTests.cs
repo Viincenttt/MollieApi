@@ -13,6 +13,7 @@ using Mollie.Api.Models.Payment;
 
 namespace Mollie.Tests.Integration.Api;
 
+[Trait("TestCategory", "LocalIntegrationTests")]
 public class SessionTests : BaseMollieApiTestClass, IDisposable {
     private readonly ISessionClient _sessionClient;
 
