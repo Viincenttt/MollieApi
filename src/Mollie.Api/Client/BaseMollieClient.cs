@@ -192,7 +192,7 @@ namespace Mollie.Api.Client {
 
         private string GetUserAgent() {
             const string packageName = "Mollie.Api.NET";
-            string versionNumber = typeof(BaseMollieClient).GetTypeInfo().Assembly.GetName().Version.ToString();
+            string versionNumber = typeof(BaseMollieClient).GetTypeInfo().Assembly.GetName().Version?.ToString() ?? "unknown";
             string userAgent = $"{packageName}/{versionNumber}";
 
             if (!string.IsNullOrEmpty(_options.CustomUserAgent)) {

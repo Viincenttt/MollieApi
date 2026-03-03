@@ -19,7 +19,7 @@ public record PointOfSalePaymentResponseDetails {
     public string? CardNumber { get; set; }
 
     /// <summary>
-    /// The first 6 digits & last 4 digits of the customer's masked card number.
+    /// The first 6 digits &amp; last 4 digits of the customer's masked card number.
     /// </summary>
     public string? MaskedNumber { get; set; }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+#pragma warning disable CS0618
 using Mollie.Api.Client;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Order;

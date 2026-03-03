@@ -29,9 +29,9 @@ internal class RawJsonConverter : JsonConverter<string>
             return;
         }
 
-        if (IsValidJson(value))
+        if (IsValidJson(value!))
         {
-            writer.WriteRawValue(value);
+            writer.WriteRawValue(value!);
         }
         else
         {

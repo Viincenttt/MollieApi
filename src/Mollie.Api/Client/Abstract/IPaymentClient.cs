@@ -35,6 +35,7 @@ namespace Mollie.Api.Client.Abstract {
         /// </param>
         /// <param name="embedRefunds">Include all refunds created for the payment.</param>
         /// <param name="embedChargebacks"> Include all chargebacks issued for the payment.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used to cancel the request.</param>
         /// <returns></returns>
         Task<PaymentResponse> GetPaymentAsync(
             string paymentId,
@@ -52,6 +53,7 @@ namespace Mollie.Api.Client.Abstract {
         /// </summary>
         /// <param name="paymentId"></param>
         /// <param name="testmode">Oauth - Optional – Set this to true to cancel a test mode payment.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used to cancel the request.</param>
         /// <returns></returns>
         Task CancelPaymentAsync(
             string paymentId,
@@ -85,6 +87,7 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="embedChargebacks">Include any chargebacks issued for the payments.</param>
         /// <param name="sort">Used for setting the direction of the results based on the from parameter. Can be set
         /// to desc or asc. Default is desc.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used to cancel the request.</param>
         /// <returns></returns>
 		Task<ListResponse<PaymentResponse>> GetPaymentListAsync(
             string? from = null,
@@ -101,6 +104,7 @@ namespace Mollie.Api.Client.Abstract {
         /// Retrieve a list of payments by URL
         /// </summary>
         /// <param name="url">The URL from which to retrieve the payments</param>
+        /// <param name="cancellationToken">A cancellation token that can be used to cancel the request.</param>
         /// <returns>A list of paginated payments</returns>
         Task<ListResponse<PaymentResponse>> GetPaymentListAsync(
             UrlObjectLink<ListResponse<PaymentResponse>> url,
@@ -110,6 +114,7 @@ namespace Mollie.Api.Client.Abstract {
         /// Retrieve a single payment by URL
         /// </summary>
         /// <param name="url">The URL from which to retrieve the payment</param>
+        /// <param name="cancellationToken">A cancellation token that can be used to cancel the request.</param>
         /// <returns>The found payment</returns>
         Task<PaymentResponse> GetPaymentAsync(
             UrlObjectLink<PaymentResponse> url,
@@ -120,6 +125,7 @@ namespace Mollie.Api.Client.Abstract {
         /// </summary>
         /// <param name="paymentId">The payment id to update</param>
         /// <param name="paymentUpdateRequest">The payment parameters to update</param>
+        /// <param name="cancellationToken">A cancellation token that can be used to cancel the request.</param>
         /// <returns>The changed payment</returns>
         /// <remarks>Updating the payment details will not result in a webhook call</remarks>
         Task<PaymentResponse> UpdatePaymentAsync(
