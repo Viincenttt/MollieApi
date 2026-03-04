@@ -24,9 +24,6 @@ namespace Mollie.Api.Client.Abstract {
         /// </summary>
         /// <param name="paymentLinkId">Provide the ID of the item you want to perform this operation on.</param>
         /// <param name="paymentLinkUpdateRequest">The request body</param>
-        /// <param name="testmode">Most API credentials are specifically created for either live mode or test mode.
-        /// In those cases the testmode query parameter can be omitted. For organization-level credentials such as
-        /// OAuth access tokens, you can enable test mode by setting the testmode query parameter to true.</param>
         /// <param name="cancellationToken">Token to cancel the operation</param>
         /// <returns>The updated payment link response</returns>
         Task<PaymentLinkResponse> UpdatePaymentLinkAsync(

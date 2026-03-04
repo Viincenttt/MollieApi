@@ -46,7 +46,9 @@ namespace Mollie.Api {
             RegisterMollieApiClient<IInvoiceClient, InvoiceClient>(services, mollieOptions.RetryPolicy);
             RegisterMollieApiClient<IMandateClient, MandateClient>(services, mollieOptions.RetryPolicy);
             RegisterMollieApiClient<IOnboardingClient, OnboardingClient>(services, mollieOptions.RetryPolicy);
+#pragma warning disable CS0618
             RegisterMollieApiClient<IOrderClient, OrderClient>(services, mollieOptions.RetryPolicy);
+#pragma warning restore CS0618
             RegisterMollieApiClient<IOrganizationClient, OrganizationClient>(services, mollieOptions.RetryPolicy);
             RegisterMollieApiClient<IPaymentClient, PaymentClient>(services, mollieOptions.RetryPolicy);
             RegisterMollieApiClient<IPaymentLinkClient, PaymentLinkClient>(services, mollieOptions.RetryPolicy);

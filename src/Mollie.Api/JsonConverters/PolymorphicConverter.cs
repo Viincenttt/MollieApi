@@ -40,14 +40,14 @@ internal class PolymorphicConverter<T> : JsonConverter<T> {
         JsonSerializerOptions newOptions = new(options);
         newOptions.Converters.Remove(this);
 
-        var result = (T)JsonSerializer.Deserialize(json, response.GetType(), newOptions)!;
+        var result = (T)JsonSerializer.Deserialize(json, response!.GetType(), newOptions)!;
 
         return result;
     }
 
     public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options)
     {
-        JsonSerializer.Serialize(writer, value, value.GetType(), options);
+        JsonSerializer.Serialize(writer, value, value!.GetType(), options);
     }
 }
 

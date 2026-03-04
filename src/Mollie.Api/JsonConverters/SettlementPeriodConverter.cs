@@ -22,7 +22,7 @@ internal class SettlementPeriodConverter : JsonConverter<Dictionary<int, Diction
 
             foreach (var period in property.Value.EnumerateObject()) {
                 int day = int.Parse(period.Name);
-                var settlementPeriod = JsonSerializer.Deserialize<SettlementPeriod>(period.Value.GetRawText(), options);
+                var settlementPeriod = JsonSerializer.Deserialize<SettlementPeriod>(period.Value.GetRawText(), options)!;
                 monthPeriods[day] = settlementPeriod;
             }
 
