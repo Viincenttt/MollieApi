@@ -19,6 +19,11 @@ namespace Mollie.Api.Models.Terminal.Response
         public required string Id { get; set; }
 
         /// <summary>
+        /// Whether this entity was created in live mode or in test mode.
+        /// </summary>
+        public required Mode Mode { get; set; }
+
+        /// <summary>
         /// The identifier used for referring to the profile the terminal was created on. For example, pfl_QkEhN94Ba.
         /// </summary>
         public required string ProfileId { get; set; }
