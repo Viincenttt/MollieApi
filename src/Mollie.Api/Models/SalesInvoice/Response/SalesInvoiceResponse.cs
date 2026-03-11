@@ -19,6 +19,11 @@ public record SalesInvoiceResponse : IEntity {
     public required string Id { get; set; }
 
     /// <summary>
+    /// The mode used to create this sales invoice
+    /// </summary>
+    public required Mode Mode { get; set; }
+
+    /// <summary>
     /// When issued, an invoice number will be set for the sales invoice.
     /// </summary>
     public string? InvoiceNumber { get; set; }
