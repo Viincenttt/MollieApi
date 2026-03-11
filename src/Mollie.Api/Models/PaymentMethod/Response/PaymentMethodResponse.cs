@@ -34,6 +34,12 @@ namespace Mollie.Api.Models.PaymentMethod.Response {
         /// </summary>
         public required PaymentMethodResponseImage Image { get; set; }
 
+        /// <summary>
+        /// The payment method's activation status for this profile.
+        /// See the <see cref="PaymentMethodStatus"/> class for possible values.
+        /// </summary>
+        public string? Status { get; set; }
+
 		/// <summary>
 		///	List of Issuers
 		/// </summary>

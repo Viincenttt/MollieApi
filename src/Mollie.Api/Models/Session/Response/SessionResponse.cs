@@ -50,6 +50,11 @@ namespace Mollie.Api.Models.Session.Response {
         public string? RedirectUrl { get; set; }
 
         /// <summary>
+        /// The identifier referring to the profile this entity belongs to.
+        /// </summary>
+        public required string ProfileId { get; set; }
+
+        /// <summary>
         /// The URL your customer will be redirected to when the customer explicitly cancels the payment.
         /// If this URL is not provided, the customer will be redirected to the redirectUrl instead — see above.
         /// </summary>

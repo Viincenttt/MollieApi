@@ -8,6 +8,11 @@ namespace Mollie.Api.Models.Order.Response {
         public required UrlObjectLink<OrderResponse> Self { get; set; }
 
         /// <summary>
+        /// A link to the Mollie dashboard page.
+        /// </summary>
+        public required UrlLink Dashboard { get; set; }
+
+        /// <summary>
         /// The URL your customer should visit to make the payment for the order.
         /// This is where you should redirect the customer to after creating the order.
         /// </summary>

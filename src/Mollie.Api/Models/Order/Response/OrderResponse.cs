@@ -28,6 +28,13 @@ namespace Mollie.Api.Models.Order.Response {
         public string? Method { get; set; }
 
         /// <summary>
+        /// For digital goods, you must make sure to apply the VAT rate from your customer's country in most jurisdictions.
+        /// You can use this parameter to restrict the payment methods available to your customer to methods from the billing
+        /// country only.
+        /// </summary>
+        public bool ShopperCountryMustMatchBillingCountry { get; set; }
+
+        /// <summary>
         /// The mode used to create this order.
         /// </summary>
         public Mode Mode { get; set; }

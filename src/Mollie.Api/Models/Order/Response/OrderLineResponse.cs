@@ -10,6 +10,11 @@ namespace Mollie.Api.Models.Order.Response {
         public required string Id { get; set; }
 
         /// <summary>
+        /// Indicates the response contains an order line object. Will always contain orderline for this endpoint.
+        /// </summary>
+        public required string Resource { get; set; }
+
+        /// <summary>
         /// The ID of the order the line belongs too, for example ord_kEn1PlbGa.
         /// </summary>
         public required string OrderId { get; set; }
