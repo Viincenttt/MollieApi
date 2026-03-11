@@ -2,6 +2,7 @@
 using Mollie.Api.Models.Customer.Response;
 using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Mandate.Response;
+using Mollie.Api.Models.Order.Response;
 using Mollie.Api.Models.Settlement.Response;
 using Mollie.Api.Models.Subscription.Response;
 using Mollie.Api.Models.Url;
@@ -67,6 +68,11 @@ namespace Mollie.Api.Models.Payment.Response {
         /// The API resource URL of the customer this payment belongs to. Not present if not linked to a customer.
         /// </summary>
         public UrlObjectLink<CustomerResponse>? Customer { get; set; }
+
+        /// <summary>
+        /// The API resource URL of the order this payment was created for. Not present if not created for an order.
+        /// </summary>
+        public UrlObjectLink<OrderResponse>? Order { get; set; }
 
         /// <summary>
         /// Recurring payments do not have a checkout URL, because these payments are executed without any user interaction.
