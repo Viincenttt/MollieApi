@@ -14,6 +14,11 @@ namespace Mollie.Api.Models.Mandate.Response {
         public required string Id { get; set; }
 
         /// <summary>
+        /// Whether this entity was created in live mode or in test mode.
+        /// </summary>
+        public required Mode Mode { get; set; }
+
+        /// <summary>
         /// Current status of mandate - See the Mollie.Api.Models.Mandate.MandateStatus class for a full
         /// list of known values.
         /// </summary>
@@ -33,6 +38,11 @@ namespace Mollie.Api.Models.Mandate.Response {
         /// The signature date of the mandate in YYYY-MM-DD format.
         /// </summary>
         public string? SignatureDate { get; set; }
+
+        /// <summary>
+        /// The identifier referring to the customer this mandate was linked to.
+        /// </summary>
+        public required string CustomerId { get; set; }
 
         /// <summary>
         /// DateTime when mandate was created.
