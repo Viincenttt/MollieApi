@@ -4,27 +4,46 @@ on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: '8.0.x'
-    - name: Install dependencies
-      run: dotnet restore
-    - name: Build unit test project
-      run: dotnet build tests/Mollie.Tests.Unit --configuration Release --no-restore
-    - name: Run unit tests
-      run: dotnet test tests/Mollie.Tests.Unit --no-restore --verbosity normal
-    - name: Build integration test project
-      run: dotnet build tests/Mollie.Tests.Integration --configuration Release --no-restore
-    - name: Run integration tests
-      run: dotnet test tests/Mollie.Tests.Integration --filter "TestCategory!=LocalIntegrationTests" --no-restore --verbosity normal 
-      env:
-        Mollie__ApiKey: ${{ secrets.Mollie__ApiKey }}
-        Mollie__AccessKey: ${{ secrets.Mollie__AccessKey }}
-        Mollie__ClientId: ${{ secrets.Mollie__ClientId }}
-        Mollie__ClientSecret: ${{ secrets.Mollie__ClientSecret }}
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '8.0.x'
+      - name: Install dependencies
+        run: dotnet restore
+      - name: Build unit test project
+        run: dotnet build tests/Mollie.Tests.Unit --configuration Release --no-restore
+      - name: Run unit tests
+        run: dotnet test tests/Mollie.Tests.Unit --no-restore --verbosity normal
+      - name: Build integration test project
+        run: dotnet build tests/Mollie.Tests.Integration --configuration Release --no-restore
+      - name: Run integration tests
+        run: dotnet test tests/Mollie.Tests.Integration --filter "TestCategory!=LocalIntegrationTests" --no-restore --verbosity normal
+        env:
+          Mollie__ApiKey: ${{ secrets.Mollie__ApiKey }}
+          Mollie__AccessKey: ${{ secrets.Mollie__AccessKey }}
+          Mollie__ClientId: ${{ secrets.Mollie__ClientId }}
+          Mollie__ClientSecret: ${{ secrets.Mollie__ClientSecret }}
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/master'
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '8.0.x'
+      - name: Install dependencies
+        run: dotnet restore
+      - name: Pack Mollie.Api
+        run: dotnet pack src/Mollie.Api/Mollie.Api.csproj --configuration Release --no-restore --output ./nupkgs
+      - name: Pack Mollie.Api.AspNet
+        run: dotnet pack src/Mollie.Api.AspNet/Mollie.Api.AspNet.csproj --configuration Release --no-restore --output ./nupkgs
+      - name: Push to NuGet
+        run: dotnet nuget push ./nupkgs/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
