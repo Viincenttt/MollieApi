@@ -27,7 +27,7 @@
     <None Include="..\..\LICENSE" Pack="true" PackagePath="\" />
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(SignAssembly)' != 'true'">
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
       <_Parameter1>Mollie.Tests.Unit</_Parameter1>
     </AssemblyAttribute>
@@ -38,4 +38,22 @@
       <_Parameter1>Mollie.Api.AspNet</_Parameter1>
     </AssemblyAttribute>
   </ItemGroup>
+
+  <ItemGroup Condition="'$(SignAssembly)' == 'true' and '$(MollieStrongNamePublicKey)' != ''">
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>Mollie.Tests.Unit, PublicKey=$(MollieStrongNamePublicKey)</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>Mollie.Tests.Integration, PublicKey=$(MollieStrongNamePublicKey)</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>Mollie.Api.AspNet, PublicKey=$(MollieStrongNamePublicKey)</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
+  <Target Name="RequirePublicKeyForStrongNamedFriends"
+          BeforeTargets="GenerateAssemblyInfo"
+          Condition="'$(SignAssembly)' == 'true' and '$(MollieStrongNamePublicKey)' == ''">
+    <Error Text="MollieStrongNamePublicKey must be set when SignAssembly=true to emit InternalsVisibleTo attributes." />
+  </Target>
 </Project>

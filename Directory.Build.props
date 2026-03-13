@@ -29,4 +29,12 @@
     <!-- Suppress warnings for missing XML documentation comments on public members -->
     <NoWarn>$(NoWarn);CS1591</NoWarn>
   </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- Release strong-name signing; key material should come from CI secrets. -->
+    <MollieStrongNameKeyFile Condition="'$(MollieStrongNameKeyFile)' == ''">$(MOLLIE_STRONG_NAME_KEY_FILE)</MollieStrongNameKeyFile>
+    <MollieStrongNamePublicKey Condition="'$(MollieStrongNamePublicKey)' == ''">$(MOLLIE_STRONG_NAME_PUBLIC_KEY)</MollieStrongNamePublicKey>
+    <SignAssembly Condition="'$(Configuration)' == 'Release' and '$(MollieStrongNameKeyFile)' != '' and Exists('$(MollieStrongNameKeyFile)')">true</SignAssembly>
+    <AssemblyOriginatorKeyFile Condition="'$(SignAssembly)' == 'true'">$(MollieStrongNameKeyFile)</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
 </Project>
