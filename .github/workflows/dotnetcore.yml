@@ -41,11 +41,9 @@ jobs:
           dotnet-version: '8.0.x'
       - name: Install dependencies
         run: dotnet restore
-      - name: Build
-        run: dotnet build --configuration Release --no-restore
       - name: Pack Mollie.Api
-        run: dotnet pack src/Mollie.Api/Mollie.Api.csproj --configuration Release --no-restore --no-build --output ./nupkgs
+        run: dotnet pack src/Mollie.Api/Mollie.Api.csproj --configuration Release --no-restore --output ./nupkgs
       - name: Pack Mollie.Api.AspNet
-        run: dotnet pack src/Mollie.Api.AspNet/Mollie.Api.AspNet.csproj --configuration Release --no-restore --no-build --output ./nupkgs
+        run: dotnet pack src/Mollie.Api.AspNet/Mollie.Api.AspNet.csproj --configuration Release --no-restore --output ./nupkgs
       - name: Push to NuGet
         run: dotnet nuget push ./nupkgs/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
