@@ -11,7 +11,7 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '10.0.x'
       - name: Install dependencies
         run: dotnet restore
       - name: Build unit test project
@@ -31,21 +31,33 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     needs: build
-    if: github.ref == 'refs/heads/master'
 
     steps:
       - uses: actions/checkout@v4
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '10.0.x'
       - name: Install dependencies
         run: dotnet restore
-      - name: Build
-        run: dotnet build --configuration Release --no-restore
+      - name: Prepare strong-name signing key
+        shell: bash
+        run: |
+          if [ -z "${{ secrets.MOLLIE_STRONG_NAME_KEY_BASE64 }}" ]; then
+            echo "MOLLIE_STRONG_NAME_KEY_BASE64 secret is not set."
+            exit 1
+          fi
+          mkdir -p "$RUNNER_TEMP/signing"
+          echo "${{ secrets.MOLLIE_STRONG_NAME_KEY_BASE64 }}" | base64 --decode > "$RUNNER_TEMP/signing/mollie.snk"
+          chmod 600 "$RUNNER_TEMP/signing/mollie.snk"
+          echo "MOLLIE_STRONG_NAME_KEY_FILE=$RUNNER_TEMP/signing/mollie.snk" >> "$GITHUB_ENV"
+      - name: Build Mollie.Api
+        run: dotnet build src/Mollie.Api/Mollie.Api.csproj --configuration Release --no-restore /p:MollieStrongNameKeyFile="$MOLLIE_STRONG_NAME_KEY_FILE"
+      - name: Build Mollie.Api.AspNet
+        run: dotnet build src/Mollie.Api.AspNet/Mollie.Api.AspNet.csproj --configuration Release --no-restore /p:MollieStrongNameKeyFile="$MOLLIE_STRONG_NAME_KEY_FILE"
       - name: Pack Mollie.Api
-        run: dotnet pack src/Mollie.Api/Mollie.Api.csproj --configuration Release --no-restore --no-build --output ./nupkgs
+        run: dotnet pack src/Mollie.Api/Mollie.Api.csproj --configuration Release --no-restore --no-build --output ./nupkgs /p:MollieStrongNameKeyFile="$MOLLIE_STRONG_NAME_KEY_FILE"
       - name: Pack Mollie.Api.AspNet
-        run: dotnet pack src/Mollie.Api.AspNet/Mollie.Api.AspNet.csproj --configuration Release --no-restore --no-build --output ./nupkgs
+        run: dotnet pack src/Mollie.Api.AspNet/Mollie.Api.AspNet.csproj --configuration Release --no-restore --no-build --output ./nupkgs /p:MollieStrongNameKeyFile="$MOLLIE_STRONG_NAME_KEY_FILE"
       - name: Push to NuGet
         run: dotnet nuget push ./nupkgs/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
