@@ -180,7 +180,7 @@ Spotted a bug or want to add a new feature? Contributions are welcome! Please ta
 This library targets [.NET Standard 2.0](https://docs.microsoft.com/en-us/dotnet/standard/net-standard?tabs=net-standard-2-0), making it compatible with a wide range of platforms:
 | .NET implementation  | Version support |
 | ------------- | ------------- |
-| .NET and .NET Core | 2.0, 2.1, 2.2, 3.0, 3.1, 5.0, 6.0, 7.0, 8.0, 9.0 |
+| .NET and .NET Core | 2.0, 2.1, 2.2, 3.0, 3.1, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0 |
 | .NET Framework  | 4.6.1, 4.6.2, 4.7, 4.7.1, 4.7.2, 4.8, 4.8.1  |
 | Mono | 5.4, 6.4  |
 | Universal Windows Platform | 10.0.16299, TBD |
