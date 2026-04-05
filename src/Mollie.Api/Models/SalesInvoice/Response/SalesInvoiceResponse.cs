@@ -130,6 +130,14 @@ public record SalesInvoiceResponse : IEntity {
     public Amount? Discount { get; set; }
 
     /// <summary>
+    /// This indicates whether the invoice is an e-invoice. The default value is false and can't be changed after the
+    /// invoice has been issued. When emailDetails is provided, an additional email is sent to the recipient. E-invoicing
+    /// is only available for merchants based in Belgium, Germany, and the Netherlands, and only when the recipient is
+    /// also located in one of these countries.
+    /// </summary>
+    public bool IsEInvoice { get; set; }
+
+    /// <summary>
     /// The amount that is left to be paid.
     /// </summary>
     public required Amount AmountDue { get; set; }
