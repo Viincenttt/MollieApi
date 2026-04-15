@@ -178,6 +178,66 @@ namespace Mollie.Tests.Unit.Client {
         }
 
         [Theory]
+        [InlineData(false, "")]
+        [InlineData(true, "?embed=payment")]
+        public async Task GetSettlementCaptureListAsync_WithEmbed_QueryStringMatchesExpectedValue(
+            bool embedPayment, string expectedQueryString) {
+            // Given
+            var mockHttp = new MockHttpMessageHandler();
+            mockHttp.When($"{BaseMollieClient.DefaultBaseApiEndPoint}settlements/{defaultSettlementId}/captures{expectedQueryString}")
+                .Respond("application/json", defaultCaptureListJsonResponse);
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            using SettlementClient settlementClient = new SettlementClient("api-key", httpClient);
+
+            // When
+            var result = await settlementClient.GetSettlementCaptureListAsync(defaultSettlementId, embedPayment: embedPayment);
+
+            // Then
+            mockHttp.VerifyNoOutstandingExpectation();
+            result.ShouldNotBeNull();
+        }
+
+        [Theory]
+        [InlineData(false, "")]
+        [InlineData(true, "?embed=payment")]
+        public async Task GetSettlementRefundListAsync_WithEmbed_QueryStringMatchesExpectedValue(
+            bool embedPayment, string expectedQueryString) {
+            // Given
+            var mockHttp = new MockHttpMessageHandler();
+            mockHttp.When($"{BaseMollieClient.DefaultBaseApiEndPoint}settlements/{defaultSettlementId}/refunds{expectedQueryString}")
+                .Respond("application/json", defaultSettlementRefundListResponse);
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            using SettlementClient settlementClient = new SettlementClient("api-key", httpClient);
+
+            // When
+            var result = await settlementClient.GetSettlementRefundListAsync(defaultSettlementId, embedPayment: embedPayment);
+
+            // Then
+            mockHttp.VerifyNoOutstandingExpectation();
+            result.ShouldNotBeNull();
+        }
+
+        [Theory]
+        [InlineData(false, "")]
+        [InlineData(true, "?embed=payment")]
+        public async Task GetSettlementChargebackListAsync_WithEmbed_QueryStringMatchesExpectedValue(
+            bool embedPayment, string expectedQueryString) {
+            // Given
+            var mockHttp = new MockHttpMessageHandler();
+            mockHttp.When($"{BaseMollieClient.DefaultBaseApiEndPoint}settlements/{defaultSettlementId}/chargebacks{expectedQueryString}")
+                .Respond("application/json", defaultSettlementChargebackListResponse);
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            using SettlementClient settlementClient = new SettlementClient("api-key", httpClient);
+
+            // When
+            var result = await settlementClient.GetSettlementChargebackListAsync(defaultSettlementId, embedPayment: embedPayment);
+
+            // Then
+            mockHttp.VerifyNoOutstandingExpectation();
+            result.ShouldNotBeNull();
+        }
+
+        [Theory]
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
@@ -330,6 +390,57 @@ namespace Mollie.Tests.Unit.Client {
         ""next"": null,
         ""documentation"": {
             ""href"": ""https://docs.mollie.com/reference/v2/settlements-api/list-settlements"",
+            ""type"": ""text/html""
+        }
+    }
+}";
+
+        private const string defaultSettlementPaymentListResponse = @"{
+    ""_embedded"": {
+        ""payments"": []
+    },
+    ""count"": 0,
+    ""_links"": {
+        ""self"": {
+            ""href"": ""https://api.mollie.com/v2/settlements/stl_jDk30akdN/payments"",
+            ""type"": ""application/hal+json""
+        },
+        ""documentation"": {
+            ""href"": ""https://docs.mollie.com/reference/v2/settlements-api/list-settlement-payments"",
+            ""type"": ""text/html""
+        }
+    }
+}";
+
+        private const string defaultSettlementRefundListResponse = @"{
+    ""_embedded"": {
+        ""refunds"": []
+    },
+    ""count"": 0,
+    ""_links"": {
+        ""self"": {
+            ""href"": ""https://api.mollie.com/v2/settlements/stl_jDk30akdN/refunds"",
+            ""type"": ""application/hal+json""
+        },
+        ""documentation"": {
+            ""href"": ""https://docs.mollie.com/reference/v2/settlements-api/list-settlement-refunds"",
+            ""type"": ""text/html""
+        }
+    }
+}";
+
+        private const string defaultSettlementChargebackListResponse = @"{
+    ""_embedded"": {
+        ""chargebacks"": []
+    },
+    ""count"": 0,
+    ""_links"": {
+        ""self"": {
+            ""href"": ""https://api.mollie.com/v2/settlements/stl_jDk30akdN/chargebacks"",
+            ""type"": ""application/hal+json""
+        },
+        ""documentation"": {
+            ""href"": ""https://docs.mollie.com/reference/v2/settlements-api/list-settlement-chargebacks"",
             ""type"": ""text/html""
         }
     }

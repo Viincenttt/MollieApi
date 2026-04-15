@@ -18,11 +18,11 @@ namespace Mollie.Api.Client.Abstract {
         Task<ListResponse<SettlementResponse>> GetSettlementListAsync(UrlObjectLink<ListResponse<SettlementResponse>> url, CancellationToken cancellationToken = default);
         Task<ListResponse<PaymentResponse>> GetSettlementPaymentListAsync(string settlementId, string? from = null, int? limit = null, CancellationToken cancellationToken = default);
         Task<ListResponse<PaymentResponse>> GetSettlementPaymentListAsync(UrlObjectLink<ListResponse<PaymentResponse>> url, CancellationToken cancellationToken = default);
-        Task<ListResponse<RefundResponse>> GetSettlementRefundListAsync(string settlementId, string? from = null, int? limit = null, CancellationToken cancellationToken = default);
+        Task<ListResponse<RefundResponse>> GetSettlementRefundListAsync(string settlementId, string? from = null, int? limit = null, bool embedPayment = false, CancellationToken cancellationToken = default);
         Task<ListResponse<RefundResponse>> GetSettlementRefundListAsync(UrlObjectLink<ListResponse<RefundResponse>> url, CancellationToken cancellationToken = default);
-        Task<ListResponse<ChargebackResponse>> GetSettlementChargebackListAsync(string settlementId, string? from = null, int? limit = null, CancellationToken cancellationToken = default);
+        Task<ListResponse<ChargebackResponse>> GetSettlementChargebackListAsync(string settlementId, string? from = null, int? limit = null, bool embedPayment = false, CancellationToken cancellationToken = default);
         Task<ListResponse<ChargebackResponse>> GetSettlementChargebackListAsync(UrlObjectLink<ListResponse<ChargebackResponse>> url, CancellationToken cancellationToken = default);
-        Task<ListResponse<CaptureResponse>> GetSettlementCaptureListAsync(string settlementId, string? from = null, int? limit = null, CancellationToken cancellationToken = default);
+        Task<ListResponse<CaptureResponse>> GetSettlementCaptureListAsync(string settlementId, string? from = null, int? limit = null, bool embedPayment = false, CancellationToken cancellationToken = default);
         Task<ListResponse<CaptureResponse>> GetSettlementCaptureListAsync(UrlObjectLink<ListResponse<CaptureResponse>> url, CancellationToken cancellationToken = default);
         Task<SettlementResponse> GetSettlementAsync(UrlObjectLink<SettlementResponse> url, CancellationToken cancellationToken = default);
     }

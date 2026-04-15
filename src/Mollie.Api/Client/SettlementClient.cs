@@ -66,7 +66,8 @@ namespace Mollie.Api.Client {
         }
 
         public async Task<ListResponse<PaymentResponse>> GetSettlementPaymentListAsync(
-            string settlementId, string? from = null, int? limit = null, CancellationToken cancellationToken = default) {
+            string settlementId, string? from = null, int? limit = null,
+            CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(settlementId), settlementId);
             return await GetListAsync<ListResponse<PaymentResponse>>(
                 $"settlements/{settlementId}/payments", from, limit, cancellationToken: cancellationToken)
@@ -79,10 +80,13 @@ namespace Mollie.Api.Client {
         }
 
         public async Task<ListResponse<RefundResponse>> GetSettlementRefundListAsync(
-            string settlementId, string? from = null, int? limit = null, CancellationToken cancellationToken = default) {
+            string settlementId, string? from = null, int? limit = null,
+            bool embedPayment = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(settlementId), settlementId);
+            var parameters = new Dictionary<string, string>();
+            parameters.AddValueIfNotNullOrEmpty("embed", BuildEmbedParameter(embedPayment));
             return await GetListAsync<ListResponse<RefundResponse>>(
-                $"settlements/{settlementId}/refunds", from, limit, cancellationToken: cancellationToken)
+                $"settlements/{settlementId}/refunds", from, limit, parameters, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
@@ -93,10 +97,13 @@ namespace Mollie.Api.Client {
         }
 
         public async Task<ListResponse<ChargebackResponse>> GetSettlementChargebackListAsync(
-            string settlementId, string? from = null, int? limit = null, CancellationToken cancellationToken = default) {
+            string settlementId, string? from = null, int? limit = null,
+            bool embedPayment = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(settlementId), settlementId);
+            var parameters = new Dictionary<string, string>();
+            parameters.AddValueIfNotNullOrEmpty("embed", BuildEmbedParameter(embedPayment));
             return await GetListAsync<ListResponse<ChargebackResponse>>(
-                $"settlements/{settlementId}/chargebacks", from, limit, cancellationToken: cancellationToken)
+                $"settlements/{settlementId}/chargebacks", from, limit, parameters, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
@@ -107,10 +114,13 @@ namespace Mollie.Api.Client {
         }
 
         public async Task<ListResponse<CaptureResponse>> GetSettlementCaptureListAsync(
-            string settlementId, string? from = null, int? limit = null, CancellationToken cancellationToken = default) {
+            string settlementId, string? from = null, int? limit = null,
+            bool embedPayment = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(settlementId), settlementId);
+            var parameters = new Dictionary<string, string>();
+            parameters.AddValueIfNotNullOrEmpty("embed", BuildEmbedParameter(embedPayment));
             return await GetListAsync<ListResponse<CaptureResponse>>(
-                $"settlements/{settlementId}/captures", from, limit, cancellationToken: cancellationToken)
+                $"settlements/{settlementId}/captures", from, limit, parameters, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
@@ -124,6 +134,12 @@ namespace Mollie.Api.Client {
             UrlObjectLink<SettlementResponse> url, CancellationToken cancellationToken = default) {
             return await GetAsync(url, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
+        }
+
+        private string BuildEmbedParameter(bool embedPayment) {
+            var embedList = new List<string>();
+            embedList.AddValueIfTrue("payment", embedPayment);
+            return embedList.ToIncludeParameter();
         }
     }
 }
