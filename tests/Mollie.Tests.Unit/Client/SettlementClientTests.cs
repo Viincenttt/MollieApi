@@ -135,6 +135,49 @@ namespace Mollie.Tests.Unit.Client {
         }
 
         [Theory]
+        [InlineData(null, null, null, null, null, "")]
+        [InlineData("bal_gVMhpKD3yw", null, null, null, null, "?balanceId=bal_gVMhpKD3yw")]
+        [InlineData(null, 2024, null, null, null, "?year=2024")]
+        [InlineData(null, 2024, 3, null, null, "?year=2024&month=3")]
+        [InlineData(null, null, null, "stl_jDk30akdN", null, "?from=stl_jDk30akdN")]
+        [InlineData(null, null, null, "stl_jDk30akdN", 10, "?from=stl_jDk30akdN&limit=10")]
+        [InlineData(null, null, null, null, 10, "?limit=10")]
+        [InlineData("bal_gVMhpKD3yw", 2024, 3, "stl_jDk30akdN", 10, "?balanceId=bal_gVMhpKD3yw&year=2024&month=3&from=stl_jDk30akdN&limit=10")]
+        public async Task GetSettlementListAsync_WithVariousParameters_QueryStringMatchesExpectedValue(
+            string? balanceId, int? year, int? month, string? from, int? limit, string expectedQueryString) {
+            // Given
+            var mockHttp = new MockHttpMessageHandler();
+            mockHttp.When($"{BaseMollieClient.DefaultBaseApiEndPoint}settlements{expectedQueryString}")
+                .Respond("application/json", defaultSettlementListResponse);
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            using SettlementClient settlementClient = new SettlementClient("api-key", httpClient);
+
+            // When
+            var result = await settlementClient.GetSettlementListAsync(balanceId, year, month, from: from, limit: limit);
+
+            // Then
+            mockHttp.VerifyNoOutstandingExpectation();
+            result.ShouldNotBeNull();
+        }
+
+        [Fact]
+        public async Task GetSettlementListAsync_WithCurrencies_QueryStringContainsCurrencies() {
+            // Given
+            var currencies = new[] { "EUR", "USD" };
+            string expectedUrl = $"{BaseMollieClient.DefaultBaseApiEndPoint}settlements?currencies=EUR%2CUSD";
+            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, defaultSettlementListResponse);
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            using SettlementClient settlementClient = new SettlementClient("api-key", httpClient);
+
+            // When
+            var result = await settlementClient.GetSettlementListAsync(currencies: currencies);
+
+            // Then
+            mockHttp.VerifyNoOutstandingExpectation();
+            result.ShouldNotBeNull();
+        }
+
+        [Theory]
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
@@ -236,6 +279,61 @@ namespace Mollie.Tests.Unit.Client {
         private const string defaultAmountValue = "1027.99";
         private const string defaultAmountCurrency = "EUR";
         private const string defaultInvoiceId = "inv_FrvewDA3Pr";
+
+        private const string defaultSettlementListResponse = @"{
+    ""_embedded"": {
+        ""settlements"": [
+            {
+                ""resource"": ""settlement"",
+                ""id"": ""stl_jDk30akdN"",
+                ""reference"": ""1234567.1804.03"",
+                ""createdAt"": ""2018-04-06T06:00:01.0Z"",
+                ""settledAt"": ""2018-04-06T09:41:44.0Z"",
+                ""status"": ""paidout"",
+                ""amount"": {
+                    ""value"": ""39.75"",
+                    ""currency"": ""EUR""
+                },
+                ""periods"": {},
+                ""_links"": {
+                    ""self"": {
+                        ""href"": ""https://api.mollie.com/v2/settlements/stl_jDk30akdN"",
+                        ""type"": ""application/hal+json""
+                    },
+                    ""payments"": {
+                        ""href"": ""https://api.mollie.com/v2/settlements/stl_jDk30akdN/payments"",
+                        ""type"": ""application/hal+json""
+                    },
+                    ""refunds"": {
+                        ""href"": ""https://api.mollie.com/v2/settlements/stl_jDk30akdN/refunds"",
+                        ""type"": ""application/hal+json""
+                    },
+                    ""chargebacks"": {
+                        ""href"": ""https://api.mollie.com/v2/settlements/stl_jDk30akdN/chargebacks"",
+                        ""type"": ""application/hal+json""
+                    },
+                    ""documentation"": {
+                        ""href"": ""https://docs.mollie.com/reference/v2/settlements-api/list-settlements"",
+                        ""type"": ""text/html""
+                    }
+                }
+            }
+        ]
+    },
+    ""count"": 1,
+    ""_links"": {
+        ""self"": {
+            ""href"": ""https://api.mollie.com/v2/settlements?limit=50"",
+            ""type"": ""application/hal+json""
+        },
+        ""previous"": null,
+        ""next"": null,
+        ""documentation"": {
+            ""href"": ""https://docs.mollie.com/reference/v2/settlements-api/list-settlements"",
+            ""type"": ""text/html""
+        }
+    }
+}";
 
         private string defaultCaptureListJsonResponse = $@"{{
     ""_embedded"": {{
