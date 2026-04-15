@@ -59,7 +59,7 @@ namespace Mollie.Tests.Unit.Client {
             SettlementClient settlementClient = new SettlementClient("api-key", httpClient);
 
             // When: We make the request
-            SettlementResponse settlementResponse = await settlementClient.GetOpenSettlement();
+            SettlementResponse settlementResponse = await settlementClient.GetOpenSettlementAsync();
 
             // Then: Response should be parsed
             mockHttp.VerifyNoOutstandingExpectation();
@@ -126,7 +126,7 @@ namespace Mollie.Tests.Unit.Client {
             SettlementClient settlementClient = new SettlementClient("api-key", httpClient);
 
             // When: We make the request
-            SettlementResponse settlementResponse = await settlementClient.GetOpenSettlement();
+            SettlementResponse settlementResponse = await settlementClient.GetOpenSettlementAsync();
 
             // Then: Response should be parsed
             mockHttp.VerifyNoOutstandingExpectation();
