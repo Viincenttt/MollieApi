@@ -47,8 +47,8 @@ namespace Mollie.Api.Client {
         }
 
         public async Task<ListResponse<SettlementResponse>> GetSettlementListAsync(
-            string? balanceId = null, int? year = null, int? month = null, IEnumerable<string>? currencies = null,
-            string? from = null, int? limit = null, CancellationToken cancellationToken = default) {
+            string? balanceId = null, string? from = null, int? limit = null, int? year = null, int? month = null,
+            IEnumerable<string>? currencies = null, CancellationToken cancellationToken = default) {
             var parameters = new Dictionary<string, string>();
             parameters.AddValueIfNotNullOrEmpty(nameof(balanceId), balanceId);
             parameters.AddValueIfNotNullOrEmpty(nameof(year), Convert.ToString(year));

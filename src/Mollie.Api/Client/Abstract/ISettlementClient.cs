@@ -44,7 +44,9 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="limit">The maximum number of settlements to return.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A list of settlement objects.</returns>
-        Task<ListResponse<SettlementResponse>> GetSettlementListAsync(string? balanceId = null, int? year = null, int? month = null, IEnumerable<string>? currencies = null, string? from = null, int? limit = null, CancellationToken cancellationToken = default);
+        Task<ListResponse<SettlementResponse>> GetSettlementListAsync(
+            string? balanceId = null, string? from = null, int? limit = null, int? year = null, int? month = null,
+            IEnumerable<string>? currencies = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieve a list of settlements using a URL object link.

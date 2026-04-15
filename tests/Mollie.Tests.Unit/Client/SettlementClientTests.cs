@@ -153,7 +153,7 @@ namespace Mollie.Tests.Unit.Client {
             using SettlementClient settlementClient = new SettlementClient("api-key", httpClient);
 
             // When
-            var result = await settlementClient.GetSettlementListAsync(balanceId, year, month, from: from, limit: limit);
+            var result = await settlementClient.GetSettlementListAsync(balanceId, from: from, limit: limit, year: year, month: month);
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
