@@ -34,13 +34,13 @@ namespace Mollie.Api.Client {
                 .ConfigureAwait(false);
         }
 
-        public async Task<SettlementResponse> GetNextSettlement(CancellationToken cancellationToken = default) {
+        public async Task<SettlementResponse> GetNextSettlementAsync(CancellationToken cancellationToken = default) {
             return await GetAsync<SettlementResponse>(
                 "settlements/next", cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<SettlementResponse> GetOpenSettlement(CancellationToken cancellationToken = default) {
+        public async Task<SettlementResponse> GetOpenSettlementAsync(CancellationToken cancellationToken = default) {
             return await GetAsync<SettlementResponse>(
                 $"settlements/open", cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
