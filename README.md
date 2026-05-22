@@ -168,6 +168,7 @@ This library currently supports the following API's:
 - [Webhooks API](https://github.com/Viincenttt/MollieApi/wiki/19.-Webhook-Api) 
 - [WebhooksEvents API](https://github.com/Viincenttt/MollieApi/wiki/20.-Webhook-Api)
 - [Balance transfer API](https://github.com/Viincenttt/MollieApi/wiki/21.-Balance-transfer-Api) 
+- [Payout API](https://github.com/Viincenttt/MollieApi/wiki/22.-Payout-API)
 
 ---
 
