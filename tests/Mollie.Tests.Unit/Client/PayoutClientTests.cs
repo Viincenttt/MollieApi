@@ -8,6 +8,7 @@ using Mollie.Api.Models.Payout.Response;
 using RichardSzalay.MockHttp;
 using Shouldly;
 using Xunit;
+using SortDirection = Mollie.Api.Models.SortDirection;
 
 namespace Mollie.Tests.Unit.Client;
 
@@ -81,6 +82,32 @@ public class PayoutClientTests : BaseClientTests {
         response.Description.ShouldBe("My payout description");
     }
 
+    [Theory]
+    [InlineData(null, null, null, false, null, "")]
+    [InlineData(null, "from", null, false, null, "?from=from")]
+    [InlineData(null, "from", 50, false, null, "?from=from&limit=50")]
+    [InlineData(null, null, null, true, null, "?testmode=true")]
+    [InlineData(null, null, null, true, SortDirection.Desc, "?testmode=true&sort=desc")]
+    [InlineData(null, null, null, true, SortDirection.Asc, "?testmode=true&sort=asc")]
+    [InlineData("bal_gVMhHKqSSRYJyPsuoPNFH", null, null, false, null, "?balanceId=bal_gVMhHKqSSRYJyPsuoPNFH")]
+    [InlineData("bal_gVMhHKqSSRYJyPsuoPNFH", null, null, true, SortDirection.Desc, "?testmode=true&sort=desc&balanceId=bal_gVMhHKqSSRYJyPsuoPNFH")]
+    public async Task GetPayoutListAsync_QueryStringParameters_AreFormattedCorrectly(
+        string? balanceId, string? from, int? limit, bool testmode, SortDirection? sort, string expectedQueryString) {
+        // Given
+        var mockHttp = new MockHttpMessageHandler();
+        mockHttp.When($"{BaseMollieClient.DefaultBaseApiEndPoint}payouts{expectedQueryString}")
+            .Respond("application/json", CreatePayoutListJsonResponse());
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        var client = new PayoutClient("abcde", httpClient);
+
+        // When
+        var result = await client.GetPayoutListAsync(balanceId, from, limit, sort, testmode);
+
+        // Then
+        mockHttp.VerifyNoOutstandingExpectation();
+        result.ShouldNotBeNull();
+    }
+
     [Fact]
     public async Task CreatePayoutAsync_WithTestmode_SendsTestmodeInRequest() {
         // Given
@@ -105,6 +132,27 @@ public class PayoutClientTests : BaseClientTests {
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
         response.ShouldNotBeNull();
+    }
+
+    private string CreatePayoutListJsonResponse() {
+        return $@"{{
+  ""count"": 1,
+  ""_embedded"": {{
+    ""payouts"": [
+      {CreatePayoutJsonResponse("payout_j8NvRAM2WNZtsykpLEX8J", "bal_gVMhHKqSSRYJyPsuoPNFH", null)}
+    ]
+  }},
+  ""_links"": {{
+    ""self"": {{
+      ""href"": ""https://api.mollie.com/v2/payouts"",
+      ""type"": ""application/hal+json""
+    }},
+    ""documentation"": {{
+      ""href"": ""https://docs.mollie.com/reference/list-payouts"",
+      ""type"": ""text/html""
+    }}
+  }}
+}}";
     }
 
     private string CreatePayoutJsonResponse(

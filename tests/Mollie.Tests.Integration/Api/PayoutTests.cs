@@ -73,6 +73,34 @@ public class PayoutTests : BaseMollieApiTestClass, IDisposable {
         result.Amount!.Currency.ShouldBe("EUR");
     }
 
+    [Fact]
+    public async Task GetPayoutListAsync_WithoutParameters_IsParsedCorrectly() {
+        // When: We retrieve the list of payouts
+        var result = await _payoutClient.GetPayoutListAsync();
+
+        // Then
+        result.ShouldNotBeNull();
+        result.Items.ShouldNotBeNull();
+        result.Links.ShouldNotBeNull();
+        result.Links.Self.ShouldNotBeNull();
+    }
+
+    [Fact]
+    public async Task GetPayoutListAsync_FilteredByBalanceId_IsParsedCorrectly() {
+        // Given: We retrieve the primary balance
+        var primaryBalance = await _balanceClient.GetPrimaryBalanceAsync();
+
+        // When: We retrieve payouts filtered by balance ID
+        var result = await _payoutClient.GetPayoutListAsync(balanceId: primaryBalance.Id);
+
+        // Then
+        result.ShouldNotBeNull();
+        result.Items.ShouldNotBeNull();
+        foreach (var payout in result.Items) {
+            payout.BalanceId.ShouldBe(primaryBalance.Id);
+        }
+    }
+
     public void Dispose() {
         _payoutClient?.Dispose();
         _balanceClient?.Dispose();
