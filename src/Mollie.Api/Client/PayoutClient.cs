@@ -40,4 +40,13 @@ public class PayoutClient : BaseMollieClient, IPayoutClient {
                 "payouts", from, limit, queryParameters, cancellationToken: cancellationToken)
             .ConfigureAwait(false);
     }
+
+    public async Task<PayoutResponse> GetPayoutAsync(
+        string payoutId, bool testmode = false, CancellationToken cancellationToken = default) {
+        ValidateRequiredUrlParameter(nameof(payoutId), payoutId);
+        var queryParameters = BuildQueryParameters(testmode: testmode);
+        return await GetAsync<PayoutResponse>(
+                $"payouts/{payoutId}{queryParameters.ToQueryString()}", cancellationToken: cancellationToken)
+            .ConfigureAwait(false);
+    }
 }

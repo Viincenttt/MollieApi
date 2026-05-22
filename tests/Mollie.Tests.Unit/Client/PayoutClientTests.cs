@@ -134,6 +134,64 @@ public class PayoutClientTests : BaseClientTests {
         response.ShouldNotBeNull();
     }
 
+    [Fact]
+    public async Task GetPayoutAsync_WithValidPayoutId_ResponseIsDeserializedInExpectedFormat() {
+        // Given
+        const string payoutId = "payout_j8NvRAM2WNZtsykpLEX8J";
+        const string balanceId = "bal_gVMhHKqSSRYJyPsuoPNFH";
+        string jsonToReturnInMockResponse = CreatePayoutJsonResponse(payoutId, balanceId, null);
+        var mockHttp = CreateMockHttpMessageHandler(
+            HttpMethod.Get,
+            $"{BaseMollieClient.DefaultBaseApiEndPoint}payouts/{payoutId}",
+            jsonToReturnInMockResponse);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        var client = new PayoutClient("abcde", httpClient);
+
+        // When
+        PayoutResponse response = await client.GetPayoutAsync(payoutId);
+
+        // Then
+        mockHttp.VerifyNoOutstandingExpectation();
+        response.ShouldNotBeNull();
+        response.Id.ShouldBe(payoutId);
+        response.BalanceId.ShouldBe(balanceId);
+        response.Status.ShouldBe(PayoutStatus.Requested);
+    }
+
+    [Fact]
+    public async Task GetPayoutAsync_WithTestmodeTrue_QueryStringContainsTestmodeParameter() {
+        // Given
+        const string payoutId = "payout_j8NvRAM2WNZtsykpLEX8J";
+        const string balanceId = "bal_gVMhHKqSSRYJyPsuoPNFH";
+        string jsonToReturnInMockResponse = CreatePayoutJsonResponse(payoutId, balanceId, null);
+        var mockHttp = CreateMockHttpMessageHandler(
+            HttpMethod.Get,
+            $"{BaseMollieClient.DefaultBaseApiEndPoint}payouts/{payoutId}?testmode=true",
+            jsonToReturnInMockResponse);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        var client = new PayoutClient("abcde", httpClient);
+
+        // When
+        PayoutResponse response = await client.GetPayoutAsync(payoutId, testmode: true);
+
+        // Then
+        mockHttp.VerifyNoOutstandingExpectation();
+        response.ShouldNotBeNull();
+        response.Id.ShouldBe(payoutId);
+    }
+
+    [Fact]
+    public async Task GetPayoutAsync_WithEmptyPayoutId_ThrowsException() {
+        // Given
+        var client = new PayoutClient("abcde", new HttpClient());
+
+        // When / Then
+        var exception = await Should.ThrowAsync<ArgumentException>(async () => {
+            await client.GetPayoutAsync("");
+        });
+        exception.Message.ShouldContain("payoutId");
+    }
+
     private string CreatePayoutListJsonResponse() {
         return $@"{{
   ""count"": 1,

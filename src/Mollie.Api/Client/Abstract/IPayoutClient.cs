@@ -23,6 +23,11 @@ public interface IPayoutClient : IBaseMollieClient {
     Task<ListResponse<PayoutResponse>> GetPayoutListAsync(
         string? balanceId = null, string? from = null, int? limit = null,
         SortDirection? sort = null, bool testmode = false, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Retrieve a single payout by its ID.
+    /// </summary>
+    Task<PayoutResponse> GetPayoutAsync(string payoutId, bool testmode = false, CancellationToken cancellationToken = default);
 }
 
 

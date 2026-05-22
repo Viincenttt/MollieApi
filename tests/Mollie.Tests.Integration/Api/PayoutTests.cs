@@ -101,6 +101,28 @@ public class PayoutTests : BaseMollieApiTestClass, IDisposable {
         }
     }
 
+    [Fact]
+    public async Task GetPayoutAsync_WithValidPayoutId_IsParsedCorrectly() {
+        // Given: We create a payout first to get a valid ID
+        var primaryBalance = await _balanceClient.GetPrimaryBalanceAsync();
+        var created = await _payoutClient.CreatePayoutAsync(new PayoutRequest { BalanceId = primaryBalance.Id });
+
+        // When: We retrieve the payout by ID
+        var result = await _payoutClient.GetPayoutAsync(created.Id);
+
+        // Then
+        result.ShouldNotBeNull();
+        result.Resource.ShouldBe("payout");
+        result.Id.ShouldBe(created.Id);
+        result.BalanceId.ShouldBe(primaryBalance.Id);
+        result.Status.ShouldNotBeNullOrEmpty();
+        result.StatusReason.ShouldNotBeNull();
+        result.CreatedAt.ShouldNotBe(default);
+        result.Mode.ShouldBeOneOf(Mode.Live, Mode.Test);
+        result.Links.ShouldNotBeNull();
+        result.Links.Self.Href.ShouldNotBeNullOrEmpty();
+    }
+
     public void Dispose() {
         _payoutClient?.Dispose();
         _balanceClient?.Dispose();
