@@ -28,6 +28,12 @@ public interface IPayoutClient : IBaseMollieClient {
     /// Retrieve a single payout by its ID.
     /// </summary>
     Task<PayoutResponse> GetPayoutAsync(string payoutId, bool testmode = false, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Cancel a payout. A payout can only be canceled while it has the status requested.
+    /// Once the payout moves to initiated, it is too late to cancel.
+    /// </summary>
+    Task<PayoutResponse> CancelPayoutAsync(string payoutId, bool testmode = false, CancellationToken cancellationToken = default);
 }
 
 

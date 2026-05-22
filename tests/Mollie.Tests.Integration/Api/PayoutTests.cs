@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Payout.Request;
+using Mollie.Api.Models.Payout.Response;
 using Mollie.Tests.Integration.Framework;
 using Shouldly;
 using Xunit;
@@ -121,6 +122,23 @@ public class PayoutTests : BaseMollieApiTestClass, IDisposable {
         result.Mode.ShouldBeOneOf(Mode.Live, Mode.Test);
         result.Links.ShouldNotBeNull();
         result.Links.Self.Href.ShouldNotBeNullOrEmpty();
+    }
+
+    [Fact]
+    public async Task CancelPayoutAsync_WithRequestedPayout_ReturnsCanceledPayout() {
+        // Given: We create a payout first
+        var primaryBalance = await _balanceClient.GetPrimaryBalanceAsync();
+        var created = await _payoutClient.CreatePayoutAsync(new PayoutRequest { BalanceId = primaryBalance.Id });
+
+        // When: We cancel the payout while it is still in 'requested' status
+        var result = await _payoutClient.CancelPayoutAsync(created.Id);
+
+        // Then
+        result.ShouldNotBeNull();
+        result.Resource.ShouldBe("payout");
+        result.Id.ShouldBe(created.Id);
+        result.Status.ShouldBe(PayoutStatus.Canceled);
+        result.CanceledAt.ShouldNotBeNull();
     }
 
     public void Dispose() {

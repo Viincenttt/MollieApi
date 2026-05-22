@@ -192,6 +192,95 @@ public class PayoutClientTests : BaseClientTests {
         exception.Message.ShouldContain("payoutId");
     }
 
+    [Fact]
+    public async Task CancelPayoutAsync_WithValidPayoutId_ResponseIsDeserializedInExpectedFormat() {
+        // Given
+        const string payoutId = "payout_j8NvRAM2WNZtsykpLEX8J";
+        const string balanceId = "bal_gVMhHKqSSRYJyPsuoPNFH";
+        string jsonToReturnInMockResponse = CreateCanceledPayoutJsonResponse(payoutId, balanceId);
+        var mockHttp = CreateMockHttpMessageHandler(
+            HttpMethod.Delete,
+            $"{BaseMollieClient.DefaultBaseApiEndPoint}payouts/{payoutId}",
+            jsonToReturnInMockResponse);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        var client = new PayoutClient("abcde", httpClient);
+
+        // When
+        PayoutResponse response = await client.CancelPayoutAsync(payoutId);
+
+        // Then
+        mockHttp.VerifyNoOutstandingExpectation();
+        response.ShouldNotBeNull();
+        response.Id.ShouldBe(payoutId);
+        response.BalanceId.ShouldBe(balanceId);
+        response.Status.ShouldBe(PayoutStatus.Canceled);
+        response.CanceledAt.ShouldNotBeNull();
+    }
+
+    [Fact]
+    public async Task CancelPayoutAsync_WithTestmodeTrue_SendsTestmodeInRequestBody() {
+        // Given
+        const string payoutId = "payout_j8NvRAM2WNZtsykpLEX8J";
+        const string balanceId = "bal_gVMhHKqSSRYJyPsuoPNFH";
+        string jsonToReturnInMockResponse = CreateCanceledPayoutJsonResponse(payoutId, balanceId);
+        var mockHttp = CreateMockHttpMessageHandler(
+            HttpMethod.Delete,
+            $"{BaseMollieClient.DefaultBaseApiEndPoint}payouts/{payoutId}",
+            jsonToReturnInMockResponse,
+            expectedPartialContent: "\"testmode\":true");
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        var client = new PayoutClient("abcde", httpClient);
+
+        // When
+        PayoutResponse response = await client.CancelPayoutAsync(payoutId, testmode: true);
+
+        // Then
+        mockHttp.VerifyNoOutstandingExpectation();
+        response.ShouldNotBeNull();
+    }
+
+    [Fact]
+    public async Task CancelPayoutAsync_WithEmptyPayoutId_ThrowsException() {
+        // Given
+        var client = new PayoutClient("abcde", new HttpClient());
+
+        // When / Then
+        var exception = await Should.ThrowAsync<ArgumentException>(async () => {
+            await client.CancelPayoutAsync("");
+        });
+        exception.Message.ShouldContain("payoutId");
+    }
+
+    private string CreateCanceledPayoutJsonResponse(string payoutId, string balanceId) {
+        return $@"{{
+  ""resource"": ""payout"",
+  ""id"": ""{payoutId}"",
+  ""balanceId"": ""{balanceId}"",
+  ""amount"": {{""currency"": ""EUR"", ""value"": ""10.00""}},
+  ""description"": ""My payout description"",
+  ""status"": ""canceled"",
+  ""statusReason"": {{
+    ""code"": ""canceled"",
+    ""message"": ""The payout has been canceled.""
+  }},
+  ""createdAt"": ""2024-03-20T09:13:37+00:00"",
+  ""initiatedAt"": null,
+  ""completedAt"": null,
+  ""canceledAt"": ""2024-03-20T09:15:00+00:00"",
+  ""mode"": ""live"",
+  ""_links"": {{
+    ""self"": {{
+      ""href"": ""https://api.mollie.com/v2/payouts/{payoutId}"",
+      ""type"": ""application/hal+json""
+    }},
+    ""documentation"": {{
+      ""href"": ""https://docs.mollie.com/reference/get-payout"",
+      ""type"": ""text/html""
+    }}
+  }}
+}}";
+    }
+
     private string CreatePayoutListJsonResponse() {
         return $@"{{
   ""count"": 1,

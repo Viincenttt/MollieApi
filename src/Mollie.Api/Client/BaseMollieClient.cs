@@ -127,6 +127,11 @@ namespace Mollie.Api.Client {
                 .ConfigureAwait(false);
         }
 
+        protected async Task<T> DeleteAsync<T>(string relativeUri, object? data = null, CancellationToken cancellationToken = default) {
+            return await SendHttpRequest<T>(HttpMethod.Delete, relativeUri, data, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
         private async Task<T> ProcessHttpResponseMessage<T>(HttpResponseMessage response) {
             var resultContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
