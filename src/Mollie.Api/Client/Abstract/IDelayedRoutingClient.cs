@@ -24,11 +24,13 @@ public interface IDelayedRoutingClient : IBaseMollieClient {
     /// </summary>
     /// <param name="paymentId">The ID of the related payment.</param>
     /// <param name="routeId">The ID of the route.</param>
+    /// <param name="testmode">Set to true to retrieve a test mode route. Only available for OAuth access tokens.</param>
     /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
     /// <returns>The route object.</returns>
     Task<DelayedRoutingResponse> GetDelayedRouteAsync(
         string paymentId,
         string routeId,
+        bool testmode = false,
         CancellationToken cancellationToken = default);
 
     /// <summary>

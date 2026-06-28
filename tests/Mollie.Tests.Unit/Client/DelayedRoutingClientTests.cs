@@ -137,6 +137,34 @@ namespace Mollie.Tests.Unit.Client {
         }
 
         [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public async Task CreateDelayedRouteAsync_TestmodeIsSet_TestmodeIsSerializedInRequestBody(bool testmode) {
+            // Given
+            var request = new DelayedRoutingRequest {
+                Amount = new Amount(DefaultAmountCurrency, DefaultAmountValue),
+                Destination = new RoutingDestination {
+                    Type = "organization",
+                    OrganizationId = DefaultOrganizationId
+                },
+                Testmode = testmode
+            };
+            var mockHttp = CreateMockHttpMessageHandler(
+                HttpMethod.Post,
+                $"{BaseMollieClient.DefaultBaseApiEndPoint}payments/{DefaultPaymentId}/routes",
+                _defaultRouteJsonResponse,
+                $"\"testmode\":{testmode.ToString().ToLower()}");
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            var client = new DelayedRoutingClient("test_api_key", httpClient);
+
+            // When
+            await client.CreateDelayedRouteAsync(DefaultPaymentId, request);
+
+            // Then
+            mockHttp.VerifyNoOutstandingExpectation();
+        }
+
+        [Theory]
         [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
@@ -252,6 +280,25 @@ namespace Mollie.Tests.Unit.Client {
             result.Amount.Currency.ShouldBe(DefaultAmountCurrency);
             result.Destination.Type.ShouldBe("organization");
             result.Destination.OrganizationId.ShouldBe(DefaultOrganizationId);
+        }
+
+        [Theory]
+        [InlineData(true, "?testmode=true")]
+        [InlineData(false, "")]
+        public async Task GetDelayedRouteAsync_TestmodeQueryParameter_IsAddedCorrectly(bool testmode, string expectedQueryString) {
+            // Given
+            var mockHttp = CreateMockHttpMessageHandler(
+                HttpMethod.Get,
+                $"{BaseMollieClient.DefaultBaseApiEndPoint}payments/{DefaultPaymentId}/routes/{DefaultRouteId}{expectedQueryString}",
+                _defaultRouteJsonResponse);
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            var client = new DelayedRoutingClient("test_api_key", httpClient);
+
+            // When
+            await client.GetDelayedRouteAsync(DefaultPaymentId, DefaultRouteId, testmode);
+
+            // Then
+            mockHttp.VerifyNoOutstandingExpectation();
         }
 
         [Theory]

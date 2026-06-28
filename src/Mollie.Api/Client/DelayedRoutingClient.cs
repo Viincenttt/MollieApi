@@ -37,13 +37,14 @@ public class DelayedRoutingClient : BaseMollieClient, IDelayedRoutingClient {
     public async Task<DelayedRoutingResponse> GetDelayedRouteAsync(
         string paymentId,
         string routeId,
+        bool testmode = false,
         CancellationToken cancellationToken = default) {
 
         ValidateRequiredUrlParameter(nameof(paymentId), paymentId);
         ValidateRequiredUrlParameter(nameof(routeId), routeId);
-
+        var queryParameters = BuildQueryParameters(testmode: testmode);
         return await GetAsync<DelayedRoutingResponse>(
-                $"payments/{paymentId}/routes/{routeId}",
+                $"payments/{paymentId}/routes/{routeId}{queryParameters.ToQueryString()}",
                 cancellationToken: cancellationToken)
             .ConfigureAwait(false);
     }
