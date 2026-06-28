@@ -39,6 +39,7 @@ namespace Mollie.Api {
             services.AddSingleton(mollieClientOptions);
 
             RegisterMollieApiClient<IBalanceClient, BalanceClient>(services, mollieOptions.RetryPolicy);
+            RegisterMollieApiClient<IDelayedRoutingClient, DelayedRoutingClient>(services, mollieOptions.RetryPolicy);
             RegisterMollieApiClient<ICaptureClient, CaptureClient>(services, mollieOptions.RetryPolicy);
             RegisterMollieApiClient<IChargebackClient, ChargebackClient>(services, mollieOptions.RetryPolicy);
             RegisterMollieApiClient<IConnectClient, ConnectClient>(services,  mollieOptions.RetryPolicy);
