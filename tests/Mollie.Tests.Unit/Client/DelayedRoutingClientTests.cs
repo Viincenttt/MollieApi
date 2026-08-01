@@ -174,7 +174,7 @@ namespace Mollie.Tests.Unit.Client {
         public async Task CreateDelayedRouteAsync_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string? paymentId) {
             // Given
             var request = new DelayedRoutingRequest {
-                Amount = new Amount(Currency.EUR, 10m),
+                Amount = new Amount(Currency.EUR, 10.00m),
                 Destination = new RoutingDestination {
                     Type = "organization",
                     OrganizationId = DefaultOrganizationId

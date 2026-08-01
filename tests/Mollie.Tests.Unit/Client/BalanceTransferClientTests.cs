@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client;
@@ -206,7 +207,7 @@ public class BalanceTransferClientTests : BaseClientTests {
   ""resource"": ""connect-balance-transfer"",
   ""id"": ""{balanceTransferId}"",
   ""amount"": {{
-    ""value"": ""{request.Amount.Value}"",
+    ""value"": ""{request.Amount.Value.ToString(CultureInfo.InvariantCulture)}"",
     ""currency"": ""{request.Amount.Currency}""
   }},
   ""source"": {{

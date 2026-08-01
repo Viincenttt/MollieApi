@@ -1197,9 +1197,9 @@ namespace Mollie.Tests.Unit.Client {
           public string Currency { get; set; } = "EUR";
           public BalanceResponseStatus Status { get; set; } = BalanceResponseStatus.Active;
           public Amount AvailableAmount { get; set; } = new Amount(Api.Models.Currency.EUR, 905.25m);
-          public Amount PendingAmount { get; set; } = new Amount(Api.Models.Currency.EUR, 100);
+          public Amount PendingAmount { get; set; } = new Amount(Api.Models.Currency.EUR, 100.00m);
           public string TransferFrequency { get; set; } = "twice-a-month";
-          public Amount TransferThreshold { get; set; } = new Amount(Api.Models.Currency.EUR, 5);
+          public Amount TransferThreshold { get; set; } = new Amount(Api.Models.Currency.EUR, 5.00m);
           public string TransferReference { get; set; } = "Mollie payout";
 
           public BalanceTransferDestination TransferDestination { get; set; } = new BalanceTransferDestination {
