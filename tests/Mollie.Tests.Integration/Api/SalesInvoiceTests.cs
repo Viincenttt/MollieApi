@@ -186,7 +186,7 @@ public class SalesInvoiceTests : BaseMollieApiTestClass, IDisposable {
                 new SalesInvoiceLine {
                     Description = "Lego Batman",
                     Quantity = 1,
-                    VatRate = "21.00",
+                    VatRate = 21.00m,
                     UnitPrice = new Amount(Currency.EUR, 50m)
                 }
             },

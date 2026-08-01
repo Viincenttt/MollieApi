@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
+using Mollie.Api.JsonConverters;
 
 namespace Mollie.Api.Models.Payment;
 
@@ -40,10 +42,11 @@ public record PaymentLine {
     public required Amount TotalAmount { get; set; }
 
     /// <summary>
-    /// The VAT rate applied to the line, for example 21.00 for 21%. The vatRate should be passed as a string and not
-    /// as a float, to ensure the correct number of decimals are passed.
+    /// The VAT rate applied to the line, for example 21.00 for 21%. The value is serialized as a string to ensure
+    /// the correct number of decimals are passed, preserving the exact value set by the user.
     /// </summary>
-    public string? VatRate { get; set; } // TODO: make it decimal?
+    [JsonConverter(typeof(NullableDecimalToStringConverter))]
+    public decimal? VatRate { get; set; }
 
     /// <summary>
     /// The amount of value-added tax on the line. The totalAmount field includes VAT, so the vatAmount can be

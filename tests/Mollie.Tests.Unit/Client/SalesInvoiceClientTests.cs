@@ -33,7 +33,7 @@ public class SalesInvoiceClientTests : BaseClientTests {
                 new SalesInvoiceLine {
                     Description = "LEGO 4440 Forest Police Station",
                     Quantity = 1,
-                    VatRate = "21.00",
+                    VatRate = 21.00m,
                     UnitPrice = new Amount("89.00", "EUR")
                 }
             ]
@@ -56,7 +56,7 @@ public class SalesInvoiceClientTests : BaseClientTests {
         var orderLine = result.Data.Lines.Single();
         orderLine.Description.ShouldBe("LEGO 4440 Forest Police Station");
         orderLine.Quantity.ShouldBe(1);
-        orderLine.VatRate.ShouldBe("21.00");
+        orderLine.VatRate.ShouldBe(21.00m);
         orderLine.UnitPrice.Value.ShouldBe("89.00");
         orderLine.UnitPrice.Currency.ShouldBe(Currency.EUR);
         orderLine.Discount.ShouldBeNull();
@@ -88,7 +88,7 @@ public class SalesInvoiceClientTests : BaseClientTests {
         var orderLine = result.Data.Lines.Single();
         orderLine.Description.ShouldBe("LEGO 4440 Forest Police Station");
         orderLine.Quantity.ShouldBe(1);
-        orderLine.VatRate.ShouldBe("21.00");
+        orderLine.VatRate.ShouldBe(21.00m);
         orderLine.UnitPrice.Value.ShouldBe("89.00");
         orderLine.UnitPrice.Currency.ShouldBe(Currency.EUR);
         orderLine.Discount.ShouldBeNull();
