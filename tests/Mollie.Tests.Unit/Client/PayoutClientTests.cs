@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client;
@@ -58,7 +59,7 @@ public class PayoutClientTests : BaseClientTests {
         // Given: we create a payout request with amount and description
         const string payoutId = "payout_j8NvRAM2WNZtsykpLEX8J";
         const string balanceId = "bal_gVMhHKqSSRYJyPsuoPNFH";
-        var amount = new Amount(Currency.EUR, "10.00");
+        var amount = new Amount(Currency.EUR, 10.00m);
         PayoutRequest request = new() {
             BalanceId = balanceId,
             Amount = amount,
@@ -82,7 +83,7 @@ public class PayoutClientTests : BaseClientTests {
         response.ShouldNotBeNull();
         response.Amount.ShouldNotBeNull();
         response.Amount!.Currency.ShouldBe("EUR");
-        response.Amount.Value.ShouldBe("10.00");
+        response.Amount.Value.ShouldBe(10.00m);
         response.Description.ShouldBe("My payout description");
     }
 
@@ -322,7 +323,7 @@ public class PayoutClientTests : BaseClientTests {
         Amount? amount,
         string? description = null) {
         string amountJson = amount != null
-            ? $@"{{""currency"": ""{amount.Currency}"", ""value"": ""{amount.Value}""}}"
+            ? $@"{{""currency"": ""{amount.Currency}"", ""value"": ""{amount.Value.ToString(CultureInfo.InvariantCulture)}""}}"
             : @"{""currency"": ""EUR"", ""value"": ""10.00""}";
         string descriptionJson = description != null ? $@"""{description}""" : @"""My payout description""";
 

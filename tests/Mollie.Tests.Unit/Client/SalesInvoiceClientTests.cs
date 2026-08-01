@@ -34,7 +34,7 @@ public class SalesInvoiceClientTests : BaseClientTests {
                     Description = "LEGO 4440 Forest Police Station",
                     Quantity = 1,
                     VatRate = 21.00m,
-                    UnitPrice = new Amount("89.00", "EUR")
+                    UnitPrice = new Amount("EUR", 89.00m)
                 }
             ]
         };
@@ -57,12 +57,12 @@ public class SalesInvoiceClientTests : BaseClientTests {
         orderLine.Description.ShouldBe("LEGO 4440 Forest Police Station");
         orderLine.Quantity.ShouldBe(1);
         orderLine.VatRate.ShouldBe(21.00m);
-        orderLine.UnitPrice.Value.ShouldBe("89.00");
+        orderLine.UnitPrice.Value.ShouldBe(89.00m);
         orderLine.UnitPrice.Currency.ShouldBe(Currency.EUR);
         orderLine.Discount.ShouldBeNull();
-        result.Data.AmountDue.Value.ShouldBe("107.69");
+        result.Data.AmountDue.Value.ShouldBe(107.69m);
         result.Data.AmountDue.Currency.ShouldBe(Currency.EUR);
-        result.Data.DiscountedSubtotalAmount.Value.ShouldBe("89.00");
+        result.Data.DiscountedSubtotalAmount.Value.ShouldBe(89.00m);
         result.Data.DiscountedSubtotalAmount.Currency.ShouldBe(Currency.EUR);
     }
 
@@ -89,12 +89,12 @@ public class SalesInvoiceClientTests : BaseClientTests {
         orderLine.Description.ShouldBe("LEGO 4440 Forest Police Station");
         orderLine.Quantity.ShouldBe(1);
         orderLine.VatRate.ShouldBe(21.00m);
-        orderLine.UnitPrice.Value.ShouldBe("89.00");
+        orderLine.UnitPrice.Value.ShouldBe(89.00m);
         orderLine.UnitPrice.Currency.ShouldBe(Currency.EUR);
         orderLine.Discount.ShouldBeNull();
-        result.Data.AmountDue.Value.ShouldBe("107.69");
+        result.Data.AmountDue.Value.ShouldBe(107.69m);
         result.Data.AmountDue.Currency.ShouldBe(Currency.EUR);
-        result.Data.DiscountedSubtotalAmount.Value.ShouldBe("89.00");
+        result.Data.DiscountedSubtotalAmount.Value.ShouldBe(89.00m);
         result.Data.DiscountedSubtotalAmount.Currency.ShouldBe(Currency.EUR);
     }
 

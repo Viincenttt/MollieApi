@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using Mollie.Api.Client;
 using System.Linq;
 using System.Net.Http;
@@ -17,7 +18,7 @@ namespace Mollie.Tests.Unit.Client {
         private const string defaultPaymentId = "tr_WDqYK6vllg";
         private const string defaultShipmentId = "shp_3wmsgCJN4U";
         private const string defaultSettlementId = "settlementId";
-        private const string defaultAmountValue = "1027.99";
+        private const decimal defaultAmountValue = 1027.99m;
         private const string defaultAmountCurrency = "EUR";
         private const string defaultStatus = "succeeded";
 
@@ -26,7 +27,7 @@ namespace Mollie.Tests.Unit.Client {
     ""id"": ""{defaultCaptureId}"",
     ""mode"": ""live"",
     ""amount"": {{
-        ""value"": ""{defaultAmountValue}"",
+        ""value"": ""{defaultAmountValue.ToString(CultureInfo.InvariantCulture)}"",
         ""currency"": ""{defaultAmountCurrency}""
     }},
     ""settlementAmount"": {{
@@ -48,7 +49,7 @@ namespace Mollie.Tests.Unit.Client {
                 ""id"": ""cpt_4qqhO89gsT"",
                 ""mode"": ""live"",
                 ""amount"": {{
-                    ""value"": ""{defaultAmountValue}"",
+                    ""value"": ""{defaultAmountValue.ToString(CultureInfo.InvariantCulture)}"",
                     ""currency"": ""{defaultAmountCurrency}""
                 }},
                 ""settlementAmount"": {{
@@ -216,7 +217,7 @@ namespace Mollie.Tests.Unit.Client {
         public async Task CreateCapture_NoPaymentIdIsGiven_ArgumentExceptionIsThrown(string? paymentId) {
             // Given
             var captureRequest = new CaptureRequest {
-                Amount = new Amount(Currency.EUR, 10m),
+                Amount = new Amount(defaultAmountCurrency, defaultAmountValue),
                 Description = "capture-description"
             };
             var mockHttp = new MockHttpMessageHandler();

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -8,7 +9,6 @@ using Mollie.Api.Models.Balance.Response;
 using Mollie.Api.Models.Balance.Response.BalanceReport;
 using Mollie.Api.Models.Balance.Response.BalanceReport.Specific.StatusBalance;
 using Mollie.Api.Models.Balance.Response.BalanceReport.Specific.TransactionCategories;
-using Mollie.Api.Models.Balance.Response.BalanceTransaction.Specific;
 using RichardSzalay.MockHttp;
 using Shouldly;
 using Xunit;
@@ -163,9 +163,9 @@ namespace Mollie.Tests.Unit.Client {
           specificBalanceReport.From.ShouldBe(from);
           specificBalanceReport.Until.ShouldBe(until);
           specificBalanceReport.Totals.ShouldNotBeNull();
-          specificBalanceReport.Totals.Open.Pending.Amount.Value.ShouldBe("5.30");
+          specificBalanceReport.Totals.Open.Pending.Amount.Value.ShouldBe(5.30m);
           specificBalanceReport.Totals.Open.Pending.Amount.Currency.ShouldBe("EUR");
-          specificBalanceReport.Totals.Open.Available.Amount.Value.ShouldBe("0.11");
+          specificBalanceReport.Totals.Open.Available.Amount.Value.ShouldBe(0.11m);
           specificBalanceReport.Totals.Open.Available.Amount.Currency.ShouldBe("EUR");
           var childSubTotals = specificBalanceReport.Totals.Payments.Pending.Subtotals.First();
           childSubTotals.TransactionType.ShouldBe("payment");
@@ -225,9 +225,9 @@ namespace Mollie.Tests.Unit.Client {
           specificBalanceReport.From.ShouldBe(from);
           specificBalanceReport.Until.ShouldBe(until);
           specificBalanceReport.Totals.ShouldNotBeNull();
-          specificBalanceReport.Totals.PendingBalance.Open.Amount.Value.ShouldBe("5.30");
+          specificBalanceReport.Totals.PendingBalance.Open.Amount.Value.ShouldBe(5.30m);
           specificBalanceReport.Totals.PendingBalance.Open.Amount.Currency.ShouldBe(Currency.EUR);
-          specificBalanceReport.Totals.AvailableBalance.MovedFromPending.Amount.Value.ShouldBe("3.38");
+          specificBalanceReport.Totals.AvailableBalance.MovedFromPending.Amount.Value.ShouldBe(3.38m);
           specificBalanceReport.Totals.AvailableBalance.MovedFromPending.Amount.Currency.ShouldBe(Currency.EUR);
           var childSubTotals = specificBalanceReport.Totals.AvailableBalance.MovedFromPending.Subtotals.First();
           childSubTotals.TransactionType.ShouldBe("payment");
@@ -1218,18 +1218,19 @@ namespace Mollie.Tests.Unit.Client {
     ""currency"": ""{Currency}"",
     ""status"": ""{Status}"",
     ""availableAmount"": {{
-      ""value"": ""{AvailableAmount.Value}"",
+      ""value"": ""{AvailableAmount.Value.ToString(CultureInfo.InvariantCulture)}"",
       ""currency"": ""{AvailableAmount.Currency}""
     }},
     ""pendingAmount"": {{
-      ""value"": ""{PendingAmount.Value}"",
+      ""value"": ""{PendingAmount.Value.ToString(CultureInfo.InvariantCulture)}"",
       ""currency"": ""{PendingAmount.Currency}""
     }},
     ""transferFrequency"": ""{TransferFrequency}"",
     ""transferThreshold"": {{
-      ""value"": ""{TransferThreshold.Value}"",
+      ""value"": ""{TransferThreshold.Value.ToString(CultureInfo.InvariantCulture)}"",
       ""currency"": ""{TransferThreshold.Currency}""
     }},
+
     ""transferReference"": ""{TransferReference}"",
     ""transferDestination"": {{
       ""type"": ""{TransferDestination.Type}"",

@@ -25,9 +25,9 @@ namespace Mollie.Tests.Unit.Client {
                 },
                 Testmode = true,
                 Lines = new List<ShipmentLineRequest> {
-                    new ShipmentLineRequest {
+                    new() {
                         Id = "shipment-line-id",
-                        Amount = new Amount(Currency.EUR, 50),
+                        Amount = new Amount(Currency.EUR, 50.00m),
                         Quantity = 1
                     }
                 }

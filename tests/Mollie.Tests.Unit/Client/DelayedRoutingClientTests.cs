@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client;
@@ -16,7 +17,7 @@ namespace Mollie.Tests.Unit.Client {
         private const string DefaultRouteId = "crt_dyARQ3JzCgtPDhU2Pbq3J";
         private const string DefaultPaymentId = "tr_5B8cwPMGnU6qLbRvo7qEZo";
         private const string DefaultOrganizationId = "org_12345678";
-        private const string DefaultAmountValue = "10.00";
+        private const decimal DefaultAmountValue = 10.00m;
         private const string DefaultAmountCurrency = "EUR";
 
         private readonly string _defaultRouteJsonResponse = $@"{{
@@ -24,7 +25,7 @@ namespace Mollie.Tests.Unit.Client {
     ""id"": ""{DefaultRouteId}"",
     ""paymentId"": ""{DefaultPaymentId}"",
     ""amount"": {{
-        ""value"": ""{DefaultAmountValue}"",
+        ""value"": ""{DefaultAmountValue.ToString(CultureInfo.InvariantCulture)}"",
         ""currency"": ""{DefaultAmountCurrency}""
     }},
     ""description"": ""Route for customer payout"",
@@ -58,7 +59,7 @@ namespace Mollie.Tests.Unit.Client {
                 ""id"": ""{DefaultRouteId}"",
                 ""paymentId"": ""{DefaultPaymentId}"",
                 ""amount"": {{
-                    ""value"": ""{DefaultAmountValue}"",
+                    ""value"": ""{DefaultAmountValue.ToString(CultureInfo.InvariantCulture)}"",
                     ""currency"": ""{DefaultAmountCurrency}""
                 }},
                 ""description"": ""Route for customer payout"",

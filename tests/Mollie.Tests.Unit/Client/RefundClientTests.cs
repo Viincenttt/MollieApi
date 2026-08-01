@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Mollie.Api.Client;
@@ -141,8 +141,8 @@ namespace Mollie.Tests.Unit.Client {
                 Amount = new Amount(Currency.EUR, 100m),
                 ReverseRouting = null,
                 RoutingReversals = new List<RoutingReversal> {
-                    new RoutingReversal {
-                        Amount = new Amount(Currency.EUR, 50m),
+                    new() {
+                        Amount = new Amount(Currency.EUR, 50.00m),
                         Source = new RoutingDestination {
                             Type = "organization",
                             OrganizationId = "organization-id"
@@ -322,7 +322,7 @@ namespace Mollie.Tests.Unit.Client {
                     {
                         Id = "odl_dgtxyl",
                         Quantity = 1,
-                        Amount = new Amount(Currency.EUR, "399.00")
+                        Amount = new Amount(Currency.EUR, 399.00m)
                     }
                 },
                 Metadata = "my-metadata"

@@ -161,8 +161,8 @@ public class CustomerTests : BaseMollieApiTestClass, IDisposable {
         string name = "Smit";
         string email = "johnsmit@mollie.com";
         CustomerResponse customer = await CreateCustomer(name, email);
-        PaymentRequest paymentRequest = new PaymentRequest() {
-            Amount = new Amount(Currency.EUR, "100.00"),
+        var paymentRequest = new PaymentRequest {
+            Amount = new Amount(Currency.EUR, 100.00m),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl
         };

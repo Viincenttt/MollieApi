@@ -1,4 +1,4 @@
-﻿using Shouldly;
+using Shouldly;
 using Mollie.Api.Framework;
 using Mollie.Api.JsonConverters;
 using Mollie.Api.Models;
@@ -13,7 +13,7 @@ namespace Mollie.Tests.Unit.Framework {
             // Given: A JSON metadata value
             JsonConverterService jsonConverterService = new JsonConverterService();
             PaymentRequest paymentRequest = new PaymentRequest() {
-                Amount = new Amount(Currency.EUR, "100.00"),
+                Amount = new Amount(Currency.EUR, 100.00m),
                 Description = "Description",
                 RedirectUrl = "http://www.mollie.com",
                 Metadata = "{\"firstName\":\"John\",\"lastName\":\"Doe\"}",

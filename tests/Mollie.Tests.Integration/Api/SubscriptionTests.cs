@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
@@ -81,7 +81,7 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
         string? customerId = await GetFirstCustomerWithValidMandate();
         if (customerId != null) {
             var subscriptionRequest = new SubscriptionRequest {
-                Amount = new Amount(Currency.EUR, "100.00"),
+                Amount = new Amount(Currency.EUR, 100.00m),
                 Times = 5,
                 Interval = "1 month",
                 Description = $"Subscription {Guid.NewGuid()}", // Subscriptions must have a unique name
@@ -156,7 +156,7 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
         string? customerId = await GetFirstCustomerWithValidMandate();
         if (customerId != null) {
             SubscriptionRequest subscriptionRequest = new SubscriptionRequest {
-                Amount = new Amount(Currency.EUR, "100.00"),
+                Amount = new Amount(Currency.EUR, 100.00m),
                 Times = 5,
                 Interval = "1 month",
                 Description = $"Subscription {Guid.NewGuid()}", // Subscriptions must have a unique name

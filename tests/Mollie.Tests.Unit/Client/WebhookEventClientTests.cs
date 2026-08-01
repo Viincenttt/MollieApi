@@ -92,7 +92,7 @@ public class WebhookEventClientTests : BaseClientTests {
         response.Entity.Mode.ShouldBe(Mode.Live);
         response.Entity.Description.ShouldBe("Bicycle tires");
         response.Entity.Amount!.Currency.ShouldBe("EUR");
-        response.Entity.Amount!.Value.ShouldBe("24.95");
+        response.Entity.Amount!.Value.ShouldBe(24.95m);
         response.Entity.MinimumAmount.ShouldBeNull();
         response.Entity.Archived.ShouldBeFalse();
     }

@@ -61,7 +61,7 @@ public class PayoutTests : BaseMollieApiTestClass, IDisposable {
 
         var request = new PayoutRequest {
             BalanceId = primaryBalance.Id,
-            Amount = new Amount(Currency.EUR, "10.00"),
+            Amount = new Amount(Currency.EUR, 10.00m),
             Description = "Integration test payout"
         };
 

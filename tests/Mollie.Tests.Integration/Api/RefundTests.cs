@@ -25,7 +25,7 @@ public class RefundTests : BaseMollieApiTestClass, IDisposable {
     [Fact(Skip = "We can only test this in debug mode, because we actually have to use the PaymentUrl to make the payment, since Mollie can only refund payments that have been paid")]
     public async Task CanCreateRefund() {
         // If: We create a payment
-        string amount = "100.00";
+        decimal amount = 100.00m;
         PaymentResponse payment = await CreatePayment(amount);
 
         // We can only test this if you make the payment using the payment.Links.Checkout property.
@@ -33,7 +33,7 @@ public class RefundTests : BaseMollieApiTestClass, IDisposable {
         Debugger.Break();
 
         // When: We attempt to refund this payment
-        RefundRequest refundRequest = new RefundRequest() {
+        var refundRequest = new RefundRequest {
             Amount = new Amount(Currency.EUR, amount)
         };
         var result = await _refundClient.CreatePaymentRefundAsync(payment.Id, refundRequest);
@@ -47,15 +47,15 @@ public class RefundTests : BaseMollieApiTestClass, IDisposable {
     [Fact(Skip = "We can only test this in debug mode, because we actually have to use the PaymentUrl to make the payment, since Mollie can only refund payments that have been paid")]
     public async Task CanCreatePartialRefund() {
         // If: We create a payment of 250 euro
-        PaymentResponse payment = await CreatePayment("250.00");
+        PaymentResponse payment = await CreatePayment(250.00m);
 
         // We can only test this if you make the payment using the payment.Links.PaymentUrl property.
         // If you don't do this, this test will fail because we can only refund payments that have been paid
         Debugger.Break();
 
         // When: We attempt to refund 50 euro
-        RefundRequest refundRequest = new RefundRequest() {
-            Amount = new Amount(Currency.EUR, "50.00")
+        var refundRequest = new RefundRequest {
+            Amount = new Amount(Currency.EUR, 50.00m)
         };
         var result = await _refundClient.CreatePaymentRefundAsync(payment.Id, refundRequest);
         var refundResponse = result.Data!;
@@ -73,8 +73,8 @@ public class RefundTests : BaseMollieApiTestClass, IDisposable {
         // If you don't do this, this test will fail because we can only refund payments that have been paid
         Debugger.Break();
 
-        RefundRequest refundRequest = new RefundRequest() {
-            Amount = new Amount(Currency.EUR, "50.00")
+        var refundRequest = new RefundRequest {
+            Amount = new Amount(Currency.EUR, 50.00m)
         };
         var createResult = await _refundClient.CreatePaymentRefundAsync(payment.Id, refundRequest);
         var refundResponse = createResult.Data!;
@@ -97,7 +97,7 @@ public class RefundTests : BaseMollieApiTestClass, IDisposable {
         PaymentResponse payment = await CreatePayment();
 
         // When: Retrieve refund list for this payment after one second
-        var test = await ExecuteWithRetry(() => _refundClient.GetPaymentRefundListAsync(payment.Id));
+        await ExecuteWithRetry(() => _refundClient.GetPaymentRefundListAsync(payment.Id));
         var result = await _refundClient.GetPaymentRefundListAsync(payment.Id);
         var refundList = result.Data!;
 
@@ -110,7 +110,7 @@ public class RefundTests : BaseMollieApiTestClass, IDisposable {
     [Fact(Skip = "We can only test this in debug mode, because we actually have to use the PaymentUrl to make the payment, since Mollie can only refund payments that have been paid")]
     public async Task CanCreateRefundWithMetaData() {
         // If: We create a payment
-        string amount = "100.00";
+        decimal amount = 100.00m;
         PaymentResponse payment = await CreatePayment(amount);
 
         // We can only test this if you make the payment using the payment.Links.Checkout property.
@@ -119,7 +119,7 @@ public class RefundTests : BaseMollieApiTestClass, IDisposable {
 
         // When: We attempt to refund this payment with meta data.
         var metadata = "this is my metadata";
-        RefundRequest refundRequest = new RefundRequest() {
+        var refundRequest = new RefundRequest {
             Amount = new Amount(Currency.EUR, amount),
             Metadata = metadata
         };
@@ -131,7 +131,7 @@ public class RefundTests : BaseMollieApiTestClass, IDisposable {
         refundResponse.Metadata.ShouldBe(metadata);
     }
 
-    private async Task<PaymentResponse> CreatePayment(string amount = "100.00") {
+    private async Task<PaymentResponse> CreatePayment(decimal amount = 100.00m) {
         PaymentRequest paymentRequest = new PayPalPaymentRequest
         {
             Amount = new Amount(Currency.EUR, amount),

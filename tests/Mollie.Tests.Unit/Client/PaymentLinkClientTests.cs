@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
@@ -160,14 +160,14 @@ namespace Mollie.Tests.Unit.Client {
             listResponse.Count.ShouldBe(1);
             PaymentResponse payment = listResponse.Items.Single();
             payment.Id.ShouldBe("tr_7UhSN1zuXS");
-            payment.Amount.Value.ShouldBe(DefaultPaymentAmount.ToString(CultureInfo.InvariantCulture));
+            payment.Amount!.Value.ShouldBe(DefaultPaymentAmount);
             payment.Description.ShouldBe(DefaultDescription);
             payment.RedirectUrl.ShouldBe(DefaultRedirectUrl);
             payment.WebhookUrl.ShouldBe(DefaultWebhookUrl);
         }
 
         private void VerifyPaymentLinkResponse(PaymentLinkResponse response) {
-            response.Amount!.Value.ShouldBe(DefaultPaymentAmount.ToString(CultureInfo.InvariantCulture));
+            response.Amount!.Value.ShouldBe(DefaultPaymentAmount);
             response.Description.ShouldBe(DefaultDescription);
             response.Id.ShouldBe(DefaultPaymentLinkId);
             response.RedirectUrl.ShouldBe(DefaultRedirectUrl);

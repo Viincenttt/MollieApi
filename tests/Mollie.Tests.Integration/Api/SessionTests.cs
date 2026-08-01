@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
@@ -25,7 +25,7 @@ public class SessionTests : BaseMollieApiTestClass, IDisposable {
     public async Task CanCreateDefaultSessionWithOnlyRequiredFields() {
         // Given: we create a session request with only the required parameters
         var sessionRequest = new SessionRequest() {
-            Amount = new Amount(Currency.EUR, "100.00"),
+            Amount = new Amount(Currency.EUR, 100.00m),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl
         };
@@ -46,7 +46,7 @@ public class SessionTests : BaseMollieApiTestClass, IDisposable {
     public async Task CanCreateDefaultSessionWithCustomIdempotencyKey() {
         // Given: we create a session request with only the required parameters
         SessionRequest sessionRequest = new SessionRequest() {
-            Amount = new Amount(Currency.EUR, "100.00"),
+            Amount = new Amount(Currency.EUR, 100.00m),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl
         };
@@ -70,7 +70,7 @@ public class SessionTests : BaseMollieApiTestClass, IDisposable {
     public async Task CanCreateSessionAndRetrieveIt() {
         // When: we create a new session request
         var sessionRequest = new SessionRequest {
-            Amount = new Amount(Currency.EUR, "100.00"),
+            Amount = new Amount(Currency.EUR, 100.00m),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl
         };
@@ -100,7 +100,7 @@ public class SessionTests : BaseMollieApiTestClass, IDisposable {
         // When: We create a session with meta data
         string json = "{\"order_id\":\"4.40\"}";
         SessionRequest sessionRequest = new SessionRequest() {
-            Amount = new Amount(Currency.EUR, "100.00"),
+            Amount = new Amount(Currency.EUR, 100.00m),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl,
             Metadata = json
@@ -124,7 +124,7 @@ public class SessionTests : BaseMollieApiTestClass, IDisposable {
         };
 
         SessionRequest sessionRequest = new SessionRequest() {
-            Amount = new Amount(Currency.EUR, "100.00"),
+            Amount = new Amount(Currency.EUR, 100.00m),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl,
         };
