@@ -118,10 +118,12 @@ namespace Mollie.Tests.Unit.Client {
             OrderClient orderClient = new ("abcde", httpClient);
 
             // When: We send the request
-            OrderResponse orderResponse = await orderClient.CreateOrderAsync(orderRequest);
+            var result = await orderClient.CreateOrderAsync(orderRequest);
+            OrderResponse orderResponse = result.Data!;
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
+            result.Success.ShouldBeTrue();
             orderResponse.Method.ShouldBe(orderRequest.Method);
         }
 

@@ -110,10 +110,12 @@ namespace Mollie.Tests.Unit.Client {
             CaptureClient captureClient = new CaptureClient("api-key", httpClient);
 
             // When: We make the request
-            CaptureResponse captureResponse = await captureClient.GetCaptureAsync(defaultPaymentId, defaultCaptureId);
+            var result = await captureClient.GetCaptureAsync(defaultPaymentId, defaultCaptureId);
+            CaptureResponse captureResponse = result.Data!;
 
             // Then: Response should be parsed
             mockHttp.VerifyNoOutstandingExpectation();
+            result.Success.ShouldBeTrue();
             captureResponse.ShouldNotBeNull();
             captureResponse.PaymentId.ShouldBe(defaultPaymentId);
             captureResponse.ShipmentId.ShouldBe(defaultShipmentId);
@@ -132,10 +134,12 @@ namespace Mollie.Tests.Unit.Client {
             CaptureClient captureClient = new CaptureClient("api-key", httpClient);
 
             // When: We make the request
-            ListResponse<CaptureResponse> listCaptureResponse = await captureClient.GetCaptureListAsync(defaultPaymentId);
+            var result = await captureClient.GetCaptureListAsync(defaultPaymentId);
+            ListResponse<CaptureResponse> listCaptureResponse = result.Data!;
 
             // Then: Response should be parsed
             mockHttp.VerifyNoOutstandingExpectation();
+            result.Success.ShouldBeTrue();
             listCaptureResponse.ShouldNotBeNull();
             listCaptureResponse.Count.ShouldBe(1);
             CaptureResponse captureResponse = listCaptureResponse.Items.First();
@@ -243,10 +247,12 @@ namespace Mollie.Tests.Unit.Client {
             CaptureClient captureClient = new CaptureClient("abcde", httpClient);
 
             // When
-            CaptureResponse response = await captureClient.CreateCapture(defaultPaymentId, captureRequest);
+            var result = await captureClient.CreateCapture(defaultPaymentId, captureRequest);
+            CaptureResponse response = result.Data!;
 
             // Then
             mockHttp.VerifyNoOutstandingRequest();
+            result.Success.ShouldBeTrue();
             response.Id.ShouldBe(defaultCaptureId);
             response.PaymentId.ShouldBe(defaultPaymentId);
         }

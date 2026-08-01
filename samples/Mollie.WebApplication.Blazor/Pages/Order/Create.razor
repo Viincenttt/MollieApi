@@ -3,7 +3,6 @@
 @using Mollie.WebApplication.Blazor.Pages.Order.Components
 @using Mollie.WebApplication.Blazor.Models.Order
 @using System.Globalization
-@using Mollie.Api.Client
 @using Mollie.Api.Models.Order.Request
 
 @inject IOrderClient OrderClient
@@ -11,7 +10,7 @@
 
 <h3>Create new order</h3>
 
-<ApiExceptionDisplay Exception="_apiException"></ApiExceptionDisplay>
+<ApiExceptionDisplay Result="_result"></ApiExceptionDisplay>
 
 <EditForm Model="_order" OnValidSubmit="@OnSave" class="col-md-6">
     <DataAnnotationsValidator />
@@ -69,7 +68,7 @@
 </EditForm>
 
 @code {
-    private MollieApiException? _apiException;
+    private MollieResult? _result;
 
     private readonly CreateOrderModel _order = new() {
         OrderNumber = "Order number",
@@ -99,37 +98,37 @@
     };
 
     private async Task OnSave() {
-        try {
-            _apiException = null;
+        _result = null;
 
-            await OrderClient.CreateOrderAsync(new OrderRequest {
-                OrderNumber = _order.OrderNumber!,
-                Locale = _order.Locale!,
-                Amount = new Amount(_order.Currency, _order.Lines!.Sum(lines => lines.TotalAmount)),
-                RedirectUrl = _order.RedirectUrl,
-                BillingAddress = new OrderAddressDetails {
-                    GivenName = _order.BillingAddress.GivenName,
-                    FamilyName = _order.BillingAddress.FamilyName,
-                    Email = _order.BillingAddress.Email,
-                    StreetAndNumber = _order.BillingAddress.StreetAndNumber,
-                    PostalCode = _order.BillingAddress.PostalCode,
-                    City = _order.BillingAddress.City,
-                    Country = _order.BillingAddress.Country
-                },
-                Lines = _order.Lines!.Select(line => new OrderLineRequest {
-                    Name = line.Name,
-                    Quantity = line.Quantity,
-                    UnitPrice = new Amount(_order.Currency, line.UnitPrice),
-                    TotalAmount = new Amount(_order.Currency, line.TotalAmount),
-                    VatRate = line.VatRate.ToString(CultureInfo.InvariantCulture),
-                    VatAmount = new Amount(_order.Currency, line.VatAmount)
-                })
-            });
+        var result = await OrderClient.CreateOrderAsync(new OrderRequest {
+            OrderNumber = _order.OrderNumber!,
+            Locale = _order.Locale!,
+            Amount = new Amount(_order.Currency, _order.Lines!.Sum(lines => lines.TotalAmount)),
+            RedirectUrl = _order.RedirectUrl,
+            BillingAddress = new OrderAddressDetails {
+                GivenName = _order.BillingAddress.GivenName,
+                FamilyName = _order.BillingAddress.FamilyName,
+                Email = _order.BillingAddress.Email,
+                StreetAndNumber = _order.BillingAddress.StreetAndNumber,
+                PostalCode = _order.BillingAddress.PostalCode,
+                City = _order.BillingAddress.City,
+                Country = _order.BillingAddress.Country
+            },
+            Lines = _order.Lines!.Select(line => new OrderLineRequest {
+                Name = line.Name,
+                Quantity = line.Quantity,
+                UnitPrice = new Amount(_order.Currency, line.UnitPrice),
+                TotalAmount = new Amount(_order.Currency, line.TotalAmount),
+                VatRate = line.VatRate.ToString(CultureInfo.InvariantCulture),
+                VatAmount = new Amount(_order.Currency, line.VatAmount)
+            })
+        });
 
+        if (result.Success) {
             NavigationManager.NavigateTo("/order/overview");
         }
-        catch (MollieApiException e) {
-            _apiException = e;
+        else {
+            _result = result;
         }
     }
 }

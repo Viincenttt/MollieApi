@@ -39,10 +39,12 @@ namespace Mollie.Tests.Unit.Client {
             PaymentLinkClient paymentLinkClient = new PaymentLinkClient("api-key", httpClient);
 
             // When: We send the request
-            PaymentLinkResponse response = await paymentLinkClient.CreatePaymentLinkAsync(paymentLinkRequest);
+            var result = await paymentLinkClient.CreatePaymentLinkAsync(paymentLinkRequest);
+            PaymentLinkResponse response = result.Data!;
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
+            result.Success.ShouldBeTrue();
             VerifyPaymentLinkResponse(response);
         }
 
@@ -56,10 +58,12 @@ namespace Mollie.Tests.Unit.Client {
             PaymentLinkClient paymentLinkClient = new PaymentLinkClient("api-key", httpClient);
 
             // When: We send the request
-            PaymentLinkResponse response = await paymentLinkClient.GetPaymentLinkAsync(DefaultPaymentLinkId);
+            var result = await paymentLinkClient.GetPaymentLinkAsync(DefaultPaymentLinkId);
+            PaymentLinkResponse response = result.Data!;
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
+            result.Success.ShouldBeTrue();
             VerifyPaymentLinkResponse(response);
         }
 
@@ -146,13 +150,15 @@ namespace Mollie.Tests.Unit.Client {
             var paymentLinkClient = new PaymentLinkClient("abcde", httpClient);
 
             // When: We send the request
-            ListResponse<PaymentResponse> result = await paymentLinkClient.GetPaymentLinkPaymentListAsync(DefaultPaymentLinkId);
+            var result = await paymentLinkClient.GetPaymentLinkPaymentListAsync(DefaultPaymentLinkId);
+            ListResponse<PaymentResponse> listResponse = result.Data!;
 
             // Then
             mockHttp.VerifyNoOutstandingRequest();
-            result.ShouldNotBeNull();
-            result.Count.ShouldBe(1);
-            PaymentResponse payment = result.Items.Single();
+            result.Success.ShouldBeTrue();
+            listResponse.ShouldNotBeNull();
+            listResponse.Count.ShouldBe(1);
+            PaymentResponse payment = listResponse.Items.Single();
             payment.Id.ShouldBe("tr_7UhSN1zuXS");
             payment.Amount.Value.ShouldBe(DefaultPaymentAmount.ToString(CultureInfo.InvariantCulture));
             payment.Description.ShouldBe(DefaultDescription);

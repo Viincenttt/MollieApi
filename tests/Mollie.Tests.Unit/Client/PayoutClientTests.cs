@@ -30,10 +30,12 @@ public class PayoutClientTests : BaseClientTests {
         var client = new PayoutClient("abcde", httpClient);
 
         // When: We send the request
-        PayoutResponse response = await client.CreatePayoutAsync(request);
+        var result = await client.CreatePayoutAsync(request);
+        PayoutResponse response = result.Data!;
 
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
+        result.Success.ShouldBeTrue();
         response.ShouldNotBeNull();
         response.Resource.ShouldBe("payout");
         response.Id.ShouldBe(payoutId);
@@ -71,10 +73,12 @@ public class PayoutClientTests : BaseClientTests {
         var client = new PayoutClient("abcde", httpClient);
 
         // When: We send the request
-        PayoutResponse response = await client.CreatePayoutAsync(request);
+        var result = await client.CreatePayoutAsync(request);
+        PayoutResponse response = result.Data!;
 
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
+        result.Success.ShouldBeTrue();
         response.ShouldNotBeNull();
         response.Amount.ShouldNotBeNull();
         response.Amount!.Currency.ShouldBe("EUR");
@@ -127,10 +131,12 @@ public class PayoutClientTests : BaseClientTests {
         var client = new PayoutClient("abcde", httpClient);
 
         // When
-        PayoutResponse response = await client.CreatePayoutAsync(request);
+        var result = await client.CreatePayoutAsync(request);
+        PayoutResponse response = result.Data!;
 
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
+        result.Success.ShouldBeTrue();
         response.ShouldNotBeNull();
     }
 
@@ -148,10 +154,12 @@ public class PayoutClientTests : BaseClientTests {
         var client = new PayoutClient("abcde", httpClient);
 
         // When
-        PayoutResponse response = await client.GetPayoutAsync(payoutId);
+        var result = await client.GetPayoutAsync(payoutId);
+        PayoutResponse response = result.Data!;
 
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
+        result.Success.ShouldBeTrue();
         response.ShouldNotBeNull();
         response.Id.ShouldBe(payoutId);
         response.BalanceId.ShouldBe(balanceId);
@@ -172,10 +180,12 @@ public class PayoutClientTests : BaseClientTests {
         var client = new PayoutClient("abcde", httpClient);
 
         // When
-        PayoutResponse response = await client.GetPayoutAsync(payoutId, testmode: true);
+        var result = await client.GetPayoutAsync(payoutId, testmode: true);
+        PayoutResponse response = result.Data!;
 
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
+        result.Success.ShouldBeTrue();
         response.ShouldNotBeNull();
         response.Id.ShouldBe(payoutId);
     }
@@ -206,10 +216,12 @@ public class PayoutClientTests : BaseClientTests {
         var client = new PayoutClient("abcde", httpClient);
 
         // When
-        PayoutResponse response = await client.CancelPayoutAsync(payoutId);
+        var result = await client.CancelPayoutAsync(payoutId);
+        PayoutResponse response = result.Data!;
 
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
+        result.Success.ShouldBeTrue();
         response.ShouldNotBeNull();
         response.Id.ShouldBe(payoutId);
         response.BalanceId.ShouldBe(balanceId);
@@ -232,10 +244,12 @@ public class PayoutClientTests : BaseClientTests {
         var client = new PayoutClient("abcde", httpClient);
 
         // When
-        PayoutResponse response = await client.CancelPayoutAsync(payoutId, testmode: true);
+        var result = await client.CancelPayoutAsync(payoutId, testmode: true);
+        PayoutResponse response = result.Data!;
 
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
+        result.Success.ShouldBeTrue();
         response.ShouldNotBeNull();
     }
 

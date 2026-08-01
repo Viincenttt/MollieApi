@@ -27,14 +27,14 @@ namespace Mollie.Api.Client {
             : base(options, mollieSecretManager, httpClient) {
         }
 
-        public async Task<OrderResponse> CreateOrderAsync(
+        public async Task<MollieResult<OrderResponse>> CreateOrderAsync(
 
             OrderRequest orderRequest, CancellationToken cancellationToken = default) {
             return await PostAsync<OrderResponse>("orders", orderRequest, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<OrderResponse> GetOrderAsync(
+        public async Task<MollieResult<OrderResponse>> GetOrderAsync(
             string orderId, bool embedPayments = false, bool embedRefunds = false, bool embedShipments = false, bool testmode = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(orderId), orderId);
             var queryParameters = BuildQueryParameters(testmode: testmode);
@@ -45,13 +45,13 @@ namespace Mollie.Api.Client {
                 .ConfigureAwait(false);
         }
 
-        public async Task<OrderResponse> GetOrderAsync(
+        public async Task<MollieResult<OrderResponse>> GetOrderAsync(
             UrlObjectLink<OrderResponse> url, CancellationToken cancellationToken = default) {
             return await GetAsync(url, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<OrderResponse> UpdateOrderAsync(
+        public async Task<MollieResult<OrderResponse>> UpdateOrderAsync(
             string orderId, OrderUpdateRequest orderUpdateRequest, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(orderId), orderId);
             return await PatchAsync<OrderResponse>(
@@ -59,7 +59,7 @@ namespace Mollie.Api.Client {
                 ).ConfigureAwait(false);
         }
 
-        public async Task<OrderResponse> UpdateOrderLinesAsync(
+        public async Task<MollieResult<OrderResponse>> UpdateOrderLinesAsync(
             string orderId, string orderLineId, OrderLineUpdateRequest orderLineUpdateRequest, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(orderId), orderId);
             ValidateRequiredUrlParameter(nameof(orderLineId), orderLineId);
@@ -68,7 +68,7 @@ namespace Mollie.Api.Client {
                 .ConfigureAwait(false);
         }
 
-        public async Task<OrderResponse> ManageOrderLinesAsync(
+        public async Task<MollieResult<OrderResponse>> ManageOrderLinesAsync(
             string orderId, ManageOrderLinesRequest manageOrderLinesRequest, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(orderId), orderId);
             return await PatchAsync<OrderResponse>(
@@ -76,16 +76,16 @@ namespace Mollie.Api.Client {
                 .ConfigureAwait(false);
         }
 
-        public async Task CancelOrderAsync(
+        public async Task<MollieResult> CancelOrderAsync(
             string orderId, bool testmode = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(orderId), orderId);
             var data = CreateTestmodeModel(testmode);
-            await DeleteAsync(
+            return await DeleteAsync(
                 $"orders/{orderId}", data, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<OrderResponse>> GetOrderListAsync(
+        public async Task<MollieResult<ListResponse<OrderResponse>>> GetOrderListAsync(
             string? from = null, int? limit = null, string? profileId = null, bool testmode = false, SortDirection? sort = null, CancellationToken cancellationToken = default) {
             var queryParameters = BuildQueryParameters(profileId, testmode, sort);
             return await GetListAsync<ListResponse<OrderResponse>>(
@@ -93,20 +93,20 @@ namespace Mollie.Api.Client {
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<OrderResponse>> GetOrderListAsync(
+        public async Task<MollieResult<ListResponse<OrderResponse>>> GetOrderListAsync(
             UrlObjectLink<ListResponse<OrderResponse>> url, CancellationToken cancellationToken = default) {
             return await GetAsync(url, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task CancelOrderLinesAsync(
+        public async Task<MollieResult> CancelOrderLinesAsync(
             string orderId, OrderLineCancellationRequest cancelationRequest, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(orderId), orderId);
-            await DeleteAsync($"orders/{orderId}/lines", cancelationRequest, cancellationToken: cancellationToken)
+            return await DeleteAsync($"orders/{orderId}/lines", cancelationRequest, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<PaymentResponse> CreateOrderPaymentAsync(
+        public async Task<MollieResult<PaymentResponse>> CreateOrderPaymentAsync(
             string orderId, OrderPaymentRequest createOrderPaymentRequest, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(orderId), orderId);
             return await PostAsync<PaymentResponse>(

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
+using Mollie.Api.Models;
 using Mollie.Api.Models.Connect.Request;
 using Mollie.Api.Models.Connect.Response;
 using Mollie.Api.Options;
@@ -78,16 +79,16 @@ namespace Mollie.Api.Client {
             return _authorizeEndPoint + parameters.ToQueryString();
         }
 
-        public async Task<TokenResponse> GetAccessTokenAsync(
+        public async Task<MollieResult<TokenResponse>> GetAccessTokenAsync(
             TokenRequest request, CancellationToken cancellationToken = default) {
             return await PostAsync<TokenResponse>(
                 "tokens", request, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task RevokeTokenAsync(
+        public async Task<MollieResult> RevokeTokenAsync(
             RevokeTokenRequest request, CancellationToken cancellationToken = default) {
-            await DeleteAsync(
+            return await DeleteAsync(
                 "tokens", request, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }

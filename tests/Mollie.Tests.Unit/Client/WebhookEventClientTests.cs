@@ -72,10 +72,12 @@ public class WebhookEventClientTests : BaseClientTests {
         var webhookClient = new WebhookEventClient("abcde", httpClient);
 
         // When
-        var response = await webhookClient.GetWebhookEventAsync<PaymentLinkResponse>(webhookEventId);
+        var result = await webhookClient.GetWebhookEventAsync<PaymentLinkResponse>(webhookEventId);
+        var response = result.Data!;
 
         // Then
         mockHttp.VerifyNoOutstandingRequest();
+        result.Success.ShouldBeTrue();
         response.Id.ShouldBe(webhookEventId);
         response.Type.ShouldBe(type);
         response.CreatedAt.ShouldBe(new DateTime(2024, 12, 16, 15, 57, 04, DateTimeKind.Utc));
@@ -111,10 +113,12 @@ public class WebhookEventClientTests : BaseClientTests {
         var webhookClient = new WebhookEventClient("abcde", httpClient);
 
         // When
-        var response = await webhookClient.GetWebhookEventAsync(webhookEventId);
+        var result = await webhookClient.GetWebhookEventAsync(webhookEventId);
+        var response = result.Data!;
 
         // Then
         mockHttp.VerifyNoOutstandingRequest();
+        result.Success.ShouldBeTrue();
         response.Id.ShouldBe(webhookEventId);
         response.Type.ShouldBe(type);
         response.CreatedAt.ShouldBe(new DateTime(2024, 12, 16, 15, 57, 04, DateTimeKind.Utc));

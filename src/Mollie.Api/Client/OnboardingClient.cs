@@ -1,4 +1,5 @@
 ﻿using Mollie.Api.Client.Abstract;
+using Mollie.Api.Models;
 using Mollie.Api.Models.Onboarding.Request;
 using Mollie.Api.Models.Onboarding.Response;
 using System.Net.Http;
@@ -18,16 +19,16 @@ namespace Mollie.Api.Client {
             : base(options, mollieSecretManager, httpClient) {
         }
 
-        public async Task<OnboardingStatusResponse> GetOnboardingStatusAsync(
+        public async Task<MollieResult<OnboardingStatusResponse>> GetOnboardingStatusAsync(
             CancellationToken cancellationToken = default) {
             return await GetAsync<OnboardingStatusResponse>(
                 "onboarding/me", cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task SubmitOnboardingDataAsync(
+        public async Task<MollieResult> SubmitOnboardingDataAsync(
             SubmitOnboardingDataRequest request, CancellationToken cancellationToken = default) {
-            await PostAsync<object>(
+            return await PostAsync<object>(
                 "onboarding/me", request, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }

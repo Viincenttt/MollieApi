@@ -10,7 +10,6 @@ using Mollie.Api.Models.Order.Request;
 using Mollie.Api.Models.Payment;
 using Mollie.Api.Models.Refund;
 using Mollie.Api.Models.Refund.Request;
-using Mollie.Api.Models.Refund.Response;
 using RichardSzalay.MockHttp;
 using Xunit;
 
@@ -60,11 +59,12 @@ namespace Mollie.Tests.Unit.Client {
             RefundClient refundClient = new RefundClient("abcde", httpClient);
 
             // When: We send the request
-            var refundResponse = await refundClient.GetPaymentRefundAsync("paymentId", "refundId", testmode: testMode);
+            var result = await refundClient.GetPaymentRefundAsync("paymentId", "refundId", testmode: testMode);
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
-            refundResponse.ShouldNotBeNull();
+            result.Success.ShouldBeTrue();
+            result.Data.ShouldNotBeNull();
         }
 
         [Theory]
@@ -124,12 +124,13 @@ namespace Mollie.Tests.Unit.Client {
             RefundClient refundClient = new("api-key", httpClient);
 
             // When: We create the refund
-            RefundResponse refundResponse = await refundClient.CreatePaymentRefundAsync(paymentId, refundRequest);
+            var result = await refundClient.CreatePaymentRefundAsync(paymentId, refundRequest);
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
-            refundResponse.ReverseRouting.ShouldBe(reverseRouting);
-            refundResponse.RoutingReversals.ShouldBeNull();
+            result.Success.ShouldBeTrue();
+            result.Data!.ReverseRouting.ShouldBe(reverseRouting);
+            result.Data.RoutingReversals.ShouldBeNull();
         }
 
         [Fact]
@@ -184,12 +185,13 @@ namespace Mollie.Tests.Unit.Client {
             RefundClient refundClient = new("api-key", httpClient);
 
             // When: We create the refund
-            RefundResponse refundResponse = await refundClient.CreatePaymentRefundAsync(paymentId, refundRequest);
+            var result = await refundClient.CreatePaymentRefundAsync(paymentId, refundRequest);
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
-            refundResponse.RoutingReversals.ShouldBeEquivalentTo(refundRequest.RoutingReversals);
-            refundResponse.ReverseRouting.ShouldBeNull();
+            result.Success.ShouldBeTrue();
+            result.Data!.RoutingReversals.ShouldBeEquivalentTo(refundRequest.RoutingReversals);
+            result.Data.ReverseRouting.ShouldBeNull();
         }
 
         [Theory]
@@ -331,10 +333,12 @@ namespace Mollie.Tests.Unit.Client {
             RefundClient refundClient = new RefundClient("api-key", httpClient);
 
             // When: We send the request
-            var response = await refundClient.CreateOrderRefundAsync(orderId, orderRefundRequest);
+            var result = await refundClient.CreateOrderRefundAsync(orderId, orderRefundRequest);
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
+            result.Success.ShouldBeTrue();
+            var response = result.Data!;
             response.Resource.ShouldBe("refund");
             response.Id.ShouldBe("re_4qqhO89gsT");
             response.Description.ShouldBe("description");

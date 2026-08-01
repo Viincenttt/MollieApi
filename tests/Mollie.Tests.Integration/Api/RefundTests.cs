@@ -2,15 +2,12 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Shouldly;
-using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
-using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Payment.Request;
 using Mollie.Api.Models.Payment.Request.PaymentSpecificParameters;
 using Mollie.Api.Models.Payment.Response;
 using Mollie.Api.Models.Refund.Request;
-using Mollie.Api.Models.Refund.Response;
 using Mollie.Tests.Integration.Framework;
 using Xunit;
 
@@ -39,9 +36,11 @@ public class RefundTests : BaseMollieApiTestClass, IDisposable {
         RefundRequest refundRequest = new RefundRequest() {
             Amount = new Amount(Currency.EUR, amount)
         };
-        RefundResponse refundResponse = await _refundClient.CreatePaymentRefundAsync(payment.Id, refundRequest);
+        var result = await _refundClient.CreatePaymentRefundAsync(payment.Id, refundRequest);
+        var refundResponse = result.Data!;
 
         // Then
+        result.Success.ShouldBeTrue();
         refundResponse.ShouldNotBeNull();
     }
 
@@ -58,9 +57,11 @@ public class RefundTests : BaseMollieApiTestClass, IDisposable {
         RefundRequest refundRequest = new RefundRequest() {
             Amount = new Amount(Currency.EUR, "50.00")
         };
-        RefundResponse refundResponse = await _refundClient.CreatePaymentRefundAsync(payment.Id, refundRequest);
+        var result = await _refundClient.CreatePaymentRefundAsync(payment.Id, refundRequest);
+        var refundResponse = result.Data!;
 
         // Then
+        result.Success.ShouldBeTrue();
         refundResponse.Amount.ShouldBe(refundRequest.Amount);
     }
 
@@ -75,12 +76,16 @@ public class RefundTests : BaseMollieApiTestClass, IDisposable {
         RefundRequest refundRequest = new RefundRequest() {
             Amount = new Amount(Currency.EUR, "50.00")
         };
-        RefundResponse refundResponse = await _refundClient.CreatePaymentRefundAsync(payment.Id, refundRequest);
+        var createResult = await _refundClient.CreatePaymentRefundAsync(payment.Id, refundRequest);
+        var refundResponse = createResult.Data!;
 
         // When: We attempt to retrieve this refund
-        RefundResponse result = await _refundClient.GetPaymentRefundAsync(payment.Id, refundResponse.Id);
+        var getResult = await _refundClient.GetPaymentRefundAsync(payment.Id, refundResponse.Id);
+        var result = getResult.Data!;
 
         // Then
+        createResult.Success.ShouldBeTrue();
+        getResult.Success.ShouldBeTrue();
         result.ShouldNotBeNull();
         result.Id.ShouldBe(refundResponse.Id);
         refundResponse.Amount.ShouldBe(refundRequest.Amount);
@@ -93,9 +98,11 @@ public class RefundTests : BaseMollieApiTestClass, IDisposable {
 
         // When: Retrieve refund list for this payment after one second
         var test = await ExecuteWithRetry(() => _refundClient.GetPaymentRefundListAsync(payment.Id));
-        ListResponse<RefundResponse> refundList = await _refundClient.GetPaymentRefundListAsync(payment.Id);
+        var result = await _refundClient.GetPaymentRefundListAsync(payment.Id);
+        var refundList = result.Data!;
 
         // Then
+        result.Success.ShouldBeTrue();
         refundList.ShouldNotBeNull();
         refundList.Items.ShouldNotBeNull();
     }
@@ -116,9 +123,11 @@ public class RefundTests : BaseMollieApiTestClass, IDisposable {
             Amount = new Amount(Currency.EUR, amount),
             Metadata = metadata
         };
-        RefundResponse refundResponse = await _refundClient.CreatePaymentRefundAsync(payment.Id, refundRequest);
+        var result = await _refundClient.CreatePaymentRefundAsync(payment.Id, refundRequest);
+        var refundResponse = result.Data!;
 
         // Then: Make sure we get the same json result as metadata
+        result.Success.ShouldBeTrue();
         refundResponse.Metadata.ShouldBe(metadata);
     }
 
@@ -130,7 +139,8 @@ public class RefundTests : BaseMollieApiTestClass, IDisposable {
             RedirectUrl = DefaultRedirectUrl
         };
 
-        return await _paymentClient.CreatePaymentAsync(paymentRequest);
+        var result = await _paymentClient.CreatePaymentAsync(paymentRequest);
+        return result.Data!;
     }
 
     public void Dispose()

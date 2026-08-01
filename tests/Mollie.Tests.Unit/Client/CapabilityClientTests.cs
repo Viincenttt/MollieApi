@@ -28,8 +28,9 @@ public class CapabilityClientTests {
 
         // Assert
         mockHttp.VerifyNoOutstandingRequest();
-        result.Count.ShouldBe(1);
-        var capability = result.Items[0];
+        result.Success.ShouldBeTrue();
+        result.Data.Count.ShouldBe(1);
+        var capability = result.Data.Items[0];
         capability.Resource.ShouldBe("capability");
         capability.Name.ShouldBe("payments");
         capability.Status.ShouldBe(CapabilityStatus.Pending);

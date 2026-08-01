@@ -39,10 +39,12 @@ public class BalanceTransferClientTests : BaseClientTests {
         var client = new BalanceTransferClient("abcde", httpClient);
 
         // When: We send the request
-        BalanceTransferResponse response = await client.CreateBalanceTransferAsync(request);
+        var result = await client.CreateBalanceTransferAsync(request);
+        BalanceTransferResponse response = result.Data!;
 
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
+        result.Success.ShouldBeTrue();
         response.ShouldNotBeNull();
         response.Description.ShouldBe(request.Description);
         response.Amount.ShouldBeEquivalentTo(request.Amount);
@@ -80,7 +82,8 @@ public class BalanceTransferClientTests : BaseClientTests {
 
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
-        result.ShouldNotBeNull();
+        result.Success.ShouldBeTrue();
+        result.Data.ShouldNotBeNull();
     }
 
     [Fact]
@@ -108,10 +111,12 @@ public class BalanceTransferClientTests : BaseClientTests {
         var client = new BalanceTransferClient("abcde", httpClient);
 
         // When: We attempt to retrieve the balance transfer
-        BalanceTransferResponse response = await client.GetBalanceTransferAsync(balanceTransferId);
+        var result = await client.GetBalanceTransferAsync(balanceTransferId);
+        BalanceTransferResponse response = result.Data!;
 
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
+        result.Success.ShouldBeTrue();
         response.ShouldNotBeNull();
         response.Id.ShouldBe(balanceTransferId);
         response.Description.ShouldBe(request.Description);
@@ -142,10 +147,12 @@ public class BalanceTransferClientTests : BaseClientTests {
         var client = new BalanceTransferClient("abcde", httpClient);
 
         // When: We attempt to retrieve the balance transfer
-        BalanceTransferResponse response = await client.GetBalanceTransferAsync(balanceTransferId, testmode: true);
+        var result = await client.GetBalanceTransferAsync(balanceTransferId, testmode: true);
+        BalanceTransferResponse response = result.Data!;
 
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
+        result.Success.ShouldBeTrue();
         response.ShouldNotBeNull();
         response.Id.ShouldBe(balanceTransferId);
         response.Description.ShouldBe(request.Description);

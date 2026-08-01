@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Session.Request;
-using Mollie.Api.Models.Session.Response;
 using Mollie.Tests.Integration.Framework;
 using System.Collections.Generic;
 using Shouldly;
@@ -32,13 +31,15 @@ public class SessionTests : BaseMollieApiTestClass, IDisposable {
         };
 
         // When: We send the session request to Mollie
-        SessionResponse result = await _sessionClient.CreateSessionAsync(sessionRequest);
+        var result = await _sessionClient.CreateSessionAsync(sessionRequest);
+        var session = result.Data!;
 
         // Then: Make sure we get a valid response
-        result.ShouldNotBeNull();
-        result.Amount.ShouldBe(sessionRequest.Amount);
-        result.Description.ShouldBe(sessionRequest.Description);
-        result.RedirectUrl.ShouldBe(sessionRequest.RedirectUrl);
+        result.Success.ShouldBeTrue();
+        session.ShouldNotBeNull();
+        session.Amount.ShouldBe(sessionRequest.Amount);
+        session.Description.ShouldBe(sessionRequest.Description);
+        session.RedirectUrl.ShouldBe(sessionRequest.RedirectUrl);
     }
 
     [Fact]
@@ -53,10 +54,14 @@ public class SessionTests : BaseMollieApiTestClass, IDisposable {
         // When: We send the session request to Mollie
         using (_sessionClient.WithIdempotencyKey("my-idempotency-key"))
         {
-            SessionResponse firstAttempt = await _sessionClient.CreateSessionAsync(sessionRequest);
-            SessionResponse secondAttempt = await _sessionClient.CreateSessionAsync(sessionRequest);
+            var firstResult = await _sessionClient.CreateSessionAsync(sessionRequest);
+            var secondResult = await _sessionClient.CreateSessionAsync(sessionRequest);
+            var firstAttempt = firstResult.Data!;
+            var secondAttempt = secondResult.Data!;
 
             // Then: Make sure the responses have the same session Id
+            firstResult.Success.ShouldBeTrue();
+            secondResult.Success.ShouldBeTrue();
             firstAttempt.Id.ShouldBe(secondAttempt.Id);
         }
     }
@@ -64,17 +69,25 @@ public class SessionTests : BaseMollieApiTestClass, IDisposable {
     [Fact]
     public async Task CanCreateSessionAndRetrieveIt() {
         // When: we create a new session request
-        SessionRequest sessionRequest = new SessionRequest() {
+        var sessionRequest = new SessionRequest {
             Amount = new Amount(Currency.EUR, "100.00"),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl
         };
 
         // When: We send the session request to Mollie and attempt to retrieve it
-        SessionResponse sessionResponse = await _sessionClient.CreateSessionAsync(sessionRequest);
-        SessionResponse result = await _sessionClient.GetSessionAsync(sessionResponse.Id);
+        var createResult = await _sessionClient.CreateSessionAsync(sessionRequest);
+        if (!createResult.Success)
+        {
+            Assert.Fail($"Failed to create session: {createResult.Error}");
+        }
+        var sessionResponse = createResult.Data!;
+        var getResult = await _sessionClient.GetSessionAsync(sessionResponse.Id);
+        var result = getResult.Data!;
 
         // Then
+        createResult.Success.ShouldBeTrue();
+        getResult.Success.ShouldBeTrue();
         result.ShouldNotBeNull();
         result.Id.ShouldBe(sessionResponse.Id);
         result.Amount.ShouldBe(sessionRequest.Amount);
@@ -94,10 +107,12 @@ public class SessionTests : BaseMollieApiTestClass, IDisposable {
         };
 
         // When: We send the session request to Mollie
-        SessionResponse result = await _sessionClient.CreateSessionAsync(sessionRequest);
+        var result = await _sessionClient.CreateSessionAsync(sessionRequest);
+        var session = result.Data!;
 
         // Then: Make sure we get the same json result as metadata
-        IsJsonResultEqual(result.Metadata, json).ShouldBeTrue();
+        result.Success.ShouldBeTrue();
+        IsJsonResultEqual(session.Metadata, json).ShouldBeTrue();
     }
 
     [Fact]
@@ -116,10 +131,16 @@ public class SessionTests : BaseMollieApiTestClass, IDisposable {
         sessionRequest.SetMetadata(metadataRequest);
 
         // When: We send the session request to Mollie
-        SessionResponse result = await _sessionClient.CreateSessionAsync(sessionRequest);
-        CustomMetadataClass? metadataResponse = result.GetMetadata<CustomMetadataClass>();
+        var result = await _sessionClient.CreateSessionAsync(sessionRequest);
+        if (!result.Success)
+        {
+            Assert.Fail($"Failed to create session: {result.Error}");
+        }
+        var session = result.Data!;
+        CustomMetadataClass? metadataResponse = session.GetMetadata<CustomMetadataClass>();
 
         // Then: Make sure we get the same json result as metadata
+        result.Success.ShouldBeTrue();
         metadataResponse.ShouldNotBeNull();
         metadataResponse.OrderId.ShouldBe(metadataRequest.OrderId);
         metadataResponse.Description.ShouldBe(metadataRequest.Description);
@@ -166,28 +187,38 @@ public class SessionTests : BaseMollieApiTestClass, IDisposable {
         };
 
         // Act
-        SessionResponse result = await _sessionClient.CreateSessionAsync(sessionRequest);
+        var result = await _sessionClient.CreateSessionAsync(sessionRequest);
+        var session = result.Data!;
 
         // Assert
-        //result.Lines.ShouldBeEquivalentTo(sessionRequest.Lines); Lines are ignored by Mollie's bug
-        result.BillingAddress.ShouldBeEquivalentTo(sessionRequest.BillingAddress);
-        result.ShippingAddress.ShouldBeEquivalentTo(sessionRequest.ShippingAddress);
+        result.Success.ShouldBeTrue();
+        //session.Lines.ShouldBeEquivalentTo(sessionRequest.Lines); Lines are ignored by Mollie's bug
+        session.BillingAddress.ShouldBeEquivalentTo(sessionRequest.BillingAddress);
+        session.ShippingAddress.ShouldBeEquivalentTo(sessionRequest.ShippingAddress);
     }
 
     [Fact]
     public async Task CanCreateSessionWithDecimalAmountAndRetrieveIt() {
         // When: we create a new session request
-        SessionRequest sessionRequest = new SessionRequest() {
+        var sessionRequest = new SessionRequest {
             Amount = new Amount(Currency.EUR, 100.1235m),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl
         };
 
         // When: We send the session request to Mollie and attempt to retrieve it
-        SessionResponse sessionResponse = await _sessionClient.CreateSessionAsync(sessionRequest);
-        SessionResponse result = await _sessionClient.GetSessionAsync(sessionResponse.Id);
+        var createResult = await _sessionClient.CreateSessionAsync(sessionRequest);
+        if (!createResult.Success)
+        {
+            Assert.Fail($"Failed to create session: {createResult.Error}");
+        }
+        var sessionResponse = createResult.Data!;
+        var getResult = await _sessionClient.GetSessionAsync(sessionResponse.Id);
+        var result = getResult.Data!;
 
         // Then
+        createResult.Success.ShouldBeTrue();
+        getResult.Success.ShouldBeTrue();
         result.ShouldNotBeNull();
         result.Id.ShouldBe(sessionResponse.Id);
         result.Amount.ShouldBe(sessionRequest.Amount);
@@ -207,13 +238,21 @@ public class SessionTests : BaseMollieApiTestClass, IDisposable {
         };
 
         // When: We send the session request to Mollie and attempt to retrieve it
-        SessionResponse sessionResponse = await _sessionClient.CreateSessionAsync(sessionRequest);
-        SessionResponse result = await _sessionClient.GetSessionAsync(sessionResponse.Id);
+        var createResult = await _sessionClient.CreateSessionAsync(sessionRequest);
+        if (!createResult.Success)
+        {
+            Assert.Fail($"Failed to create session: {createResult.Error}");
+        }
+        var sessionResponse = createResult.Data!;
+        var getResult = await _sessionClient.GetSessionAsync(sessionResponse.Id);
+        var result = getResult.Data!;
 
         decimal responseAmount = sessionResponse.Amount; // Implicit cast
         decimal resultAmount = result.Amount; // Implicit cast
 
         // Then
+        createResult.Success.ShouldBeTrue();
+        getResult.Success.ShouldBeTrue();
         result.ShouldNotBeNull();
         result.Id.ShouldBe(sessionResponse.Id);
         result.Amount.ShouldBe(sessionRequest.Amount);

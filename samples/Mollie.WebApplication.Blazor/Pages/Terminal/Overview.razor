@@ -56,13 +56,15 @@ else {
 
     private async Task LoadData() {
         if (string.IsNullOrEmpty(Url)) {
-            _terminals = await TerminalClient.GetTerminalListAsync();
+            var result = await TerminalClient.GetTerminalListAsync();
+            _terminals = result.Data;
         }
         else {
-            _terminals = await TerminalClient.GetTerminalListAsync(new UrlObjectLink<ListResponse<TerminalResponse>>() {
+            var result = await TerminalClient.GetTerminalListAsync(new UrlObjectLink<ListResponse<TerminalResponse>>() {
                 Href = Url,
                 Type = "application/json"
             });
+            _terminals = result.Data;
         }
     }
 }

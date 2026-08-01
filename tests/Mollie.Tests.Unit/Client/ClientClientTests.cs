@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client;
@@ -40,18 +40,19 @@ public class ClientClientTests : BaseClientTests {
 
         // Assert
         mockHttp.VerifyNoOutstandingRequest();
-        result.Resource.ShouldBe("client");
-        result.Id.ShouldBe(clientId);
-        result.Commission.ShouldNotBeNull().Count.ShouldBe(0);
-        result.Links.ShouldNotBeNull();
-        result.Links.Self.Href.ShouldBe("https://api.mollie.com/v2/clients/org_12345678");
-        result.Links.Self.Type.ShouldBe("application/hal+json");
-        result.Links.Organization.Href.ShouldBe("https://api.mollie.com/v2/organizations/org_12345678");
-        result.Links.Organization.Type.ShouldBe("application/hal+json");
-        result.Links.Onboarding.Href.ShouldBe("https://api.mollie.com/v2/onboarding/org_12345678");
-        result.Links.Onboarding.Type.ShouldBe("application/hal+json");
-        result.Links.Documentation.Href.ShouldBe("https://docs.mollie.com/reference/clients-api");
-        result.Links.Documentation.Type.ShouldBe("text/html");
+        result.Success.ShouldBeTrue();
+        result.Data.Resource.ShouldBe("client");
+        result.Data.Id.ShouldBe(clientId);
+        result.Data.Commission.ShouldNotBeNull().Count.ShouldBe(0);
+        result.Data.Links.ShouldNotBeNull();
+        result.Data.Links.Self.Href.ShouldBe("https://api.mollie.com/v2/clients/org_12345678");
+        result.Data.Links.Self.Type.ShouldBe("application/hal+json");
+        result.Data.Links.Organization.Href.ShouldBe("https://api.mollie.com/v2/organizations/org_12345678");
+        result.Data.Links.Organization.Type.ShouldBe("application/hal+json");
+        result.Data.Links.Onboarding.Href.ShouldBe("https://api.mollie.com/v2/onboarding/org_12345678");
+        result.Data.Links.Onboarding.Type.ShouldBe("application/hal+json");
+        result.Data.Links.Documentation.Href.ShouldBe("https://docs.mollie.com/reference/clients-api");
+        result.Data.Links.Documentation.Type.ShouldBe("text/html");
     }
 
     [Theory]
@@ -120,17 +121,17 @@ public class ClientClientTests : BaseClientTests {
 
         // Assert
         mockHttp.VerifyNoOutstandingRequest();
-        result.Count.ShouldBe(2);
-        result.Items.ShouldNotBeNull();
-        result.Links.ShouldNotBeNull();
-        result.Links.ShouldNotBeNull();
-        result.Links.Self.Href.ShouldBe("https://api.mollie.com/v2/clients");
-        result.Links.Self.Type.ShouldBe("application/hal+json");
-        result.Links.Previous.ShouldBeNull();
-        result.Links.Next!.Href.ShouldBe("https://api.mollie.com/v2/clients?from=org_63916732&limit=5");
-        result.Links.Next.Type.ShouldBe("application/hal+json");
-        result.Links.Documentation.Href.ShouldBe("https://docs.mollie.com/reference/clients-api");
-        result.Links.Documentation.Type.ShouldBe("text/html");
+        result.Success.ShouldBeTrue();
+        result.Data.Count.ShouldBe(2);
+        result.Data.Items.ShouldNotBeNull();
+        result.Data.Links.ShouldNotBeNull();
+        result.Data.Links.Self.Href.ShouldBe("https://api.mollie.com/v2/clients");
+        result.Data.Links.Self.Type.ShouldBe("application/hal+json");
+        result.Data.Links.Previous.ShouldBeNull();
+        result.Data.Links.Next!.Href.ShouldBe("https://api.mollie.com/v2/clients?from=org_63916732&limit=5");
+        result.Data.Links.Next.Type.ShouldBe("application/hal+json");
+        result.Data.Links.Documentation.Href.ShouldBe("https://docs.mollie.com/reference/clients-api");
+        result.Data.Links.Documentation.Type.ShouldBe("text/html");
     }
 
     private const string DefaultGetClientResponse = @"{

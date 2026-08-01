@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
 using Mollie.Api.Framework.Authentication.Abstract;
+using Mollie.Api.Models;
 using Mollie.Api.Models.Client.Response;
 using Mollie.Api.Models.List.Response;
 using Mollie.Api.Options;
@@ -23,7 +24,7 @@ namespace Mollie.Api.Client {
         {
         }
 
-        public async Task<ClientResponse> GetClientAsync(
+        public async Task<MollieResult<ClientResponse>> GetClientAsync(
             string clientId,
             bool embedOrganization = false,
             bool embedOnboarding = false,
@@ -37,7 +38,7 @@ namespace Mollie.Api.Client {
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<ClientResponse>> GetClientListAsync(
+        public async Task<MollieResult<ListResponse<ClientResponse>>> GetClientListAsync(
             string? from = null,
             int? limit = null,
             bool embedOrganization = false,

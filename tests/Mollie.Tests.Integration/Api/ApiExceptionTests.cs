@@ -1,7 +1,5 @@
-﻿using System.Net;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Shouldly;
-using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Connect.Request;
@@ -21,7 +19,7 @@ public class ApiExceptionTests : BaseMollieApiTestClass {
     }
 
     [Fact]
-    public async Task CreatePayment_WithInvalidParameters_ShouldThrowMollieApiException() {
+    public async Task CreatePayment_WithInvalidParameters_ShouldReturnErrorResult() {
         // Given: we create a payment request with invalid parameters
         var paymentRequest = new PaymentRequest() {
             Amount = new Amount(Currency.EUR, "100.00"),
@@ -29,17 +27,17 @@ public class ApiExceptionTests : BaseMollieApiTestClass {
             RedirectUrl = null
         };
 
-        // Then: Send the payment request to the Mollie Api, this should throw a mollie api exception
-        MollieApiException apiException = await Assert.ThrowsAsync<MollieApiException>(() => _paymentClient.CreatePaymentAsync(paymentRequest));
-        apiException.ShouldNotBeNull();
-        apiException.Details.ShouldNotBeNull();
-        apiException.Details.Status.ShouldBe(422);
-        apiException.Details.Title.ShouldBe("Unprocessable Entity");
-        apiException.Details.Detail.ShouldBe("The description is invalid");
+        // Then: Send the payment request to the Mollie Api, this should return an error result
+        var result = await _paymentClient.CreatePaymentAsync(paymentRequest);
+        result.Success.ShouldBeFalse();
+        result.Error.ShouldNotBeNull();
+        result.Error.Status.ShouldBe(422);
+        result.Error.Title.ShouldBe("Unprocessable Entity");
+        result.Error.Detail.ShouldBe("The description is invalid");
     }
 
     [Fact]
-    public async Task RevokeTokenAsync_WithInvalidToken_ShouldThrowMollieApiException() {
+    public async Task RevokeTokenAsync_WithInvalidToken_ShouldReturnErrorResult() {
         // Given
         var tokenRequest = new RevokeTokenRequest {
             Token = "token",
@@ -47,7 +45,9 @@ public class ApiExceptionTests : BaseMollieApiTestClass {
         };
 
         // Then
-        MollieApiException apiException = await Assert.ThrowsAsync<MollieApiException>(() => _connectClient.RevokeTokenAsync(tokenRequest));
-        apiException.Details.Title.ShouldBe("invalid_request");
+        var result = await _connectClient.RevokeTokenAsync(tokenRequest);
+        result.Success.ShouldBeFalse();
+        result.Error.ShouldNotBeNull();
+        result.Error.Title.ShouldBe("invalid_request");
     }
 }

@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Shouldly;
-using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
 using Mollie.Api.Models;
-using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Order.Request;
 using Mollie.Api.Models.Payment;
 using Mollie.Api.Models.PaymentLink.Request;
@@ -26,9 +24,11 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
     [Fact]
     public async Task CanRetrievePaymentLinkList() {
         // When: Retrieve payment list with default settings
-        ListResponse<PaymentLinkResponse> response = await _paymentLinkClient.GetPaymentLinkListAsync();
+        var result = await _paymentLinkClient.GetPaymentLinkListAsync();
+        var response = result.Data!;
 
         // Then
+        result.Success.ShouldBeTrue();
         response.ShouldNotBeNull();
         response.Items.ShouldNotBeNull();
     }
@@ -47,10 +47,12 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
             BillingAddress = address,
             ShippingAddress = address
         };
-        var createdPaymentLinkResponse = await _paymentLinkClient.CreatePaymentLinkAsync(paymentLinkRequest);
+        var createdResult = await _paymentLinkClient.CreatePaymentLinkAsync(paymentLinkRequest);
+        var createdPaymentLinkResponse = createdResult.Data!;
 
         // When: We retrieve it
-        var retrievePaymentLinkResponse = await _paymentLinkClient.GetPaymentLinkAsync(createdPaymentLinkResponse.Id);
+        var retrieveResult = await _paymentLinkClient.GetPaymentLinkAsync(createdPaymentLinkResponse.Id);
+        var retrievePaymentLinkResponse = retrieveResult.Data!;
 
         // Then: We expect a payment link with the expected properties
         var verifyPaymentLinkResponse = new Action<PaymentLinkResponse>(response => {
@@ -67,6 +69,8 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
             response.ShippingAddress.ShouldBe(paymentLinkRequest.ShippingAddress);
         });
 
+        createdResult.Success.ShouldBeTrue();
+        retrieveResult.Success.ShouldBeTrue();
         verifyPaymentLinkResponse(createdPaymentLinkResponse);
         verifyPaymentLinkResponse(retrievePaymentLinkResponse);
     }
@@ -83,10 +87,12 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
             Reusable = true,
             ExpiresAt = DateTime.Now.AddDays(1)
         };
-        var createdPaymentLinkResponse = await _paymentLinkClient.CreatePaymentLinkAsync(paymentLinkRequest);
+        var createdResult = await _paymentLinkClient.CreatePaymentLinkAsync(paymentLinkRequest);
+        var createdPaymentLinkResponse = createdResult.Data!;
 
         // When: We retrieve it
-        var retrievePaymentLinkResponse = await _paymentLinkClient.GetPaymentLinkAsync(createdPaymentLinkResponse.Id);
+        var retrieveResult = await _paymentLinkClient.GetPaymentLinkAsync(createdPaymentLinkResponse.Id);
+        var retrievePaymentLinkResponse = retrieveResult.Data!;
 
         // Then: We expect a payment link with the expected properties
         var verifyPaymentLinkResponse = new Action<PaymentLinkResponse>(response => {
@@ -101,6 +107,8 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
             response.Reusable.ShouldBe(paymentLinkRequest.Reusable);
         });
 
+        createdResult.Success.ShouldBeTrue();
+        retrieveResult.Success.ShouldBeTrue();
         verifyPaymentLinkResponse(createdPaymentLinkResponse);
         verifyPaymentLinkResponse(retrievePaymentLinkResponse);
     }
@@ -117,10 +125,12 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
             ExpiresAt = DateTime.Now.AddDays(1),
             SequenceType = SequenceType.First
         };
-        var createdPaymentLinkResponse = await _paymentLinkClient.CreatePaymentLinkAsync(paymentLinkRequest);
+        var createdResult = await _paymentLinkClient.CreatePaymentLinkAsync(paymentLinkRequest);
+        var createdPaymentLinkResponse = createdResult.Data!;
 
         // When: We retrieve it
-        var retrievePaymentLinkResponse = await _paymentLinkClient.GetPaymentLinkAsync(createdPaymentLinkResponse.Id);
+        var retrieveResult = await _paymentLinkClient.GetPaymentLinkAsync(createdPaymentLinkResponse.Id);
+        var retrievePaymentLinkResponse = retrieveResult.Data!;
 
         // Then: We expect a payment link with the expected properties
         var verifyPaymentLinkResponse = new Action<PaymentLinkResponse>(response => {
@@ -135,6 +145,8 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
             response.SequenceType.ShouldBe(paymentLinkRequest.SequenceType);
         });
 
+        createdResult.Success.ShouldBeTrue();
+        retrieveResult.Success.ShouldBeTrue();
         verifyPaymentLinkResponse(createdPaymentLinkResponse);
         verifyPaymentLinkResponse(retrievePaymentLinkResponse);
     }
@@ -166,10 +178,12 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
                 }
             }
         };
-        var createdPaymentLinkResponse = await _paymentLinkClient.CreatePaymentLinkAsync(paymentLinkRequest);
+        var createdResult = await _paymentLinkClient.CreatePaymentLinkAsync(paymentLinkRequest);
+        var createdPaymentLinkResponse = createdResult.Data!;
 
         // When: We retrieve it
-        var retrievePaymentLinkResponse = await _paymentLinkClient.GetPaymentLinkAsync(createdPaymentLinkResponse.Id);
+        var retrieveResult = await _paymentLinkClient.GetPaymentLinkAsync(createdPaymentLinkResponse.Id);
+        var retrievePaymentLinkResponse = retrieveResult.Data!;
 
         // Then: We expect a payment link with the expected properties
         var verifyPaymentLinkResponse = new Action<PaymentLinkResponse>(response => {
@@ -184,6 +198,8 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
             response.Lines.ShouldBe(paymentLinkRequest.Lines);
         });
 
+        createdResult.Success.ShouldBeTrue();
+        retrieveResult.Success.ShouldBeTrue();
         verifyPaymentLinkResponse(createdPaymentLinkResponse);
         verifyPaymentLinkResponse(retrievePaymentLinkResponse);
     }
@@ -198,10 +214,12 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
             RedirectUrl = DefaultRedirectUrl,
             ExpiresAt = DateTime.Now.AddDays(1)
         };
-        var createdPaymentLinkResponse = await _paymentLinkClient.CreatePaymentLinkAsync(paymentLinkRequest);
+        var createdResult = await _paymentLinkClient.CreatePaymentLinkAsync(paymentLinkRequest);
+        var createdPaymentLinkResponse = createdResult.Data!;
 
         // When: We retrieve it
-        var retrievePaymentLinkResponse = await _paymentLinkClient.GetPaymentLinkAsync(createdPaymentLinkResponse.Id);
+        var retrieveResult = await _paymentLinkClient.GetPaymentLinkAsync(createdPaymentLinkResponse.Id);
+        var retrievePaymentLinkResponse = retrieveResult.Data!;
 
         // Then: We expect a payment link with the expected properties
         var verifyPaymentLinkResponse = new Action<PaymentLinkResponse>(response => {
@@ -213,6 +231,8 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
             response.RedirectUrl.ShouldBe(paymentLinkRequest.RedirectUrl);
         });
 
+        createdResult.Success.ShouldBeTrue();
+        retrieveResult.Success.ShouldBeTrue();
         verifyPaymentLinkResponse(createdPaymentLinkResponse);
         verifyPaymentLinkResponse(retrievePaymentLinkResponse);
     }
@@ -229,10 +249,12 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
             ExpiresAt = DateTime.Now.AddDays(1),
             AllowedMethods = [PaymentMethod.Ideal, PaymentMethod.CreditCard]
         };
-        var createdPaymentLinkResponse = await _paymentLinkClient.CreatePaymentLinkAsync(paymentLinkRequest);
+        var createdResult = await _paymentLinkClient.CreatePaymentLinkAsync(paymentLinkRequest);
+        var createdPaymentLinkResponse = createdResult.Data!;
 
         // When: We retrieve it
-        var retrievePaymentLinkResponse = await _paymentLinkClient.GetPaymentLinkAsync(createdPaymentLinkResponse.Id);
+        var retrieveResult = await _paymentLinkClient.GetPaymentLinkAsync(createdPaymentLinkResponse.Id);
+        var retrievePaymentLinkResponse = retrieveResult.Data!;
 
         // Then: We expect a payment link with the expected properties
         var verifyPaymentLinkResponse = new Action<PaymentLinkResponse>(response => {
@@ -246,6 +268,8 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
             response.AllowedMethods.ShouldBe(paymentLinkRequest.AllowedMethods);
         });
 
+        createdResult.Success.ShouldBeTrue();
+        retrieveResult.Success.ShouldBeTrue();
         verifyPaymentLinkResponse(createdPaymentLinkResponse);
         verifyPaymentLinkResponse(retrievePaymentLinkResponse);
     }
@@ -260,7 +284,8 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
             RedirectUrl = DefaultRedirectUrl,
             ExpiresAt = DateTime.Now.AddDays(1)
         };
-        var createdPaymentLinkResponse = await _paymentLinkClient.CreatePaymentLinkAsync(paymentLinkRequest);
+        var createdResult = await _paymentLinkClient.CreatePaymentLinkAsync(paymentLinkRequest);
+        var createdPaymentLinkResponse = createdResult.Data!;
 
         // When: We update the payment link
         PaymentLinkUpdateRequest paymentLinkUpdateRequest = new() {
@@ -268,11 +293,14 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
             Archived = true,
             AllowedMethods = [PaymentMethod.CreditCard]
         };
-        var updatedPaymentLinkResponse = await _paymentLinkClient.UpdatePaymentLinkAsync(
+        var updatedResult = await _paymentLinkClient.UpdatePaymentLinkAsync(
             createdPaymentLinkResponse.Id,
             paymentLinkUpdateRequest);
+        var updatedPaymentLinkResponse = updatedResult.Data!;
 
         // Then: We expect the payment link to be updated
+        createdResult.Success.ShouldBeTrue();
+        updatedResult.Success.ShouldBeTrue();
         updatedPaymentLinkResponse.Description.ShouldBe(paymentLinkUpdateRequest.Description);
         updatedPaymentLinkResponse.Archived.ShouldBe(paymentLinkUpdateRequest.Archived);
         updatedPaymentLinkResponse.AllowedMethods.ShouldBe(paymentLinkUpdateRequest.AllowedMethods);
@@ -289,15 +317,17 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
             ExpiresAt = DateTime.Now.AddDays(1)
         };
         var createdPaymentLinkResponse = await _paymentLinkClient.CreatePaymentLinkAsync(paymentLinkRequest);
+        createdPaymentLinkResponse.Success.ShouldBeTrue();
 
         // When: We delete the payment link
-        await _paymentLinkClient.DeletePaymentLinkAsync(createdPaymentLinkResponse.Id);
+        await _paymentLinkClient.DeletePaymentLinkAsync(createdPaymentLinkResponse.Data!.Id);
 
         // Then: We expect the payment link to be updated
-        MollieApiException exception = await Assert.ThrowsAsync<MollieApiException>(() =>
-            _paymentLinkClient.GetPaymentLinkAsync(createdPaymentLinkResponse.Id));
-        exception.Details.Status.ShouldBe(404);
-        exception.Details.Detail.ShouldBe("Resource not found");
+        var result = await _paymentLinkClient.GetPaymentLinkAsync(createdPaymentLinkResponse.Data.Id);
+        result.Success.ShouldBeFalse();
+        result.Error.ShouldNotBeNull();
+        result.Error.Status.ShouldBe(404);
+        result.Error.Detail.ShouldBe("Resource not found");
     }
 
     [Fact]
@@ -310,14 +340,18 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
             RedirectUrl = DefaultRedirectUrl,
             ExpiresAt = DateTime.Now.AddDays(1)
         };
-        var createdPaymentLinkResponse = await _paymentLinkClient.CreatePaymentLinkAsync(paymentLinkRequest);
+        var createdResult = await _paymentLinkClient.CreatePaymentLinkAsync(paymentLinkRequest);
+        var createdPaymentLinkResponse = createdResult.Data!;
 
         // When: We get the payment list of the payment link
         var result = await _paymentLinkClient.GetPaymentLinkPaymentListAsync(createdPaymentLinkResponse.Id);
+        var paymentList = result.Data!;
 
         // Then: We expect the payment list to be returned
-        result.ShouldNotBeNull();
-        result.Items.Count.ShouldBe(0);
+        createdResult.Success.ShouldBeTrue();
+        result.Success.ShouldBeTrue();
+        paymentList.ShouldNotBeNull();
+        paymentList.Items.Count.ShouldBe(0);
     }
 
     private PaymentAddressDetails CreateAddress() {

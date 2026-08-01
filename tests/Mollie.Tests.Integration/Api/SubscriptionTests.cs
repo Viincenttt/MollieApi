@@ -5,7 +5,6 @@ using Shouldly;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Customer.Response;
-using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Mandate.Response;
 using Mollie.Api.Models.Subscription.Request;
 using Mollie.Api.Models.Subscription.Response;
@@ -35,9 +34,11 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
 
         // When: Retrieve subscription list with default settings
         if (customerId != null) {
-            ListResponse<SubscriptionResponse> response = await _subscriptionClient.GetSubscriptionListAsync(customerId);
+            var result = await _subscriptionClient.GetSubscriptionListAsync(customerId);
+            var response = result.Data!;
 
             // Then
+            result.Success.ShouldBeTrue();
             response.ShouldNotBeNull();
             response.Items.ShouldNotBeNull();
         }
@@ -48,9 +49,11 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
         // Given
 
         // When: Retrieve subscription list with default settings
-        ListResponse<SubscriptionResponse> response = await _subscriptionClient.GetAllSubscriptionList();
+        var result = await _subscriptionClient.GetAllSubscriptionList();
+        var response = result.Data!;
 
         // Then
+        result.Success.ShouldBeTrue();
         response.ShouldNotBeNull();
         response.Items.ShouldNotBeNull();
     }
@@ -63,9 +66,11 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
             int numberOfSubscriptions = 5;
 
             // When: Retrieve 5 subscriptions
-            ListResponse<SubscriptionResponse> response = await _subscriptionClient.GetSubscriptionListAsync(customerId, null, numberOfSubscriptions);
+            var result = await _subscriptionClient.GetSubscriptionListAsync(customerId, null, numberOfSubscriptions);
+            var response = result.Data!;
 
             // Then
+            result.Success.ShouldBeTrue();
             response.Items.Count.ShouldBeLessThanOrEqualTo(numberOfSubscriptions);
         }
     }
@@ -85,9 +90,11 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
             };
 
             // When
-            SubscriptionResponse subscriptionResponse = await _subscriptionClient.CreateSubscriptionAsync(customerId, subscriptionRequest);
+            var result = await _subscriptionClient.CreateSubscriptionAsync(customerId, subscriptionRequest);
+            var subscriptionResponse = result.Data!;
 
             // Then
+            result.Success.ShouldBeTrue();
             subscriptionResponse.Amount.ShouldBe(subscriptionRequest.Amount);
             subscriptionResponse.Times.ShouldBe(subscriptionRequest.Times);
             subscriptionResponse.Interval.ShouldBe(subscriptionRequest.Interval);
@@ -108,9 +115,11 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
             SubscriptionUpdateRequest request = new () {
                 Description = $"Updated subscription {Guid.NewGuid()}"
             };
-            SubscriptionResponse response = await _subscriptionClient.UpdateSubscriptionAsync(customerId, activeSubscription.Id, request);
+            var result = await _subscriptionClient.UpdateSubscriptionAsync(customerId, activeSubscription.Id, request);
+            var response = result.Data!;
 
             // Then
+            result.Success.ShouldBeTrue();
             response.Description.ShouldBe(request.Description);
         }
     }
@@ -120,7 +129,8 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
         // Given: We have a customer with a mandate
         string? customerId = await GetFirstCustomerWithValidMandate();
         if (customerId != null) {
-            ListResponse<SubscriptionResponse> subscriptions = await _subscriptionClient.GetSubscriptionListAsync(customerId);
+            var listResult = await _subscriptionClient.GetSubscriptionListAsync(customerId);
+            var subscriptions = listResult.Data!;
 
             // When: That customer has a subscription that we can cancel
             SubscriptionResponse? subscriptionToCancel = subscriptions.Items
@@ -130,7 +140,10 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
 
                 // Then: Make sure its canceled after one second
                 await Task.Delay(TimeSpan.FromSeconds(1));
-                SubscriptionResponse cancelledSubscription = await _subscriptionClient.GetSubscriptionAsync(customerId, subscriptionToCancel.Id);
+                var getResult = await _subscriptionClient.GetSubscriptionAsync(customerId, subscriptionToCancel.Id);
+                var cancelledSubscription = getResult.Data!;
+                listResult.Success.ShouldBeTrue();
+                getResult.Success.ShouldBeTrue();
                 cancelledSubscription.Status.ShouldBe(SubscriptionStatus.Canceled);
             }
         }
@@ -153,18 +166,22 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
             };
 
             // When We send the subscription request to Mollie
-            SubscriptionResponse result = await _subscriptionClient.CreateSubscriptionAsync(customerId, subscriptionRequest);
+            var result = await _subscriptionClient.CreateSubscriptionAsync(customerId, subscriptionRequest);
+            var subscription = result.Data!;
 
             // Then: Make sure we get the same json result as metadata
-            IsJsonResultEqual(result.Metadata, json).ShouldBeTrue();
+            result.Success.ShouldBeTrue();
+            IsJsonResultEqual(subscription.Metadata, json).ShouldBeTrue();
         }
     }
 
     private async Task<string?> GetFirstCustomerWithValidMandate() {
-        ListResponse<CustomerResponse> customers = await _customerClient.GetCustomerListAsync();
+        var customerListResult = await _customerClient.GetCustomerListAsync();
+        var customers = customerListResult.Data!;
 
         foreach (CustomerResponse customer in customers.Items) {
-            ListResponse<MandateResponse> mandates = await _mandateClient.GetMandateListAsync(customer.Id);
+            var mandateListResult = await _mandateClient.GetMandateListAsync(customer.Id);
+            var mandates = mandateListResult.Data!;
             if (mandates.Items.Any(x => x.Status == MandateStatus.Valid)) {
                 return customer.Id;
             }
@@ -174,10 +191,12 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
     }
 
     private async Task<SubscriptionResponse?> GetActiveSubscription() {
-        ListResponse<CustomerResponse> customers = await _customerClient.GetCustomerListAsync();
+        var customerListResult = await _customerClient.GetCustomerListAsync();
+        var customers = customerListResult.Data!;
 
         foreach (CustomerResponse customer in customers.Items.OrderByDescending(x => x.CreatedAt)) {
-            ListResponse<SubscriptionResponse> subscriptions = await _subscriptionClient.GetSubscriptionListAsync(customer.Id);
+            var subscriptionListResult = await _subscriptionClient.GetSubscriptionListAsync(customer.Id);
+            var subscriptions = subscriptionListResult.Data!;
             var activeSubscription = subscriptions.Items.FirstOrDefault(x => x.Status == SubscriptionStatus.Active);
             if (activeSubscription != null) {
                 return activeSubscription;

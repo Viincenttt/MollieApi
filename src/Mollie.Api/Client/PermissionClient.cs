@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Framework.Authentication.Abstract;
+using Mollie.Api.Models;
 using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Permission.Response;
 using Mollie.Api.Models.Url;
@@ -19,7 +20,7 @@ namespace Mollie.Api.Client {
             : base(options, mollieSecretManager, httpClient) {
         }
 
-        public async Task<PermissionResponse> GetPermissionAsync(
+        public async Task<MollieResult<PermissionResponse>> GetPermissionAsync(
             string permissionId, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(permissionId), permissionId);
             return await GetAsync<PermissionResponse>(
@@ -27,13 +28,13 @@ namespace Mollie.Api.Client {
                 .ConfigureAwait(false);
         }
 
-        public async Task<PermissionResponse> GetPermissionAsync(
+        public async Task<MollieResult<PermissionResponse>> GetPermissionAsync(
             UrlObjectLink<PermissionResponse> url, CancellationToken cancellationToken = default) {
             return await GetAsync(url, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<PermissionResponse>> GetPermissionListAsync(
+        public async Task<MollieResult<ListResponse<PermissionResponse>>> GetPermissionListAsync(
             CancellationToken cancellationToken = default) {
             return await GetListAsync<ListResponse<PermissionResponse>>(
                 "permissions", null, null, cancellationToken: cancellationToken)

@@ -33,10 +33,12 @@ public class WebhookClientTests : BaseClientTests {
         var client = new WebhookClient("abcde", httpClient);
 
         // When: We send the request
-        WebhookResponse response = await client.CreateWebhookAsync(request);
+        var result = await client.CreateWebhookAsync(request);
+        WebhookResponse response = result.Data!;
 
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
+        result.Success.ShouldBeTrue();
         response.ShouldNotBeNull();
         response.Id.ShouldBe(webhookId);
         response.Resource.ShouldBe("webhook");
@@ -63,10 +65,12 @@ public class WebhookClientTests : BaseClientTests {
         var client = new WebhookClient("abcde", httpClient);
 
         // When: We send the request
-        WebhookResponse response = await client.UpdateWebhookAsync(webhookId, request);
+        var result = await client.UpdateWebhookAsync(webhookId, request);
+        WebhookResponse response = result.Data!;
 
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
+        result.Success.ShouldBeTrue();
         response.ShouldNotBeNull();
         response.Id.ShouldBe(webhookId);
         response.Resource.ShouldBe("webhook");
@@ -129,10 +133,12 @@ public class WebhookClientTests : BaseClientTests {
         var webhookClient = new WebhookClient("abcde", httpClient);
 
         // When
-        WebhookResponse response = await webhookClient.GetWebhookAsync(webhookId);
+        var result = await webhookClient.GetWebhookAsync(webhookId);
+        WebhookResponse response = result.Data!;
 
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
+        result.Success.ShouldBeTrue();
         response.Id.ShouldBe(webhookId);
         response.Resource.ShouldBe("webhook");
         response.Name.ShouldBe(name);
@@ -202,9 +208,11 @@ public class WebhookClientTests : BaseClientTests {
         var webhookClient = new WebhookClient("abcde", httpClient);
 
         // When
-        ListResponse<WebhookResponse> response = await webhookClient.GetWebhookListAsync();
+        var result = await webhookClient.GetWebhookListAsync();
+        ListResponse<WebhookResponse> response = result.Data!;
 
         // Then
+        result.Success.ShouldBeTrue();
         response.Count.ShouldBe(1);
         response.Items.Count.ShouldBe(response.Count);
         response.Links.ShouldNotBeNull();

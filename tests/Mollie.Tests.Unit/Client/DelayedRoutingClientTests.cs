@@ -115,25 +115,27 @@ namespace Mollie.Tests.Unit.Client {
             var client = new DelayedRoutingClient("test_api_key", httpClient);
 
             // When
-            DelayedRoutingResponse result = await client.CreateDelayedRouteAsync(DefaultPaymentId, request);
+            var result = await client.CreateDelayedRouteAsync(DefaultPaymentId, request);
+            DelayedRoutingResponse delayedRoutingResponse = result.Data!;
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
-            result.ShouldNotBeNull();
-            result.Id.ShouldBe(DefaultRouteId);
-            result.Resource.ShouldBe("route");
-            result.PaymentId.ShouldBe(DefaultPaymentId);
-            result.Amount.Value.ShouldBe(DefaultAmountValue);
-            result.Amount.Currency.ShouldBe(DefaultAmountCurrency);
-            result.Description.ShouldBe("Route for customer payout");
-            result.Destination.ShouldNotBeNull();
-            result.Destination.Type.ShouldBe("organization");
-            result.Destination.OrganizationId.ShouldBe(DefaultOrganizationId);
-            result.CreatedAt.ShouldBeOfType<DateTime>();
-            result.Links.ShouldNotBeNull();
-            result.Links.Self.ShouldNotBeNull();
-            result.Links.Payment.ShouldNotBeNull();
-            result.Links.Documentation.ShouldNotBeNull();
+            result.Success.ShouldBeTrue();
+            delayedRoutingResponse.ShouldNotBeNull();
+            delayedRoutingResponse.Id.ShouldBe(DefaultRouteId);
+            delayedRoutingResponse.Resource.ShouldBe("route");
+            delayedRoutingResponse.PaymentId.ShouldBe(DefaultPaymentId);
+            delayedRoutingResponse.Amount.Value.ShouldBe(DefaultAmountValue);
+            delayedRoutingResponse.Amount.Currency.ShouldBe(DefaultAmountCurrency);
+            delayedRoutingResponse.Description.ShouldBe("Route for customer payout");
+            delayedRoutingResponse.Destination.ShouldNotBeNull();
+            delayedRoutingResponse.Destination.Type.ShouldBe("organization");
+            delayedRoutingResponse.Destination.OrganizationId.ShouldBe(DefaultOrganizationId);
+            delayedRoutingResponse.CreatedAt.ShouldBeOfType<DateTime>();
+            delayedRoutingResponse.Links.ShouldNotBeNull();
+            delayedRoutingResponse.Links.Self.ShouldNotBeNull();
+            delayedRoutingResponse.Links.Payment.ShouldNotBeNull();
+            delayedRoutingResponse.Links.Documentation.ShouldNotBeNull();
         }
 
         [Theory]
@@ -202,14 +204,16 @@ namespace Mollie.Tests.Unit.Client {
             var client = new DelayedRoutingClient("test_api_key", httpClient);
 
             // When
-            ListResponse<DelayedRoutingResponse> result = await client.GetPaymentRouteListAsync(DefaultPaymentId);
+            var result = await client.GetPaymentRouteListAsync(DefaultPaymentId);
+            ListResponse<DelayedRoutingResponse> listResponse = result.Data!;
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
-            result.ShouldNotBeNull();
-            result.Count.ShouldBe(1);
-            result.Items.ShouldHaveSingleItem();
-            var route = result.Items[0];
+            result.Success.ShouldBeTrue();
+            listResponse.ShouldNotBeNull();
+            listResponse.Count.ShouldBe(1);
+            listResponse.Items.ShouldHaveSingleItem();
+            var route = listResponse.Items[0];
             route.Id.ShouldBe(DefaultRouteId);
             route.PaymentId.ShouldBe(DefaultPaymentId);
             route.Amount.Value.ShouldBe(DefaultAmountValue);
@@ -268,18 +272,20 @@ namespace Mollie.Tests.Unit.Client {
             var client = new DelayedRoutingClient("test_api_key", httpClient);
 
             // When
-            DelayedRoutingResponse result = await client.GetDelayedRouteAsync(DefaultPaymentId, DefaultRouteId);
+            var result = await client.GetDelayedRouteAsync(DefaultPaymentId, DefaultRouteId);
+            DelayedRoutingResponse delayedRoutingResponse = result.Data!;
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
-            result.ShouldNotBeNull();
-            result.Id.ShouldBe(DefaultRouteId);
-            result.Resource.ShouldBe("route");
-            result.PaymentId.ShouldBe(DefaultPaymentId);
-            result.Amount.Value.ShouldBe(DefaultAmountValue);
-            result.Amount.Currency.ShouldBe(DefaultAmountCurrency);
-            result.Destination.Type.ShouldBe("organization");
-            result.Destination.OrganizationId.ShouldBe(DefaultOrganizationId);
+            result.Success.ShouldBeTrue();
+            delayedRoutingResponse.ShouldNotBeNull();
+            delayedRoutingResponse.Id.ShouldBe(DefaultRouteId);
+            delayedRoutingResponse.Resource.ShouldBe("route");
+            delayedRoutingResponse.PaymentId.ShouldBe(DefaultPaymentId);
+            delayedRoutingResponse.Amount.Value.ShouldBe(DefaultAmountValue);
+            delayedRoutingResponse.Amount.Currency.ShouldBe(DefaultAmountCurrency);
+            delayedRoutingResponse.Destination.Type.ShouldBe("organization");
+            delayedRoutingResponse.Destination.OrganizationId.ShouldBe(DefaultOrganizationId);
         }
 
         [Theory]
@@ -342,7 +348,4 @@ namespace Mollie.Tests.Unit.Client {
         }
     }
 }
-
-
-
 
