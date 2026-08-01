@@ -48,6 +48,6 @@ public class ApiExceptionTests : BaseMollieApiTestClass {
         var result = await _connectClient.RevokeTokenAsync(tokenRequest);
         result.Success.ShouldBeFalse();
         result.Error.ShouldNotBeNull();
-        result.Error.Title.ShouldBe("invalid_client");
+        result.Error.Title.ShouldBe("invalid_request");
     }
 }
