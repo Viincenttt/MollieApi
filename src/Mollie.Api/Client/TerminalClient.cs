@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
 using Mollie.Api.Framework.Authentication.Abstract;
+using Mollie.Api.Models;
 using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Terminal.Response;
 using Mollie.Api.Models.Url;
@@ -21,7 +22,7 @@ namespace Mollie.Api.Client {
             : base(options, mollieSecretManager, httpClient) {
         }
 
-        public async Task<TerminalResponse> GetTerminalAsync(
+        public async Task<MollieResult<TerminalResponse>> GetTerminalAsync(
             string terminalId, bool testmode = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(terminalId), terminalId);
             var queryParameters = BuildQueryParameters(testmode: testmode);
@@ -30,12 +31,12 @@ namespace Mollie.Api.Client {
                 .ConfigureAwait(false);
         }
 
-        public async Task<TerminalResponse> GetTerminalAsync(
+        public async Task<MollieResult<TerminalResponse>> GetTerminalAsync(
             UrlObjectLink<TerminalResponse> url, CancellationToken cancellationToken = default) {
             return await GetAsync(url, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<TerminalResponse>> GetTerminalListAsync(
+        public async Task<MollieResult<ListResponse<TerminalResponse>>> GetTerminalListAsync(
             string? from = null, int? limit = null, string? profileId = null, bool testmode = false, CancellationToken cancellationToken = default) {
             var queryParameters = BuildQueryParameters(profileId, testmode);
             return await GetListAsync<ListResponse<TerminalResponse>>(
@@ -43,7 +44,7 @@ namespace Mollie.Api.Client {
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<TerminalResponse>> GetTerminalListAsync(
+        public async Task<MollieResult<ListResponse<TerminalResponse>>> GetTerminalListAsync(
             UrlObjectLink<ListResponse<TerminalResponse>> url, CancellationToken cancellationToken = default) {
             return await GetAsync(url, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Shouldly;
 using Mollie.Api.Client;
 using Mollie.Api.Models;
+using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Shipment;
 using Mollie.Api.Models.Shipment.Request;
 using Mollie.Api.Models.Shipment.Response;
@@ -42,10 +43,12 @@ namespace Mollie.Tests.Unit.Client {
             ShipmentClient shipmentClient = new ShipmentClient("abcde", httpClient);
 
             // When: We send the request
-            ShipmentResponse shipmentResponse = await shipmentClient.CreateShipmentAsync(orderId, shipmentRequest);
+            var result = await shipmentClient.CreateShipmentAsync(orderId, shipmentRequest);
+            ShipmentResponse shipmentResponse = result.Data!;
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
+            result.Success.ShouldBeTrue();
             shipmentResponse.ShouldNotBeNull();
             shipmentResponse.OrderId.ShouldBe(orderId);
             shipmentResponse.Tracking!.Carrier.ShouldBe(shipmentRequest.Tracking.Carrier);
@@ -68,10 +71,12 @@ namespace Mollie.Tests.Unit.Client {
             ShipmentClient shipmentClient = new ShipmentClient("abcde", httpClient);
 
             // When: We send the request
-            ShipmentResponse shipmentResponse = await shipmentClient.GetShipmentAsync(orderId, shipmentId, testModeParameter);
+            var result = await shipmentClient.GetShipmentAsync(orderId, shipmentId, testModeParameter);
+            ShipmentResponse shipmentResponse = result.Data!;
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
+            result.Success.ShouldBeTrue();
             shipmentResponse.ShouldNotBeNull();
         }
 
@@ -89,10 +94,12 @@ namespace Mollie.Tests.Unit.Client {
             ShipmentClient shipmentClient = new ShipmentClient("abcde", httpClient);
 
             // When: We send the request
-            var shipmentListResponse = await shipmentClient.GetShipmentListAsync(orderId, testModeParameter);
+            var result = await shipmentClient.GetShipmentListAsync(orderId, testModeParameter);
+            ListResponse<ShipmentResponse> shipmentListResponse = result.Data!;
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
+            result.Success.ShouldBeTrue();
             shipmentListResponse.ShouldNotBeNull();
         }
 
@@ -119,10 +126,12 @@ namespace Mollie.Tests.Unit.Client {
             ShipmentClient shipmentClient = new ShipmentClient("abcde", httpClient);
 
             // When: We send the request
-            ShipmentResponse shipmentResponse = await shipmentClient.UpdateShipmentAsync(orderId, shipmentId, updateShipmentRequest);
+            var result = await shipmentClient.UpdateShipmentAsync(orderId, shipmentId, updateShipmentRequest);
+            ShipmentResponse shipmentResponse = result.Data!;
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
+            result.Success.ShouldBeTrue();
             shipmentResponse.ShouldNotBeNull();
             shipmentResponse.OrderId.ShouldBe(orderId);
             shipmentResponse.Tracking!.Carrier.ShouldBe(updateShipmentRequest.Tracking.Carrier);

@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Mollie.Api.Client;
 using Polly;
 
 namespace Mollie.Tests.Integration.Framework;
@@ -11,8 +9,7 @@ public static class MollieIntegrationTestHttpRetryPolicies {
 
     public static IAsyncPolicy<HttpResponseMessage> TooManyRequestRetryPolicy() {
         var retryPolicy = Policy<HttpResponseMessage>
-            .Handle<MollieApiException>(x => x.Details.Status == (int)HttpStatusCode.TooManyRequests)
-            .OrResult(r =>  r?.Headers?.RetryAfter != null)
+            .HandleResult(r => r?.Headers?.RetryAfter != null)
             .WaitAndRetryAsync(
                 3,
                 sleepDurationProvider: (_, response, _) =>

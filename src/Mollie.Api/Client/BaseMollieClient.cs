@@ -72,9 +72,10 @@ namespace Mollie.Api.Client {
             return _idempotencyKey;
         }
 
-        private async Task<T> SendHttpRequest<T>(
+        private async Task<MollieResult<T>> SendHttpRequest<T>(
             HttpMethod httpMethod, string relativeUri, object? data = null, CancellationToken cancellationToken = default) {
             HttpRequestMessage httpRequest = CreateHttpRequest(httpMethod, relativeUri);
+            string? requestBody = null;
             if (data != null) {
                 if (data is ITestModeRequest testModeRequest) {
                     testModeRequest.Testmode ??= _options.Testmode;
@@ -85,63 +86,83 @@ namespace Mollie.Api.Client {
                 }
 
                 var jsonData = _jsonConverterService.Serialize(data);
+                requestBody = jsonData;
                 var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
                 httpRequest.Content = content;
             }
 
             var response = await _httpClient.SendAsync(httpRequest, cancellationToken).ConfigureAwait(false);
-            return await ProcessHttpResponseMessage<T>(response).ConfigureAwait(false);
+            return await ProcessHttpResponseMessage<T>(response, requestBody).ConfigureAwait(false);
         }
 
-        protected async Task<T> GetListAsync<T>(
+        protected async Task<MollieResult<T>> GetListAsync<T>(
             string relativeUri, string? from, int? limit, IDictionary<string, string>? otherParameters = null, CancellationToken cancellationToken = default) {
             string url = relativeUri + BuildListQueryString(from, limit, otherParameters);
             return await SendHttpRequest<T>(HttpMethod.Get, url, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        protected async Task<T> GetAsync<T>(string relativeUri, CancellationToken cancellationToken = default) {
+        protected async Task<MollieResult<T>> GetAsync<T>(string relativeUri, CancellationToken cancellationToken = default) {
             return await SendHttpRequest<T>(HttpMethod.Get, relativeUri, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        protected async Task<T> GetAsync<T>(UrlObjectLink<T> urlObject, CancellationToken cancellationToken = default) {
+        protected async Task<MollieResult<T>> GetAsync<T>(UrlObjectLink<T> urlObject, CancellationToken cancellationToken = default) {
             ValidateUrlLink(urlObject);
             return await GetAsync<T>(urlObject.Href, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        protected async Task<T> PostAsync<T>(
+        protected async Task<MollieResult<T>> PostAsync<T>(
             string relativeUri, object? data, CancellationToken cancellationToken = default) {
             return await SendHttpRequest<T>(HttpMethod.Post, relativeUri, data, cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        protected async Task<T> PatchAsync<T>(string relativeUri, object? data, CancellationToken cancellationToken = default) {
+        protected async Task<MollieResult<T>> PatchAsync<T>(string relativeUri, object? data, CancellationToken cancellationToken = default) {
             return await SendHttpRequest<T>(new HttpMethod("PATCH"), relativeUri, data, cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        protected async Task DeleteAsync(string relativeUri, object? data = null, CancellationToken cancellationToken = default) {
-            await SendHttpRequest<object>(HttpMethod.Delete, relativeUri, data, cancellationToken)
+        protected async Task<MollieResult> DeleteAsync(string relativeUri, object? data = null, CancellationToken cancellationToken = default) {
+            return await SendHttpRequest<object>(HttpMethod.Delete, relativeUri, data, cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        protected async Task<T> DeleteAsync<T>(string relativeUri, object? data = null, CancellationToken cancellationToken = default) {
+        protected async Task<MollieResult<T>> DeleteAsync<T>(string relativeUri, object? data = null, CancellationToken cancellationToken = default) {
             return await SendHttpRequest<T>(HttpMethod.Delete, relativeUri, data, cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        private async Task<T> ProcessHttpResponseMessage<T>(HttpResponseMessage response) {
+        private async Task<MollieResult<T>> ProcessHttpResponseMessage<T>(HttpResponseMessage response, string? requestBody) {
             var resultContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var requestUrl = response.RequestMessage?.RequestUri?.ToString() ?? string.Empty;
+            var httpMethod = response.RequestMessage?.Method ?? HttpMethod.Get;
 
             if (response.IsSuccessStatusCode) {
                 resultContent = string.IsNullOrEmpty(resultContent) ? "{}" : resultContent;
-                return _jsonConverterService.Deserialize<T>(resultContent)!;
+                var data = _jsonConverterService.Deserialize<T>(resultContent);
+                return new MollieResult<T> {
+                    Success = true,
+                    Data = data,
+                    RequestBody = requestBody,
+                    RequestUrl = requestUrl,
+                    HttpMethod = httpMethod,
+                    HttpStatusCode = response.StatusCode,
+                    ResponseBody = resultContent
+                };
             }
 
             MollieErrorMessage errorDetails = ParseMollieErrorMessage(response.StatusCode, resultContent);
-            throw new MollieApiException(errorDetails);
+            return new MollieResult<T> {
+                Success = false,
+                Error = errorDetails,
+                RequestBody = requestBody,
+                RequestUrl = requestUrl,
+                HttpMethod = httpMethod,
+                HttpStatusCode = response.StatusCode,
+                ResponseBody = resultContent
+            };
         }
 
         protected void ValidateApiKeyIsOauthAccesstoken(bool isConstructor = false) {

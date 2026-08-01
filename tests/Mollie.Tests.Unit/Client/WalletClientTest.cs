@@ -34,9 +34,11 @@ public class WalletClientTest : BaseClientTests {
         using var walletClient = new WalletClient("abcde", mockHttp.ToHttpClient());
 
         // Act
-        var response = await walletClient.RequestApplePayPaymentSessionAsync(request);
+        var result = await walletClient.RequestApplePayPaymentSessionAsync(request);
+        var response = result.Data!;
 
         // Assert
+        result.Success.ShouldBeTrue();
         response.EpochTimestamp.ShouldBe(DateTimeOffset.FromUnixTimeMilliseconds(1555507053169).UtcDateTime);
         response.ExpiresAt.ShouldBe(DateTimeOffset.FromUnixTimeMilliseconds(1555510653169).UtcDateTime);
         response.MerchantSessionIdentifier.ShouldBe("SSH2EAF8AFAEAA94DEEA898162A5DAFD36E_916523AAED1343F5BC5815E12BEE9250AFFDC1A17C46B0DE5A943F0F94927C24");

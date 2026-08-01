@@ -21,10 +21,12 @@ namespace Mollie.Tests.Unit.Client {
             SettlementClient settlementClient = new SettlementClient("api-key", httpClient);
 
             // When: We make the request
-            ListResponse<CaptureResponse> listCaptureResponse = await settlementClient.GetSettlementCaptureListAsync(defaultSettlementId);
+            var result = await settlementClient.GetSettlementCaptureListAsync(defaultSettlementId);
+            ListResponse<CaptureResponse> listCaptureResponse = result.Data!;
 
             // Then: Response should be parsed
             mockHttp.VerifyNoOutstandingExpectation();
+            result.Success.ShouldBeTrue();
             listCaptureResponse.ShouldNotBeNull();
             listCaptureResponse.Count.ShouldBe(1);
             listCaptureResponse.Links.Self.Href.ShouldBe("https://api.mollie.com/v2/settlements/stl_jDk30akdN/captures?limit=50");
@@ -59,10 +61,12 @@ namespace Mollie.Tests.Unit.Client {
             SettlementClient settlementClient = new SettlementClient("api-key", httpClient);
 
             // When: We make the request
-            SettlementResponse settlementResponse = await settlementClient.GetOpenSettlementAsync();
+            var result = await settlementClient.GetOpenSettlementAsync();
+            SettlementResponse settlementResponse = result.Data!;
 
             // Then: Response should be parsed
             mockHttp.VerifyNoOutstandingExpectation();
+            result.Success.ShouldBeTrue();
             settlementResponse.ShouldNotBeNull();
             settlementResponse.Amount.Value.ShouldBe(defaultAmountValue);
             settlementResponse.Amount.Currency.ShouldBe(defaultAmountCurrency);
@@ -126,10 +130,12 @@ namespace Mollie.Tests.Unit.Client {
             SettlementClient settlementClient = new SettlementClient("api-key", httpClient);
 
             // When: We make the request
-            SettlementResponse settlementResponse = await settlementClient.GetOpenSettlementAsync();
+            var result = await settlementClient.GetOpenSettlementAsync();
+            SettlementResponse settlementResponse = result.Data!;
 
             // Then: Response should be parsed
             mockHttp.VerifyNoOutstandingExpectation();
+            result.Success.ShouldBeTrue();
             settlementResponse.ShouldNotBeNull();
             settlementResponse.Periods.Count.ShouldBe(0);
         }

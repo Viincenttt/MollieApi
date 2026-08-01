@@ -23,19 +23,20 @@ public class PermissionClientTests : BaseClientTests
         using var permissionClient = new PermissionClient("access_abcde", httpClient);
 
         // Act
-        var response = await permissionClient.GetPermissionAsync(permissionId);
+        var result = await permissionClient.GetPermissionAsync(permissionId);
 
         // Assert
         mockHttp.VerifyNoOutstandingExpectation();
-        response.Resource.ShouldBe("permission");
-        response.Id.ShouldBe("payments.read");
-        response.Description.ShouldBe("View your payments");
-        response.Granted.ShouldBeTrue();
-        response.Links.ShouldNotBeNull();
-        response.Links.Self.Href.ShouldBe("https://api.mollie.com/v2/permissions/payments.read");
-        response.Links.Self.Type.ShouldBe("application/hal+json");
-        response.Links.Documentation.Href.ShouldBe("https://docs.mollie.com/reference/v2/permissions-api/get-permission");
-        response.Links.Documentation.Type.ShouldBe("text/html");
+        result.Success.ShouldBeTrue();
+        result.Data.Resource.ShouldBe("permission");
+        result.Data.Id.ShouldBe("payments.read");
+        result.Data.Description.ShouldBe("View your payments");
+        result.Data.Granted.ShouldBeTrue();
+        result.Data.Links.ShouldNotBeNull();
+        result.Data.Links.Self.Href.ShouldBe("https://api.mollie.com/v2/permissions/payments.read");
+        result.Data.Links.Self.Type.ShouldBe("application/hal+json");
+        result.Data.Links.Documentation.Href.ShouldBe("https://docs.mollie.com/reference/v2/permissions-api/get-permission");
+        result.Data.Links.Documentation.Type.ShouldBe("text/html");
     }
 
     [Fact]
@@ -65,32 +66,33 @@ public class PermissionClientTests : BaseClientTests
         using var permissionClient = new PermissionClient("access_abcde", httpClient);
 
         // Act
-        var response = await permissionClient.GetPermissionListAsync();
+        var result = await permissionClient.GetPermissionListAsync();
 
         // Assert
         mockHttp.VerifyNoOutstandingExpectation();
-        response.Count.ShouldBe(2);
-        response.ShouldNotBeNull();
-        response.Items.Count.ShouldBe(2);
-        response.Items[0].Resource.ShouldBe("permission");
-        response.Items[0].Id.ShouldBe("payments.write");
-        response.Items[0].Description.ShouldBe("Create new payments");
-        response.Items[0].Granted.ShouldBeFalse();
-        response.Items[0].Links.ShouldNotBeNull();
-        response.Items[0].Links.Self.Href.ShouldBe("https://api.mollie.com/v2/permissions/payments.write");
-        response.Items[0].Links.Self.Type.ShouldBe("application/hal+json");
-        response.Items[1].Resource.ShouldBe("permission");
-        response.Items[1].Id.ShouldBe("payments.read");
-        response.Items[1].Description.ShouldBe("View your payments");
-        response.Items[1].Granted.ShouldBeTrue();
-        response.Items[1].Links.ShouldNotBeNull();
-        response.Items[1].Links.Self.Href.ShouldBe("https://api.mollie.com/v2/permissions/payments.read");
-        response.Items[1].Links.Self.Type.ShouldBe("application/hal+json");
-        response.Links.ShouldNotBeNull();
-        response.Links.Self.Href.ShouldBe("https://api.mollie.com/v2/permissions");
-        response.Links.Self.Type.ShouldBe("application/hal+json");
-        response.Links.Documentation.Href.ShouldBe("https://docs.mollie.com/reference/v2/permissions-api/list-permissions");
-        response.Links.Documentation.Type.ShouldBe("text/html");
+        result.Success.ShouldBeTrue();
+        result.Data.Count.ShouldBe(2);
+        result.Data.ShouldNotBeNull();
+        result.Data.Items.Count.ShouldBe(2);
+        result.Data.Items[0].Resource.ShouldBe("permission");
+        result.Data.Items[0].Id.ShouldBe("payments.write");
+        result.Data.Items[0].Description.ShouldBe("Create new payments");
+        result.Data.Items[0].Granted.ShouldBeFalse();
+        result.Data.Items[0].Links.ShouldNotBeNull();
+        result.Data.Items[0].Links.Self.Href.ShouldBe("https://api.mollie.com/v2/permissions/payments.write");
+        result.Data.Items[0].Links.Self.Type.ShouldBe("application/hal+json");
+        result.Data.Items[1].Resource.ShouldBe("permission");
+        result.Data.Items[1].Id.ShouldBe("payments.read");
+        result.Data.Items[1].Description.ShouldBe("View your payments");
+        result.Data.Items[1].Granted.ShouldBeTrue();
+        result.Data.Items[1].Links.ShouldNotBeNull();
+        result.Data.Items[1].Links.Self.Href.ShouldBe("https://api.mollie.com/v2/permissions/payments.read");
+        result.Data.Items[1].Links.Self.Type.ShouldBe("application/hal+json");
+        result.Data.Links.ShouldNotBeNull();
+        result.Data.Links.Self.Href.ShouldBe("https://api.mollie.com/v2/permissions");
+        result.Data.Links.Self.Type.ShouldBe("application/hal+json");
+        result.Data.Links.Documentation.Href.ShouldBe("https://docs.mollie.com/reference/v2/permissions-api/list-permissions");
+        result.Data.Links.Documentation.Type.ShouldBe("text/html");
     }
 
     private const string defaultGetPermissionResponse = @"{

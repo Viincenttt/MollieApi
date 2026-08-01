@@ -16,7 +16,7 @@ namespace Mollie.Tests.Unit.Client;
 
 public class BaseMollieClientTests : BaseClientTests {
     [Fact]
-    public async Task HttpResponseStatusCodeIsNotSuccesfull_ResponseBodyContainsMollieErrorDetails_MollieApiExceptionIsThrown() {
+    public async Task HttpResponseStatusCodeIsNotSuccessful_ResponseBodyContainsMollieErrorDetails_ResultContainsError() {
 
         // Arrange
         const string errorMessage = "A validation error occured";
@@ -46,15 +46,17 @@ public class BaseMollieClientTests : BaseClientTests {
         };
 
         // Act
-        var exception = await Assert.ThrowsAsync<MollieApiException>(() => paymentClient.CreatePaymentAsync(paymentRequest));
+        var result = await paymentClient.CreatePaymentAsync(paymentRequest);
 
         // Assert
-        exception.Details.Detail.ShouldBe(errorMessage);
-        exception.Details.Status.ShouldBe(errorStatus);
+        result.Success.ShouldBeFalse();
+        result.Error.ShouldNotBeNull();
+        result.Error.Detail.ShouldBe(errorMessage);
+        result.Error.Status.ShouldBe(errorStatus);
     }
 
     [Fact]
-    public async Task HttpResponseStatusCodeIsNotSuccesfull_ResponseBodyContainsHtml_MollieApiExceptionIsThrown() {
+    public async Task HttpResponseStatusCodeIsNotSuccessful_ResponseBodyContainsHtml_ResultContainsError() {
         // Arrange
         string responseBody = "<html><body>Whoops!</body></html>";
         const string expectedUrl = $"{BaseMollieClient.DefaultBaseApiEndPoint}payments";
@@ -72,11 +74,13 @@ public class BaseMollieClientTests : BaseClientTests {
         };
 
         // Act
-        var exception = await Assert.ThrowsAsync<MollieApiException>(() => paymentClient.CreatePaymentAsync(paymentRequest));
+        var result = await paymentClient.CreatePaymentAsync(paymentRequest);
 
         // Assert
-        exception.Details.Detail.ShouldBe(responseBody);
-        exception.Details.Status.ShouldBe((int)HttpStatusCode.UnprocessableEntity);
+        result.Success.ShouldBeFalse();
+        result.Error.ShouldNotBeNull();
+        result.Error.Detail.ShouldBe(responseBody);
+        result.Error.Status.ShouldBe((int)HttpStatusCode.UnprocessableEntity);
     }
 
     [Fact]

@@ -24,7 +24,7 @@ namespace Mollie.Api.Client {
             : base(options, mollieSecretManager, httpClient) {
         }
 
-        public async Task<ListResponse<SubscriptionResponse>> GetSubscriptionListAsync(
+        public async Task<MollieResult<ListResponse<SubscriptionResponse>>> GetSubscriptionListAsync(
             string customerId, string? from = null, int? limit = null, string? profileId = null, bool testmode = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(customerId), customerId);
             var queryParameters = BuildQueryParameters(profileId, testmode);
@@ -34,7 +34,7 @@ namespace Mollie.Api.Client {
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<SubscriptionResponse>> GetAllSubscriptionList(
+        public async Task<MollieResult<ListResponse<SubscriptionResponse>>> GetAllSubscriptionList(
             string? from = null, int? limit = null, string? profileId = null, bool testmode = false, CancellationToken cancellationToken = default) {
             var queryParameters = BuildQueryParameters(profileId, testmode);
             return await GetListAsync<ListResponse<SubscriptionResponse>>(
@@ -42,19 +42,19 @@ namespace Mollie.Api.Client {
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<SubscriptionResponse>> GetSubscriptionListAsync(
+        public async Task<MollieResult<ListResponse<SubscriptionResponse>>> GetSubscriptionListAsync(
             UrlObjectLink<ListResponse<SubscriptionResponse>> url, CancellationToken cancellationToken = default) {
             return await GetAsync(url, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<SubscriptionResponse> GetSubscriptionAsync(
+        public async Task<MollieResult<SubscriptionResponse>> GetSubscriptionAsync(
             UrlObjectLink<SubscriptionResponse> url, CancellationToken cancellationToken = default) {
             return await GetAsync(url, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<SubscriptionResponse> GetSubscriptionAsync(
+        public async Task<MollieResult<SubscriptionResponse>> GetSubscriptionAsync(
             string customerId, string subscriptionId, bool testmode = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(customerId), customerId);
             ValidateRequiredUrlParameter(nameof(subscriptionId), subscriptionId);
@@ -65,7 +65,7 @@ namespace Mollie.Api.Client {
                 .ConfigureAwait(false);
         }
 
-        public async Task<SubscriptionResponse> CreateSubscriptionAsync(
+        public async Task<MollieResult<SubscriptionResponse>> CreateSubscriptionAsync(
             string customerId, SubscriptionRequest request, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(customerId), customerId);
             return await PostAsync<SubscriptionResponse>(
@@ -74,18 +74,18 @@ namespace Mollie.Api.Client {
                 .ConfigureAwait(false);
         }
 
-        public async Task CancelSubscriptionAsync(
+        public async Task<MollieResult> CancelSubscriptionAsync(
             string customerId, string subscriptionId, bool testmode = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(customerId), customerId);
             ValidateRequiredUrlParameter(nameof(subscriptionId), subscriptionId);
             var data = CreateTestmodeModel(testmode);
-            await DeleteAsync(
+            return await DeleteAsync(
                 $"customers/{customerId}/subscriptions/{subscriptionId}", data,
                 cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<SubscriptionResponse> UpdateSubscriptionAsync(
+        public async Task<MollieResult<SubscriptionResponse>> UpdateSubscriptionAsync(
             string customerId, string subscriptionId, SubscriptionUpdateRequest request, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(customerId), customerId);
             ValidateRequiredUrlParameter(nameof(subscriptionId), subscriptionId);
@@ -95,7 +95,7 @@ namespace Mollie.Api.Client {
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<PaymentResponse>> GetSubscriptionPaymentListAsync(
+        public async Task<MollieResult<ListResponse<PaymentResponse>>> GetSubscriptionPaymentListAsync(
             string customerId, string subscriptionId, string? from = null, int? limit = null, bool testmode = false,
             CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(customerId), customerId);

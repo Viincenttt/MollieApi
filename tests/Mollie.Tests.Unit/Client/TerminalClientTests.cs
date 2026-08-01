@@ -47,10 +47,12 @@ public class TerminalClientTests : BaseClientTests {
         var terminalClient = new TerminalClient("abcde", httpClient);
 
         // When
-        TerminalResponse response = await terminalClient.GetTerminalAsync(terminalId);
+        var result = await terminalClient.GetTerminalAsync(terminalId);
+        TerminalResponse response = result.Data!;
 
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
+        result.Success.ShouldBeTrue();
         response.Id.ShouldBe(terminalId);
         response.Description.ShouldBe(description);
         response.SerialNumber.ShouldBe(serialNumber);
@@ -122,9 +124,11 @@ public class TerminalClientTests : BaseClientTests {
         var terminalClient = new TerminalClient("abcde", httpClient);
 
         // When
-        ListResponse<TerminalResponse> response = await terminalClient.GetTerminalListAsync();
+        var result = await terminalClient.GetTerminalListAsync();
+        ListResponse<TerminalResponse> response = result.Data!;
 
         // Then
+        result.Success.ShouldBeTrue();
         response.Count.ShouldBe(1);
         response.Items.Count.ShouldBe(response.Count);
         response.Links.ShouldNotBeNull();

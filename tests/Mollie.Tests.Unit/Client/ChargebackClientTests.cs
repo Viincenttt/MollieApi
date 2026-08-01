@@ -58,9 +58,11 @@ namespace Mollie.Tests.Unit.Client {
             ChargebackClient chargebackClient = new ChargebackClient("abcde", httpClient);
 
             // When: We send the request
-            ChargebackResponse chargebackResponse = await chargebackClient.GetChargebackAsync(defaultPaymentId, defaultChargebackId);
+            var result = await chargebackClient.GetChargebackAsync(defaultPaymentId, defaultChargebackId);
+            ChargebackResponse chargebackResponse = result.Data!;
 
             // Then
+            result.Success.ShouldBeTrue();
             chargebackResponse.PaymentId.ShouldBe(defaultPaymentId);
             chargebackResponse.Id.ShouldBe(defaultChargebackId);
             chargebackResponse.Reason.ShouldNotBeNull();

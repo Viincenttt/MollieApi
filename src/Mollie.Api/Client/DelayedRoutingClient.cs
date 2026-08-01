@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
 using Mollie.Api.Framework.Authentication.Abstract;
+using Mollie.Api.Models;
 using Mollie.Api.Models.DelayedRouting.Request;
 using Mollie.Api.Models.DelayedRouting.Response;
 using Mollie.Api.Models.List.Response;
@@ -22,7 +23,7 @@ public class DelayedRoutingClient : BaseMollieClient, IDelayedRoutingClient {
     }
 
     /// <inheritdoc />
-    public async Task<DelayedRoutingResponse> CreateDelayedRouteAsync(
+    public async Task<MollieResult<DelayedRoutingResponse>> CreateDelayedRouteAsync(
         string paymentId, DelayedRoutingRequest request, CancellationToken cancellationToken = default) {
 
         ValidateRequiredUrlParameter(nameof(paymentId), paymentId);
@@ -34,7 +35,7 @@ public class DelayedRoutingClient : BaseMollieClient, IDelayedRoutingClient {
     }
 
     /// <inheritdoc />
-    public async Task<DelayedRoutingResponse> GetDelayedRouteAsync(
+    public async Task<MollieResult<DelayedRoutingResponse>> GetDelayedRouteAsync(
         string paymentId,
         string routeId,
         bool testmode = false,
@@ -50,7 +51,7 @@ public class DelayedRoutingClient : BaseMollieClient, IDelayedRoutingClient {
     }
 
     /// <inheritdoc />
-    public async Task<ListResponse<DelayedRoutingResponse>> GetPaymentRouteListAsync(
+    public async Task<MollieResult<ListResponse<DelayedRoutingResponse>>> GetPaymentRouteListAsync(
         string paymentId,
         bool testmode = false,
         CancellationToken cancellationToken = default) {

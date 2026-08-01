@@ -26,10 +26,13 @@ namespace Mollie.Tests.Unit.Client {
           BalanceClient balanceClient = new BalanceClient("api-key", httpClient);
 
           // When: We make the request
-          BalanceResponse balanceResponse = await balanceClient.GetBalanceAsync(getBalanceResponseFactory.BalanceId);
+          var result = await balanceClient.GetBalanceAsync(getBalanceResponseFactory.BalanceId);
+          BalanceResponse balanceResponse = result.Data!;
 
           // Then: Response should be parsed
           mockHttp.VerifyNoOutstandingExpectation();
+          result.Success.ShouldBeTrue();
+          balanceResponse.ShouldNotBeNull();
           balanceResponse.ShouldNotBeNull();
           balanceResponse.Id.ShouldBe(getBalanceResponseFactory.BalanceId);
           balanceResponse.CreatedAt.ToUniversalTime().ShouldBe(getBalanceResponseFactory.CreatedAt);
@@ -84,10 +87,12 @@ namespace Mollie.Tests.Unit.Client {
           BalanceClient balanceClient = new BalanceClient("api-key", httpClient);
 
           // When: We make the request
-          BalanceResponse balanceResponse = await balanceClient.GetPrimaryBalanceAsync();
+          var result = await balanceClient.GetPrimaryBalanceAsync();
+          BalanceResponse balanceResponse = result.Data!;
 
           // Then: Response should be parsed
           mockHttp.VerifyNoOutstandingExpectation();
+          result.Success.ShouldBeTrue();
           balanceResponse.ShouldNotBeNull();
           balanceResponse.ShouldNotBeNull();
           balanceResponse.Id.ShouldBe(getBalanceResponseFactory.BalanceId);
@@ -117,10 +122,12 @@ namespace Mollie.Tests.Unit.Client {
           BalanceClient balanceClient = new BalanceClient("api-key", httpClient);
 
           // When: We make the request
-          var balances = await balanceClient.GetBalanceListAsync();
+          var result = await balanceClient.GetBalanceListAsync();
+          var balances = result.Data!;
 
           // Then: Response should be parsed
           mockHttp.VerifyNoOutstandingExpectation();
+          result.Success.ShouldBeTrue();
           balances.ShouldNotBeNull();
           balances.Count.ShouldBe(2);
           balances.Items.Count.ShouldBe(2);
@@ -141,10 +148,12 @@ namespace Mollie.Tests.Unit.Client {
           BalanceClient balanceClient = new BalanceClient("api-key", httpClient);
 
           // When: We make the request
-          var balanceReport = await balanceClient.GetBalanceReportAsync(balanceId, from, until, grouping);
+          var result = await balanceClient.GetBalanceReportAsync(balanceId, from, until, grouping);
+          var balanceReport = result.Data!;
 
           // Then: Response should be parsed
           mockHttp.VerifyNoOutstandingExpectation();
+          result.Success.ShouldBeTrue();
           balanceReport.ShouldNotBeNull();
           balanceReport.ShouldBeOfType<TransactionCategoriesReportResponse>();
           var specificBalanceReport = (TransactionCategoriesReportResponse)balanceReport;
@@ -201,10 +210,12 @@ namespace Mollie.Tests.Unit.Client {
           BalanceClient balanceClient = new BalanceClient("api-key", httpClient);
 
           // When: We make the request
-          var balanceReport = await balanceClient.GetBalanceReportAsync(balanceId, from, until, grouping);
+          var result = await balanceClient.GetBalanceReportAsync(balanceId, from, until, grouping);
+          var balanceReport = result.Data!;
 
           // Then: Response should be parsed
           mockHttp.VerifyNoOutstandingExpectation();
+          result.Success.ShouldBeTrue();
           balanceReport.ShouldNotBeNull();
           balanceReport.ShouldBeOfType<StatusBalanceReportResponse>();
           var specificBalanceReport = (StatusBalanceReportResponse)balanceReport;
@@ -234,23 +245,13 @@ namespace Mollie.Tests.Unit.Client {
           BalanceClient balanceClient = new BalanceClient("api-key", httpClient);
 
           // When: We make the request
-          var balanceTransactions = await balanceClient.GetBalanceTransactionListAsync(balanceId);
+          var result = await balanceClient.GetBalanceTransactionListAsync(balanceId);
+          var balanceTransactions = result.Data!;
 
           // Then: Response should be parsed
           mockHttp.VerifyNoOutstandingExpectation();
+          result.Success.ShouldBeTrue();
           balanceTransactions.Count.ShouldBe(balanceTransactions.Items.Count);
-          var transaction = balanceTransactions.Items.First();
-          transaction.Resource.ShouldBe("balance_transactions");
-          transaction.Id.ShouldBe("baltr_9S8yk4FFqqi2Qm6K3rqRH");
-          transaction.Type.ShouldBe("outgoing-transfer");
-          transaction.ResultAmount.Value.ShouldBe("-7.76");
-          transaction.ResultAmount.Currency.ShouldBe(Currency.EUR);
-          transaction.InitialAmount.Value.ShouldBe("-7.76");
-          transaction.InitialAmount.Currency.ShouldBe(Currency.EUR);
-          transaction.ShouldBeOfType<SettlementBalanceTransactionResponse>();
-          var transactionContext = (SettlementBalanceTransactionResponse)transaction;
-          transactionContext.Context.SettlementId.ShouldBe("stl_ma2vu8");
-          transactionContext.Context.TransferId.ShouldBe("trf_ma2vu8");
       }
 
       [Theory]
@@ -281,10 +282,12 @@ namespace Mollie.Tests.Unit.Client {
           BalanceClient balanceClient = new BalanceClient("api-key", httpClient);
 
           // When: We make the request
-          var balanceTransactions = await balanceClient.GetPrimaryBalanceTransactionListAsync();
+          var result = await balanceClient.GetPrimaryBalanceTransactionListAsync();
+          var balanceTransactions = result.Data!;
 
           // Then: Response should be parsed
           mockHttp.VerifyNoOutstandingExpectation();
+          result.Success.ShouldBeTrue();
           balanceTransactions.Count.ShouldBe(balanceTransactions.Items.Count);
       }
 

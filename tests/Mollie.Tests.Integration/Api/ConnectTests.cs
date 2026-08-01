@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Shouldly;
 using Mollie.Api.Models.Connect.Request;
-using Mollie.Api.Models.Connect.Response;
 using Xunit;
 
 namespace Mollie.Tests.Integration.Api;
@@ -51,9 +50,11 @@ public class ConnectTests : BaseMollieApiTestClass {
         TokenRequest tokenRequest = new TokenRequest(authCode, DefaultRedirectUrl);
 
         // When: We request the auth code
-        TokenResponse tokenResponse = await connectClient.GetAccessTokenAsync(tokenRequest);
+        var result = await connectClient.GetAccessTokenAsync(tokenRequest);
+        var tokenResponse = result.Data!;
 
         // Then: The access token should not be null
+        result.Success.ShouldBeTrue();
         tokenResponse.AccessToken.ShouldNotBeNullOrEmpty();
     }
 

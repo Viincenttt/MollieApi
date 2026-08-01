@@ -69,10 +69,12 @@ public class ConnectClientTests : BaseClientTests
         var tokenRequest = new TokenRequest(refreshToken, DefaultRedirectUrl);
 
         // Act
-        TokenResponse tokenResponse = await connectClient.GetAccessTokenAsync(tokenRequest);
+        var result = await connectClient.GetAccessTokenAsync(tokenRequest);
+        TokenResponse tokenResponse = result.Data!;
 
         // Assert
         mockHttp.VerifyNoOutstandingExpectation();
+        result.Success.ShouldBeTrue();
         tokenRequest.GrantType.ShouldBe(expectedGrantType);
         tokenResponse.ShouldNotBeNull();
         tokenResponse.AccessToken.ShouldBe("access_46EUJ6x8jFJZZeAvhNH4JVey6qVpqR");

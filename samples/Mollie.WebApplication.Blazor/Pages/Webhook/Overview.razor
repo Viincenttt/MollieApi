@@ -1,5 +1,5 @@
 ﻿@page "/webhook/overview"
-@using Mollie.Api.Client
+
 @using Mollie.Api.Models.List.Response
 @using Mollie.Api.Models.Webhook.Response
 
@@ -7,7 +7,7 @@
 
 <h3>Webhooks</h3>
 
-<ApiExceptionDisplay Exception="_apiException"></ApiExceptionDisplay>
+<ApiExceptionDisplay Result="_result"></ApiExceptionDisplay>
 
 @if (_webhooks == null) {
     <p>Loading...</p>
@@ -71,7 +71,7 @@ else {
     public string? Url { get; set; }
 
     private ListResponse<WebhookResponse>? _webhooks;
-    private MollieApiException? _apiException;
+    private MollieResult? _result;
 
     protected override async Task OnParametersSetAsync() {
         await LoadData();
@@ -79,38 +79,44 @@ else {
 
     private async Task LoadData() {
         if (string.IsNullOrEmpty(Url)) {
-            _webhooks = await WebhookClient.GetWebhookListAsync(testmode: true);
+            var result = await WebhookClient.GetWebhookListAsync(testmode: true);
+            if (result.Success) {
+                _webhooks = result.Data;
+            }
+            else {
+                _result = result;
+            }
         }
         else {
-            _webhooks = await WebhookClient.GetWebhookListAsync(new UrlObjectLink<ListResponse<WebhookResponse>>() {
+            var result = await WebhookClient.GetWebhookListAsync(new UrlObjectLink<ListResponse<WebhookResponse>>() {
                 Href = Url,
                 Type = "application/json"
             });
+            if (result.Success) {
+                _webhooks = result.Data;
+            }
+            else {
+                _result = result;
+            }
         }
     }
 
-    private async Task TestWebhook(string webhookId)
-    {
-        try
-        {
-            await WebhookClient.TestWebhookAsync(webhookId, testmode: true);
-        }
-        catch (MollieApiException e)
-        {
-            _apiException = e;
+    private async Task TestWebhook(string webhookId) {
+        _result = null;
+        var result = await WebhookClient.TestWebhookAsync(webhookId, testmode: true);
+        if (!result.Success) {
+            _result = result;
         }
     }
 
-    private async Task DeleteWebhook(string webhookId)
-    {
-        try
-        {
-            await WebhookClient.DeleteWebhookAsync(webhookId, testmode: true);
+    private async Task DeleteWebhook(string webhookId) {
+        _result = null;
+        var result = await WebhookClient.DeleteWebhookAsync(webhookId, testmode: true);
+        if (result.Success) {
             await LoadData();
         }
-        catch (MollieApiException e)
-        {
-            _apiException = e;
+        else {
+            _result = result;
         }
     }
 }

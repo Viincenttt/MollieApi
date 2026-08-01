@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
-using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models.Balance.Response.BalanceReport;
 using Mollie.Api.Models.Balance.Response.BalanceReport.Specific.StatusBalance;
@@ -24,24 +23,27 @@ public class BalanceTests : BaseMollieApiTestClass, IDisposable {
     public async Task GetPrimaryBalanceAsync_IsParsedCorrectly() {
         // When: We retrieve the primary balance from the Mollie API
         var result = await _balanceClient.GetPrimaryBalanceAsync();
+        var balance = result.Data!;
 
         // Then: Make sure we can parse the result
-        result.ShouldNotBeNull();
-        result.Resource.ShouldBe("balance");
-        result.Currency.ShouldNotBeNull();
-        result.Id.ShouldNotBeNull();
-        result.Links.Documentation.Href.ShouldBe("https://docs.mollie.com/reference/v2/balances-api/get-primary-balance");
-        result.Links.Self.Href.ShouldBe("https://api.mollie.com/v2/balances/{result.Id}");
-        result.TransferFrequency.ShouldNotBeNull();
-        result.AvailableAmount.ShouldNotBeNull();
-        result.PendingAmount.ShouldNotBeNull();
-        result.TransferThreshold.ShouldNotBeNull();
+        result.Success.ShouldBeTrue();
+        balance.ShouldNotBeNull();
+        balance.Resource.ShouldBe("balance");
+        balance.Currency.ShouldNotBeNull();
+        balance.Id.ShouldNotBeNull();
+        balance.Links.Documentation.Href.ShouldBe("https://docs.mollie.com/reference/v2/balances-api/get-primary-balance");
+        balance.Links.Self.Href.ShouldBe("https://api.mollie.com/v2/balances/{balance.Id}");
+        balance.TransferFrequency.ShouldNotBeNull();
+        balance.AvailableAmount.ShouldNotBeNull();
+        balance.PendingAmount.ShouldNotBeNull();
+        balance.TransferThreshold.ShouldNotBeNull();
     }
 
     [Fact]
     public async Task GetBalanceAsync_IsParsedCorrectly() {
         // Given: We get a balance id from the list balances endpoint
-        var balanceList = await _balanceClient.GetBalanceListAsync();
+        var balanceListResult = await _balanceClient.GetBalanceListAsync();
+        var balanceList = balanceListResult.Data!;
         if (balanceList.Count == 0) {
             Assert.Fail("No balance found to retrieve");
         }
@@ -49,29 +51,33 @@ public class BalanceTests : BaseMollieApiTestClass, IDisposable {
 
         // When: We retrieve a specific balance from the Mollie API
         var result = await _balanceClient.GetBalanceAsync(firstBalance.Id);
+        var balance = result.Data!;
 
         // Then: Make sure we can parse the result
-        result.ShouldNotBeNull();
-        result.Resource.ShouldBe("balance");
-        result.AvailableAmount.ShouldBe(firstBalance.AvailableAmount);
-        result.Id.ShouldBe(firstBalance.Id);
-        result.Links.Documentation.Href.ShouldBe("https://docs.mollie.com/reference/v2/balances-api/get-balance");
-        result.Links.Self.Href.ShouldBe($"https://api.mollie.com/v2/balances/{result.Id}");
-        result.Currency.ShouldBe(firstBalance.Currency);
-        result.TransferFrequency.ShouldBe(firstBalance.TransferFrequency);
-        result.AvailableAmount.ShouldBe(firstBalance.AvailableAmount);
-        result.PendingAmount.ShouldBe(firstBalance.PendingAmount);
-        result.TransferThreshold.ShouldBe(firstBalance.TransferThreshold);
+        result.Success.ShouldBeTrue();
+        balance.ShouldNotBeNull();
+        balance.Resource.ShouldBe("balance");
+        balance.AvailableAmount.ShouldBe(firstBalance.AvailableAmount);
+        balance.Id.ShouldBe(firstBalance.Id);
+        balance.Links.Documentation.Href.ShouldBe("https://docs.mollie.com/reference/v2/balances-api/get-balance");
+        balance.Links.Self.Href.ShouldBe($"https://api.mollie.com/v2/balances/{balance.Id}");
+        balance.Currency.ShouldBe(firstBalance.Currency);
+        balance.TransferFrequency.ShouldBe(firstBalance.TransferFrequency);
+        balance.AvailableAmount.ShouldBe(firstBalance.AvailableAmount);
+        balance.PendingAmount.ShouldBe(firstBalance.PendingAmount);
+        balance.TransferThreshold.ShouldBe(firstBalance.TransferThreshold);
     }
 
     [Fact]
     public async Task ListBalancesAsync_IsParsedCorrectly() {
         // When: We retrieve the list of balances
         var result = await _balanceClient.GetBalanceListAsync();
+        var balanceList = result.Data!;
 
         // Then: Make sure we can parse the result
-        result.ShouldNotBeNull();
-        result.Items.Count.ShouldBe(result.Count);
+        result.Success.ShouldBeTrue();
+        balanceList.ShouldNotBeNull();
+        balanceList.Items.Count.ShouldBe(balanceList.Count);
     }
 
     [Theory]
@@ -81,7 +87,8 @@ public class BalanceTests : BaseMollieApiTestClass, IDisposable {
         // Given: We retrieve the primary balance
         var from = new DateTime(2022, 11, 1);
         var until = new DateTime(2022, 11, 30);
-        var primaryBalance = await _balanceClient.GetPrimaryBalanceAsync();
+        var primaryBalanceResult = await _balanceClient.GetPrimaryBalanceAsync();
+        var primaryBalance = primaryBalanceResult.Data!;
 
         // When: We retrieve the primary balance report
         var result = await _balanceClient.GetBalanceReportAsync(
@@ -89,15 +96,17 @@ public class BalanceTests : BaseMollieApiTestClass, IDisposable {
             from: from,
             until: until,
             grouping: grouping);
+        var report = result.Data!;
 
         // Then: Make sure we can parse the result
-        result.ShouldNotBeNull();
-        result.ShouldBeOfType(expectedObjectType);
-        result.Resource.ShouldBe("balance-report");
-        result.BalanceId.ShouldBe(primaryBalance.Id);
-        result.From.ShouldBe(from);
-        result.Until.ShouldBe(until);
-        result.Grouping.ShouldBe(grouping);
+        result.Success.ShouldBeTrue();
+        report.ShouldNotBeNull();
+        report.ShouldBeOfType(expectedObjectType);
+        report.Resource.ShouldBe("balance-report");
+        report.BalanceId.ShouldBe(primaryBalance.Id);
+        report.From.ShouldBe(from);
+        report.Until.ShouldBe(until);
+        report.Grouping.ShouldBe(grouping);
     }
 
     [Fact]
@@ -109,12 +118,14 @@ public class BalanceTests : BaseMollieApiTestClass, IDisposable {
 
         // When: We list the balance transactions
         var result = await _balanceClient.GetBalanceTransactionListAsync(balanceId, from, limit);
+        var transactions = result.Data!;
 
         // Then: Make sure we can parse the result
-        result.ShouldNotBeNull();
-        result.Items.ShouldNotBeNull();
-        result.Links.ShouldNotBeNull();
-        result.Links.Self.Href.ShouldBe($"https://api.mollie.com/v2/balances/{balanceId}/transactions?from={from}&limit={limit}");
+        result.Success.ShouldBeTrue();
+        transactions.ShouldNotBeNull();
+        transactions.Items.ShouldNotBeNull();
+        transactions.Links.ShouldNotBeNull();
+        transactions.Links.Self.Href.ShouldBe($"https://api.mollie.com/v2/balances/{balanceId}/transactions?from={from}&limit={limit}");
     }
 
     [Fact]
@@ -125,10 +136,12 @@ public class BalanceTests : BaseMollieApiTestClass, IDisposable {
 
         // When: We list the balance transactions
         var result = await _balanceClient.GetPrimaryBalanceTransactionListAsync(from, limit);
+        var transactions = result.Data!;
 
         // Then: Make sure we can parse the result
-        result.ShouldNotBeNull();
-        result.Items.ShouldNotBeNull();
+        result.Success.ShouldBeTrue();
+        transactions.ShouldNotBeNull();
+        transactions.Items.ShouldNotBeNull();
     }
 
     public void Dispose()

@@ -4,10 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
-using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
-using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Order;
 using Mollie.Api.Models.Order.Request;
 using Mollie.Api.Models.Order.Request.ManageOrderLines;
@@ -31,9 +29,11 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
     public async Task GetOrderListAsync_WithoutSortOrder_ReturnsOrdersInDescendingOrder()
     {
         // Act
-        var orders = await _orderClient.GetOrderListAsync();
+        var result = await _orderClient.GetOrderListAsync();
+        var orders = result.Data!;
 
         // Assert
+        result.Success.ShouldBeTrue();
         if (orders.Items.Any())
         {
             orders.Items.Select(x => x.CreatedAt).ShouldBeInOrder(Shouldly.SortDirection.Descending);
@@ -44,9 +44,11 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
     public async Task GetOrderListAsync_InDescendingOrder_ReturnsOrdersInDescendingOrder()
     {
         // Act
-        var orders = await _orderClient.GetOrderListAsync(sort: SortDirection.Desc);
+        var result = await _orderClient.GetOrderListAsync(sort: SortDirection.Desc);
+        var orders = result.Data!;
 
         // Assert
+        result.Success.ShouldBeTrue();
         if (orders.Items.Any())
         {
             orders.Items.Select(x => x.CreatedAt).ShouldBeInOrder(Shouldly.SortDirection.Descending);
@@ -57,9 +59,11 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
     public async Task GetOrderListAsync_InAscendingOrder_ReturnsOrdersInAscendingOrder()
     {
         // Act
-        var orders = await _orderClient.GetOrderListAsync(sort: SortDirection.Asc);
+        var result = await _orderClient.GetOrderListAsync(sort: SortDirection.Asc);
+        var orders = result.Data!;
 
         // Assert
+        result.Success.ShouldBeTrue();
         if (orders.Items.Any())
         {
             orders.Items.Select(x => x.CreatedAt).ShouldBeInOrder(Shouldly.SortDirection.Ascending);
@@ -72,20 +76,22 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         OrderRequest orderRequest = CreateOrder();
 
         // When: We send the order request to Mollie
-        OrderResponse result = await _orderClient.CreateOrderAsync(orderRequest);
+        var result = await _orderClient.CreateOrderAsync(orderRequest);
+        var order = result.Data!;
 
         // Then: Make sure we get a valid response
-        result.ShouldNotBeNull();
-        result.Amount.ShouldBe(orderRequest.Amount);
-        result.OrderNumber.ShouldBe(orderRequest.OrderNumber);
-        result.Lines.Count().ShouldBe(orderRequest.Lines.Count());
-        result.Links.ShouldNotBeNull();
+        result.Success.ShouldBeTrue();
+        order.ShouldNotBeNull();
+        order.Amount.ShouldBe(orderRequest.Amount);
+        order.OrderNumber.ShouldBe(orderRequest.OrderNumber);
+        order.Lines.Count().ShouldBe(orderRequest.Lines.Count());
+        order.Links.ShouldNotBeNull();
         OrderLineRequest orderLineRequest = orderRequest.Lines.First();
-        OrderLineResponse orderResponseLine = result.Lines.First();
+        OrderLineResponse orderResponseLine = order.Lines.First();
         orderResponseLine.Type.ShouldBe(orderLineRequest.Type);
         orderResponseLine.Links.ImageUrl!.Href.ShouldBe(orderLineRequest.ImageUrl);
         orderResponseLine.Links.ProductUrl!.Href.ShouldBe(orderLineRequest.ProductUrl);
-        var expectedMetadataString = result.Lines.First().Metadata;
+        var expectedMetadataString = order.Lines.First().Metadata;
         orderResponseLine.Metadata.ShouldBe(expectedMetadataString);
     }
 
@@ -97,12 +103,14 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         orderRequest.ExpiresAt = DateTime.Now.AddDays(2);
 
         // When: We send the order request to Mollie
-        OrderResponse result = await _orderClient.CreateOrderAsync(orderRequest);
+        var result = await _orderClient.CreateOrderAsync(orderRequest);
+        var order = result.Data!;
 
         // Then: Make sure we get a valid response
-        result.ShouldNotBeNull();
-        result.ConsumerDateOfBirth.ShouldBe(orderRequest.ConsumerDateOfBirth);
-        result.ExpiresAt!.Value.Date.ShouldBe(orderRequest.ExpiresAt.Value.Date);
+        result.Success.ShouldBeTrue();
+        order.ShouldNotBeNull();
+        order.ConsumerDateOfBirth.ShouldBe(orderRequest.ConsumerDateOfBirth);
+        order.ExpiresAt!.Value.Date.ShouldBe(orderRequest.ExpiresAt.Value.Date);
     }
 
     [Fact]
@@ -118,20 +126,22 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         };
 
         // When: We send the order request to Mollie
-        OrderResponse result = await _orderClient.CreateOrderAsync(orderRequest);
+        var result = await _orderClient.CreateOrderAsync(orderRequest);
+        var order = result.Data!;
 
         // Then: Make sure we get a valid response
-        result.ShouldNotBeNull();
-        result.Amount.ShouldBe(orderRequest.Amount);
-        result.OrderNumber.ShouldBe(orderRequest.OrderNumber);
-        result.Lines.Count().ShouldBe(orderRequest.Lines.Count());
-        result.Links.ShouldNotBeNull();
+        result.Success.ShouldBeTrue();
+        order.ShouldNotBeNull();
+        order.Amount.ShouldBe(orderRequest.Amount);
+        order.OrderNumber.ShouldBe(orderRequest.OrderNumber);
+        order.Lines.Count().ShouldBe(orderRequest.Lines.Count());
+        order.Links.ShouldNotBeNull();
         OrderLineRequest orderLineRequest = orderRequest.Lines.First();
-        OrderLineResponse orderResponseLine = result.Lines.First();
+        OrderLineResponse orderResponseLine = order.Lines.First();
         orderResponseLine.Type.ShouldBe(orderLineRequest.Type);
         orderResponseLine.Links.ImageUrl!.Href.ShouldBe(orderLineRequest.ImageUrl);
         orderResponseLine.Links.ProductUrl!.Href.ShouldBe(orderLineRequest.ProductUrl);
-        var expectedMetadataString = result.Lines.First().Metadata;
+        var expectedMetadataString = order.Lines.First().Metadata;
         orderResponseLine.Metadata.ShouldBe(expectedMetadataString);
     }
 
@@ -146,12 +156,14 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         };
 
         // When: We send the order request to Mollie
-        OrderResponse result = await _orderClient.CreateOrderAsync(orderRequest);
+        var result = await _orderClient.CreateOrderAsync(orderRequest);
+        var order = result.Data!;
 
         // Then: Make sure we get a valid response
-        result.ShouldNotBeNull();
-        result.Amount.ShouldBe(orderRequest.Amount);
-        result.OrderNumber.ShouldBe(orderRequest.OrderNumber);
+        result.Success.ShouldBeTrue();
+        order.ShouldNotBeNull();
+        order.Amount.ShouldBe(orderRequest.Amount);
+        order.OrderNumber.ShouldBe(orderRequest.OrderNumber);
     }
 
     [Fact]
@@ -161,14 +173,16 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         orderRequest.Method = PaymentMethod.CreditCard;
 
         // When: We send the order request to Mollie
-        OrderResponse result = await _orderClient.CreateOrderAsync(orderRequest);
+        var result = await _orderClient.CreateOrderAsync(orderRequest);
+        var order = result.Data!;
 
         // Then: Make sure we get a valid response
         orderRequest.Method.ShouldBe(PaymentMethod.CreditCard);
         orderRequest.Methods!.First().ShouldBe(PaymentMethod.CreditCard);
-        result.ShouldNotBeNull();
-        result.Amount.ShouldBe(orderRequest.Amount);
-        result.OrderNumber.ShouldBe(orderRequest.OrderNumber);
+        result.Success.ShouldBeTrue();
+        order.ShouldNotBeNull();
+        order.Amount.ShouldBe(orderRequest.Amount);
+        order.OrderNumber.ShouldBe(orderRequest.OrderNumber);
     }
 
     public static IEnumerable<object[]> PaymentSpecificParameters =>
@@ -236,24 +250,30 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         orderRequest.Payment = paymentSpecificParameters;
 
         // When: We send the order request to Mollie
-        OrderResponse result = await _orderClient.CreateOrderAsync(orderRequest);
+        var result = await _orderClient.CreateOrderAsync(orderRequest);
+        var order = result.Data!;
 
         // Then: Make sure we get a valid response
-        result.ShouldNotBeNull();
-        result.Amount.ShouldBe(orderRequest.Amount);
-        result.OrderNumber.ShouldBe(orderRequest.OrderNumber);
+        result.Success.ShouldBeTrue();
+        order.ShouldNotBeNull();
+        order.Amount.ShouldBe(orderRequest.Amount);
+        order.OrderNumber.ShouldBe(orderRequest.OrderNumber);
     }
 
     [Fact]
     public async Task GetOrderAsync_OrderIsCreated_OrderCanBeRetrieved() {
         // If: we create a new order
         OrderRequest orderRequest = CreateOrder();
-        OrderResponse createdOrder = await _orderClient.CreateOrderAsync(orderRequest);
+        var createResult = await _orderClient.CreateOrderAsync(orderRequest);
+        var createdOrder = createResult.Data!;
 
         // When: We attempt to retrieve the order
-        OrderResponse retrievedOrder = await _orderClient.GetOrderAsync(createdOrder.Id);
+        var getResult = await _orderClient.GetOrderAsync(createdOrder.Id);
+        var retrievedOrder = getResult.Data!;
 
         // Then: Make sure we get a valid response
+        createResult.Success.ShouldBeTrue();
+        getResult.Success.ShouldBeTrue();
         retrievedOrder.ShouldNotBeNull();
         retrievedOrder.Id.ShouldBe(createdOrder.Id);
     }
@@ -262,12 +282,16 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
     public async Task GetOrderAsync_WithUrlObject_OrderCanBeRetrieved() {
         // If: we create a new order
         OrderRequest orderRequest = CreateOrder();
-        OrderResponse createdOrder = await _orderClient.CreateOrderAsync(orderRequest);
+        var createResult = await _orderClient.CreateOrderAsync(orderRequest);
+        var createdOrder = createResult.Data!;
 
         // When: We attempt to retrieve the order
-        OrderResponse retrievedOrder = await _orderClient.GetOrderAsync(createdOrder.Links.Self);
+        var getResult = await _orderClient.GetOrderAsync(createdOrder.Links.Self);
+        var retrievedOrder = getResult.Data!;
 
         // Then: Make sure we get a valid response
+        createResult.Success.ShouldBeTrue();
+        getResult.Success.ShouldBeTrue();
         retrievedOrder.ShouldNotBeNull();
         retrievedOrder.Id.ShouldBe(createdOrder.Id);
     }
@@ -276,12 +300,16 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
     public async Task GetOrderAsync_WithIncludeParameters_OrderIsRetrievedWithEmbeddedData() {
         // If: we create a new order
         OrderRequest orderRequest = CreateOrder();
-        OrderResponse createdOrder = await _orderClient.CreateOrderAsync(orderRequest);
+        var createResult = await _orderClient.CreateOrderAsync(orderRequest);
+        var createdOrder = createResult.Data!;
 
         // When: We attempt to retrieve the order and add the include parameters
-        OrderResponse retrievedOrder = await _orderClient.GetOrderAsync(createdOrder.Id, embedPayments: true, embedShipments: true, embedRefunds: true);
+        var getResult = await _orderClient.GetOrderAsync(createdOrder.Id, embedPayments: true, embedShipments: true, embedRefunds: true);
+        var retrievedOrder = getResult.Data!;
 
         // Then: Make sure we get a valid response
+        createResult.Success.ShouldBeTrue();
+        getResult.Success.ShouldBeTrue();
         retrievedOrder.ShouldNotBeNull();
         retrievedOrder.Id.ShouldBe(createdOrder.Id);
         retrievedOrder.Embedded.ShouldNotBeNull();
@@ -294,16 +322,20 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
     public async Task UpdateOrderAsync_OrderIsUpdated_OrderIsUpdated() {
         // If: we create a new order
         OrderRequest orderRequest = CreateOrder();
-        OrderResponse createdOrder = await _orderClient.CreateOrderAsync(orderRequest);
+        var createResult = await _orderClient.CreateOrderAsync(orderRequest);
+        var createdOrder = createResult.Data!;
 
         // When: We attempt to update the order
         OrderUpdateRequest orderUpdateRequest = new() {
             OrderNumber = "1337",
             BillingAddress = createdOrder.BillingAddress
         };
-        OrderResponse updatedOrder = await _orderClient.UpdateOrderAsync(createdOrder.Id, orderUpdateRequest);
+        var updateResult = await _orderClient.UpdateOrderAsync(createdOrder.Id, orderUpdateRequest);
+        var updatedOrder = updateResult.Data!;
 
         // Then: Make sure the order is updated
+        createResult.Success.ShouldBeTrue();
+        updateResult.Success.ShouldBeTrue();
         updatedOrder.OrderNumber.ShouldBe(orderUpdateRequest.OrderNumber);
     }
 
@@ -311,15 +343,19 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
     public async Task UpdateOrderLinesAsync_WhenOrderLineIsUpdated_UpdatedPropertiesCanBeRetrieved() {
         // If: we create a new order
         OrderRequest orderRequest = CreateOrder();
-        OrderResponse createdOrder = await _orderClient.CreateOrderAsync(orderRequest);
+        var createResult = await _orderClient.CreateOrderAsync(orderRequest);
+        var createdOrder = createResult.Data!;
 
         // When: We update the order line
         OrderLineUpdateRequest updateRequest = new() {
             Name = "A fluffy bear"
         };
-        OrderResponse updatedOrder = await _orderClient.UpdateOrderLinesAsync(createdOrder.Id, createdOrder.Lines.First().Id, updateRequest);
+        var updateResult = await _orderClient.UpdateOrderLinesAsync(createdOrder.Id, createdOrder.Lines.First().Id, updateRequest);
+        var updatedOrder = updateResult.Data!;
 
         // Then: The name of the order line should be updated
+        createResult.Success.ShouldBeTrue();
+        updateResult.Success.ShouldBeTrue();
         updatedOrder.Lines.First().Name.ShouldBe(updateRequest.Name);
     }
 
@@ -327,7 +363,8 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
     public async Task ManageOrderLinesAsync_AddOperation_OrderLineIsAdded() {
         // If: we create a new order
         OrderRequest orderRequest = CreateOrder();
-        OrderResponse createdOrder = await _orderClient.CreateOrderAsync(orderRequest);
+        var createResult = await _orderClient.CreateOrderAsync(orderRequest);
+        var createdOrder = createResult.Data!;
 
         // When: We use the manager order lines endpoint to add a order line
         ManageOrderLinesAddOperationData newOrderLineRequest = new() {
@@ -350,9 +387,12 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
                 }
             }
         };
-        OrderResponse updatedOrder = await _orderClient.ManageOrderLinesAsync(createdOrder.Id, manageOrderLinesRequest);
+        var manageResult = await _orderClient.ManageOrderLinesAsync(createdOrder.Id, manageOrderLinesRequest);
+        var updatedOrder = manageResult.Data!;
 
         // Then: The order line should be added
+        createResult.Success.ShouldBeTrue();
+        manageResult.Success.ShouldBeTrue();
         updatedOrder.Lines.Count().ShouldBe(2);
         var addedOrderLineRequest = updatedOrder.Lines.SingleOrDefault(line => line.Name == newOrderLineRequest.Name);
         addedOrderLineRequest.ShouldNotBeNull();
@@ -372,7 +412,8 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
     public async Task ManageOrderLinesAsync_UpdateOperation_OrderLineIsUpdated() {
         // If: we create a new order
         OrderRequest orderRequest = CreateOrder();
-        OrderResponse createdOrder = await _orderClient.CreateOrderAsync(orderRequest);
+        var createResult = await _orderClient.CreateOrderAsync(orderRequest);
+        var createdOrder = createResult.Data!;
 
         // When: We use the manager order lines endpoint to update a order line
         ManageOrderLinesUpdateOperationData orderLineUpdateRequest = new() {
@@ -396,9 +437,12 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
                 }
             }
         };
-        OrderResponse updatedOrder = await _orderClient.ManageOrderLinesAsync(createdOrder.Id, manageOrderLinesRequest);
+        var manageResult = await _orderClient.ManageOrderLinesAsync(createdOrder.Id, manageOrderLinesRequest);
+        var updatedOrder = manageResult.Data!;
 
         // Then: The order line should be updated
+        createResult.Success.ShouldBeTrue();
+        manageResult.Success.ShouldBeTrue();
         updatedOrder.Lines.Count().ShouldBe(1);
         var addedOrderLineRequest = updatedOrder.Lines.SingleOrDefault(line => line.Name == orderLineUpdateRequest.Name);
         addedOrderLineRequest.ShouldNotBeNull();
@@ -417,7 +461,8 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
     public async Task ManageOrderLinesAsync_CancelOperation_OrderLineIsCanceled() {
         // If: we create a new order
         OrderRequest orderRequest = CreateOrder();
-        OrderResponse createdOrder = await _orderClient.CreateOrderAsync(orderRequest);
+        var createResult = await _orderClient.CreateOrderAsync(orderRequest);
+        var createdOrder = createResult.Data!;
 
         // When: We use the manager order lines endpoint to cancel a order line
         ManagerOrderLinesCancelOperationData orderLineCancelRequest = new() {
@@ -431,9 +476,12 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
                 }
             }
         };
-        OrderResponse updatedOrder = await _orderClient.ManageOrderLinesAsync(createdOrder.Id, manageOrderLinesRequest);
+        var manageResult = await _orderClient.ManageOrderLinesAsync(createdOrder.Id, manageOrderLinesRequest);
+        var updatedOrder = manageResult.Data!;
 
         // Then: The order line should be canceled
+        createResult.Success.ShouldBeTrue();
+        manageResult.Success.ShouldBeTrue();
         updatedOrder.Lines.Count().ShouldBe(1);
         var updatedOrderLineRequest = updatedOrder.Lines.Single();
         updatedOrderLineRequest.Status.ShouldBe(OrderStatus.Canceled);
@@ -442,9 +490,11 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
     [Fact]
     public async Task GetOrderListAsync_NoParameters_OrderListIsRetrieved() {
         // When: Retrieve orders list with default settings
-        ListResponse<OrderResponse> response = await _orderClient.GetOrderListAsync();
+        var result = await _orderClient.GetOrderListAsync();
+        var response = result.Data!;
 
         // Then
+        result.Success.ShouldBeTrue();
         response.ShouldNotBeNull();
         response.Items.ShouldNotBeNull();
     }
@@ -455,9 +505,11 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         int numberOfOrders = 5;
 
         // When: Retrieve 5 orders
-        ListResponse<OrderResponse> response = await _orderClient.GetOrderListAsync(null, numberOfOrders);
+        var result = await _orderClient.GetOrderListAsync(null, numberOfOrders);
+        var response = result.Data!;
 
         // Then
+        result.Success.ShouldBeTrue();
         response.Items.Count.ShouldBeLessThanOrEqualTo(numberOfOrders);
     }
 

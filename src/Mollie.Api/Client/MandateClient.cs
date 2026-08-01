@@ -23,7 +23,7 @@ namespace Mollie.Api.Client {
             : base(options, mollieSecretManager, httpClient) {
         }
 
-        public async Task<MandateResponse> GetMandateAsync(
+        public async Task<MollieResult<MandateResponse>> GetMandateAsync(
             string customerId, string mandateId, bool testmode = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(customerId), customerId);
             ValidateRequiredUrlParameter(nameof(mandateId), mandateId);
@@ -33,7 +33,7 @@ namespace Mollie.Api.Client {
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<MandateResponse>> GetMandateListAsync(
+        public async Task<MollieResult<ListResponse<MandateResponse>>> GetMandateListAsync(
             string customerId, string? from = null, int? limit = null, bool testmode = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(customerId), customerId);
             var queryParameters = BuildQueryParameters(testmode: testmode);
@@ -42,7 +42,7 @@ namespace Mollie.Api.Client {
                 .ConfigureAwait(false);
         }
 
-        public async Task<MandateResponse> CreateMandateAsync(
+        public async Task<MollieResult<MandateResponse>> CreateMandateAsync(
             string customerId, MandateRequest request, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(customerId), customerId);
             return await PostAsync<MandateResponse>(
@@ -50,22 +50,22 @@ namespace Mollie.Api.Client {
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<MandateResponse>> GetMandateListAsync(
+        public async Task<MollieResult<ListResponse<MandateResponse>>> GetMandateListAsync(
             UrlObjectLink<ListResponse<MandateResponse>> url, CancellationToken cancellationToken = default) {
             return await GetAsync(url, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<MandateResponse> GetMandateAsync(
+        public async Task<MollieResult<MandateResponse>> GetMandateAsync(
             UrlObjectLink<MandateResponse> url, CancellationToken cancellationToken = default) {
             return await GetAsync(url, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task RevokeMandate(
+        public async Task<MollieResult> RevokeMandate(
             string customerId, string mandateId, bool testmode = false, CancellationToken cancellationToken = default) {
             var data = CreateTestmodeModel(testmode);
-            await DeleteAsync($"customers/{customerId}/mandates/{mandateId}", data, cancellationToken: cancellationToken)
+            return await DeleteAsync($"customers/{customerId}/mandates/{mandateId}", data, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
     }
