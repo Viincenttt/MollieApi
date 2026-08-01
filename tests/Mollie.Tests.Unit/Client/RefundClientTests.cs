@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Mollie.Api.Client;
@@ -56,7 +56,7 @@ namespace Mollie.Tests.Unit.Client {
             bool testMode = testModeParameter ?? false;
             var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.DefaultBaseApiEndPoint}{expectedUrl}", defaultGetRefundResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
-            RefundClient refundClient = new RefundClient("abcde", httpClient);
+            using var refundClient = new RefundClient("abcde", httpClient);
 
             // When: We send the request
             var result = await refundClient.GetPaymentRefundAsync("paymentId", "refundId", testmode: testMode);
@@ -75,9 +75,9 @@ namespace Mollie.Tests.Unit.Client {
             // Given: We create a refund without specifying a paymentId
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
-            RefundClient refundClient = new RefundClient("api-key", httpClient);
+            using var refundClient = new RefundClient("api-key", httpClient);
             var refund = new RefundRequest  {
-                Amount = new Amount(Currency.EUR, 100m)
+                Amount = new Amount(Currency.EUR, 100.00m)
             };
 
             // When: We send the request
@@ -96,7 +96,7 @@ namespace Mollie.Tests.Unit.Client {
             // Given: We create a refund with a routing destination
             const string paymentId = "tr_7UhSN1zuXS";
             var refundRequest = new RefundRequest  {
-                Amount = new Amount(Currency.EUR, 100m),
+                Amount = new Amount(Currency.EUR, 100.00m),
                 ReverseRouting = reverseRouting
             };
             string expectedStringValue = reverseRouting.ToString().ToLowerInvariant();
@@ -121,7 +121,7 @@ namespace Mollie.Tests.Unit.Client {
                 expectedJsonResponse,
                 expectedRoutingInformation);
             HttpClient httpClient = mockHttp.ToHttpClient();
-            RefundClient refundClient = new("api-key", httpClient);
+            using var refundClient = new RefundClient("api-key", httpClient);
 
             // When: We create the refund
             var result = await refundClient.CreatePaymentRefundAsync(paymentId, refundRequest);
@@ -138,11 +138,11 @@ namespace Mollie.Tests.Unit.Client {
             // Given: We create a refund with a routing destination
             const string paymentId = "tr_7UhSN1zuXS";
             var refundRequest = new RefundRequest  {
-                Amount = new Amount(Currency.EUR, 100m),
+                Amount = new Amount(Currency.EUR, 100.00m),
                 ReverseRouting = null,
                 RoutingReversals = new List<RoutingReversal> {
-                    new RoutingReversal {
-                        Amount = new Amount(Currency.EUR, 50m),
+                    new() {
+                        Amount = new Amount(Currency.EUR, 50.00m),
                         Source = new RoutingDestination {
                             Type = "organization",
                             OrganizationId = "organization-id"
@@ -182,7 +182,7 @@ namespace Mollie.Tests.Unit.Client {
                 expectedJsonResponse,
                 expectedRoutingInformation);
             HttpClient httpClient = mockHttp.ToHttpClient();
-            RefundClient refundClient = new("api-key", httpClient);
+            using var refundClient = new RefundClient("api-key", httpClient);
 
             // When: We create the refund
             var result = await refundClient.CreatePaymentRefundAsync(paymentId, refundRequest);
@@ -202,7 +202,7 @@ namespace Mollie.Tests.Unit.Client {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
-            RefundClient refundClient = new RefundClient("api-key", httpClient);
+            using var refundClient = new RefundClient("api-key", httpClient);
 
             // When: We send the request
 #pragma warning disable CS8604 // Possible null reference argument.
@@ -221,7 +221,7 @@ namespace Mollie.Tests.Unit.Client {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
-            RefundClient refundClient = new RefundClient("api-key", httpClient);
+            using var refundClient = new RefundClient("api-key", httpClient);
 
             // When: We send the request
 #pragma warning disable CS8604 // Possible null reference argument.
@@ -240,7 +240,7 @@ namespace Mollie.Tests.Unit.Client {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
-            RefundClient refundClient = new RefundClient("api-key", httpClient);
+            using var refundClient = new RefundClient("api-key", httpClient);
 
             // When: We send the request
 #pragma warning disable CS8604 // Possible null reference argument.
@@ -259,7 +259,7 @@ namespace Mollie.Tests.Unit.Client {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
-            RefundClient refundClient = new RefundClient("api-key", httpClient);
+            using var refundClient = new RefundClient("api-key", httpClient);
 
             // When: We send the request
 #pragma warning disable CS8604 // Possible null reference argument.
@@ -278,7 +278,7 @@ namespace Mollie.Tests.Unit.Client {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
-            RefundClient refundClient = new RefundClient("api-key", httpClient);
+            using var refundClient = new RefundClient("api-key", httpClient);
 
             // When: We send the request
 #pragma warning disable CS8604 // Possible null reference argument.
@@ -299,7 +299,7 @@ namespace Mollie.Tests.Unit.Client {
             const string orderId = "abcde";
             var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.DefaultBaseApiEndPoint}orders/{orderId}/refunds{expectedQueryString}", defaultOrderJsonResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
-            RefundClient refundClient = new RefundClient("api-key", httpClient);
+            using var refundClient = new RefundClient("api-key", httpClient);
 
             // When: We send the request
             await refundClient.GetOrderRefundListAsync(orderId, from, limit, testmode);
@@ -313,7 +313,7 @@ namespace Mollie.Tests.Unit.Client {
         {
             // Given: We create a refund request with only the required parameters
             const string orderId = "ord_stTC2WHAuS";
-            OrderRefundRequest orderRefundRequest = new OrderRefundRequest()
+            var orderRefundRequest = new OrderRefundRequest
             {
                 Description = "description",
                 Lines = new[]
@@ -322,7 +322,7 @@ namespace Mollie.Tests.Unit.Client {
                     {
                         Id = "odl_dgtxyl",
                         Quantity = 1,
-                        Amount = new Amount(Currency.EUR, "399.00")
+                        Amount = new Amount(Currency.EUR, 399.00m)
                     }
                 },
                 Metadata = "my-metadata"
@@ -357,7 +357,7 @@ namespace Mollie.Tests.Unit.Client {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
-            RefundClient refundClient = new RefundClient("api-key", httpClient);
+            using var refundClient = new RefundClient("api-key", httpClient);
             var request = new OrderRefundRequest()
             {
                 Lines = new List<OrderLineDetails>()
@@ -380,7 +380,7 @@ namespace Mollie.Tests.Unit.Client {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
-            RefundClient refundClient = new RefundClient("api-key", httpClient);
+            using var refundClient = new RefundClient("api-key", httpClient);
 
             // When: We send the request
 #pragma warning disable CS8604 // Possible null reference argument.

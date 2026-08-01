@@ -428,7 +428,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
             ProductUrl = "http://www.mollie.nl/legobatmanproduct",
             Metadata = "{\"is_lego_awesome\":\"fosho\"}",
             Sku = "Sku",
-            DiscountAmount = new Amount(Currency.EUR, 10m)
+            DiscountAmount = new Amount(Currency.EUR, 10.00m)
         };
         ManageOrderLinesRequest manageOrderLinesRequest = new() {
             Operations = new List<ManageOrderLinesOperation> {
@@ -515,18 +515,18 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
 
     private OrderRequest CreateOrder() {
         return new OrderRequest() {
-            Amount = new Amount(Currency.EUR, "100.00"),
+            Amount = new Amount(Currency.EUR, 100.00m),
             OrderNumber = "16738",
-            Lines = new List<OrderLineRequest>() {
+            Lines = new List<OrderLineRequest> {
                 new() {
                     Name = "A box of chocolates",
                     Type = OrderLineDetailsType.Physical,
                     Category = VoucherCategory.Gift,
                     Quantity = 1,
-                    UnitPrice = new Amount(Currency.EUR, "100.00"),
-                    TotalAmount = new Amount(Currency.EUR, "100.00"),
+                    UnitPrice = new Amount(Currency.EUR, 100.00m),
+                    TotalAmount = new Amount(Currency.EUR, 100.00m),
                     VatRate = 21.00m,
-                    VatAmount = new Amount(Currency.EUR, "17.36"),
+                    VatAmount = new Amount(Currency.EUR, 17.36m),
                     ImageUrl = "http://www.google.com/",
                     ProductUrl = "http://www.mollie.nl/",
                     Metadata =  "{\"order_id\":\"4.40\"}",

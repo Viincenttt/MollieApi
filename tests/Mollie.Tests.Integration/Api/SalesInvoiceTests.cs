@@ -187,7 +187,7 @@ public class SalesInvoiceTests : BaseMollieApiTestClass, IDisposable {
                     Description = "Lego Batman",
                     Quantity = 1,
                     VatRate = 21.00m,
-                    UnitPrice = new Amount(Currency.EUR, 50m)
+                    UnitPrice = new Amount(Currency.EUR, 50.00m)
                 }
             },
             RecipientIdentifier = Guid.NewGuid().ToString(),

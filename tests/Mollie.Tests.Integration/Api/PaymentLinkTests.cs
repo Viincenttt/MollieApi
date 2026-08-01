@@ -39,7 +39,7 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
         var address = CreateAddress();
         PaymentLinkRequest paymentLinkRequest = new() {
             Description = "Test",
-            Amount = new Amount(Currency.EUR, 50),
+            Amount = new Amount(Currency.EUR, 50.00m),
             WebhookUrl = DefaultWebhookUrl,
             RedirectUrl = DefaultRedirectUrl,
             Reusable = true,
@@ -81,7 +81,7 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
         // Given: We create a new payment link
         PaymentLinkRequest paymentLinkRequest = new() {
             Description = "Test",
-            MinimumAmount = new Amount(Currency.EUR, 50),
+            MinimumAmount = new Amount(Currency.EUR, 50.00m),
             WebhookUrl = DefaultWebhookUrl,
             RedirectUrl = DefaultRedirectUrl,
             Reusable = true,
@@ -118,7 +118,7 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
         // Given: We create a new payment link
         PaymentLinkRequest paymentLinkRequest = new() {
             Description = "Test",
-            Amount = new Amount(Currency.EUR, 50),
+            Amount = new Amount(Currency.EUR, 50.00m),
             WebhookUrl = DefaultWebhookUrl,
             RedirectUrl = DefaultRedirectUrl,
             Reusable = true,
@@ -156,7 +156,7 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
         // Given: We create a new payment link
         PaymentLinkRequest paymentLinkRequest = new() {
             Description = "Test",
-            Amount = new Amount(Currency.EUR, 90m),
+            Amount = new Amount(Currency.EUR, 90.00m),
             WebhookUrl = DefaultWebhookUrl,
             RedirectUrl = DefaultRedirectUrl,
             Reusable = false,
@@ -167,9 +167,9 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
                     Description = "Star wars lego",
                     Quantity = 1,
                     QuantityUnit = "pcs",
-                    UnitPrice = new Amount(Currency.EUR, 100m),
-                    TotalAmount = new Amount(Currency.EUR, 90m),
-                    DiscountAmount = new Amount(Currency.EUR, 10m),
+                    UnitPrice = new Amount(Currency.EUR, 100.00m),
+                    TotalAmount = new Amount(Currency.EUR, 90.00m),
+                    DiscountAmount = new Amount(Currency.EUR, 10.00m),
                     ProductUrl = "http://www.lego.com/starwars",
                     ImageUrl = "http://www.lego.com/starwars.jpg",
                     Sku = "my-sku",
@@ -243,7 +243,7 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
         // Given: We create a new payment link
         PaymentLinkRequest paymentLinkRequest = new() {
             Description = "Test",
-            Amount = new Amount(Currency.EUR, 50),
+            Amount = new Amount(Currency.EUR, 50.00m),
             WebhookUrl = DefaultWebhookUrl,
             RedirectUrl = DefaultRedirectUrl,
             ExpiresAt = DateTime.Now.AddDays(1),
@@ -279,7 +279,7 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
         // Given: We create a new payment link
         PaymentLinkRequest paymentLinkRequest = new() {
             Description = "Test",
-            Amount = new Amount(Currency.EUR, 50),
+            Amount = new Amount(Currency.EUR, 50.00m),
             WebhookUrl = DefaultWebhookUrl,
             RedirectUrl = DefaultRedirectUrl,
             ExpiresAt = DateTime.Now.AddDays(1)
@@ -311,7 +311,7 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
         // Given: We create a new payment link
         PaymentLinkRequest paymentLinkRequest = new() {
             Description = "Test",
-            Amount = new Amount(Currency.EUR, 50),
+            Amount = new Amount(Currency.EUR, 50.00m),
             WebhookUrl = DefaultWebhookUrl,
             RedirectUrl = DefaultRedirectUrl,
             ExpiresAt = DateTime.Now.AddDays(1)
@@ -335,7 +335,7 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
         // Given: We create a new payment link
         PaymentLinkRequest paymentLinkRequest = new() {
             Description = "Test",
-            Amount = new Amount(Currency.EUR, 50),
+            Amount = new Amount(Currency.EUR, 50.00m),
             WebhookUrl = DefaultWebhookUrl,
             RedirectUrl = DefaultRedirectUrl,
             ExpiresAt = DateTime.Now.AddDays(1)

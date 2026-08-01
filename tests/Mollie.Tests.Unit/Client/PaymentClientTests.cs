@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Mollie.Api.Client;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Payment;
@@ -24,7 +24,7 @@ public class PaymentClientTests : BaseClientTests {
         // Given: We create a payment request with only the required parameters
         var paymentRequest = new PaymentRequest()
         {
-            Amount = new Amount(Currency.EUR, "100.00"),
+            Amount = new Amount(Currency.EUR, 100.00m),
             Description = "Description",
             RedirectUrl = "http://www.mollie.com"
         };
@@ -59,7 +59,7 @@ public class PaymentClientTests : BaseClientTests {
     public async Task CreatePaymentAsync_PaymentWithRequiredParameters_ResponseIsDeserializedInExpectedFormat() {
         // Given: we create a payment request with only the required parameters
         PaymentRequest paymentRequest = new PaymentRequest() {
-            Amount = new Amount(Currency.EUR, "100.00"),
+            Amount = new Amount(Currency.EUR, 100.00m),
             Description = "Description",
             RedirectUrl = "http://www.mollie.com"
         };
@@ -87,18 +87,18 @@ public class PaymentClientTests : BaseClientTests {
         paymentResponse.ExpiredAt!.Value.ToUniversalTime().ShouldBe(DateTime.SpecifyKind(new DateTime(2018, 3, 23, 13, 28, 37), DateTimeKind.Utc));
         paymentResponse.FailedAt!.Value.ToUniversalTime().ShouldBe(DateTime.SpecifyKind(new DateTime(2018, 3, 24, 13, 28, 37), DateTimeKind.Utc));
         paymentResponse.CaptureBefore!.Value.ToUniversalTime().ShouldBe(DateTime.SpecifyKind(new DateTime(2018, 3, 25, 13, 28, 37), DateTimeKind.Utc));
-        paymentResponse.AmountRefunded!.Value.ShouldBe("10.00");
+        paymentResponse.AmountRefunded!.Value.ShouldBe(10.00m);
         paymentResponse.AmountRefunded.Currency.ShouldBe(Currency.EUR);
-        paymentResponse.AmountRemaining!.Value.ShouldBe("90.00");
+        paymentResponse.AmountRemaining!.Value.ShouldBe(90.00m);
         paymentResponse.AmountRemaining.Currency.ShouldBe(Currency.EUR);
-        paymentResponse.AmountChargedBack!.Value.ShouldBe("10.00");
+        paymentResponse.AmountChargedBack!.Value.ShouldBe(10.00m);
         paymentResponse.AmountChargedBack.Currency.ShouldBe(Currency.EUR);
         paymentResponse.CancelUrl.ShouldBe("https://webshop.example.org/order/12345/cancel");
         paymentResponse.CountryCode.ShouldBe("NL");
         paymentResponse.SettlementId.ShouldBe("stl_jDk30akdN");
         paymentResponse.SubscriptionId.ShouldBe("sub_rVKGtNd6s3");
         paymentResponse.ApplicationFee.ShouldNotBeNull();
-        paymentResponse.ApplicationFee!.Amount.Value.ShouldBe("1.00");
+        paymentResponse.ApplicationFee!.Amount.Value.ShouldBe(1.00m);
         paymentResponse.ApplicationFee.Amount.Currency.ShouldBe(Currency.EUR);
         paymentResponse.ApplicationFee.Description.ShouldBe("description");
     }
@@ -107,7 +107,7 @@ public class PaymentClientTests : BaseClientTests {
     public async Task CreatePaymentAsync_PaymentWithSinglePaymentMethod_RequestIsSerializedInExpectedFormat() {
         // Given: We create a payment request with a single payment method
         PaymentRequest paymentRequest = new PaymentRequest() {
-            Amount = new Amount(Currency.EUR, "100.00"),
+            Amount = new Amount(Currency.EUR, 100.00m),
             Description = "Description",
             RedirectUrl = "http://www.mollie.com",
             Method = PaymentMethod.Ideal
@@ -140,7 +140,7 @@ public class PaymentClientTests : BaseClientTests {
     public async Task CreatePaymentAsync_PaymentWithMultiplePaymentMethods_RequestIsSerializedInExpectedFormat() {
         // Given: We create a payment request with multiple payment methods
         PaymentRequest paymentRequest = new PaymentRequest() {
-            Amount = new Amount(Currency.EUR, "100.00"),
+            Amount = new Amount(Currency.EUR, 100.00m),
             Description = "Description",
             RedirectUrl = "http://www.mollie.com",
             Methods = new List<string>() {
@@ -176,16 +176,16 @@ public class PaymentClientTests : BaseClientTests {
     [Fact]
     public async Task CreatePayment_WithRoutingInformation_RequestIsSerializedInExpectedFormat() {
         // Given: We create a payment request with the routing request
-        PaymentRoutingRequest routingRequest = new PaymentRoutingRequest {
-            Amount = new Amount("EUR", 100),
+        var routingRequest = new PaymentRoutingRequest {
+            Amount = new Amount("EUR", 100.00m),
             Destination = new RoutingDestination {
                 Type = "organization",
                 OrganizationId = "organization-id"
             },
             ReleaseDate = new DateTime(2022, 1, 14)
         };
-        PaymentRequest paymentRequest = new PaymentRequest() {
-            Amount = new Amount(Currency.EUR, "100.00"),
+        var paymentRequest = new PaymentRequest {
+            Amount = new Amount(Currency.EUR, 100.00m),
             Description = "Description",
             RedirectUrl = "http://www.mollie.com",
             Routings = new List<PaymentRoutingRequest> {
@@ -242,7 +242,7 @@ public class PaymentClientTests : BaseClientTests {
     public async Task CreatePaymentAsync_IncludeQrCode_QueryStringContainsIncludeQrCodeParameter() {
         // Given: We make a request to create a payment and include the QR code
         PaymentRequest paymentRequest = new PaymentRequest() {
-            Amount = new Amount(Currency.EUR, "100.00"),
+            Amount = new Amount(Currency.EUR, 100.00m),
             Description = "Description",
             RedirectUrl = "http://www.mollie.com",
             Method = PaymentMethod.Ideal
@@ -275,7 +275,7 @@ public class PaymentClientTests : BaseClientTests {
         result.Success.ShouldBeTrue();
         payment.Resource.ShouldBe("payment");
         payment.Id.ShouldBe(paymentId);
-        payment.Amount.Value.ShouldBe("100.00");
+        payment.Amount.Value.ShouldBe(100.00m);
         payment.Amount.Currency.ShouldBe(Currency.EUR);
         payment.Description.ShouldBe("Description");
         payment.Method.ShouldBeNull();
@@ -435,7 +435,7 @@ public class PaymentClientTests : BaseClientTests {
         // Given we create a creditcard specific payment request
         var paymentRequest = new SepaDirectDebitRequest()
         {
-            Amount = new Amount(Currency.EUR, "100.00"),
+            Amount = new Amount(Currency.EUR, 100.00m),
             Description = "Description",
             Method = PaymentMethod.Ideal,
             RedirectUrl = "http://www.mollie.com",
@@ -577,7 +577,7 @@ public class PaymentClientTests : BaseClientTests {
         payPalPayment.Details.ShippingAddress.Country.ShouldBe("country");
         payPalPayment.Details.PaypalFee.ShouldNotBeNull();
         payPalPayment.Details.PaypalFee.Currency.ShouldBe("EUR");
-        payPalPayment.Details.PaypalFee.Value.ShouldBe("100.00");
+        payPalPayment.Details.PaypalFee.Value.ShouldBe(100.00m);
     }
 
     [Fact]
@@ -586,7 +586,7 @@ public class PaymentClientTests : BaseClientTests {
         // Given we create a creditcard specific payment request
         var paymentRequest = new CreditCardPaymentRequest()
         {
-            Amount = new Amount(Currency.EUR, "100.00"),
+            Amount = new Amount(Currency.EUR, 100.00m),
             Description = "Description",
             Method = PaymentMethod.Ideal,
             RedirectUrl = "http://www.mollie.com",
@@ -696,7 +696,7 @@ public class PaymentClientTests : BaseClientTests {
         // Given we create a giftcard specific payment request
         var paymentRequest = new GiftcardPaymentRequest()
         {
-            Amount = new Amount(Currency.EUR, "100.00"),
+            Amount = new Amount(Currency.EUR, 100.00m),
             Description = "Description",
             Method = PaymentMethod.GiftCard,
             RedirectUrl = "http://www.mollie.com",
@@ -770,11 +770,11 @@ public class PaymentClientTests : BaseClientTests {
         specificPaymentResponse.Details.Giftcards[0].Issuer.ShouldBe("issuer");
         specificPaymentResponse.Details.Giftcards[0].Amount.ShouldNotBeNull();
         specificPaymentResponse.Details.Giftcards[0].Amount.Currency.ShouldBe("EUR");
-        specificPaymentResponse.Details.Giftcards[0].Amount.Value.ShouldBe("100.00");
+        specificPaymentResponse.Details.Giftcards[0].Amount.Value.ShouldBe(100.00m);
         specificPaymentResponse.Details.Giftcards[0].VoucherNumber.ShouldBe("voucher-number");
         specificPaymentResponse.Details.RemainderAmount.ShouldNotBeNull();
         specificPaymentResponse.Details.RemainderAmount.Currency.ShouldBe("EUR");
-        specificPaymentResponse.Details.RemainderAmount.Value.ShouldBe("100.00");
+        specificPaymentResponse.Details.RemainderAmount.Value.ShouldBe(100.00m);
         specificPaymentResponse.Details.RemainderMethod.ShouldBe("ideal");
     }
 

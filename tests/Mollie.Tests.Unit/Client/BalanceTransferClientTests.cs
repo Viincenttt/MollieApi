@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client;
@@ -20,7 +21,7 @@ public class BalanceTransferClientTests : BaseClientTests {
         const string balanceTransferId = "balance-transfer-id";
         BalanceTransferRequest request = new() {
             Description = "Test Description",
-            Amount = new Amount(Currency.EUR, 50),
+            Amount = new Amount(Currency.EUR, 50.00m),
             Source = new BalanceTransferParty {
                 Id = "source",
                 Description = "Test Source",
@@ -92,7 +93,7 @@ public class BalanceTransferClientTests : BaseClientTests {
         const string balanceTransferId = "balance-transfer-id";
         BalanceTransferRequest request = new() {
             Description = "Test Description",
-            Amount = new Amount(Currency.EUR, 50),
+            Amount = new Amount(Currency.EUR, 50.00m),
             Source = new BalanceTransferParty {
                 Id = "source",
                 Description = "Test Source",
@@ -128,7 +129,7 @@ public class BalanceTransferClientTests : BaseClientTests {
         const string balanceTransferId = "balance-transfer-id";
         BalanceTransferRequest request = new() {
             Description = "Test Description",
-            Amount = new Amount(Currency.EUR, 50),
+            Amount = new Amount(Currency.EUR, 50.00m),
             Source = new BalanceTransferParty {
                 Id = "source",
                 Description = "Test Source",
@@ -176,7 +177,7 @@ public class BalanceTransferClientTests : BaseClientTests {
     private string CreateBalanceTransferListJsonResponse() {
         BalanceTransferRequest request = new() {
             Description = "Test Description",
-            Amount = new Amount(Currency.EUR, 50),
+            Amount = new Amount(Currency.EUR, 50.00m),
             Source = new BalanceTransferParty {
                 Id = "source",
                 Description = "Test Source",
@@ -206,7 +207,7 @@ public class BalanceTransferClientTests : BaseClientTests {
   ""resource"": ""connect-balance-transfer"",
   ""id"": ""{balanceTransferId}"",
   ""amount"": {{
-    ""value"": ""{request.Amount.Value}"",
+    ""value"": ""{request.Amount.Value.ToString(CultureInfo.InvariantCulture)}"",
     ""currency"": ""{request.Amount.Currency}""
   }},
   ""source"": {{

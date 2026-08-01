@@ -41,7 +41,7 @@ public class BaseMollieClientTests : BaseClientTests {
         HttpClient httpClient = mockHttp.ToHttpClient();
         PaymentClient paymentClient = new("api-key", httpClient);
         PaymentRequest paymentRequest = new() {
-            Amount = new Amount(Currency.EUR, 50m),
+            Amount = new Amount(Currency.EUR, 50.00m),
             Description = "description"
         };
 
@@ -69,7 +69,7 @@ public class BaseMollieClientTests : BaseClientTests {
         HttpClient httpClient = mockHttp.ToHttpClient();
         PaymentClient paymentClient = new("api-key", httpClient);
         PaymentRequest paymentRequest = new() {
-            Amount = new Amount(Currency.EUR, 50m),
+            Amount = new Amount(Currency.EUR, 50.00m),
             Description = "description"
         };
 
@@ -179,7 +179,7 @@ public class BaseMollieClientTests : BaseClientTests {
         var secretManager = new DefaultMollieSecretManager(mollieClientOptions.ApiKey);
         using var paymentClient = new PaymentClient(mollieClientOptions, secretManager, httpClient);
         var request = new PaymentRequest {
-            Amount = new Amount(Currency.EUR, 10m),
+            Amount = new Amount(Currency.EUR, 10.00m),
             Description = "Test payment"
         };
 
@@ -205,7 +205,7 @@ public class BaseMollieClientTests : BaseClientTests {
         var secretManager = new DefaultMollieSecretManager(mollieClientOptions.ApiKey);
         using var paymentClient = new PaymentClient(mollieClientOptions, secretManager, httpClient);
         var request = new PaymentRequest {
-            Amount = new Amount(Currency.EUR, 10m),
+            Amount = new Amount(Currency.EUR, 10.00m),
             Description = "Test payment"
         };
 

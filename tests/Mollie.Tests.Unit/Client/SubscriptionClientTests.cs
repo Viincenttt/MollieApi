@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Shouldly;
@@ -190,7 +190,7 @@ namespace Mollie.Tests.Unit.Client {
             HttpClient httpClient = mockHttp.ToHttpClient();
             var subscriptionClient = new SubscriptionClient("api-key", httpClient);
             var subscriptionRequest = new SubscriptionRequest {
-                Amount = new Amount(Currency.EUR, "100.00"),
+                Amount = new Amount(Currency.EUR, 100.00m),
                 Times = 5,
                 Interval = "1 month",
                 Description = $"Subscription {Guid.NewGuid()}", // Subscriptions must have a unique name

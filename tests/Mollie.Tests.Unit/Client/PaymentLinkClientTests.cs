@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
@@ -27,7 +27,7 @@ namespace Mollie.Tests.Unit.Client {
             // Given: we create a payment link request with only the required parameters
             PaymentLinkRequest paymentLinkRequest = new() {
                 Description = "Test",
-                Amount = new Amount(Currency.EUR, 50),
+                Amount = new Amount(Currency.EUR, 50.00m),
                 WebhookUrl = "https://www.mollie.com",
                 RedirectUrl = "https://www.mollie.com",
                 ExpiresAt = DateTime.Now.AddDays(1)
@@ -160,14 +160,14 @@ namespace Mollie.Tests.Unit.Client {
             listResponse.Count.ShouldBe(1);
             PaymentResponse payment = listResponse.Items.Single();
             payment.Id.ShouldBe("tr_7UhSN1zuXS");
-            payment.Amount.Value.ShouldBe(DefaultPaymentAmount.ToString(CultureInfo.InvariantCulture));
+            payment.Amount!.Value.ShouldBe(DefaultPaymentAmount);
             payment.Description.ShouldBe(DefaultDescription);
             payment.RedirectUrl.ShouldBe(DefaultRedirectUrl);
             payment.WebhookUrl.ShouldBe(DefaultWebhookUrl);
         }
 
         private void VerifyPaymentLinkResponse(PaymentLinkResponse response) {
-            response.Amount!.Value.ShouldBe(DefaultPaymentAmount.ToString(CultureInfo.InvariantCulture));
+            response.Amount!.Value.ShouldBe(DefaultPaymentAmount);
             response.Description.ShouldBe(DefaultDescription);
             response.Id.ShouldBe(DefaultPaymentLinkId);
             response.RedirectUrl.ShouldBe(DefaultRedirectUrl);
