@@ -12,9 +12,9 @@ Easily integrate the [Mollie payment provider](https://www.mollie.com) into your
 
 Full documentation of this library is available on the [Wiki](https://github.com/Viincenttt/MollieApi/wiki) — including usage examples, API references, and integration tips.
 
-Mollie offers excellent [API documentation](https://docs.mollie.com/) that we highly recommend reviewing before using this library. If you encounter any issues or have feature requests, feel free to [open an issue](https://github.com/Viincenttt/MollieApi/issues). 
+Mollie offers excellent [API documentation](https://docs.mollie.com/) that we highly recommend reviewing before using this library. If you encounter any issues or have feature requests, feel free to [open an issue](https://github.com/Viincenttt/MollieApi/issues).
 
-> 💬 **Need help with integration?**  
+> 💬 **Need help with integration?**
 > I’m happy to assist you with your implementation or questions. Feel free to [connect with me on LinkedIn](https://www.linkedin.com/in/vincent-kok-4aa44211/) — I’d love to help!
 
 Have feedback or ideas? Join the [official Mollie Developer Discord](https://discord.gg/Pdy49HxCWZ) or [open an issue](https://github.com/Viincenttt/MollieApi/issues).
@@ -46,14 +46,14 @@ Your support helps me keep improving the library and providing integration help 
 ## 📖 Full Documentation
 Looking for the full API docs, usage examples, and advanced guides?
 
-👉 **Check out the full Wiki here:**  
+👉 **Check out the full Wiki here:**
 ➡️ [https://github.com/Viincenttt/MollieApi/wiki](https://github.com/Viincenttt/MollieApi/wiki)
 You'll find:
 - Getting started walkthroughs
 - All supported APIs and code samples
 - Best practices for integration
 
---- 
+---
 
 ## 🛠 Getting started
 Install via NuGet:
@@ -97,10 +97,18 @@ var paymentRequest = new PaymentRequest {
     Method = PaymentMethod.Ideal
 };
 
-PaymentResponse paymentResponse = await paymentClient.CreatePaymentAsync(paymentRequest);
-// Redirect your user to the checkout URL
-string checkoutUrl = paymentResponse.Links.Checkout.Href;
+MollieResult<PaymentResponse> result = await paymentClient.CreatePaymentAsync(paymentRequest);
+
+if (result.Success) {
+    // Redirect your user to the checkout URL
+    string checkoutUrl = result.Data.Links.Checkout.Href;
+}
+else {
+    // Handle the error
+}
 ```
+
+Every client method returns a `MollieResult<T>` (or `MollieResult` for void operations). Check `result.Success` to determine whether the call succeeded, access the response via `result.Data`, and inspect `result.Error` for details when a request fails.
 
 ### Webhooks
 Mollie offers two different webhook systems:
@@ -110,7 +118,7 @@ Both systems are supported through the Mollie.Api.AspNet NuGet package included 
 
 Install via NuGet:
 ```bash
-Install-Package Mollie.Api.AspNet 
+Install-Package Mollie.Api.AspNet
 ```
 
 The Mollie.Api.AspNet NuGet package has built in attributes that automatically parse and validate incoming objects in your ASP.NET application. For example:
@@ -165,9 +173,9 @@ This library currently supports the following API's:
 - Wallet API (documentation coming soon)
 - Client API (documentation coming soon)
 - Capability API (documentation coming soon)
-- [Webhooks API](https://github.com/Viincenttt/MollieApi/wiki/19.-Webhook-Api) 
+- [Webhooks API](https://github.com/Viincenttt/MollieApi/wiki/19.-Webhook-Api)
 - [WebhooksEvents API](https://github.com/Viincenttt/MollieApi/wiki/20.-Webhook-Api)
-- [Balance transfer API](https://github.com/Viincenttt/MollieApi/wiki/21.-Balance-transfer-Api) 
+- [Balance transfer API](https://github.com/Viincenttt/MollieApi/wiki/21.-Balance-transfer-Api)
 - [Payout API](https://github.com/Viincenttt/MollieApi/wiki/22.-Payout-API)
 
 ---
@@ -191,4 +199,3 @@ This library targets [.NET Standard 2.0](https://docs.microsoft.com/en-us/dotnet
 | Unity | 2018.1 |
 
 > ⚠️ Note: This library uses the required keyword in some model classes. Your project must target **C# 11 or higher**.
-
