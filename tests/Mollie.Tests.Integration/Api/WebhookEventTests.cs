@@ -25,6 +25,7 @@ public class WebhookEventTests : BaseMollieApiTestClass, IDisposable {
         var webhookEvent = await _webhookEventClient.GetWebhookEventAsync(webhookEventIdToRetrieve);
 
         // Assert
+        webhookEvent.Success.ShouldBeTrue();
         webhookEvent.Data.ShouldNotBeNull();
     }
 
@@ -37,6 +38,7 @@ public class WebhookEventTests : BaseMollieApiTestClass, IDisposable {
         var webhookEvent = await _webhookEventClient.GetWebhookEventAsync<PaymentLinkResponse>(webhookEventIdToRetrieve);
 
         // Assert
+        webhookEvent.Success.ShouldBeTrue();
         webhookEvent.Data.ShouldNotBeNull();
     }
 

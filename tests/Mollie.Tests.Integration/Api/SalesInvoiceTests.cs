@@ -31,6 +31,9 @@ public class SalesInvoiceTests : BaseMollieApiTestClass, IDisposable {
 
         // When
         var result = await _salesInvoiceClient.CreateSalesInvoiceAsync(request);
+        if (!result.Success) {
+            Assert.Fail($"Failed to create sales invoice: {result.Error?.Detail}");
+        }
         var response = result.Data!;
 
         // Then
@@ -89,6 +92,10 @@ public class SalesInvoiceTests : BaseMollieApiTestClass, IDisposable {
         // Given: We create a new sales invoice
         var salesInvoiceRequest = CreateSalesInvoiceRequest();
         var createResult = await _salesInvoiceClient.CreateSalesInvoiceAsync(salesInvoiceRequest);
+        if (!createResult.Success) {
+            Assert.Fail($"Failed to create sales invoice: {createResult.Error?.Detail}");
+        }
+
         var createdSalesInvoice = createResult.Data!;
 
         // When: We retrieve the sales invoice
@@ -106,6 +113,9 @@ public class SalesInvoiceTests : BaseMollieApiTestClass, IDisposable {
         // Given: We create a new sales invoice
         var salesInvoiceRequest = CreateSalesInvoiceRequest();
         var createResult = await _salesInvoiceClient.CreateSalesInvoiceAsync(salesInvoiceRequest);
+        if (!createResult.Success) {
+            Assert.Fail($"Failed to create sales invoice: {createResult.Error?.Detail}");
+        }
         var createdSalesInvoice = createResult.Data!;
 
         // When: We retrieve the sales invoice
@@ -123,6 +133,9 @@ public class SalesInvoiceTests : BaseMollieApiTestClass, IDisposable {
         // Given: We create a new sales invoice
         var salesInvoiceRequest = CreateSalesInvoiceRequest();
         var createResult = await _salesInvoiceClient.CreateSalesInvoiceAsync(salesInvoiceRequest);
+        if (!createResult.Success) {
+            Assert.Fail($"Failed to create sales invoice: {createResult.Error?.Detail}");
+        }
         var createdSalesInvoice = createResult.Data!;
 
         // When: We update the sales invoice
@@ -144,6 +157,9 @@ public class SalesInvoiceTests : BaseMollieApiTestClass, IDisposable {
     public async Task DeleteSalesInvoiceAsync_DeletesSalesInvoice() {
         // If: We retrieve a list of sales invoices
         var listResult = await _salesInvoiceClient.GetSalesInvoiceListAsync();
+        if (!listResult.Success) {
+            Assert.Fail($"Failed to retrieve sales invoice list: {listResult.Error?.Detail}");
+        }
         var response = listResult.Data!;
 
         // When: We delete one of the sales invoices in the list

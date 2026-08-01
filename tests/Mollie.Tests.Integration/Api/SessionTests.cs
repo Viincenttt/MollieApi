@@ -69,7 +69,7 @@ public class SessionTests : BaseMollieApiTestClass, IDisposable {
     [Fact]
     public async Task CanCreateSessionAndRetrieveIt() {
         // When: we create a new session request
-        SessionRequest sessionRequest = new SessionRequest() {
+        var sessionRequest = new SessionRequest {
             Amount = new Amount(Currency.EUR, "100.00"),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl
@@ -77,6 +77,10 @@ public class SessionTests : BaseMollieApiTestClass, IDisposable {
 
         // When: We send the session request to Mollie and attempt to retrieve it
         var createResult = await _sessionClient.CreateSessionAsync(sessionRequest);
+        if (!createResult.Success)
+        {
+            Assert.Fail($"Failed to create session: {createResult.Error}");
+        }
         var sessionResponse = createResult.Data!;
         var getResult = await _sessionClient.GetSessionAsync(sessionResponse.Id);
         var result = getResult.Data!;
@@ -128,6 +132,10 @@ public class SessionTests : BaseMollieApiTestClass, IDisposable {
 
         // When: We send the session request to Mollie
         var result = await _sessionClient.CreateSessionAsync(sessionRequest);
+        if (!result.Success)
+        {
+            Assert.Fail($"Failed to create session: {result.Error}");
+        }
         var session = result.Data!;
         CustomMetadataClass? metadataResponse = session.GetMetadata<CustomMetadataClass>();
 
@@ -192,7 +200,7 @@ public class SessionTests : BaseMollieApiTestClass, IDisposable {
     [Fact]
     public async Task CanCreateSessionWithDecimalAmountAndRetrieveIt() {
         // When: we create a new session request
-        SessionRequest sessionRequest = new SessionRequest() {
+        var sessionRequest = new SessionRequest {
             Amount = new Amount(Currency.EUR, 100.1235m),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl
@@ -200,6 +208,10 @@ public class SessionTests : BaseMollieApiTestClass, IDisposable {
 
         // When: We send the session request to Mollie and attempt to retrieve it
         var createResult = await _sessionClient.CreateSessionAsync(sessionRequest);
+        if (!createResult.Success)
+        {
+            Assert.Fail($"Failed to create session: {createResult.Error}");
+        }
         var sessionResponse = createResult.Data!;
         var getResult = await _sessionClient.GetSessionAsync(sessionResponse.Id);
         var result = getResult.Data!;
@@ -227,6 +239,10 @@ public class SessionTests : BaseMollieApiTestClass, IDisposable {
 
         // When: We send the session request to Mollie and attempt to retrieve it
         var createResult = await _sessionClient.CreateSessionAsync(sessionRequest);
+        if (!createResult.Success)
+        {
+            Assert.Fail($"Failed to create session: {createResult.Error}");
+        }
         var sessionResponse = createResult.Data!;
         var getResult = await _sessionClient.GetSessionAsync(sessionResponse.Id);
         var result = getResult.Data!;

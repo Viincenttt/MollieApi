@@ -121,14 +121,15 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
     [Fact]
     public async Task CanCreateDefaultPaymentWithCustomIdempotencyKey() {
         // Given: we create a payment request with only the required parameters
-        PaymentRequest paymentRequest = new PaymentRequest() {
+        var paymentRequest = new PaymentRequest {
             Amount = new Amount(Currency.EUR, "100.00"),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl
         };
+        var idempotencyKey = Guid.NewGuid();
 
         // When: We send the payment request to Mollie
-        using (_paymentClient.WithIdempotencyKey("my-idempotency-key"))
+        using (_paymentClient.WithIdempotencyKey(idempotencyKey.ToString()))
         {
             var firstResult = await _paymentClient.CreatePaymentAsync(paymentRequest);
             var secondResult = await _paymentClient.CreatePaymentAsync(paymentRequest);
@@ -145,7 +146,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
     [Fact]
     public async Task CanCreateDefaultPaymentWithAllFields() {
         // Given: we create a payment request where all parameters have a value
-        PaymentRequest paymentRequest = new PaymentRequest() {
+        var paymentRequest = new PaymentRequest {
             Amount = new Amount(Currency.EUR, "100.00"),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl,
@@ -173,7 +174,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
     [Fact]
     public async Task CanUpdatePayment() {
         // Given: We create a payment with only the required parameters
-        PaymentRequest paymentRequest = new PaymentRequest() {
+        var paymentRequest = new PaymentRequest {
             Amount = new Amount(Currency.EUR, "100.00"),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl
@@ -182,7 +183,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         var result = createResult.Data!;
 
         // When: We update this payment
-        PaymentUpdateRequest paymentUpdateRequest = new PaymentUpdateRequest() {
+        var paymentUpdateRequest = new PaymentUpdateRequest {
             Description = "Updated description",
             Metadata = "My metadata"
         };
@@ -199,7 +200,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
     [Fact]
     public async Task CanCreatePaymentWithSinglePaymentMethod() {
         // Given: we create a payment request and specify multiple payment methods
-        PaymentRequest paymentRequest = new PaymentRequest() {
+        var paymentRequest = new PaymentRequest {
             Amount = new Amount(Currency.EUR, "100.00"),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl,
@@ -222,7 +223,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
     [Fact]
     public async Task CanCreatePaymentWithMultiplePaymentMethods() {
         // When: we create a payment request and specify multiple payment methods
-        PaymentRequest paymentRequest = new PaymentRequest() {
+        var paymentRequest = new PaymentRequest {
             Amount = new Amount(Currency.EUR, "100.00"),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl,
@@ -284,7 +285,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
     [Fact]
     public async Task CanCreatePaymentAndRetrieveIt() {
         // When: we create a new payment request
-        PaymentRequest paymentRequest = new PaymentRequest() {
+        var paymentRequest = new PaymentRequest {
             Amount = new Amount(Currency.EUR, "100.00"),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl,
@@ -315,7 +316,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         if (mandate != null) {
             var customerResult = await _customerClient.GetCustomerAsync(mandate.Links.Customer);
             var customer = customerResult.Data!;
-            PaymentRequest paymentRequest = new PaymentRequest() {
+            var paymentRequest = new PaymentRequest {
                 Amount = new Amount(Currency.EUR, "100.00"),
                 Description = "Description",
                 RedirectUrl = DefaultRedirectUrl,
@@ -341,7 +342,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
     public async Task CanCreatePaymentWithMetaData() {
         // When: We create a payment with meta data
         string metadata = "this is my metadata";
-        PaymentRequest paymentRequest = new PaymentRequest() {
+        var paymentRequest = new PaymentRequest {
             Amount = new Amount(Currency.EUR, "100.00"),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl,
@@ -361,7 +362,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
     public async Task CanCreatePaymentWithJsonMetaData() {
         // When: We create a payment with meta data
         string json = "{\"order_id\":\"4.40\"}";
-        PaymentRequest paymentRequest = new PaymentRequest() {
+        var paymentRequest = new PaymentRequest {
             Amount = new Amount(Currency.EUR, "100.00"),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl,
@@ -385,7 +386,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
             Description = "Custom description"
         };
 
-        PaymentRequest paymentRequest = new PaymentRequest() {
+        var paymentRequest = new PaymentRequest {
             Amount = new Amount(Currency.EUR, "100.00"),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl,
@@ -420,11 +421,11 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
             Region = "Zuid-Holland",
             PostalCode = "1015CW"
         };
-        PaymentRequest paymentRequest = new PaymentRequest() {
+        var paymentRequest = new PaymentRequest {
             Amount = new Amount(Currency.EUR, 90m),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl,
-            Lines = new List<PaymentLine>() {
+            Lines = new List<PaymentLine> {
                 new() {
                     Type = OrderLineDetailsType.Digital,
                     Description = "Star wars lego",
@@ -462,7 +463,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         if (validMandate != null) {
             var customerResult = await _customerClient.GetCustomerAsync(validMandate.Links.Customer);
             var customer = customerResult.Data!;
-            PaymentRequest paymentRequest = new PaymentRequest() {
+            var paymentRequest = new PaymentRequest {
                 Amount = new Amount(Currency.EUR, "100.00"),
                 Description = "Description",
                 RedirectUrl = DefaultRedirectUrl,
@@ -487,7 +488,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
     [Fact]
     public async Task CanCreatePaymentWithDecimalAmountAndRetrieveIt() {
         // When: we create a new payment request
-        PaymentRequest paymentRequest = new PaymentRequest() {
+        var paymentRequest = new PaymentRequest {
             Amount = new Amount(Currency.EUR, 100.1235m),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl,
@@ -515,7 +516,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         var initialAmount = 100.75m;
 
         // When: we create a new payment request
-        PaymentRequest paymentRequest = new PaymentRequest() {
+        var paymentRequest = new PaymentRequest {
             Amount = new Amount(Currency.EUR, initialAmount),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl,
@@ -584,7 +585,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
     [Fact(Skip = "We can only test this in debug mode, because we have to set the payment status to authorized")]
     public async Task CanCreatePaymentWithManualCaptureMode() {
         // Given
-        PaymentRequest paymentRequest = new PaymentRequest() {
+        var paymentRequest = new PaymentRequest {
             Amount = new Amount(Currency.EUR, 10m),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl,

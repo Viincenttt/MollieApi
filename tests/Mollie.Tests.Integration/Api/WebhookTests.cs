@@ -30,6 +30,9 @@ public class WebhookTests : BaseMollieApiTestClass, IDisposable, IAsyncLifetime 
 
         // When: The webhook is created
         var createResult = await _webhookClient.CreateWebhookAsync(request);
+        if (!createResult.Success) {
+            Assert.Fail($"Failed to create webhook: {createResult.Error}");
+        }
         var created = createResult.Data!;
 
         // Then
@@ -120,6 +123,10 @@ public class WebhookTests : BaseMollieApiTestClass, IDisposable, IAsyncLifetime 
 
     public async Task InitializeAsync() {
         var result = await _webhookClient.GetWebhookListAsync(testmode: true);
+        if (result.Success == false) {
+            Assert.Fail($"Failed to retrieve webhook list: {result.Error}");
+        }
+
         var webhooks = result.Data!;
         foreach (var webhook in webhooks.Items) {
             await _webhookClient.DeleteWebhookAsync(webhook.Id, testmode: true);
