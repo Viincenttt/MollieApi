@@ -2,7 +2,6 @@
 
 @using Mollie.WebApplication.Blazor.Pages.Order.Components
 @using Mollie.WebApplication.Blazor.Models.Order
-@using System.Globalization
 @using Mollie.Api.Models.Order.Request
 
 @inject IOrderClient OrderClient
@@ -119,7 +118,7 @@
                 Quantity = line.Quantity,
                 UnitPrice = new Amount(_order.Currency, line.UnitPrice),
                 TotalAmount = new Amount(_order.Currency, line.TotalAmount),
-                VatRate = line.VatRate.ToString(CultureInfo.InvariantCulture),
+                VatRate = line.VatRate,
                 VatAmount = new Amount(_order.Currency, line.VatAmount)
             })
         });

@@ -355,7 +355,7 @@ namespace Mollie.Tests.Unit.Client {
                         Quantity = 1,
                         UnitPrice = new Amount(Currency.EUR, "100.00"),
                         TotalAmount = new Amount(Currency.EUR, "100.00"),
-                        VatRate = "21.00",
+                        VatRate = 21.00m,
                         VatAmount = new Amount(Currency.EUR, "17.36")
                     }
                 },

@@ -438,7 +438,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
                     ImageUrl = "http://www.lego.com/starwars.jpg",
                     Sku = "my-sku",
                     VatAmount = new Amount(Currency.EUR, 15.62m),
-                    VatRate = "21.00"
+                    VatRate = 21.00m
                 }
             },
             ShippingAddress = address,

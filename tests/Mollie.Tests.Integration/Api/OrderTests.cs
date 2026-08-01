@@ -374,7 +374,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
             Quantity = 1,
             UnitPrice = new Amount(Currency.EUR, 100.00m),
             TotalAmount = new Amount(Currency.EUR, 100.00m),
-            VatRate = "21.00",
+            VatRate = 21.00m,
             VatAmount = new Amount(Currency.EUR, 17.36m),
             ImageUrl = "http://www.google.com/legobatmanimage",
             ProductUrl = "http://www.mollie.nl/legobatmanproduct",
@@ -422,7 +422,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
             Quantity = 1,
             UnitPrice = new Amount(Currency.EUR, 100.00m),
             TotalAmount = new Amount(Currency.EUR, 90.00m),
-            VatRate = "21.00",
+            VatRate = 21.00m,
             VatAmount = new Amount(Currency.EUR, 15.62m),
             ImageUrl = "http://www.google.com/legobatmanimage",
             ProductUrl = "http://www.mollie.nl/legobatmanproduct",
@@ -449,7 +449,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         addedOrderLineRequest!.Quantity.ShouldBe(orderLineUpdateRequest.Quantity.Value);
         addedOrderLineRequest.UnitPrice.ShouldBe(orderLineUpdateRequest.UnitPrice);
         addedOrderLineRequest.TotalAmount.ShouldBe(orderLineUpdateRequest.TotalAmount);
-        addedOrderLineRequest.VatRate.ShouldBe(orderLineUpdateRequest.VatRate);
+        addedOrderLineRequest.VatRate.ShouldBe(orderLineUpdateRequest.VatRate.Value);
         addedOrderLineRequest.VatAmount.ShouldBe(orderLineUpdateRequest.VatAmount);
         addedOrderLineRequest.Metadata!
             .Replace(Environment.NewLine, "")
@@ -525,7 +525,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
                     Quantity = 1,
                     UnitPrice = new Amount(Currency.EUR, "100.00"),
                     TotalAmount = new Amount(Currency.EUR, "100.00"),
-                    VatRate = "21.00",
+                    VatRate = 21.00m,
                     VatAmount = new Amount(Currency.EUR, "17.36"),
                     ImageUrl = "http://www.google.com/",
                     ProductUrl = "http://www.mollie.nl/",
