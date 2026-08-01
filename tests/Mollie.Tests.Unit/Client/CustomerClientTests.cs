@@ -184,7 +184,7 @@ namespace Mollie.Tests.Unit.Client {
             var customerClient = new CustomerClient("api-key", httpClient);
             var paymentRequest = new PaymentRequest()
             {
-                Amount = new Amount(Currency.EUR, 100),
+                Amount = new Amount(Currency.EUR, 100.00m),
                 Description = "Order #12345",
             };
 

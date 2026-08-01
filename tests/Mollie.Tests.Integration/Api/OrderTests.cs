@@ -428,7 +428,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
             ProductUrl = "http://www.mollie.nl/legobatmanproduct",
             Metadata = "{\"is_lego_awesome\":\"fosho\"}",
             Sku = "Sku",
-            DiscountAmount = new Amount(Currency.EUR, 10m)
+            DiscountAmount = new Amount(Currency.EUR, 10.00m)
         };
         ManageOrderLinesRequest manageOrderLinesRequest = new() {
             Operations = new List<ManageOrderLinesOperation> {

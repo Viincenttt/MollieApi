@@ -422,7 +422,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
             PostalCode = "1015CW"
         };
         var paymentRequest = new PaymentRequest {
-            Amount = new Amount(Currency.EUR, 90m),
+            Amount = new Amount(Currency.EUR, 90.00m),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl,
             Lines = new List<PaymentLine> {
@@ -431,9 +431,9 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
                     Description = "Star wars lego",
                     Quantity = 1,
                     QuantityUnit = "pcs",
-                    UnitPrice = new Amount(Currency.EUR, 100m),
-                    TotalAmount = new Amount(Currency.EUR, 90m),
-                    DiscountAmount = new Amount(Currency.EUR, 10m),
+                    UnitPrice = new Amount(Currency.EUR, 100.00m),
+                    TotalAmount = new Amount(Currency.EUR, 90.00m),
+                    DiscountAmount = new Amount(Currency.EUR, 10.00m),
                     ProductUrl = "http://www.lego.com/starwars",
                     ImageUrl = "http://www.lego.com/starwars.jpg",
                     Sku = "my-sku",
@@ -489,7 +489,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
     public async Task CanCreatePaymentWithDecimalAmountAndRetrieveIt() {
         // When: we create a new payment request
         var paymentRequest = new PaymentRequest {
-            Amount = new Amount(Currency.EUR, 100.1235m),
+            Amount = new Amount(Currency.EUR, 100.12m),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl,
             Locale = Locale.de_DE
@@ -553,7 +553,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         if (terminal != null) {
             string terminalId = terminals.Items.First().Id;
             PointOfSalePaymentRequest paymentRequest = new() {
-                Amount = new Amount(Currency.EUR, 10m),
+                Amount = new Amount(Currency.EUR, 10.00m),
                 Description = "Description",
                 Method = PaymentMethod.PointOfSale,
                 TerminalId = terminalId
@@ -619,7 +619,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
     public async Task CanCreatePaymentWithCaptureDelay() {
         // Given
         PaymentRequest paymentRequest = new() {
-            Amount = new Amount(Currency.EUR, 10m),
+            Amount = new Amount(Currency.EUR, 10.00m),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl,
             Method = PaymentMethod.CreditCard,

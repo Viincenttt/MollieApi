@@ -20,7 +20,7 @@ public class BalanceTransferClientTests : BaseClientTests {
         const string balanceTransferId = "balance-transfer-id";
         BalanceTransferRequest request = new() {
             Description = "Test Description",
-            Amount = new Amount(Currency.EUR, 50),
+            Amount = new Amount(Currency.EUR, 50.00m),
             Source = new BalanceTransferParty {
                 Id = "source",
                 Description = "Test Source",
@@ -92,7 +92,7 @@ public class BalanceTransferClientTests : BaseClientTests {
         const string balanceTransferId = "balance-transfer-id";
         BalanceTransferRequest request = new() {
             Description = "Test Description",
-            Amount = new Amount(Currency.EUR, 50),
+            Amount = new Amount(Currency.EUR, 50.00m),
             Source = new BalanceTransferParty {
                 Id = "source",
                 Description = "Test Source",
@@ -128,7 +128,7 @@ public class BalanceTransferClientTests : BaseClientTests {
         const string balanceTransferId = "balance-transfer-id";
         BalanceTransferRequest request = new() {
             Description = "Test Description",
-            Amount = new Amount(Currency.EUR, 50),
+            Amount = new Amount(Currency.EUR, 50.00m),
             Source = new BalanceTransferParty {
                 Id = "source",
                 Description = "Test Source",
@@ -176,7 +176,7 @@ public class BalanceTransferClientTests : BaseClientTests {
     private string CreateBalanceTransferListJsonResponse() {
         BalanceTransferRequest request = new() {
             Description = "Test Description",
-            Amount = new Amount(Currency.EUR, 50),
+            Amount = new Amount(Currency.EUR, 50.00m),
             Source = new BalanceTransferParty {
                 Id = "source",
                 Description = "Test Source",

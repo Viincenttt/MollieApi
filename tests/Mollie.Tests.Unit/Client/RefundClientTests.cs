@@ -96,7 +96,7 @@ namespace Mollie.Tests.Unit.Client {
             // Given: We create a refund with a routing destination
             const string paymentId = "tr_7UhSN1zuXS";
             var refundRequest = new RefundRequest  {
-                Amount = new Amount(Currency.EUR, 100m),
+                Amount = new Amount(Currency.EUR, 100.00m),
                 ReverseRouting = reverseRouting
             };
             string expectedStringValue = reverseRouting.ToString().ToLowerInvariant();
@@ -138,7 +138,7 @@ namespace Mollie.Tests.Unit.Client {
             // Given: We create a refund with a routing destination
             const string paymentId = "tr_7UhSN1zuXS";
             var refundRequest = new RefundRequest  {
-                Amount = new Amount(Currency.EUR, 100m),
+                Amount = new Amount(Currency.EUR, 100.00m),
                 ReverseRouting = null,
                 RoutingReversals = new List<RoutingReversal> {
                     new() {

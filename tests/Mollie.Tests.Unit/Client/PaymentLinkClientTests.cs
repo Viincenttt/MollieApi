@@ -27,7 +27,7 @@ namespace Mollie.Tests.Unit.Client {
             // Given: we create a payment link request with only the required parameters
             PaymentLinkRequest paymentLinkRequest = new() {
                 Description = "Test",
-                Amount = new Amount(Currency.EUR, 50),
+                Amount = new Amount(Currency.EUR, 50.00m),
                 WebhookUrl = "https://www.mollie.com",
                 RedirectUrl = "https://www.mollie.com",
                 ExpiresAt = DateTime.Now.AddDays(1)

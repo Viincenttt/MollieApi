@@ -45,7 +45,7 @@ public class SessionTests : BaseMollieApiTestClass, IDisposable {
     [Fact]
     public async Task CanCreateDefaultSessionWithCustomIdempotencyKey() {
         // Given: we create a session request with only the required parameters
-        SessionRequest sessionRequest = new SessionRequest() {
+        var sessionRequest = new SessionRequest {
             Amount = new Amount(Currency.EUR, 100.00m),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl
@@ -99,7 +99,7 @@ public class SessionTests : BaseMollieApiTestClass, IDisposable {
     public async Task CanCreateSessionWithJsonMetaData() {
         // When: We create a session with meta data
         string json = "{\"order_id\":\"4.40\"}";
-        SessionRequest sessionRequest = new SessionRequest() {
+        var sessionRequest = new SessionRequest {
             Amount = new Amount(Currency.EUR, 100.00m),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl,
@@ -162,8 +162,8 @@ public class SessionTests : BaseMollieApiTestClass, IDisposable {
             Region = "Zuid-Holland",
             PostalCode = "1015CW"
         };
-        SessionRequest sessionRequest = new SessionRequest() {
-            Amount = new Amount(Currency.EUR, 90m),
+        var sessionRequest = new SessionRequest {
+            Amount = new Amount(Currency.EUR, 90.00m),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl,
             Lines = new List<PaymentLine>() {
@@ -172,9 +172,9 @@ public class SessionTests : BaseMollieApiTestClass, IDisposable {
                     Description = "Star wars lego",
                     Quantity = 1,
                     QuantityUnit = "pcs",
-                    UnitPrice = new Amount(Currency.EUR, 100m),
-                    TotalAmount = new Amount(Currency.EUR, 90m),
-                    DiscountAmount = new Amount(Currency.EUR, 10m),
+                    UnitPrice = new Amount(Currency.EUR, 100.00m),
+                    TotalAmount = new Amount(Currency.EUR, 90.00m),
+                    DiscountAmount = new Amount(Currency.EUR, 10.00m),
                     ProductUrl = "http://www.lego.com/starwars",
                     ImageUrl = "http://www.lego.com/starwars.jpg",
                     Sku = "my-sku",
@@ -201,7 +201,7 @@ public class SessionTests : BaseMollieApiTestClass, IDisposable {
     public async Task CanCreateSessionWithDecimalAmountAndRetrieveIt() {
         // When: we create a new session request
         var sessionRequest = new SessionRequest {
-            Amount = new Amount(Currency.EUR, 100.1235m),
+            Amount = new Amount(Currency.EUR, 100.12m),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl
         };
@@ -231,7 +231,7 @@ public class SessionTests : BaseMollieApiTestClass, IDisposable {
         var initialAmount = 100.75m;
 
         // When: we create a new session request
-        SessionRequest sessionRequest = new SessionRequest() {
+        var sessionRequest = new SessionRequest {
             Amount = new Amount(Currency.EUR, initialAmount),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl
