@@ -76,7 +76,7 @@ namespace Mollie.Tests.Unit.Client {
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
             using var refundClient = new RefundClient("api-key", httpClient);
-            var refund = new RefundRequest  {
+            var refund = new PaymentRefundRequest  {
                 Amount = new Amount(Currency.EUR, 100.00m)
             };
 
@@ -95,7 +95,7 @@ namespace Mollie.Tests.Unit.Client {
         public async Task CreateRefundAsync_WithReverseRouting_ResponseIsDeserializedInExpectedFormat(bool reverseRouting) {
             // Given: We create a refund with a routing destination
             const string paymentId = "tr_7UhSN1zuXS";
-            var refundRequest = new RefundRequest  {
+            var refundRequest = new PaymentRefundRequest  {
                 Amount = new Amount(Currency.EUR, 100.00m),
                 ReverseRouting = reverseRouting
             };
@@ -137,7 +137,7 @@ namespace Mollie.Tests.Unit.Client {
         public async Task CreateRefundAsync_WithRoutingInformation_ResponseIsDeserializedInExpectedFormat() {
             // Given: We create a refund with a routing destination
             const string paymentId = "tr_7UhSN1zuXS";
-            var refundRequest = new RefundRequest  {
+            var refundRequest = new PaymentRefundRequest  {
                 Amount = new Amount(Currency.EUR, 100.00m),
                 ReverseRouting = null,
                 RoutingReversals = new List<RoutingReversal> {

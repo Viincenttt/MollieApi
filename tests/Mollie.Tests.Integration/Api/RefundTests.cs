@@ -33,7 +33,7 @@ public class RefundTests : BaseMollieApiTestClass, IDisposable {
         Debugger.Break();
 
         // When: We attempt to refund this payment
-        var refundRequest = new RefundRequest {
+        var refundRequest = new PaymentRefundRequest {
             Amount = new Amount(Currency.EUR, amount)
         };
         var result = await _refundClient.CreatePaymentRefundAsync(payment.Id, refundRequest);
@@ -54,7 +54,7 @@ public class RefundTests : BaseMollieApiTestClass, IDisposable {
         Debugger.Break();
 
         // When: We attempt to refund 50 euro
-        var refundRequest = new RefundRequest {
+        var refundRequest = new PaymentRefundRequest {
             Amount = new Amount(Currency.EUR, 50.00m)
         };
         var result = await _refundClient.CreatePaymentRefundAsync(payment.Id, refundRequest);
@@ -73,7 +73,7 @@ public class RefundTests : BaseMollieApiTestClass, IDisposable {
         // If you don't do this, this test will fail because we can only refund payments that have been paid
         Debugger.Break();
 
-        var refundRequest = new RefundRequest {
+        var refundRequest = new PaymentRefundRequest {
             Amount = new Amount(Currency.EUR, 50.00m)
         };
         var createResult = await _refundClient.CreatePaymentRefundAsync(payment.Id, refundRequest);
@@ -119,7 +119,7 @@ public class RefundTests : BaseMollieApiTestClass, IDisposable {
 
         // When: We attempt to refund this payment with meta data.
         var metadata = "this is my metadata";
-        var refundRequest = new RefundRequest {
+        var refundRequest = new PaymentRefundRequest {
             Amount = new Amount(Currency.EUR, amount),
             Metadata = metadata
         };

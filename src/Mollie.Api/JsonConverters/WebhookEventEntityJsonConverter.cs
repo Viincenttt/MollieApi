@@ -77,7 +77,7 @@ internal class WebhookEventEntityJsonConverter : JsonConverter<object> {
                 case "issuer": return typeof(IssuerResponse);
                 case "mandate": return typeof(MandateResponse);
                 case "order": return typeof(OrderResponse);
-                case "refund": return typeof(RefundResponse);
+                case "refund": return typeof(PaymentRefundResponse);
                 case "settlement": return typeof(SettlementResponse);
                 case "shipment": return typeof(ShipmentResponse);
                 case "subscription": return typeof(SubscriptionResponse);

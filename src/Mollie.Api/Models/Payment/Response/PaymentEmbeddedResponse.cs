@@ -4,7 +4,7 @@ using Mollie.Api.Models.Refund.Response;
 
 namespace Mollie.Api.Models.Payment.Response {
     public record PaymentEmbeddedResponse {
-        public IEnumerable<RefundResponse>? Refunds { get; set; }
+        public IEnumerable<PaymentRefundResponse>? Refunds { get; set; }
         public IEnumerable<ChargebackResponse>? Chargebacks { get; set; }
     }
 }

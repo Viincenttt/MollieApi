@@ -2,7 +2,7 @@
 using Mollie.Api.Models.Refund.Response;
 
 namespace Mollie.Api.Models.Order.Response {
-    public record OrderRefundResponse : RefundResponse {
+    public record OrderRefundResponse : PaymentRefundResponse {
         /// <summary>
         /// The unique identifier of the order this refund was created for. For example: ord_stTC2WHAuS.
         /// </summary>

@@ -12,7 +12,7 @@ namespace Mollie.Api.Models.Profile.Response {
         public UrlObjectLink<ListResponse<ChargebackResponse>>? Chargebacks { get; set; }
         public UrlObjectLink<ListResponse<PaymentMethodResponse>>? Methods { get; set; }
         public UrlObjectLink<ListResponse<PaymentResponse>>? Payments { get; set; }
-        public UrlObjectLink<ListResponse<RefundResponse>>? Refunds { get; set; }
+        public UrlObjectLink<ListResponse<PaymentRefundResponse>>? Refunds { get; set; }
         public UrlLink? CheckoutPreviewUrl { get; set; }
         public required UrlLink Documentation { get; set; }
     }

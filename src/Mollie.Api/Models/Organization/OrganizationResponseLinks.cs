@@ -43,7 +43,7 @@ namespace Mollie.Api.Models.Organization {
         /// <summary>
         /// The API resource URL where the organization’s refunds can be retrieved.
         /// </summary>
-        public UrlObjectLink<ListResponse<RefundResponse>>? Refunds { get; set; }
+        public UrlObjectLink<ListResponse<PaymentRefundResponse>>? Refunds { get; set; }
 
         /// <summary>
         /// The API resource URL where the organization’s settlements can be retrieved.

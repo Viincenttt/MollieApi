@@ -84,7 +84,7 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="embedPayment">Set to true to embed the full payment object in the refund response.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A list of refund objects.</returns>
-        Task<MollieResult<ListResponse<RefundResponse>>> GetSettlementRefundListAsync(string settlementId, string? from = null, int? limit = null, bool embedPayment = false, CancellationToken cancellationToken = default);
+        Task<MollieResult<ListResponse<PaymentRefundResponse>>> GetSettlementRefundListAsync(string settlementId, string? from = null, int? limit = null, bool embedPayment = false, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieve the list of refunds included in a settlement using a URL object link.
@@ -92,7 +92,7 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="url">The URL object link to the next page.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A list of refund objects.</returns>
-        Task<MollieResult<ListResponse<RefundResponse>>> GetSettlementRefundListAsync(UrlObjectLink<ListResponse<RefundResponse>> url, CancellationToken cancellationToken = default);
+        Task<MollieResult<ListResponse<PaymentRefundResponse>>> GetSettlementRefundListAsync(UrlObjectLink<ListResponse<PaymentRefundResponse>> url, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieve the list of chargebacks included in a settlement.

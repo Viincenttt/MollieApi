@@ -19,7 +19,7 @@ namespace Mollie.Api.Models.Settlement.Response {
         /// <summary>
         /// The API resource URL of the refunds that are included in this settlement.
         /// </summary>
-        public required UrlObjectLink<ListResponse<RefundResponse>> Refunds { get; set; }
+        public required UrlObjectLink<ListResponse<PaymentRefundResponse>> Refunds { get; set; }
 
         /// <summary>
         /// The API resource URL of the chargebacks that are included in this settlement.

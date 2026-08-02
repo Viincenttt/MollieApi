@@ -7,7 +7,7 @@ namespace Mollie.Api.Models.Refund.Response {
         /// <summary>
         /// The API resource URL of the refund itself.
         /// </summary>
-        public required UrlObjectLink<RefundResponse> Self { get; set; }
+        public required UrlObjectLink<PaymentRefundResponse> Self { get; set; }
 
         /// <summary>
         /// The API resource URL of the payment the refund belongs to.

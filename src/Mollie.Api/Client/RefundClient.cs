@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Threading.Tasks;
 using System.Threading;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,54 +24,54 @@ namespace Mollie.Api.Client {
             : base(options, mollieSecretManager, httpClient) {
         }
 
-        public async Task<MollieResult<RefundResponse>> CreatePaymentRefundAsync(
-            string paymentId, RefundRequest refundRequest, CancellationToken cancellationToken = default) {
+        public async Task<MollieResult<PaymentRefundResponse>> CreatePaymentRefundAsync(
+            string paymentId, PaymentRefundRequest paymentRefundRequest, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(paymentId), paymentId);
 
-            if (refundRequest.Testmode.HasValue)
+            if (paymentRefundRequest.Testmode.HasValue)
             {
                 ValidateApiKeyIsOauthAccesstoken();
             }
 
-            return await PostAsync<RefundResponse>(
-                $"payments/{paymentId}/refunds", refundRequest, cancellationToken: cancellationToken)
+            return await PostAsync<PaymentRefundResponse>(
+                $"payments/{paymentId}/refunds", paymentRefundRequest, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<MollieResult<ListResponse<RefundResponse>>> GetRefundListAsync(
+        public async Task<MollieResult<ListResponse<PaymentRefundResponse>>> GetRefundListAsync(
             string? from = null, int? limit = null, bool testmode = false, CancellationToken cancellationToken = default) {
             var queryParameters = BuildQueryParameters(testmode: testmode);
 
-            return await GetListAsync<ListResponse<RefundResponse>>(
+            return await GetListAsync<ListResponse<PaymentRefundResponse>>(
                 "refunds", from, limit, queryParameters, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<MollieResult<ListResponse<RefundResponse>>> GetPaymentRefundListAsync(
+        public async Task<MollieResult<ListResponse<PaymentRefundResponse>>> GetPaymentRefundListAsync(
             string paymentId, string? from = null, int? limit = null, bool testmode = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(paymentId), paymentId);
             var queryParameters = BuildQueryParameters(testmode: testmode);
 
-            return await GetListAsync<ListResponse<RefundResponse>>(
+            return await GetListAsync<ListResponse<PaymentRefundResponse>>(
                 $"payments/{paymentId}/refunds", from, limit, queryParameters, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<MollieResult<ListResponse<RefundResponse>>> GetRefundListAsync(UrlObjectLink<ListResponse<RefundResponse>> url, CancellationToken cancellationToken = default)
+        public async Task<MollieResult<ListResponse<PaymentRefundResponse>>> GetPaymentRefundListAsync(UrlObjectLink<ListResponse<PaymentRefundResponse>> url, CancellationToken cancellationToken = default)
         {
             return await GetAsync(url, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<MollieResult<RefundResponse>> GetRefundAsync(UrlObjectLink<RefundResponse> url, CancellationToken cancellationToken = default) {
+        public async Task<MollieResult<PaymentRefundResponse>> GetPaymentRefundAsync(UrlObjectLink<PaymentRefundResponse> url, CancellationToken cancellationToken = default) {
             return await GetAsync(url, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<MollieResult<RefundResponse>> GetPaymentRefundAsync(
+        public async Task<MollieResult<PaymentRefundResponse>> GetPaymentRefundAsync(
             string paymentId, string refundId, bool testmode = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(paymentId), paymentId);
             ValidateRequiredUrlParameter(nameof(refundId), refundId);
             var queryParameters = BuildQueryParameters(testmode: testmode);
-            return await GetAsync<RefundResponse>(
+            return await GetAsync<PaymentRefundResponse>(
                 $"payments/{paymentId}/refunds/{refundId}{queryParameters.ToQueryString()}", cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
@@ -94,11 +93,11 @@ namespace Mollie.Api.Client {
                 .ConfigureAwait(false);
         }
 
-        public async Task<MollieResult<ListResponse<RefundResponse>>> GetOrderRefundListAsync(
+        public async Task<MollieResult<ListResponse<OrderRefundResponse>>> GetOrderRefundListAsync(
             string orderId, string? from = null, int? limit = null, bool testmode = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(orderId), orderId);
             var queryParameters = BuildQueryParameters(testmode: testmode);
-            return await GetListAsync<ListResponse<RefundResponse>>(
+            return await GetListAsync<ListResponse<OrderRefundResponse>>(
                 $"orders/{orderId}/refunds", from, limit, queryParameters, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
