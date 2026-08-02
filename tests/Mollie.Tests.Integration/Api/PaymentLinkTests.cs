@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Shouldly;
@@ -43,7 +43,7 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
             WebhookUrl = DefaultWebhookUrl,
             RedirectUrl = DefaultRedirectUrl,
             Reusable = true,
-            ExpiresAt = DateTime.Now.AddDays(1),
+            ExpiresAt = DateTimeOffset.Now.AddDays(1),
             BillingAddress = address,
             ShippingAddress = address
         };
@@ -85,7 +85,7 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
             WebhookUrl = DefaultWebhookUrl,
             RedirectUrl = DefaultRedirectUrl,
             Reusable = true,
-            ExpiresAt = DateTime.Now.AddDays(1)
+            ExpiresAt = DateTimeOffset.Now.AddDays(1)
         };
         var createdResult = await _paymentLinkClient.CreatePaymentLinkAsync(paymentLinkRequest);
         var createdPaymentLinkResponse = createdResult.Data!;
@@ -122,7 +122,7 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
             WebhookUrl = DefaultWebhookUrl,
             RedirectUrl = DefaultRedirectUrl,
             Reusable = true,
-            ExpiresAt = DateTime.Now.AddDays(1),
+            ExpiresAt = DateTimeOffset.Now.AddDays(1),
             SequenceType = SequenceType.First
         };
         var createdResult = await _paymentLinkClient.CreatePaymentLinkAsync(paymentLinkRequest);
@@ -160,7 +160,7 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
             WebhookUrl = DefaultWebhookUrl,
             RedirectUrl = DefaultRedirectUrl,
             Reusable = false,
-            ExpiresAt = DateTime.Now.AddDays(1),
+            ExpiresAt = DateTimeOffset.Now.AddDays(1),
             Lines = new List<PaymentLine> {
                 new() {
                     Type = OrderLineDetailsType.Digital,
@@ -212,7 +212,7 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
             Amount =  null,
             WebhookUrl = DefaultWebhookUrl,
             RedirectUrl = DefaultRedirectUrl,
-            ExpiresAt = DateTime.Now.AddDays(1)
+            ExpiresAt = DateTimeOffset.Now.AddDays(1)
         };
         var createdResult = await _paymentLinkClient.CreatePaymentLinkAsync(paymentLinkRequest);
         var createdPaymentLinkResponse = createdResult.Data!;
@@ -246,7 +246,7 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
             Amount = new Amount(Currency.EUR, 50.00m),
             WebhookUrl = DefaultWebhookUrl,
             RedirectUrl = DefaultRedirectUrl,
-            ExpiresAt = DateTime.Now.AddDays(1),
+            ExpiresAt = DateTimeOffset.Now.AddDays(1),
             AllowedMethods = [PaymentMethod.Ideal, PaymentMethod.CreditCard]
         };
         var createdResult = await _paymentLinkClient.CreatePaymentLinkAsync(paymentLinkRequest);
@@ -282,7 +282,7 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
             Amount = new Amount(Currency.EUR, 50.00m),
             WebhookUrl = DefaultWebhookUrl,
             RedirectUrl = DefaultRedirectUrl,
-            ExpiresAt = DateTime.Now.AddDays(1)
+            ExpiresAt = DateTimeOffset.Now.AddDays(1)
         };
         var createdResult = await _paymentLinkClient.CreatePaymentLinkAsync(paymentLinkRequest);
         var createdPaymentLinkResponse = createdResult.Data!;
@@ -314,7 +314,7 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
             Amount = new Amount(Currency.EUR, 50.00m),
             WebhookUrl = DefaultWebhookUrl,
             RedirectUrl = DefaultRedirectUrl,
-            ExpiresAt = DateTime.Now.AddDays(1)
+            ExpiresAt = DateTimeOffset.Now.AddDays(1)
         };
         var createdPaymentLinkResponse = await _paymentLinkClient.CreatePaymentLinkAsync(paymentLinkRequest);
         createdPaymentLinkResponse.Success.ShouldBeTrue();
@@ -338,7 +338,7 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
             Amount = new Amount(Currency.EUR, 50.00m),
             WebhookUrl = DefaultWebhookUrl,
             RedirectUrl = DefaultRedirectUrl,
-            ExpiresAt = DateTime.Now.AddDays(1)
+            ExpiresAt = DateTimeOffset.Now.AddDays(1)
         };
         var createdResult = await _paymentLinkClient.CreatePaymentLinkAsync(paymentLinkRequest);
         var createdPaymentLinkResponse = createdResult.Data!;

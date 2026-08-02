@@ -44,7 +44,7 @@ public class PayoutClientTests : BaseClientTests {
         response.Status.ShouldBe(PayoutStatus.Requested);
         response.StatusReason.Code.ShouldBe("requested");
         response.StatusReason.Message.ShouldBe("The payout has been requested.");
-        response.CreatedAt.ToUniversalTime().ShouldBe(new DateTime(2024, 3, 20, 9, 13, 37, DateTimeKind.Utc));
+        response.CreatedAt.ToUniversalTime().ShouldBe(new DateTimeOffset(2024, 3, 20, 9, 13, 37, TimeSpan.Zero));
         response.InitiatedAt.ShouldBeNull();
         response.CompletedAt.ShouldBeNull();
         response.CanceledAt.ShouldBeNull();

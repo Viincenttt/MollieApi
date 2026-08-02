@@ -132,7 +132,7 @@ namespace Mollie.Tests.Unit.Client {
             delayedRoutingResponse.Destination.ShouldNotBeNull();
             delayedRoutingResponse.Destination.Type.ShouldBe("organization");
             delayedRoutingResponse.Destination.OrganizationId.ShouldBe(DefaultOrganizationId);
-            delayedRoutingResponse.CreatedAt.ShouldBeOfType<DateTime>();
+            delayedRoutingResponse.CreatedAt.ShouldBeOfType<DateTimeOffset>();
             delayedRoutingResponse.Links.ShouldNotBeNull();
             delayedRoutingResponse.Links.Self.ShouldNotBeNull();
             delayedRoutingResponse.Links.Payment.ShouldNotBeNull();

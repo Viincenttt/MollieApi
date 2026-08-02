@@ -54,8 +54,8 @@ public class BalanceTransferClientTests : BaseClientTests {
         response.Status.ShouldBe("succeeded");
         response.StatusReason.Code.ShouldBe("success");
         response.StatusReason.Message.ShouldBe("Balance transfer completed successfully.");
-        response.CreatedAt.ToUniversalTime().ShouldBe(new DateTime(2025, 5, 1, 10, 0, 0, DateTimeKind.Utc));
-        response.ExecutedAt!.Value.ToUniversalTime().ShouldBe(new DateTime(2025, 5, 1, 10, 5, 0, DateTimeKind.Utc));
+        response.CreatedAt.ToUniversalTime().ShouldBe(new DateTimeOffset(2025, 5, 1, 10, 0, 0, TimeSpan.Zero));
+        response.ExecutedAt!.Value.ToUniversalTime().ShouldBe(new DateTimeOffset(2025, 5, 1, 10, 5, 0, TimeSpan.Zero));
         response.Mode.ShouldBe(Mode.Live);
     }
 
