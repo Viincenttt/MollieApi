@@ -160,17 +160,17 @@ public record SalesInvoiceResponse : IEntity {
     /// <summary>
     /// The entity's date and time of creation.
     /// </summary>
-    public required DateTime CreatedAt { get; set; }
+    public required DateTimeOffset CreatedAt { get; set; }
 
     /// <summary>
     /// If issued, the date when the sales invoice was issued.
     /// </summary>
-    public DateTime? IssuedAt { get; set; }
+    public DateTimeOffset? IssuedAt { get; set; }
 
     /// <summary>
     /// If issued, the date when the sales invoice payment is due.
     /// </summary>
-    public DateTime? DueAt { get; set; }
+    public DateTimeOffset? DueAt { get; set; }
 
     /// <summary>
     /// An object with several relevant URLs. Every URL object will contain an href and a type field.

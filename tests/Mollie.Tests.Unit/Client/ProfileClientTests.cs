@@ -120,7 +120,7 @@ public class ProfileClientTests : BaseClientTests
         profile.BusinessCategory.ShouldBe("OTHER_MERCHANDISE");
         profile.Status.ShouldBe(ProfileStatus.Verified);
         profile.Review!.Status.ShouldBe(ReviewStatus.Pending);
-        profile.CreatedAt.ShouldBe(DateTime.Parse("2018-03-20T09:28:37+00:00"));
+        profile.CreatedAt.ShouldBe(DateTimeOffset.Parse("2018-03-20T09:28:37+00:00"));
         profile.Links.ShouldNotBeNull();
         profile.Links.Self.Href.ShouldBe("https://api.mollie.com/v2/profiles/pfl_v9hTwCvYqw");
         profile.Links.Self.Type.ShouldBe("application/hal+json");

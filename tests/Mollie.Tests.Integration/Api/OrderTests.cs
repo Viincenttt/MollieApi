@@ -99,8 +99,8 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
     public async Task CreateOrderAsync_OrderWithExtendedFields_OrderIsCreated() {
         // If: we create a order request
         OrderRequest orderRequest = CreateOrder();
-        orderRequest.ConsumerDateOfBirth = new DateTime(1980, 1, 1);
-        orderRequest.ExpiresAt = DateTime.Now.AddDays(2);
+        orderRequest.ConsumerDateOfBirth = new DateOnly(1980, 1, 1);
+        orderRequest.ExpiresAt = DateOnly.FromDateTime(DateTime.Now.AddDays(2));
 
         // When: We send the order request to Mollie
         var result = await _orderClient.CreateOrderAsync(orderRequest);
@@ -110,7 +110,7 @@ public class OrderTests : BaseMollieApiTestClass, IDisposable {
         result.Success.ShouldBeTrue();
         order.ShouldNotBeNull();
         order.ConsumerDateOfBirth.ShouldBe(orderRequest.ConsumerDateOfBirth);
-        order.ExpiresAt!.Value.Date.ShouldBe(orderRequest.ExpiresAt.Value.Date);
+        order.ExpiresAt!.Value.Date.ShouldBe(orderRequest.ExpiresAt.Value.ToDateTime(TimeOnly.MinValue));
     }
 
     [Fact]

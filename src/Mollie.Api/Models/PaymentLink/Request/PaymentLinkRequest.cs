@@ -66,7 +66,7 @@ namespace Mollie.Api.Models.PaymentLink.Request {
         /// The expiry date of the payment link in ISO 8601 format. For example: 2021-12-24T12:00:16+01:00.
         /// </summary>
         [JsonConverter(typeof(Iso8601DateTimeConverter))]
-        public DateTime? ExpiresAt { get; set; }
+        public DateTimeOffset? ExpiresAt { get; set; }
 
         /// <summary>
         /// An array of payment methods that are allowed to be used for this payment link. When this parameter is not

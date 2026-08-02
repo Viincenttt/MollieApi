@@ -343,7 +343,7 @@ namespace Mollie.Tests.Unit.Client {
             response.Id.ShouldBe("re_4qqhO89gsT");
             response.Description.ShouldBe("description");
             response.Status.ShouldBe("pending");
-            response.CreatedAt!.Value.ToUniversalTime().ShouldBe(DateTime.SpecifyKind(new DateTime(2018, 3, 14, 17, 09, 02), DateTimeKind.Utc));
+            response.CreatedAt!.Value.ToUniversalTime().ShouldBe(new DateTimeOffset(2018, 3, 14, 17, 09, 02, TimeSpan.Zero));
             response.PaymentId.ShouldBe("tr_WDqYK6vllg");
             response.OrderId.ShouldBe(orderId);
             response.Lines.Count().ShouldBe(1);

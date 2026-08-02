@@ -79,7 +79,7 @@ namespace Mollie.Api.Models.Refund.Response {
         /// <summary>
         /// The date and time the refund was issued, in ISO 8601 format.
         /// </summary>
-        public DateTime? CreatedAt { get; set; }
+        public DateTimeOffset? CreatedAt { get; set; }
 
         /// <summary>
         /// An object with several URL objects relevant to the refund. Every URL object will contain an href and a type field.

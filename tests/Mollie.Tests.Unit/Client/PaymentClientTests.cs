@@ -80,13 +80,13 @@ public class PaymentClientTests : BaseClientTests {
         mockHttp.VerifyNoOutstandingExpectation();
         result.Success.ShouldBeTrue();
         AssertPaymentIsEqual(paymentRequest, paymentResponse);
-        paymentResponse.AuthorizedAt!.Value.ToUniversalTime().ShouldBe(DateTime.SpecifyKind(new DateTime(2018, 3, 19, 13, 28, 37), DateTimeKind.Utc));
-        paymentResponse.CreatedAt!.ToUniversalTime().ShouldBe(DateTime.SpecifyKind(new DateTime(2018, 3, 20, 13, 13, 37), DateTimeKind.Utc));
-        paymentResponse.PaidAt!.Value.ToUniversalTime().ShouldBe(DateTime.SpecifyKind(new DateTime(2018, 3, 21, 13, 28, 37), DateTimeKind.Utc));
-        paymentResponse.CanceledAt!.Value.ToUniversalTime().ShouldBe(DateTime.SpecifyKind(new DateTime(2018, 3, 22, 13, 28, 37), DateTimeKind.Utc));
-        paymentResponse.ExpiredAt!.Value.ToUniversalTime().ShouldBe(DateTime.SpecifyKind(new DateTime(2018, 3, 23, 13, 28, 37), DateTimeKind.Utc));
-        paymentResponse.FailedAt!.Value.ToUniversalTime().ShouldBe(DateTime.SpecifyKind(new DateTime(2018, 3, 24, 13, 28, 37), DateTimeKind.Utc));
-        paymentResponse.CaptureBefore!.Value.ToUniversalTime().ShouldBe(DateTime.SpecifyKind(new DateTime(2018, 3, 25, 13, 28, 37), DateTimeKind.Utc));
+        paymentResponse.AuthorizedAt!.Value.ToUniversalTime().ShouldBe(new DateTimeOffset(2018, 3, 19, 13, 28, 37, TimeSpan.Zero));
+        paymentResponse.CreatedAt.ToUniversalTime().ShouldBe(new DateTimeOffset(2018, 3, 20, 13, 13, 37, TimeSpan.Zero));
+        paymentResponse.PaidAt!.Value.ToUniversalTime().ShouldBe(new DateTimeOffset(2018, 3, 21, 13, 28, 37, TimeSpan.Zero));
+        paymentResponse.CanceledAt!.Value.ToUniversalTime().ShouldBe(new DateTimeOffset(2018, 3, 22, 13, 28, 37, TimeSpan.Zero));
+        paymentResponse.ExpiredAt!.Value.ToUniversalTime().ShouldBe(new DateTimeOffset(2018, 3, 23, 13, 28, 37, TimeSpan.Zero));
+        paymentResponse.FailedAt!.Value.ToUniversalTime().ShouldBe(new DateTimeOffset(2018, 3, 24, 13, 28, 37, TimeSpan.Zero));
+        paymentResponse.CaptureBefore!.Value.ToUniversalTime().ShouldBe(new DateTimeOffset(2018, 3, 25, 13, 28, 37, TimeSpan.Zero));
         paymentResponse.AmountRefunded!.Value.ShouldBe(10.00m);
         paymentResponse.AmountRefunded.Currency.ShouldBe(Currency.EUR);
         paymentResponse.AmountRemaining!.Value.ShouldBe(90.00m);
@@ -182,7 +182,7 @@ public class PaymentClientTests : BaseClientTests {
                 Type = "organization",
                 OrganizationId = "organization-id"
             },
-            ReleaseDate = new DateTime(2022, 1, 14)
+            ReleaseDate = new DateOnly(2022, 1, 14)
         };
         var paymentRequest = new PaymentRequest {
             Amount = new Amount(Currency.EUR, 100.00m),
@@ -282,7 +282,7 @@ public class PaymentClientTests : BaseClientTests {
         payment.Status.ShouldBe(PaymentStatus.Open);
         payment.IsCancelable.ShouldBe(false);
         payment.Locale.ShouldBe("nl_NL");
-        payment.ExpiresAt!.Value.ToUniversalTime().ShouldBe(DateTime.SpecifyKind(new DateTime(2018, 3, 20, 13, 28, 37), DateTimeKind.Utc));
+        payment.ExpiresAt!.Value.ToUniversalTime().ShouldBe(new DateTimeOffset(2018, 3, 20, 13, 28, 37, TimeSpan.Zero));
         payment.ProfileId.ShouldBe("pfl_QkEhN94Ba");
         payment.SequenceType.ShouldBe(SequenceType.OneOff);
         payment.RedirectUrl.ShouldBe("https://webshop.example.org/order/12345/");

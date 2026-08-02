@@ -146,7 +146,7 @@ public class WebhookClientTests : BaseClientTests {
         response.EventTypes.ShouldNotBeNull();
         response.EventTypes.ShouldBe(eventTypes);
         response.ProfileId.ShouldBe("pfl_8XcSdLtrNK");
-        response.CreatedAt.ShouldBe(DateTime.Parse("2024-12-06T10:09:56+00:00"));
+        response.CreatedAt.ShouldBe(DateTimeOffset.Parse("2024-12-06T10:09:56+00:00"));
         response.Status.ShouldBe("enabled");
         response.Mode.ShouldBe(Mode.Test);
     }

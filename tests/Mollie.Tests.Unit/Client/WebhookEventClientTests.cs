@@ -80,7 +80,7 @@ public class WebhookEventClientTests : BaseClientTests {
         result.Success.ShouldBeTrue();
         response.Id.ShouldBe(webhookEventId);
         response.Type.ShouldBe(type);
-        response.CreatedAt.ShouldBe(new DateTime(2024, 12, 16, 15, 57, 04, DateTimeKind.Utc));
+        response.CreatedAt.ShouldBe(new DateTimeOffset(2024, 12, 16, 15, 57, 04, TimeSpan.Zero));
         response.EntityId.ShouldBe(paymentLinkEntityId);
         response.Links.Documentation.Href.ShouldBe("https://docs.mollie.com/guides/webhooks");
         response.Links.Entity.Href.ShouldBe($"/v2/payment-links/{paymentLinkEntityId}");
@@ -121,7 +121,7 @@ public class WebhookEventClientTests : BaseClientTests {
         result.Success.ShouldBeTrue();
         response.Id.ShouldBe(webhookEventId);
         response.Type.ShouldBe(type);
-        response.CreatedAt.ShouldBe(new DateTime(2024, 12, 16, 15, 57, 04, DateTimeKind.Utc));
+        response.CreatedAt.ShouldBe(new DateTimeOffset(2024, 12, 16, 15, 57, 04, TimeSpan.Zero));
         response.EntityId.ShouldBe(paymentLinkEntityId);
         response.Links.Documentation.Href.ShouldBe("https://docs.mollie.com/guides/webhooks");
         response.Links.Entity.Href.ShouldBe($"/v2/payment-links/{paymentLinkEntityId}");

@@ -21,7 +21,7 @@ namespace Mollie.Api.Models.Client.Response {
         /// <summary>
         /// The date and time the client organization was created.
         /// </summary>
-        public required DateTime OrganizationCreatedAt { get; set; }
+        public required DateTimeOffset OrganizationCreatedAt { get; set; }
 
         [JsonPropertyName("_embedded")]
         public ClientEmbeddedResponse? Embedded { get; set; }

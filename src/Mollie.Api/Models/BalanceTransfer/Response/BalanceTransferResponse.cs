@@ -52,13 +52,13 @@ public record BalanceTransferResponse {
     /// <summary>
     /// The entity's date and time of creation, in ISO 8601 format.
     /// </summary>
-    public required DateTime CreatedAt { get; set; }
+    public required DateTimeOffset CreatedAt { get; set; }
 
     /// <summary>
     /// The date and time when the transfer was completed, in ISO 8601 format.
     /// This parameter is omitted if the transfer is not executed (yet).
     /// </summary>
-    public DateTime? ExecutedAt { get; set; }
+    public DateTimeOffset? ExecutedAt { get; set; }
 
     /// <summary>
     /// Whether this entity was created in live mode or in test mode.

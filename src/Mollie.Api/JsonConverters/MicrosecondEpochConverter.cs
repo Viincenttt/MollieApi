@@ -3,15 +3,15 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Mollie.Api.JsonConverters {
-    internal class MicrosecondEpochConverter : JsonConverter<DateTime>
+    internal class MicrosecondEpochConverter : JsonConverter<DateTimeOffset>
     {
-        public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override DateTimeOffset Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var longValue = reader.GetInt64();
-            return DateTimeOffset.FromUnixTimeMilliseconds(longValue).UtcDateTime;
+            return DateTimeOffset.FromUnixTimeMilliseconds(longValue);
         }
 
-        public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
+        public override void Write(Utf8JsonWriter writer, DateTimeOffset value, JsonSerializerOptions options)
         {
             throw new NotImplementedException();
         }
