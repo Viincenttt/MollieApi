@@ -160,8 +160,8 @@ namespace Mollie.Tests.Unit.Client {
           specificBalanceReport.Grouping.ShouldBe(grouping);
           specificBalanceReport.BalanceId.ShouldBe(balanceId);
           specificBalanceReport.Resource.ShouldBe("balance-report");
-          specificBalanceReport.From.ShouldBe(from);
-          specificBalanceReport.Until.ShouldBe(until);
+          specificBalanceReport.From.ShouldBe(DateOnly.FromDateTime(from));
+          specificBalanceReport.Until.ShouldBe(DateOnly.FromDateTime(until));
           specificBalanceReport.Totals.ShouldNotBeNull();
           specificBalanceReport.Totals.Open.Pending.Amount.Value.ShouldBe(5.30m);
           specificBalanceReport.Totals.Open.Pending.Amount.Currency.ShouldBe("EUR");
@@ -222,13 +222,13 @@ namespace Mollie.Tests.Unit.Client {
           specificBalanceReport.Grouping.ShouldBe(grouping);
           specificBalanceReport.BalanceId.ShouldBe(balanceId);
           specificBalanceReport.Resource.ShouldBe("balance-report");
-          specificBalanceReport.From.ShouldBe(from);
-          specificBalanceReport.Until.ShouldBe(until);
+          specificBalanceReport.From.ShouldBe(DateOnly.FromDateTime(from));
+          specificBalanceReport.Until.ShouldBe(DateOnly.FromDateTime(until));
           specificBalanceReport.Totals.ShouldNotBeNull();
           specificBalanceReport.Totals.PendingBalance.Open.Amount.Value.ShouldBe(5.30m);
-          specificBalanceReport.Totals.PendingBalance.Open.Amount.Currency.ShouldBe(Currency.EUR);
+          specificBalanceReport.Totals.PendingBalance.Open.Amount.Currency.ShouldBe("EUR");
           specificBalanceReport.Totals.AvailableBalance.MovedFromPending.Amount.Value.ShouldBe(3.38m);
-          specificBalanceReport.Totals.AvailableBalance.MovedFromPending.Amount.Currency.ShouldBe(Currency.EUR);
+          specificBalanceReport.Totals.AvailableBalance.MovedFromPending.Amount.Currency.ShouldBe("EUR");
           var childSubTotals = specificBalanceReport.Totals.AvailableBalance.MovedFromPending.Subtotals.First();
           childSubTotals.TransactionType.ShouldBe("payment");
           var childChildSubtotals = childSubTotals.Subtotals!.First();

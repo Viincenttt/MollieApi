@@ -86,7 +86,7 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
                 Interval = "1 month",
                 Description = $"Subscription {Guid.NewGuid()}", // Subscriptions must have a unique name
                 WebhookUrl = "http://www.google.nl",
-                StartDate = DateTime.Now.AddDays(1)
+                StartDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1))
             };
 
             // When
@@ -100,7 +100,7 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
             subscriptionResponse.Interval.ShouldBe(subscriptionRequest.Interval);
             subscriptionResponse.Description.ShouldBe(subscriptionRequest.Description);
             subscriptionResponse.WebhookUrl.ShouldBe(subscriptionRequest.WebhookUrl);
-            subscriptionResponse.StartDate.ShouldBe(subscriptionRequest.StartDate.Value.Date);
+            subscriptionResponse.StartDate.ShouldBe(subscriptionRequest.StartDate);
         }
     }
 
@@ -161,7 +161,7 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
                 Interval = "1 month",
                 Description = $"Subscription {Guid.NewGuid()}", // Subscriptions must have a unique name
                 WebhookUrl = "http://www.google.nl",
-                StartDate = DateTime.Now.AddDays(1),
+                StartDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1)),
                 Metadata = json
             };
 

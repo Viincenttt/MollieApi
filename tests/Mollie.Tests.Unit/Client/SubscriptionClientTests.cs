@@ -195,7 +195,7 @@ namespace Mollie.Tests.Unit.Client {
                 Interval = "1 month",
                 Description = $"Subscription {Guid.NewGuid()}", // Subscriptions must have a unique name
                 WebhookUrl = "http://www.google.nl",
-                StartDate = DateTime.Now.AddDays(1),
+                StartDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1)),
             };
 
             // When: We send the request

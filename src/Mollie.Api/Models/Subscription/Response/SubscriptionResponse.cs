@@ -54,13 +54,23 @@ namespace Mollie.Api.Models.Subscription.Response {
         /// <summary>
         /// The start date of the subscription in yyyy-mm-dd format.
         /// </summary>
+#if NET8_0_OR_GREATER
+        public DateOnly? StartDate { get; set; }
+#else
+        [JsonConverter(typeof(DateJsonConverter))]
         public DateTime? StartDate { get; set; }
+#endif
 
         /// <summary>
         /// The date of the next scheduled payment in YYYY-MM-DD format. When there will be no next payment, for example
         /// when the subscription has ended, this parameter will not be returned.
         /// </summary>
+#if NET8_0_OR_GREATER
+        public DateOnly? NextPaymentDate { get; set; }
+#else
+        [JsonConverter(typeof(DateJsonConverter))]
         public DateTime? NextPaymentDate { get; set; }
+#endif
 
         /// <summary>
         /// A description unique per customer. This will be included in the payment description along with the charge date in

@@ -104,8 +104,8 @@ public class BalanceTests : BaseMollieApiTestClass, IDisposable {
         report.ShouldBeOfType(expectedObjectType);
         report.Resource.ShouldBe("balance-report");
         report.BalanceId.ShouldBe(primaryBalance.Id);
-        report.From.ShouldBe(from);
-        report.Until.ShouldBe(until);
+        report.From.ShouldBe(DateOnly.FromDateTime(from));
+        report.Until.ShouldBe(DateOnly.FromDateTime(until));
         report.Grouping.ShouldBe(grouping);
     }
 

@@ -182,7 +182,7 @@ public class PaymentClientTests : BaseClientTests {
                 Type = "organization",
                 OrganizationId = "organization-id"
             },
-            ReleaseDate = new DateTime(2022, 1, 14)
+            ReleaseDate = new DateOnly(2022, 1, 14)
         };
         var paymentRequest = new PaymentRequest {
             Amount = new Amount(Currency.EUR, 100.00m),

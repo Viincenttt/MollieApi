@@ -72,7 +72,12 @@ namespace Mollie.Api.Models.Order.Response {
         /// <summary>
         /// The date of birth of your customer, if available.
         /// </summary>
+#if NET8_0_OR_GREATER
+        public DateOnly? ConsumerDateOfBirth { get; set; }
+#else
+        [JsonConverter(typeof(DateJsonConverter))]
         public DateTime? ConsumerDateOfBirth { get; set; }
+#endif
 
         /// <summary>
         /// Your order number that was used when creating the order.
