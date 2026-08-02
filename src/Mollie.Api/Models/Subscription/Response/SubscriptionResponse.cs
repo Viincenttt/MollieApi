@@ -23,7 +23,7 @@ namespace Mollie.Api.Models.Subscription.Response {
         /// <summary>
         ///  The subscription's date and time of creation, in ISO 8601 format.
         /// </summary>
-        public required DateTime CreatedAt { get; set; }
+        public required DateTimeOffset CreatedAt { get; set; }
 
         /// <summary>
         /// The subscription's current status, depends on whether the customer has a pending, valid or invalid mandate.
@@ -83,7 +83,7 @@ namespace Mollie.Api.Models.Subscription.Response {
         /// <summary>
         /// The subscription's date of cancellation, in ISO 8601 format.
         /// </summary>
-        public DateTime? CanceledAt { get; set; }
+        public DateTimeOffset? CanceledAt { get; set; }
 
         /// <summary>
         /// The URL Mollie will call as soon a payment status change takes place.

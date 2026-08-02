@@ -43,6 +43,6 @@ namespace Mollie.Api.Models.Balance.Response.BalanceTransaction {
         /// <summary>
         /// The date and time of the movement, in ISO 8601 format.
         /// </summary>
-        public required DateTime CreatedAt { get; set; }
+        public required DateTimeOffset CreatedAt { get; set; }
     }
 }

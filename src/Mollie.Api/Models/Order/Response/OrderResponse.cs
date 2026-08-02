@@ -122,38 +122,38 @@ namespace Mollie.Api.Models.Order.Response {
         /// <summary>
         /// The order’s date and time of creation, in ISO 8601 format.
         /// </summary>
-        public required DateTime CreatedAt { get; set; }
+        public required DateTimeOffset CreatedAt { get; set; }
 
         /// <summary>
         /// The date and time the order will expire, in ISO 8601 format. Note that you have until this date to fully ship the
         /// order.
         /// </summary>
-        public DateTime? ExpiresAt { get; set; }
+        public DateTimeOffset? ExpiresAt { get; set; }
 
         /// <summary>
         /// If the order is expired, the time of expiration will be present in ISO 8601 format.
         /// </summary>
-        public DateTime? ExpiredAt { get; set; }
+        public DateTimeOffset? ExpiredAt { get; set; }
 
         /// <summary>
         /// If the order has been paid, the time of payment will be present in ISO 8601 format.
         /// </summary>
-        public DateTime? PaidAt { get; set; }
+        public DateTimeOffset? PaidAt { get; set; }
 
         /// <summary>
         /// If the order has been authorized, the time of authorization will be present in ISO 8601 format.
         /// </summary>
-        public DateTime? AuthorizedAt { get; set; }
+        public DateTimeOffset? AuthorizedAt { get; set; }
 
         /// <summary>
         /// If the order has been canceled, the time of cancellation will be present in ISO 8601 format.
         /// </summary>
-        public DateTime? CanceledAt { get; set; }
+        public DateTimeOffset? CanceledAt { get; set; }
 
         /// <summary>
         /// If the order is completed, the time of completion will be present in ISO 8601 format.
         /// </summary>
-        public DateTime? CompletedAt { get; set; }
+        public DateTimeOffset? CompletedAt { get; set; }
 
         public required IEnumerable<OrderLineResponse> Lines { get; set; }
 

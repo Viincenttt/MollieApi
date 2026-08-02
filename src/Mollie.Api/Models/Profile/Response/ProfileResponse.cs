@@ -79,7 +79,7 @@ namespace Mollie.Api.Models.Profile.Response {
         /// <summary>
         /// The payment profile's date and time of creation.
         /// </summary>
-        public required DateTime CreatedAt { get; set; }
+        public required DateTimeOffset CreatedAt { get; set; }
 
         /// <summary>
         /// Useful URLs to related resources.
