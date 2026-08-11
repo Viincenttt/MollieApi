@@ -1,9 +1,8 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Session.Request;
-using Mollie.Api.Models.Session.Response;
 using Mollie.Tests.Integration.Framework;
 using System.Collections.Generic;
 using Shouldly;
@@ -26,26 +25,28 @@ public class SessionTests : BaseMollieApiTestClass, IDisposable {
     public async Task CanCreateDefaultSessionWithOnlyRequiredFields() {
         // Given: we create a session request with only the required parameters
         var sessionRequest = new SessionRequest() {
-            Amount = new Amount(Currency.EUR, "100.00"),
+            Amount = new Amount(Currency.EUR, 100.00m),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl
         };
 
         // When: We send the session request to Mollie
-        SessionResponse result = await _sessionClient.CreateSessionAsync(sessionRequest);
+        var result = await _sessionClient.CreateSessionAsync(sessionRequest);
+        var session = result.Data!;
 
         // Then: Make sure we get a valid response
-        result.ShouldNotBeNull();
-        result.Amount.ShouldBe(sessionRequest.Amount);
-        result.Description.ShouldBe(sessionRequest.Description);
-        result.RedirectUrl.ShouldBe(sessionRequest.RedirectUrl);
+        result.Success.ShouldBeTrue();
+        session.ShouldNotBeNull();
+        session.Amount.ShouldBe(sessionRequest.Amount);
+        session.Description.ShouldBe(sessionRequest.Description);
+        session.RedirectUrl.ShouldBe(sessionRequest.RedirectUrl);
     }
 
     [Fact]
     public async Task CanCreateDefaultSessionWithCustomIdempotencyKey() {
         // Given: we create a session request with only the required parameters
-        SessionRequest sessionRequest = new SessionRequest() {
-            Amount = new Amount(Currency.EUR, "100.00"),
+        var sessionRequest = new SessionRequest {
+            Amount = new Amount(Currency.EUR, 100.00m),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl
         };
@@ -53,10 +54,14 @@ public class SessionTests : BaseMollieApiTestClass, IDisposable {
         // When: We send the session request to Mollie
         using (_sessionClient.WithIdempotencyKey("my-idempotency-key"))
         {
-            SessionResponse firstAttempt = await _sessionClient.CreateSessionAsync(sessionRequest);
-            SessionResponse secondAttempt = await _sessionClient.CreateSessionAsync(sessionRequest);
+            var firstResult = await _sessionClient.CreateSessionAsync(sessionRequest);
+            var secondResult = await _sessionClient.CreateSessionAsync(sessionRequest);
+            var firstAttempt = firstResult.Data!;
+            var secondAttempt = secondResult.Data!;
 
             // Then: Make sure the responses have the same session Id
+            firstResult.Success.ShouldBeTrue();
+            secondResult.Success.ShouldBeTrue();
             firstAttempt.Id.ShouldBe(secondAttempt.Id);
         }
     }
@@ -64,17 +69,25 @@ public class SessionTests : BaseMollieApiTestClass, IDisposable {
     [Fact]
     public async Task CanCreateSessionAndRetrieveIt() {
         // When: we create a new session request
-        SessionRequest sessionRequest = new SessionRequest() {
-            Amount = new Amount(Currency.EUR, "100.00"),
+        var sessionRequest = new SessionRequest {
+            Amount = new Amount(Currency.EUR, 100.00m),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl
         };
 
         // When: We send the session request to Mollie and attempt to retrieve it
-        SessionResponse sessionResponse = await _sessionClient.CreateSessionAsync(sessionRequest);
-        SessionResponse result = await _sessionClient.GetSessionAsync(sessionResponse.Id);
+        var createResult = await _sessionClient.CreateSessionAsync(sessionRequest);
+        if (!createResult.Success)
+        {
+            Assert.Fail($"Failed to create session: {createResult.Error}");
+        }
+        var sessionResponse = createResult.Data!;
+        var getResult = await _sessionClient.GetSessionAsync(sessionResponse.Id);
+        var result = getResult.Data!;
 
         // Then
+        createResult.Success.ShouldBeTrue();
+        getResult.Success.ShouldBeTrue();
         result.ShouldNotBeNull();
         result.Id.ShouldBe(sessionResponse.Id);
         result.Amount.ShouldBe(sessionRequest.Amount);
@@ -86,18 +99,20 @@ public class SessionTests : BaseMollieApiTestClass, IDisposable {
     public async Task CanCreateSessionWithJsonMetaData() {
         // When: We create a session with meta data
         string json = "{\"order_id\":\"4.40\"}";
-        SessionRequest sessionRequest = new SessionRequest() {
-            Amount = new Amount(Currency.EUR, "100.00"),
+        var sessionRequest = new SessionRequest {
+            Amount = new Amount(Currency.EUR, 100.00m),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl,
             Metadata = json
         };
 
         // When: We send the session request to Mollie
-        SessionResponse result = await _sessionClient.CreateSessionAsync(sessionRequest);
+        var result = await _sessionClient.CreateSessionAsync(sessionRequest);
+        var session = result.Data!;
 
         // Then: Make sure we get the same json result as metadata
-        IsJsonResultEqual(result.Metadata, json).ShouldBeTrue();
+        result.Success.ShouldBeTrue();
+        IsJsonResultEqual(session.Metadata, json).ShouldBeTrue();
     }
 
     [Fact]
@@ -109,17 +124,23 @@ public class SessionTests : BaseMollieApiTestClass, IDisposable {
         };
 
         SessionRequest sessionRequest = new SessionRequest() {
-            Amount = new Amount(Currency.EUR, "100.00"),
+            Amount = new Amount(Currency.EUR, 100.00m),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl,
         };
         sessionRequest.SetMetadata(metadataRequest);
 
         // When: We send the session request to Mollie
-        SessionResponse result = await _sessionClient.CreateSessionAsync(sessionRequest);
-        CustomMetadataClass? metadataResponse = result.GetMetadata<CustomMetadataClass>();
+        var result = await _sessionClient.CreateSessionAsync(sessionRequest);
+        if (!result.Success)
+        {
+            Assert.Fail($"Failed to create session: {result.Error}");
+        }
+        var session = result.Data!;
+        CustomMetadataClass? metadataResponse = session.GetMetadata<CustomMetadataClass>();
 
         // Then: Make sure we get the same json result as metadata
+        result.Success.ShouldBeTrue();
         metadataResponse.ShouldNotBeNull();
         metadataResponse.OrderId.ShouldBe(metadataRequest.OrderId);
         metadataResponse.Description.ShouldBe(metadataRequest.Description);
@@ -141,8 +162,8 @@ public class SessionTests : BaseMollieApiTestClass, IDisposable {
             Region = "Zuid-Holland",
             PostalCode = "1015CW"
         };
-        SessionRequest sessionRequest = new SessionRequest() {
-            Amount = new Amount(Currency.EUR, 90m),
+        var sessionRequest = new SessionRequest {
+            Amount = new Amount(Currency.EUR, 90.00m),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl,
             Lines = new List<PaymentLine>() {
@@ -151,14 +172,14 @@ public class SessionTests : BaseMollieApiTestClass, IDisposable {
                     Description = "Star wars lego",
                     Quantity = 1,
                     QuantityUnit = "pcs",
-                    UnitPrice = new Amount(Currency.EUR, 100m),
-                    TotalAmount = new Amount(Currency.EUR, 90m),
-                    DiscountAmount = new Amount(Currency.EUR, 10m),
+                    UnitPrice = new Amount(Currency.EUR, 100.00m),
+                    TotalAmount = new Amount(Currency.EUR, 90.00m),
+                    DiscountAmount = new Amount(Currency.EUR, 10.00m),
                     ProductUrl = "http://www.lego.com/starwars",
                     ImageUrl = "http://www.lego.com/starwars.jpg",
                     Sku = "my-sku",
                     VatAmount = new Amount(Currency.EUR, 15.62m),
-                    VatRate = "21.00"
+                    VatRate = 21.00m
                 }
             },
             ShippingAddress = address,
@@ -166,28 +187,38 @@ public class SessionTests : BaseMollieApiTestClass, IDisposable {
         };
 
         // Act
-        SessionResponse result = await _sessionClient.CreateSessionAsync(sessionRequest);
+        var result = await _sessionClient.CreateSessionAsync(sessionRequest);
+        var session = result.Data!;
 
         // Assert
-        //result.Lines.ShouldBeEquivalentTo(sessionRequest.Lines); Lines are ignored by Mollie's bug
-        result.BillingAddress.ShouldBeEquivalentTo(sessionRequest.BillingAddress);
-        result.ShippingAddress.ShouldBeEquivalentTo(sessionRequest.ShippingAddress);
+        result.Success.ShouldBeTrue();
+        //session.Lines.ShouldBeEquivalentTo(sessionRequest.Lines); Lines are ignored by Mollie's bug
+        session.BillingAddress.ShouldBeEquivalentTo(sessionRequest.BillingAddress);
+        session.ShippingAddress.ShouldBeEquivalentTo(sessionRequest.ShippingAddress);
     }
 
     [Fact]
     public async Task CanCreateSessionWithDecimalAmountAndRetrieveIt() {
         // When: we create a new session request
-        SessionRequest sessionRequest = new SessionRequest() {
-            Amount = new Amount(Currency.EUR, 100.1235m),
+        var sessionRequest = new SessionRequest {
+            Amount = new Amount(Currency.EUR, 100.12m),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl
         };
 
         // When: We send the session request to Mollie and attempt to retrieve it
-        SessionResponse sessionResponse = await _sessionClient.CreateSessionAsync(sessionRequest);
-        SessionResponse result = await _sessionClient.GetSessionAsync(sessionResponse.Id);
+        var createResult = await _sessionClient.CreateSessionAsync(sessionRequest);
+        if (!createResult.Success)
+        {
+            Assert.Fail($"Failed to create session: {createResult.Error}");
+        }
+        var sessionResponse = createResult.Data!;
+        var getResult = await _sessionClient.GetSessionAsync(sessionResponse.Id);
+        var result = getResult.Data!;
 
         // Then
+        createResult.Success.ShouldBeTrue();
+        getResult.Success.ShouldBeTrue();
         result.ShouldNotBeNull();
         result.Id.ShouldBe(sessionResponse.Id);
         result.Amount.ShouldBe(sessionRequest.Amount);
@@ -200,20 +231,28 @@ public class SessionTests : BaseMollieApiTestClass, IDisposable {
         var initialAmount = 100.75m;
 
         // When: we create a new session request
-        SessionRequest sessionRequest = new SessionRequest() {
+        var sessionRequest = new SessionRequest {
             Amount = new Amount(Currency.EUR, initialAmount),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl
         };
 
         // When: We send the session request to Mollie and attempt to retrieve it
-        SessionResponse sessionResponse = await _sessionClient.CreateSessionAsync(sessionRequest);
-        SessionResponse result = await _sessionClient.GetSessionAsync(sessionResponse.Id);
+        var createResult = await _sessionClient.CreateSessionAsync(sessionRequest);
+        if (!createResult.Success)
+        {
+            Assert.Fail($"Failed to create session: {createResult.Error}");
+        }
+        var sessionResponse = createResult.Data!;
+        var getResult = await _sessionClient.GetSessionAsync(sessionResponse.Id);
+        var result = getResult.Data!;
 
         decimal responseAmount = sessionResponse.Amount; // Implicit cast
         decimal resultAmount = result.Amount; // Implicit cast
 
         // Then
+        createResult.Success.ShouldBeTrue();
+        getResult.Success.ShouldBeTrue();
         result.ShouldNotBeNull();
         result.Id.ShouldBe(sessionResponse.Id);
         result.Amount.ShouldBe(sessionRequest.Amount);

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client;
@@ -20,7 +21,7 @@ public class BalanceTransferClientTests : BaseClientTests {
         const string balanceTransferId = "balance-transfer-id";
         BalanceTransferRequest request = new() {
             Description = "Test Description",
-            Amount = new Amount(Currency.EUR, 50),
+            Amount = new Amount(Currency.EUR, 50.00m),
             Source = new BalanceTransferParty {
                 Id = "source",
                 Description = "Test Source",
@@ -39,10 +40,12 @@ public class BalanceTransferClientTests : BaseClientTests {
         var client = new BalanceTransferClient("abcde", httpClient);
 
         // When: We send the request
-        BalanceTransferResponse response = await client.CreateBalanceTransferAsync(request);
+        var result = await client.CreateBalanceTransferAsync(request);
+        BalanceTransferResponse response = result.Data!;
 
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
+        result.Success.ShouldBeTrue();
         response.ShouldNotBeNull();
         response.Description.ShouldBe(request.Description);
         response.Amount.ShouldBeEquivalentTo(request.Amount);
@@ -51,8 +54,8 @@ public class BalanceTransferClientTests : BaseClientTests {
         response.Status.ShouldBe("succeeded");
         response.StatusReason.Code.ShouldBe("success");
         response.StatusReason.Message.ShouldBe("Balance transfer completed successfully.");
-        response.CreatedAt.ToUniversalTime().ShouldBe(new DateTime(2025, 5, 1, 10, 0, 0, DateTimeKind.Utc));
-        response.ExecutedAt!.Value.ToUniversalTime().ShouldBe(new DateTime(2025, 5, 1, 10, 5, 0, DateTimeKind.Utc));
+        response.CreatedAt.ToUniversalTime().ShouldBe(new DateTimeOffset(2025, 5, 1, 10, 0, 0, TimeSpan.Zero));
+        response.ExecutedAt!.Value.ToUniversalTime().ShouldBe(new DateTimeOffset(2025, 5, 1, 10, 5, 0, TimeSpan.Zero));
         response.Mode.ShouldBe(Mode.Live);
     }
 
@@ -80,7 +83,8 @@ public class BalanceTransferClientTests : BaseClientTests {
 
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
-        result.ShouldNotBeNull();
+        result.Success.ShouldBeTrue();
+        result.Data.ShouldNotBeNull();
     }
 
     [Fact]
@@ -89,7 +93,7 @@ public class BalanceTransferClientTests : BaseClientTests {
         const string balanceTransferId = "balance-transfer-id";
         BalanceTransferRequest request = new() {
             Description = "Test Description",
-            Amount = new Amount(Currency.EUR, 50),
+            Amount = new Amount(Currency.EUR, 50.00m),
             Source = new BalanceTransferParty {
                 Id = "source",
                 Description = "Test Source",
@@ -108,10 +112,12 @@ public class BalanceTransferClientTests : BaseClientTests {
         var client = new BalanceTransferClient("abcde", httpClient);
 
         // When: We attempt to retrieve the balance transfer
-        BalanceTransferResponse response = await client.GetBalanceTransferAsync(balanceTransferId);
+        var result = await client.GetBalanceTransferAsync(balanceTransferId);
+        BalanceTransferResponse response = result.Data!;
 
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
+        result.Success.ShouldBeTrue();
         response.ShouldNotBeNull();
         response.Id.ShouldBe(balanceTransferId);
         response.Description.ShouldBe(request.Description);
@@ -123,7 +129,7 @@ public class BalanceTransferClientTests : BaseClientTests {
         const string balanceTransferId = "balance-transfer-id";
         BalanceTransferRequest request = new() {
             Description = "Test Description",
-            Amount = new Amount(Currency.EUR, 50),
+            Amount = new Amount(Currency.EUR, 50.00m),
             Source = new BalanceTransferParty {
                 Id = "source",
                 Description = "Test Source",
@@ -142,10 +148,12 @@ public class BalanceTransferClientTests : BaseClientTests {
         var client = new BalanceTransferClient("abcde", httpClient);
 
         // When: We attempt to retrieve the balance transfer
-        BalanceTransferResponse response = await client.GetBalanceTransferAsync(balanceTransferId, testmode: true);
+        var result = await client.GetBalanceTransferAsync(balanceTransferId, testmode: true);
+        BalanceTransferResponse response = result.Data!;
 
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
+        result.Success.ShouldBeTrue();
         response.ShouldNotBeNull();
         response.Id.ShouldBe(balanceTransferId);
         response.Description.ShouldBe(request.Description);
@@ -169,7 +177,7 @@ public class BalanceTransferClientTests : BaseClientTests {
     private string CreateBalanceTransferListJsonResponse() {
         BalanceTransferRequest request = new() {
             Description = "Test Description",
-            Amount = new Amount(Currency.EUR, 50),
+            Amount = new Amount(Currency.EUR, 50.00m),
             Source = new BalanceTransferParty {
                 Id = "source",
                 Description = "Test Source",
@@ -199,7 +207,7 @@ public class BalanceTransferClientTests : BaseClientTests {
   ""resource"": ""connect-balance-transfer"",
   ""id"": ""{balanceTransferId}"",
   ""amount"": {{
-    ""value"": ""{request.Amount.Value}"",
+    ""value"": ""{request.Amount.Value.ToString(CultureInfo.InvariantCulture)}"",
     ""currency"": ""{request.Amount.Currency}""
   }},
   ""source"": {{

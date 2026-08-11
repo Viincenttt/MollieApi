@@ -1,12 +1,9 @@
 using System;
 using System.Threading.Tasks;
-using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
-using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Webhook;
 using Mollie.Api.Models.Webhook.Request;
-using Mollie.Api.Models.Webhook.Response;
 using Mollie.Tests.Integration.Framework;
 using Shouldly;
 using Xunit;
@@ -32,9 +29,14 @@ public class WebhookTests : BaseMollieApiTestClass, IDisposable, IAsyncLifetime 
         };
 
         // When: The webhook is created
-        WebhookResponse created = await _webhookClient.CreateWebhookAsync(request);
+        var createResult = await _webhookClient.CreateWebhookAsync(request);
+        if (!createResult.Success) {
+            Assert.Fail($"Failed to create webhook: {createResult.Error}");
+        }
+        var created = createResult.Data!;
 
         // Then
+        createResult.Success.ShouldBeTrue();
         created.Name.ShouldBe(request.Name);
         created.Url.ShouldBe(request.Url);
         created.EventTypes.ShouldBe([WebhookEventTypes.PaymentLinkPaid, WebhookEventTypes.SalesInvoiceCreated]);
@@ -43,7 +45,9 @@ public class WebhookTests : BaseMollieApiTestClass, IDisposable, IAsyncLifetime 
         created.Id.ShouldNotBeNullOrEmpty();
 
         // Then: The webhook can be retrieved
-        WebhookResponse retrieved = await _webhookClient.GetWebhookAsync(created.Id, testmode: true);
+        var retrieveResult = await _webhookClient.GetWebhookAsync(created.Id, testmode: true);
+        var retrieved = retrieveResult.Data!;
+        retrieveResult.Success.ShouldBeTrue();
         retrieved.ShouldBeEquivalentTo(created);
 
         // Then: The webhook can be deleted
@@ -55,9 +59,11 @@ public class WebhookTests : BaseMollieApiTestClass, IDisposable, IAsyncLifetime 
         // Given
 
         // When: Retrieve webhook list
-        ListResponse<WebhookResponse> response = await _webhookClient.GetWebhookListAsync(testmode: true);
+        var result = await _webhookClient.GetWebhookListAsync(testmode: true);
+        var response = result.Data!;
 
         // Then
+        result.Success.ShouldBeTrue();
         response.ShouldNotBeNull();
         response.Items.ShouldNotBeNull();
     }
@@ -71,7 +77,8 @@ public class WebhookTests : BaseMollieApiTestClass, IDisposable, IAsyncLifetime 
             EventTypes = [WebhookEventTypes.PaymentLinkPaid],
             Testmode = true
         };
-        WebhookResponse created = await _webhookClient.CreateWebhookAsync(createRequest);
+        var createResult = await _webhookClient.CreateWebhookAsync(createRequest);
+        var created = createResult.Data!;
         var updateRequest = new WebhookRequest {
             Name = "my-webhook-updated",
             Url = "https://github.com/Viincenttt/MollieApi/-updated",
@@ -80,9 +87,12 @@ public class WebhookTests : BaseMollieApiTestClass, IDisposable, IAsyncLifetime 
         };
 
         // When: The webhook is updated
-        WebhookResponse updated = await _webhookClient.UpdateWebhookAsync(created.Id, updateRequest);
+        var updateResult = await _webhookClient.UpdateWebhookAsync(created.Id, updateRequest);
+        var updated = updateResult.Data!;
 
         // Then
+        createResult.Success.ShouldBeTrue();
+        updateResult.Success.ShouldBeTrue();
         updated.Name.ShouldBe(updateRequest.Name);
         updated.Url.ShouldBe(updateRequest.Url);
         updated.EventTypes.ShouldBe([WebhookEventTypes.PaymentLinkPaid, WebhookEventTypes.SalesInvoiceCreated]);
@@ -98,17 +108,26 @@ public class WebhookTests : BaseMollieApiTestClass, IDisposable, IAsyncLifetime 
             EventTypes = [WebhookEventTypes.PaymentLinkPaid],
             Testmode = true
         };
-        WebhookResponse created = await _webhookClient.CreateWebhookAsync(createRequest);
+        var createResult = await _webhookClient.CreateWebhookAsync(createRequest);
+        var created = createResult.Data!;
 
         // When: The webhook is updated
-        MollieApiException exception = await Assert.ThrowsAsync<MollieApiException>(() => _webhookClient.TestWebhookAsync(created.Id, testmode: true));
+        var result = await _webhookClient.TestWebhookAsync(created.Id, testmode: true);
 
-        // Then: An exception is thrown as the URL can't be reached
-        exception.Message.ShouldBe("Unprocessable Entity - Failed to ping the webhook subscription.");
+        // Then: An error result is returned as the URL can't be reached
+        createResult.Success.ShouldBeTrue();
+        result.Success.ShouldBeFalse();
+        result.Error.ShouldNotBeNull();
+        result.Error.ToString().ShouldBe("Unprocessable Entity - Failed to ping the webhook subscription.");
     }
 
     public async Task InitializeAsync() {
-        ListResponse<WebhookResponse> webhooks = await _webhookClient.GetWebhookListAsync(testmode: true);
+        var result = await _webhookClient.GetWebhookListAsync(testmode: true);
+        if (result.Success == false) {
+            Assert.Fail($"Failed to retrieve webhook list: {result.Error}");
+        }
+
+        var webhooks = result.Data!;
         foreach (var webhook in webhooks.Items) {
             await _webhookClient.DeleteWebhookAsync(webhook.Id, testmode: true);
         }

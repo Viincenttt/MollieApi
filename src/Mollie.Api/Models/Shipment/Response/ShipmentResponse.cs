@@ -26,7 +26,7 @@ namespace Mollie.Api.Models.Shipment.Response
         /// <summary>
         /// The shipment’s date and time of creation, in ISO 8601 format.
         /// </summary>
-        public required DateTime CreatedAt { get; set; }
+        public required DateTimeOffset CreatedAt { get; set; }
 
         /// <summary>
         /// An object containing shipment tracking details. Will be omitted when no tracking details are available.

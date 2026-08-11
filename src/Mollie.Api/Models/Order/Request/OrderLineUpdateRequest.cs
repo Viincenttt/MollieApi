@@ -61,10 +61,11 @@ namespace Mollie.Api.Models.Order.Request {
         public Amount? VatAmount { get; set; }
 
         /// <summary>
-        /// The VAT rate applied to the order line, for example "21.00" for 21%. The vatRate should be passed as a
-        /// string and not as a float to ensure the correct number of decimals are passed.
+        /// The VAT rate applied to the order line, for example 21.00 for 21%. The value is serialized as a string
+        /// to ensure the correct number of decimals are passed, preserving the exact value set by the user.
         /// </summary>
-        public string? VatRate { get; set; }
+        [JsonConverter(typeof(NullableDecimalToStringConverter))]
+        public decimal? VatRate { get; set; }
 
         /// <summary>
         ///	Oauth only - Optional

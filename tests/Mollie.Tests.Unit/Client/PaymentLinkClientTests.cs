@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
@@ -27,7 +27,7 @@ namespace Mollie.Tests.Unit.Client {
             // Given: we create a payment link request with only the required parameters
             PaymentLinkRequest paymentLinkRequest = new() {
                 Description = "Test",
-                Amount = new Amount(Currency.EUR, 50),
+                Amount = new Amount(Currency.EUR, 50.00m),
                 WebhookUrl = "https://www.mollie.com",
                 RedirectUrl = "https://www.mollie.com",
                 ExpiresAt = DateTime.Now.AddDays(1)
@@ -39,10 +39,12 @@ namespace Mollie.Tests.Unit.Client {
             PaymentLinkClient paymentLinkClient = new PaymentLinkClient("api-key", httpClient);
 
             // When: We send the request
-            PaymentLinkResponse response = await paymentLinkClient.CreatePaymentLinkAsync(paymentLinkRequest);
+            var result = await paymentLinkClient.CreatePaymentLinkAsync(paymentLinkRequest);
+            PaymentLinkResponse response = result.Data!;
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
+            result.Success.ShouldBeTrue();
             VerifyPaymentLinkResponse(response);
         }
 
@@ -56,10 +58,12 @@ namespace Mollie.Tests.Unit.Client {
             PaymentLinkClient paymentLinkClient = new PaymentLinkClient("api-key", httpClient);
 
             // When: We send the request
-            PaymentLinkResponse response = await paymentLinkClient.GetPaymentLinkAsync(DefaultPaymentLinkId);
+            var result = await paymentLinkClient.GetPaymentLinkAsync(DefaultPaymentLinkId);
+            PaymentLinkResponse response = result.Data!;
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
+            result.Success.ShouldBeTrue();
             VerifyPaymentLinkResponse(response);
         }
 
@@ -146,22 +150,24 @@ namespace Mollie.Tests.Unit.Client {
             var paymentLinkClient = new PaymentLinkClient("abcde", httpClient);
 
             // When: We send the request
-            ListResponse<PaymentResponse> result = await paymentLinkClient.GetPaymentLinkPaymentListAsync(DefaultPaymentLinkId);
+            var result = await paymentLinkClient.GetPaymentLinkPaymentListAsync(DefaultPaymentLinkId);
+            ListResponse<PaymentResponse> listResponse = result.Data!;
 
             // Then
             mockHttp.VerifyNoOutstandingRequest();
-            result.ShouldNotBeNull();
-            result.Count.ShouldBe(1);
-            PaymentResponse payment = result.Items.Single();
+            result.Success.ShouldBeTrue();
+            listResponse.ShouldNotBeNull();
+            listResponse.Count.ShouldBe(1);
+            PaymentResponse payment = listResponse.Items.Single();
             payment.Id.ShouldBe("tr_7UhSN1zuXS");
-            payment.Amount.Value.ShouldBe(DefaultPaymentAmount.ToString(CultureInfo.InvariantCulture));
+            payment.Amount!.Value.ShouldBe(DefaultPaymentAmount);
             payment.Description.ShouldBe(DefaultDescription);
             payment.RedirectUrl.ShouldBe(DefaultRedirectUrl);
             payment.WebhookUrl.ShouldBe(DefaultWebhookUrl);
         }
 
         private void VerifyPaymentLinkResponse(PaymentLinkResponse response) {
-            response.Amount!.Value.ShouldBe(DefaultPaymentAmount.ToString(CultureInfo.InvariantCulture));
+            response.Amount!.Value.ShouldBe(DefaultPaymentAmount);
             response.Description.ShouldBe(DefaultDescription);
             response.Id.ShouldBe(DefaultPaymentLinkId);
             response.RedirectUrl.ShouldBe(DefaultRedirectUrl);

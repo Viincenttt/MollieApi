@@ -21,8 +21,12 @@ namespace Mollie.Api.Models.Subscription.Request {
         /// will be charged. When
         /// this parameter is not provided, the current date will be used instead.
         /// </summary>
+#if NET8_0_OR_GREATER
+        public DateOnly? StartDate { get; set; }
+#else
         [JsonConverter(typeof(DateJsonConverter))]
         public DateTime? StartDate { get; set; }
+#endif
 
         /// <summary>
         /// A description unique per customer. This will be included in the payment description along with the charge date in

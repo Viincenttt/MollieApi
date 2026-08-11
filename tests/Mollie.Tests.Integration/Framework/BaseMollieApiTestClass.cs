@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
-using Mollie.Api.Client;
+using Mollie.Api.Models;
 using Mollie.Api.Options;
 
 namespace Mollie.Tests.Integration.Framework {
@@ -44,18 +44,18 @@ namespace Mollie.Tests.Integration.Framework {
                 CompareOptions.IgnoreCase | CompareOptions.IgnoreSymbols) == 0;
         }
 
-        protected async Task<TResult> ExecuteWithRetry<TResult>(Func<Task<TResult>> apiAction, int numberOfRetries = 3) {
-            MollieApiException? exception = null;
+        protected async Task<TResult> ExecuteWithRetry<TResult>(Func<Task<MollieResult<TResult>>> apiAction, int numberOfRetries = 3) {
+            MollieResult<TResult>? result = null;
             for (int i = 0; i < numberOfRetries; i++) {
-                try {
-                    return await apiAction.Invoke();
-                } catch (MollieApiException ex) {
-                    exception = ex;
-                    await Task.Delay(TimeSpan.FromSeconds(1));
+                result = await apiAction.Invoke();
+                if (result.Success) {
+                    return result.Data!;
                 }
+
+                await Task.Delay(TimeSpan.FromSeconds(1));
             }
 
-            throw exception!;
+            throw new InvalidOperationException($"Request failed after {numberOfRetries} retries: {result?.Error}");
         }
     }
 }

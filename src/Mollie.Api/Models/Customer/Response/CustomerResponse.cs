@@ -47,7 +47,7 @@ namespace Mollie.Api.Models.Customer.Response {
         /// <summary>
         /// DateTime when user was created.
         /// </summary>
-        public required DateTime CreatedAt { get; set; }
+        public required DateTimeOffset CreatedAt { get; set; }
 
         /// <summary>
         /// An object with several URL objects relevant to the customer. Every URL object will contain an href and a type field.

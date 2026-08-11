@@ -21,6 +21,6 @@ namespace Mollie.Api.Models.Profile.Response {
         /// <summary>
         ///     The API key's date and time of creation.
         /// </summary>
-        public DateTime CreatedDatetime { get; set; }
+        public DateTimeOffset CreatedDatetime { get; set; }
     }
 }

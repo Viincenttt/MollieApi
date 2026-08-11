@@ -2,14 +2,13 @@
 
 @using Mollie.Api.Models.PaymentLink.Request
 @using Mollie.WebApplication.Blazor.Models.PaymentLink
-@using Mollie.Api.Client
 
 @inject IPaymentLinkClient PaymentLinkClient
 @inject NavigationManager NavigationManager
 
 <h3>Create new payment link</h3>
 
-<ApiExceptionDisplay Exception="_apiException"></ApiExceptionDisplay>
+<ApiExceptionDisplay Result="_result"></ApiExceptionDisplay>
 
 <EditForm Model="_model" OnValidSubmit="@OnSave" class="col-md-6">
     <DataAnnotationsValidator />
@@ -67,7 +66,7 @@
 </EditForm>
 
 @code {
-    private MollieApiException? _apiException;
+    private MollieResult? _result;
 
     private CreatePaymentLinkModel _model = new() {
         Amount = 10.00m,
@@ -78,20 +77,20 @@
     };
 
     private async Task OnSave() {
-        try {
-            _apiException = null;
+        _result = null;
 
-            await PaymentLinkClient.CreatePaymentLinkAsync(new PaymentLinkRequest {
-                Amount = new Amount(_model.Currency, _model.Amount),
-                RedirectUrl = _model.RedirectUrl,
-                WebhookUrl = _model.WebhookUrl,
-                Description = _model.Description
-            });
+        var result = await PaymentLinkClient.CreatePaymentLinkAsync(new PaymentLinkRequest {
+            Amount = new Amount(_model.Currency, _model.Amount),
+            RedirectUrl = _model.RedirectUrl,
+            WebhookUrl = _model.WebhookUrl,
+            Description = _model.Description
+        });
 
+        if (result.Success) {
             NavigationManager.NavigateTo("/paymentlink/overview");
         }
-        catch (MollieApiException e) {
-            _apiException = e;
+        else {
+            _result = result;
         }
     }
 }

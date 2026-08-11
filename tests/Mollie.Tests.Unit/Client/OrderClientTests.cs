@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 #pragma warning disable CS0618
 using Mollie.Api.Client;
 using Mollie.Api.Models;
@@ -118,10 +118,12 @@ namespace Mollie.Tests.Unit.Client {
             OrderClient orderClient = new ("abcde", httpClient);
 
             // When: We send the request
-            OrderResponse orderResponse = await orderClient.CreateOrderAsync(orderRequest);
+            var result = await orderClient.CreateOrderAsync(orderRequest);
+            OrderResponse orderResponse = result.Data!;
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
+            result.Success.ShouldBeTrue();
             orderResponse.Method.ShouldBe(orderRequest.Method);
         }
 
@@ -345,16 +347,16 @@ namespace Mollie.Tests.Unit.Client {
 
         private OrderRequest CreateOrderRequestWithOnlyRequiredFields() {
             return new OrderRequest() {
-                Amount = new Amount(Currency.EUR, "100.00"),
+                Amount = new Amount(Currency.EUR, 100.00m),
                 OrderNumber = "16738",
                 Lines = new List<OrderLineRequest>() {
                     new OrderLineRequest() {
                         Name = "A box of chocolates",
                         Quantity = 1,
-                        UnitPrice = new Amount(Currency.EUR, "100.00"),
-                        TotalAmount = new Amount(Currency.EUR, "100.00"),
-                        VatRate = "21.00",
-                        VatAmount = new Amount(Currency.EUR, "17.36")
+                        UnitPrice = new Amount(Currency.EUR, 100.00m),
+                        TotalAmount = new Amount(Currency.EUR, 100.00m),
+                        VatRate = 21.00m,
+                        VatAmount = new Amount(Currency.EUR, 17.36m)
                     }
                 },
                 BillingAddress = new OrderAddressDetails() {

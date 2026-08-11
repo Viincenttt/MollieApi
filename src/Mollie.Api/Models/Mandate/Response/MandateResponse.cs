@@ -47,7 +47,7 @@ namespace Mollie.Api.Models.Mandate.Response {
         /// <summary>
         /// DateTime when mandate was created.
         /// </summary>
-        public DateTime CreatedAt { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
 
         /// <summary>
         /// An object with several URL objects relevant to the mandate. Every URL object will contain an href and a type field.

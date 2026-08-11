@@ -61,13 +61,15 @@ else {
 
     private async Task LoadData() {
         if (string.IsNullOrEmpty(Url)) {
-            _customers = await CustomerClient.GetCustomerListAsync();
+            var result = await CustomerClient.GetCustomerListAsync();
+            _customers = result.Data;
         }
         else {
-            _customers = await CustomerClient.GetCustomerListAsync(new UrlObjectLink<ListResponse<CustomerResponse>>() {
+            var result = await CustomerClient.GetCustomerListAsync(new UrlObjectLink<ListResponse<CustomerResponse>>() {
                 Href = Url,
                 Type = "application/json"
             });
+            _customers = result.Data;
         }
     }
 }

@@ -63,12 +63,12 @@ namespace Mollie.Api.Models.Terminal.Response
         /// <summary>
         /// The Terminal's date and time of creation, in ISO 8601 format.
         /// </summary>
-        public DateTime CreatedAt { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
 
         /// <summary>
         /// The Terminal's date and time of creation, in ISO 8601 format.
         /// </summary>
-        public DateTime? UpdatedAt { get; set; }
+        public DateTimeOffset? UpdatedAt { get; set; }
 
         /// <summary>
         /// An object with several URL objects relevant to the payment method. Every URL object will contain an href and a type field.

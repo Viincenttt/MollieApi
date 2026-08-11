@@ -56,13 +56,15 @@ else {
 
     private async Task LoadData() {
         if (string.IsNullOrEmpty(Url)) {
-            _paymentLinks = await PaymentClient.GetPaymentLinkListAsync();
+            var result = await PaymentClient.GetPaymentLinkListAsync();
+            _paymentLinks = result.Data;
         }
         else {
-            _paymentLinks = await PaymentClient.GetPaymentLinkListAsync(new UrlObjectLink<ListResponse<PaymentLinkResponse>>() {
+            var result = await PaymentClient.GetPaymentLinkListAsync(new UrlObjectLink<ListResponse<PaymentLinkResponse>>() {
                 Href = Url,
                 Type = "application/json"
             });
+            _paymentLinks = result.Data;
         }
     }
 }

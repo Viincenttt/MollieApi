@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Mollie.Api.Client;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Payment;
@@ -24,7 +24,7 @@ public class PaymentClientTests : BaseClientTests {
         // Given: We create a payment request with only the required parameters
         var paymentRequest = new PaymentRequest()
         {
-            Amount = new Amount(Currency.EUR, "100.00"),
+            Amount = new Amount(Currency.EUR, 100.00m),
             Description = "Description",
             RedirectUrl = "http://www.mollie.com"
         };
@@ -59,7 +59,7 @@ public class PaymentClientTests : BaseClientTests {
     public async Task CreatePaymentAsync_PaymentWithRequiredParameters_ResponseIsDeserializedInExpectedFormat() {
         // Given: we create a payment request with only the required parameters
         PaymentRequest paymentRequest = new PaymentRequest() {
-            Amount = new Amount(Currency.EUR, "100.00"),
+            Amount = new Amount(Currency.EUR, 100.00m),
             Description = "Description",
             RedirectUrl = "http://www.mollie.com"
         };
@@ -73,29 +73,32 @@ public class PaymentClientTests : BaseClientTests {
         var paymentClient = new PaymentClient("abcde", httpClient);
 
         // When: We send the request
-        PaymentResponse paymentResponse = await paymentClient.CreatePaymentAsync(paymentRequest);
+        var result = await paymentClient.CreatePaymentAsync(paymentRequest);
+        PaymentResponse paymentResponse = result.Data!;
 
         // Then
+        mockHttp.VerifyNoOutstandingExpectation();
+        result.Success.ShouldBeTrue();
         AssertPaymentIsEqual(paymentRequest, paymentResponse);
-        paymentResponse.AuthorizedAt!.Value.ToUniversalTime().ShouldBe(DateTime.SpecifyKind(new DateTime(2018, 3, 19, 13, 28, 37), DateTimeKind.Utc));
-        paymentResponse.CreatedAt!.ToUniversalTime().ShouldBe(DateTime.SpecifyKind(new DateTime(2018, 3, 20, 13, 13, 37), DateTimeKind.Utc));
-        paymentResponse.PaidAt!.Value.ToUniversalTime().ShouldBe(DateTime.SpecifyKind(new DateTime(2018, 3, 21, 13, 28, 37), DateTimeKind.Utc));
-        paymentResponse.CanceledAt!.Value.ToUniversalTime().ShouldBe(DateTime.SpecifyKind(new DateTime(2018, 3, 22, 13, 28, 37), DateTimeKind.Utc));
-        paymentResponse.ExpiredAt!.Value.ToUniversalTime().ShouldBe(DateTime.SpecifyKind(new DateTime(2018, 3, 23, 13, 28, 37), DateTimeKind.Utc));
-        paymentResponse.FailedAt!.Value.ToUniversalTime().ShouldBe(DateTime.SpecifyKind(new DateTime(2018, 3, 24, 13, 28, 37), DateTimeKind.Utc));
-        paymentResponse.CaptureBefore!.Value.ToUniversalTime().ShouldBe(DateTime.SpecifyKind(new DateTime(2018, 3, 25, 13, 28, 37), DateTimeKind.Utc));
-        paymentResponse.AmountRefunded!.Value.ShouldBe("10.00");
+        paymentResponse.AuthorizedAt!.Value.ToUniversalTime().ShouldBe(new DateTimeOffset(2018, 3, 19, 13, 28, 37, TimeSpan.Zero));
+        paymentResponse.CreatedAt.ToUniversalTime().ShouldBe(new DateTimeOffset(2018, 3, 20, 13, 13, 37, TimeSpan.Zero));
+        paymentResponse.PaidAt!.Value.ToUniversalTime().ShouldBe(new DateTimeOffset(2018, 3, 21, 13, 28, 37, TimeSpan.Zero));
+        paymentResponse.CanceledAt!.Value.ToUniversalTime().ShouldBe(new DateTimeOffset(2018, 3, 22, 13, 28, 37, TimeSpan.Zero));
+        paymentResponse.ExpiredAt!.Value.ToUniversalTime().ShouldBe(new DateTimeOffset(2018, 3, 23, 13, 28, 37, TimeSpan.Zero));
+        paymentResponse.FailedAt!.Value.ToUniversalTime().ShouldBe(new DateTimeOffset(2018, 3, 24, 13, 28, 37, TimeSpan.Zero));
+        paymentResponse.CaptureBefore!.Value.ToUniversalTime().ShouldBe(new DateTimeOffset(2018, 3, 25, 13, 28, 37, TimeSpan.Zero));
+        paymentResponse.AmountRefunded!.Value.ShouldBe(10.00m);
         paymentResponse.AmountRefunded.Currency.ShouldBe(Currency.EUR);
-        paymentResponse.AmountRemaining!.Value.ShouldBe("90.00");
+        paymentResponse.AmountRemaining!.Value.ShouldBe(90.00m);
         paymentResponse.AmountRemaining.Currency.ShouldBe(Currency.EUR);
-        paymentResponse.AmountChargedBack!.Value.ShouldBe("10.00");
+        paymentResponse.AmountChargedBack!.Value.ShouldBe(10.00m);
         paymentResponse.AmountChargedBack.Currency.ShouldBe(Currency.EUR);
         paymentResponse.CancelUrl.ShouldBe("https://webshop.example.org/order/12345/cancel");
         paymentResponse.CountryCode.ShouldBe("NL");
         paymentResponse.SettlementId.ShouldBe("stl_jDk30akdN");
         paymentResponse.SubscriptionId.ShouldBe("sub_rVKGtNd6s3");
         paymentResponse.ApplicationFee.ShouldNotBeNull();
-        paymentResponse.ApplicationFee!.Amount.Value.ShouldBe("1.00");
+        paymentResponse.ApplicationFee!.Amount.Value.ShouldBe(1.00m);
         paymentResponse.ApplicationFee.Amount.Currency.ShouldBe(Currency.EUR);
         paymentResponse.ApplicationFee.Description.ShouldBe("description");
     }
@@ -104,7 +107,7 @@ public class PaymentClientTests : BaseClientTests {
     public async Task CreatePaymentAsync_PaymentWithSinglePaymentMethod_RequestIsSerializedInExpectedFormat() {
         // Given: We create a payment request with a single payment method
         PaymentRequest paymentRequest = new PaymentRequest() {
-            Amount = new Amount(Currency.EUR, "100.00"),
+            Amount = new Amount(Currency.EUR, 100.00m),
             Description = "Description",
             RedirectUrl = "http://www.mollie.com",
             Method = PaymentMethod.Ideal
@@ -123,10 +126,12 @@ public class PaymentClientTests : BaseClientTests {
         var paymentClient = new PaymentClient("abcde", httpClient);
 
         // When: We send the request
-        PaymentResponse paymentResponse = await paymentClient.CreatePaymentAsync(paymentRequest);
+        var result = await paymentClient.CreatePaymentAsync(paymentRequest);
+        PaymentResponse paymentResponse = result.Data!;
 
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
+        result.Success.ShouldBeTrue();
         AssertPaymentIsEqual(paymentRequest, paymentResponse);
         paymentResponse.Method.ShouldBe(paymentRequest.Method);
     }
@@ -135,7 +140,7 @@ public class PaymentClientTests : BaseClientTests {
     public async Task CreatePaymentAsync_PaymentWithMultiplePaymentMethods_RequestIsSerializedInExpectedFormat() {
         // Given: We create a payment request with multiple payment methods
         PaymentRequest paymentRequest = new PaymentRequest() {
-            Amount = new Amount(Currency.EUR, "100.00"),
+            Amount = new Amount(Currency.EUR, 100.00m),
             Description = "Description",
             RedirectUrl = "http://www.mollie.com",
             Methods = new List<string>() {
@@ -158,10 +163,12 @@ public class PaymentClientTests : BaseClientTests {
         var paymentClient = new PaymentClient("abcde", httpClient);
 
         // When: We send the request
-        PaymentResponse paymentResponse = await paymentClient.CreatePaymentAsync(paymentRequest);
+        var result = await paymentClient.CreatePaymentAsync(paymentRequest);
+        PaymentResponse paymentResponse = result.Data!;
 
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
+        result.Success.ShouldBeTrue();
         AssertPaymentIsEqual(paymentRequest, paymentResponse);
         paymentResponse.Method.ShouldBeNull();
     }
@@ -169,16 +176,16 @@ public class PaymentClientTests : BaseClientTests {
     [Fact]
     public async Task CreatePayment_WithRoutingInformation_RequestIsSerializedInExpectedFormat() {
         // Given: We create a payment request with the routing request
-        PaymentRoutingRequest routingRequest = new PaymentRoutingRequest {
-            Amount = new Amount("EUR", 100),
+        var routingRequest = new PaymentRoutingRequest {
+            Amount = new Amount("EUR", 100.00m),
             Destination = new RoutingDestination {
                 Type = "organization",
                 OrganizationId = "organization-id"
             },
-            ReleaseDate = new DateTime(2022, 1, 14)
+            ReleaseDate = new DateOnly(2022, 1, 14)
         };
-        PaymentRequest paymentRequest = new PaymentRequest() {
-            Amount = new Amount(Currency.EUR, "100.00"),
+        var paymentRequest = new PaymentRequest {
+            Amount = new Amount(Currency.EUR, 100.00m),
             Description = "Description",
             RedirectUrl = "http://www.mollie.com",
             Routings = new List<PaymentRoutingRequest> {
@@ -221,10 +228,12 @@ public class PaymentClientTests : BaseClientTests {
         var paymentClient = new PaymentClient("abcde", httpClient);
 
         // When: We send the request
-        PaymentResponse paymentResponse = await paymentClient.CreatePaymentAsync(paymentRequest);
+        var result = await paymentClient.CreatePaymentAsync(paymentRequest);
+        PaymentResponse paymentResponse = result.Data!;
 
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
+        result.Success.ShouldBeTrue();
         AssertPaymentIsEqual(paymentRequest, paymentResponse);
         paymentResponse.Method.ShouldBeNull();
     }
@@ -233,7 +242,7 @@ public class PaymentClientTests : BaseClientTests {
     public async Task CreatePaymentAsync_IncludeQrCode_QueryStringContainsIncludeQrCodeParameter() {
         // Given: We make a request to create a payment and include the QR code
         PaymentRequest paymentRequest = new PaymentRequest() {
-            Amount = new Amount(Currency.EUR, "100.00"),
+            Amount = new Amount(Currency.EUR, 100.00m),
             Description = "Description",
             RedirectUrl = "http://www.mollie.com",
             Method = PaymentMethod.Ideal
@@ -258,20 +267,22 @@ public class PaymentClientTests : BaseClientTests {
         var paymentClient = new PaymentClient("abcde", httpClient);
 
         // When: We send the request
-        var payment = await paymentClient.GetPaymentAsync(paymentId);
+        var result = await paymentClient.GetPaymentAsync(paymentId);
+        var payment = result.Data!;
 
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
+        result.Success.ShouldBeTrue();
         payment.Resource.ShouldBe("payment");
         payment.Id.ShouldBe(paymentId);
-        payment.Amount.Value.ShouldBe("100.00");
+        payment.Amount.Value.ShouldBe(100.00m);
         payment.Amount.Currency.ShouldBe(Currency.EUR);
         payment.Description.ShouldBe("Description");
         payment.Method.ShouldBeNull();
         payment.Status.ShouldBe(PaymentStatus.Open);
         payment.IsCancelable.ShouldBe(false);
         payment.Locale.ShouldBe("nl_NL");
-        payment.ExpiresAt!.Value.ToUniversalTime().ShouldBe(DateTime.SpecifyKind(new DateTime(2018, 3, 20, 13, 28, 37), DateTimeKind.Utc));
+        payment.ExpiresAt!.Value.ToUniversalTime().ShouldBe(new DateTimeOffset(2018, 3, 20, 13, 28, 37, TimeSpan.Zero));
         payment.ProfileId.ShouldBe("pfl_QkEhN94Ba");
         payment.SequenceType.ShouldBe(SequenceType.OneOff);
         payment.RedirectUrl.ShouldBe("https://webshop.example.org/order/12345/");
@@ -336,9 +347,11 @@ public class PaymentClientTests : BaseClientTests {
         var paymentClient = new PaymentClient("abcde", httpClient);
 
         // When: We send the request
-        var payment = await paymentClient.GetPaymentAsync(paymentId);
+        var result = await paymentClient.GetPaymentAsync(paymentId);
+        var payment = result.Data!;
 
         // Then
+        result.Success.ShouldBeTrue();
         payment.ShouldBeOfType<BankTransferPaymentResponse>();
         var bankTransferPayment = payment as BankTransferPaymentResponse;
         bankTransferPayment!.Details!.BankName.ShouldBe("bank-name");
@@ -399,10 +412,12 @@ public class PaymentClientTests : BaseClientTests {
 
         // When: We send the request
         var result = await paymentClient.GetPaymentAsync(paymentId);
+        var payment = result.Data!;
 
         // Then
-        result.ShouldBeOfType<BancontactPaymentResponse>();
-        var banContactPayment = result as BancontactPaymentResponse;
+        result.Success.ShouldBeTrue();
+        payment.ShouldBeOfType<BancontactPaymentResponse>();
+        var banContactPayment = payment as BancontactPaymentResponse;
         banContactPayment!.Details!.CardNumber.ShouldBe("1234567890123456");
         banContactPayment.Details.QrCode.ShouldNotBeNull();
         banContactPayment.Details.QrCode.Height.ShouldBe(5);
@@ -420,7 +435,7 @@ public class PaymentClientTests : BaseClientTests {
         // Given we create a creditcard specific payment request
         var paymentRequest = new SepaDirectDebitRequest()
         {
-            Amount = new Amount(Currency.EUR, "100.00"),
+            Amount = new Amount(Currency.EUR, 100.00m),
             Description = "Description",
             Method = PaymentMethod.Ideal,
             RedirectUrl = "http://www.mollie.com",
@@ -480,7 +495,7 @@ public class PaymentClientTests : BaseClientTests {
 
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
-        var specificPaymentResponse = result as SepaDirectDebitResponse;
+        var specificPaymentResponse = result.Data as SepaDirectDebitResponse;
         specificPaymentResponse.ShouldNotBeNull();
         specificPaymentResponse.Details!.ConsumerName.ShouldBe("consumer-name");
         specificPaymentResponse.Details.ConsumerAccount.ShouldBe("consumer-account");
@@ -542,10 +557,12 @@ public class PaymentClientTests : BaseClientTests {
 
         // When: We send the request
         var result = await paymentClient.GetPaymentAsync(paymentId);
+        var payment = result.Data!;
 
         // Then
-        result.ShouldBeOfType<PayPalPaymentResponse>();
-        var payPalPayment = result as PayPalPaymentResponse;
+        result.Success.ShouldBeTrue();
+        payment.ShouldBeOfType<PayPalPaymentResponse>();
+        var payPalPayment = payment as PayPalPaymentResponse;
         payPalPayment!.Details!.ConsumerName.ShouldBe("consumer-name");
         payPalPayment.Details.ConsumerAccount.ShouldBe("consumer-account");
         payPalPayment.Details.PayPalReference.ShouldBe("paypal-ref");
@@ -560,7 +577,7 @@ public class PaymentClientTests : BaseClientTests {
         payPalPayment.Details.ShippingAddress.Country.ShouldBe("country");
         payPalPayment.Details.PaypalFee.ShouldNotBeNull();
         payPalPayment.Details.PaypalFee.Currency.ShouldBe("EUR");
-        payPalPayment.Details.PaypalFee.Value.ShouldBe("100.00");
+        payPalPayment.Details.PaypalFee.Value.ShouldBe(100.00m);
     }
 
     [Fact]
@@ -569,7 +586,7 @@ public class PaymentClientTests : BaseClientTests {
         // Given we create a creditcard specific payment request
         var paymentRequest = new CreditCardPaymentRequest()
         {
-            Amount = new Amount(Currency.EUR, "100.00"),
+            Amount = new Amount(Currency.EUR, 100.00m),
             Description = "Description",
             Method = PaymentMethod.Ideal,
             RedirectUrl = "http://www.mollie.com",
@@ -658,7 +675,7 @@ public class PaymentClientTests : BaseClientTests {
 
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
-        var specificPaymentResponse = result as CreditCardPaymentResponse;
+        var specificPaymentResponse = result.Data as CreditCardPaymentResponse;
         specificPaymentResponse.ShouldNotBeNull();
         specificPaymentResponse.Details!.CardNumber.ShouldBe("1234567890123456");
         specificPaymentResponse.Details.CardHolder.ShouldBe("John Doe");
@@ -679,7 +696,7 @@ public class PaymentClientTests : BaseClientTests {
         // Given we create a giftcard specific payment request
         var paymentRequest = new GiftcardPaymentRequest()
         {
-            Amount = new Amount(Currency.EUR, "100.00"),
+            Amount = new Amount(Currency.EUR, 100.00m),
             Description = "Description",
             Method = PaymentMethod.GiftCard,
             RedirectUrl = "http://www.mollie.com",
@@ -745,7 +762,7 @@ public class PaymentClientTests : BaseClientTests {
 
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
-        var specificPaymentResponse = result as GiftcardPaymentResponse;
+        var specificPaymentResponse = result.Data as GiftcardPaymentResponse;
         specificPaymentResponse.ShouldNotBeNull();
         specificPaymentResponse!.Details!.VoucherNumber.ShouldBe("voucher-number");
         specificPaymentResponse.Details.Giftcards.ShouldNotBeNull();
@@ -753,11 +770,11 @@ public class PaymentClientTests : BaseClientTests {
         specificPaymentResponse.Details.Giftcards[0].Issuer.ShouldBe("issuer");
         specificPaymentResponse.Details.Giftcards[0].Amount.ShouldNotBeNull();
         specificPaymentResponse.Details.Giftcards[0].Amount.Currency.ShouldBe("EUR");
-        specificPaymentResponse.Details.Giftcards[0].Amount.Value.ShouldBe("100.00");
+        specificPaymentResponse.Details.Giftcards[0].Amount.Value.ShouldBe(100.00m);
         specificPaymentResponse.Details.Giftcards[0].VoucherNumber.ShouldBe("voucher-number");
         specificPaymentResponse.Details.RemainderAmount.ShouldNotBeNull();
         specificPaymentResponse.Details.RemainderAmount.Currency.ShouldBe("EUR");
-        specificPaymentResponse.Details.RemainderAmount.Value.ShouldBe("100.00");
+        specificPaymentResponse.Details.RemainderAmount.Value.ShouldBe(100.00m);
         specificPaymentResponse.Details.RemainderMethod.ShouldBe("ideal");
     }
 
@@ -792,8 +809,9 @@ public class PaymentClientTests : BaseClientTests {
         var result = await paymentClient.GetPaymentAsync(paymentId);
 
         // Then
-        result.ShouldBeOfType<BelfiusPaymentResponse>();
-        var belfiusPayment = result as BelfiusPaymentResponse;
+        result.Success.ShouldBeTrue();
+        result.Data.ShouldBeOfType<BelfiusPaymentResponse>();
+        var belfiusPayment = result.Data as BelfiusPaymentResponse;
         belfiusPayment!.Details!.ConsumerName.ShouldBe("consumer-name");
         belfiusPayment.Details.ConsumerAccount.ShouldBe("consumer-account");
         belfiusPayment.Details.ConsumerBic.ShouldBe("consumer-bic");
@@ -831,8 +849,8 @@ public class PaymentClientTests : BaseClientTests {
         var result = await paymentClient.GetPaymentAsync(paymentId);
 
         // Then
-        result.ShouldBeOfType<IngHomePayPaymentResponse>();
-        var ingHomePayPayment = result as IngHomePayPaymentResponse;
+        result.Data.ShouldBeOfType<IngHomePayPaymentResponse>();
+        var ingHomePayPayment = result.Data as IngHomePayPaymentResponse;
         ingHomePayPayment!.Details!.ConsumerName.ShouldBe("consumer-name");
         ingHomePayPayment.Details.ConsumerAccount.ShouldBe("consumer-account");
         ingHomePayPayment.Details.ConsumerBic.ShouldBe("consumer-bic");
@@ -870,8 +888,8 @@ public class PaymentClientTests : BaseClientTests {
         var result = await paymentClient.GetPaymentAsync(paymentId);
 
         // Then
-        result.ShouldBeOfType<KbcPaymentResponse>();
-        var kbcPayment = result as KbcPaymentResponse;
+        result.Data.ShouldBeOfType<KbcPaymentResponse>();
+        var kbcPayment = result.Data as KbcPaymentResponse;
         kbcPayment!.Details!.ConsumerName.ShouldBe("consumer-name");
         kbcPayment.Details.ConsumerAccount.ShouldBe("consumer-account");
         kbcPayment.Details.ConsumerBic.ShouldBe("consumer-bic");
@@ -907,10 +925,12 @@ public class PaymentClientTests : BaseClientTests {
 
         // When: We send the request
         var result = await paymentClient.GetPaymentAsync(paymentId);
+        var payment = result.Data!;
 
         // Then
-        result.ShouldBeOfType<SofortPaymentResponse>();
-        var sofortPayment = result as SofortPaymentResponse;
+        result.Success.ShouldBeTrue();
+        payment.ShouldBeOfType<SofortPaymentResponse>();
+        var sofortPayment = payment as SofortPaymentResponse;
         sofortPayment!.Details!.ConsumerName.ShouldBe("consumer-name");
         sofortPayment.Details.ConsumerAccount.ShouldBe("consumer-account");
         sofortPayment.Details.ConsumerBic.ShouldBe("consumer-bic");
@@ -967,8 +987,9 @@ public class PaymentClientTests : BaseClientTests {
 
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
-        result.ShouldBeOfType<IdealPaymentResponse>();
-        var paymentResponse = result as IdealPaymentResponse;
+        result.Success.ShouldBeTrue();
+        result.Data.ShouldBeOfType<IdealPaymentResponse>();
+        var paymentResponse = result.Data as IdealPaymentResponse;
         paymentResponse!.Details!.QrCode.ShouldNotBeNull();
         paymentResponse.Details.QrCode.Height.ShouldBe(5);
         paymentResponse.Details.QrCode.Width.ShouldBe(5);

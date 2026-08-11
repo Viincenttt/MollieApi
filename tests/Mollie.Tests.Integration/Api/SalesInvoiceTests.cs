@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
 using Mollie.Api.Models.List.Response;
@@ -31,18 +30,25 @@ public class SalesInvoiceTests : BaseMollieApiTestClass, IDisposable {
         var request = CreateSalesInvoiceRequest();
 
         // When
-        var response = await _salesInvoiceClient.CreateSalesInvoiceAsync(request);
+        var result = await _salesInvoiceClient.CreateSalesInvoiceAsync(request);
+        if (!result.Success) {
+            Assert.Fail($"Failed to create sales invoice: {result.Error?.Detail}");
+        }
+        var response = result.Data!;
 
         // Then
+        result.Success.ShouldBeTrue();
         AssertSalesInvoice(request, response);
     }
 
     [Fact]
     public async Task GetSalesInvoiceListAsync_NoParameters_SalesInvoiceListIsRetrieved() {
         // When: Retrieve sales invoice list with default settings
-        ListResponse<SalesInvoiceResponse> response = await _salesInvoiceClient.GetSalesInvoiceListAsync();
+        var result = await _salesInvoiceClient.GetSalesInvoiceListAsync();
+        var response = result.Data!;
 
         // Then
+        result.Success.ShouldBeTrue();
         response.ShouldNotBeNull();
         response.Items.ShouldNotBeNull();
         response.Links.ShouldNotBeNull();
@@ -56,9 +62,11 @@ public class SalesInvoiceTests : BaseMollieApiTestClass, IDisposable {
             Href = "https://api.mollie.com/v2/sales-invoices",
             Type = "application/hal+json"
         };
-        ListResponse<SalesInvoiceResponse> response = await _salesInvoiceClient.GetSalesInvoiceListAsync(urlObjectLink);
+        var result = await _salesInvoiceClient.GetSalesInvoiceListAsync(urlObjectLink);
+        var response = result.Data!;
 
         // Then
+        result.Success.ShouldBeTrue();
         response.ShouldNotBeNull();
         response.Items.ShouldNotBeNull();
         response.Links.ShouldNotBeNull();
@@ -71,9 +79,11 @@ public class SalesInvoiceTests : BaseMollieApiTestClass, IDisposable {
         int numberOfSalesInvoices = 5;
 
         // When: Retrieve 5 sales invoices
-        ListResponse<SalesInvoiceResponse> response = await _salesInvoiceClient.GetSalesInvoiceListAsync(null, numberOfSalesInvoices);
+        var result = await _salesInvoiceClient.GetSalesInvoiceListAsync(null, numberOfSalesInvoices);
+        var response = result.Data!;
 
         // Then
+        result.Success.ShouldBeTrue();
         response.Items.Count.ShouldBeLessThanOrEqualTo(numberOfSalesInvoices);
     }
 
@@ -81,12 +91,20 @@ public class SalesInvoiceTests : BaseMollieApiTestClass, IDisposable {
     public async Task GetSalesInvoiceAsync_SalesInvoiceCanBeRetrieved() {
         // Given: We create a new sales invoice
         var salesInvoiceRequest = CreateSalesInvoiceRequest();
-        var createdSalesInvoice = await _salesInvoiceClient.CreateSalesInvoiceAsync(salesInvoiceRequest);
+        var createResult = await _salesInvoiceClient.CreateSalesInvoiceAsync(salesInvoiceRequest);
+        if (!createResult.Success) {
+            Assert.Fail($"Failed to create sales invoice: {createResult.Error?.Detail}");
+        }
+
+        var createdSalesInvoice = createResult.Data!;
 
         // When: We retrieve the sales invoice
-        var retrievedSalesInvoice = await _salesInvoiceClient.GetSalesInvoiceAsync(createdSalesInvoice.Id);
+        var getResult = await _salesInvoiceClient.GetSalesInvoiceAsync(createdSalesInvoice.Id);
+        var retrievedSalesInvoice = getResult.Data!;
 
         // Then: The retrieved sales invoice should match the created one
+        createResult.Success.ShouldBeTrue();
+        getResult.Success.ShouldBeTrue();
         AssertSalesInvoice(salesInvoiceRequest, retrievedSalesInvoice);
     }
 
@@ -94,12 +112,19 @@ public class SalesInvoiceTests : BaseMollieApiTestClass, IDisposable {
     public async Task GetSalesInvoiceAsync_WithObjectUrlLink_SalesInvoiceCanBeRetrieved() {
         // Given: We create a new sales invoice
         var salesInvoiceRequest = CreateSalesInvoiceRequest();
-        var createdSalesInvoice = await _salesInvoiceClient.CreateSalesInvoiceAsync(salesInvoiceRequest);
+        var createResult = await _salesInvoiceClient.CreateSalesInvoiceAsync(salesInvoiceRequest);
+        if (!createResult.Success) {
+            Assert.Fail($"Failed to create sales invoice: {createResult.Error?.Detail}");
+        }
+        var createdSalesInvoice = createResult.Data!;
 
         // When: We retrieve the sales invoice
-        var retrievedSalesInvoice = await _salesInvoiceClient.GetSalesInvoiceAsync(createdSalesInvoice.Links.Self);
+        var getResult = await _salesInvoiceClient.GetSalesInvoiceAsync(createdSalesInvoice.Links.Self);
+        var retrievedSalesInvoice = getResult.Data!;
 
         // Then: The retrieved sales invoice should match the created one
+        createResult.Success.ShouldBeTrue();
+        getResult.Success.ShouldBeTrue();
         AssertSalesInvoice(salesInvoiceRequest, retrievedSalesInvoice);
     }
 
@@ -107,15 +132,22 @@ public class SalesInvoiceTests : BaseMollieApiTestClass, IDisposable {
     public async Task UpdateSalesInvoiceAsync_UpdatesSalesInvoice() {
         // Given: We create a new sales invoice
         var salesInvoiceRequest = CreateSalesInvoiceRequest();
-        var createdSalesInvoice = await _salesInvoiceClient.CreateSalesInvoiceAsync(salesInvoiceRequest);
+        var createResult = await _salesInvoiceClient.CreateSalesInvoiceAsync(salesInvoiceRequest);
+        if (!createResult.Success) {
+            Assert.Fail($"Failed to create sales invoice: {createResult.Error?.Detail}");
+        }
+        var createdSalesInvoice = createResult.Data!;
 
         // When: We update the sales invoice
         var updatedSalesInvoiceRequest = new SalesInvoiceUpdateRequest {
             Memo = "Updated memo"
         };
-        var updatedSalesInvoice = await _salesInvoiceClient.UpdateSalesInvoiceAsync(createdSalesInvoice.Id, updatedSalesInvoiceRequest);
+        var updateResult = await _salesInvoiceClient.UpdateSalesInvoiceAsync(createdSalesInvoice.Id, updatedSalesInvoiceRequest);
+        var updatedSalesInvoice = updateResult.Data!;
 
         // Then: The updated sales invoice should match the updated request
+        createResult.Success.ShouldBeTrue();
+        updateResult.Success.ShouldBeTrue();
         updatedSalesInvoice.ShouldNotBeNull();
         updatedSalesInvoice.Memo.ShouldBe(updatedSalesInvoiceRequest.Memo);
         updatedSalesInvoice.Lines!.Count().ShouldBe(1);
@@ -124,7 +156,11 @@ public class SalesInvoiceTests : BaseMollieApiTestClass, IDisposable {
     [Fact]
     public async Task DeleteSalesInvoiceAsync_DeletesSalesInvoice() {
         // If: We retrieve a list of sales invoices
-        ListResponse<SalesInvoiceResponse> response = await _salesInvoiceClient.GetSalesInvoiceListAsync();
+        var listResult = await _salesInvoiceClient.GetSalesInvoiceListAsync();
+        if (!listResult.Success) {
+            Assert.Fail($"Failed to retrieve sales invoice list: {listResult.Error?.Detail}");
+        }
+        var response = listResult.Data!;
 
         // When: We delete one of the sales invoices in the list
         var salesInvoiceToDelete = response.Items.FirstOrDefault(x => x.Status == SalesInvoiceStatus.Draft);
@@ -132,9 +168,10 @@ public class SalesInvoiceTests : BaseMollieApiTestClass, IDisposable {
             await _salesInvoiceClient.DeleteSalesInvoiceAsync(salesInvoiceToDelete.Id);
 
             // Then: Make sure the sales invoice is deleted
-            MollieApiException apiException = await Assert.ThrowsAsync<MollieApiException>(() =>
-                _salesInvoiceClient.GetSalesInvoiceAsync(salesInvoiceToDelete.Id));
-            apiException.Details.Status.ShouldBe((int)HttpStatusCode.NotFound);
+            var result = await _salesInvoiceClient.GetSalesInvoiceAsync(salesInvoiceToDelete.Id);
+            result.Success.ShouldBeFalse();
+            result.Error.ShouldNotBeNull();
+            result.Error.Status.ShouldBe((int)HttpStatusCode.NotFound);
         }
     }
 
@@ -149,8 +186,8 @@ public class SalesInvoiceTests : BaseMollieApiTestClass, IDisposable {
                 new SalesInvoiceLine {
                     Description = "Lego Batman",
                     Quantity = 1,
-                    VatRate = "21.00",
-                    UnitPrice = new Amount(Currency.EUR, 50m)
+                    VatRate = 21.00m,
+                    UnitPrice = new Amount(Currency.EUR, 50.00m)
                 }
             },
             RecipientIdentifier = Guid.NewGuid().ToString(),

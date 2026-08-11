@@ -26,10 +26,12 @@ namespace Mollie.Tests.Unit.Client {
             var customerClient = new CustomerClient("abcde", httpClient);
 
             // When: We send the request
-            CustomerResponse customerResponse = await customerClient.GetCustomerAsync(customerId, testModeParameter);
+            var result = await customerClient.GetCustomerAsync(customerId, testModeParameter);
+            CustomerResponse customerResponse = result.Data!;
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
+            result.Success.ShouldBeTrue();
             customerResponse.ShouldNotBeNull();
         }
 
@@ -51,7 +53,8 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
-            result.ShouldNotBeNull();
+            result.Success.ShouldBeTrue();
+            result.Data.ShouldNotBeNull();
         }
 
         [Theory]
@@ -74,7 +77,8 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
-            result.ShouldNotBeNull();
+            result.Success.ShouldBeTrue();
+            result.Data.ShouldNotBeNull();
         }
 
         [Fact]
@@ -180,7 +184,7 @@ namespace Mollie.Tests.Unit.Client {
             var customerClient = new CustomerClient("api-key", httpClient);
             var paymentRequest = new PaymentRequest()
             {
-                Amount = new Amount(Currency.EUR, 100),
+                Amount = new Amount(Currency.EUR, 100.00m),
                 Description = "Order #12345",
             };
 

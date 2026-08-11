@@ -13,7 +13,7 @@ public class PaymentRequestTests {
     [InlineData(PaymentMethod.CreditCard, typeof(CreditCardPaymentRequest))]
     [InlineData(PaymentMethod.PayPal, typeof(PayPalPaymentRequest))]
     public void CreatePaymentRequest(string paymentMethod, Type expectedType) {
-        var amount = new Amount(Currency.EUR, 50m);
+        var amount = new Amount(Currency.EUR, 50.00m);
         var description = "my-description";
         var paymentRequest = new PaymentRequest() {
             Amount = amount,

@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
 using Mollie.Api.Framework.Authentication.Abstract;
+using Mollie.Api.Models;
 using Mollie.Api.Models.Capture.Request;
 using Mollie.Api.Models.Capture.Response;
 using Mollie.Api.Models.List.Response;
@@ -23,7 +24,7 @@ namespace Mollie.Api.Client
             : base(options, mollieSecretManager, httpClient) {
         }
 
-        public async Task<CaptureResponse> GetCaptureAsync(
+        public async Task<MollieResult<CaptureResponse>> GetCaptureAsync(
             string paymentId, string captureId, bool testmode = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(paymentId), paymentId);
             ValidateRequiredUrlParameter(nameof(captureId), captureId);
@@ -33,13 +34,13 @@ namespace Mollie.Api.Client
                 .ConfigureAwait(false);
         }
 
-        public async Task<CaptureResponse> GetCaptureAsync(
+        public async Task<MollieResult<CaptureResponse>> GetCaptureAsync(
             UrlObjectLink<CaptureResponse> url, CancellationToken cancellationToken = default) {
             return await GetAsync(url, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<CaptureResponse>> GetCaptureListAsync(
+        public async Task<MollieResult<ListResponse<CaptureResponse>>> GetCaptureListAsync(
             string paymentId, bool testmode = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(paymentId), paymentId);
             var queryParameters = BuildQueryParameters(testmode: testmode);
@@ -49,12 +50,12 @@ namespace Mollie.Api.Client
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<CaptureResponse>> GetCaptureListAsync(UrlObjectLink<ListResponse<CaptureResponse>> url, CancellationToken cancellationToken = default) {
+        public async Task<MollieResult<ListResponse<CaptureResponse>>> GetCaptureListAsync(UrlObjectLink<ListResponse<CaptureResponse>> url, CancellationToken cancellationToken = default) {
             return await GetAsync(url, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<CaptureResponse> CreateCapture(string paymentId, CaptureRequest captureRequest, CancellationToken cancellationToken = default) {
+        public async Task<MollieResult<CaptureResponse>> CreateCapture(string paymentId, CaptureRequest captureRequest, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(paymentId), paymentId);
             return await PostAsync<CaptureResponse>(
                     $"payments/{paymentId}/captures", captureRequest,

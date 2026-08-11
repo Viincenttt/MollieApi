@@ -28,8 +28,9 @@ public class CapabilityClientTests {
 
         // Assert
         mockHttp.VerifyNoOutstandingRequest();
-        result.Count.ShouldBe(1);
-        var capability = result.Items[0];
+        result.Success.ShouldBeTrue();
+        result.Data.Count.ShouldBe(1);
+        var capability = result.Data.Items[0];
         capability.Resource.ShouldBe("capability");
         capability.Name.ShouldBe("payments");
         capability.Status.ShouldBe(CapabilityStatus.Pending);
@@ -44,7 +45,7 @@ public class CapabilityClientTests {
         requirement1.Links.Dashboard.Type.ShouldBe("text/html");
         var requirement2 = capability.Requirements.Skip(1).First();
         requirement2.Id.ShouldBe("bank-account");
-        requirement2.DueDate.ShouldBe(new DateTime(2024, 5, 14, 1, 29, 9, DateTimeKind.Utc));
+        requirement2.DueDate.ShouldBe(new DateTimeOffset(2024, 5, 14, 1, 29, 9, TimeSpan.Zero));
         requirement2.Status.ShouldBe(CapabilityRequirementStatus.PastDue);
         requirement2.Links.ShouldNotBeNull();
         requirement2.Links.Dashboard.Href.ShouldBe("https://my.mollie.com/dashboard/");

@@ -44,9 +44,10 @@ public class ProfileClientTests : BaseClientTests
 
         // Assert
         mockHttp.VerifyNoOutstandingRequest();
-        AssertDefaultProfileResponse(result);
-        result.Description.ShouldBe(profileRequest.Description);
-        result.CountriesOfActivity.ShouldBe(profileRequest.CountriesOfActivity);
+        result.Success.ShouldBeTrue();
+        AssertDefaultProfileResponse(result.Data!);
+        result.Data.Description.ShouldBe(profileRequest.Description);
+        result.Data.CountriesOfActivity.ShouldBe(profileRequest.CountriesOfActivity);
     }
 
     [Fact]
@@ -66,7 +67,8 @@ public class ProfileClientTests : BaseClientTests
 
         // Assert
         mockHttp.VerifyNoOutstandingRequest();
-        AssertDefaultProfileResponse(result);
+        result.Success.ShouldBeTrue();
+        AssertDefaultProfileResponse(result.Data!);
     }
 
     [Fact]
@@ -85,7 +87,8 @@ public class ProfileClientTests : BaseClientTests
 
         // Assert
         mockHttp.VerifyNoOutstandingRequest();
-        AssertDefaultProfileResponse(result);
+        result.Success.ShouldBeTrue();
+        AssertDefaultProfileResponse(result.Data!);
     }
 
     [Fact]
@@ -104,8 +107,9 @@ public class ProfileClientTests : BaseClientTests
 
         // Assert
         mockHttp.VerifyNoOutstandingRequest();
-        result.Count.ShouldBe(1);
-        var profile = result.Items[0];
+        result.Success.ShouldBeTrue();
+        result.Data.Count.ShouldBe(1);
+        var profile = result.Data.Items[0];
         profile.Resource.ShouldBe("profiles");
         profile.Id.ShouldBe("pfl_v9hTwCvYqw");
         profile.Mode.ShouldBe(Mode.Live);
@@ -116,7 +120,7 @@ public class ProfileClientTests : BaseClientTests
         profile.BusinessCategory.ShouldBe("OTHER_MERCHANDISE");
         profile.Status.ShouldBe(ProfileStatus.Verified);
         profile.Review!.Status.ShouldBe(ReviewStatus.Pending);
-        profile.CreatedAt.ShouldBe(DateTime.Parse("2018-03-20T09:28:37+00:00"));
+        profile.CreatedAt.ShouldBe(DateTimeOffset.Parse("2018-03-20T09:28:37+00:00"));
         profile.Links.ShouldNotBeNull();
         profile.Links.Self.Href.ShouldBe("https://api.mollie.com/v2/profiles/pfl_v9hTwCvYqw");
         profile.Links.Self.Type.ShouldBe("application/hal+json");
@@ -161,7 +165,8 @@ public class ProfileClientTests : BaseClientTests
 
         // Assert
         mockHttp.VerifyNoOutstandingRequest();
-        AssertDefaultProfileResponse(result);
+        result.Success.ShouldBeTrue();
+        AssertDefaultProfileResponse(result.Data!);
     }
 
     [Fact]
@@ -205,8 +210,9 @@ public class ProfileClientTests : BaseClientTests
 
         // Assert
         mockHttp.VerifyNoOutstandingRequest();
-        result.Resource.ShouldBe("method");
-        result.Id.ShouldBe(paymentMethod);
+        result.Success.ShouldBeTrue();
+        result.Data.Resource.ShouldBe("method");
+        result.Data.Id.ShouldBe(paymentMethod);
     }
 
     [Fact]
@@ -309,10 +315,11 @@ public class ProfileClientTests : BaseClientTests
 
         // Assert
         mockHttp.VerifyNoOutstandingRequest();
-        result.Resource.ShouldBe("issuer");
-        result.Id.ShouldBe(issuer);
-        result.Description.ShouldBe("FestivalCadeau Giftcard");
-        result.Status.ShouldBe("pending-issuer");
+        result.Success.ShouldBeTrue();
+        result.Data.Resource.ShouldBe("issuer");
+        result.Data.Id.ShouldBe(issuer);
+        result.Data.Description.ShouldBe("FestivalCadeau Giftcard");
+        result.Data.Status.ShouldBe("pending-issuer");
     }
 
     [Fact]

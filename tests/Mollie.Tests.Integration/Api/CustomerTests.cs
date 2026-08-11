@@ -3,15 +3,12 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Shouldly;
-using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Customer.Request;
 using Mollie.Api.Models.Customer.Response;
-using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Payment;
 using Mollie.Api.Models.Payment.Request;
-using Mollie.Api.Models.Payment.Response;
 using Mollie.Tests.Integration.Framework;
 using Xunit;
 
@@ -27,9 +24,11 @@ public class CustomerTests : BaseMollieApiTestClass, IDisposable {
     [Fact]
     public async Task CanRetrieveCustomerList() {
         // When: Retrieve customer list with default settings
-        ListResponse<CustomerResponse> response = await _customerClient.GetCustomerListAsync();
+        var result = await _customerClient.GetCustomerListAsync();
+        var response = result.Data!;
 
         // Then
+        result.Success.ShouldBeTrue();
         response.ShouldNotBeNull();
         response.Items.ShouldNotBeNull();
     }
@@ -40,9 +39,11 @@ public class CustomerTests : BaseMollieApiTestClass, IDisposable {
         int numberOfCustomers = 5;
 
         // When: Retrieve 5 customers
-        ListResponse<CustomerResponse> response = await _customerClient.GetCustomerListAsync(null, numberOfCustomers);
+        var result = await _customerClient.GetCustomerListAsync(null, numberOfCustomers);
+        var response = result.Data!;
 
         // Then
+        result.Success.ShouldBeTrue();
         numberOfCustomers.ShouldBe(response.Items.Count);
     }
 
@@ -64,7 +65,8 @@ public class CustomerTests : BaseMollieApiTestClass, IDisposable {
     [Fact]
     public async Task CanUpdateCustomer() {
         // If: We retrieve the customer list
-        ListResponse<CustomerResponse> response = await _customerClient.GetCustomerListAsync();
+        var listResult = await _customerClient.GetCustomerListAsync();
+        var response = listResult.Data!;
 
         // When: We update one of the customers in the list
         string customerIdToUpdate = response.Items.First().Id;
@@ -72,9 +74,12 @@ public class CustomerTests : BaseMollieApiTestClass, IDisposable {
         CustomerRequest updateParameters = new CustomerRequest() {
             Name = newCustomerName
         };
-        CustomerResponse result = await _customerClient.UpdateCustomerAsync(customerIdToUpdate, updateParameters);
+        var updateResult = await _customerClient.UpdateCustomerAsync(customerIdToUpdate, updateParameters);
+        var result = updateResult.Data!;
 
         // Then: Make sure the new name is updated
+        listResult.Success.ShouldBeTrue();
+        updateResult.Success.ShouldBeTrue();
         result.ShouldNotBeNull();
         result.Name.ShouldBe(newCustomerName);
     }
@@ -82,7 +87,8 @@ public class CustomerTests : BaseMollieApiTestClass, IDisposable {
     [Fact]
     public async Task CanDeleteCustomer() {
         // If: We retrieve the customer list
-        ListResponse<CustomerResponse> response = await _customerClient.GetCustomerListAsync();
+        var listResult = await _customerClient.GetCustomerListAsync();
+        var response = listResult.Data!;
 
         // When: We delete one of the customers in the list
         string customerIdToDelete = response.Items.First().Id;
@@ -90,8 +96,10 @@ public class CustomerTests : BaseMollieApiTestClass, IDisposable {
 
         // Then: Make sure its deleted after one second
         await Task.Delay(TimeSpan.FromSeconds(1));
-        MollieApiException apiException = await Assert.ThrowsAsync<MollieApiException>(() => _customerClient.GetCustomerAsync(customerIdToDelete));
-        apiException.Details.Status.ShouldBe((int)HttpStatusCode.Gone);
+        var result = await _customerClient.GetCustomerAsync(customerIdToDelete);
+        result.Success.ShouldBeFalse();
+        result.Error.ShouldNotBeNull();
+        result.Error.Status.ShouldBe((int)HttpStatusCode.Gone);
     }
 
     [Fact]
@@ -120,9 +128,11 @@ public class CustomerTests : BaseMollieApiTestClass, IDisposable {
         };
 
         // When: We try to retrieve the customer by Url object
-        CustomerResponse retrievedCustomer = await _customerClient.CreateCustomerAsync(customerRequest);
+        var result = await _customerClient.CreateCustomerAsync(customerRequest);
+        var retrievedCustomer = result.Data!;
 
         // Then: Make sure it's retrieved
+        result.Success.ShouldBeTrue();
         IsJsonResultEqual(customerRequest.Metadata, retrievedCustomer.Metadata).ShouldBeTrue();
     }
 
@@ -137,9 +147,11 @@ public class CustomerTests : BaseMollieApiTestClass, IDisposable {
         };
 
         // When: We try to retrieve the customer by Url object
-        CustomerResponse retrievedCustomer = await _customerClient.CreateCustomerAsync(customerRequest);
+        var result = await _customerClient.CreateCustomerAsync(customerRequest);
+        var retrievedCustomer = result.Data!;
 
         // Then: Make sure it's retrieved
+        result.Success.ShouldBeTrue();
         retrievedCustomer.Metadata.ShouldBe(customerRequest.Metadata);
     }
 
@@ -149,16 +161,18 @@ public class CustomerTests : BaseMollieApiTestClass, IDisposable {
         string name = "Smit";
         string email = "johnsmit@mollie.com";
         CustomerResponse customer = await CreateCustomer(name, email);
-        PaymentRequest paymentRequest = new PaymentRequest() {
-            Amount = new Amount(Currency.EUR, "100.00"),
+        var paymentRequest = new PaymentRequest {
+            Amount = new Amount(Currency.EUR, 100.00m),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl
         };
 
         // When: We create a payment request for this customer to Mollie
-        PaymentResponse paymentResponse = await _customerClient.CreateCustomerPayment(customer.Id, paymentRequest);
+        var result = await _customerClient.CreateCustomerPayment(customer.Id, paymentRequest);
+        var paymentResponse = result.Data!;
 
         // Then: Make sure the requested parameters match the response parameter values
+        result.Success.ShouldBeTrue();
         paymentResponse.ShouldNotBeNull();
         paymentResponse.CustomerId.ShouldBe(customer.Id);
     }
@@ -170,7 +184,8 @@ public class CustomerTests : BaseMollieApiTestClass, IDisposable {
             Locale = Locale.nl_NL
         };
 
-        return await _customerClient.CreateCustomerAsync(customerRequest);
+        var result = await _customerClient.CreateCustomerAsync(customerRequest);
+        return result.Data!;
     }
 
     public void Dispose()

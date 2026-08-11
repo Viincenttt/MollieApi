@@ -17,11 +17,19 @@ public class PaymentController : ControllerBase {
 
     [HttpPost]
     public async Task<ActionResult> Webhook([FromForm] string id) {
-        PaymentResponse payment = await _paymentClient.GetPaymentAsync(id);
-        _logger.LogInformation("Webhook called for PaymentId={PaymentId}, PaymentStatus={Status}",
-            id,
-            payment.Status);
+        var result = await _paymentClient.GetPaymentAsync(id);
+        if (result.Success) {
+            _logger.LogInformation("Webhook called for PaymentId={PaymentId}, PaymentStatus={Status}",
+                id,
+                result.Data.Status);
 
-        return Ok();
+            return Ok();
+        }
+        else {
+            _logger.LogError("Failed to retrieve payment for PaymentId={PaymentId}. Error: {Error}",
+                id,
+                result.Error);
+            return BadRequest(result.Error);
+        }
     }
 }

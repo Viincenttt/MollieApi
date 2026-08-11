@@ -1,4 +1,4 @@
-﻿﻿using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Mollie.Api.Models;
 using Mollie.Api.Models.List.Response;
@@ -8,7 +8,7 @@ using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Client.Abstract {
     public interface IPaymentMethodClient : IBaseMollieClient {
-        Task<PaymentMethodResponse> GetPaymentMethodAsync(
+        Task<MollieResult<PaymentMethodResponse>> GetPaymentMethodAsync(
             string paymentMethod,
             bool includeIssuers = false,
             string? locale = null,
@@ -17,7 +17,7 @@ namespace Mollie.Api.Client.Abstract {
             string? currency = null,
             CancellationToken cancellationToken = default);
 
-        Task<ListResponse<PaymentMethodResponse>> GetAllPaymentMethodListAsync(
+        Task<MollieResult<ListResponse<PaymentMethodResponse>>> GetAllPaymentMethodListAsync(
             string? locale = null,
             Amount? amount = null,
             bool includeIssuers = false,
@@ -26,7 +26,7 @@ namespace Mollie.Api.Client.Abstract {
             bool testmode = false,
             CancellationToken cancellationToken = default);
 
-        Task<ListResponse<PaymentMethodResponse>> GetPaymentMethodListAsync(
+        Task<MollieResult<ListResponse<PaymentMethodResponse>>> GetPaymentMethodListAsync(
             string? sequenceType = null,
             string? locale = null,
             Amount? amount = null,
@@ -38,7 +38,7 @@ namespace Mollie.Api.Client.Abstract {
             string? includeWallets = null,
             CancellationToken cancellationToken = default);
 
-        Task<PaymentMethodResponse> GetPaymentMethodAsync(UrlObjectLink<PaymentMethodResponse> url,
+        Task<MollieResult<PaymentMethodResponse>> GetPaymentMethodAsync(UrlObjectLink<PaymentMethodResponse> url,
             CancellationToken cancellationToken = default);
     }
 }

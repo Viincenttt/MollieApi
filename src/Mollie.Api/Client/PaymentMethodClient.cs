@@ -1,4 +1,5 @@
-﻿﻿using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,7 +26,7 @@ namespace Mollie.Api.Client
             : base(options, mollieSecretManager, httpClient) {
         }
 
-        public async Task<PaymentMethodResponse> GetPaymentMethodAsync(
+        public async Task<MollieResult<PaymentMethodResponse>> GetPaymentMethodAsync(
             string paymentMethod,
             bool includeIssuers = false,
             string? locale = null,
@@ -48,7 +49,7 @@ namespace Mollie.Api.Client
                 cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<PaymentMethodResponse>> GetAllPaymentMethodListAsync(
+        public async Task<MollieResult<ListResponse<PaymentMethodResponse>>> GetAllPaymentMethodListAsync(
             string? locale = null,
             Amount? amount = null,
             bool includeIssuers = false,
@@ -70,7 +71,7 @@ namespace Mollie.Api.Client
                 cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<PaymentMethodResponse>> GetPaymentMethodListAsync(
+        public async Task<MollieResult<ListResponse<PaymentMethodResponse>>> GetPaymentMethodListAsync(
             string? sequenceType = null,
             string? locale = null,
             Amount? amount = null,
@@ -98,7 +99,7 @@ namespace Mollie.Api.Client
                 cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<PaymentMethodResponse> GetPaymentMethodAsync(
+        public async Task<MollieResult<PaymentMethodResponse>> GetPaymentMethodAsync(
             UrlObjectLink<PaymentMethodResponse> url,
             CancellationToken cancellationToken = default) {
             return await GetAsync(url, cancellationToken: cancellationToken).ConfigureAwait(false);
@@ -121,7 +122,7 @@ namespace Mollie.Api.Client
             result.AddValueIfNotNullOrEmpty(nameof(sequenceType), sequenceType?.ToLower());
             result.AddValueIfNotNullOrEmpty(nameof(locale), locale);
             result.AddValueIfNotNullOrEmpty("amount[currency]", amount?.Currency);
-            result.AddValueIfNotNullOrEmpty("amount[value]", amount?.Value);
+            result.AddValueIfNotNullOrEmpty("amount[value]", amount?.Value.ToString(CultureInfo.InvariantCulture));
             result.AddValueIfNotNullOrEmpty("include", BuildIncludeParameter(includeIssuers, includePricing));
             result.AddValueIfNotNullOrEmpty(nameof(resource), resource?.ToString()?.ToLower());
             result.AddValueIfNotNullOrEmpty(nameof(currency), currency);

@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Shouldly;
-using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Capture;
@@ -36,7 +35,8 @@ public class CaptureTests : BaseMollieApiTestClass, IDisposable {
             Method = PaymentMethod.CreditCard,
             CaptureMode = CaptureMode.Manual
         };
-        var payment = await _paymentClient.CreatePaymentAsync(paymentRequest);
+        var paymentResult = await _paymentClient.CreatePaymentAsync(paymentRequest);
+        var payment = paymentResult.Data!;
 
         // When: We create a capture for the payment
         var captureRequest = new CaptureRequest
@@ -45,9 +45,12 @@ public class CaptureTests : BaseMollieApiTestClass, IDisposable {
             Description = "my capture",
             Metadata = "my-metadata string"
         };
-        var capture = await _captureClient.CreateCapture(payment.Id, captureRequest);
+        var captureResult = await _captureClient.CreateCapture(payment.Id, captureRequest);
+        var capture = captureResult.Data!;
 
         // Then: The capture should be created
+        paymentResult.Success.ShouldBeTrue();
+        captureResult.Success.ShouldBeTrue();
         capture.Status.ShouldBe("pending");
         capture.PaymentId.ShouldBe(payment.Id);
         capture.Resource.ShouldBe("capture");
@@ -66,7 +69,8 @@ public class CaptureTests : BaseMollieApiTestClass, IDisposable {
             Method = PaymentMethod.CreditCard,
             CaptureMode = CaptureMode.Manual
         };
-        var payment = await _paymentClient.CreatePaymentAsync(paymentRequest);
+        var paymentResult = await _paymentClient.CreatePaymentAsync(paymentRequest);
+        var payment = paymentResult.Data!;
         var captureRequest = new CaptureRequest
         {
             Amount = new Amount(Currency.EUR, 0.01m),
@@ -76,9 +80,12 @@ public class CaptureTests : BaseMollieApiTestClass, IDisposable {
         await _captureClient.CreateCapture(payment.Id, captureRequest);
 
         // When: we retrieve the captures of the payment
-        var captureList = await _captureClient.GetCaptureListAsync(payment.Id);
+        var captureListResult = await _captureClient.GetCaptureListAsync(payment.Id);
+        var captureList = captureListResult.Data!;
 
         // Then
+        paymentResult.Success.ShouldBeTrue();
+        captureListResult.Success.ShouldBeTrue();
         captureList.Count.ShouldBe(1);
         var capture = captureList.Items.Single();
         capture.Status.ShouldBe("succeeded");

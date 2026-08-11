@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using Mollie.Api.Client;
 using Mollie.Api.Models.Payment;
 using Mollie.Api.Models.Profile.Response;
@@ -9,8 +8,6 @@ using System.Threading.Tasks;
 using Shouldly;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
-using Mollie.Api.Models.List.Response;
-using Mollie.Api.Models.PaymentMethod.Response;
 using Mollie.Api.Models.Profile.Request;
 using Xunit;
 
@@ -28,9 +25,11 @@ public class ProfileTests : BaseMollieApiTestClass, IDisposable {
         // Given
 
         // When: We retrieve the current profile from the mollie API
-        ProfileResponse profileResponse = await _profileClient.GetCurrentProfileAsync();
+        var result = await _profileClient.GetCurrentProfileAsync();
+        var profileResponse = result.Data!;
 
         // Then: Make sure we get a valid response
+        result.Success.ShouldBeTrue();
         profileResponse.ShouldNotBeNull();
         profileResponse.Id.ShouldNotBeNullOrEmpty();
         profileResponse.Email.ShouldNotBeNullOrEmpty();
@@ -42,9 +41,11 @@ public class ProfileTests : BaseMollieApiTestClass, IDisposable {
         // Given
 
         // When: We enable a payment method for the current profile
-        PaymentMethodResponse paymentMethodResponse = await _profileClient.EnablePaymentMethodAsync(PaymentMethod.CreditCard);
+        var result = await _profileClient.EnablePaymentMethodAsync(PaymentMethod.CreditCard);
+        var paymentMethodResponse = result.Data!;
 
         // Then: Make sure a payment method is returned
+        result.Success.ShouldBeTrue();
         paymentMethodResponse.ShouldNotBeNull();
         paymentMethodResponse.Id.ShouldBe(PaymentMethod.CreditCard);
     }
@@ -53,14 +54,18 @@ public class ProfileTests : BaseMollieApiTestClass, IDisposable {
     public async Task EnablePaymentMethodAsync_WhenEnablingPaymentMethodForProfile_PaymentMethodIsReturned() {
         // Given: We retrieve the profile from the API
         ProfileClient profileClient = new ProfileClient("abcde"); // Set access token
-        ListResponse<ProfileResponse> allProfiles = await profileClient.GetProfileListAsync();
+        var listResult = await profileClient.GetProfileListAsync();
+        var allProfiles = listResult.Data!;
         if (allProfiles.Items.Count > 0) {
             ProfileResponse profileToTestWith = allProfiles.Items.First();
 
             // When: We enable a payment method for the given profile
-            PaymentMethodResponse paymentMethodResponse = await profileClient.EnablePaymentMethodAsync(profileToTestWith.Id, PaymentMethod.Ideal);
+            var result = await profileClient.EnablePaymentMethodAsync(profileToTestWith.Id, PaymentMethod.Ideal);
+            var paymentMethodResponse = result.Data!;
 
             // Then: Make sure a payment method is returned
+            listResult.Success.ShouldBeTrue();
+            result.Success.ShouldBeTrue();
             paymentMethodResponse.ShouldNotBeNull();
             paymentMethodResponse.Id.ShouldBeNullOrEmpty();
         }
@@ -80,9 +85,11 @@ public class ProfileTests : BaseMollieApiTestClass, IDisposable {
         ProfileClient profileClient = new ProfileClient("accesstoken"); // Set access token
 
         // When: We create a new profile
-        ProfileResponse profileResponse = await profileClient.CreateProfileAsync(profileRequest);
+        var result = await profileClient.CreateProfileAsync(profileRequest);
+        var profileResponse = result.Data!;
 
         // Then: Make sure the profile that is created matched the profile request
+        result.Success.ShouldBeTrue();
         profileResponse.ShouldNotBeNull();
     }
 
