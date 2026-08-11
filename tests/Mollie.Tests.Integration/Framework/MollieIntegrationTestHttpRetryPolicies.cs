@@ -1,26 +1,27 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Http.Resilience;
 using Polly;
 
 namespace Mollie.Tests.Integration.Framework;
 
 public static class MollieIntegrationTestHttpRetryPolicies {
 
-    public static IAsyncPolicy<HttpResponseMessage> TooManyRequestRetryPolicy() {
-        var retryPolicy = Policy<HttpResponseMessage>
-            .HandleResult(r => r?.Headers?.RetryAfter != null)
-            .WaitAndRetryAsync(
-                3,
-                sleepDurationProvider: (_, response, _) =>
-                    response.Result.Headers.RetryAfter?.Delta?.Add(TimeSpan.FromSeconds(1)) ?? TimeSpan.FromSeconds(5),
-                onRetryAsync: (response, _, _, _) => {
+    public static Action<ResiliencePipelineBuilder<HttpResponseMessage>> TooManyRequestRetryPolicy() {
+        return builder => {
+            builder.AddRetry(new HttpRetryStrategyOptions {
+                MaxRetryAttempts = 3,
+                UseJitter = false,
+                BackoffType = DelayBackoffType.Constant,
+                Delay = TimeSpan.FromSeconds(1),
+                ShouldHandle = new PredicateBuilder<HttpResponseMessage>().HandleResult(response => response?.Headers?.RetryAfter != null),
+                OnRetry = async outcome => {
                     // If we send a retry with the same idempotency key, we always get a 429 back...
-                    response.Result.RequestMessage?.Headers.Add("Idempotency-Key", Guid.NewGuid().ToString());
-                    return Task.CompletedTask;
+                    outcome.Outcome.Result?.RequestMessage?.Headers.Add("Idempotency-Key", Guid.NewGuid().ToString());
+                    await Task.CompletedTask;
                 }
-            );
-
-        return retryPolicy;
+            });
+        };
     }
 }
