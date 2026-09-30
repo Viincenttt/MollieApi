@@ -6,11 +6,13 @@
 [![GitHub last commit](https://img.shields.io/github/last-commit/Viincenttt/MollieApi)](https://github.com/Viincenttt/MollieApi)
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/m/Viincenttt/MollieApi)](https://github.com/Viincenttt/MollieApi/graphs/commit-activity)
 [![open issues](https://img.shields.io/github/issues/Viincenttt/MollieApi)](https://github.com/Viincenttt/MollieApi/issues)
-[![Read the Wiki](https://img.shields.io/badge/docs-Wiki-blue)](https://github.com/Viincenttt/MollieApi/wiki)
+[![Read the docs](https://img.shields.io/badge/docs-GitHub-blue)](https://github.com/Viincenttt/MollieApi/tree/development/docs)
 
 Easily integrate the [Mollie payment provider](https://www.mollie.com) into your .NET application.
 
-Full documentation of this library is available on the [Wiki](https://github.com/Viincenttt/MollieApi/wiki) — including usage examples, API references, and integration tips.
+Full documentation of this library is available in the [docs folder](https://github.com/Viincenttt/MollieApi/tree/development/docs) — including usage examples, API references, and integration tips.
+
+> ⬆️ **Upgrading from v4?** Version 5 contains breaking changes. Follow the [migration guide](https://github.com/Viincenttt/MollieApi/blob/development/docs/23.-Migration-guide-v4-to-v5.md) to update your code.
 
 Mollie offers excellent [API documentation](https://docs.mollie.com/) that we highly recommend reviewing before using this library. If you encounter any issues or have feature requests, feel free to [open an issue](https://github.com/Viincenttt/MollieApi/issues).
 
@@ -46,12 +48,13 @@ Your support helps me keep improving the library and providing integration help 
 ## 📖 Full Documentation
 Looking for the full API docs, usage examples, and advanced guides?
 
-👉 **Check out the full Wiki here:**
-➡️ [https://github.com/Viincenttt/MollieApi/wiki](https://github.com/Viincenttt/MollieApi/wiki)
+👉 **Check out the full documentation here:**
+➡️ [https://github.com/Viincenttt/MollieApi/tree/development/docs](https://github.com/Viincenttt/MollieApi/tree/development/docs)
 You'll find:
 - Getting started walkthroughs
 - All supported APIs and code samples
 - Best practices for integration
+- The [v4 to v5 migration guide](https://github.com/Viincenttt/MollieApi/blob/development/docs/23.-Migration-guide-v4-to-v5.md)
 
 ---
 
@@ -130,7 +133,7 @@ public Task<ActionResult> WebhookWithSpecificType([FromMollieWebhook] FullWebhoo
 }
 ```
 
-For more information about webhooks, take a look at the [full webhook documentation](https://github.com/Viincenttt/MollieApi/wiki/01.-Getting-started#webhooks) on the Wiki page.
+For more information about webhooks, take a look at the [full webhook documentation](https://github.com/Viincenttt/MollieApi/blob/development/docs/01.-Getting-started.md#webhooks).
 
 ### 🧪 Blazor Example Project
 Want to see the library in action? Check out the full-featured .NET Blazor example project, which demonstrates real-world usage of several APIs:
@@ -151,32 +154,32 @@ Want to see the library in action? Check out the full-featured .NET Blazor examp
 
 ## 📦 Supported API's
 This library currently supports the following API's:
-- [Payment API](https://github.com/Viincenttt/MollieApi/wiki/02.-Payment-API)
-- [PaymentMethod API](https://github.com/Viincenttt/MollieApi/wiki/03.-Payment-method-API)
-- [PaymentLink API](https://github.com/Viincenttt/MollieApi/wiki/14.-Payment-link-Api)
-- [Customer API](https://github.com/Viincenttt/MollieApi/wiki/05.-Customer-API)
-- [Mandate API](https://github.com/Viincenttt/MollieApi/wiki/06.-Mandate-API)
-- [Subscription API](https://github.com/Viincenttt/MollieApi/wiki/07.-Subscription-API)
-- [Refund API](https://github.com/Viincenttt/MollieApi/wiki/04.-Refund-API)
-- [Connect API](https://github.com/Viincenttt/MollieApi/wiki/10.-Connect-Api)
+- [Payment API](https://github.com/Viincenttt/MollieApi/blob/development/docs/02.-Payment-API.md)
+- [PaymentMethod API](https://github.com/Viincenttt/MollieApi/blob/development/docs/03.-Payment-method-API.md)
+- [PaymentLink API](https://github.com/Viincenttt/MollieApi/blob/development/docs/14.-Payment-link-Api.md)
+- [Customer API](https://github.com/Viincenttt/MollieApi/blob/development/docs/05.-Customer-API.md)
+- [Mandate API](https://github.com/Viincenttt/MollieApi/blob/development/docs/06.-Mandate-API.md)
+- [Subscription API](https://github.com/Viincenttt/MollieApi/blob/development/docs/07.-Subscription-API.md)
+- [Refund API](https://github.com/Viincenttt/MollieApi/blob/development/docs/04.-Refund-API.md)
+- [Connect API](https://github.com/Viincenttt/MollieApi/blob/development/docs/10.-Connect-Api.md)
 - Chargeback API (documentation coming soon)
 - Invoice API (documentation coming soon)
 - Permissions API (documentation coming soon)
-- [Profile API](https://github.com/Viincenttt/MollieApi/wiki/11.-Profile-Api)
-- [Organizations API](https://github.com/Viincenttt/MollieApi/wiki/09.-Organization-API)
-- [Order API](https://github.com/Viincenttt/MollieApi/wiki/08.-Order-API)
-- [Capture API](https://github.com/Viincenttt/MollieApi/wiki/12.-Captures-API)
-- [Onboarding API](https://github.com/Viincenttt/MollieApi/wiki/13.-Onboarding-Api)
-- [Balances API](https://github.com/Viincenttt/MollieApi/wiki/15.-Balances-Api)
-- Terminal API (documentation coming soon)
-- ClientLink API (documentation coming soon)
-- Wallet API (documentation coming soon)
+- [Profile API](https://github.com/Viincenttt/MollieApi/blob/development/docs/11.-Profile-Api.md)
+- [Organizations API](https://github.com/Viincenttt/MollieApi/blob/development/docs/09.-Organization-API.md)
+- [Order API](https://github.com/Viincenttt/MollieApi/blob/development/docs/08.-Order-API.md)
+- [Capture API](https://github.com/Viincenttt/MollieApi/blob/development/docs/12.-Captures-API.md)
+- [Onboarding API](https://github.com/Viincenttt/MollieApi/blob/development/docs/13.-Onboarding-Api.md)
+- [Balances API](https://github.com/Viincenttt/MollieApi/blob/development/docs/15.-Balances-Api.md)
+- [Terminal API](https://github.com/Viincenttt/MollieApi/blob/development/docs/16.-Terminal-Api.md)
+- [ClientLink API](https://github.com/Viincenttt/MollieApi/blob/development/docs/17.-Client-Link-Api.md)
+- [Wallet API](https://github.com/Viincenttt/MollieApi/blob/development/docs/18.-Wallet-Api.md)
 - Client API (documentation coming soon)
 - Capability API (documentation coming soon)
-- [Webhooks API](https://github.com/Viincenttt/MollieApi/wiki/19.-Webhook-Api)
-- [WebhooksEvents API](https://github.com/Viincenttt/MollieApi/wiki/20.-Webhook-Api)
-- [Balance transfer API](https://github.com/Viincenttt/MollieApi/wiki/21.-Balance-transfer-Api)
-- [Payout API](https://github.com/Viincenttt/MollieApi/wiki/22.-Payout-API)
+- [Webhooks API](https://github.com/Viincenttt/MollieApi/blob/development/docs/19.-Webhook-Api.md)
+- [WebhooksEvents API](https://github.com/Viincenttt/MollieApi/blob/development/docs/20.-Webhook-Api.md)
+- [Balance transfer API](https://github.com/Viincenttt/MollieApi/blob/development/docs/21.-Balance-Transfer-API.md)
+- [Payout API](https://github.com/Viincenttt/MollieApi/blob/development/docs/22.-Payout-API.md)
 
 ---
 
