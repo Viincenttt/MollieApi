@@ -230,15 +230,21 @@ namespace Mollie.Api.Client {
 
         private MollieErrorMessage ParseMollieErrorMessage(HttpStatusCode responseStatusCode, string responseBody) {
             try {
-                return _jsonConverterService.Deserialize<MollieErrorMessage>(responseBody)!;
+                // A response body that contains the JSON literal null is deserialized to null
+                return _jsonConverterService.Deserialize<MollieErrorMessage>(responseBody)
+                       ?? CreateUnknownErrorMessage(responseStatusCode, responseBody);
             }
             catch (JsonException) {
-                return new MollieErrorMessage {
-                    Title = "Unknown error",
-                    Status = (int)responseStatusCode,
-                    Detail = responseBody
-                };
+                return CreateUnknownErrorMessage(responseStatusCode, responseBody);
             }
+        }
+
+        private static MollieErrorMessage CreateUnknownErrorMessage(HttpStatusCode responseStatusCode, string responseBody) {
+            return new MollieErrorMessage {
+                Title = "Unknown error",
+                Status = (int)responseStatusCode,
+                Detail = responseBody
+            };
         }
 
         protected void ValidateRequiredUrlParameter(string parameterName, string parameterValue) {

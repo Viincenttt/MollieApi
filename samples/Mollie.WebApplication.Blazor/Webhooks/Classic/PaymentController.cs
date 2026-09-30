@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Net;
+using Microsoft.AspNetCore.Mvc;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models.Payment.Response;
 
@@ -25,11 +26,19 @@ public class PaymentController : ControllerBase {
 
             return Ok();
         }
-        else {
-            _logger.LogError("Failed to retrieve payment for PaymentId={PaymentId}. Error: {Error}",
-                id,
-                result.Error);
-            return BadRequest(result.Error);
+
+        if (result.HttpStatusCode == HttpStatusCode.NotFound) {
+            // The webhook URL is public, so anyone can call it with a made-up id. Respond with 200 OK, so the
+            // caller does not learn whether the id exists and Mollie does not keep retrying an unknown payment
+            _logger.LogWarning("Webhook called for unknown PaymentId={PaymentId}", id);
+            return Ok();
         }
+
+        // Any other failure is likely temporary. Respond with an error status code without details, so Mollie
+        // calls the webhook again later
+        _logger.LogError("Failed to retrieve payment for PaymentId={PaymentId}. Error: {Error}",
+            id,
+            result.Error);
+        return StatusCode(StatusCodes.Status500InternalServerError);
     }
 }

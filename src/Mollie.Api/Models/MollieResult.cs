@@ -12,6 +12,7 @@ namespace Mollie.Api.Models {
         /// <summary>
         /// Indicates whether the request was successful.
         /// </summary>
+        [MemberNotNullWhen(false, nameof(Error))]
         public virtual bool Success { get; init; }
 
         /// <summary>
