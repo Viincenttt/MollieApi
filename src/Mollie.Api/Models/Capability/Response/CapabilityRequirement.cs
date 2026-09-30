@@ -19,7 +19,7 @@ public record CapabilityRequirement {
     /// <summary>
     /// Due date until the requirement must be fulfilled, if any
     /// </summary>
-    public DateTime? DueDate { get; set; }
+    public DateTimeOffset? DueDate { get; set; }
 
     /// <summary>
     /// Related links

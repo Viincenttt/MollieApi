@@ -23,7 +23,7 @@ namespace Mollie.Api.Models.Subscription.Response {
         /// <summary>
         ///  The subscription's date and time of creation, in ISO 8601 format.
         /// </summary>
-        public required DateTime CreatedAt { get; set; }
+        public required DateTimeOffset CreatedAt { get; set; }
 
         /// <summary>
         /// The subscription's current status, depends on whether the customer has a pending, valid or invalid mandate.
@@ -54,13 +54,23 @@ namespace Mollie.Api.Models.Subscription.Response {
         /// <summary>
         /// The start date of the subscription in yyyy-mm-dd format.
         /// </summary>
+#if NET8_0_OR_GREATER
+        public DateOnly? StartDate { get; set; }
+#else
+        [JsonConverter(typeof(DateJsonConverter))]
         public DateTime? StartDate { get; set; }
+#endif
 
         /// <summary>
         /// The date of the next scheduled payment in YYYY-MM-DD format. When there will be no next payment, for example
         /// when the subscription has ended, this parameter will not be returned.
         /// </summary>
+#if NET8_0_OR_GREATER
+        public DateOnly? NextPaymentDate { get; set; }
+#else
+        [JsonConverter(typeof(DateJsonConverter))]
         public DateTime? NextPaymentDate { get; set; }
+#endif
 
         /// <summary>
         /// A description unique per customer. This will be included in the payment description along with the charge date in
@@ -83,7 +93,7 @@ namespace Mollie.Api.Models.Subscription.Response {
         /// <summary>
         /// The subscription's date of cancellation, in ISO 8601 format.
         /// </summary>
-        public DateTime? CanceledAt { get; set; }
+        public DateTimeOffset? CanceledAt { get; set; }
 
         /// <summary>
         /// The URL Mollie will call as soon a payment status change takes place.

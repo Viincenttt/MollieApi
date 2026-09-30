@@ -18,8 +18,12 @@ namespace Mollie.Api.Models.Mandate.Request {
         /// <summary>
         /// Optional - The date when the mandate was signed.
         /// </summary>
+#if NET8_0_OR_GREATER
+        public DateOnly? SignatureDate { get; set; }
+#else
         [JsonConverter(typeof(DateJsonConverter))]
         public DateTime? SignatureDate { get; set; }
+#endif
 
         /// <summary>
         /// Optional - A custom reference

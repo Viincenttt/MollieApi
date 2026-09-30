@@ -36,9 +36,11 @@ public class ClientLinkClientTests : BaseClientTests
         };
 
         // When: We send the request
-        ClientLinkResponse response = await clientLinkClient.CreateClientLinkAsync(request);
+        var result = await clientLinkClient.CreateClientLinkAsync(request);
+        ClientLinkResponse response = result.Data!;
 
         // Then
+        result.Success.ShouldBeTrue();
         response.Id.ShouldBe(clientLinkId);
         response.Links.ClientLink.Href.ShouldBe(clientLinkUrl);
         mockHttp.VerifyNoOutstandingRequest();

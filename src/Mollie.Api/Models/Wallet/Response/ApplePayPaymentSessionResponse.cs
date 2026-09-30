@@ -5,9 +5,9 @@ using System.Text.Json.Serialization;
 namespace Mollie.Api.Models.Wallet.Response {
     public record ApplePayPaymentSessionResponse {
         [JsonConverter(typeof(MicrosecondEpochConverter))]
-        public required DateTime EpochTimestamp { get; set; }
+        public required DateTimeOffset EpochTimestamp { get; set; }
         [JsonConverter(typeof(MicrosecondEpochConverter))]
-        public required DateTime ExpiresAt { get; set; }
+        public required DateTimeOffset ExpiresAt { get; set; }
         public required string MerchantSessionIdentifier { get; set; }
         public required string Nonce { get; set; }
         public required string MerchantIdentifier { get; set; }

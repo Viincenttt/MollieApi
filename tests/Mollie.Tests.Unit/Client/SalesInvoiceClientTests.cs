@@ -33,8 +33,8 @@ public class SalesInvoiceClientTests : BaseClientTests {
                 new SalesInvoiceLine {
                     Description = "LEGO 4440 Forest Police Station",
                     Quantity = 1,
-                    VatRate = "21.00",
-                    UnitPrice = new Amount("89.00", "EUR")
+                    VatRate = 21.00m,
+                    UnitPrice = new Amount("EUR", 89.00m)
                 }
             ]
         };
@@ -48,21 +48,22 @@ public class SalesInvoiceClientTests : BaseClientTests {
 
         // Then: We should get a valid response
         mockHttp.VerifyNoOutstandingExpectation();
-        result.Id.ShouldBe("invoice_4Y0eZitmBnQ6IDoMqZQKh");
-        result.Status.ShouldBe(SalesInvoiceStatus.Draft);
-        result.Currency.ShouldBe(Currency.EUR);
-        result.Lines.ShouldNotBeEmpty();
-        var orderLine = result.Lines.Single();
+        result.Success.ShouldBeTrue();
+        result.Data.Id.ShouldBe("invoice_4Y0eZitmBnQ6IDoMqZQKh");
+        result.Data.Status.ShouldBe(SalesInvoiceStatus.Draft);
+        result.Data.Currency.ShouldBe(Currency.EUR);
+        result.Data.Lines.ShouldNotBeEmpty();
+        var orderLine = result.Data.Lines.Single();
         orderLine.Description.ShouldBe("LEGO 4440 Forest Police Station");
         orderLine.Quantity.ShouldBe(1);
-        orderLine.VatRate.ShouldBe("21.00");
-        orderLine.UnitPrice.Value.ShouldBe("89.00");
+        orderLine.VatRate.ShouldBe(21.00m);
+        orderLine.UnitPrice.Value.ShouldBe(89.00m);
         orderLine.UnitPrice.Currency.ShouldBe(Currency.EUR);
         orderLine.Discount.ShouldBeNull();
-        result.AmountDue.Value.ShouldBe("107.69");
-        result.AmountDue.Currency.ShouldBe(Currency.EUR);
-        result.DiscountedSubtotalAmount.Value.ShouldBe("89.00");
-        result.DiscountedSubtotalAmount.Currency.ShouldBe(Currency.EUR);
+        result.Data.AmountDue.Value.ShouldBe(107.69m);
+        result.Data.AmountDue.Currency.ShouldBe(Currency.EUR);
+        result.Data.DiscountedSubtotalAmount.Value.ShouldBe(89.00m);
+        result.Data.DiscountedSubtotalAmount.Currency.ShouldBe(Currency.EUR);
     }
 
     [Fact]
@@ -79,21 +80,22 @@ public class SalesInvoiceClientTests : BaseClientTests {
 
         // Then: The response should match the expected data
         mockHttp.VerifyNoOutstandingExpectation();
-        result.Id.ShouldBe(salesInvoiceId);
-        result.Status.ShouldBe(SalesInvoiceStatus.Draft);
-        result.Currency.ShouldBe(Currency.EUR);
-        result.Lines.ShouldNotBeEmpty();
-        var orderLine = result.Lines.Single();
+        result.Success.ShouldBeTrue();
+        result.Data.Id.ShouldBe(salesInvoiceId);
+        result.Data.Status.ShouldBe(SalesInvoiceStatus.Draft);
+        result.Data.Currency.ShouldBe(Currency.EUR);
+        result.Data.Lines.ShouldNotBeEmpty();
+        var orderLine = result.Data.Lines.Single();
         orderLine.Description.ShouldBe("LEGO 4440 Forest Police Station");
         orderLine.Quantity.ShouldBe(1);
-        orderLine.VatRate.ShouldBe("21.00");
-        orderLine.UnitPrice.Value.ShouldBe("89.00");
+        orderLine.VatRate.ShouldBe(21.00m);
+        orderLine.UnitPrice.Value.ShouldBe(89.00m);
         orderLine.UnitPrice.Currency.ShouldBe(Currency.EUR);
         orderLine.Discount.ShouldBeNull();
-        result.AmountDue.Value.ShouldBe("107.69");
-        result.AmountDue.Currency.ShouldBe(Currency.EUR);
-        result.DiscountedSubtotalAmount.Value.ShouldBe("89.00");
-        result.DiscountedSubtotalAmount.Currency.ShouldBe(Currency.EUR);
+        result.Data.AmountDue.Value.ShouldBe(107.69m);
+        result.Data.AmountDue.Currency.ShouldBe(Currency.EUR);
+        result.Data.DiscountedSubtotalAmount.Value.ShouldBe(89.00m);
+        result.Data.DiscountedSubtotalAmount.Currency.ShouldBe(Currency.EUR);
     }
 
     [Fact]

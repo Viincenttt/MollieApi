@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
 using Mollie.Api.Framework.Authentication.Abstract;
+using Mollie.Api.Models;
 using Mollie.Api.Models.Balance.Response;
 using Mollie.Api.Models.Balance.Response.BalanceReport;
 using Mollie.Api.Models.Balance.Response.BalanceTransaction;
@@ -24,22 +26,22 @@ namespace Mollie.Api.Client {
             : base(options, mollieSecretManager, httpClient) {
         }
 
-        public async Task<BalanceResponse> GetBalanceAsync(string balanceId, CancellationToken cancellationToken = default) {
+        public async Task<MollieResult<BalanceResponse>> GetBalanceAsync(string balanceId, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(balanceId), balanceId);
             return await GetAsync<BalanceResponse>($"balances/{balanceId}", cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<BalanceResponse> GetBalanceAsync(UrlObjectLink<BalanceResponse> url, CancellationToken cancellationToken = default) {
+        public async Task<MollieResult<BalanceResponse>> GetBalanceAsync(UrlObjectLink<BalanceResponse> url, CancellationToken cancellationToken = default) {
             return await GetAsync(url, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<BalanceResponse> GetPrimaryBalanceAsync(CancellationToken cancellationToken = default) {
+        public async Task<MollieResult<BalanceResponse>> GetPrimaryBalanceAsync(CancellationToken cancellationToken = default) {
             return await GetAsync<BalanceResponse>("balances/primary", cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<BalanceResponse>> GetBalanceListAsync(
+        public async Task<MollieResult<ListResponse<BalanceResponse>>> GetBalanceListAsync(
             string? from = null, int? limit = null, string? currency = null, CancellationToken cancellationToken = default) {
             var queryParameters = BuildListBalanceQueryParameters(currency);
             return await GetListAsync<ListResponse<BalanceResponse>>(
@@ -47,13 +49,18 @@ namespace Mollie.Api.Client {
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<BalanceResponse>> GetBalanceListAsync(
+        public async Task<MollieResult<ListResponse<BalanceResponse>>> GetBalanceListAsync(
             UrlObjectLink<ListResponse<BalanceResponse>> url, CancellationToken cancellationToken = default) {
             return await GetAsync(url, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<BalanceReportResponse> GetBalanceReportAsync(
+#if NET8_0_OR_GREATER
+        public async Task<MollieResult<BalanceReportResponse>> GetBalanceReportAsync(
+            string balanceId, DateOnly from, DateOnly until, string? grouping = null, CancellationToken cancellationToken = default) {
+#else
+        public async Task<MollieResult<BalanceReportResponse>> GetBalanceReportAsync(
             string balanceId, DateTime from, DateTime until, string? grouping = null, CancellationToken cancellationToken = default) {
+#endif
             ValidateRequiredUrlParameter(nameof(balanceId), balanceId);
             var queryParameters = BuildGetBalanceReportQueryParameters(from, until, grouping);
             return await GetAsync<BalanceReportResponse>(
@@ -61,15 +68,20 @@ namespace Mollie.Api.Client {
                 .ConfigureAwait(false);
         }
 
-        public async Task<BalanceReportResponse> GetPrimaryBalanceReportAsync(
+#if NET8_0_OR_GREATER
+        public async Task<MollieResult<BalanceReportResponse>> GetPrimaryBalanceReportAsync(
+            DateOnly from, DateOnly until, string? grouping = null, CancellationToken cancellationToken = default) {
+#else
+        public async Task<MollieResult<BalanceReportResponse>> GetPrimaryBalanceReportAsync(
             DateTime from, DateTime until, string? grouping = null, CancellationToken cancellationToken = default) {
+#endif
             var queryParameters = BuildGetBalanceReportQueryParameters(from, until, grouping);
             return await GetAsync<BalanceReportResponse>(
                 $"balances/primary/report{queryParameters.ToQueryString()}", cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<BalanceTransactionResponse>> GetBalanceTransactionListAsync(
+        public async Task<MollieResult<ListResponse<BalanceTransactionResponse>>> GetBalanceTransactionListAsync(
             string balanceId, string? from = null, int? limit = null, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(balanceId), balanceId);
             return await GetListAsync<ListResponse<BalanceTransactionResponse>>(
@@ -77,22 +89,26 @@ namespace Mollie.Api.Client {
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<BalanceTransactionResponse>> GetPrimaryBalanceTransactionListAsync(
+        public async Task<MollieResult<ListResponse<BalanceTransactionResponse>>> GetPrimaryBalanceTransactionListAsync(
             string? from = null, int? limit = null, CancellationToken cancellationToken = default) {
             return await GetListAsync<ListResponse<BalanceTransactionResponse>>(
                     $"balances/primary/transactions", from, limit, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<BalanceTransactionResponse>> GetBalanceTransactionListAsync(
+        public async Task<MollieResult<ListResponse<BalanceTransactionResponse>>> GetBalanceTransactionListAsync(
             UrlObjectLink<ListResponse<BalanceTransactionResponse>> url, CancellationToken cancellationToken = default) {
             return await GetAsync(url, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
+#if NET8_0_OR_GREATER
+        private Dictionary<string, string> BuildGetBalanceReportQueryParameters(DateOnly from, DateOnly until, string? grouping = null) {
+#else
         private Dictionary<string, string> BuildGetBalanceReportQueryParameters(DateTime from, DateTime until, string? grouping = null) {
+#endif
             var result = new Dictionary<string, string>();
-            result.AddValueIfNotNullOrEmpty("from", from.ToString("yyyy-MM-dd"));
-            result.AddValueIfNotNullOrEmpty("until", until.ToString("yyyy-MM-dd"));
+            result.AddValueIfNotNullOrEmpty("from", from.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
+            result.AddValueIfNotNullOrEmpty("until", until.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
             result.AddValueIfNotNullOrEmpty("grouping", grouping);
             return result;
         }

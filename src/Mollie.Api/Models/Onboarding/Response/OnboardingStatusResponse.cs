@@ -16,7 +16,7 @@ namespace Mollie.Api.Models.Onboarding.Response {
         /// <summary>
         /// The sign up date and time of the organization.
         /// </summary>
-        public DateTime SignedUpAt { get; set; }
+        public DateTimeOffset SignedUpAt { get; set; }
 
         /// <summary>
         /// The current status of the organization’s onboarding process. See the Mollie.Api.Models.Onboarding.Response.OnboardingStatus

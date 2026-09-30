@@ -23,7 +23,7 @@ namespace Mollie.Api.Client {
             : base(options, mollieSecretManager, httpClient) {
         }
 
-        public async Task<PaymentResponse> CreatePaymentAsync(
+        public async Task<MollieResult<PaymentResponse>> CreatePaymentAsync(
             PaymentRequest paymentRequest,
             bool includeQrCode = false,
             CancellationToken cancellationToken = default) {
@@ -40,7 +40,7 @@ namespace Mollie.Api.Client {
                 cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<PaymentResponse> GetPaymentAsync(
+        public async Task<MollieResult<PaymentResponse>> GetPaymentAsync(
             string paymentId,
             bool testmode = false,
             bool includeQrCode = false,
@@ -67,43 +67,43 @@ namespace Mollie.Api.Client {
                 cancellationToken: cancellationToken).ConfigureAwait(false);
 		}
 
-		public async Task CancelPaymentAsync(
+		public async Task<MollieResult> CancelPaymentAsync(
             string paymentId,
             bool testmode = false,
             CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(paymentId), paymentId);
 
             var data = CreateTestmodeModel(testmode);
-		    await DeleteAsync(
+		    return await DeleteAsync(
                 $"payments/{paymentId}",
                 data,
                 cancellationToken: cancellationToken).ConfigureAwait(false);
 		}
 
-        public async Task ReleasePaymentAuthorization(
+        public async Task<MollieResult> ReleasePaymentAuthorization(
             string paymentId, bool testmode = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(paymentId), paymentId);
 
             var queryParameters = BuildQueryParameters(testmode: testmode);
-            await PostAsync<object>(
+            return await PostAsync<object>(
                 $"payments/{paymentId}/release-authorization{queryParameters.ToQueryString()}",
                 null,
                 cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<PaymentResponse> GetPaymentAsync(
+        public async Task<MollieResult<PaymentResponse>> GetPaymentAsync(
             UrlObjectLink<PaymentResponse> url,
             CancellationToken cancellationToken = default) {
             return await GetAsync(url, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<PaymentResponse>> GetPaymentListAsync(
+        public async Task<MollieResult<ListResponse<PaymentResponse>>> GetPaymentListAsync(
             UrlObjectLink<ListResponse<PaymentResponse>> url,
             CancellationToken cancellationToken = default) {
             return await GetAsync(url, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<PaymentResponse>> GetPaymentListAsync(
+        public async Task<MollieResult<ListResponse<PaymentResponse>>> GetPaymentListAsync(
             string? from = null,
             int? limit = null,
             string? profileId = null,
@@ -134,7 +134,7 @@ namespace Mollie.Api.Client {
                 cancellationToken: cancellationToken).ConfigureAwait(false);
 		}
 
-        public async Task<PaymentResponse> UpdatePaymentAsync(
+        public async Task<MollieResult<PaymentResponse>> UpdatePaymentAsync(
             string paymentId,
             PaymentUpdateRequest paymentUpdateRequest,
             CancellationToken cancellationToken = default) {

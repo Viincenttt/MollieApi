@@ -64,13 +64,15 @@ else {
 
     private async Task LoadData() {
         if (string.IsNullOrEmpty(Url)) {
-            _orders = await OrderClient.GetOrderListAsync();
+            var result = await OrderClient.GetOrderListAsync();
+            _orders = result.Data;
         }
         else {
-            _orders = await OrderClient.GetOrderListAsync(new UrlObjectLink<ListResponse<OrderResponse>>() {
+            var result = await OrderClient.GetOrderListAsync(new UrlObjectLink<ListResponse<OrderResponse>>() {
                 Href = Url,
                 Type = "application/json"
             });
+            _orders = result.Data;
         }
     }
 }

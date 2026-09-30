@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Mollie.Api.Models;
 using Mollie.Api.Models.Capture.Response;
 using Mollie.Api.Models.Chargeback.Response;
 using Mollie.Api.Models.List.Response;
@@ -17,21 +18,21 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="settlementId">The settlement's ID, for example stl_jDk30akdN.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The settlement object.</returns>
-        Task<SettlementResponse> GetSettlementAsync(string settlementId, CancellationToken cancellationToken = default);
+        Task<MollieResult<SettlementResponse>> GetSettlementAsync(string settlementId, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieve the details of the current settlement that has not yet been paid out.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The next settlement object.</returns>
-        Task<SettlementResponse> GetNextSettlementAsync(CancellationToken cancellationToken = default);
+        Task<MollieResult<SettlementResponse>> GetNextSettlementAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieve the details of the open settlement that is not yet finalized.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The open settlement object.</returns>
-        Task<SettlementResponse> GetOpenSettlementAsync(CancellationToken cancellationToken = default);
+        Task<MollieResult<SettlementResponse>> GetOpenSettlementAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieve a list of settlements, optionally filtered by balance, year, month, or currency.
@@ -44,7 +45,7 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="limit">The maximum number of settlements to return.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A list of settlement objects.</returns>
-        Task<ListResponse<SettlementResponse>> GetSettlementListAsync(
+        Task<MollieResult<ListResponse<SettlementResponse>>> GetSettlementListAsync(
             string? balanceId = null, string? from = null, int? limit = null, int? year = null, int? month = null,
             IEnumerable<string>? currencies = null, CancellationToken cancellationToken = default);
 
@@ -54,7 +55,7 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="url">The URL object link to the next page.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A list of settlement objects.</returns>
-        Task<ListResponse<SettlementResponse>> GetSettlementListAsync(UrlObjectLink<ListResponse<SettlementResponse>> url, CancellationToken cancellationToken = default);
+        Task<MollieResult<ListResponse<SettlementResponse>>> GetSettlementListAsync(UrlObjectLink<ListResponse<SettlementResponse>> url, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieve the list of payments included in a settlement.
@@ -64,7 +65,7 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="limit">The maximum number of payments to return.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A list of payment objects.</returns>
-        Task<ListResponse<PaymentResponse>> GetSettlementPaymentListAsync(string settlementId, string? from = null, int? limit = null, CancellationToken cancellationToken = default);
+        Task<MollieResult<ListResponse<PaymentResponse>>> GetSettlementPaymentListAsync(string settlementId, string? from = null, int? limit = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieve the list of payments included in a settlement using a URL object link.
@@ -72,7 +73,7 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="url">The URL object link to the next page.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A list of payment objects.</returns>
-        Task<ListResponse<PaymentResponse>> GetSettlementPaymentListAsync(UrlObjectLink<ListResponse<PaymentResponse>> url, CancellationToken cancellationToken = default);
+        Task<MollieResult<ListResponse<PaymentResponse>>> GetSettlementPaymentListAsync(UrlObjectLink<ListResponse<PaymentResponse>> url, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieve the list of refunds included in a settlement.
@@ -83,7 +84,7 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="embedPayment">Set to true to embed the full payment object in the refund response.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A list of refund objects.</returns>
-        Task<ListResponse<RefundResponse>> GetSettlementRefundListAsync(string settlementId, string? from = null, int? limit = null, bool embedPayment = false, CancellationToken cancellationToken = default);
+        Task<MollieResult<ListResponse<RefundResponse>>> GetSettlementRefundListAsync(string settlementId, string? from = null, int? limit = null, bool embedPayment = false, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieve the list of refunds included in a settlement using a URL object link.
@@ -91,7 +92,7 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="url">The URL object link to the next page.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A list of refund objects.</returns>
-        Task<ListResponse<RefundResponse>> GetSettlementRefundListAsync(UrlObjectLink<ListResponse<RefundResponse>> url, CancellationToken cancellationToken = default);
+        Task<MollieResult<ListResponse<RefundResponse>>> GetSettlementRefundListAsync(UrlObjectLink<ListResponse<RefundResponse>> url, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieve the list of chargebacks included in a settlement.
@@ -102,7 +103,7 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="embedPayment">Set to true to embed the full payment object in the chargeback response.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A list of chargeback objects.</returns>
-        Task<ListResponse<ChargebackResponse>> GetSettlementChargebackListAsync(string settlementId, string? from = null, int? limit = null, bool embedPayment = false, CancellationToken cancellationToken = default);
+        Task<MollieResult<ListResponse<ChargebackResponse>>> GetSettlementChargebackListAsync(string settlementId, string? from = null, int? limit = null, bool embedPayment = false, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieve the list of chargebacks included in a settlement using a URL object link.
@@ -110,7 +111,7 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="url">The URL object link to the next page.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A list of chargeback objects.</returns>
-        Task<ListResponse<ChargebackResponse>> GetSettlementChargebackListAsync(UrlObjectLink<ListResponse<ChargebackResponse>> url, CancellationToken cancellationToken = default);
+        Task<MollieResult<ListResponse<ChargebackResponse>>> GetSettlementChargebackListAsync(UrlObjectLink<ListResponse<ChargebackResponse>> url, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieve the list of captures included in a settlement.
@@ -121,7 +122,7 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="embedPayment">Set to true to embed the full payment object in the capture response.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A list of capture objects.</returns>
-        Task<ListResponse<CaptureResponse>> GetSettlementCaptureListAsync(string settlementId, string? from = null, int? limit = null, bool embedPayment = false, CancellationToken cancellationToken = default);
+        Task<MollieResult<ListResponse<CaptureResponse>>> GetSettlementCaptureListAsync(string settlementId, string? from = null, int? limit = null, bool embedPayment = false, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieve the list of captures included in a settlement using a URL object link.
@@ -129,7 +130,7 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="url">The URL object link to the next page.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A list of capture objects.</returns>
-        Task<ListResponse<CaptureResponse>> GetSettlementCaptureListAsync(UrlObjectLink<ListResponse<CaptureResponse>> url, CancellationToken cancellationToken = default);
+        Task<MollieResult<ListResponse<CaptureResponse>>> GetSettlementCaptureListAsync(UrlObjectLink<ListResponse<CaptureResponse>> url, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieve a settlement using a URL object link.
@@ -137,6 +138,6 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="url">The URL object link to the settlement.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The settlement object.</returns>
-        Task<SettlementResponse> GetSettlementAsync(UrlObjectLink<SettlementResponse> url, CancellationToken cancellationToken = default);
+        Task<MollieResult<SettlementResponse>> GetSettlementAsync(UrlObjectLink<SettlementResponse> url, CancellationToken cancellationToken = default);
     }
 }

@@ -27,7 +27,7 @@ public record SimpleWebhookEventResponse : IEntity {
     /// <summary>
     /// The event's date time of creation.
     /// </summary>
-    public required DateTime CreatedAt { get; set; }
+    public required DateTimeOffset CreatedAt { get; set; }
 
     /// <summary>
     /// An object with several relevant URLs. Every URL object will contain an href and a type field.

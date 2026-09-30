@@ -141,8 +141,12 @@ namespace Mollie.Api.Models.Payment.Request {
         /// <summary>
         /// The date by which the payment should be completed in YYYY-MM-DD format
         /// </summary>
+#if NET8_0_OR_GREATER
+        public DateOnly? DueDate { get; set; }
+#else
         [JsonConverter(typeof(DateJsonConverter))]
         public DateTime? DueDate { get; set; }
+#endif
 
 		/// <summary>
 		///	Oauth only - Optional – Set this to true to make this payment a test payment.

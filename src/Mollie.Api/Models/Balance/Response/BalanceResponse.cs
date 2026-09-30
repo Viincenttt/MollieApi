@@ -16,7 +16,7 @@ namespace Mollie.Api.Models.Balance.Response {
         /// <summary>
         /// The balance’s date and time of creation, in ISO 8601 format.
         /// </summary>
-        public required DateTime CreatedAt { get; set; }
+        public required DateTimeOffset CreatedAt { get; set; }
 
         /// <summary>
         /// The balance’s ISO 4217 currency code.

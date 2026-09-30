@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
 using Mollie.Api.Framework.Authentication.Abstract;
+using Mollie.Api.Models;
 using Mollie.Api.Models.Capture.Response;
 using Mollie.Api.Models.Chargeback.Response;
 using Mollie.Api.Models.List.Response;
@@ -26,7 +27,7 @@ namespace Mollie.Api.Client {
             : base(options, mollieSecretManager, httpClient) {
         }
 
-        public async Task<SettlementResponse> GetSettlementAsync(
+        public async Task<MollieResult<SettlementResponse>> GetSettlementAsync(
             string settlementId, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(settlementId), settlementId);
             return await GetAsync<SettlementResponse>(
@@ -34,19 +35,19 @@ namespace Mollie.Api.Client {
                 .ConfigureAwait(false);
         }
 
-        public async Task<SettlementResponse> GetNextSettlementAsync(CancellationToken cancellationToken = default) {
+        public async Task<MollieResult<SettlementResponse>> GetNextSettlementAsync(CancellationToken cancellationToken = default) {
             return await GetAsync<SettlementResponse>(
                 "settlements/next", cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<SettlementResponse> GetOpenSettlementAsync(CancellationToken cancellationToken = default) {
+        public async Task<MollieResult<SettlementResponse>> GetOpenSettlementAsync(CancellationToken cancellationToken = default) {
             return await GetAsync<SettlementResponse>(
                 $"settlements/open", cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<SettlementResponse>> GetSettlementListAsync(
+        public async Task<MollieResult<ListResponse<SettlementResponse>>> GetSettlementListAsync(
             string? balanceId = null, string? from = null, int? limit = null, int? year = null, int? month = null,
             IEnumerable<string>? currencies = null, CancellationToken cancellationToken = default) {
             var parameters = new Dictionary<string, string>();
@@ -59,13 +60,13 @@ namespace Mollie.Api.Client {
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<SettlementResponse>> GetSettlementListAsync(
+        public async Task<MollieResult<ListResponse<SettlementResponse>>> GetSettlementListAsync(
             UrlObjectLink<ListResponse<SettlementResponse>> url, CancellationToken cancellationToken = default) {
             return await GetAsync(url, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<PaymentResponse>> GetSettlementPaymentListAsync(
+        public async Task<MollieResult<ListResponse<PaymentResponse>>> GetSettlementPaymentListAsync(
             string settlementId, string? from = null, int? limit = null,
             CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(settlementId), settlementId);
@@ -74,12 +75,12 @@ namespace Mollie.Api.Client {
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<PaymentResponse>> GetSettlementPaymentListAsync(
+        public async Task<MollieResult<ListResponse<PaymentResponse>>> GetSettlementPaymentListAsync(
             UrlObjectLink<ListResponse<PaymentResponse>> url, CancellationToken cancellationToken = default) {
             return await GetAsync(url, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<RefundResponse>> GetSettlementRefundListAsync(
+        public async Task<MollieResult<ListResponse<RefundResponse>>> GetSettlementRefundListAsync(
             string settlementId, string? from = null, int? limit = null,
             bool embedPayment = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(settlementId), settlementId);
@@ -90,13 +91,13 @@ namespace Mollie.Api.Client {
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<RefundResponse>> GetSettlementRefundListAsync(
+        public async Task<MollieResult<ListResponse<RefundResponse>>> GetSettlementRefundListAsync(
             UrlObjectLink<ListResponse<RefundResponse>> url, CancellationToken cancellationToken = default) {
             return await GetAsync(url, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<ChargebackResponse>> GetSettlementChargebackListAsync(
+        public async Task<MollieResult<ListResponse<ChargebackResponse>>> GetSettlementChargebackListAsync(
             string settlementId, string? from = null, int? limit = null,
             bool embedPayment = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(settlementId), settlementId);
@@ -107,13 +108,13 @@ namespace Mollie.Api.Client {
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<ChargebackResponse>> GetSettlementChargebackListAsync(
+        public async Task<MollieResult<ListResponse<ChargebackResponse>>> GetSettlementChargebackListAsync(
             UrlObjectLink<ListResponse<ChargebackResponse>> url, CancellationToken cancellationToken = default) {
             return await GetAsync(url, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<CaptureResponse>> GetSettlementCaptureListAsync(
+        public async Task<MollieResult<ListResponse<CaptureResponse>>> GetSettlementCaptureListAsync(
             string settlementId, string? from = null, int? limit = null,
             bool embedPayment = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(settlementId), settlementId);
@@ -124,13 +125,13 @@ namespace Mollie.Api.Client {
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<CaptureResponse>> GetSettlementCaptureListAsync(
+        public async Task<MollieResult<ListResponse<CaptureResponse>>> GetSettlementCaptureListAsync(
             UrlObjectLink<ListResponse<CaptureResponse>> url, CancellationToken cancellationToken = default) {
             return await GetAsync(url, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<SettlementResponse> GetSettlementAsync(
+        public async Task<MollieResult<SettlementResponse>> GetSettlementAsync(
             UrlObjectLink<SettlementResponse> url, CancellationToken cancellationToken = default) {
             return await GetAsync(url, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);

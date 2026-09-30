@@ -25,7 +25,7 @@ namespace Mollie.Api.Models.Payment.Response {
         /// <summary>
         /// The payment's date and time of creation, in ISO 8601 format.
         /// </summary>
-        public required DateTime CreatedAt { get; set; }
+        public required DateTimeOffset CreatedAt { get; set; }
 
         /// <summary>
         /// The payment's status. Please refer to the page about statuses for more info about which statuses occur at what
@@ -46,35 +46,35 @@ namespace Mollie.Api.Models.Payment.Response {
         /// <summary>
         /// The date and time the payment became authorized, in ISO 8601 format. This parameter is omitted if the payment is not authorized (yet).
         /// </summary>
-        public DateTime? AuthorizedAt { get; set; }
+        public DateTimeOffset? AuthorizedAt { get; set; }
 
         /// <summary>
         /// The date and time the payment became paid, in ISO 8601 format. Null is returned if the payment isn't completed
         /// (yet).
         /// </summary>
-        public DateTime? PaidAt { get; set; }
+        public DateTimeOffset? PaidAt { get; set; }
 
         /// <summary>
         /// The date and time the payment was cancelled, in ISO 8601 format. Null is returned if the payment isn't cancelled
         /// (yet).
         /// </summary>
-        public DateTime? CanceledAt { get; set; }
+        public DateTimeOffset? CanceledAt { get; set; }
 
         /// <summary>
         /// The date and time the payment was expired, in ISO 8601 format. Null is returned if the payment did not expire
         /// (yet).
         /// </summary>
-        public DateTime? ExpiresAt { get; set; }
+        public DateTimeOffset? ExpiresAt { get; set; }
 
         /// <summary>
         /// The time until the payment will expire in ISO 8601 duration format.
         /// </summary>
-        public DateTime? ExpiredAt { get; set; }
+        public DateTimeOffset? ExpiredAt { get; set; }
 
         /// <summary>
         /// The date and time the payment failed, in ISO 8601 format. This parameter is omitted if the payment did not fail (yet).
         /// </summary>
-        public DateTime? FailedAt { get; set; }
+        public DateTimeOffset? FailedAt { get; set; }
 
         /// <summary>
         /// The amount of the payment, e.g. {"currency":"EUR", "value":"100.00"} for a €100.00 payment.
@@ -248,7 +248,7 @@ namespace Mollie.Api.Models.Payment.Response {
         /// Indicates the datetime on which the merchant has to have captured the payment, before we can no longer guarantee a
         /// successful capture, in ISO 8601 format. This parameter is omitted if the payment is not authorized (yet).
         /// </summary>
-        public DateTime? CaptureBefore { get; set; }
+        public DateTimeOffset? CaptureBefore { get; set; }
 
         [JsonPropertyName("_embedded")]
         public PaymentEmbeddedResponse? Embedded { get; set; }

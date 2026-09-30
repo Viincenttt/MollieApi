@@ -22,13 +22,21 @@ namespace Mollie.Api.Models.Balance.Response.BalanceReport {
         /// The start date of the report, in YYYY-MM-DD format. The from date is ‘inclusive’, and in Central European Time.
         /// This means a report with for example from: 2020-01-01 will include movements of 2020-01-01 0:00:00 CET and onwards.
         /// </summary>
+#if NET8_0_OR_GREATER
+        public required DateOnly From { get; set; }
+#else
         public required DateTime From { get; set; }
+#endif
 
         /// <summary>
         /// The end date of the report, in YYYY-MM-DD format. The until date is ‘exclusive’, and in Central European Time.
         /// This means a report with for example until: 2020-02-01 will include movements up until 2020-01-31 23:59:59 CET.
         /// </summary>
+#if NET8_0_OR_GREATER
+        public required DateOnly Until { get; set; }
+#else
         public required DateTime Until { get; set; }
+#endif
 
         /// <summary>
         /// You can retrieve reports in two different formats. With the status-balances format, transactions are grouped by status

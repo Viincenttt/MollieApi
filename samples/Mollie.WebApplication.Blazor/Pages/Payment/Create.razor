@@ -2,14 +2,13 @@
 
 @using Mollie.Api.Models.Payment.Request
 @using Mollie.WebApplication.Blazor.Models.Payment
-@using Mollie.Api.Client
 
 @inject IPaymentClient PaymentClient
 @inject NavigationManager NavigationManager
 
 <h3>Create new payment</h3>
 
-<ApiExceptionDisplay Exception="_apiException"></ApiExceptionDisplay>
+<ApiExceptionDisplay Result="_result"></ApiExceptionDisplay>
 
 <EditForm Model="_model" OnValidSubmit="@OnSave" class="col-md-6">
     <DataAnnotationsValidator />
@@ -103,7 +102,7 @@
 </EditForm>
 
 @code {
-    private MollieApiException? _apiException;
+    private MollieResult? _result;
 
     private CreatePaymentModel _model = new() {
         Amount = 10.00m,
@@ -115,23 +114,23 @@
     };
 
     private async Task OnSave() {
-        try {
-            _apiException = null;
+        _result = null;
 
-            await PaymentClient.CreatePaymentAsync(new PaymentRequest {
-                Amount = new Amount(_model.Currency, _model.Amount),
-                RedirectUrl = _model.RedirectUrl,
-                WebhookUrl = _model.WebhookUrl,
-                Description = _model.Description,
-                CustomerId = _model.CustomerId,
-                SequenceType = _model.SequenceType,
-                MandateId = _model.MandateId
-            });
+        var result = await PaymentClient.CreatePaymentAsync(new PaymentRequest {
+            Amount = new Amount(_model.Currency, _model.Amount),
+            RedirectUrl = _model.RedirectUrl,
+            WebhookUrl = _model.WebhookUrl,
+            Description = _model.Description,
+            CustomerId = _model.CustomerId,
+            SequenceType = _model.SequenceType,
+            MandateId = _model.MandateId
+        });
 
+        if (result.Success) {
             NavigationManager.NavigateTo("/payment/overview");
         }
-        catch (MollieApiException e) {
-            _apiException = e;
+        else {
+            _result = result;
         }
     }
 }

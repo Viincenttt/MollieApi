@@ -26,7 +26,8 @@ public class OrganizationClientTests : BaseClientTests
         var result = await organizationsClient.GetCurrentOrganizationAsync();
 
         // Assert
-        AssertDefaultOrganization(result);
+        result.Success.ShouldBeTrue();
+        AssertDefaultOrganization(result.Data!);
     }
 
     [Fact]
@@ -45,7 +46,8 @@ public class OrganizationClientTests : BaseClientTests
         var result = await organizationsClient.GetOrganizationAsync(organizationId);
 
         // Assert
-        AssertDefaultOrganization(result);
+        result.Success.ShouldBeTrue();
+        AssertDefaultOrganization(result.Data!);
     }
 
     [Fact]
@@ -63,8 +65,9 @@ public class OrganizationClientTests : BaseClientTests
         var result = await organizationsClient.GetOrganizationListAsync();
 
         // Assert
-        result.Count.ShouldBe(2);
-        result.Items.Count.ShouldBe(2);
+        result.Success.ShouldBeTrue();
+        result.Data!.Count.ShouldBe(2);
+        result.Data.Items.Count.ShouldBe(2);
     }
 
     [Fact]
@@ -81,15 +84,16 @@ public class OrganizationClientTests : BaseClientTests
         var result = await organizationsClient.GetPartnerStatusAsync();
 
         // Assert
-        result.ShouldNotBeNull();
-        result.Resource.ShouldBe("partner");
-        result.PartnerType.ShouldBe(PartnerTypes.SignupLink);
-        result.PartnerContractSignedAt.ShouldBe(new DateTimeOffset(2024, 3, 20, 13, 59, 02, TimeSpan.FromHours(0)));
-        result.PartnerContractExpiresAt.ShouldBe(new DateTimeOffset(2024, 4, 19, 23, 59, 59, TimeSpan.FromHours(0)));
-        result.Links.ShouldNotBeNull();
-        result.Links.Self.Href.ShouldBe("https://docs.mollie.com/reference/get-partner-status");
-        result.Links.Documentation.Href.ShouldBe("https://docs.mollie.com/reference/get-partner-status");
-        result.Links.Signuplink!.Href.ShouldBe("https://www.mollie.com/dashboard/signup/exampleCode");
+        result.Success.ShouldBeTrue();
+        result.Data.ShouldNotBeNull();
+        result.Data.Resource.ShouldBe("partner");
+        result.Data.PartnerType.ShouldBe(PartnerTypes.SignupLink);
+        result.Data.PartnerContractSignedAt.ShouldBe(new DateTimeOffset(2024, 3, 20, 13, 59, 02, TimeSpan.FromHours(0)));
+        result.Data.PartnerContractExpiresAt.ShouldBe(new DateTimeOffset(2024, 4, 19, 23, 59, 59, TimeSpan.FromHours(0)));
+        result.Data.Links.ShouldNotBeNull();
+        result.Data.Links.Self.Href.ShouldBe("https://docs.mollie.com/reference/get-partner-status");
+        result.Data.Links.Documentation.Href.ShouldBe("https://docs.mollie.com/reference/get-partner-status");
+        result.Data.Links.Signuplink!.Href.ShouldBe("https://www.mollie.com/dashboard/signup/exampleCode");
     }
 
     private void AssertDefaultOrganization(OrganizationResponse response)

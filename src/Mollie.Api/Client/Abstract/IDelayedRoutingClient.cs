@@ -1,5 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
+using Mollie.Api.Models;
 using Mollie.Api.Models.DelayedRouting.Request;
 using Mollie.Api.Models.DelayedRouting.Response;
 using Mollie.Api.Models.List.Response;
@@ -14,7 +15,7 @@ public interface IDelayedRoutingClient : IBaseMollieClient {
     /// <param name="request">The payload to create a new delayed route for a payment.</param>
     /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
     /// <returns>The created route object.</returns>
-    Task<DelayedRoutingResponse> CreateDelayedRouteAsync(
+    Task<MollieResult<DelayedRoutingResponse>> CreateDelayedRouteAsync(
         string paymentId,
         DelayedRoutingRequest request,
         CancellationToken cancellationToken = default);
@@ -27,7 +28,7 @@ public interface IDelayedRoutingClient : IBaseMollieClient {
     /// <param name="testmode">Set to true to retrieve a test mode route. Only available for OAuth access tokens.</param>
     /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
     /// <returns>The route object.</returns>
-    Task<DelayedRoutingResponse> GetDelayedRouteAsync(
+    Task<MollieResult<DelayedRoutingResponse>> GetDelayedRouteAsync(
         string paymentId,
         string routeId,
         bool testmode = false,
@@ -40,7 +41,7 @@ public interface IDelayedRoutingClient : IBaseMollieClient {
     /// <param name="testmode">Set to true to retrieve test mode routes. Only available for OAuth access tokens.</param>
     /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
     /// <returns>A list of route objects.</returns>
-    Task<ListResponse<DelayedRoutingResponse>> GetPaymentRouteListAsync(
+    Task<MollieResult<ListResponse<DelayedRoutingResponse>>> GetPaymentRouteListAsync(
         string paymentId,
         bool testmode = false,
         CancellationToken cancellationToken = default);

@@ -27,7 +27,7 @@ namespace Mollie.Tests.Unit.Client {
             // Given: We make a request to retrieve all payment methods without any parameters
             var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.DefaultBaseApiEndPoint}methods/all", defaultPaymentMethodJsonResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
-            PaymentMethodClient paymentMethodClient = new PaymentMethodClient("abcde", httpClient);
+            var paymentMethodClient = new PaymentMethodClient("abcde", httpClient);
 
             // When: We send the request
             await paymentMethodClient.GetAllPaymentMethodListAsync();
@@ -41,10 +41,30 @@ namespace Mollie.Tests.Unit.Client {
             // Given: We make a request to retrieve all payment methods with a amount parameter
             var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.DefaultBaseApiEndPoint}methods/all?amount[value]=100.00&amount[currency]=EUR", defaultPaymentMethodJsonResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
-            PaymentMethodClient paymentMethodClient = new PaymentMethodClient("abcde", httpClient);
+            var paymentMethodClient = new PaymentMethodClient("abcde", httpClient);
 
             // When: We send the request
-            await paymentMethodClient.GetAllPaymentMethodListAsync(amount: new Amount("EUR", 100));
+            await paymentMethodClient.GetAllPaymentMethodListAsync(amount: new Amount("EUR", 100.00m));
+
+            // Then
+            mockHttp.VerifyNoOutstandingExpectation();
+        }
+
+        [Theory]
+        [InlineData("EUR", "20", "20.00")]
+        [InlineData("EUR", "20.0000", "20.00")]
+        [InlineData("JPY", "500.00", "500")]
+        [InlineData("EUR", "10.005", "10.005")]
+        public async Task GetAllPaymentMethodListAsync_AmountParameterIsAdded_AmountValueHasNumberOfDecimalsOfCurrency(
+            string currency, string value, string expectedValue) {
+            // Given: We make a request to retrieve all payment methods with a amount parameter
+            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.DefaultBaseApiEndPoint}methods/all?amount[value]={expectedValue}&amount[currency]={currency}", defaultPaymentMethodJsonResponse);
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            var paymentMethodClient = new PaymentMethodClient("abcde", httpClient);
+            var amount = new Amount(currency, decimal.Parse(value, System.Globalization.CultureInfo.InvariantCulture));
+
+            // When: We send the request
+            await paymentMethodClient.GetAllPaymentMethodListAsync(amount: amount);
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
@@ -56,7 +76,7 @@ namespace Mollie.Tests.Unit.Client {
             var profileId = "myProfileId";
             var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.DefaultBaseApiEndPoint}methods/all?profileId={profileId}", defaultPaymentMethodJsonResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
-            PaymentMethodClient paymentMethodClient = new PaymentMethodClient("abcde", httpClient);
+            var paymentMethodClient = new PaymentMethodClient("abcde", httpClient);
 
             // When: We send the request
             await paymentMethodClient.GetAllPaymentMethodListAsync(profileId: profileId);
@@ -71,7 +91,7 @@ namespace Mollie.Tests.Unit.Client {
             var includeWalletsValue = "includeWalletsValue";
             var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.DefaultBaseApiEndPoint}methods?includeWallets={includeWalletsValue}", defaultPaymentMethodJsonResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
-            PaymentMethodClient paymentMethodClient = new PaymentMethodClient("abcde", httpClient);
+            var paymentMethodClient = new PaymentMethodClient("abcde", httpClient);
 
             // When: We send the request
             await paymentMethodClient.GetPaymentMethodListAsync(includeWallets: includeWalletsValue);
@@ -88,7 +108,7 @@ namespace Mollie.Tests.Unit.Client {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
-            PaymentMethodClient paymentMethodClient = new PaymentMethodClient("api-key", httpClient);
+            var paymentMethodClient = new PaymentMethodClient("api-key", httpClient);
 
             // When: We send the request
 #pragma warning disable CS8604 // Possible null reference argument.

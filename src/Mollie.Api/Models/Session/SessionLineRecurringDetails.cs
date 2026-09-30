@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 using Mollie.Api.JsonConverters;
 using Mollie.Api.Models.Payment;
 
-namespace Mollie.Api.Models.Session; 
+namespace Mollie.Api.Models.Session;
 public record SessionLineRecurringDetails {
     /// <summary>
     /// A description of the recurring item. If not present, the main description of the item will be used.
@@ -30,6 +30,10 @@ public record SessionLineRecurringDetails {
     /// <summary>
     /// Optional – The start date of the subscription if it does not start right away (format YYYY-MM-DD)
     /// </summary>
+#if NET8_0_OR_GREATER
+    public DateOnly? StartDate { get; set; }
+#else
     [JsonConverter(typeof(DateJsonConverter))]
     public DateTime? StartDate { get; set; }
+#endif
 }

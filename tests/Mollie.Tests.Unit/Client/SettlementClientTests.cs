@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using Mollie.Api.Client;
 using System.Linq;
 using System.Net.Http;
@@ -18,13 +19,15 @@ namespace Mollie.Tests.Unit.Client {
             string expectedUrl = $"{BaseMollieClient.DefaultBaseApiEndPoint}settlements/{defaultSettlementId}/captures";
             var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, defaultCaptureListJsonResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
-            SettlementClient settlementClient = new SettlementClient("api-key", httpClient);
+            var settlementClient = new SettlementClient("api-key", httpClient);
 
             // When: We make the request
-            ListResponse<CaptureResponse> listCaptureResponse = await settlementClient.GetSettlementCaptureListAsync(defaultSettlementId);
+            var result = await settlementClient.GetSettlementCaptureListAsync(defaultSettlementId);
+            ListResponse<CaptureResponse> listCaptureResponse = result.Data!;
 
             // Then: Response should be parsed
             mockHttp.VerifyNoOutstandingExpectation();
+            result.Success.ShouldBeTrue();
             listCaptureResponse.ShouldNotBeNull();
             listCaptureResponse.Count.ShouldBe(1);
             listCaptureResponse.Links.Self.Href.ShouldBe("https://api.mollie.com/v2/settlements/stl_jDk30akdN/captures?limit=50");
@@ -56,13 +59,15 @@ namespace Mollie.Tests.Unit.Client {
             string expectedUrl = $"{BaseMollieClient.DefaultBaseApiEndPoint}settlements/open";
             var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, defaultGetSettlementResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
-            SettlementClient settlementClient = new SettlementClient("api-key", httpClient);
+            var settlementClient = new SettlementClient("api-key", httpClient);
 
             // When: We make the request
-            SettlementResponse settlementResponse = await settlementClient.GetOpenSettlementAsync();
+            var result = await settlementClient.GetOpenSettlementAsync();
+            SettlementResponse settlementResponse = result.Data!;
 
             // Then: Response should be parsed
             mockHttp.VerifyNoOutstandingExpectation();
+            result.Success.ShouldBeTrue();
             settlementResponse.ShouldNotBeNull();
             settlementResponse.Amount.Value.ShouldBe(defaultAmountValue);
             settlementResponse.Amount.Currency.ShouldBe(defaultAmountCurrency);
@@ -72,44 +77,43 @@ namespace Mollie.Tests.Unit.Client {
             settlementResponse.Periods[2018][4].Revenue[0].Description.ShouldBe("iDEAL");
             settlementResponse.Periods[2018][4].Revenue[0].Method.ShouldBe("ideal");
             settlementResponse.Periods[2018][4].Revenue[0].Count.ShouldBe(6);
-            settlementResponse.Periods[2018][4].Revenue[0].AmountNet.Value.ShouldBe("86.1000");
+            settlementResponse.Periods[2018][4].Revenue[0].AmountNet.Value.ShouldBe(86.1000m);
             settlementResponse.Periods[2018][4].Revenue[0].AmountNet.Currency.ShouldBe("EUR");
             settlementResponse.Periods[2018][4].Revenue[0].AmountVat.ShouldBeNull();
-            settlementResponse.Periods[2018][4].Revenue[0].AmountGross.Value.ShouldBe("86.1000");
+            settlementResponse.Periods[2018][4].Revenue[0].AmountGross.Value.ShouldBe(86.1000m);
             settlementResponse.Periods[2018][4].Revenue[0].AmountGross.Currency.ShouldBe("EUR");
             settlementResponse.Periods[2018][4].Revenue[1].Description.ShouldBe("Refunds iDEAL");
             settlementResponse.Periods[2018][4].Revenue[1].Method.ShouldBe("refund");
             settlementResponse.Periods[2018][4].Revenue[1].Count.ShouldBe(2);
-            settlementResponse.Periods[2018][4].Revenue[1].AmountNet.Value.ShouldBe("-43.2000");
+            settlementResponse.Periods[2018][4].Revenue[1].AmountNet.Value.ShouldBe(-43.2000m);
             settlementResponse.Periods[2018][4].Revenue[1].AmountNet.Currency.ShouldBe("EUR");
             settlementResponse.Periods[2018][4].Revenue[1].AmountVat.ShouldBeNull();
-            settlementResponse.Periods[2018][4].Revenue[1].AmountGross.Value.ShouldBe("43.2000");
+            settlementResponse.Periods[2018][4].Revenue[1].AmountGross.Value.ShouldBe(43.2000m);
             settlementResponse.Periods[2018][4].Revenue[1].AmountGross.Currency.ShouldBe("EUR");
             settlementResponse.Periods[2018][4].Costs.Count.ShouldBe(2);
             settlementResponse.Periods[2018][4].Costs[0].Description.ShouldBe("iDEAL");
             settlementResponse.Periods[2018][4].Costs[0].Method.ShouldBe("ideal");
             settlementResponse.Periods[2018][4].Costs[0].Count.ShouldBe(6);
-            settlementResponse.Periods[2018][4].Costs[0].Rate.Fixed.Value.ShouldBe("0.3500");
+            settlementResponse.Periods[2018][4].Costs[0].Rate.Fixed.Value.ShouldBe(0.3500m);
             settlementResponse.Periods[2018][4].Costs[0].Rate.Fixed.Currency.ShouldBe("EUR");
             settlementResponse.Periods[2018][4].Costs[0].Rate.Percentage.ShouldBeNull();
-            settlementResponse.Periods[2018][4].Costs[0].AmountNet.Value.ShouldBe("2.1000");
+            settlementResponse.Periods[2018][4].Costs[0].AmountNet.Value.ShouldBe(2.1000m);
             settlementResponse.Periods[2018][4].Costs[0].AmountNet.Currency.ShouldBe("EUR");
-            settlementResponse.Periods[2018][4].Costs[0].AmountVat.Value.ShouldBe("0.4410");
+            settlementResponse.Periods[2018][4].Costs[0].AmountVat.Value.ShouldBe(0.4410m);
             settlementResponse.Periods[2018][4].Costs[0].AmountVat.Currency.ShouldBe("EUR");
-            settlementResponse.Periods[2018][4].Costs[0].AmountGross.Value.ShouldBe("2.5410");
+            settlementResponse.Periods[2018][4].Costs[0].AmountGross.Value.ShouldBe(2.5410m);
             settlementResponse.Periods[2018][4].Costs[0].AmountGross.Currency.ShouldBe("EUR");
             settlementResponse.Periods[2018][4].Costs[1].Description.ShouldBe("Refunds iDEAL");
             settlementResponse.Periods[2018][4].Costs[1].Method.ShouldBe("refund");
             settlementResponse.Periods[2018][4].Costs[1].Count.ShouldBe(2);
-            settlementResponse.Periods[2018][4].Costs[1].Rate.Fixed.Value.ShouldBe("0.2500");
+            settlementResponse.Periods[2018][4].Costs[1].Rate.Fixed.Value.ShouldBe(0.2500m);
             settlementResponse.Periods[2018][4].Costs[1].Rate.Fixed.Currency.ShouldBe("EUR");
             settlementResponse.Periods[2018][4].Costs[1].Rate.Percentage.ShouldBeNull();
-            settlementResponse.Periods[2018][4].Costs[1].AmountNet.Value.ShouldBe("0.5000");
+            settlementResponse.Periods[2018][4].Costs[1].AmountNet.Value.ShouldBe(0.5000m);
             settlementResponse.Periods[2018][4].Costs[1].AmountNet.Currency.ShouldBe("EUR");
-            settlementResponse.Periods[2018][4].Costs[1].AmountVat.Value.ShouldBe("0.1050");
+            settlementResponse.Periods[2018][4].Costs[1].AmountVat.Value.ShouldBe(0.1050m);
             settlementResponse.Periods[2018][4].Costs[1].AmountVat.Currency.ShouldBe("EUR");
-            settlementResponse.Periods[2018][4].Costs[1].AmountGross.Value.ShouldBe("0.6050");
-            settlementResponse.Periods[2018][4].Costs[1].AmountGross.Currency.ShouldBe("EUR");
+            settlementResponse.Periods[2018][4].Costs[1].AmountGross.Value.ShouldBe(0.6050m);
             settlementResponse.Links.ShouldNotBeNull();
             settlementResponse.Links.Self.Href.ShouldBe("https://api.mollie.com/v2/settlements/open");
             settlementResponse.Links.Self.Type.ShouldBe("application/hal+json");
@@ -123,13 +127,15 @@ namespace Mollie.Tests.Unit.Client {
             string expectedUrl = $"{BaseMollieClient.DefaultBaseApiEndPoint}settlements/open";
             var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, expectedUrl, emptyPeriodsSettlementResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
-            SettlementClient settlementClient = new SettlementClient("api-key", httpClient);
+            var settlementClient = new SettlementClient("api-key", httpClient);
 
             // When: We make the request
-            SettlementResponse settlementResponse = await settlementClient.GetOpenSettlementAsync();
+            var result = await settlementClient.GetOpenSettlementAsync();
+            SettlementResponse settlementResponse = result.Data!;
 
             // Then: Response should be parsed
             mockHttp.VerifyNoOutstandingExpectation();
+            result.Success.ShouldBeTrue();
             settlementResponse.ShouldNotBeNull();
             settlementResponse.Periods.Count.ShouldBe(0);
         }
@@ -150,7 +156,7 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.When($"{BaseMollieClient.DefaultBaseApiEndPoint}settlements{expectedQueryString}")
                 .Respond("application/json", defaultSettlementListResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
-            using SettlementClient settlementClient = new SettlementClient("api-key", httpClient);
+            using var settlementClient = new SettlementClient("api-key", httpClient);
 
             // When
             var result = await settlementClient.GetSettlementListAsync(balanceId, from: from, limit: limit, year: year, month: month);
@@ -187,7 +193,7 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.When($"{BaseMollieClient.DefaultBaseApiEndPoint}settlements/{defaultSettlementId}/captures{expectedQueryString}")
                 .Respond("application/json", defaultCaptureListJsonResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
-            using SettlementClient settlementClient = new SettlementClient("api-key", httpClient);
+            using var settlementClient = new SettlementClient("api-key", httpClient);
 
             // When
             var result = await settlementClient.GetSettlementCaptureListAsync(defaultSettlementId, embedPayment: embedPayment);
@@ -207,7 +213,7 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.When($"{BaseMollieClient.DefaultBaseApiEndPoint}settlements/{defaultSettlementId}/refunds{expectedQueryString}")
                 .Respond("application/json", defaultSettlementRefundListResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
-            using SettlementClient settlementClient = new SettlementClient("api-key", httpClient);
+            using var settlementClient = new SettlementClient("api-key", httpClient);
 
             // When
             var result = await settlementClient.GetSettlementRefundListAsync(defaultSettlementId, embedPayment: embedPayment);
@@ -227,7 +233,7 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.When($"{BaseMollieClient.DefaultBaseApiEndPoint}settlements/{defaultSettlementId}/chargebacks{expectedQueryString}")
                 .Respond("application/json", defaultSettlementChargebackListResponse);
             HttpClient httpClient = mockHttp.ToHttpClient();
-            using SettlementClient settlementClient = new SettlementClient("api-key", httpClient);
+            using var settlementClient = new SettlementClient("api-key", httpClient);
 
             // When
             var result = await settlementClient.GetSettlementChargebackListAsync(defaultSettlementId, embedPayment: embedPayment);
@@ -245,7 +251,7 @@ namespace Mollie.Tests.Unit.Client {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
-            SettlementClient settlementClient = new SettlementClient("api-key", httpClient);
+            using var settlementClient = new SettlementClient("api-key", httpClient);
 
             // When: We send the request
 #pragma warning disable CS8604 // Possible null reference argument.
@@ -264,7 +270,7 @@ namespace Mollie.Tests.Unit.Client {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
-            SettlementClient settlementClient = new SettlementClient("api-key", httpClient);
+            using var settlementClient = new SettlementClient("api-key", httpClient);
 
             // When: We send the request
 #pragma warning disable CS8604 // Possible null reference argument.
@@ -283,7 +289,7 @@ namespace Mollie.Tests.Unit.Client {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
-            SettlementClient settlementClient = new SettlementClient("api-key", httpClient);
+            using var settlementClient = new SettlementClient("api-key", httpClient);
 
             // When: We send the request
 #pragma warning disable CS8604 // Possible null reference argument.
@@ -302,7 +308,7 @@ namespace Mollie.Tests.Unit.Client {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
-            SettlementClient settlementClient = new SettlementClient("api-key", httpClient);
+            using var settlementClient = new SettlementClient("api-key", httpClient);
 
             // When: We send the request
 #pragma warning disable CS8604 // Possible null reference argument.
@@ -321,7 +327,7 @@ namespace Mollie.Tests.Unit.Client {
             // Arrange
             var mockHttp = new MockHttpMessageHandler();
             HttpClient httpClient = mockHttp.ToHttpClient();
-            var settlementClient = new SettlementClient("api-key", httpClient);
+            using var settlementClient = new SettlementClient("api-key", httpClient);
 
             // When: We send the request
 #pragma warning disable CS8604 // Possible null reference argument.
@@ -336,7 +342,7 @@ namespace Mollie.Tests.Unit.Client {
         private const string defaultSettlementId = "tr_Agfg241g";
         private const string defaultPaymentId = "tr_WDqYK6vllg";
         private const string defaultShipmentId = "shp_3wmsgCJN4U";
-        private const string defaultAmountValue = "1027.99";
+        private const decimal defaultAmountValue = 1027.99m;
         private const string defaultAmountCurrency = "EUR";
         private const string defaultInvoiceId = "inv_FrvewDA3Pr";
 
@@ -454,7 +460,7 @@ namespace Mollie.Tests.Unit.Client {
                 ""id"": ""cpt_4qqhO89gsT"",
                 ""mode"": ""live"",
                 ""amount"": {{
-                    ""value"": ""{defaultAmountValue}"",
+                    ""value"": ""{defaultAmountValue.ToString(CultureInfo.InvariantCulture)}"",
                     ""currency"": ""{defaultAmountCurrency}""
                 }},
                 ""settlementAmount"": {{
@@ -511,7 +517,7 @@ namespace Mollie.Tests.Unit.Client {
     ""status"": ""open"",
     ""amount"": {{
         ""currency"": ""{defaultAmountCurrency}"",
-        ""value"": ""{defaultAmountValue}""
+        ""value"": ""{defaultAmountValue.ToString(CultureInfo.InvariantCulture)}""
     }},
     ""periods"": {{
         ""2018"": {{

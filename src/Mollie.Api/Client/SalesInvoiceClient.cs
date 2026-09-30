@@ -23,25 +23,25 @@ public class SalesInvoiceClient : BaseMollieClient, ISalesInvoiceClient {
         : base(options, mollieSecretManager, httpClient) {
     }
 
-    public async Task<SalesInvoiceResponse> CreateSalesInvoiceAsync(
+    public async Task<MollieResult<SalesInvoiceResponse>> CreateSalesInvoiceAsync(
         SalesInvoiceRequest salesInvoiceRequest, CancellationToken cancellationToken = default) {
         return await PostAsync<SalesInvoiceResponse>($"sales-invoices", salesInvoiceRequest, cancellationToken: cancellationToken)
             .ConfigureAwait(false);
     }
 
-    public async Task<ListResponse<SalesInvoiceResponse>> GetSalesInvoiceListAsync(
+    public async Task<MollieResult<ListResponse<SalesInvoiceResponse>>> GetSalesInvoiceListAsync(
         string? from = null, int? limit = null, bool testmode = false, CancellationToken cancellationToken = default) {
         var queryParameters = BuildQueryParameters(testmode: testmode);
         return await GetListAsync<ListResponse<SalesInvoiceResponse>>("sales-invoices", from, limit, queryParameters, cancellationToken: cancellationToken)
             .ConfigureAwait(false);
     }
 
-    public async Task<ListResponse<SalesInvoiceResponse>> GetSalesInvoiceListAsync(
+    public async Task<MollieResult<ListResponse<SalesInvoiceResponse>>> GetSalesInvoiceListAsync(
         UrlObjectLink<ListResponse<SalesInvoiceResponse>> url, CancellationToken cancellationToken = default) {
         return await GetAsync(url, cancellationToken: cancellationToken).ConfigureAwait(false);
     }
 
-    public async Task<SalesInvoiceResponse> GetSalesInvoiceAsync(
+    public async Task<MollieResult<SalesInvoiceResponse>> GetSalesInvoiceAsync(
         string salesInvoiceId, bool testmode = false, CancellationToken cancellationToken = default) {
         ValidateRequiredUrlParameter(nameof(salesInvoiceId), salesInvoiceId);
         var queryParameters = BuildQueryParameters(testmode: testmode);
@@ -49,21 +49,21 @@ public class SalesInvoiceClient : BaseMollieClient, ISalesInvoiceClient {
             .ConfigureAwait(false);
     }
 
-    public async Task<SalesInvoiceResponse> GetSalesInvoiceAsync(
+    public async Task<MollieResult<SalesInvoiceResponse>> GetSalesInvoiceAsync(
         UrlObjectLink<SalesInvoiceResponse> url, CancellationToken cancellationToken = default) {
         return await GetAsync(url, cancellationToken: cancellationToken).ConfigureAwait(false);
     }
 
-    public async Task<SalesInvoiceResponse> UpdateSalesInvoiceAsync(
+    public async Task<MollieResult<SalesInvoiceResponse>> UpdateSalesInvoiceAsync(
         string salesInvoiceId, SalesInvoiceUpdateRequest salesInvoiceRequest, CancellationToken cancellationToken = default) {
         ValidateRequiredUrlParameter(nameof(salesInvoiceId), salesInvoiceId);
         return await PatchAsync<SalesInvoiceResponse>($"sales-invoices/{salesInvoiceId}", salesInvoiceRequest, cancellationToken: cancellationToken)
             .ConfigureAwait(false);
     }
 
-    public async Task DeleteSalesInvoiceAsync(string salesInvoiceId, bool testmode = false, CancellationToken cancellationToken = default) {
+    public async Task<MollieResult> DeleteSalesInvoiceAsync(string salesInvoiceId, bool testmode = false, CancellationToken cancellationToken = default) {
         ValidateRequiredUrlParameter(nameof(salesInvoiceId), salesInvoiceId);
         var data = CreateTestmodeModel(testmode);
-        await DeleteAsync($"sales-invoices/{salesInvoiceId}", data, cancellationToken: cancellationToken).ConfigureAwait(false);
+        return await DeleteAsync($"sales-invoices/{salesInvoiceId}", data, cancellationToken: cancellationToken).ConfigureAwait(false);
     }
 }

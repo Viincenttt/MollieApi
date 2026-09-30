@@ -16,7 +16,7 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="includeQrCode">Include a QR code object for the payment. Only available for iDEAL, Bancontact and bank transfer payments.</param>
         /// <param name="cancellationToken">Token to cancel the request</param>
         /// <returns>The payment object created by Mollie. Once the payment is created, redirect the user to Links.Checkout.Redirect</returns>
-        Task<PaymentResponse> CreatePaymentAsync(
+        Task<MollieResult<PaymentResponse>> CreatePaymentAsync(
             PaymentRequest paymentRequest,
             bool includeQrCode = false,
             CancellationToken cancellationToken = default);
@@ -37,7 +37,7 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="embedChargebacks"> Include all chargebacks issued for the payment.</param>
         /// <param name="cancellationToken">A cancellation token that can be used to cancel the request.</param>
         /// <returns></returns>
-        Task<PaymentResponse> GetPaymentAsync(
+        Task<MollieResult<PaymentResponse>> GetPaymentAsync(
             string paymentId,
             bool testmode = false,
             bool includeQrCode = false,
@@ -55,7 +55,7 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="testmode">Oauth - Optional – Set this to true to cancel a test mode payment.</param>
         /// <param name="cancellationToken">A cancellation token that can be used to cancel the request.</param>
         /// <returns></returns>
-        Task CancelPaymentAsync(
+        Task<MollieResult> CancelPaymentAsync(
             string paymentId,
             bool testmode = false,
             CancellationToken cancellationToken = default);
@@ -68,7 +68,7 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="testmode">Oauth - Optional – Set this to true to release the authorization of a test mode payment.</param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task ReleasePaymentAuthorization(
+        Task<MollieResult> ReleasePaymentAuthorization(
             string paymentId, bool testmode = false, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace Mollie.Api.Client.Abstract {
         /// to desc or asc. Default is desc.</param>
         /// <param name="cancellationToken">A cancellation token that can be used to cancel the request.</param>
         /// <returns></returns>
-		Task<ListResponse<PaymentResponse>> GetPaymentListAsync(
+		Task<MollieResult<ListResponse<PaymentResponse>>> GetPaymentListAsync(
             string? from = null,
             int? limit = null,
             string? profileId = null,
@@ -106,7 +106,7 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="url">The URL from which to retrieve the payments</param>
         /// <param name="cancellationToken">A cancellation token that can be used to cancel the request.</param>
         /// <returns>A list of paginated payments</returns>
-        Task<ListResponse<PaymentResponse>> GetPaymentListAsync(
+        Task<MollieResult<ListResponse<PaymentResponse>>> GetPaymentListAsync(
             UrlObjectLink<ListResponse<PaymentResponse>> url,
             CancellationToken cancellationToken = default);
 
@@ -116,7 +116,7 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="url">The URL from which to retrieve the payment</param>
         /// <param name="cancellationToken">A cancellation token that can be used to cancel the request.</param>
         /// <returns>The found payment</returns>
-        Task<PaymentResponse> GetPaymentAsync(
+        Task<MollieResult<PaymentResponse>> GetPaymentAsync(
             UrlObjectLink<PaymentResponse> url,
             CancellationToken cancellationToken = default);
 
@@ -128,10 +128,9 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="cancellationToken">A cancellation token that can be used to cancel the request.</param>
         /// <returns>The changed payment</returns>
         /// <remarks>Updating the payment details will not result in a webhook call</remarks>
-        Task<PaymentResponse> UpdatePaymentAsync(
+        Task<MollieResult<PaymentResponse>> UpdatePaymentAsync(
             string paymentId,
             PaymentUpdateRequest paymentUpdateRequest,
             CancellationToken cancellationToken = default);
     }
 }
-

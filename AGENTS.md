@@ -10,7 +10,7 @@ This is an open-source .NET library that wraps the [Mollie REST API](https://doc
 
 | Package | Path | Purpose |
 |---|---|---|
-| `Mollie.Api` | `src/Mollie.Api` | Core API client library targeting `netstandard2.0` and `net8.0` |
+| `Mollie.Api` | `src/Mollie.Api` | Core API client library targeting `netstandard2.0`, `net8.0` and `net10.0`. Ships the `Mollie.Api.Analyzers` Roslyn analyzers inside the package |
 | `Mollie.Api.AspNet` | `src/Mollie.Api.AspNet` | ASP.NET-specific webhook helpers |
 
 Tests live under `tests/` and samples under `samples/Mollie.WebApplication.Blazor`.
@@ -30,6 +30,7 @@ src/
     Extensions/      # Extension methods (IEnumerable, Dictionary helpers)
     Options/         # MollieOptions, MollieClientOptions
     DependencyInjection.cs
+  Mollie.Api.Analyzers/ # Roslyn analyzers (e.g. MOLLIE001), packed into the Mollie.Api package
   Mollie.Api.AspNet/
     Webhooks/        # Model binders and signature filter
 tests/
@@ -37,6 +38,7 @@ tests/
     Client/          # One test class per client
     Models/          # Serialisation/deserialisation tests
     Framework/
+    Analyzers/       # Tests for the Roslyn analyzers
   Mollie.Tests.Integration/
 samples/
   Mollie.WebApplication.Blazor/
@@ -49,7 +51,7 @@ samples/
 ### Language & Target
 
 - **C# 12** (`LangVersion` is set to `12`). Use modern language features such as `required` members, primary constructors, collection expressions, and `record` types where appropriate.
-- The library targets **`netstandard2.0`** (via PolySharp for back-fill) and **`net8.0`**.
+- The library targets **`netstandard2.0`** (via PolySharp for back-fill), **`net8.0`** and **`net10.0`**. Types that do not exist on `netstandard2.0`, such as `DateOnly`, are switched with `#if NET8_0_OR_GREATER`.
 - Nullable reference types are **enabled** (`<Nullable>enable</Nullable>`). Always annotate nullability correctly.
 
 ### Naming
@@ -77,7 +79,7 @@ Every API resource follows this pattern:
 
 ```csharp
 // Typical method signature
-public async Task<FooResponse> GetFooAsync(
+public async Task<MollieResult<FooResponse>> GetFooAsync(
     string fooId,
     bool testmode = false,
     CancellationToken cancellationToken = default) {
@@ -96,6 +98,7 @@ Key rules:
 - Always pass `cancellationToken` through and call `.ConfigureAwait(false)` on every `await`.
 - Use the protected helpers `GetAsync`, `PostAsync`, `PatchAsync`, `DeleteAsync`, `GetListAsync` from `BaseMollieClient` — never call `HttpClient` directly.
 - Build query strings using the `BuildQueryParameters` helper and the `ToQueryString()` extension method.
+- Every client method returns `Task<MollieResult<T>>`, or `Task<MollieResult>` when the API returns no payload. Never throw for an error returned by the Mollie API.
 
 ### Model Pattern
 
@@ -143,6 +146,7 @@ return includeList.ToIncludeParameter();
 - Never hit real Mollie endpoints in unit tests — use `MockHttpMessageHandler` to return canned JSON.
 - Store expected JSON response strings as `private const string` fields in the test class.
 - Use `mockHttp.VerifyNoOutstandingExpectation()` to assert all expected HTTP calls were made.
+- Never ignore a `MollieResult`: assert `result.Success` (or call `EnsureSuccess()`), otherwise the `MOLLIE001` analyzer reports a warning.
 
 ```csharp
 [Fact]
@@ -157,10 +161,11 @@ public async Task GetFooAsync_WithValidId_ResponseIsDeserializedCorrectly() {
     var client = new FooClient("test_api_key", mockHttp.ToHttpClient());
 
     // When
-    FooResponse result = await client.GetFooAsync(fooId);
+    MollieResult<FooResponse> result = await client.GetFooAsync(fooId);
 
     // Then
-    result.Id.ShouldBe(fooId);
+    result.Success.ShouldBeTrue();
+    result.Data.Id.ShouldBe(fooId);
     mockHttp.VerifyNoOutstandingExpectation();
 }
 ```
@@ -192,8 +197,11 @@ Follow these steps in order:
 
 ## Error Handling
 
-- HTTP errors are thrown as `MollieApiException` which contains a `MollieErrorMessage` with `Status`, `Title`, and `Detail`.
-- Callers should catch `MollieApiException` to handle Mollie-specific API errors.
+- Client methods do not throw for API errors. They return a `MollieResult` / `MollieResult<T>` whose `Error` is a `MollieErrorMessage` with `Status`, `Title`, and `Detail`.
+- API errors come back as a result; everything else (invalid arguments, network failures, JSON errors) throws.
+- Callers who prefer exceptions can call `result.EnsureSuccess()`, which throws a `MollieApiException` for an unsuccessful result. On `MollieResult<T>` it returns the data.
+- `Success` is annotated with `MemberNotNullWhen`, so `Data` is non-null after a `Success` check and `Error` is non-null after a failed one.
+- The `MOLLIE001` analyzer (`src/Mollie.Api.Analyzers`) warns when a `MollieResult` is discarded, e.g. a bare `await client.DeleteFooAsync(id);`. Inspect the result, call `EnsureSuccess()`, or discard it explicitly with `_ =`.
 
 ---
 

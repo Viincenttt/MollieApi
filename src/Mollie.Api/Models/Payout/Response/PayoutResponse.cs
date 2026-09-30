@@ -45,25 +45,25 @@ public record PayoutResponse {
     /// <summary>
     /// The entity's date and time of creation, in ISO 8601 format.
     /// </summary>
-    public required DateTime CreatedAt { get; set; }
+    public required DateTimeOffset CreatedAt { get; set; }
 
     /// <summary>
     /// The date and time the payout was initiated, in ISO 8601 format.
     /// null if the payout has not been initiated yet.
     /// </summary>
-    public DateTime? InitiatedAt { get; set; }
+    public DateTimeOffset? InitiatedAt { get; set; }
 
     /// <summary>
     /// The date and time the payout was sent to the destination bank account, in ISO 8601 format.
     /// null if the payout has not completed yet.
     /// </summary>
-    public DateTime? CompletedAt { get; set; }
+    public DateTimeOffset? CompletedAt { get; set; }
 
     /// <summary>
     /// The date and time the payout was canceled, in ISO 8601 format.
     /// null if the payout was not canceled.
     /// </summary>
-    public DateTime? CanceledAt { get; set; }
+    public DateTimeOffset? CanceledAt { get; set; }
 
     /// <summary>
     /// Whether this entity was created in live mode or in test mode.
@@ -76,6 +76,3 @@ public record PayoutResponse {
     [JsonPropertyName("_links")]
     public required PayoutResponseLinks Links { get; set; }
 }
-
-
-

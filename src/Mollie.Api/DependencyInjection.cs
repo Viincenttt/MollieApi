@@ -77,13 +77,14 @@ namespace Mollie.Api {
 
         static void RegisterMollieApiClient<TInterface, TImplementation>(
             IServiceCollection services,
-            IAsyncPolicy<HttpResponseMessage>? retryPolicy = null)
+            Action<ResiliencePipelineBuilder<HttpResponseMessage>>? retryPolicy = null)
             where TInterface : class
             where TImplementation : class, TInterface {
 
             IHttpClientBuilder clientBuilder = services.AddHttpClient<TInterface, TImplementation>();
             if (retryPolicy != null) {
-                clientBuilder.AddPolicyHandler(retryPolicy);
+                const string resilienceHandlerName = "Mollie";
+                clientBuilder.AddResilienceHandler(resilienceHandlerName, (builder, context) => retryPolicy(builder));
             }
         }
     }

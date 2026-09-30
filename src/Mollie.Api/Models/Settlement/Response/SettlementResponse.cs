@@ -25,13 +25,13 @@ public record SettlementResponse : IEntity {
 	/// <summary>
 	/// The settlement's bank reference, as found in your Mollie account and on your bank statement.
 	/// </summary>
-	public required DateTime CreatedAt { get; set; }
+	public required DateTimeOffset CreatedAt { get; set; }
 
 	/// <summary>
 	/// The date on which the settlement was settled.
 	/// When requesting the open settlement or next settlement the return value is null.
 	/// </summary>
-	public DateTime? SettledAt { get; set; }
+	public DateTimeOffset? SettledAt { get; set; }
 
 	/// <summary>
 	/// The status of the settlement - See the Mollie.Api.Models.Settlement.SettlementStatus

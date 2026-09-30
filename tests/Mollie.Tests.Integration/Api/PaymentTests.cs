@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Net.Http;
 using System.Threading.Tasks;
-using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Capture;
@@ -13,9 +11,7 @@ using Mollie.Tests.Integration.Framework;
 using System.Collections.Generic;
 using System.Linq;
 using Shouldly;
-using Mollie.Api.Models.Capture.Response;
 using Mollie.Api.Models.Customer.Response;
-using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Mandate.Response;
 using Mollie.Api.Models.Order.Request;
 using Mollie.Api.Models.Payment.Request.PaymentSpecificParameters;
@@ -49,9 +45,11 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
     [Fact]
     public async Task CanRetrievePaymentList() {
         // When: Retrieve payment list with default settings
-        ListResponse<PaymentResponse> response = await _paymentClient.GetPaymentListAsync();
+        var result = await _paymentClient.GetPaymentListAsync();
+        var response = result.Data!;
 
         // Then
+        result.Success.ShouldBeTrue();
         response.ShouldNotBeNull();
         response.Items.ShouldNotBeNull();
         response.Items.Select(x => x.CreatedAt).ShouldBeInOrder(Shouldly.SortDirection.Descending);
@@ -61,9 +59,11 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
     public async Task CanRetrievePaymentListInDescendingOrder()
     {
         // When: Retrieve payment list in ascending order
-        ListResponse<PaymentResponse> response = await _paymentClient.GetPaymentListAsync(sort: SortDirection.Desc);
+        var result = await _paymentClient.GetPaymentListAsync(sort: SortDirection.Desc);
+        var response = result.Data!;
 
         // Then
+        result.Success.ShouldBeTrue();
         response.ShouldNotBeNull();
         response.Items.ShouldNotBeNull();
         response.Items.Select(x => x.CreatedAt).ShouldBeInOrder(Shouldly.SortDirection.Descending);
@@ -73,9 +73,11 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
     public async Task CanRetrievePaymentListInAscendingOrder()
     {
         // When: Retrieve payment list in ascending order
-        ListResponse<PaymentResponse> response = await _paymentClient.GetPaymentListAsync(sort: SortDirection.Asc);
+        var result = await _paymentClient.GetPaymentListAsync(sort: SortDirection.Asc);
+        var response = result.Data!;
 
         // Then
+        result.Success.ShouldBeTrue();
         response.ShouldNotBeNull();
         response.Items.ShouldNotBeNull();
         response.Items.Select(x => x.CreatedAt).ShouldBeInOrder(Shouldly.SortDirection.Ascending);
@@ -87,47 +89,56 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         int numberOfPayments = 5;
 
         // When: Retrieve 5 payments
-        ListResponse<PaymentResponse> response = await _paymentClient.GetPaymentListAsync(null, numberOfPayments);
+        var result = await _paymentClient.GetPaymentListAsync(null, numberOfPayments);
+        var response = result.Data!;
 
         // Then
+        result.Success.ShouldBeTrue();
         response.Items.Count.ShouldBeLessThanOrEqualTo(numberOfPayments);
     }
 
     [Fact]
     public async Task CanCreateDefaultPaymentWithOnlyRequiredFields() {
         // Given: we create a payment request with only the required parameters
-        var paymentRequest = new PaymentRequest() {
-            Amount = new Amount(Currency.EUR, "100.00"),
+        var paymentRequest = new PaymentRequest {
+            Amount = new Amount(Currency.EUR, 10.00m),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl
         };
 
         // When: We send the payment request to Mollie
-        PaymentResponse result = await _paymentClient.CreatePaymentAsync(paymentRequest);
+        var result = await _paymentClient.CreatePaymentAsync(paymentRequest);
+        var payment = result.Data!;
 
         // Then: Make sure we get a valid response
-        result.ShouldNotBeNull();
-        result.Amount.ShouldBe(paymentRequest.Amount);
-        result.Description.ShouldBe(paymentRequest.Description);
-        result.RedirectUrl.ShouldBe(paymentRequest.RedirectUrl);
+        result.Success.ShouldBeTrue();
+        payment.ShouldNotBeNull();
+        payment.Amount.ShouldBe(paymentRequest.Amount);
+        payment.Description.ShouldBe(paymentRequest.Description);
+        payment.RedirectUrl.ShouldBe(paymentRequest.RedirectUrl);
     }
 
     [Fact]
     public async Task CanCreateDefaultPaymentWithCustomIdempotencyKey() {
         // Given: we create a payment request with only the required parameters
-        PaymentRequest paymentRequest = new PaymentRequest() {
-            Amount = new Amount(Currency.EUR, "100.00"),
+        var paymentRequest = new PaymentRequest {
+            Amount = new Amount(Currency.EUR, 10.00m),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl
         };
+        var idempotencyKey = Guid.NewGuid();
 
         // When: We send the payment request to Mollie
-        using (_paymentClient.WithIdempotencyKey("my-idempotency-key"))
+        using (_paymentClient.WithIdempotencyKey(idempotencyKey.ToString()))
         {
-            PaymentResponse firstAttempt = await _paymentClient.CreatePaymentAsync(paymentRequest);
-            PaymentResponse secondAttempt = await _paymentClient.CreatePaymentAsync(paymentRequest);
+            var firstResult = await _paymentClient.CreatePaymentAsync(paymentRequest);
+            var secondResult = await _paymentClient.CreatePaymentAsync(paymentRequest);
+            var firstAttempt = firstResult.Data!;
+            var secondAttempt = secondResult.Data!;
 
             // Then: Make sure the responses have the same payment Id
+            firstResult.Success.ShouldBeTrue();
+            secondResult.Success.ShouldBeTrue();
             firstAttempt.Id.ShouldBe(secondAttempt.Id);
         }
     }
@@ -135,8 +146,8 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
     [Fact]
     public async Task CanCreateDefaultPaymentWithAllFields() {
         // Given: we create a payment request where all parameters have a value
-        PaymentRequest paymentRequest = new PaymentRequest() {
-            Amount = new Amount(Currency.EUR, "100.00"),
+        var paymentRequest = new PaymentRequest {
+            Amount = new Amount(Currency.EUR, 10.00m),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl,
             Locale = Locale.nl_NL,
@@ -146,36 +157,42 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         };
 
         // When: We send the payment request to Mollie
-        PaymentResponse result = await _paymentClient.CreatePaymentAsync(paymentRequest);
+        var result = await _paymentClient.CreatePaymentAsync(paymentRequest);
+        var payment = result.Data!;
 
         // Then: Make sure all requested parameters match the response parameter values
-        result.ShouldNotBeNull();
-        result.Amount.ShouldBe(paymentRequest.Amount);
-        result.Description.ShouldBe(paymentRequest.Description);
-        result.RedirectUrl.ShouldBe(paymentRequest.RedirectUrl);
-        result.Locale.ShouldBe(paymentRequest.Locale);
-        result.WebhookUrl.ShouldBe(paymentRequest.WebhookUrl);
-        IsJsonResultEqual(result.Metadata, paymentRequest.Metadata).ShouldBeTrue();
+        result.Success.ShouldBeTrue();
+        payment.ShouldNotBeNull();
+        payment.Amount.ShouldBe(paymentRequest.Amount);
+        payment.Description.ShouldBe(paymentRequest.Description);
+        payment.RedirectUrl.ShouldBe(paymentRequest.RedirectUrl);
+        payment.Locale.ShouldBe(paymentRequest.Locale);
+        payment.WebhookUrl.ShouldBe(paymentRequest.WebhookUrl);
+        IsJsonResultEqual(payment.Metadata, paymentRequest.Metadata).ShouldBeTrue();
     }
 
     [Fact]
     public async Task CanUpdatePayment() {
         // Given: We create a payment with only the required parameters
-        PaymentRequest paymentRequest = new PaymentRequest() {
-            Amount = new Amount(Currency.EUR, "100.00"),
+        var paymentRequest = new PaymentRequest {
+            Amount = new Amount(Currency.EUR, 10.00m),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl
         };
-        PaymentResponse result = await _paymentClient.CreatePaymentAsync(paymentRequest);
+        var createResult = await _paymentClient.CreatePaymentAsync(paymentRequest);
+        var result = createResult.Data!;
 
         // When: We update this payment
-        PaymentUpdateRequest paymentUpdateRequest = new PaymentUpdateRequest() {
+        var paymentUpdateRequest = new PaymentUpdateRequest {
             Description = "Updated description",
             Metadata = "My metadata"
         };
-        PaymentResponse updatedPayment = await _paymentClient.UpdatePaymentAsync(result.Id, paymentUpdateRequest);
+        var updateResult = await _paymentClient.UpdatePaymentAsync(result.Id, paymentUpdateRequest);
+        var updatedPayment = updateResult.Data!;
 
         // Then: Make sure the payment is updated
+        createResult.Success.ShouldBeTrue();
+        updateResult.Success.ShouldBeTrue();
         updatedPayment.Description.ShouldBe(paymentUpdateRequest.Description);
         updatedPayment.Metadata.ShouldBe(paymentUpdateRequest.Metadata);
     }
@@ -183,29 +200,31 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
     [Fact]
     public async Task CanCreatePaymentWithSinglePaymentMethod() {
         // Given: we create a payment request and specify multiple payment methods
-        PaymentRequest paymentRequest = new PaymentRequest() {
-            Amount = new Amount(Currency.EUR, "100.00"),
+        var paymentRequest = new PaymentRequest {
+            Amount = new Amount(Currency.EUR, 10.00m),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl,
             Method = PaymentMethod.CreditCard
         };
 
         // When: We send the payment request to Mollie
-        PaymentResponse result = await _paymentClient.CreatePaymentAsync(paymentRequest);
+        var result = await _paymentClient.CreatePaymentAsync(paymentRequest);
+        var payment = result.Data!;
 
         // Then: Make sure we get a valid response
-        result.ShouldNotBeNull();
-        result.Amount.ShouldBe(paymentRequest.Amount);
-        result.Description.ShouldBe(paymentRequest.Description);
-        result.RedirectUrl.ShouldBe(paymentRequest.RedirectUrl);
-        result.Method.ShouldBe(paymentRequest.Method);
+        result.Success.ShouldBeTrue();
+        payment.ShouldNotBeNull();
+        payment.Amount.ShouldBe(paymentRequest.Amount);
+        payment.Description.ShouldBe(paymentRequest.Description);
+        payment.RedirectUrl.ShouldBe(paymentRequest.RedirectUrl);
+        payment.Method.ShouldBe(paymentRequest.Method);
     }
 
     [Fact]
     public async Task CanCreatePaymentWithMultiplePaymentMethods() {
         // When: we create a payment request and specify multiple payment methods
-        PaymentRequest paymentRequest = new PaymentRequest() {
-            Amount = new Amount(Currency.EUR, "100.00"),
+        var paymentRequest = new PaymentRequest {
+            Amount = new Amount(Currency.EUR, 10.00m),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl,
             Methods = new List<string>() {
@@ -216,14 +235,16 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         };
 
         // When: We send the payment request to Mollie
-        PaymentResponse result = await _paymentClient.CreatePaymentAsync(paymentRequest);
+        var result = await _paymentClient.CreatePaymentAsync(paymentRequest);
+        var payment = result.Data!;
 
         // Then: Make sure we get a valid response
-        result.ShouldNotBeNull();
-        result.Amount.ShouldBe(paymentRequest.Amount);
-        result.Description.ShouldBe(paymentRequest.Description);
-        result.RedirectUrl.ShouldBe(paymentRequest.RedirectUrl);
-        result.Method.ShouldBeNull();
+        result.Success.ShouldBeTrue();
+        payment.ShouldNotBeNull();
+        payment.Amount.ShouldBe(paymentRequest.Amount);
+        payment.Description.ShouldBe(paymentRequest.Description);
+        payment.RedirectUrl.ShouldBe(paymentRequest.RedirectUrl);
+        payment.Method.ShouldBeNull();
     }
 
     [Theory]
@@ -236,7 +257,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
     public async Task CanCreateSpecificPaymentType(Type paymentType, string paymentMethod, Type expectedResponseType) {
         // When: we create a specific payment type with some bank transfer specific values
         PaymentRequest paymentRequest = (PaymentRequest)Activator.CreateInstance(paymentType)!;
-        paymentRequest.Amount = new Amount(Currency.EUR, "100.00");
+        paymentRequest.Amount = new Amount(Currency.EUR, 10.00m);
         paymentRequest.Description = "Description";
         paymentRequest.RedirectUrl = DefaultRedirectUrl;
         paymentRequest.Method = paymentMethod;
@@ -247,33 +268,39 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         }
 
         // When: We send the payment request to Mollie
-        PaymentResponse result = await _paymentClient.CreatePaymentAsync(paymentRequest);
+        var result = await _paymentClient.CreatePaymentAsync(paymentRequest);
+        var payment = result.Data!;
 
         // Then: Make sure all requested parameters match the response parameter values
-        result.ShouldNotBeNull();
-        result.ShouldBeOfType(expectedResponseType);
-        result.Amount.ShouldBe(paymentRequest.Amount);
-        result.Description.ShouldBe(paymentRequest.Description);
-        result.RedirectUrl.ShouldBe(paymentRequest.RedirectUrl);
-        result.Method.ShouldBe(paymentRequest.Method);
-        result.Links.ShouldNotBeNull();
+        result.Success.ShouldBeTrue();
+        payment.ShouldNotBeNull();
+        payment.ShouldBeOfType(expectedResponseType);
+        payment.Amount.ShouldBe(paymentRequest.Amount);
+        payment.Description.ShouldBe(paymentRequest.Description);
+        payment.RedirectUrl.ShouldBe(paymentRequest.RedirectUrl);
+        payment.Method.ShouldBe(paymentRequest.Method);
+        payment.Links.ShouldNotBeNull();
     }
 
     [Fact]
     public async Task CanCreatePaymentAndRetrieveIt() {
         // When: we create a new payment request
-        PaymentRequest paymentRequest = new PaymentRequest() {
-            Amount = new Amount(Currency.EUR, "100.00"),
+        var paymentRequest = new PaymentRequest {
+            Amount = new Amount(Currency.EUR, 10.00m),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl,
             Locale = Locale.de_DE
         };
 
         // When: We send the payment request to Mollie and attempt to retrieve it
-        PaymentResponse paymentResponse = await _paymentClient.CreatePaymentAsync(paymentRequest);
-        PaymentResponse result = await _paymentClient.GetPaymentAsync(paymentResponse.Id);
+        var createResult = await _paymentClient.CreatePaymentAsync(paymentRequest);
+        var paymentResponse = createResult.Data!;
+        var getResult = await _paymentClient.GetPaymentAsync(paymentResponse.Id);
+        var result = getResult.Data!;
 
         // Then
+        createResult.Success.ShouldBeTrue();
+        getResult.Success.ShouldBeTrue();
         result.ShouldNotBeNull();
         result.Id.ShouldBe(paymentResponse.Id);
         result.Amount.ShouldBe(paymentRequest.Amount);
@@ -287,9 +314,10 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         // When: we create a new recurring payment
         MandateResponse? mandate = await GetFirstValidMandate();
         if (mandate != null) {
-            CustomerResponse customer = await _customerClient.GetCustomerAsync(mandate.Links.Customer);
-            PaymentRequest paymentRequest = new PaymentRequest() {
-                Amount = new Amount(Currency.EUR, "100.00"),
+            var customerResult = await _customerClient.GetCustomerAsync(mandate.Links.Customer);
+            var customer = customerResult.Data!;
+            var paymentRequest = new PaymentRequest {
+                Amount = new Amount(Currency.EUR, 10.00m),
                 Description = "Description",
                 RedirectUrl = DefaultRedirectUrl,
                 SequenceType = SequenceType.First,
@@ -297,10 +325,15 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
             };
 
             // When: We send the payment request to Mollie and attempt to retrieve it
-            PaymentResponse paymentResponse = await _paymentClient.CreatePaymentAsync(paymentRequest);
-            PaymentResponse result = await _paymentClient.GetPaymentAsync(paymentResponse.Id);
+            var createResult = await _paymentClient.CreatePaymentAsync(paymentRequest);
+            var paymentResponse = createResult.Data!;
+            var getResult = await _paymentClient.GetPaymentAsync(paymentResponse.Id);
+            var result = getResult.Data!;
 
             // Then: Make sure the recurringtype parameter is entered
+            customerResult.Success.ShouldBeTrue();
+            createResult.Success.ShouldBeTrue();
+            getResult.Success.ShouldBeTrue();
             result.SequenceType.ShouldBe(SequenceType.First);
         }
     }
@@ -309,58 +342,64 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
     public async Task CanCreatePaymentWithMetaData() {
         // When: We create a payment with meta data
         string metadata = "this is my metadata";
-        PaymentRequest paymentRequest = new PaymentRequest() {
-            Amount = new Amount(Currency.EUR, "100.00"),
+        var paymentRequest = new PaymentRequest {
+            Amount = new Amount(Currency.EUR, 10.00m),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl,
             Metadata = metadata
         };
 
         // When: We send the payment request to Mollie
-        PaymentResponse result = await _paymentClient.CreatePaymentAsync(paymentRequest);
+        var result = await _paymentClient.CreatePaymentAsync(paymentRequest);
+        var payment = result.Data!;
 
         // Then: Make sure we get the same json result as metadata
-        result.Metadata.ShouldBe(metadata);
+        result.Success.ShouldBeTrue();
+        payment.Metadata.ShouldBe(metadata);
     }
 
     [Fact]
     public async Task CanCreatePaymentWithJsonMetaData() {
         // When: We create a payment with meta data
         string json = "{\"order_id\":\"4.40\"}";
-        PaymentRequest paymentRequest = new PaymentRequest() {
-            Amount = new Amount(Currency.EUR, "100.00"),
+        var paymentRequest = new PaymentRequest {
+            Amount = new Amount(Currency.EUR, 10.00m),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl,
             Metadata = json
         };
 
         // When: We send the payment request to Mollie
-        PaymentResponse result = await _paymentClient.CreatePaymentAsync(paymentRequest);
+        var result = await _paymentClient.CreatePaymentAsync(paymentRequest);
+        var payment = result.Data!;
 
         // Then: Make sure we get the same json result as metadata
-        IsJsonResultEqual(result.Metadata, json).ShouldBeTrue();
+        result.Success.ShouldBeTrue();
+        IsJsonResultEqual(payment.Metadata, json).ShouldBeTrue();
     }
 
     [Fact]
     public async Task CanCreatePaymentWithCustomMetaDataClass() {
         // When: We create a payment with meta data
-        CustomMetadataClass metadataRequest = new CustomMetadataClass() {
+        var metadataRequest = new CustomMetadataClass {
             OrderId = 1,
             Description = "Custom description"
         };
 
-        PaymentRequest paymentRequest = new PaymentRequest() {
-            Amount = new Amount(Currency.EUR, "100.00"),
+        var paymentRequest = new PaymentRequest {
+            Amount = new Amount(Currency.EUR, 10.00m),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl,
         };
         paymentRequest.SetMetadata(metadataRequest);
 
         // When: We send the payment request to Mollie
-        PaymentResponse result = await _paymentClient.CreatePaymentAsync(paymentRequest);
-        CustomMetadataClass? metadataResponse = result.GetMetadata<CustomMetadataClass>();
+        var result = await _paymentClient.CreatePaymentAsync(paymentRequest);
+        var payment = result.Data!;
+        CustomMetadataClass? metadataResponse = payment.GetMetadata<CustomMetadataClass>();
 
         // Then: Make sure we get the same json result as metadata
+        result.Success.ShouldBeTrue();
         metadataResponse.ShouldNotBeNull();
         metadataResponse.OrderId.ShouldBe(metadataRequest.OrderId);
         metadataResponse.Description.ShouldBe(metadataRequest.Description);
@@ -382,24 +421,24 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
             Region = "Zuid-Holland",
             PostalCode = "1015CW"
         };
-        PaymentRequest paymentRequest = new PaymentRequest() {
-            Amount = new Amount(Currency.EUR, 90m),
+        var paymentRequest = new PaymentRequest {
+            Amount = new Amount(Currency.EUR, 90.00m),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl,
-            Lines = new List<PaymentLine>() {
+            Lines = new List<PaymentLine> {
                 new() {
                     Type = OrderLineDetailsType.Digital,
                     Description = "Star wars lego",
                     Quantity = 1,
                     QuantityUnit = "pcs",
-                    UnitPrice = new Amount(Currency.EUR, 100m),
-                    TotalAmount = new Amount(Currency.EUR, 90m),
-                    DiscountAmount = new Amount(Currency.EUR, 10m),
+                    UnitPrice = new Amount(Currency.EUR, 100.00m),
+                    TotalAmount = new Amount(Currency.EUR, 90.00m),
+                    DiscountAmount = new Amount(Currency.EUR, 10.00m),
                     ProductUrl = "http://www.lego.com/starwars",
                     ImageUrl = "http://www.lego.com/starwars.jpg",
                     Sku = "my-sku",
                     VatAmount = new Amount(Currency.EUR, 15.62m),
-                    VatRate = "21.00"
+                    VatRate = 21.00m
                 }
             },
             ShippingAddress = address,
@@ -407,12 +446,14 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         };
 
         // Act
-        PaymentResponse result = await _paymentClient.CreatePaymentAsync(paymentRequest);
+        var result = await _paymentClient.CreatePaymentAsync(paymentRequest);
+        var payment = result.Data!;
 
         // Assert
-        result.Lines.ShouldBeEquivalentTo(paymentRequest.Lines);
-        result.BillingAddress.ShouldBeEquivalentTo(paymentRequest.BillingAddress);
-        result.ShippingAddress.ShouldBeEquivalentTo(paymentRequest.ShippingAddress);
+        result.Success.ShouldBeTrue();
+        payment.Lines.ShouldBeEquivalentTo(paymentRequest.Lines);
+        payment.BillingAddress.ShouldBeEquivalentTo(paymentRequest.BillingAddress);
+        payment.ShippingAddress.ShouldBeEquivalentTo(paymentRequest.ShippingAddress);
     }
 
     [Fact]
@@ -420,9 +461,10 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         // When: We create a payment with a mandate id
         MandateResponse? validMandate = await GetFirstValidMandate();
         if (validMandate != null) {
-            CustomerResponse customer = await _customerClient.GetCustomerAsync(validMandate.Links.Customer);
-            PaymentRequest paymentRequest = new PaymentRequest() {
-                Amount = new Amount(Currency.EUR, "100.00"),
+            var customerResult = await _customerClient.GetCustomerAsync(validMandate.Links.Customer);
+            var customer = customerResult.Data!;
+            var paymentRequest = new PaymentRequest {
+                Amount = new Amount(Currency.EUR, 10.00m),
                 Description = "Description",
                 RedirectUrl = DefaultRedirectUrl,
                 SequenceType = SequenceType.Recurring,
@@ -431,30 +473,37 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
             };
 
             // When: We send the payment request to Mollie
-            PaymentResponse result = await _paymentClient.CreatePaymentAsync(paymentRequest);
+            var result = await _paymentClient.CreatePaymentAsync(paymentRequest);
+            var payment = result.Data!;
 
             // Then: Make sure we get the mandate id back in the details
-            result.MandateId.ShouldBe(validMandate.Id);
-            result.Links.Mandate!.Href.ShouldEndWith(validMandate.Id);
-            result.Links.Customer!.Href.ShouldEndWith(customer.Id);
+            customerResult.Success.ShouldBeTrue();
+            result.Success.ShouldBeTrue();
+            payment.MandateId.ShouldBe(validMandate.Id);
+            payment.Links.Mandate!.Href.ShouldEndWith(validMandate.Id);
+            payment.Links.Customer!.Href.ShouldEndWith(customer.Id);
         }
     }
 
     [Fact]
     public async Task CanCreatePaymentWithDecimalAmountAndRetrieveIt() {
         // When: we create a new payment request
-        PaymentRequest paymentRequest = new PaymentRequest() {
-            Amount = new Amount(Currency.EUR, 100.1235m),
+        var paymentRequest = new PaymentRequest {
+            Amount = new Amount(Currency.EUR, 100.12m),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl,
             Locale = Locale.de_DE
         };
 
         // When: We send the payment request to Mollie and attempt to retrieve it
-        PaymentResponse paymentResponse = await _paymentClient.CreatePaymentAsync(paymentRequest);
-        PaymentResponse result = await _paymentClient.GetPaymentAsync(paymentResponse.Id);
+        var createResult = await _paymentClient.CreatePaymentAsync(paymentRequest);
+        var paymentResponse = createResult.Data!;
+        var getResult = await _paymentClient.GetPaymentAsync(paymentResponse.Id);
+        var result = getResult.Data!;
 
         // Then
+        createResult.Success.ShouldBeTrue();
+        getResult.Success.ShouldBeTrue();
         result.ShouldNotBeNull();
         result.Id.ShouldBe(paymentResponse.Id);
         result.Amount.ShouldBe(paymentRequest.Amount);
@@ -467,7 +516,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         var initialAmount = 100.75m;
 
         // When: we create a new payment request
-        PaymentRequest paymentRequest = new PaymentRequest() {
+        var paymentRequest = new PaymentRequest {
             Amount = new Amount(Currency.EUR, initialAmount),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl,
@@ -475,13 +524,17 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         };
 
         // When: We send the payment request to Mollie and attempt to retrieve it
-        PaymentResponse paymentResponse = await _paymentClient.CreatePaymentAsync(paymentRequest);
-        PaymentResponse result = await _paymentClient.GetPaymentAsync(paymentResponse.Id);
+        var createResult = await _paymentClient.CreatePaymentAsync(paymentRequest);
+        var paymentResponse = createResult.Data!;
+        var getResult = await _paymentClient.GetPaymentAsync(paymentResponse.Id);
+        var result = getResult.Data!;
 
         decimal responseAmount = paymentResponse.Amount; // Implicit cast
         decimal resultAmount = result.Amount; // Implicit cast
 
         // Then
+        createResult.Success.ShouldBeTrue();
+        getResult.Success.ShouldBeTrue();
         result.ShouldNotBeNull();
         result.Id.ShouldBe(paymentResponse.Id);
         result.Amount.ShouldBe(paymentRequest.Amount);
@@ -494,21 +547,25 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
     [Fact]
     public async Task CanCreatePointOfSalePayment() {
         // Given
-        ListResponse<TerminalResponse> terminals = await _terminalClient.GetTerminalListAsync();
+        var terminalListResult = await _terminalClient.GetTerminalListAsync();
+        var terminals = terminalListResult.Data!;
         TerminalResponse? terminal = terminals.Items.FirstOrDefault();
         if (terminal != null) {
             string terminalId = terminals.Items.First().Id;
             PointOfSalePaymentRequest paymentRequest = new() {
-                Amount = new Amount(Currency.EUR, 10m),
+                Amount = new Amount(Currency.EUR, 10.00m),
                 Description = "Description",
                 Method = PaymentMethod.PointOfSale,
                 TerminalId = terminalId
             };
 
             // When
-            PaymentResponse response = await _paymentClient.CreatePaymentAsync(paymentRequest);
+            var result = await _paymentClient.CreatePaymentAsync(paymentRequest);
+            var response = result.Data!;
 
             // Then
+            terminalListResult.Success.ShouldBeTrue();
+            result.Success.ShouldBeTrue();
             response.ShouldNotBeNull();
             response.Amount.ShouldBe(paymentRequest.Amount);
             response.Description.ShouldBe(paymentRequest.Description);
@@ -528,8 +585,8 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
     [Fact(Skip = "We can only test this in debug mode, because we have to set the payment status to authorized")]
     public async Task CanCreatePaymentWithManualCaptureMode() {
         // Given
-        PaymentRequest paymentRequest = new PaymentRequest() {
-            Amount = new Amount(Currency.EUR, 10m),
+        var paymentRequest = new PaymentRequest {
+            Amount = new Amount(Currency.EUR, 10.00m),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl,
             Method = PaymentMethod.CreditCard,
@@ -537,15 +594,21 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         };
 
         // When
-        PaymentResponse paymentResponse = await _paymentClient.CreatePaymentAsync(paymentRequest);
+        var createResult = await _paymentClient.CreatePaymentAsync(paymentRequest);
+        var paymentResponse = createResult.Data!;
         // Perform payment before API call
-        paymentResponse = await _paymentClient.GetPaymentAsync(paymentResponse.Id);
-        CaptureResponse captureResponse = await _captureClient.CreateCapture(paymentResponse.Id, new CaptureRequest {
-            Amount = new Amount(Currency.EUR, 10m),
+        var getResult = await _paymentClient.GetPaymentAsync(paymentResponse.Id);
+        paymentResponse = getResult.Data!;
+        var captureResult = await _captureClient.CreateCapture(paymentResponse.Id, new CaptureRequest {
+            Amount = new Amount(Currency.EUR, 10.00m),
             Description = "capture"
         });
+        var captureResponse = captureResult.Data!;
 
         // Then
+        createResult.Success.ShouldBeTrue();
+        getResult.Success.ShouldBeTrue();
+        captureResult.Success.ShouldBeTrue();
         captureResponse.ShouldNotBeNull();
         paymentResponse.Status.ShouldBe(PaymentStatus.Authorized);
         paymentRequest.CaptureMode.ShouldBe(CaptureMode.Manual);
@@ -556,7 +619,7 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
     public async Task CanCreatePaymentWithCaptureDelay() {
         // Given
         PaymentRequest paymentRequest = new() {
-            Amount = new Amount(Currency.EUR, 10m),
+            Amount = new Amount(Currency.EUR, 10.00m),
             Description = "Description",
             RedirectUrl = DefaultRedirectUrl,
             Method = PaymentMethod.CreditCard,
@@ -564,17 +627,21 @@ public class PaymentTests : BaseMollieApiTestClass, IDisposable {
         };
 
         // When
-        PaymentResponse paymentResponse = await _paymentClient.CreatePaymentAsync(paymentRequest);
+        var result = await _paymentClient.CreatePaymentAsync(paymentRequest);
+        var paymentResponse = result.Data!;
 
         // Then
+        result.Success.ShouldBeTrue();
         paymentResponse.CaptureDelay.ShouldBe(paymentRequest.CaptureDelay);
     }
 
     private async Task<MandateResponse?> GetFirstValidMandate() {
-        ListResponse<CustomerResponse> customers = await _customerClient.GetCustomerListAsync();
+        var customerListResult = await _customerClient.GetCustomerListAsync();
+        var customers = customerListResult.Data!;
 
         foreach (CustomerResponse customer in customers.Items) {
-            ListResponse<MandateResponse> customerMandates = await _mandateClient.GetMandateListAsync(customer.Id);
+            var mandateListResult = await _mandateClient.GetMandateListAsync(customer.Id);
+            var customerMandates = mandateListResult.Data!;
             MandateResponse? firstValidMandate = customerMandates.Items.FirstOrDefault(x => x.Status == MandateStatus.Valid);
             if (firstValidMandate != null) {
                 return firstValidMandate;

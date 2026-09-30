@@ -25,12 +25,13 @@ public class InvoiceClientTests : BaseClientTests
 
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
-        result.ShouldNotBeNull();
-        result.Resource.ShouldBe("invoice");
-        result.Id.ShouldBe(invoiceId);
-        result.Reference.ShouldBe("2016.10000");
-        result.VatNumber.ShouldBe("NL001234567B01");
-        result.Status.ShouldBe("open");
+        result.Success.ShouldBeTrue();
+        result.Data.ShouldNotBeNull();
+        result.Data.Resource.ShouldBe("invoice");
+        result.Data.Id.ShouldBe(invoiceId);
+        result.Data.Reference.ShouldBe("2016.10000");
+        result.Data.VatNumber.ShouldBe("NL001234567B01");
+        result.Data.Status.ShouldBe("open");
     }
 
     [Theory]

@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
 using Mollie.Api.Framework.Authentication.Abstract;
+using Mollie.Api.Models;
 using Mollie.Api.Models.Invoice.Response;
 using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Url;
@@ -22,7 +23,7 @@ namespace Mollie.Api.Client {
             : base(options, mollieSecretManager, httpClient) {
         }
 
-        public async Task<InvoiceResponse> GetInvoiceAsync(
+        public async Task<MollieResult<InvoiceResponse>> GetInvoiceAsync(
             string invoiceId, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(invoiceId), invoiceId);
             return await GetAsync<InvoiceResponse>(
@@ -30,13 +31,13 @@ namespace Mollie.Api.Client {
                 .ConfigureAwait(false);
         }
 
-        public async Task<InvoiceResponse> GetInvoiceAsync(
+        public async Task<MollieResult<InvoiceResponse>> GetInvoiceAsync(
             UrlObjectLink<InvoiceResponse> url, CancellationToken cancellationToken = default) {
             return await GetAsync(url, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<InvoiceResponse>> GetInvoiceListAsync(
+        public async Task<MollieResult<ListResponse<InvoiceResponse>>> GetInvoiceListAsync(
             string? reference = null, int? year = null, string? from = null, int? limit = null, CancellationToken cancellationToken = default) {
             var parameters = new Dictionary<string, string>();
             parameters.AddValueIfNotNullOrEmpty(nameof(reference), reference);
@@ -47,7 +48,7 @@ namespace Mollie.Api.Client {
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<InvoiceResponse>> GetInvoiceListAsync(
+        public async Task<MollieResult<ListResponse<InvoiceResponse>>> GetInvoiceListAsync(
             UrlObjectLink<ListResponse<InvoiceResponse>> url, CancellationToken cancellationToken = default) {
             return await GetAsync(url, cancellationToken: cancellationToken).ConfigureAwait(false);
         }

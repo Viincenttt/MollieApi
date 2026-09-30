@@ -15,7 +15,7 @@ public interface IBalanceTransferClient {
     /// destination organization must be a connected organization that has authorized the balance-transfers.write
     /// scope for your organization.
     /// </summary>
-    Task<BalanceTransferResponse> CreateBalanceTransferAsync(
+    Task<MollieResult<BalanceTransferResponse>> CreateBalanceTransferAsync(
         BalanceTransferRequest request, CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -23,12 +23,12 @@ public interface IBalanceTransferClient {
     /// that was received or sent from your balance, or a balance transfer that you initiated on behalf of your clients.
     /// If no balance transfers are available, the resulting array will be empty. This request should never throw an error.
     /// </summary>
-    Task<ListResponse<BalanceTransferResponse>> GetBalanceTransferListAsync(
+    Task<MollieResult<ListResponse<BalanceTransferResponse>>> GetBalanceTransferListAsync(
         string? from = null, int? limit = null, SortDirection? sort = null, bool testmode = false, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Retrieve a single Connect balance transfer object by its ID.
     /// </summary>
-    Task<BalanceTransferResponse> GetBalanceTransferAsync(
+    Task<MollieResult<BalanceTransferResponse>> GetBalanceTransferAsync(
         string balanceTransferId, bool testmode = false, CancellationToken cancellationToken = default);
 }

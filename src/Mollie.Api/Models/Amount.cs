@@ -3,16 +3,20 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text.Json.Serialization;
+using Mollie.Api.JsonConverters;
 
 namespace Mollie.Api.Models {
     /// <summary>
     /// The amount of a payment, refund, or chargeback.
     /// </summary>
+    [JsonConverter(typeof(AmountJsonConverter))]
     public record Amount {
-        private static readonly IDictionary<string, string> CurrenciesWithAlternativeDecimalPrecision =
-            new Dictionary<string, string>() {
-                { "JPY", "0" },
-                { "ISK", "0" },
+        private const int DefaultNumberOfDecimals = 2;
+
+        private static readonly Dictionary<string, int> CurrenciesWithAlternativeNumberOfDecimals =
+            new(StringComparer.OrdinalIgnoreCase) {
+                { Models.Currency.JPY, 0 },
+                { Models.Currency.ISK, 0 }
             };
 
         /// <summary>
@@ -21,21 +25,11 @@ namespace Mollie.Api.Models {
         public required string Currency { get; set; }
 
         /// <summary>
-        /// An ISO 4217 currency code. The currencies supported depend on the payment methods that are enabled on your account.
+        /// The exact monetary amount in the given currency. The value is serialized as a string with the number of
+        /// decimals of the currency, for example "20.00" for EUR and "20" for JPY. Only zeros are added or removed,
+        /// the value is never rounded.
         /// </summary>
-        public required string Value { get; set; }
-
-        /// <summary>
-        /// Constructor for constructing based on a string value
-        /// </summary>
-        /// <param name="currency">An ISO 4217 currency code. The currencies supported depend on the payment methods that are enabled on your account.</param>
-        /// <param name="value">A string containing an exact monetary amount in the given currency.</param>
-        [JsonConstructor]
-        [SetsRequiredMembers]
-        public Amount(string currency, string value) {
-            Currency = currency;
-            Value = value;
-        }
+        public required decimal Value { get; set; }
 
         /// <summary>
         /// Constructor for constructing based on a decimal value
@@ -45,29 +39,43 @@ namespace Mollie.Api.Models {
         [SetsRequiredMembers]
         public Amount(string currency, decimal value) {
             Currency = currency;
-            Value = ConvertDecimalAmountToStringAmount(currency, value);
+            Value = value;
+        }
+
+        /// <summary>
+        /// Constructor used by the JSON serializer
+        /// </summary>
+        [JsonConstructor]
+        public Amount() {
         }
 
         /// <summary>
         /// Implicit cast operator from Amount to decimal.
         /// </summary>
         /// <param name="amount"></param>
-        public static implicit operator decimal(Amount amount)
-            => decimal.TryParse(amount.Value, NumberStyles.Number, CultureInfo.InvariantCulture, out var a) ? a : throw new InvalidCastException($"Cannot convert {amount.Value} to decimal");
+        public static implicit operator decimal(Amount amount) => amount.Value;
 
         /// <summary>
         /// Implicit cast operator from Amount? to decimal?.
         /// </summary>
         /// <param name="amount"></param>
-        public static implicit operator decimal?(Amount? amount)
-            => amount == null ? null : (decimal)amount;
+        public static implicit operator decimal?(Amount? amount) => amount?.Value;
 
-        private static string ConvertDecimalAmountToStringAmount(string currency, decimal value) {
-            if (CurrenciesWithAlternativeDecimalPrecision.TryGetValue(currency, out string? format)) {
-                return value.ToString(format, CultureInfo.InvariantCulture);
+        /// <summary>
+        /// Formats the value the way it is sent to Mollie: with the number of decimals of the currency, by adding or
+        /// removing zeros. A value that has more significant decimals than the currency allows is returned as is, so
+        /// it is never silently rounded.
+        /// </summary>
+        internal string ToFormattedValue() {
+            if (Currency == null || !CurrenciesWithAlternativeNumberOfDecimals.TryGetValue(Currency, out int numberOfDecimals)) {
+                numberOfDecimals = DefaultNumberOfDecimals;
             }
 
-            return value.ToString("0.00", CultureInfo.InvariantCulture);
+            if (decimal.Round(Value, numberOfDecimals) != Value) {
+                return Value.ToString(CultureInfo.InvariantCulture);
+            }
+
+            return Value.ToString("F" + numberOfDecimals, CultureInfo.InvariantCulture);
         }
 
         public override string ToString() {

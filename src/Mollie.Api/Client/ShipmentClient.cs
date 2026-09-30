@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
 using Mollie.Api.Framework.Authentication.Abstract;
+using Mollie.Api.Models;
 using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Shipment.Request;
 using Mollie.Api.Models.Shipment.Response;
@@ -23,7 +24,7 @@ namespace Mollie.Api.Client
             : base(options, mollieSecretManager, httpClient) {
         }
 
-        public async Task<ShipmentResponse> CreateShipmentAsync(
+        public async Task<MollieResult<ShipmentResponse>> CreateShipmentAsync(
             string orderId, ShipmentRequest shipmentRequest, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(orderId), orderId);
             return await PostAsync<ShipmentResponse>(
@@ -31,7 +32,7 @@ namespace Mollie.Api.Client
                 .ConfigureAwait(false);
         }
 
-        public async Task<ShipmentResponse> GetShipmentAsync(
+        public async Task<MollieResult<ShipmentResponse>> GetShipmentAsync(
             string orderId, string shipmentId, bool testmode = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(orderId), orderId);
             ValidateRequiredUrlParameter(nameof(shipmentId), shipmentId);
@@ -42,12 +43,12 @@ namespace Mollie.Api.Client
                 .ConfigureAwait(false);
         }
 
-        public async Task<ShipmentResponse> GetShipmentAsync(
+        public async Task<MollieResult<ShipmentResponse>> GetShipmentAsync(
             UrlObjectLink<ShipmentResponse> url, CancellationToken cancellationToken = default) {
             return await GetAsync(url).ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<ShipmentResponse>> GetShipmentListAsync(
+        public async Task<MollieResult<ListResponse<ShipmentResponse>>> GetShipmentListAsync(
             string orderId, bool testmode = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(orderId), orderId);
             var queryParameters = BuildQueryParameters(testmode: testmode);
@@ -57,13 +58,13 @@ namespace Mollie.Api.Client
                 .ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<ShipmentResponse>> GetShipmentListAsync(
+        public async Task<MollieResult<ListResponse<ShipmentResponse>>> GetShipmentListAsync(
             UrlObjectLink<ListResponse<ShipmentResponse>> url, CancellationToken cancellationToken = default) {
             return await GetAsync(url, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        public async Task<ShipmentResponse> UpdateShipmentAsync(
+        public async Task<MollieResult<ShipmentResponse>> UpdateShipmentAsync(
             string orderId, string shipmentId, ShipmentUpdateRequest shipmentUpdateRequest, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(orderId), orderId);
             ValidateRequiredUrlParameter(nameof(shipmentId), shipmentId);

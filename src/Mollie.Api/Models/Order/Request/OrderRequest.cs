@@ -41,8 +41,12 @@ namespace Mollie.Api.Models.Order.Request {
         /// The date of birth of your customer. Some payment methods need this value and if you have it, you should
         /// send it so that your customer does not have to enter it again later in the checkout process.
         /// </summary>
+#if NET8_0_OR_GREATER
+        public DateOnly? ConsumerDateOfBirth { get; set; }
+#else
         [JsonConverter(typeof(DateJsonConverter))]
         public DateTime? ConsumerDateOfBirth { get; set; }
+#endif
 
         /// <summary>
         /// The URL your customer will be redirected to after the payment process.
@@ -118,8 +122,12 @@ namespace Mollie.Api.Models.Order.Request {
         /// The date the order should expire in YYYY-MM-DD format. The minimum date is tomorrow and the maximum date is 100 days
         /// after tomorrow.
         /// </summary>
+#if NET8_0_OR_GREATER
+        public DateOnly? ExpiresAt { get; set; }
+#else
         [JsonConverter(typeof(DateJsonConverter))]
         public DateTime? ExpiresAt { get; set; }
+#endif
 
         /// <summary>
         /// For digital goods, you must make sure to apply the VAT rate from your customer’s country in most jurisdictions. Use

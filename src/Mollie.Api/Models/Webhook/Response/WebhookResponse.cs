@@ -28,7 +28,7 @@ public record WebhookResponse : IEntity {
     /// <summary>
     /// The subscription's date time of creation.
     /// </summary>
-    public required DateTime CreatedAt { get; set; }
+    public required DateTimeOffset CreatedAt { get; set; }
 
     /// <summary>
     /// The subscription's name.

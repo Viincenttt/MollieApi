@@ -24,7 +24,7 @@ namespace Mollie.Api.Client {
             : base(options, mollieSecretManager, httpClient) {
         }
 
-        public async Task<PaymentLinkResponse> CreatePaymentLinkAsync(
+        public async Task<MollieResult<PaymentLinkResponse>> CreatePaymentLinkAsync(
             PaymentLinkRequest paymentLinkRequest,
             CancellationToken cancellationToken = default) {
             if (!string.IsNullOrWhiteSpace(paymentLinkRequest.ProfileId) || paymentLinkRequest.Testmode.HasValue) {
@@ -37,7 +37,7 @@ namespace Mollie.Api.Client {
                 cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<PaymentLinkResponse> UpdatePaymentLinkAsync(
+        public async Task<MollieResult<PaymentLinkResponse>> UpdatePaymentLinkAsync(
             string paymentLinkId,
             PaymentLinkUpdateRequest paymentLinkUpdateRequest,
             CancellationToken cancellationToken = default) {
@@ -54,7 +54,7 @@ namespace Mollie.Api.Client {
                 cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task DeletePaymentLinkAsync(
+        public async Task<MollieResult> DeletePaymentLinkAsync(
             string paymentLinkId,
             string? profileId = null,
             bool testmode = false,
@@ -63,13 +63,13 @@ namespace Mollie.Api.Client {
             var queryParameters = BuildQueryParameters(profileId);
             var data = CreateTestmodeModel(testmode);
             string relativeUri = $"payment-links/{paymentLinkId}{queryParameters.ToQueryString()}";
-            await DeleteAsync(
+            return await DeleteAsync(
                 relativeUri,
                 data,
                 cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<PaymentLinkResponse> GetPaymentLinkAsync(
+        public async Task<MollieResult<PaymentLinkResponse>> GetPaymentLinkAsync(
             string paymentLinkId,
             bool testmode = false,
             CancellationToken cancellationToken = default) {
@@ -86,19 +86,19 @@ namespace Mollie.Api.Client {
                 cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<PaymentLinkResponse> GetPaymentLinkAsync(
+        public async Task<MollieResult<PaymentLinkResponse>> GetPaymentLinkAsync(
             UrlObjectLink<PaymentLinkResponse> url,
             CancellationToken cancellationToken = default) {
             return await GetAsync(url, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<PaymentLinkResponse>> GetPaymentLinkListAsync(
+        public async Task<MollieResult<ListResponse<PaymentLinkResponse>>> GetPaymentLinkListAsync(
             UrlObjectLink<ListResponse<PaymentLinkResponse>> url,
             CancellationToken cancellationToken = default) {
             return await GetAsync(url, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<PaymentLinkResponse>> GetPaymentLinkListAsync(
+        public async Task<MollieResult<ListResponse<PaymentLinkResponse>>> GetPaymentLinkListAsync(
             string? from = null,
             int? limit = null,
             string? profileId = null,
@@ -120,7 +120,7 @@ namespace Mollie.Api.Client {
                 cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<ListResponse<PaymentResponse>> GetPaymentLinkPaymentListAsync(
+        public async Task<MollieResult<ListResponse<PaymentResponse>>> GetPaymentLinkPaymentListAsync(
             string paymentLinkId,
             string? from = null,
             int? limit = null,

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
 using Mollie.Api.Framework.Authentication.Abstract;
+using Mollie.Api.Models;
 using Mollie.Api.Models.ClientLink.Request;
 using Mollie.Api.Models.ClientLink.Response;
 using System.Threading;
@@ -32,7 +33,7 @@ namespace Mollie.Api.Client {
             _clientId = options.ClientId!;
         }
 
-        public async Task<ClientLinkResponse> CreateClientLinkAsync(ClientLinkRequest request, CancellationToken cancellationToken = default)
+        public async Task<MollieResult<ClientLinkResponse>> CreateClientLinkAsync(ClientLinkRequest request, CancellationToken cancellationToken = default)
         {
             return await PostAsync<ClientLinkResponse>(
                     "client-links", request, cancellationToken: cancellationToken)

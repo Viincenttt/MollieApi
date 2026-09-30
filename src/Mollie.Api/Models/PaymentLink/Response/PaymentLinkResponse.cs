@@ -85,22 +85,22 @@ namespace Mollie.Api.Models.PaymentLink.Response
         /// <summary>
         /// The payment link’s date and time of creation, in ISO 8601 format.
         /// </summary>
-        public DateTime? CreatedAt { get; set; }
+        public DateTimeOffset? CreatedAt { get; set; }
 
         /// <summary>
         /// The date and time the payment link became paid, in ISO 8601 format.
         /// </summary>
-        public DateTime? PaidAt { get; set; }
+        public DateTimeOffset? PaidAt { get; set; }
 
         /// <summary>
         /// The date and time the payment link last status change, in ISO 8601 format.
         /// </summary>
-        public DateTime? UpdatedAt { get; set; }
+        public DateTimeOffset? UpdatedAt { get; set; }
 
         /// <summary>
         /// The expiry date and time of the payment link, in ISO 8601 format.
         /// </summary>
-        public DateTime? ExpiresAt { get; set; }
+        public DateTimeOffset? ExpiresAt { get; set; }
 
         /// <summary>
         /// An array of payment methods that are allowed to be used for this payment link. When this parameter is not

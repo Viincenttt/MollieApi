@@ -23,12 +23,12 @@ public class WebhookClient : BaseMollieClient, IWebhookClient {
         : base(options, mollieSecretManager, httpClient) {
     }
 
-    public async Task<WebhookResponse> CreateWebhookAsync(WebhookRequest request, CancellationToken cancellationToken = default) {
+    public async Task<MollieResult<WebhookResponse>> CreateWebhookAsync(WebhookRequest request, CancellationToken cancellationToken = default) {
         return await PostAsync<WebhookResponse>("webhooks", request, cancellationToken: cancellationToken)
             .ConfigureAwait(false);
     }
 
-    public async Task<ListResponse<WebhookResponse>> GetWebhookListAsync(string? from = null, int? limit = null,
+    public async Task<MollieResult<ListResponse<WebhookResponse>>> GetWebhookListAsync(string? from = null, int? limit = null,
         bool testmode = false, CancellationToken cancellationToken = default) {
         var queryParameters = BuildQueryParameters(testmode: testmode);
         return await GetListAsync<ListResponse<WebhookResponse>>(
@@ -36,13 +36,13 @@ public class WebhookClient : BaseMollieClient, IWebhookClient {
             .ConfigureAwait(false);
     }
 
-    public async Task<ListResponse<WebhookResponse>> GetWebhookListAsync(
+    public async Task<MollieResult<ListResponse<WebhookResponse>>> GetWebhookListAsync(
         UrlObjectLink<ListResponse<WebhookResponse>> url, CancellationToken cancellationToken = default) {
         return await GetAsync(url, cancellationToken: cancellationToken)
             .ConfigureAwait(false);
     }
 
-    public async Task<WebhookResponse> GetWebhookAsync(string webhookId, bool testmode = false, CancellationToken cancellationToken = default) {
+    public async Task<MollieResult<WebhookResponse>> GetWebhookAsync(string webhookId, bool testmode = false, CancellationToken cancellationToken = default) {
         ValidateRequiredUrlParameter(nameof(webhookId), webhookId);
         var queryParameters = BuildQueryParameters(testmode: testmode);
 
@@ -50,25 +50,25 @@ public class WebhookClient : BaseMollieClient, IWebhookClient {
             .ConfigureAwait(false);
     }
 
-    public async Task<WebhookResponse> UpdateWebhookAsync(string webhookId, WebhookRequest request, CancellationToken cancellationToken = default) {
+    public async Task<MollieResult<WebhookResponse>> UpdateWebhookAsync(string webhookId, WebhookRequest request, CancellationToken cancellationToken = default) {
         ValidateRequiredUrlParameter(nameof(webhookId), webhookId);
 
         return await PatchAsync<WebhookResponse>($"webhooks/{webhookId}", request, cancellationToken: cancellationToken)
             .ConfigureAwait(false);
     }
 
-    public async Task DeleteWebhookAsync(string webhookId, bool testmode = false, CancellationToken cancellationToken = default) {
+    public async Task<MollieResult> DeleteWebhookAsync(string webhookId, bool testmode = false, CancellationToken cancellationToken = default) {
         ValidateRequiredUrlParameter(nameof(webhookId), webhookId);
         var data = CreateTestmodeModel(testmode);
-        await DeleteAsync($"webhooks/{webhookId}", data, cancellationToken: cancellationToken)
+        return await DeleteAsync($"webhooks/{webhookId}", data, cancellationToken: cancellationToken)
             .ConfigureAwait(false);
     }
 
-    public async Task TestWebhookAsync(string webhookId, bool testmode = false, CancellationToken cancellationToken = default) {
+    public async Task<MollieResult> TestWebhookAsync(string webhookId, bool testmode = false, CancellationToken cancellationToken = default) {
         ValidateRequiredUrlParameter(nameof(webhookId), webhookId);
         var queryParameters = BuildQueryParameters(testmode: testmode);
 
-        await PostAsync<object>($"webhooks/{webhookId}/ping{queryParameters.ToQueryString()}", null,
+        return await PostAsync<object>($"webhooks/{webhookId}/ping{queryParameters.ToQueryString()}", null,
             cancellationToken: cancellationToken);
     }
 }

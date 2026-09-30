@@ -33,10 +33,12 @@ namespace Mollie.Tests.Unit.Client {
             OnboardingClient onboardingClient = new OnboardingClient("api-key", httpClient);
 
             // When: We make the request
-            OnboardingStatusResponse onboardingResponse = await onboardingClient.GetOnboardingStatusAsync();
+            var result = await onboardingClient.GetOnboardingStatusAsync();
+            OnboardingStatusResponse onboardingResponse = result.Data!;
 
             // Then: Response should be parsed
             mockHttp.VerifyNoOutstandingExpectation();
+            result.Success.ShouldBeTrue();
             onboardingResponse.ShouldNotBeNull();
             onboardingResponse.Name.ShouldBe(defaultName);
             onboardingResponse.Status.ShouldBe(defaultStatus);

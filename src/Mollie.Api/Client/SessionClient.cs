@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Mollie.Api.Client.Abstract;
 using Mollie.Api.Extensions;
 using Mollie.Api.Framework.Authentication.Abstract;
+using Mollie.Api.Models;
 using Mollie.Api.Models.Session.Request;
 using Mollie.Api.Models.Session.Response;
 using Mollie.Api.Options;
@@ -19,7 +20,7 @@ namespace Mollie.Api.Client {
             : base(options, mollieSecretManager, httpClient) {
         }
 
-        public async Task<SessionResponse> GetSessionAsync(
+        public async Task<MollieResult<SessionResponse>> GetSessionAsync(
             string sessionId, bool testmode = false, CancellationToken cancellationToken = default) {
             ValidateRequiredUrlParameter(nameof(sessionId), sessionId);
             var queryParameters = BuildQueryParameters(testmode: testmode);
@@ -29,7 +30,7 @@ namespace Mollie.Api.Client {
                 .ConfigureAwait(false);
         }
 
-        public async Task<SessionResponse> CreateSessionAsync(
+        public async Task<MollieResult<SessionResponse>> CreateSessionAsync(
             SessionRequest request, CancellationToken cancellationToken = default) {
             return await PostAsync<SessionResponse>(
                     $"sessions", request,

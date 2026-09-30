@@ -1,7 +1,6 @@
 ﻿@page "/customer/create"
 
 @using Mollie.WebApplication.Blazor.Models.Customer
-@using Mollie.Api.Client
 @using Mollie.Api.Models.Customer.Request
 
 @inject ICustomerClient CustomerClient
@@ -9,7 +8,7 @@
 
 <h3>Create new customer</h3>
 
-<ApiExceptionDisplay Exception="_apiException"></ApiExceptionDisplay>
+<ApiExceptionDisplay Result="_result"></ApiExceptionDisplay>
 
 <EditForm Model="_customer" OnValidSubmit="@OnSave" class="col-md-6">
     <DataAnnotationsValidator />
@@ -37,7 +36,7 @@
 </EditForm>
 
 @code {
-    private MollieApiException? _apiException;
+    private MollieResult? _result;
 
     private CreateCustomerModel _customer = new() {
         Name = "Customer name",
@@ -45,18 +44,18 @@
     };
 
     private async Task OnSave() {
-        try {
-            _apiException = null;
+        _result = null;
 
-            await CustomerClient.CreateCustomerAsync(new CustomerRequest() {
-                Name = _customer.Name,
-                Email = _customer.Email
-            });
+        var result = await CustomerClient.CreateCustomerAsync(new CustomerRequest {
+            Name = _customer.Name,
+            Email = _customer.Email
+        });
 
+        if (result.Success) {
             NavigationManager.NavigateTo("/customer/overview");
         }
-        catch (MollieApiException e) {
-            _apiException = e;
+        else {
+            _result = result;
         }
     }
 }

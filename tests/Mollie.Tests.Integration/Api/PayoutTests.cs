@@ -23,7 +23,8 @@ public class PayoutTests : BaseMollieApiTestClass, IDisposable {
     [Fact]
     public async Task CreatePayoutAsync_WithFullBalance_IsParsedCorrectly() {
         // Given: We retrieve the primary balance to get a valid balance ID
-        var primaryBalance = await _balanceClient.GetPrimaryBalanceAsync();
+        var primaryBalanceResult = await _balanceClient.GetPrimaryBalanceAsync();
+        var primaryBalance = primaryBalanceResult.Data!;
 
         var request = new PayoutRequest {
             BalanceId = primaryBalance.Id
@@ -31,73 +32,83 @@ public class PayoutTests : BaseMollieApiTestClass, IDisposable {
 
         // When: We create a payout
         var result = await _payoutClient.CreatePayoutAsync(request);
+        var payout = result.Data!;
 
         // Then: Make sure we can parse the result
-        result.ShouldNotBeNull();
-        result.Resource.ShouldBe("payout");
-        result.Id.ShouldNotBeNullOrEmpty();
-        result.BalanceId.ShouldBe(primaryBalance.Id);
-        result.Status.ShouldNotBeNullOrEmpty();
-        result.StatusReason.ShouldNotBeNull();
-        result.StatusReason.Code.ShouldNotBeNullOrEmpty();
-        result.StatusReason.Message.ShouldNotBeNullOrEmpty();
-        result.CreatedAt.ShouldNotBe(default);
-        result.Mode.ShouldBeOneOf(Mode.Live, Mode.Test);
-        result.Links.ShouldNotBeNull();
-        result.Links.Self.ShouldNotBeNull();
-        result.Links.Self.Href.ShouldNotBeNullOrEmpty();
-        result.Links.Documentation.ShouldNotBeNull();
-        result.Links.Documentation.Href.ShouldNotBeNullOrEmpty();
+        result.Success.ShouldBeTrue();
+        payout.ShouldNotBeNull();
+        payout.Resource.ShouldBe("payout");
+        payout.Id.ShouldNotBeNullOrEmpty();
+        payout.BalanceId.ShouldBe(primaryBalance.Id);
+        payout.Status.ShouldNotBeNullOrEmpty();
+        payout.StatusReason.ShouldNotBeNull();
+        payout.StatusReason.Code.ShouldNotBeNullOrEmpty();
+        payout.StatusReason.Message.ShouldNotBeNullOrEmpty();
+        payout.CreatedAt.ShouldNotBe(default);
+        payout.Mode.ShouldBeOneOf(Mode.Live, Mode.Test);
+        payout.Links.ShouldNotBeNull();
+        payout.Links.Self.ShouldNotBeNull();
+        payout.Links.Self.Href.ShouldNotBeNullOrEmpty();
+        payout.Links.Documentation.ShouldNotBeNull();
+        payout.Links.Documentation.Href.ShouldNotBeNullOrEmpty();
     }
 
     [Fact]
     public async Task CreatePayoutAsync_WithSpecificAmountAndDescription_IsParsedCorrectly() {
         // Given: We retrieve the primary balance
-        var primaryBalance = await _balanceClient.GetPrimaryBalanceAsync();
+        var primaryBalanceResult = await _balanceClient.GetPrimaryBalanceAsync();
+        var primaryBalance = primaryBalanceResult.Data!;
 
         var request = new PayoutRequest {
             BalanceId = primaryBalance.Id,
-            Amount = new Amount(Currency.EUR, "10.00"),
+            Amount = new Amount(Currency.EUR, 10.00m),
             Description = "Integration test payout"
         };
 
         // When: We create a payout with an amount and description
         var result = await _payoutClient.CreatePayoutAsync(request);
+        var payout = result.Data!;
 
         // Then
-        result.ShouldNotBeNull();
-        result.Resource.ShouldBe("payout");
-        result.Id.ShouldNotBeNullOrEmpty();
-        result.BalanceId.ShouldBe(primaryBalance.Id);
-        result.Description.ShouldBe("Integration test payout");
-        result.Amount.ShouldNotBeNull();
-        result.Amount!.Currency.ShouldBe("EUR");
+        result.Success.ShouldBeTrue();
+        payout.ShouldNotBeNull();
+        payout.Resource.ShouldBe("payout");
+        payout.Id.ShouldNotBeNullOrEmpty();
+        payout.BalanceId.ShouldBe(primaryBalance.Id);
+        payout.Description.ShouldBe("Integration test payout");
+        payout.Amount.ShouldNotBeNull();
+        payout.Amount!.Currency.ShouldBe("EUR");
     }
 
     [Fact]
     public async Task GetPayoutListAsync_WithoutParameters_IsParsedCorrectly() {
         // When: We retrieve the list of payouts
         var result = await _payoutClient.GetPayoutListAsync();
+        var payouts = result.Data!;
 
         // Then
-        result.ShouldNotBeNull();
-        result.Items.ShouldNotBeNull();
-        result.Links.ShouldNotBeNull();
-        result.Links.Self.ShouldNotBeNull();
+        result.Success.ShouldBeTrue();
+        payouts.ShouldNotBeNull();
+        payouts.Items.ShouldNotBeNull();
+        payouts.Links.ShouldNotBeNull();
+        payouts.Links.Self.ShouldNotBeNull();
     }
 
     [Fact]
     public async Task GetPayoutListAsync_FilteredByBalanceId_IsParsedCorrectly() {
         // Given: We retrieve the primary balance
-        var primaryBalance = await _balanceClient.GetPrimaryBalanceAsync();
+        var primaryBalanceResult = await _balanceClient.GetPrimaryBalanceAsync();
+        var primaryBalance = primaryBalanceResult.Data!;
 
         // When: We retrieve payouts filtered by balance ID
         var result = await _payoutClient.GetPayoutListAsync(balanceId: primaryBalance.Id);
+        var payouts = result.Data!;
 
         // Then
-        result.ShouldNotBeNull();
-        result.Items.ShouldNotBeNull();
-        foreach (var payout in result.Items) {
+        result.Success.ShouldBeTrue();
+        payouts.ShouldNotBeNull();
+        payouts.Items.ShouldNotBeNull();
+        foreach (var payout in payouts.Items) {
             payout.BalanceId.ShouldBe(primaryBalance.Id);
         }
     }
@@ -105,40 +116,48 @@ public class PayoutTests : BaseMollieApiTestClass, IDisposable {
     [Fact]
     public async Task GetPayoutAsync_WithValidPayoutId_IsParsedCorrectly() {
         // Given: We create a payout first to get a valid ID
-        var primaryBalance = await _balanceClient.GetPrimaryBalanceAsync();
-        var created = await _payoutClient.CreatePayoutAsync(new PayoutRequest { BalanceId = primaryBalance.Id });
+        var primaryBalanceResult = await _balanceClient.GetPrimaryBalanceAsync();
+        var primaryBalance = primaryBalanceResult.Data!;
+        var createdResult = await _payoutClient.CreatePayoutAsync(new PayoutRequest { BalanceId = primaryBalance.Id });
+        var created = createdResult.Data!;
 
         // When: We retrieve the payout by ID
         var result = await _payoutClient.GetPayoutAsync(created.Id);
+        var payout = result.Data!;
 
         // Then
-        result.ShouldNotBeNull();
-        result.Resource.ShouldBe("payout");
-        result.Id.ShouldBe(created.Id);
-        result.BalanceId.ShouldBe(primaryBalance.Id);
-        result.Status.ShouldNotBeNullOrEmpty();
-        result.StatusReason.ShouldNotBeNull();
-        result.CreatedAt.ShouldNotBe(default);
-        result.Mode.ShouldBeOneOf(Mode.Live, Mode.Test);
-        result.Links.ShouldNotBeNull();
-        result.Links.Self.Href.ShouldNotBeNullOrEmpty();
+        result.Success.ShouldBeTrue();
+        payout.ShouldNotBeNull();
+        payout.Resource.ShouldBe("payout");
+        payout.Id.ShouldBe(created.Id);
+        payout.BalanceId.ShouldBe(primaryBalance.Id);
+        payout.Status.ShouldNotBeNullOrEmpty();
+        payout.StatusReason.ShouldNotBeNull();
+        payout.CreatedAt.ShouldNotBe(default);
+        payout.Mode.ShouldBeOneOf(Mode.Live, Mode.Test);
+        payout.Links.ShouldNotBeNull();
+        payout.Links.Self.Href.ShouldNotBeNullOrEmpty();
     }
 
     [Fact]
     public async Task CancelPayoutAsync_WithRequestedPayout_ReturnsCanceledPayout() {
         // Given: We create a payout first
-        var primaryBalance = await _balanceClient.GetPrimaryBalanceAsync();
-        var created = await _payoutClient.CreatePayoutAsync(new PayoutRequest { BalanceId = primaryBalance.Id });
+        var primaryBalanceResult = await _balanceClient.GetPrimaryBalanceAsync();
+        var primaryBalance = primaryBalanceResult.Data!;
+        var createdResult = await _payoutClient.CreatePayoutAsync(new PayoutRequest { BalanceId = primaryBalance.Id });
+        var created = createdResult.Data!;
 
         // When: We cancel the payout while it is still in 'requested' status
         var result = await _payoutClient.CancelPayoutAsync(created.Id);
+        var payout = result.Data!;
 
         // Then
-        result.ShouldNotBeNull();
-        result.Resource.ShouldBe("payout");
-        result.Id.ShouldBe(created.Id);
-        result.Status.ShouldBe(PayoutStatus.Canceled);
-        result.CanceledAt.ShouldNotBeNull();
+        result.Success.ShouldBeTrue();
+        payout.ShouldNotBeNull();
+        payout.Resource.ShouldBe("payout");
+        payout.Id.ShouldBe(created.Id);
+        payout.Status.ShouldBe(PayoutStatus.Canceled);
+        payout.CanceledAt.ShouldNotBeNull();
     }
 
     public void Dispose() {

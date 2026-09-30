@@ -25,14 +25,14 @@ public class BalanceTransferClient : BaseMollieClient, IBalanceTransferClient {
     {
     }
 
-    public async Task<BalanceTransferResponse> CreateBalanceTransferAsync(
+    public async Task<MollieResult<BalanceTransferResponse>> CreateBalanceTransferAsync(
         BalanceTransferRequest request, CancellationToken cancellationToken = default) {
         return await PostAsync<BalanceTransferResponse>(
                 "connect/balance-transfers", request, cancellationToken: cancellationToken)
             .ConfigureAwait(false);
     }
 
-    public async Task<ListResponse<BalanceTransferResponse>> GetBalanceTransferListAsync(
+    public async Task<MollieResult<ListResponse<BalanceTransferResponse>>> GetBalanceTransferListAsync(
         string? from = null, int? limit = null, SortDirection? sort = null, bool testmode = false, CancellationToken cancellationToken = default) {
         var queryParameters = BuildQueryParameters(testmode: testmode, sort: sort);
         return await GetListAsync<ListResponse<BalanceTransferResponse>>(
@@ -40,7 +40,7 @@ public class BalanceTransferClient : BaseMollieClient, IBalanceTransferClient {
             .ConfigureAwait(false);
     }
 
-    public async Task<BalanceTransferResponse> GetBalanceTransferAsync(
+    public async Task<MollieResult<BalanceTransferResponse>> GetBalanceTransferAsync(
         string balanceTransferId, bool testmode = false, CancellationToken cancellationToken = default) {
         ValidateRequiredUrlParameter(nameof(balanceTransferId), balanceTransferId);
         var queryParameters = BuildQueryParameters(testmode: testmode);

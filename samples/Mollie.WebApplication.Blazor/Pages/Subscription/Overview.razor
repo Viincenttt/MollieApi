@@ -63,13 +63,15 @@ else {
 
     private async Task LoadData() {
         if (string.IsNullOrEmpty(Url)) {
-            _subscriptions = await SubscriptionClient.GetSubscriptionListAsync(CustomerId);
+            var result = await SubscriptionClient.GetSubscriptionListAsync(CustomerId);
+            _subscriptions = result.Data;
         }
         else {
-            _subscriptions = await SubscriptionClient.GetSubscriptionListAsync(new UrlObjectLink<ListResponse<SubscriptionResponse>>() {
+            var result = await SubscriptionClient.GetSubscriptionListAsync(new UrlObjectLink<ListResponse<SubscriptionResponse>>() {
                 Href = Url,
                 Type = "application/json"
             });
+            _subscriptions = result.Data;
         }
     }
 }

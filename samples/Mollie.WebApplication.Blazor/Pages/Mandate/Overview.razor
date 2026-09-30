@@ -57,13 +57,15 @@ else {
 
     private async Task LoadData() {
         if (string.IsNullOrEmpty(Url)) {
-            _mandates = await MandateClient.GetMandateListAsync(CustomerId);
+            var result = await MandateClient.GetMandateListAsync(CustomerId);
+            _mandates = result.Data;
         }
         else {
-            _mandates = await MandateClient.GetMandateListAsync(new UrlObjectLink<ListResponse<MandateResponse>>() {
+            var result = await MandateClient.GetMandateListAsync(new UrlObjectLink<ListResponse<MandateResponse>>() {
                 Href = Url,
                 Type = "application/json"
             });
+            _mandates = result.Data;
         }
     }
 }

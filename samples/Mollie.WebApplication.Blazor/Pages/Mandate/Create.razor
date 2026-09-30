@@ -1,7 +1,5 @@
 ﻿@page "/customer/{customerId}/mandate/create"
 @using Mollie.WebApplication.Blazor.Models.Mandate
-@using Mollie.Api.Client
-@using Mollie.Api.Models.Mandate.Request
 @using Mollie.Api.Models.Mandate.Request.PaymentSpecificParameters
 
 @inject IMandateClient MandateClient
@@ -19,7 +17,7 @@
     </p>
 </div>
 
-<ApiExceptionDisplay Exception="_apiException"></ApiExceptionDisplay>
+<ApiExceptionDisplay Result="_result"></ApiExceptionDisplay>
 
 <EditForm Model="_mandate" OnValidSubmit="@OnSave" class="col-md-6">
     <DataAnnotationsValidator />
@@ -56,7 +54,7 @@
 </EditForm>
 
 @code {
-    private MollieApiException? _apiException;
+    private MollieResult? _result;
 
     [Parameter]
     public required string CustomerId { get; set; }
@@ -68,20 +66,20 @@
     };
 
     private async Task OnSave() {
-        try {
-            _apiException = null;
+        _result = null;
 
-            await MandateClient.CreateMandateAsync(CustomerId, new SepaDirectDebitMandateRequest {
-                Method = PaymentMethod.DirectDebit,
-                ConsumerName = _mandate.ConsumerName,
-                ConsumerAccount = _mandate.ConsumerAccount,
-                ConsumerBic = _mandate.ConsumerBic
-            });
+        var result = await MandateClient.CreateMandateAsync(CustomerId, new SepaDirectDebitMandateRequest {
+            Method = PaymentMethod.DirectDebit,
+            ConsumerName = _mandate.ConsumerName,
+            ConsumerAccount = _mandate.ConsumerAccount,
+            ConsumerBic = _mandate.ConsumerBic
+        });
 
+        if (result.Success) {
             NavigationManager.NavigateTo($"/customer/{CustomerId}/mandate/overview");
         }
-        catch (MollieApiException e) {
-            _apiException = e;
+        else {
+            _result = result;
         }
     }
 }

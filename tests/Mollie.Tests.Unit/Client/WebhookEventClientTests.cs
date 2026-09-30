@@ -72,13 +72,15 @@ public class WebhookEventClientTests : BaseClientTests {
         var webhookClient = new WebhookEventClient("abcde", httpClient);
 
         // When
-        var response = await webhookClient.GetWebhookEventAsync<PaymentLinkResponse>(webhookEventId);
+        var result = await webhookClient.GetWebhookEventAsync<PaymentLinkResponse>(webhookEventId);
+        var response = result.Data!;
 
         // Then
         mockHttp.VerifyNoOutstandingRequest();
+        result.Success.ShouldBeTrue();
         response.Id.ShouldBe(webhookEventId);
         response.Type.ShouldBe(type);
-        response.CreatedAt.ShouldBe(new DateTime(2024, 12, 16, 15, 57, 04, DateTimeKind.Utc));
+        response.CreatedAt.ShouldBe(new DateTimeOffset(2024, 12, 16, 15, 57, 04, TimeSpan.Zero));
         response.EntityId.ShouldBe(paymentLinkEntityId);
         response.Links.Documentation.Href.ShouldBe("https://docs.mollie.com/guides/webhooks");
         response.Links.Entity.Href.ShouldBe($"/v2/payment-links/{paymentLinkEntityId}");
@@ -90,7 +92,7 @@ public class WebhookEventClientTests : BaseClientTests {
         response.Entity.Mode.ShouldBe(Mode.Live);
         response.Entity.Description.ShouldBe("Bicycle tires");
         response.Entity.Amount!.Currency.ShouldBe("EUR");
-        response.Entity.Amount!.Value.ShouldBe("24.95");
+        response.Entity.Amount!.Value.ShouldBe(24.95m);
         response.Entity.MinimumAmount.ShouldBeNull();
         response.Entity.Archived.ShouldBeFalse();
     }
@@ -111,13 +113,15 @@ public class WebhookEventClientTests : BaseClientTests {
         var webhookClient = new WebhookEventClient("abcde", httpClient);
 
         // When
-        var response = await webhookClient.GetWebhookEventAsync(webhookEventId);
+        var result = await webhookClient.GetWebhookEventAsync(webhookEventId);
+        var response = result.Data!;
 
         // Then
         mockHttp.VerifyNoOutstandingRequest();
+        result.Success.ShouldBeTrue();
         response.Id.ShouldBe(webhookEventId);
         response.Type.ShouldBe(type);
-        response.CreatedAt.ShouldBe(new DateTime(2024, 12, 16, 15, 57, 04, DateTimeKind.Utc));
+        response.CreatedAt.ShouldBe(new DateTimeOffset(2024, 12, 16, 15, 57, 04, TimeSpan.Zero));
         response.EntityId.ShouldBe(paymentLinkEntityId);
         response.Links.Documentation.Href.ShouldBe("https://docs.mollie.com/guides/webhooks");
         response.Links.Entity.Href.ShouldBe($"/v2/payment-links/{paymentLinkEntityId}");

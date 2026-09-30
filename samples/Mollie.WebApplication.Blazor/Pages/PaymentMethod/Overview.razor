@@ -37,6 +37,7 @@ else {
     private ListResponse<PaymentMethodResponse>? _paymentMethods;
 
     protected override async Task OnInitializedAsync() {
-        _paymentMethods = await PaymentMethodClient.GetPaymentMethodListAsync();
+        var result = await PaymentMethodClient.GetPaymentMethodListAsync();
+        _paymentMethods = result.Data;
     }
 }

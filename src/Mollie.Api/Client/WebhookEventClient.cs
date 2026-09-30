@@ -21,7 +21,7 @@ public class WebhookEventClient : BaseMollieClient, IWebhookEventClient {
         : base(options, mollieSecretManager, httpClient) {
     }
 
-    public async Task<FullWebhookEventResponse> GetWebhookEventAsync(string webhookEventId, bool testmode = false,
+    public async Task<MollieResult<FullWebhookEventResponse>> GetWebhookEventAsync(string webhookEventId, bool testmode = false,
         CancellationToken cancellationToken = default) {
         ValidateRequiredUrlParameter(nameof(webhookEventId), webhookEventId);
         var queryParameters = BuildQueryParameters(testmode);
@@ -31,7 +31,7 @@ public class WebhookEventClient : BaseMollieClient, IWebhookEventClient {
             .ConfigureAwait(false);
     }
 
-    public async Task<FullWebhookEventResponse<T>> GetWebhookEventAsync<T>(string webhookEventId, bool testmode = false,
+    public async Task<MollieResult<FullWebhookEventResponse<T>>> GetWebhookEventAsync<T>(string webhookEventId, bool testmode = false,
         CancellationToken cancellationToken = default) where T : IEntity {
         ValidateRequiredUrlParameter(nameof(webhookEventId), webhookEventId);
         var queryParameters = BuildQueryParameters(testmode);

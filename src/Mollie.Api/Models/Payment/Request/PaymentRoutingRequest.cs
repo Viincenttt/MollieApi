@@ -19,6 +19,10 @@ public record PaymentRoutingRequest
     /// <summary>
     /// Optionally, schedule this portion of the payment to be transferred to its destination on a later date. If no date is given, the funds become available to the balance as soon as the payment succeeds.
     /// </summary>
+#if NET8_0_OR_GREATER
+    public DateOnly? ReleaseDate { get; set; }
+#else
     [JsonConverter(typeof(DateJsonConverter))]
     public DateTime? ReleaseDate { get; set; }
+#endif
 }

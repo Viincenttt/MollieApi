@@ -1,21 +1,19 @@
 ﻿using Mollie.Api.Models;
-using System;
+using Shouldly;
 using Xunit;
 
 namespace Mollie.Tests.Unit.Framework {
     public class AmountConversionTests {
         [Fact]
-        public void InvalidAmountValueWillThrowInvalidCastException() {
+        public void Amount_ImplicitlyConvertedToDecimal_ReturnsValue() {
+            // Given
+            var amount = new Amount(Currency.EUR, 50.25m);
 
-            // Initiate Amount with invalid decimal value
-            var amount = new Amount(Currency.EUR, "NotAValidDecimal");
+            // When
+            decimal convertedValue = amount;
 
-            // When: We implicitly cast Amount to decimal
-            // Then: An InvalidCastException will be thrown
-            Assert.Throws<InvalidCastException>(() => {
-                // ReSharper disable once UnusedVariable
-                decimal a = amount;
-            });
+            // Then
+            convertedValue.ShouldBe(50.25m);
         }
     }
 }

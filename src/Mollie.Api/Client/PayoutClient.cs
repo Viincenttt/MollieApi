@@ -25,13 +25,13 @@ public class PayoutClient : BaseMollieClient, IPayoutClient {
     {
     }
 
-    public async Task<PayoutResponse> CreatePayoutAsync(
+    public async Task<MollieResult<PayoutResponse>> CreatePayoutAsync(
         PayoutRequest request, CancellationToken cancellationToken = default) {
         return await PostAsync<PayoutResponse>("payouts", request, cancellationToken: cancellationToken)
             .ConfigureAwait(false);
     }
 
-    public async Task<ListResponse<PayoutResponse>> GetPayoutListAsync(
+    public async Task<MollieResult<ListResponse<PayoutResponse>>> GetPayoutListAsync(
         string? balanceId = null, string? from = null, int? limit = null,
         SortDirection? sort = null, bool testmode = false, CancellationToken cancellationToken = default) {
         var queryParameters = BuildQueryParameters(testmode: testmode, sort: sort);
@@ -41,7 +41,7 @@ public class PayoutClient : BaseMollieClient, IPayoutClient {
             .ConfigureAwait(false);
     }
 
-    public async Task<PayoutResponse> GetPayoutAsync(
+    public async Task<MollieResult<PayoutResponse>> GetPayoutAsync(
         string payoutId, bool testmode = false, CancellationToken cancellationToken = default) {
         ValidateRequiredUrlParameter(nameof(payoutId), payoutId);
         var queryParameters = BuildQueryParameters(testmode: testmode);
@@ -50,7 +50,7 @@ public class PayoutClient : BaseMollieClient, IPayoutClient {
             .ConfigureAwait(false);
     }
 
-    public async Task<PayoutResponse> CancelPayoutAsync(
+    public async Task<MollieResult<PayoutResponse>> CancelPayoutAsync(
         string payoutId, bool testmode = false, CancellationToken cancellationToken = default) {
         ValidateRequiredUrlParameter(nameof(payoutId), payoutId);
         var data = CreateTestmodeModel(testmode);

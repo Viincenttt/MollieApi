@@ -3,7 +3,6 @@
 @using Mollie.WebApplication.Blazor.Models.Webhook
 @using Mollie.Api.Models.Webhook.Request
 @using Mollie.Api.Models.Webhook
-@using Mollie.Api.Client
 @using Mollie.WebApplication.Blazor.Pages.Webhook.Components
 
 @inject IWebhookClient WebhookClient
@@ -11,7 +10,7 @@
 
 <h3>Create new webhook</h3>
 
-<ApiExceptionDisplay Exception="_apiException"></ApiExceptionDisplay>
+<ApiExceptionDisplay Result="_result"></ApiExceptionDisplay>
 
 <EditForm Model="_model" OnValidSubmit="@OnSave" class="col-md-6">
     <DataAnnotationsValidator />
@@ -49,7 +48,7 @@
 </EditForm>
 
 @code {
-    private MollieApiException? _apiException;
+    private MollieResult? _result;
 
     private CreateWebhookModel _model = new() {
         Name = "Test webhook",
@@ -59,20 +58,20 @@
     };
 
     private async Task OnSave() {
-        try {
-            _apiException = null;
+        _result = null;
 
-            await WebhookClient.CreateWebhookAsync(new WebhookRequest {
-                Name = _model.Name,
-                Url = _model.Url,
-                EventTypes = _model.EventTypes,
-                Testmode = _model.Testmode
-            });
+        var result = await WebhookClient.CreateWebhookAsync(new WebhookRequest {
+            Name = _model.Name,
+            Url = _model.Url,
+            EventTypes = _model.EventTypes,
+            Testmode = _model.Testmode
+        });
 
+        if (result.Success) {
             NavigationManager.NavigateTo("/webhook/overview");
         }
-        catch (MollieApiException e) {
-            _apiException = e;
+        else {
+            _result = result;
         }
     }
 }

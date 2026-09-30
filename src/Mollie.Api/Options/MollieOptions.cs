@@ -38,9 +38,13 @@ namespace Mollie.Api.Options {
         public string ConnectTokenEndPoint { get; set; } = ConnectClient.DefaultTokenEndpoint;
 
         /// <summary>
-        /// (Optional) Polly retry policy for failed requests
+        /// (Optional) Resilience pipeline configuration that is applied to all Mollie API clients.
+        /// Requests are not retried unless this property is set. Assign
+        /// <see cref="Mollie.Api.Framework.MollieHttpRetryPolicies.TransientHttpErrorRetryPolicy"/> to retry transient
+        /// errors, or configure your own retry behaviour for failed requests, e.g.
+        /// <c>options.RetryPolicy = builder => builder.AddRetry(new HttpRetryStrategyOptions());</c>
         /// </summary>
-        public IAsyncPolicy<HttpResponseMessage>? RetryPolicy { get; set; }
+        public Action<ResiliencePipelineBuilder<HttpResponseMessage>>? RetryPolicy { get; set; }
 
         /// <summary>
         /// (Optional) The default user agent is "Mollie.Api.NET {version}". When this property is set, the custom user

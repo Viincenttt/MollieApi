@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Shouldly;
-using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
-using Mollie.Api.Models.List.Response;
 using Mollie.Api.Models.Shipment.Request;
-using Mollie.Api.Models.Shipment.Response;
 using Mollie.Tests.Integration.Framework;
 using Xunit;
 
@@ -24,20 +21,24 @@ public class ShipmentTests : BaseMollieApiTestClass, IDisposable {
         // the order needs to be autorized to do a shipment on. this can only be done by waiting.
         string validOrderId = "XXXXX";
         ShipmentRequest shipmentRequest = CreateShipmentWithOnlyRequiredFields();
-        ShipmentResponse result = await _shipmentClient.CreateShipmentAsync(validOrderId, shipmentRequest);
+        var result = await _shipmentClient.CreateShipmentAsync(validOrderId, shipmentRequest);
+        var shipment = result.Data!;
 
         // Then: Make sure we get a valid shipment response
-        result.ShouldNotBeNull();
-        result.CreatedAt.ShouldBeGreaterThan(DateTime.Now);
+        result.Success.ShouldBeTrue();
+        shipment.ShouldNotBeNull();
+        shipment.CreatedAt.ShouldBeGreaterThan(DateTime.Now);
     }
 
     [Fact(Skip = "For manual testing only")]
     public async Task CanListShipmentsForOrder(){
         string validOrderId = "XXXXX";
-        ListResponse<ShipmentResponse> result = await _shipmentClient.GetShipmentListAsync(validOrderId);
+        var result = await _shipmentClient.GetShipmentListAsync(validOrderId);
+        var shipments = result.Data!;
 
-        result.ShouldNotBeNull();
-        result.Count.ShouldBeGreaterThan(0);
+        result.Success.ShouldBeTrue();
+        shipments.ShouldNotBeNull();
+        shipments.Count.ShouldBeGreaterThan(0);
     }
 
     private ShipmentRequest CreateShipmentWithOnlyRequiredFields() {

@@ -27,12 +27,12 @@ namespace Mollie.Api.Models.Chargeback.Response {
         /// <summary>
         /// The date and time the chargeback was issued, in ISO 8601 format.
         /// </summary>
-        public required DateTime CreatedAt { get; set; }
+        public required DateTimeOffset CreatedAt { get; set; }
 
         /// <summary>
         /// The date and time the chargeback was reversed, in ISO 8601 format.
         /// </summary>
-        public DateTime? ReversedAt { get; set; }
+        public DateTimeOffset? ReversedAt { get; set; }
 
         /// <summary>
         /// The id of the payment this chargeback belongs to.

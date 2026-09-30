@@ -1,7 +1,6 @@
 ﻿@page "/customer/{customerId}/subscription/create"
 
 @using Mollie.WebApplication.Blazor.Models.Subscription
-@using Mollie.Api.Client
 @using Mollie.Api.Models.Subscription.Request
 
 @inject ISubscriptionClient SubscriptionClient
@@ -9,7 +8,7 @@
 
 <h3>Create new subscription</h3>
 
-<ApiExceptionDisplay Exception="_apiException"></ApiExceptionDisplay>
+<ApiExceptionDisplay Result="_result"></ApiExceptionDisplay>
 
 <EditForm Model="_model" OnValidSubmit="@OnSave" class="col-md-6">
     <DataAnnotationsValidator />
@@ -88,7 +87,7 @@
 </EditForm>
 
 @code {
-    private MollieApiException? _apiException;
+    private MollieResult? _result;
 
     [Parameter]
     public required string CustomerId { get; set; }
@@ -103,21 +102,21 @@
     };
 
     private async Task OnSave() {
-        try {
-            _apiException = null;
+        _result = null;
 
-            await SubscriptionClient.CreateSubscriptionAsync(CustomerId, new SubscriptionRequest {
-                Amount = new Amount(_model.Currency, _model.Amount),
-                Interval = $"{_model.IntervalAmount} {_model.IntervalPeriod.ToString().ToLower()}",
-                Times = _model.Times,
-                Description = _model.Description,
-                MandateId = _model.MandateId
-            });
+        var result = await SubscriptionClient.CreateSubscriptionAsync(CustomerId, new SubscriptionRequest {
+            Amount = new Amount(_model.Currency, _model.Amount),
+            Interval = $"{_model.IntervalAmount} {_model.IntervalPeriod.ToString().ToLower()}",
+            Times = _model.Times,
+            Description = _model.Description,
+            MandateId = _model.MandateId
+        });
 
+        if (result.Success) {
             NavigationManager.NavigateTo($"/customer/{CustomerId}/subscription/overview");
         }
-        catch (MollieApiException e) {
-            _apiException = e;
+        else {
+            _result = result;
         }
     }
 }
