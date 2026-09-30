@@ -7,6 +7,7 @@ namespace Mollie.Api.Models {
     /// <summary>
     /// The amount of a payment, refund, or chargeback.
     /// </summary>
+    [JsonConverter(typeof(AmountJsonConverter))]
     public record Amount {
         /// <summary>
         /// An ISO 4217 currency code. The currencies supported depend on the payment methods that are enabled on your account.
@@ -14,10 +15,10 @@ namespace Mollie.Api.Models {
         public required string Currency { get; set; }
 
         /// <summary>
-        /// The exact monetary amount in the given currency. The value is serialized as a string to ensure the
-        /// correct number of decimals are passed, preserving the exact value set by the user.
+        /// The exact monetary amount in the given currency. The value is serialized as a string with the number of
+        /// decimals of the currency, for example "20.00" for EUR and "20" for JPY. Only zeros are added or removed,
+        /// the value is never rounded.
         /// </summary>
-        [JsonConverter(typeof(DecimalToStringConverter))]
         public required decimal Value { get; set; }
 
         /// <summary>
