@@ -50,6 +50,26 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.VerifyNoOutstandingExpectation();
         }
 
+        [Theory]
+        [InlineData("EUR", "20", "20.00")]
+        [InlineData("EUR", "20.0000", "20.00")]
+        [InlineData("JPY", "500.00", "500")]
+        [InlineData("EUR", "10.005", "10.005")]
+        public async Task GetAllPaymentMethodListAsync_AmountParameterIsAdded_AmountValueHasNumberOfDecimalsOfCurrency(
+            string currency, string value, string expectedValue) {
+            // Given: We make a request to retrieve all payment methods with a amount parameter
+            var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.DefaultBaseApiEndPoint}methods/all?amount[value]={expectedValue}&amount[currency]={currency}", defaultPaymentMethodJsonResponse);
+            HttpClient httpClient = mockHttp.ToHttpClient();
+            var paymentMethodClient = new PaymentMethodClient("abcde", httpClient);
+            var amount = new Amount(currency, decimal.Parse(value, System.Globalization.CultureInfo.InvariantCulture));
+
+            // When: We send the request
+            await paymentMethodClient.GetAllPaymentMethodListAsync(amount: amount);
+
+            // Then
+            mockHttp.VerifyNoOutstandingExpectation();
+        }
+
         [Fact]
         public async Task GetAllPaymentMethodListAsync_ProfileIdParameterIsSpecified_QueryStringContainsProfileIdParameter() {
             // Given: We make a request to retrieve all payment methods with a profile id parameter

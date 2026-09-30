@@ -21,7 +21,8 @@ internal class DecimalToStringConverter : JsonConverter<decimal> {
             return reader.GetDecimal();
         }
 
-        throw new JsonException($"Unable to convert \"{reader.GetString()}\" to {typeToConvert.Name}.");
+        string invalidValue = reader.TokenType == JsonTokenType.String ? $"\"{reader.GetString()}\"" : $"a token of type {reader.TokenType}";
+        throw new JsonException($"Unable to convert {invalidValue} to {typeToConvert.Name}.");
     }
 
     public override void Write(Utf8JsonWriter writer, decimal value, JsonSerializerOptions options) {

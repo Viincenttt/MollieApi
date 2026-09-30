@@ -61,6 +61,22 @@ public class DecimalToStringConverterTests {
             }));
     }
 
+    [Theory]
+    [InlineData("true")]
+    [InlineData("{}")]
+    [InlineData("[]")]
+    [InlineData("\"abc\"")]
+    public void Read_ValueThatIsNotADecimal_ThrowsJsonException(string json) {
+        // Given
+        var converter = new DecimalToStringConverter();
+
+        // When / Then
+        Should.Throw<JsonException>(() =>
+            JsonSerializer.Deserialize<decimal>(json, new JsonSerializerOptions {
+                Converters = { converter }
+            }));
+    }
+
     [Fact]
     public void NullableConverter_Write_NullValue_WritesNull() {
         // Given

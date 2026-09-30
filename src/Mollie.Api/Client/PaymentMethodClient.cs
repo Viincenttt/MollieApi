@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -122,7 +121,7 @@ namespace Mollie.Api.Client
             result.AddValueIfNotNullOrEmpty(nameof(sequenceType), sequenceType?.ToLower());
             result.AddValueIfNotNullOrEmpty(nameof(locale), locale);
             result.AddValueIfNotNullOrEmpty("amount[currency]", amount?.Currency);
-            result.AddValueIfNotNullOrEmpty("amount[value]", amount?.Value.ToString(CultureInfo.InvariantCulture));
+            result.AddValueIfNotNullOrEmpty("amount[value]", amount?.ToFormattedValue());
             result.AddValueIfNotNullOrEmpty("include", BuildIncludeParameter(includeIssuers, includePricing));
             result.AddValueIfNotNullOrEmpty(nameof(resource), resource?.ToString()?.ToLower());
             result.AddValueIfNotNullOrEmpty(nameof(currency), currency);
