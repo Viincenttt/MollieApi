@@ -1,0 +1,87 @@
+﻿@page "/terminal/{terminalId}/unreferenced-refund/overview"
+@using Mollie.Api.Client
+@using Mollie.Api.Models.List.Response
+@using Mollie.Api.Models.UnreferencedRefund.Response
+
+@inject ITerminalClient TerminalClient
+
+<h3>Unreferenced refunds</h3>
+
+<ApiExceptionDisplay Exception="_apiException"></ApiExceptionDisplay>
+
+@if (_unreferencedRefunds == null) {
+    @if (_apiException == null) {
+        <p>Loading...</p>
+    }
+}
+else {
+    <div class="clearfix">
+        <a href="/terminal/@TerminalId/unreferenced-refund/create" class="btn btn-primary float-right">Create new unreferenced refund</a>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Date created</th>
+            <th scope="col">Status</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Description</th>
+            <th scope="col">Metadata</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (UnreferencedRefundResponse unreferencedRefund in _unreferencedRefunds.Items) {
+            <tr>
+                <td>@unreferencedRefund.Id</td>
+                <td>@unreferencedRefund.CreatedAt</td>
+                <td>@unreferencedRefund.Status</td>
+                <td>@unreferencedRefund.Amount.ToString()</td>
+                <td>@unreferencedRefund.Description</td>
+                <td>@unreferencedRefund.Metadata</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+
+    <OverviewNavigation
+        Previous="_unreferencedRefunds.Links.Previous"
+        Next="_unreferencedRefunds.Links.Next">
+    </OverviewNavigation>
+}
+
+@code {
+    private MollieApiException? _apiException;
+
+    [Parameter]
+    public required string TerminalId { get; set; }
+
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string? Url { get; set; }
+
+    private ListResponse<UnreferencedRefundResponse>? _unreferencedRefunds;
+
+    protected override async Task OnParametersSetAsync() {
+        await LoadData();
+    }
+
+    private async Task LoadData() {
+        try {
+            _apiException = null;
+
+            if (string.IsNullOrEmpty(Url)) {
+                _unreferencedRefunds = await TerminalClient.GetUnreferencedRefundListAsync(TerminalId);
+            }
+            else {
+                _unreferencedRefunds = await TerminalClient.GetUnreferencedRefundListAsync(new UrlObjectLink<ListResponse<UnreferencedRefundResponse>>() {
+                    Href = Url,
+                    Type = "application/json"
+                });
+            }
+        }
+        catch (MollieApiException e) {
+            _apiException = e;
+        }
+    }
+}

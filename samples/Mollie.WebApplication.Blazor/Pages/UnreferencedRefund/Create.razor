@@ -1,0 +1,95 @@
+﻿@page "/terminal/{terminalId}/unreferenced-refund/create"
+@using Mollie.WebApplication.Blazor.Models.UnreferencedRefund
+@using Mollie.Api.Client
+@using Mollie.Api.Models.UnreferencedRefund.Request
+
+@inject ITerminalClient TerminalClient
+@inject NavigationManager NavigationManager
+
+<h3>Create new unreferenced refund</h3>
+
+<div class="alert alert-info">
+    <p>
+        An unreferenced refund is a refund that is not linked to a payment. The refund is created on a point-of-sale terminal,
+        and the customer receives the refund by presenting their card on the terminal.
+    </p>
+</div>
+
+<ApiExceptionDisplay Exception="_apiException"></ApiExceptionDisplay>
+
+<EditForm Model="_model" OnValidSubmit="@OnSave" class="col-md-6">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="amount">Amount</label>
+        <InputNumber
+            id="amount"
+            class="form-control"
+            @bind-Value="_model.Amount">
+        </InputNumber>
+    </div>
+
+    <div class="form-group">
+        <label for="currency">Currency</label>
+        <InputSelect
+            id="currency"
+            class="form-control"
+            @bind-Value="_model.Currency">
+            @foreach (string currency in StaticStringListBuilder.GetStaticStringList(typeof(Currency))) {
+                <option value="@currency">@currency</option>
+            }
+        </InputSelect>
+    </div>
+
+    <div class="form-group">
+        <label for="description">Description</label>
+        <InputText
+            id="description"
+            class="form-control"
+            @bind-Value="_model.Description">
+        </InputText>
+    </div>
+
+    <div class="form-group">
+        <label for="metadata">Metadata</label>
+        <InputText
+            id="metadata"
+            class="form-control"
+            @bind-Value="_model.Metadata">
+        </InputText>
+    </div>
+
+    <input type="submit" name="Save" value="Save" class="btn btn-primary mt-2"/>
+</EditForm>
+
+@code {
+    private MollieApiException? _apiException;
+
+    [Parameter]
+    public required string TerminalId { get; set; }
+
+    private CreateUnreferencedRefundModel _model = new() {
+        Amount = 0.01m,
+        Currency = "EUR",
+        Description = "An unreferenced refund from the example application",
+        Metadata = null
+    };
+
+    private async Task OnSave() {
+        try {
+            _apiException = null;
+
+            await TerminalClient.CreateUnreferencedRefundAsync(TerminalId, new UnreferencedRefundRequest {
+                Amount = new Amount(_model.Currency, _model.Amount),
+                Description = _model.Description,
+                Metadata = string.IsNullOrWhiteSpace(_model.Metadata) ? null : _model.Metadata
+            });
+
+            NavigationManager.NavigateTo($"/terminal/{TerminalId}/unreferenced-refund/overview");
+        }
+        catch (MollieApiException e) {
+            _apiException = e;
+        }
+    }
+}
