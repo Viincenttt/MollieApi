@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Mollie.Api.Client;
 using Mollie.Api.Models;
 using Mollie.Api.Models.PaymentLink.Response;
+using Mollie.Api.Models.UnreferencedRefund.Response;
+using Mollie.Api.Models.Webhook;
 using RichardSzalay.MockHttp;
 using Shouldly;
 using Xunit;
@@ -122,6 +124,52 @@ public class WebhookEventClientTests : BaseClientTests {
         response.Links.Documentation.Href.ShouldBe("https://docs.mollie.com/guides/webhooks");
         response.Links.Entity.Href.ShouldBe($"/v2/payment-links/{paymentLinkEntityId}");
         response.Links.Self.Href.ShouldBe($"https://api.mollie.com/v2/events/{webhookEventId}");
+    }
+
+    [Fact]
+    public async Task GetWebhookEventAsync_WithUnreferencedRefundEntity_EntityIsDeserializedAsUnreferencedRefundResponse() {
+        // Given
+        const string webhookEventId = "webhook-event-id";
+        const string unreferencedRefundId = "unref_vytxeTZskVKR7C7WgdSP3d";
+        string entityJson = $@"{{
+      ""resource"": ""unreferenced-refund"",
+      ""id"": ""{unreferencedRefundId}"",
+      ""mode"": ""live"",
+      ""description"": ""Refund of a pair of jeans"",
+      ""amount"": {{ ""currency"": ""EUR"", ""value"": ""20.00"" }},
+      ""status"": ""succeeded"",
+      ""terminalId"": ""term_7MgL4wea46qkRcoTZjWEH"",
+      ""metadata"": null,
+      ""createdAt"": ""2023-03-14T17:09:02+00:00"",
+      ""_links"": {{
+        ""self"": {{
+          ""href"": ""https://api.mollie.com/v2/terminals/term_7MgL4wea46qkRcoTZjWEH/unreferenced-refunds/{unreferencedRefundId}"",
+          ""type"": ""application/hal+json""
+        }},
+        ""documentation"": {{
+          ""href"": ""https://docs.mollie.com/reference/create-unreferenced-refund"",
+          ""type"": ""text/html""
+        }}
+      }}
+    }}";
+        string jsonToReturnInMockResponse = CreateWebhookEventJsonResponse(
+            webhookEventId, WebhookEventTypes.UnreferencedRefundSucceeded, unreferencedRefundId, entityJson);
+        var mockHttp = new MockHttpMessageHandler();
+        mockHttp.When($"{BaseMollieClient.DefaultBaseApiEndPoint}events/{webhookEventId}")
+            .Respond("application/json", jsonToReturnInMockResponse);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        var webhookClient = new WebhookEventClient("abcde", httpClient);
+
+        // When
+        var response = await webhookClient.GetWebhookEventAsync(webhookEventId);
+
+        // Then
+        response.Type.ShouldBe("unreferenced-refund.succeeded");
+        var entity = response.Entity.ShouldBeOfType<UnreferencedRefundResponse>();
+        entity.Id.ShouldBe(unreferencedRefundId);
+        entity.Status.ShouldBe(UnreferencedRefundStatus.Succeeded);
+        entity.Metadata.ShouldBeNull();
+        entity.Links.Terminal.ShouldBeNull();
     }
 
     private string CreateWebhookEventJsonResponse(string webhookEventId, string type, string entityId, string entityJson) {
