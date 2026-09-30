@@ -15,7 +15,7 @@ namespace Mollie.Api.Client.Abstract {
         Task<MollieResult> CancelPaymentRefundAsync(string paymentId, string refundId, bool testmode = false, CancellationToken cancellationToken = default);
         Task<MollieResult<ListResponse<RefundResponse>>> GetPaymentRefundListAsync(string paymentId, string? from = null, int? limit = null, bool testmode = false, CancellationToken cancellationToken = default);
         Task<MollieResult<OrderRefundResponse>> CreateOrderRefundAsync(string orderId, OrderRefundRequest createOrderRefundRequest, CancellationToken cancellationToken = default);
-        Task<MollieResult<ListResponse<RefundResponse>>> GetOrderRefundListAsync(string orderId, string? from = null, int? limit = null, bool testmode = false, CancellationToken cancellationToken = default);
+        Task<MollieResult<ListResponse<OrderRefundResponse>>> GetOrderRefundListAsync(string orderId, string? from = null, int? limit = null, bool testmode = false, CancellationToken cancellationToken = default);
         Task<MollieResult<ListResponse<RefundResponse>>> GetRefundListAsync(UrlObjectLink<ListResponse<RefundResponse>> url, CancellationToken cancellationToken = default);
         Task<MollieResult<RefundResponse>> GetRefundAsync(UrlObjectLink<RefundResponse> url, CancellationToken cancellationToken = default);
     }
