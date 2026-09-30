@@ -192,8 +192,9 @@ Follow these steps in order:
 
 ## Error Handling
 
-- HTTP errors are thrown as `MollieApiException` which contains a `MollieErrorMessage` with `Status`, `Title`, and `Detail`.
-- Callers should catch `MollieApiException` to handle Mollie-specific API errors.
+- Client methods do not throw for API errors. They return a `MollieResult` / `MollieResult<T>` whose `Error` is a `MollieErrorMessage` with `Status`, `Title`, and `Detail`.
+- API errors come back as a result; everything else (invalid arguments, network failures, JSON errors) throws.
+- Callers who prefer exceptions can call `result.EnsureSuccess()`, which throws a `MollieApiException` for an unsuccessful result.
 
 ---
 

@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Http;
+using Mollie.Api.Client;
 using Mollie.Api.Models.Error;
 
 namespace Mollie.Api.Models {
@@ -42,6 +43,28 @@ namespace Mollie.Api.Models {
         /// The error details returned by the API when the request was not successful.
         /// </summary>
         public MollieErrorMessage? Error { get; init; }
+
+        /// <summary>
+        /// Throws a <see cref="MollieApiException"/> when the request was not successful.
+        /// </summary>
+        /// <returns>The current result, when the request was successful.</returns>
+        /// <exception cref="MollieApiException">The Mollie API returned an error.</exception>
+        public MollieResult EnsureSuccess() {
+            if (!Success) {
+                throw CreateException();
+            }
+
+            return this;
+        }
+
+        private protected MollieApiException CreateException() {
+            var details = Error ?? new MollieErrorMessage {
+                Title = "Unknown error",
+                Status = (int)(HttpStatusCode ?? 0),
+                Detail = ResponseBody ?? string.Empty
+            };
+            return new MollieApiException(details, this);
+        }
     }
 
     /// <summary>
@@ -59,5 +82,19 @@ namespace Mollie.Api.Models {
         /// </summary>
         [MemberNotNullWhen(true, nameof(Data))]
         public override bool Success { get; init; }
+
+        /// <summary>
+        /// Throws a <see cref="MollieApiException"/> when the request was not successful.
+        /// </summary>
+        /// <returns>The data returned by the API, when the request was successful.</returns>
+        /// <exception cref="MollieApiException">The Mollie API returned an error.</exception>
+        [MemberNotNull(nameof(Data))]
+        public new T EnsureSuccess() {
+            if (!Success) {
+                throw CreateException();
+            }
+
+            return Data;
+        }
     }
 }
