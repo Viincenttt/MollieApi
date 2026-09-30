@@ -85,8 +85,8 @@ public class BalanceTests : BaseMollieApiTestClass, IDisposable {
     [InlineData(ReportGrouping.StatusBalances, typeof(StatusBalanceReportResponse))]
     public async Task GetBalanceReportAsync_IsParsedCorrectly(string grouping, Type expectedObjectType) {
         // Given: We retrieve the primary balance
-        var from = new DateTime(2022, 11, 1);
-        var until = new DateTime(2022, 11, 30);
+        var from = new DateOnly(2022, 11, 1);
+        var until = new DateOnly(2022, 11, 30);
         var primaryBalanceResult = await _balanceClient.GetPrimaryBalanceAsync();
         var primaryBalance = primaryBalanceResult.Data!;
 
@@ -104,8 +104,8 @@ public class BalanceTests : BaseMollieApiTestClass, IDisposable {
         report.ShouldBeOfType(expectedObjectType);
         report.Resource.ShouldBe("balance-report");
         report.BalanceId.ShouldBe(primaryBalance.Id);
-        report.From.ShouldBe(DateOnly.FromDateTime(from));
-        report.Until.ShouldBe(DateOnly.FromDateTime(until));
+        report.From.ShouldBe(from);
+        report.Until.ShouldBe(until);
         report.Grouping.ShouldBe(grouping);
     }
 

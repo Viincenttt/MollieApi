@@ -137,8 +137,8 @@ namespace Mollie.Tests.Unit.Client {
       public async Task GetBalanceReportAsync_TransactionCategories_ResponseIsParsed() {
           // Given: We request a balance report
           string balanceId = "bal_CKjKwQdjCwCSArXFAJNFH";
-          DateTime from = new DateTime(2022, 11, 1);
-          DateTime until = new DateTime(2022, 11, 30);
+          DateOnly from = new DateOnly(2022, 11, 1);
+          DateOnly until = new DateOnly(2022, 11, 30);
           string grouping = ReportGrouping.TransactionCategories;
 
           string expectedUrl = $"{BaseMollieClient.DefaultBaseApiEndPoint}balances/{balanceId}/report" +
@@ -160,8 +160,8 @@ namespace Mollie.Tests.Unit.Client {
           specificBalanceReport.Grouping.ShouldBe(grouping);
           specificBalanceReport.BalanceId.ShouldBe(balanceId);
           specificBalanceReport.Resource.ShouldBe("balance-report");
-          specificBalanceReport.From.ShouldBe(DateOnly.FromDateTime(from));
-          specificBalanceReport.Until.ShouldBe(DateOnly.FromDateTime(until));
+          specificBalanceReport.From.ShouldBe(from);
+          specificBalanceReport.Until.ShouldBe(until);
           specificBalanceReport.Totals.ShouldNotBeNull();
           specificBalanceReport.Totals.Open.Pending.Amount.Value.ShouldBe(5.30m);
           specificBalanceReport.Totals.Open.Pending.Amount.Currency.ShouldBe("EUR");
@@ -183,8 +183,8 @@ namespace Mollie.Tests.Unit.Client {
           var mockHttp = new MockHttpMessageHandler();
           HttpClient httpClient = mockHttp.ToHttpClient();
           BalanceClient balanceClient = new BalanceClient("api-key", httpClient);
-          DateTime from = new DateTime(2022, 11, 1);
-          DateTime until = new DateTime(2022, 11, 30);
+          DateOnly from = new DateOnly(2022, 11, 1);
+          DateOnly until = new DateOnly(2022, 11, 30);
 
           // When: We send the request
 #pragma warning disable CS8604 // Possible null reference argument.
@@ -199,8 +199,8 @@ namespace Mollie.Tests.Unit.Client {
       public async Task GetBalanceReportAsync_StatusBalances_ResponseIsParsed() {
           // Given: We request a balance report
           string balanceId = "bal_CKjKwQdjCwCSArXFAJNFH";
-          DateTime from = new DateTime(2022, 11, 1);
-          DateTime until = new DateTime(2022, 11, 30);
+          DateOnly from = new DateOnly(2022, 11, 1);
+          DateOnly until = new DateOnly(2022, 11, 30);
           string grouping = ReportGrouping.StatusBalances;
 
           string expectedUrl = $"{BaseMollieClient.DefaultBaseApiEndPoint}balances/{balanceId}/report" +
@@ -222,8 +222,8 @@ namespace Mollie.Tests.Unit.Client {
           specificBalanceReport.Grouping.ShouldBe(grouping);
           specificBalanceReport.BalanceId.ShouldBe(balanceId);
           specificBalanceReport.Resource.ShouldBe("balance-report");
-          specificBalanceReport.From.ShouldBe(DateOnly.FromDateTime(from));
-          specificBalanceReport.Until.ShouldBe(DateOnly.FromDateTime(until));
+          specificBalanceReport.From.ShouldBe(from);
+          specificBalanceReport.Until.ShouldBe(until);
           specificBalanceReport.Totals.ShouldNotBeNull();
           specificBalanceReport.Totals.PendingBalance.Open.Amount.Value.ShouldBe(5.30m);
           specificBalanceReport.Totals.PendingBalance.Open.Amount.Currency.ShouldBe("EUR");

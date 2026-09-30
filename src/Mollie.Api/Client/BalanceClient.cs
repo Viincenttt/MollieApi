@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -53,8 +54,13 @@ namespace Mollie.Api.Client {
             return await GetAsync(url, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
+#if NET8_0_OR_GREATER
+        public async Task<MollieResult<BalanceReportResponse>> GetBalanceReportAsync(
+            string balanceId, DateOnly from, DateOnly until, string? grouping = null, CancellationToken cancellationToken = default) {
+#else
         public async Task<MollieResult<BalanceReportResponse>> GetBalanceReportAsync(
             string balanceId, DateTime from, DateTime until, string? grouping = null, CancellationToken cancellationToken = default) {
+#endif
             ValidateRequiredUrlParameter(nameof(balanceId), balanceId);
             var queryParameters = BuildGetBalanceReportQueryParameters(from, until, grouping);
             return await GetAsync<BalanceReportResponse>(
@@ -62,8 +68,13 @@ namespace Mollie.Api.Client {
                 .ConfigureAwait(false);
         }
 
+#if NET8_0_OR_GREATER
+        public async Task<MollieResult<BalanceReportResponse>> GetPrimaryBalanceReportAsync(
+            DateOnly from, DateOnly until, string? grouping = null, CancellationToken cancellationToken = default) {
+#else
         public async Task<MollieResult<BalanceReportResponse>> GetPrimaryBalanceReportAsync(
             DateTime from, DateTime until, string? grouping = null, CancellationToken cancellationToken = default) {
+#endif
             var queryParameters = BuildGetBalanceReportQueryParameters(from, until, grouping);
             return await GetAsync<BalanceReportResponse>(
                 $"balances/primary/report{queryParameters.ToQueryString()}", cancellationToken: cancellationToken)
@@ -90,10 +101,14 @@ namespace Mollie.Api.Client {
             return await GetAsync(url, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
+#if NET8_0_OR_GREATER
+        private Dictionary<string, string> BuildGetBalanceReportQueryParameters(DateOnly from, DateOnly until, string? grouping = null) {
+#else
         private Dictionary<string, string> BuildGetBalanceReportQueryParameters(DateTime from, DateTime until, string? grouping = null) {
+#endif
             var result = new Dictionary<string, string>();
-            result.AddValueIfNotNullOrEmpty("from", from.ToString("yyyy-MM-dd"));
-            result.AddValueIfNotNullOrEmpty("until", until.ToString("yyyy-MM-dd"));
+            result.AddValueIfNotNullOrEmpty("from", from.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
+            result.AddValueIfNotNullOrEmpty("until", until.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
             result.AddValueIfNotNullOrEmpty("grouping", grouping);
             return result;
         }

@@ -66,8 +66,13 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="grouping">You can retrieve reports in two different formats: status-balances and
         /// transaction-categories</param>
         /// <param name="cancellationToken">Optional cancellation token</param>
+#if NET8_0_OR_GREATER
+        Task<MollieResult<BalanceReportResponse>> GetBalanceReportAsync(
+            string balanceId, DateOnly from, DateOnly until, string? grouping = null, CancellationToken cancellationToken = default);
+#else
         Task<MollieResult<BalanceReportResponse>> GetBalanceReportAsync(
             string balanceId, DateTime from, DateTime until, string? grouping = null, CancellationToken cancellationToken = default);
+#endif
 
         /// <summary>
         /// With the Get primary balance report endpoint you can retrieve a summarized report for all movements on your
@@ -82,8 +87,13 @@ namespace Mollie.Api.Client.Abstract {
         /// <param name="grouping">You can retrieve reports in two different formats: status-balances and
         /// transaction-categories</param>
         /// <param name="cancellationToken">Optional cancellation token</param>
+#if NET8_0_OR_GREATER
+        Task<MollieResult<BalanceReportResponse>> GetPrimaryBalanceReportAsync(
+            DateOnly from, DateOnly until, string? grouping = null, CancellationToken cancellationToken = default);
+#else
         Task<MollieResult<BalanceReportResponse>> GetPrimaryBalanceReportAsync(
             DateTime from, DateTime until, string? grouping = null, CancellationToken cancellationToken = default);
+#endif
 
         /// <summary>
         /// With the List balance transactions endpoint you can retrieve a list of all the movements on your balance.
