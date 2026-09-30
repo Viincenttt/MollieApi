@@ -27,6 +27,26 @@ public static class WebhookEventTypes {
     public const string SalesInvoicePaid = "sales-invoice.paid";
 
     /// <summary>
+    /// An unreferenced refund has succeeded.
+    /// </summary>
+    public const string UnreferencedRefundSucceeded = "unreferenced-refund.succeeded";
+
+    /// <summary>
+    /// An unreferenced refund has failed.
+    /// </summary>
+    public const string UnreferencedRefundFailed = "unreferenced-refund.failed";
+
+    /// <summary>
+    /// An unreferenced refund has been canceled.
+    /// </summary>
+    public const string UnreferencedRefundCanceled = "unreferenced-refund.canceled";
+
+    /// <summary>
+    /// An unreferenced refund has expired.
+    /// </summary>
+    public const string UnreferencedRefundExpired = "unreferenced-refund.expired";
+
+    /// <summary>
     /// All event types
     /// </summary>
     public const string All = "*";

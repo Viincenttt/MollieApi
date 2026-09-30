@@ -18,6 +18,7 @@ using Mollie.Api.Models.Settlement.Response;
 using Mollie.Api.Models.Shipment.Response;
 using Mollie.Api.Models.Subscription.Response;
 using Mollie.Api.Models.Terminal.Response;
+using Mollie.Api.Models.UnreferencedRefund.Response;
 
 namespace Mollie.Api.JsonConverters;
 
@@ -85,6 +86,7 @@ internal class WebhookEventEntityJsonConverter : JsonConverter<object> {
                 case "payment": return typeof(PaymentResponse);
                 case "payment-link": return typeof(PaymentLinkResponse);
                 case "sales-invoice": return typeof(SalesInvoiceResponse);
+                case "unreferenced-refund": return typeof(UnreferencedRefundResponse);
                 default:
                     throw new JsonException(
                         $"Unable to convert embedded JSON to entity type. Resource '{resource}' is not supported or recognized.");
