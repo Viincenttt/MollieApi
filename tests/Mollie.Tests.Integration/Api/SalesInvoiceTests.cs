@@ -165,7 +165,8 @@ public class SalesInvoiceTests : BaseMollieApiTestClass, IDisposable {
         // When: We delete one of the sales invoices in the list
         var salesInvoiceToDelete = response.Items.FirstOrDefault(x => x.Status == SalesInvoiceStatus.Draft);
         if (salesInvoiceToDelete != null) {
-            await _salesInvoiceClient.DeleteSalesInvoiceAsync(salesInvoiceToDelete.Id);
+            var deleteResult = await _salesInvoiceClient.DeleteSalesInvoiceAsync(salesInvoiceToDelete.Id);
+            deleteResult.Success.ShouldBeTrue();
 
             // Then: Make sure the sales invoice is deleted
             var result = await _salesInvoiceClient.GetSalesInvoiceAsync(salesInvoiceToDelete.Id);

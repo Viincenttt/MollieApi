@@ -69,6 +69,9 @@ public class ConnectTests : BaseMollieApiTestClass {
         };
 
         // When: we send the request
-        await connectClient.RevokeTokenAsync(revokeTokenRequest);
+        var result = await connectClient.RevokeTokenAsync(revokeTokenRequest);
+
+        // Then: the token is revoked
+        result.Success.ShouldBeTrue();
     }
 }

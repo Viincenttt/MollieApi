@@ -51,7 +51,8 @@ public class WebhookTests : BaseMollieApiTestClass, IDisposable, IAsyncLifetime 
         retrieved.ShouldBeEquivalentTo(created);
 
         // Then: The webhook can be deleted
-        await _webhookClient.DeleteWebhookAsync(created.Id, testmode: true);
+        var deleteResult = await _webhookClient.DeleteWebhookAsync(created.Id, testmode: true);
+        deleteResult.Success.ShouldBeTrue();
     }
 
     [Fact]
@@ -129,7 +130,10 @@ public class WebhookTests : BaseMollieApiTestClass, IDisposable, IAsyncLifetime 
 
         var webhooks = result.Data!;
         foreach (var webhook in webhooks.Items) {
-            await _webhookClient.DeleteWebhookAsync(webhook.Id, testmode: true);
+            var deleteResult = await _webhookClient.DeleteWebhookAsync(webhook.Id, testmode: true);
+            if (deleteResult.Success == false) {
+                Assert.Fail($"Failed to delete webhook {webhook.Id}: {deleteResult.Error}");
+            }
         }
     }
 

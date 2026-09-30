@@ -136,7 +136,8 @@ public class SubscriptionTests : BaseMollieApiTestClass, IDisposable {
             SubscriptionResponse? subscriptionToCancel = subscriptions.Items
                 .FirstOrDefault(s => s.Status != SubscriptionStatus.Canceled);
             if (subscriptionToCancel != null) {
-                await _subscriptionClient.CancelSubscriptionAsync(customerId, subscriptionToCancel.Id);
+                var cancelResult = await _subscriptionClient.CancelSubscriptionAsync(customerId, subscriptionToCancel.Id);
+                cancelResult.Success.ShouldBeTrue();
 
                 // Then: Make sure its canceled after one second
                 await Task.Delay(TimeSpan.FromSeconds(1));

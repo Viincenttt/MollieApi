@@ -98,9 +98,10 @@ public class ProfileTests : BaseMollieApiTestClass, IDisposable {
         // Given
 
         // When: We disable a payment method for the current profile
-        await _profileClient.DisablePaymentMethodAsync(PaymentMethod.CreditCard);
+        var result = await _profileClient.DisablePaymentMethodAsync(PaymentMethod.CreditCard);
 
         // Then
+        result.Success.ShouldBeTrue();
     }
 
     [Fact]
@@ -108,9 +109,10 @@ public class ProfileTests : BaseMollieApiTestClass, IDisposable {
         // Given
 
         // When: We disable a issuer method for the current profile
-        await _profileClient.DisableGiftCardIssuerAsync("festivalcadeau");
+        var result = await _profileClient.DisableGiftCardIssuerAsync("festivalcadeau");
 
         // Then
+        result.Success.ShouldBeTrue();
     }
 
     public void Dispose()

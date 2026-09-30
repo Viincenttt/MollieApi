@@ -320,7 +320,8 @@ public class PaymentLinkTests : BaseMollieApiTestClass, IDisposable {
         createdPaymentLinkResponse.Success.ShouldBeTrue();
 
         // When: We delete the payment link
-        await _paymentLinkClient.DeletePaymentLinkAsync(createdPaymentLinkResponse.Data!.Id);
+        var deleteResult = await _paymentLinkClient.DeletePaymentLinkAsync(createdPaymentLinkResponse.Data!.Id);
+        deleteResult.Success.ShouldBeTrue();
 
         // Then: We expect the payment link to be updated
         var result = await _paymentLinkClient.GetPaymentLinkAsync(createdPaymentLinkResponse.Data.Id);

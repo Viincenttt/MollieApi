@@ -77,7 +77,8 @@ public class CaptureTests : BaseMollieApiTestClass, IDisposable {
             Description = "my capture",
             Metadata = "my-metadata string"
         };
-        await _captureClient.CreateCapture(payment.Id, captureRequest);
+        var captureResult = await _captureClient.CreateCapture(payment.Id, captureRequest);
+        captureResult.Success.ShouldBeTrue();
 
         // When: we retrieve the captures of the payment
         var captureListResult = await _captureClient.GetCaptureListAsync(payment.Id);

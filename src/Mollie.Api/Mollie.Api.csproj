@@ -27,6 +27,12 @@
     <None Include="..\..\LICENSE" Pack="true" PackagePath="\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <!-- The analyzers are not used by the library itself, they are shipped in the package so they run in projects that consume it -->
+    <ProjectReference Include="..\Mollie.Api.Analyzers\Mollie.Api.Analyzers.csproj" ReferenceOutputAssembly="false" PrivateAssets="all" />
+    <None Include="..\Mollie.Api.Analyzers\bin\$(Configuration)\netstandard2.0\Mollie.Api.Analyzers.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+  </ItemGroup>
+
   <ItemGroup Condition="'$(SignAssembly)' != 'true'">
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
       <_Parameter1>Mollie.Tests.Unit</_Parameter1>

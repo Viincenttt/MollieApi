@@ -92,7 +92,8 @@ public class CustomerTests : BaseMollieApiTestClass, IDisposable {
 
         // When: We delete one of the customers in the list
         string customerIdToDelete = response.Items.First().Id;
-        await _customerClient.DeleteCustomerAsync(customerIdToDelete);
+        var deleteResult = await _customerClient.DeleteCustomerAsync(customerIdToDelete);
+        deleteResult.Success.ShouldBeTrue();
 
         // Then: Make sure its deleted after one second
         await Task.Delay(TimeSpan.FromSeconds(1));

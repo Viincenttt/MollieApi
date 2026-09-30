@@ -49,6 +49,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Mollie.Api\Mollie.Api.csproj" />
+    <ProjectReference Include="..\..\src\Mollie.Api.Analyzers\Mollie.Api.Analyzers.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
 </Project>
