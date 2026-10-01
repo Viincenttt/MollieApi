@@ -83,7 +83,7 @@ namespace Mollie.Api.Models.Session.Response {
         /// <summary>
         /// The customer this session belongs to.
         /// </summary>
-        public required string CustomerId { get; set; }
+        public string? CustomerId { get; set; }
 
         /// <summary>
         /// Indicates which type of payment this is in a recurring sequence. Set to first for first payments that allow the customer to agree
@@ -98,6 +98,27 @@ namespace Mollie.Api.Models.Session.Response {
         /// </summary>
         [JsonConverter(typeof(RawJsonConverter))]
         public string? Metadata { get; set; }
+
+        /// <summary>
+        /// The customer details that should be collected during checkout. Note: this field is in private beta.
+        /// See the Mollie.Api.Models.Session.SessionRequiredCustomerDetail class for a full list of known values.
+        /// </summary>
+        public List<string>? RequiredCustomerDetails { get; set; }
+
+        /// <summary>
+        /// The session's date and time of creation, in ISO 8601 format.
+        /// </summary>
+        public required DateTimeOffset CreatedAt { get; set; }
+
+        /// <summary>
+        /// The date and time the session expired, in ISO 8601 format. Only set if the session has expired.
+        /// </summary>
+        public DateTimeOffset? ExpiredAt { get; set; }
+
+        /// <summary>
+        /// The date and time the session was completed, in ISO 8601 format. Only set if the session has been completed.
+        /// </summary>
+        public DateTimeOffset? CompletedAt { get; set; }
 
         /// <summary>
         /// An object with several URL objects relevant to the session. Every URL object will contain an href and a type field.

@@ -79,6 +79,12 @@ namespace Mollie.Api.Models.Session.Request {
         public string? Metadata { get; set; }
 
         /// <summary>
+        /// The customer details that should be collected during checkout. Note: this field is in private beta.
+        /// See the Mollie.Api.Models.Session.SessionRequiredCustomerDetail class for a full list of known values.
+        /// </summary>
+        public List<string>? RequiredCustomerDetails { get; set; }
+
+        /// <summary>
         ///	Oauth only - Optional – Set this to true to make this session a test session.
         /// </summary>
         public bool? Testmode { get; set; }
