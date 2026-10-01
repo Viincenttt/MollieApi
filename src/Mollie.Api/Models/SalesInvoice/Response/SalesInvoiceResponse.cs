@@ -123,14 +123,6 @@ public record SalesInvoiceResponse : IEntity {
     public required IEnumerable<SalesInvoiceLine>? Lines { get; set; }
 
     /// <summary>
-    /// The webhook URL where we will send invoice status updates to. The webhookUrl is optional, but without a webhook
-    /// you will miss out on important status changes to your invoice. The webhookUrl must be reachable from Mollie's
-    /// point of view, so you cannot use localhost. If you want to use webhook during development on localhost, you
-    /// must use a tool like ngrok to have the webhooks delivered to your local machine.
-    /// </summary>
-    public string? WebhookUrl { get; set; }
-
-    /// <summary>
     /// The discount to be applied to the entire invoice, possibly on top of the line item discounts.
     /// </summary>
     public SalesInvoiceDiscount? Discount { get; set; }

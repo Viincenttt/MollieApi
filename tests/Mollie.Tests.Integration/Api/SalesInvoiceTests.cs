@@ -178,7 +178,6 @@ public class SalesInvoiceTests : BaseMollieApiTestClass, IDisposable {
 
     private SalesInvoiceRequest CreateSalesInvoiceRequest() {
         return new SalesInvoiceRequest {
-            WebhookUrl = "https://github.com/Viincenttt/MollieApi",
             Status = SalesInvoiceStatus.Draft,
             PaymentTerm = PaymentTerm.Days30,
             VatMode = VatMode.Exclusive,
@@ -226,7 +225,6 @@ public class SalesInvoiceTests : BaseMollieApiTestClass, IDisposable {
         response.Recipient.Country.ShouldBe(request.Recipient.Country);
         response.RecipientIdentifier.ShouldBe(request.RecipientIdentifier);
         response.Recipient.Type.ShouldBe(RecipientType.Consumer);
-        response.WebhookUrl.ShouldBe(request.WebhookUrl);
     }
 
     public void Dispose() {
