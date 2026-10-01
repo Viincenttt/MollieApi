@@ -71,7 +71,9 @@ namespace Mollie.Tests.Unit.Client {
             result.Success.ShouldBeTrue();
             result.Data.ShouldNotBeNull();
             result.Data.Mode.ShouldBe(Mode.Live);
-            result.Data.ExternalReference.ShouldBe(new RefundExternalReference { Type = RefundExternalReferenceType.AcquirerReference, Id = "123456789012345" });
+            result.Data.ExternalReference.ShouldNotBeNull();
+            result.Data.ExternalReference.Type.ShouldBe(RefundExternalReferenceType.AcquirerReference);
+            result.Data.ExternalReference.Id.ShouldBe("123456789012345");
         }
 
         [Theory]
