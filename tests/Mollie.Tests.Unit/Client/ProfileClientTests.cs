@@ -524,7 +524,6 @@ public class ProfileClientTests : BaseClientTests
     ""description"": ""Description"",
     ""countriesOfActivity"": [""NL""],
     ""businessCategory"": ""OTHER_MERCHANDISE"",
-    ""categoryCode"": 5399,
     ""status"": ""unverified"",
     ""createdAt"": ""2018-03-20T09:28:37+00:00"",
     ""_links"": {
@@ -575,7 +574,6 @@ public class ProfileClientTests : BaseClientTests
                 ""email"": ""info@mywebsite.com"",
                 ""phone"": ""+31208202070"",
                 ""businessCategory"": ""OTHER_MERCHANDISE"",
-                ""categoryCode"": 5399,
                 ""status"": ""verified"",
                 ""review"": {
                     ""status"": ""pending""
