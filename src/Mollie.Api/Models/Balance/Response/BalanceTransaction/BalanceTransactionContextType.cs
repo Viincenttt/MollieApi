@@ -17,5 +17,20 @@
         public const string SplitPayment = "split-payment";
         public const string PlatformPaymentRefund = "platform-payment-refund";
         public const string PlatformPaymentChargeback = "platform-payment-chargeback";
+        public const string CaptureCommission = "capture-commission";
+        public const string CaptureRollingReserveRelease = "capture-rolling-reserve-release";
+        public const string RefundCompensation = "refund-compensation";
+        public const string ReturnedRefundCompensation = "returned-refund-compensation";
+        public const string ChargebackCompensation = "chargeback-compensation";
+        public const string ReversedChargebackCompensation = "reversed-chargeback-compensation";
+        public const string ReturnedPlatformPaymentRefund = "returned-platform-payment-refund";
+        public const string ReversedPlatformPaymentChargeback = "reversed-platform-payment-chargeback";
+        public const string PaymentCommission = "payment-commission";
+        public const string ReimbursementFee = "reimbursement-fee";
+        public const string FailedPaymentFee = "failed-payment-fee";
+        public const string PaymentFee = "payment-fee";
+        public const string ManagedFee = "managed-fee";
+        public const string ReturnedManagedFee = "returned-managed-fee";
+        public const string PostPaymentSplitPayment = "post-payment-split-payment";
     }
 }

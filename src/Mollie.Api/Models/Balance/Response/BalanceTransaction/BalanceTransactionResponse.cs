@@ -38,7 +38,13 @@ namespace Mollie.Api.Models.Balance.Response.BalanceTransaction {
         /// to a balance, we always round the deduction to a ‘real’ amount. Any differences between these realtime
         /// rounded amounts and the final invoice will be compensated when the invoice is generated.
         /// </summary>
-        public required Amount Deductions { get; set; }
+        public Amount? Deductions { get; set; }
+
+        /// <summary>
+        /// A detailed breakdown of the deductions withheld from the movement. Each field represents a specific type
+        /// of deduction applied to the transaction. Only the applicable fields will be present.
+        /// </summary>
+        public BalanceTransactionDeductionDetails? DeductionDetails { get; set; }
 
         /// <summary>
         /// The date and time of the movement, in ISO 8601 format.
