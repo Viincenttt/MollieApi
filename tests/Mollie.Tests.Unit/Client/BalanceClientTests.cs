@@ -9,6 +9,7 @@ using Mollie.Api.Models.Balance.Response;
 using Mollie.Api.Models.Balance.Response.BalanceReport;
 using Mollie.Api.Models.Balance.Response.BalanceReport.Specific.StatusBalance;
 using Mollie.Api.Models.Balance.Response.BalanceReport.Specific.TransactionCategories;
+using Mollie.Api.Models.Balance.Response.BalanceTransaction.Specific;
 using RichardSzalay.MockHttp;
 using Shouldly;
 using Xunit;
@@ -47,9 +48,12 @@ namespace Mollie.Tests.Unit.Client {
           balanceResponse.TransferReference.ShouldBe(getBalanceResponseFactory.TransferReference);
           balanceResponse.TransferThreshold.Currency.ShouldBe(getBalanceResponseFactory.TransferThreshold.Currency);
           balanceResponse.TransferThreshold.Value.ShouldBe(getBalanceResponseFactory.TransferThreshold.Value);
+          balanceResponse.TransferDestination.ShouldNotBeNull();
           balanceResponse.TransferDestination.Type.ShouldBe(getBalanceResponseFactory.TransferDestination.Type);
           balanceResponse.TransferDestination.BankAccount.ShouldBe(getBalanceResponseFactory.TransferDestination.BankAccount);
           balanceResponse.TransferDestination.BeneficiaryName.ShouldBe(getBalanceResponseFactory.TransferDestination.BeneficiaryName);
+          balanceResponse.Mode.ShouldBe(Mode.Live);
+          balanceResponse.Description.ShouldBe(getBalanceResponseFactory.Description);
           balanceResponse.Links.ShouldNotBeNull();
           balanceResponse.Links.Self.Href.ShouldBe($"https://api.mollie.com/v2/balances/{getBalanceResponseFactory.BalanceId}");
           balanceResponse.Links.Self.Type.ShouldBe("application/hal+json");
@@ -108,6 +112,7 @@ namespace Mollie.Tests.Unit.Client {
           balanceResponse.TransferReference.ShouldBe(getBalanceResponseFactory.TransferReference);
           balanceResponse.TransferThreshold.Currency.ShouldBe(getBalanceResponseFactory.TransferThreshold.Currency);
           balanceResponse.TransferThreshold.Value.ShouldBe(getBalanceResponseFactory.TransferThreshold.Value);
+          balanceResponse.TransferDestination.ShouldNotBeNull();
           balanceResponse.TransferDestination.Type.ShouldBe(getBalanceResponseFactory.TransferDestination.Type);
           balanceResponse.TransferDestination.BankAccount.ShouldBe(getBalanceResponseFactory.TransferDestination.BankAccount);
           balanceResponse.TransferDestination.BeneficiaryName.ShouldBe(getBalanceResponseFactory.TransferDestination.BeneficiaryName);
@@ -172,6 +177,11 @@ namespace Mollie.Tests.Unit.Client {
           childSubTotals.Count.ShouldBe(36);
           var childChildSubTotals = childSubTotals.Subtotals!.First();
           childChildSubTotals.Method.ShouldBe("ideal");
+          var cardSubTotals = specificBalanceReport.Totals.Refunds.ImmediatelyAvailable.Subtotals.First().Subtotals!.First().Subtotals!.First();
+          cardSubTotals.CardIssuer.ShouldBe("other");
+          cardSubTotals.CardAudience.ShouldBe("other");
+          cardSubTotals.CardRegion.ShouldBe("domestic");
+          specificBalanceReport.Totals.Topups!.ImmediatelyAvailable.Amount.Value.ShouldBe(25.00m);
       }
 
       [Theory]
@@ -252,6 +262,9 @@ namespace Mollie.Tests.Unit.Client {
           mockHttp.VerifyNoOutstandingExpectation();
           result.Success.ShouldBeTrue();
           balanceTransactions.Count.ShouldBe(balanceTransactions.Items.Count);
+          var paymentTransaction = balanceTransactions.Items[1].ShouldBeOfType<PaymentBalanceTransactionResponse>();
+          paymentTransaction.DeductionDetails!.Fees!.Value.ShouldBe(-0.29m);
+          paymentTransaction.Context.PaymentDescription.ShouldBe("Order 12345");
       }
 
       [Theory]
@@ -323,9 +336,20 @@ namespace Mollie.Tests.Unit.Client {
                     ""value"": ""0.15"",
                     ""currency"": ""EUR""
                 },
+                ""deductions"": {
+                    ""value"": ""-0.29"",
+                    ""currency"": ""EUR""
+                },
+                ""deductionDetails"": {
+                    ""fees"": {
+                        ""value"": ""-0.29"",
+                        ""currency"": ""EUR""
+                    }
+                },
                 ""createdAt"": ""2022-12-20T21:21:09+00:00"",
                 ""context"": {
-                    ""paymentId"": ""tr_JzT2KxV7hZ""
+                    ""paymentId"": ""tr_JzT2KxV7hZ"",
+                    ""paymentDescription"": ""Order 12345""
                 }
             }
         ]
@@ -777,6 +801,26 @@ namespace Mollie.Tests.Unit.Client {
                 ]
             }
         },
+        ""topups"": {
+            ""pending"": {
+                ""amount"": {
+                    ""value"": ""0.00"",
+                    ""currency"": ""EUR""
+                }
+            },
+            ""movedToAvailable"": {
+                ""amount"": {
+                    ""value"": ""0.00"",
+                    ""currency"": ""EUR""
+                }
+            },
+            ""immediatelyAvailable"": {
+                ""amount"": {
+                    ""value"": ""25.00"",
+                    ""currency"": ""EUR""
+                }
+            }
+        },
         ""corrections"": {
             ""pending"": {
                 ""amount"": {
@@ -1195,6 +1239,7 @@ namespace Mollie.Tests.Unit.Client {
           public string BalanceId { get; set; } = "bal_gVMhHKqSSRYJyPsuoPNFH";
           public DateTime CreatedAt { get; set; } = DateTime.SpecifyKind(new DateTime(2022, 11, 22, 13, 15, 0), DateTimeKind.Utc);
           public string Currency { get; set; } = "EUR";
+          public string Description { get; set; } = "Primary balance";
           public BalanceResponseStatus Status { get; set; } = BalanceResponseStatus.Active;
           public Amount AvailableAmount { get; set; } = new Amount(Api.Models.Currency.EUR, 905.25m);
           public Amount PendingAmount { get; set; } = new Amount(Api.Models.Currency.EUR, 100.00m);
@@ -1214,6 +1259,7 @@ namespace Mollie.Tests.Unit.Client {
     ""resource"": ""balance"",
     ""id"": ""{BalanceId}"",
     ""mode"": ""live"",
+    ""description"": ""{Description}"",
     ""createdAt"": ""{CreatedAt:yyyy-MM-ddTHH:mm:ss.fffffffzzz}"",
     ""currency"": ""{Currency}"",
     ""status"": ""{Status}"",

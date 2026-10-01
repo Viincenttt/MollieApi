@@ -14,6 +14,16 @@ namespace Mollie.Api.Models.Balance.Response {
         public required string Id { get; set; }
 
         /// <summary>
+        /// Whether this entity was created in live mode or in test mode.
+        /// </summary>
+        public required Mode Mode { get; set; }
+
+        /// <summary>
+        /// The description or name of the balance. Can be used to denote the purpose of the balance.
+        /// </summary>
+        public required string Description { get; set; }
+
+        /// <summary>
         /// The balance’s date and time of creation, in ISO 8601 format.
         /// </summary>
         public required DateTimeOffset CreatedAt { get; set; }
@@ -47,8 +57,9 @@ namespace Mollie.Api.Models.Balance.Response {
 
         /// <summary>
         /// The destination where the available amount will be automatically transferred to according to the configured transferFrequency.
+        /// Either an object or null.
         /// </summary>
-        public required BalanceTransferDestination TransferDestination { get; set; }
+        public BalanceTransferDestination? TransferDestination { get; set; }
 
         /// <summary>
         /// The amount directly available on the balance, e.g. {"currency":"EUR", "value":"100.00"}.

@@ -12,5 +12,6 @@ namespace Mollie.Api.Models.Balance.Response.BalanceReport.Specific.TransactionC
         [JsonPropertyName("fee-prepayments")]
         public required TransactionCategoriesTransaction FeePrepayments { get; set; }
         public required TransactionCategoriesTransaction Corrections { get; set; }
+        public TransactionCategoriesTransaction? Topups { get; set; }
     }
 }
