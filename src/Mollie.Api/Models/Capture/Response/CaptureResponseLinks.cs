@@ -18,12 +18,12 @@ namespace Mollie.Api.Models.Capture.Response {
         /// <summary>
         /// The API resource URL of the shipment that triggered the capture to be created.
         /// </summary>
-        public required UrlObjectLink<ShipmentResponse> Shipment { get; set; }
+        public UrlObjectLink<ShipmentResponse>? Shipment { get; set; }
 
         /// <summary>
         /// The API resource URL of the settlement this capture has been settled with. Not present if not yet settled.
         /// </summary>
-        public required UrlObjectLink<SettlementResponse> Settlement { get; set; }
+        public UrlObjectLink<SettlementResponse>? Settlement { get; set; }
 
         /// <summary>
         /// The URL to the order retrieval endpoint documentation.

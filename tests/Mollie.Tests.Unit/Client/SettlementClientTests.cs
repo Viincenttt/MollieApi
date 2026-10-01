@@ -45,8 +45,10 @@ namespace Mollie.Tests.Unit.Client {
             captureResponse.Links.Self.Type.ShouldBe("application/hal+json");
             captureResponse.Links.Payment.Href.ShouldBe($"https://api.mollie.com/v2/payments/{defaultPaymentId}");
             captureResponse.Links.Payment.Type.ShouldBe("application/hal+json");
+            captureResponse.Links.Shipment.ShouldNotBeNull();
             captureResponse.Links.Shipment.Href.ShouldBe($"https://api.mollie.com/v2/orders/ord_8wmqcHMN4U/shipments/shp_3wmsgCJN4U");
             captureResponse.Links.Shipment.Type.ShouldBe("application/hal+json");
+            captureResponse.Links.Settlement.ShouldNotBeNull();
             captureResponse.Links.Settlement.Href.ShouldBe($"https://api.mollie.com/v2/settlements/stl_jDk30akdN");
             captureResponse.Links.Settlement.Type.ShouldBe("application/hal+json");
             captureResponse.Links.Documentation.Href.ShouldBe("https://docs.mollie.com/reference/v2/captures-api/get-capture");
