@@ -35,7 +35,7 @@ namespace Mollie.Api.Models.Organization {
         /// <summary>
         /// The registration number of the organization at the (local) chamber of commerce.
         /// </summary>
-        public required string RegistrationNumber { get; set; }
+        public string? RegistrationNumber { get; set; }
 
         /// <summary>
         /// The VAT number of the organization, if based in the European Union. The VAT number has been checked with the VIES by Mollie.
