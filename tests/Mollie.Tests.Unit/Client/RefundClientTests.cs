@@ -19,9 +19,14 @@ namespace Mollie.Tests.Unit.Client {
         private readonly string defaultGetRefundResponse = @$"{{
     ""resource"": ""refund"",
     ""id"": ""re_4qqhO89gsT"",
+    ""mode"": ""live"",
     ""amount"": {{
         ""currency"": ""EUR"",
         ""value"": ""5.95""
+    }},
+    ""externalReference"": {{
+        ""type"": ""acquirer-reference"",
+        ""id"": ""123456789012345""
     }},
     ""settlementId"": ""{defaultSettlementId}"",
     ""status"": ""pending"",
@@ -65,6 +70,8 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.VerifyNoOutstandingExpectation();
             result.Success.ShouldBeTrue();
             result.Data.ShouldNotBeNull();
+            result.Data.Mode.ShouldBe(Mode.Live);
+            result.Data.ExternalReference.ShouldBe(new RefundExternalReference { Type = RefundExternalReferenceType.AcquirerReference, Id = "123456789012345" });
         }
 
         [Theory]
@@ -139,6 +146,7 @@ namespace Mollie.Tests.Unit.Client {
             const string paymentId = "tr_7UhSN1zuXS";
             var refundRequest = new RefundRequest  {
                 Amount = new Amount(Currency.EUR, 100.00m),
+                ExternalReference = new RefundExternalReference { Type = RefundExternalReferenceType.AcquirerReference, Id = "123456789012345" },
                 ReverseRouting = null,
                 RoutingReversals = new List<RoutingReversal> {
                     new() {
@@ -150,7 +158,7 @@ namespace Mollie.Tests.Unit.Client {
                     }
                 }
             };
-            string expectedRoutingInformation = $"\"routingReversals\":[{{\"amount\":{{\"currency\":\"EUR\",\"value\":\"50.00\"}},\"source\":{{\"type\":\"organization\",\"organizationId\":\"organization-id\"}}}}]}}";
+            string expectedRoutingInformation = $"\"externalReference\":{{\"type\":\"acquirer-reference\",\"id\":\"123456789012345\"}},\"routingReversals\":[{{\"amount\":{{\"currency\":\"EUR\",\"value\":\"50.00\"}},\"source\":{{\"type\":\"organization\",\"organizationId\":\"organization-id\"}}}}]}}";
             string expectedJsonResponse = @$"{{
   ""resource"": ""refund"",
   ""id"": ""re_4qqhO89gsT"",

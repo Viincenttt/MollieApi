@@ -17,6 +17,11 @@ namespace Mollie.Api.Models.Refund.Response {
         public required string Id { get; set; }
 
         /// <summary>
+        /// The mode used to create this refund. Mode determines whether a refund is real or a test refund.
+        /// </summary>
+        public required Mode Mode { get; set; }
+
+        /// <summary>
         /// The description of the refund that may be shown to the consumer, depending on the payment method used.
         /// </summary>
         public string? Description { get; set; }
@@ -40,6 +45,11 @@ namespace Mollie.Api.Models.Refund.Response {
         /// </summary>
         [JsonConverter(typeof(RawJsonConverter))]
         public string? Metadata { get; set; }
+
+        /// <summary>
+        /// A reference to the refund at the payment provider, for example the acquirer reference.
+        /// </summary>
+        public RefundExternalReference? ExternalReference { get; set; }
 
         /// <summary>
         /// Since refunds may be delayed for certain payment methods, the refund carries a status field. See the
