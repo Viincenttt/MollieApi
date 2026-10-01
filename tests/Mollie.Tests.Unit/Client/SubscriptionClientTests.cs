@@ -75,7 +75,8 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
-            result.ShouldNotBeNull();
+            result.Success.ShouldBeTrue();
+            result.Data.Links.Mandate!.Href.ShouldBe("https://api.mollie.com/v2/customers/customer-id/mandates/mdt_38HS4fsS");
         }
 
         [Fact]
@@ -341,6 +342,12 @@ namespace Mollie.Tests.Unit.Client {
     ""method"": null,
     ""mandateId"": ""mdt_38HS4fsS"",
     ""webhookUrl"": ""https://webshop.example.org/payments/webhook"",
+    ""_links"": {
+        ""mandate"": {
+            ""href"": ""https://api.mollie.com/v2/customers/customer-id/mandates/mdt_38HS4fsS"",
+            ""type"": ""application/hal+json""
+        }
+    },
     ""metadata"": {
         ""plan"": ""small""
     }
