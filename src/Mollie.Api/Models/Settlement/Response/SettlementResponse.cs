@@ -52,7 +52,7 @@ public record SettlementResponse : IEntity {
     /// <summary>
     /// The ID of the oldest invoice created for all the periods, if the invoice has been created yet.
     /// </summary>
-    public required string InvoiceId { get; set; }
+    public string? InvoiceId { get; set; }
 
 	/// <summary>
 	/// This object is a collection of Period objects, which describe the settlement by month in full detail.
