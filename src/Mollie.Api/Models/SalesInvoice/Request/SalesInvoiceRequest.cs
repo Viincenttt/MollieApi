@@ -110,7 +110,7 @@ public record SalesInvoiceRequest : ITestModeRequest, IProfileRequest {
     /// <summary>
     /// The discount to be applied to the entire invoice, possibly on top of the line item discounts.
     /// </summary>
-    public Amount? Discount { get; set; }
+    public SalesInvoiceDiscount? Discount { get; set; }
 
     /// <summary>
     /// This indicates whether the invoice is an e-invoice. The default value is false and can't be changed after the
