@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.Webhook.Response;
 
@@ -50,4 +51,17 @@ public record WebhookResponse : IEntity {
     /// The subscription's mode.
     /// </summary>
     public required Mode Mode { get; set; }
+
+    /// <summary>
+    /// The subscription's secret, used to verify the signature of the webhook events. Only returned when the
+    /// subscription is created.
+    /// </summary>
+    public string? WebhookSecret { get; set; }
+
+    /// <summary>
+    /// An object with several URL objects relevant to the webhook subscription. Every URL object will contain an href
+    /// and a type field.
+    /// </summary>
+    [JsonPropertyName("_links")]
+    public required WebhookResponseLinks Links { get; set; }
 }

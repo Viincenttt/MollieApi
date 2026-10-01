@@ -46,6 +46,7 @@ public class WebhookClientTests : BaseClientTests {
         response.Url.ShouldBe(request.Url);
         response.EventTypes.ShouldNotBeNull();
         response.EventTypes.ShouldBe(new[] { WebhookEventTypes.PaymentLinkPaid });
+        response.WebhookSecret.ShouldBe("secret_abc123");
     }
 
     [Fact]
@@ -149,6 +150,10 @@ public class WebhookClientTests : BaseClientTests {
         response.CreatedAt.ShouldBe(DateTimeOffset.Parse("2024-12-06T10:09:56+00:00"));
         response.Status.ShouldBe("enabled");
         response.Mode.ShouldBe(Mode.Test);
+        response.Links.Self.Href.ShouldBe($"https://api.mollie.com/v2/webhooks/{webhookId}");
+        response.Links.Self.Type.ShouldBe("application/hal+json");
+        response.Links.Documentation.Href.ShouldBe("https://docs.mollie.com/reference/get-webhook");
+        response.Links.Documentation.Type.ShouldBe("text/html");
     }
 
     [Theory]
@@ -264,7 +269,12 @@ public class WebhookClientTests : BaseClientTests {
   ""status"": ""enabled"",
   ""mode"": ""test"",
   ""eventTypes"": [{jsonToReturnInMockResponse}],
+  ""webhookSecret"": ""secret_abc123"",
   ""_links"": {{
+    ""self"": {{
+      ""href"": ""https://api.mollie.com/v2/webhooks/{webhookId}"",
+      ""type"": ""application/hal+json""
+    }},
     ""documentation"": {{
       ""href"": ""https://docs.mollie.com/reference/get-webhook"",
       ""type"": ""text/html""
