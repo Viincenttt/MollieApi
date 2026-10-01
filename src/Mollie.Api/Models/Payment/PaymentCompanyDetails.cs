@@ -1,4 +1,4 @@
-namespace Mollie.Api.Models.Payment;
+﻿namespace Mollie.Api.Models.Payment;
 
 public record PaymentCompanyDetails {
     /// <summary>

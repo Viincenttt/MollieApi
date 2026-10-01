@@ -1,4 +1,4 @@
-namespace Mollie.Api.Models.Payment.Response.PaymentSpecificParameters {
+﻿namespace Mollie.Api.Models.Payment.Response.PaymentSpecificParameters {
     public record MultibancoPaymentResponse : PaymentResponse {
         /// <summary>
         /// An object with payment details.

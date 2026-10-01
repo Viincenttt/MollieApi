@@ -1,4 +1,4 @@
-using Mollie.Api.Models.Url;
+﻿using Mollie.Api.Models.Url;
 
 namespace Mollie.Api.Models.Payment.Response {
     public record PaymentRoutingResponseLinks {

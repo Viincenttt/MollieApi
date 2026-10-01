@@ -1,4 +1,4 @@
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace Mollie.Api.Models.Payment.Request.PaymentSpecificParameters {
     public record BilliePaymentRequest : PaymentRequest {

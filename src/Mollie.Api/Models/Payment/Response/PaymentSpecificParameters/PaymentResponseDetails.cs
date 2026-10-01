@@ -1,4 +1,4 @@
-namespace Mollie.Api.Models.Payment.Response.PaymentSpecificParameters {
+﻿namespace Mollie.Api.Models.Payment.Response.PaymentSpecificParameters {
     /// <summary>
     /// The customer details that are available for all payment methods. Payment method specific details
     /// classes inherit from this class.
