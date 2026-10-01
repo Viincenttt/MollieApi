@@ -3,7 +3,10 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Shouldly;
 using Mollie.Api.Client;
+using Mollie.Api.Framework.Authentication;
 using Mollie.Api.Models.Wallet.Request;
+using Mollie.Api.Options;
+using RichardSzalay.MockHttp;
 using Xunit;
 
 namespace Mollie.Tests.Unit.Client;
@@ -49,5 +52,31 @@ public class WalletClientTest : BaseClientTests {
         response.DomainName.ShouldBe("pay.example.org");
         response.DisplayName.ShouldBe("Chuck Norris's Store");
         response.Signature.ShouldBe("308006092a864886f7...8cc030ad3000000000000");
+    }
+
+    [Fact]
+    public async Task RequestApplePayPaymentSessionAsync_ProfileIdIsSetInOptions_ProfileIdIsNotSent() {
+        // Arrange
+        var mollieClientOptions = new MollieClientOptions {
+            ApiKey = "test_abcde",
+            ProfileId = "pfl_3RkSN1zuPE"
+        };
+        var request = new ApplePayPaymentSessionRequest() {
+            Domain = "pay.mywebshop.com",
+            ValidationUrl = "https://apple-pay-gateway-cert.apple.com/paymentservices/paymentSession"
+        };
+        var mockHttp = new MockHttpMessageHandler();
+        mockHttp.Expect(HttpMethod.Post, $"{BaseMollieClient.DefaultBaseApiEndPoint}wallets/applepay/sessions")
+            .With(x => !x.Content!.ReadAsStringAsync().Result.Contains("profileId"))
+            .Respond("application/json", defaultApplePayPaymentSessionResponse);
+        var secretManager = new DefaultMollieSecretManager(mollieClientOptions.ApiKey);
+        using var walletClient = new WalletClient(mollieClientOptions, secretManager, mockHttp.ToHttpClient());
+
+        // Act
+        var result = await walletClient.RequestApplePayPaymentSessionAsync(request);
+
+        // Assert
+        result.Success.ShouldBeTrue();
+        mockHttp.VerifyNoOutstandingExpectation();
     }
 }

@@ -1,5 +1,5 @@
 ﻿namespace Mollie.Api.Models.Wallet.Request {
-    public record ApplePayPaymentSessionRequest : IProfileRequest {
+    public record ApplePayPaymentSessionRequest {
         /// <summary>
         /// The validationUrl you got from the ApplePayValidateMerchant event.
         /// A list of all valid host names for merchant validation is available. You should white list these in your
