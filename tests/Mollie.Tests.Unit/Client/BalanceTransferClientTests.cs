@@ -54,6 +54,7 @@ public class BalanceTransferClientTests : BaseClientTests {
         response.Status.ShouldBe("succeeded");
         response.StatusReason.Code.ShouldBe("success");
         response.StatusReason.Message.ShouldBe("Balance transfer completed successfully.");
+        response.Category.ShouldBe("invoice_collection");
         response.CreatedAt.ToUniversalTime().ShouldBe(new DateTimeOffset(2025, 5, 1, 10, 0, 0, TimeSpan.Zero));
         response.ExecutedAt!.Value.ToUniversalTime().ShouldBe(new DateTimeOffset(2025, 5, 1, 10, 5, 0, TimeSpan.Zero));
         response.Mode.ShouldBe(Mode.Live);
@@ -226,6 +227,7 @@ public class BalanceTransferClientTests : BaseClientTests {
     ""code"": ""success"",
     ""message"": ""Balance transfer completed successfully.""
   }},
+  ""category"": ""invoice_collection"",
   ""metadata"": {{
     ""order_id"": 12345,
     ""customer_id"": 9876

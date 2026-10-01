@@ -50,6 +50,11 @@ public record BalanceTransferResponse {
     public required StatusReason StatusReason { get; set; }
 
     /// <summary>
+    /// The type of the transfer. Different fees may apply to different types of transfers.
+    /// </summary>
+    public string? Category { get; set; }
+
+    /// <summary>
     /// The entity's date and time of creation, in ISO 8601 format.
     /// </summary>
     public required DateTimeOffset CreatedAt { get; set; }
