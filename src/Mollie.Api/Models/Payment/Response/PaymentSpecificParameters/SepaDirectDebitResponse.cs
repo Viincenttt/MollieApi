@@ -3,7 +3,7 @@
         public required SepaDirectDebitResponseDetails? Details { get; set; }
     }
 
-    public record SepaDirectDebitResponseDetails {
+    public record SepaDirectDebitResponseDetails : PaymentResponseDetails {
         /// <summary>
         /// Transfer reference used by Mollie to identify this payment.
         /// </summary>
@@ -15,20 +15,7 @@
         /// </summary>
         public string? CreditorIdentifier { get; set; }
 
-        /// <summary>
-        /// Optional – The consumer's name.
-        /// </summary>
-        public string? ConsumerName { get; set; }
 
-        /// <summary>
-        /// Optional – The consumer's IBAN.
-        /// </summary>
-        public string? ConsumerAccount { get; set; }
-
-        /// <summary>
-        /// Optional – The consumer's bank's BIC.
-        /// </summary>
-        public string? ConsumerBic { get; set; }
 
         /// <summary>
         /// Estimated date the payment is debited from the consumer's bank account, in YYYY-MM-DD format.

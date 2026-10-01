@@ -5,17 +5,7 @@ namespace Mollie.Api.Models.Payment.Response.PaymentSpecificParameters {
         public PayPalPaymentResponseDetails? Details { get; set; }
     }
 
-    public record PayPalPaymentResponseDetails {
-        /// <summary>
-        /// Only available if the payment has been completed – The consumer’s first and last name.
-        /// </summary>
-        public string? ConsumerName { get; set; }
-
-        /// <summary>
-        /// Only available if the payment has been completed – The consumer’s email address.
-        /// </summary>
-        public string? ConsumerAccount { get; set; }
-
+    public record PayPalPaymentResponseDetails : PaymentResponseDetails {
         /// <summary>
         /// PayPal’s reference for the transaction, for instance 9AL35361CF606152E.
         /// </summary>
@@ -33,11 +23,6 @@ namespace Mollie.Api.Models.Payment.Response.PaymentSpecificParameters {
         /// for a full list of known values.
         /// </summary>
         public string? SellerProtection { get; set; }
-
-        /// <summary>
-        /// The shipping address details.
-        /// </summary>
-        public AddressObject? ShippingAddress { get; set; }
 
         /// <summary>
         /// The amount of fee PayPal will charge for this transaction. This field is omitted if PayPal will not charge a fee

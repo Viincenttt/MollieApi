@@ -11,7 +11,7 @@ namespace Mollie.Api.Models.Payment.Response.PaymentSpecificParameters {
         public VoucherPaymentResponseDetails? Details { get; set; }
     }
 
-    public record VoucherPaymentResponseDetails {
+    public record VoucherPaymentResponseDetails : PaymentResponseDetails {
         /// <summary>
         /// The brand name of the first voucher applied.
         /// </summary>

@@ -1458,6 +1458,34 @@ public class PaymentClientTests : BaseClientTests {
     }
 
     [Fact]
+    public async Task GetPaymentAsync_ForPaymentMethodWithoutSpecificDetails_CustomerDetailsAreDeserialized() {
+        // Given: We retrieve a Trustly payment, which has no method specific details
+        const string paymentId = "tr_WDqYK6vllg";
+        const string jsonResponse = @"{
+            ""resource"": ""payment"",
+            ""id"": ""tr_WDqYK6vllg"",
+            ""mode"": ""test"",
+            ""createdAt"": ""2018-03-20T13:13:37+00:00"",
+            ""amount"": { ""currency"": ""EUR"", ""value"": ""100.00"" },
+            ""method"": ""trustly"",
+            ""details"": { ""consumerName"": ""consumer-name"", ""consumerAccount"": ""consumer-account"", ""consumerBic"": ""consumer-bic"" }
+        }";
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.DefaultBaseApiEndPoint}payments/{paymentId}", jsonResponse);
+        var paymentClient = new PaymentClient("abcde", mockHttp.ToHttpClient());
+
+        // When: We send the request
+        var result = await paymentClient.GetPaymentAsync(paymentId);
+
+        // Then
+        result.Success.ShouldBeTrue();
+        var payment = result.Data.ShouldBeOfType<DefaultPaymentResponse>();
+        payment.Details!.ConsumerName.ShouldBe("consumer-name");
+        payment.Details.ConsumerAccount.ShouldBe("consumer-account");
+        payment.Details.ConsumerBic.ShouldBe("consumer-bic");
+        mockHttp.VerifyNoOutstandingExpectation();
+    }
+
+    [Fact]
     public async Task GetPaymentAsync_ForBankTransferPaymentWithoutTransferReference_TransferReferenceIsNull() {
         // Given: We retrieve a bank transfer payment where the transfer reference is null
         const string paymentId = "tr_WDqYK6vllg";

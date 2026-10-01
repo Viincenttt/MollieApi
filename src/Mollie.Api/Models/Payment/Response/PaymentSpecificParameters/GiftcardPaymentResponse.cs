@@ -8,7 +8,7 @@ namespace Mollie.Api.Models.Payment.Response.PaymentSpecificParameters {
         public required GiftcardPaymentResponseDetails? Details { get; set; }
     }
 
-    public record GiftcardPaymentResponseDetails {
+    public record GiftcardPaymentResponseDetails : PaymentResponseDetails {
         /// <summary>
         /// The voucher number, with the last four digits masked. When multiple gift cards are used, this is the first voucher
         /// number. Example: 606436353088147****.

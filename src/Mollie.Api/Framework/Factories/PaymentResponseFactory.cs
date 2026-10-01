@@ -50,7 +50,7 @@ namespace Mollie.Api.Framework.Factories {
                 case PaymentMethod.Multibanco:
                     return Activator.CreateInstance<MultibancoPaymentResponse>();
                 default:
-                    return Activator.CreateInstance<PaymentResponse>();
+                    return Activator.CreateInstance<DefaultPaymentResponse>();
             }
         }
     }

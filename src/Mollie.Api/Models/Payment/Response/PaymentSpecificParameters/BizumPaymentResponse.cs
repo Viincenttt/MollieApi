@@ -6,7 +6,7 @@ namespace Mollie.Api.Models.Payment.Response.PaymentSpecificParameters {
         public BizumPaymentResponseDetails? Details { get; set; }
     }
 
-    public record BizumPaymentResponseDetails {
+    public record BizumPaymentResponseDetails : PaymentResponseDetails {
         /// <summary>
         /// Bizum payment reference of the transaction.
         /// </summary>

@@ -6,7 +6,7 @@
         public CreditCardPaymentResponseDetails? Details { get; set; }
     }
 
-    public record CreditCardPaymentResponseDetails {
+    public record CreditCardPaymentResponseDetails : PaymentResponseDetails {
         /// <summary>
         /// Only available if the payment has been completed - Unique alphanumeric representation of card, usable for identifying
         /// returning customers.
