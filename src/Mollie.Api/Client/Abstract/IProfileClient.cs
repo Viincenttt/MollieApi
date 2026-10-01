@@ -25,5 +25,9 @@ namespace Mollie.Api.Client.Abstract {
         Task<MollieResult<EnableGiftCardIssuerResponse>> EnableGiftCardIssuerAsync(string issuer, CancellationToken cancellationToken = default);
         Task<MollieResult> DisableGiftCardIssuerAsync(string profileId, string issuer, CancellationToken cancellationToken = default);
         Task<MollieResult> DisableGiftCardIssuerAsync(string issuer, CancellationToken cancellationToken = default);
+        Task<MollieResult<EnableVoucherIssuerResponse>> EnableVoucherIssuerAsync(string profileId, string issuer, EnableVoucherIssuerRequest? request = null, CancellationToken cancellationToken = default);
+        Task<MollieResult<EnableVoucherIssuerResponse>> EnableVoucherIssuerAsync(string issuer, EnableVoucherIssuerRequest? request = null, CancellationToken cancellationToken = default);
+        Task<MollieResult> DisableVoucherIssuerAsync(string profileId, string issuer, CancellationToken cancellationToken = default);
+        Task<MollieResult> DisableVoucherIssuerAsync(string issuer, CancellationToken cancellationToken = default);
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System.Text.Json.Serialization;
-using Mollie.Api.Models.Issuer.Response;
 
 namespace Mollie.Api.Models.Profile.Response {
     public record EnableGiftCardIssuerResponse {
@@ -19,24 +18,9 @@ namespace Mollie.Api.Models.Profile.Response {
         public required string Description { get; set; }
 
         /// <summary>
-        /// The full name of the payment method issuer.
-        /// </summary>
-        public string? Name { get; set; }
-
-        /// <summary>
-        /// URLs of images representing the payment method issuer.
-        /// </summary>
-        public IssuerResponseImage? Image { get; set; }
-
-        /// <summary>
         /// The status that the issuer is in. Possible values: pending-issuer or activated.
         /// </summary>
         public required string Status { get; set; }
-
-        /// <summary>
-        /// Information regarding the contractor. Only relevant for voucher issuers.
-        /// </summary>
-        public EnableGiftCardIssuerResponseContractor? Contractor { get; set; }
 
         /// <summary>
         /// An object with several URL objects relevant to the order. Every URL object will contain an href and a type field.

@@ -1,5 +1,5 @@
 ﻿namespace Mollie.Api.Models.Profile.Response {
-    public record EnableGiftCardIssuerResponseContractor {
+    public record EnableVoucherIssuerResponseContractor {
         /// <summary>
         /// The unique identifier of the contractor.
         /// </summary>

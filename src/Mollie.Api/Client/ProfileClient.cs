@@ -140,5 +140,39 @@ namespace Mollie.Api.Client {
                 $"profiles/me/methods/giftcard/issuers/{issuer}", cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
+
+        public async Task<MollieResult<EnableVoucherIssuerResponse>> EnableVoucherIssuerAsync(
+            string profileId, string issuer, EnableVoucherIssuerRequest? request = null, CancellationToken cancellationToken = default) {
+            ValidateRequiredUrlParameter(nameof(profileId), profileId);
+            ValidateRequiredUrlParameter(nameof(issuer), issuer);
+            return await PostAsync<EnableVoucherIssuerResponse>(
+                $"profiles/{profileId}/methods/voucher/issuers/{issuer}", request, cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        public async Task<MollieResult<EnableVoucherIssuerResponse>> EnableVoucherIssuerAsync(
+            string issuer, EnableVoucherIssuerRequest? request = null, CancellationToken cancellationToken = default) {
+            ValidateRequiredUrlParameter(nameof(issuer), issuer);
+            return await PostAsync<EnableVoucherIssuerResponse>(
+                $"profiles/me/methods/voucher/issuers/{issuer}", request, cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        public async Task<MollieResult> DisableVoucherIssuerAsync(
+            string profileId, string issuer, CancellationToken cancellationToken = default) {
+            ValidateRequiredUrlParameter(nameof(profileId), profileId);
+            ValidateRequiredUrlParameter(nameof(issuer), issuer);
+            return await DeleteAsync(
+                $"profiles/{profileId}/methods/voucher/issuers/{issuer}", cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        public async Task<MollieResult> DisableVoucherIssuerAsync(
+            string issuer, CancellationToken cancellationToken = default) {
+            ValidateRequiredUrlParameter(nameof(issuer), issuer);
+            return await DeleteAsync(
+                $"profiles/me/methods/voucher/issuers/{issuer}", cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
+        }
     }
 }
