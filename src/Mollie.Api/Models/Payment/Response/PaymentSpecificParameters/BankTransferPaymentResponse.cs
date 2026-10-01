@@ -41,7 +41,7 @@ namespace Mollie.Api.Models.Payment.Response.PaymentSpecificParameters {
 
 
         /// <summary>
-        /// Only available if filled out in the API or by the consumer � The email address which the consumer asked the payment
+        /// Only available if filled out in the API or by the consumer – The email address which the consumer asked the payment
         /// instructions to be sent to.
         /// </summary>
         public string? BillingEmail { get; set; }
