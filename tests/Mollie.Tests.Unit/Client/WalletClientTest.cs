@@ -25,13 +25,15 @@ public class WalletClientTest : BaseClientTests {
         // Arrange
         var request = new ApplePayPaymentSessionRequest() {
             Domain = "pay.mywebshop.com",
-            ValidationUrl = "https://apple-pay-gateway-cert.apple.com/paymentservices/paymentSession"
+            ValidationUrl = "https://apple-pay-gateway-cert.apple.com/paymentservices/paymentSession",
+            ProfileId = "pfl_3RkSN1zuPE"
         };
         var mockHttp = CreateMockHttpMessageHandler(
             HttpMethod.Post,
             $"{BaseMollieClient.DefaultBaseApiEndPoint}wallets/applepay/sessions",
-            defaultApplePayPaymentSessionResponse);
-        using var walletClient = new WalletClient("abcde", mockHttp.ToHttpClient());
+            defaultApplePayPaymentSessionResponse,
+            "\"profileId\":\"pfl_3RkSN1zuPE\"");
+        using var walletClient = new WalletClient("access_abcde", mockHttp.ToHttpClient());
 
         // Act
         var result = await walletClient.RequestApplePayPaymentSessionAsync(request);
