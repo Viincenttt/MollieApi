@@ -53,6 +53,9 @@ public class ClientClientTests : BaseClientTests {
         result.Data.Links.Onboarding.Type.ShouldBe("application/hal+json");
         result.Data.Links.Documentation.Href.ShouldBe("https://docs.mollie.com/reference/clients-api");
         result.Data.Links.Documentation.Type.ShouldBe("text/html");
+        result.Data.Embedded.ShouldNotBeNull();
+        result.Data.Embedded.Capabilities.ShouldNotBeNull();
+        result.Data.Embedded.Capabilities.ShouldHaveSingleItem().Name.ShouldBe("payments");
     }
 
     [Theory]
@@ -141,6 +144,17 @@ public class ClientClientTests : BaseClientTests {
           ""count"": 0
         },
         ""organizationCreatedAt"": ""2024-10-03T10:47:38.457381+00:00"",
+        ""_embedded"": {
+            ""capabilities"": [
+                {
+                    ""resource"": ""capability"",
+                    ""name"": ""payments"",
+                    ""status"": ""enabled"",
+                    ""statusReason"": null,
+                    ""requirements"": []
+                }
+            ]
+        },
         ""_links"": {
             ""self"": {
               ""href"": ""https://api.mollie.com/v2/clients/org_12345678"",
