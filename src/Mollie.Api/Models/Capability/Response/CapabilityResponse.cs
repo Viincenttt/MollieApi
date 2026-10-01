@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Mollie.Api.Models.Capability.Response;
 
@@ -30,10 +29,4 @@ public record CapabilityResponse {
     /// The requirements that need to be fulfilled before the capability can be enabled.
     /// </summary>
     public required IEnumerable<CapabilityRequirement> Requirements { get; set; }
-
-    /// <summary>
-    /// Related links. The Mollie API does not return links for a capability, so this is always null.
-    /// </summary>
-    [Obsolete("The Mollie API does not return links for a capability. This property is always null and will be removed in a future version.")]
-    public CapabilityResponseLinks? Links { get; set; }
 }
