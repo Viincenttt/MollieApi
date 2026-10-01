@@ -1,5 +1,6 @@
 ﻿using Mollie.Api.Models.Customer.Response;
 using Mollie.Api.Models.List.Response;
+using Mollie.Api.Models.Mandate.Response;
 using Mollie.Api.Models.Payment.Response;
 using Mollie.Api.Models.Profile.Response;
 using Mollie.Api.Models.Url;
@@ -26,6 +27,11 @@ namespace Mollie.Api.Models.Subscription.Response {
         /// The API resource URL of the website profile on which this subscription was created.
         /// </summary>
         public required UrlObjectLink<ProfileResponse> Profile { get; set; }
+
+        /// <summary>
+        /// The API resource URL of the mandate linked to this subscription. Not present if no mandate is linked.
+        /// </summary>
+        public UrlObjectLink<MandateResponse>? Mandate { get; set; }
 
         /// <summary>
         /// The URL to the subscription retrieval endpoint documentation.
