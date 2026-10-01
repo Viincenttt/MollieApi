@@ -1451,37 +1451,6 @@ public class PaymentClientTests : BaseClientTests {
     }
 
     [Fact]
-    public async Task GetPaymentAsync_ForPaymentMethodWithoutDedicatedType_DetailsAreKeptAsRawJson() {
-        // Given: We retrieve a payment for a method that has no dedicated response type
-        const string paymentId = "tr_WDqYK6vllg";
-        const string jsonResponse = @"{
-            ""resource"": ""payment"",
-            ""id"": ""tr_WDqYK6vllg"",
-            ""mode"": ""test"",
-            ""createdAt"": ""2018-03-20T13:13:37+00:00"",
-            ""amount"": { ""currency"": ""CHF"", ""value"": ""100.00"" },
-            ""method"": ""twint"",
-            ""details"": { ""consumerName"": ""consumer-name"", ""consumerAccount"": ""consumer-account"" }
-        }";
-        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.DefaultBaseApiEndPoint}payments/{paymentId}", jsonResponse);
-        HttpClient httpClient = mockHttp.ToHttpClient();
-        var paymentClient = new PaymentClient("abcde", httpClient);
-
-        // When: We send the request
-        var result = await paymentClient.GetPaymentAsync(paymentId);
-
-        // Then
-        result.Success.ShouldBeTrue();
-        var genericPayment = result.Data.ShouldBeOfType<GenericPaymentResponse>();
-        genericPayment.Details.ShouldNotBeNull();
-        var details = genericPayment.GetDetails<Dictionary<string, string>>();
-        details.ShouldNotBeNull();
-        details["consumerName"].ShouldBe("consumer-name");
-        details["consumerAccount"].ShouldBe("consumer-account");
-        mockHttp.VerifyNoOutstandingExpectation();
-    }
-
-    [Fact]
     public async Task GetPaymentAsync_ForBankTransferPaymentWithoutTransferReference_TransferReferenceIsNull() {
         // Given: We retrieve a bank transfer payment where the transfer reference is null
         const string paymentId = "tr_WDqYK6vllg";
