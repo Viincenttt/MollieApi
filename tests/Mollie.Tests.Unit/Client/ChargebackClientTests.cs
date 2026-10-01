@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Shouldly;
 using Mollie.Api.Client;
+using Mollie.Api.Models;
 using Mollie.Api.Models.Chargeback.Response;
 using RichardSzalay.MockHttp;
 using Xunit;
@@ -17,6 +18,7 @@ namespace Mollie.Tests.Unit.Client {
         private string defaultGetChargebacksResponse = @$"{{
     ""resource"": ""chargeback"",
     ""id"": ""{defaultChargebackId}"",
+    ""mode"": ""live"",
     ""amount"": {{
         ""currency"": ""USD"",
         ""value"": ""43.38""
@@ -25,6 +27,7 @@ namespace Mollie.Tests.Unit.Client {
         ""currency"": ""EUR"",
         ""value"": ""-35.07""
     }},
+    ""settlementId"": ""stl_BkEjN2eBb"",
     ""createdAt"": ""2018-03-14T17:00:52.0Z"",
      ""reason"": {{
        ""code"": ""AC01"",
@@ -65,6 +68,8 @@ namespace Mollie.Tests.Unit.Client {
             result.Success.ShouldBeTrue();
             chargebackResponse.PaymentId.ShouldBe(defaultPaymentId);
             chargebackResponse.Id.ShouldBe(defaultChargebackId);
+            chargebackResponse.Mode.ShouldBe(Mode.Live);
+            chargebackResponse.SettlementId.ShouldBe("stl_BkEjN2eBb");
             chargebackResponse.Reason.ShouldNotBeNull();
             chargebackResponse.Reason!.Code.ShouldBe(defaultChargebackReasonCode);
             chargebackResponse.Reason.Description.ShouldBe(defaultChargebackReason);

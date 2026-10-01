@@ -14,6 +14,11 @@ namespace Mollie.Api.Models.Chargeback.Response {
 		public required string Id { get; set; }
 
         /// <summary>
+        /// Whether this entity was created in live mode or in test mode.
+        /// </summary>
+        public required Mode Mode { get; set; }
+
+        /// <summary>
         /// The amount charged back.
         /// </summary>
         public required Amount Amount { get; set; }
@@ -23,6 +28,12 @@ namespace Mollie.Api.Models.Chargeback.Response {
         /// your account is settled in. It follows the same syntax as the amount property.
         /// </summary>
         public Amount? SettlementAmount { get; set; }
+
+        /// <summary>
+        /// The identifier referring to the settlement this chargeback was settled with. For example, stl_BkEjN2eBb.
+        /// This field is omitted if the chargeback is not settled (yet).
+        /// </summary>
+        public string? SettlementId { get; set; }
 
         /// <summary>
         /// The date and time the chargeback was issued, in ISO 8601 format.
