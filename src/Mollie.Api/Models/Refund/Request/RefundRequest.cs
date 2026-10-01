@@ -24,6 +24,11 @@ namespace Mollie.Api.Models.Refund.Request {
         public string? Metadata { get; set; }
 
         /// <summary>
+        /// Optional – A reference to the refund at the payment provider, for example the acquirer reference.
+        /// </summary>
+        public RefundExternalReference? ExternalReference { get; set; }
+
+        /// <summary>
         /// With Mollie Connect you can charge fees on payments that your app is processing on behalf of other Mollie merchants,
         /// by providing the routing object during payment creation. When creating refunds for these routed payments, by default
         /// the full amount is deducted from your balance.If you want to pull back the funds that were routed to the connected
