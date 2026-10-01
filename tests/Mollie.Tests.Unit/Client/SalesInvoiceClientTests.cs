@@ -40,7 +40,7 @@ public class SalesInvoiceClientTests : BaseClientTests {
             ],
             Discount = new SalesInvoiceDiscount {
                 Type = SalesInvoiceDiscountType.Percentage,
-                Value = "10"
+                Value = 10m
             }
         };
         string expectedUrl = $"{BaseMollieClient.DefaultBaseApiEndPoint}sales-invoices";
@@ -67,7 +67,7 @@ public class SalesInvoiceClientTests : BaseClientTests {
         orderLine.UnitPrice.Currency.ShouldBe(Currency.EUR);
         orderLine.Discount.ShouldNotBeNull();
         orderLine.Discount.Type.ShouldBe(SalesInvoiceDiscountType.Amount);
-        orderLine.Discount.Value.ShouldBe("10.00");
+        orderLine.Discount.Value.ShouldBe(10.00m);
         result.Data.AmountDue.Value.ShouldBe(107.69m);
         result.Data.AmountDue.Currency.ShouldBe(Currency.EUR);
         result.Data.DiscountedSubtotalAmount.Value.ShouldBe(89.00m);
@@ -101,14 +101,14 @@ public class SalesInvoiceClientTests : BaseClientTests {
         orderLine.UnitPrice.Currency.ShouldBe(Currency.EUR);
         orderLine.Discount.ShouldNotBeNull();
         orderLine.Discount.Type.ShouldBe(SalesInvoiceDiscountType.Amount);
-        orderLine.Discount.Value.ShouldBe("10.00");
+        orderLine.Discount.Value.ShouldBe(10.00m);
         result.Data.AmountDue.Value.ShouldBe(107.69m);
         result.Data.AmountDue.Currency.ShouldBe(Currency.EUR);
         result.Data.DiscountedSubtotalAmount.Value.ShouldBe(89.00m);
         result.Data.DiscountedSubtotalAmount.Currency.ShouldBe(Currency.EUR);
         result.Data.Discount.ShouldNotBeNull();
         result.Data.Discount.Type.ShouldBe(SalesInvoiceDiscountType.Percentage);
-        result.Data.Discount.Value.ShouldBe("10");
+        result.Data.Discount.Value.ShouldBe(10m);
         result.Data.EInvoiceStatus.ShouldBe(SalesInvoiceEInvoiceStatus.Issued);
         result.Data.TotalVatAmount.ShouldNotBeNull();
         result.Data.TotalVatAmount.Value.ShouldBe(18.69m);

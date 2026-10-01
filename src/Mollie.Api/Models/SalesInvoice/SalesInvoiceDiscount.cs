@@ -1,3 +1,6 @@
+using System.Text.Json.Serialization;
+using Mollie.Api.JsonConverters;
+
 namespace Mollie.Api.Models.SalesInvoice;
 
 public record SalesInvoiceDiscount {
@@ -8,7 +11,9 @@ public record SalesInvoiceDiscount {
     public required string Type { get; set; }
 
     /// <summary>
-    /// A string containing an exact monetary amount in the given currency, or the percentage.
+    /// The exact monetary amount in the currency of the invoice, or the percentage. The value is serialized as a
+    /// string to ensure the correct number of decimals are passed, preserving the exact value set by the user.
     /// </summary>
-    public required string Value { get; set; }
+    [JsonConverter(typeof(DecimalToStringConverter))]
+    public required decimal Value { get; set; }
 }
