@@ -320,6 +320,15 @@ public class ProfileClientTests : BaseClientTests
         result.Data.Id.ShouldBe(issuer);
         result.Data.Description.ShouldBe("FestivalCadeau Giftcard");
         result.Data.Status.ShouldBe("pending-issuer");
+        result.Data.Name.ShouldBe("FestivalCadeau Giftcard");
+        result.Data.Image.ShouldNotBeNull();
+        result.Data.Image.Size1x.ShouldBe("https://www.mollie.com/external/icons/giftcard-issuers/festivalcadeau.png");
+        result.Data.Image.Size2x.ShouldBe("https://www.mollie.com/external/icons/giftcard-issuers/festivalcadeau%402x.png");
+        result.Data.Image.Svg.ShouldBe("https://www.mollie.com/external/icons/giftcard-issuers/festivalcadeau.svg");
+        result.Data.Contractor.ShouldNotBeNull();
+        result.Data.Contractor.Id.ShouldBe("Apetiz");
+        result.Data.Contractor.Name.ShouldBe("Apetiz");
+        result.Data.Contractor.ContractId.ShouldBe("someContractId");
     }
 
     [Fact]
@@ -388,7 +397,18 @@ public class ProfileClientTests : BaseClientTests
      ""resource"": ""issuer"",
      ""id"": ""festivalcadeau"",
      ""description"": ""FestivalCadeau Giftcard"",
+     ""name"": ""FestivalCadeau Giftcard"",
+     ""image"": {
+         ""size1x"": ""https://www.mollie.com/external/icons/giftcard-issuers/festivalcadeau.png"",
+         ""size2x"": ""https://www.mollie.com/external/icons/giftcard-issuers/festivalcadeau%402x.png"",
+         ""svg"": ""https://www.mollie.com/external/icons/giftcard-issuers/festivalcadeau.svg""
+     },
      ""status"": ""pending-issuer"",
+     ""contractor"": {
+         ""id"": ""Apetiz"",
+         ""name"": ""Apetiz"",
+         ""contractId"": ""someContractId""
+     },
      ""_links"": {
          ""self"": {
              ""href"": ""https://api.mollie.com/v2/issuers/festivalcadeau"",
