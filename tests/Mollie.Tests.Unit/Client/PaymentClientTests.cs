@@ -1177,27 +1177,34 @@ public class PaymentClientTests : BaseClientTests {
         exception.Message.ShouldBe("Required URL argument 'paymentId' is null or empty");
     }
 
-    [Fact]
-    public async Task CreatePaymentAsync_WithCompanyDateOfBirthAndExtraMerchantData_RequestIsSerializedInExpectedFormat() {
-        // Given: We create a payment request with the Billie, in3 and Klarna specific parameters
-        var paymentRequest = new PaymentRequest {
-            Amount = new Amount(Currency.EUR, 100.00m),
-            Description = "Description",
-            RedirectUrl = "http://www.mollie.com",
-            Company = new PaymentCompanyDetails {
-                RegistrationNumber = "12345678",
-                VatNumber = "NL123456789B01",
-                EntityType = "LLC"
+    public static TheoryData<PaymentRequest, string> MethodSpecificPaymentRequests() {
+        var amount = new Amount(Currency.EUR, 100.00m);
+        var klarnaPaymentRequest = new KlarnaPaymentRequest { Amount = amount, Description = "Description" };
+        klarnaPaymentRequest.SetExtraMerchantData(new { customer_account_info = "test" });
+        return new TheoryData<PaymentRequest, string> {
+            {
+                new BilliePaymentRequest { Amount = amount, Description = "Description", Company = new PaymentCompanyDetails { RegistrationNumber = "12345678", VatNumber = "NL123456789B01", EntityType = "LLC" } },
+                "\"company\":{\"registrationNumber\":\"12345678\",\"vatNumber\":\"NL123456789B01\",\"entityType\":\"LLC\"}"
             },
-            ConsumerDateOfBirth = new DateOnly(2000, 1, 1)
+            {
+                new In3PaymentRequest { Amount = amount, Description = "Description", ConsumerDateOfBirth = new DateOnly(2000, 1, 1) },
+                "\"consumerDateOfBirth\":\"2000-01-01\""
+            },
+            {
+                klarnaPaymentRequest,
+                "\"extraMerchantData\":{\"customer_account_info\":\"test\"}"
+            }
         };
-        paymentRequest.SetExtraMerchantData(new { customer_account_info = new[] { new { unique_account_identifier = "test" } } });
-        string expectedJson = "\"company\":{\"registrationNumber\":\"12345678\",\"vatNumber\":\"NL123456789B01\",\"entityType\":\"LLC\"},\"consumerDateOfBirth\":\"2000-01-01\",\"extraMerchantData\":{\"customer_account_info\":[{\"unique_account_identifier\":\"test\"}]}";
-        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Post, $"{BaseMollieClient.DefaultBaseApiEndPoint}payments", defaultPaymentJsonResponse, expectedJson);
-        HttpClient httpClient = mockHttp.ToHttpClient();
-        var paymentClient = new PaymentClient("abcde", httpClient);
+    }
 
-        // When: We send the request
+    [Theory]
+    [MemberData(nameof(MethodSpecificPaymentRequests))]
+    public async Task CreatePaymentAsync_MethodSpecificPaymentRequest_RequestIsSerializedInExpectedFormat(PaymentRequest paymentRequest, string expectedJson) {
+        // Given
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Post, $"{BaseMollieClient.DefaultBaseApiEndPoint}payments", defaultPaymentJsonResponse, expectedJson);
+        var paymentClient = new PaymentClient("abcde", mockHttp.ToHttpClient());
+
+        // When
         var result = await paymentClient.CreatePaymentAsync(paymentRequest);
 
         // Then
