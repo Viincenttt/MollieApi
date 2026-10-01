@@ -22,6 +22,11 @@ namespace Mollie.Api.Models.Capture.Response
         public required string Mode { get; set; }
 
         /// <summary>
+        /// The description of the capture.
+        /// </summary>
+        public string? Description { get; set; }
+
+        /// <summary>
         /// The amount captured.
         /// </summary>
         public required Amount Amount { get; set; }
@@ -34,7 +39,7 @@ namespace Mollie.Api.Models.Capture.Response
         /// <summary>
         /// This optional field will contain the amount that will be settled to your account, converted to the currency your account is settled in. It follows the same syntax as the amount property.
         /// </summary>
-        public required Amount SettlementAmount { get; set; }
+        public Amount? SettlementAmount { get; set; }
 
         /// <summary>
         /// The unique identifier of the payment this capture was created for, for example: tr_7UhSN1zuXS
@@ -44,12 +49,12 @@ namespace Mollie.Api.Models.Capture.Response
         /// <summary>
         /// The unique identifier of the shipment that triggered the creation of this capture, for example: shp_3wmsgCJN4U
         /// </summary>
-        public required string ShipmentId { get; set; }
+        public string? ShipmentId { get; set; }
 
         /// <summary>
         /// The unique identifier of the settlement this capture was settled with, for example: stl_jDk30akdN
         /// </summary>
-        public required string SettlementId { get; set; }
+        public string? SettlementId { get; set; }
 
         /// <summary>
         /// The capture’s date and time of creation, in ISO 8601 format.

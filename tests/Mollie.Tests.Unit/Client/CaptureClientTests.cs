@@ -26,6 +26,7 @@ namespace Mollie.Tests.Unit.Client {
     ""resource"": ""capture"",
     ""id"": ""{defaultCaptureId}"",
     ""mode"": ""live"",
+    ""description"": ""Capture for cart #12345"",
     ""amount"": {{
         ""value"": ""{defaultAmountValue.ToString(CultureInfo.InvariantCulture)}"",
         ""currency"": ""{defaultAmountCurrency}""
@@ -118,6 +119,7 @@ namespace Mollie.Tests.Unit.Client {
             mockHttp.VerifyNoOutstandingExpectation();
             result.Success.ShouldBeTrue();
             captureResponse.ShouldNotBeNull();
+            captureResponse.Description.ShouldBe("Capture for cart #12345");
             captureResponse.PaymentId.ShouldBe(defaultPaymentId);
             captureResponse.ShipmentId.ShouldBe(defaultShipmentId);
             captureResponse.SettlementId.ShouldBe(defaultSettlementId);
