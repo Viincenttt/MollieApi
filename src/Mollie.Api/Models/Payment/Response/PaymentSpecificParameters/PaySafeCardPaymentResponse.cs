@@ -3,7 +3,7 @@ namespace Mollie.Api.Models.Payment.Response.PaymentSpecificParameters {
         public required PaySafeCardPaymentResponseDetails? Details { get; set; }
     }
 
-    public record PaySafeCardPaymentResponseDetails {
+    public record PaySafeCardPaymentResponseDetails : PaymentResponseDetails {
         /// <summary>
         /// The consumer identification supplied when the payment was created.
         /// </summary>

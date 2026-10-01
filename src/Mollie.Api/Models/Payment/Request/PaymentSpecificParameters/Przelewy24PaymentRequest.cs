@@ -15,7 +15,7 @@ namespace Mollie.Api.Models.Payment.Request.PaymentSpecificParameters
         }
 
         /// <summary>
-        /// Consumer�s email address, this is required for Przelewy24 payments.
+        /// Consumer’s email address, this is required for Przelewy24 payments.
         /// </summary>
         public string? BillingEmail { get; set; }
     }

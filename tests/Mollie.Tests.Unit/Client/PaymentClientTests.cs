@@ -1177,6 +1177,346 @@ public class PaymentClientTests : BaseClientTests {
         exception.Message.ShouldBe("Required URL argument 'paymentId' is null or empty");
     }
 
+    public static TheoryData<PaymentRequest, string> MethodSpecificPaymentRequests() {
+        var amount = new Amount(Currency.EUR, 100.00m);
+        var klarnaPaymentRequest = new KlarnaPaymentRequest { Amount = amount, Description = "Description" };
+        klarnaPaymentRequest.SetExtraMerchantData(new { customer_account_info = "test" });
+        return new TheoryData<PaymentRequest, string> {
+            {
+                new BilliePaymentRequest { Amount = amount, Description = "Description", Company = new PaymentCompanyDetails { RegistrationNumber = "12345678", VatNumber = "NL123456789B01", EntityType = "LLC" } },
+                "\"company\":{\"registrationNumber\":\"12345678\",\"vatNumber\":\"NL123456789B01\",\"entityType\":\"LLC\"}"
+            },
+            {
+                new In3PaymentRequest { Amount = amount, Description = "Description", ConsumerDateOfBirth = new DateOnly(2000, 1, 1) },
+                "\"consumerDateOfBirth\":\"2000-01-01\""
+            },
+            {
+                klarnaPaymentRequest,
+                "\"extraMerchantData\":{\"customer_account_info\":\"test\"}"
+            }
+        };
+    }
+
+    [Theory]
+    [MemberData(nameof(MethodSpecificPaymentRequests))]
+    public async Task CreatePaymentAsync_MethodSpecificPaymentRequest_RequestIsSerializedInExpectedFormat(PaymentRequest paymentRequest, string expectedJson) {
+        // Given
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Post, $"{BaseMollieClient.DefaultBaseApiEndPoint}payments", defaultPaymentJsonResponse, expectedJson);
+        var paymentClient = new PaymentClient("abcde", mockHttp.ToHttpClient());
+
+        // When
+        var result = await paymentClient.CreatePaymentAsync(paymentRequest);
+
+        // Then
+        result.Success.ShouldBeTrue();
+        mockHttp.VerifyNoOutstandingExpectation();
+    }
+
+    [Fact]
+    public async Task CreatePaymentAsync_CreditCardPaymentWithGooglePayTokenAndStoreCredentials_RequestIsSerializedInExpectedFormat() {
+        // Given: We create a credit card payment request with a Google Pay token and store credentials
+        var paymentRequest = new CreditCardPaymentRequest {
+            Amount = new Amount(Currency.EUR, 100.00m),
+            Description = "Description",
+            RedirectUrl = "http://www.mollie.com",
+            CustomerId = "cst_8wmqcHMN4U",
+            CardToken = "tkn_12345",
+            GooglePayPaymentToken = "google-pay-token",
+            StoreCredentials = true
+        };
+        string expectedJson = "\"cardToken\":\"tkn_12345\",\"googlePayPaymentToken\":\"google-pay-token\",\"storeCredentials\":true";
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Post, $"{BaseMollieClient.DefaultBaseApiEndPoint}payments", defaultPaymentJsonResponse, expectedJson);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        var paymentClient = new PaymentClient("abcde", httpClient);
+
+        // When: We send the request
+        var result = await paymentClient.CreatePaymentAsync(paymentRequest);
+
+        // Then
+        result.Success.ShouldBeTrue();
+        mockHttp.VerifyNoOutstandingExpectation();
+    }
+
+    [Fact]
+    public async Task CreatePaymentAsync_WithRecurringLine_RequestIsSerializedInExpectedFormat() {
+        // Given: We create a payment request with a payment line that has recurring details
+        var paymentRequest = new PaymentRequest {
+            Amount = new Amount(Currency.EUR, 100.00m),
+            Description = "Description",
+            RedirectUrl = "http://www.mollie.com",
+            Lines = [
+                new PaymentLine {
+                    Type = "digital",
+                    Description = "Gym subscription",
+                    Quantity = 1,
+                    UnitPrice = new Amount(Currency.EUR, 100.00m),
+                    TotalAmount = new Amount(Currency.EUR, 100.00m),
+                    Recurring = new PaymentLineRecurringDetails {
+                        Description = "Gym subscription",
+                        Interval = "12 months",
+                        Amount = new Amount(Currency.EUR, 100.00m),
+                        Times = 1,
+                        StartDate = new DateOnly(2024, 12, 12)
+                    }
+                }
+            ]
+        };
+        string expectedJson = "\"recurring\":{\"description\":\"Gym subscription\",\"interval\":\"12 months\",\"amount\":{\"currency\":\"EUR\",\"value\":\"100.00\"},\"times\":1,\"startDate\":\"2024-12-12\"}";
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Post, $"{BaseMollieClient.DefaultBaseApiEndPoint}payments", defaultPaymentJsonResponse, expectedJson);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        var paymentClient = new PaymentClient("abcde", httpClient);
+
+        // When: We send the request
+        var result = await paymentClient.CreatePaymentAsync(paymentRequest);
+
+        // Then
+        result.Success.ShouldBeTrue();
+        mockHttp.VerifyNoOutstandingExpectation();
+    }
+
+    [Fact]
+    public async Task UpdatePaymentAsync_WithAddressesDueDateAndIssuer_RequestIsSerializedInExpectedFormat() {
+        // Given: We update a payment with the billing and shipping address, billing email, due date and issuer
+        const string paymentId = "tr_WDqYK6vllg";
+        var paymentUpdateRequest = new PaymentUpdateRequest {
+            Issuer = "ideal_INGBNL2A",
+            DueDate = new DateOnly(2025, 1, 1),
+            BillingEmail = "billing@example.org",
+            BillingAddress = new PaymentAddressDetails {
+                StreetAndNumber = "Keizersgracht 126",
+                PostalCode = "1015 CW",
+                City = "Amsterdam",
+                Country = "NL"
+            },
+            ShippingAddress = new PaymentAddressDetails {
+                StreetAndNumber = "Prinsengracht 1",
+                PostalCode = "1015 DK",
+                City = "Amsterdam",
+                Country = "NL"
+            }
+        };
+        string expectedJson = "\"issuer\":\"ideal_INGBNL2A\",\"dueDate\":\"2025-01-01\",\"billingAddress\":{\"streetAndNumber\":\"Keizersgracht 126\",\"postalCode\":\"1015 CW\",\"city\":\"Amsterdam\",\"country\":\"NL\"},\"shippingAddress\":{\"streetAndNumber\":\"Prinsengracht 1\",\"postalCode\":\"1015 DK\",\"city\":\"Amsterdam\",\"country\":\"NL\"},\"billingEmail\":\"billing@example.org\"";
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Patch, $"{BaseMollieClient.DefaultBaseApiEndPoint}payments/{paymentId}", defaultPaymentJsonResponse, expectedJson);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        var paymentClient = new PaymentClient("abcde", httpClient);
+
+        // When: We send the request
+        var result = await paymentClient.UpdatePaymentAsync(paymentId, paymentUpdateRequest);
+
+        // Then
+        result.Success.ShouldBeTrue();
+        mockHttp.VerifyNoOutstandingExpectation();
+    }
+
+    [Fact]
+    public async Task GetPaymentAsync_WithRoutingAndRestrictedCountry_ResponseIsDeserializedInExpectedFormat() {
+        // Given: We retrieve a payment with a route and a restricted country
+        const string paymentId = "tr_5B8cwPMGnU6qLbRvo7qEZo";
+        const string jsonResponse = @"{
+            ""resource"": ""payment"",
+            ""id"": ""tr_5B8cwPMGnU6qLbRvo7qEZo"",
+            ""mode"": ""live"",
+            ""createdAt"": ""2024-03-20T09:13:37+00:00"",
+            ""status"": ""open"",
+            ""profileId"": ""pfl_QkEhN94Ba"",
+            ""sequenceType"": ""oneoff"",
+            ""amount"": { ""currency"": ""EUR"", ""value"": ""100.00"" },
+            ""description"": ""Description"",
+            ""restrictPaymentMethodsToCountry"": ""NL"",
+            ""routing"": [{
+                ""resource"": ""route"",
+                ""id"": ""rt_5B8cwPMGnU6qLbRvo7qEZo"",
+                ""mode"": ""test"",
+                ""createdAt"": ""2024-12-12T10:00:00+00:00"",
+                ""amount"": { ""currency"": ""EUR"", ""value"": ""100.00"" },
+                ""destination"": { ""type"": ""organization"", ""organizationId"": ""org_12345678"" },
+                ""releaseDate"": ""2024-12-12"",
+                ""_links"": {
+                    ""self"": { ""href"": ""https://api.mollie.com/v2/payments/tr_5B8cwPMGnU6qLbRvo7qEZo/routes/rt_5B8cwPMGnU6qLbRvo7qEZo"", ""type"": ""application/hal+json"" },
+                    ""payment"": { ""href"": ""https://api.mollie.com/v2/payments/tr_5B8cwPMGnU6qLbRvo7qEZo"", ""type"": ""application/hal+json"" }
+                }
+            }]
+        }";
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.DefaultBaseApiEndPoint}payments/{paymentId}", jsonResponse);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        var paymentClient = new PaymentClient("abcde", httpClient);
+
+        // When: We send the request
+        var result = await paymentClient.GetPaymentAsync(paymentId);
+
+        // Then
+        result.Success.ShouldBeTrue();
+        var payment = result.Data;
+        payment.RestrictPaymentMethodsToCountry.ShouldBe("NL");
+        payment.Routings.ShouldNotBeNull();
+        var routing = payment.Routings.ShouldHaveSingleItem();
+        routing.Id.ShouldBe("rt_5B8cwPMGnU6qLbRvo7qEZo");
+        routing.Mode.ShouldBe(Mode.Test);
+        routing.CreatedAt.ToUniversalTime().ShouldBe(new DateTimeOffset(2024, 12, 12, 10, 0, 0, TimeSpan.Zero));
+        routing.ReleaseDate.ShouldBe(new DateOnly(2024, 12, 12));
+        routing.Links.Self.Href.ShouldBe("https://api.mollie.com/v2/payments/tr_5B8cwPMGnU6qLbRvo7qEZo/routes/rt_5B8cwPMGnU6qLbRvo7qEZo");
+        routing.Links.Payment.Href.ShouldBe("https://api.mollie.com/v2/payments/tr_5B8cwPMGnU6qLbRvo7qEZo");
+        mockHttp.VerifyNoOutstandingExpectation();
+    }
+
+    [Fact]
+    public async Task GetPaymentAsync_ForVoucherPayment_DetailsAreDeserialized() {
+        // Given: We retrieve a voucher payment
+        const string paymentId = "tr_WDqYK6vllg";
+        const string jsonResponse = @"{
+            ""resource"": ""payment"",
+            ""id"": ""tr_WDqYK6vllg"",
+            ""mode"": ""test"",
+            ""createdAt"": ""2018-03-20T13:13:37+00:00"",
+            ""amount"": { ""currency"": ""EUR"", ""value"": ""100.00"" },
+            ""method"": ""voucher"",
+            ""details"": {
+                ""issuer"": ""appetiz"",
+                ""vouchers"": [
+                    { ""issuer"": ""appetiz"", ""amount"": { ""currency"": ""EUR"", ""value"": ""60.00"" } }
+                ],
+                ""remainderAmount"": { ""currency"": ""EUR"", ""value"": ""40.00"" },
+                ""remainderMethod"": ""creditcard"",
+                ""remainderDetails"": { ""cardNumber"": ""6787"" }
+            }
+        }";
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.DefaultBaseApiEndPoint}payments/{paymentId}", jsonResponse);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        var paymentClient = new PaymentClient("abcde", httpClient);
+
+        // When: We send the request
+        var result = await paymentClient.GetPaymentAsync(paymentId);
+
+        // Then
+        result.Success.ShouldBeTrue();
+        var voucherPayment = result.Data.ShouldBeOfType<VoucherPaymentResponse>();
+        voucherPayment.Details.ShouldNotBeNull();
+        voucherPayment.Details.Issuer.ShouldBe("appetiz");
+        voucherPayment.Details.Vouchers.ShouldNotBeNull();
+        var voucher = voucherPayment.Details.Vouchers.ShouldHaveSingleItem();
+        voucher.Issuer.ShouldBe("appetiz");
+        voucher.Amount.ShouldBe(new Amount(Currency.EUR, 60.00m));
+        voucherPayment.Details.RemainderAmount.ShouldBe(new Amount(Currency.EUR, 40.00m));
+        voucherPayment.Details.RemainderMethod.ShouldBe(PaymentMethod.CreditCard);
+        voucherPayment.Details.GetRemainderDetails<Dictionary<string, string>>()!["cardNumber"].ShouldBe("6787");
+        mockHttp.VerifyNoOutstandingExpectation();
+    }
+
+    [Fact]
+    public async Task GetPaymentAsync_ForBizumPayment_DetailsAreDeserialized() {
+        // Given: We retrieve a Bizum payment
+        const string paymentId = "tr_WDqYK6vllg";
+        const string jsonResponse = @"{
+            ""resource"": ""payment"",
+            ""id"": ""tr_WDqYK6vllg"",
+            ""mode"": ""test"",
+            ""createdAt"": ""2018-03-20T13:13:37+00:00"",
+            ""amount"": { ""currency"": ""EUR"", ""value"": ""100.00"" },
+            ""method"": ""bizum"",
+            ""details"": { ""bizumReference"": ""2901tq2ure1d"" }
+        }";
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.DefaultBaseApiEndPoint}payments/{paymentId}", jsonResponse);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        var paymentClient = new PaymentClient("abcde", httpClient);
+
+        // When: We send the request
+        var result = await paymentClient.GetPaymentAsync(paymentId);
+
+        // Then
+        result.Success.ShouldBeTrue();
+        var bizumPayment = result.Data.ShouldBeOfType<BizumPaymentResponse>();
+        bizumPayment.Details!.BizumReference.ShouldBe("2901tq2ure1d");
+        mockHttp.VerifyNoOutstandingExpectation();
+    }
+
+    [Fact]
+    public async Task GetPaymentAsync_ForMultibancoPayment_DetailsAreDeserialized() {
+        // Given: We retrieve a Multibanco payment
+        const string paymentId = "tr_WDqYK6vllg";
+        const string jsonResponse = @"{
+            ""resource"": ""payment"",
+            ""id"": ""tr_WDqYK6vllg"",
+            ""mode"": ""test"",
+            ""createdAt"": ""2018-03-20T13:13:37+00:00"",
+            ""amount"": { ""currency"": ""EUR"", ""value"": ""100.00"" },
+            ""method"": ""multibanco"",
+            ""details"": { ""multibancoReference"": ""123456789"", ""multibancoEntity"": ""98765"" }
+        }";
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.DefaultBaseApiEndPoint}payments/{paymentId}", jsonResponse);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        var paymentClient = new PaymentClient("abcde", httpClient);
+
+        // When: We send the request
+        var result = await paymentClient.GetPaymentAsync(paymentId);
+
+        // Then
+        result.Success.ShouldBeTrue();
+        var multibancoPayment = result.Data.ShouldBeOfType<MultibancoPaymentResponse>();
+        multibancoPayment.Details!.MultibancoReference.ShouldBe("123456789");
+        multibancoPayment.Details.MultibancoEntity.ShouldBe("98765");
+        mockHttp.VerifyNoOutstandingExpectation();
+    }
+
+    [Fact]
+    public async Task GetPaymentAsync_ForPaymentMethodWithoutSpecificDetails_CustomerDetailsAreDeserialized() {
+        // Given: We retrieve a Trustly payment, which has no method specific details
+        const string paymentId = "tr_WDqYK6vllg";
+        const string jsonResponse = @"{
+            ""resource"": ""payment"",
+            ""id"": ""tr_WDqYK6vllg"",
+            ""mode"": ""test"",
+            ""createdAt"": ""2018-03-20T13:13:37+00:00"",
+            ""amount"": { ""currency"": ""EUR"", ""value"": ""100.00"" },
+            ""method"": ""trustly"",
+            ""details"": { ""consumerName"": ""consumer-name"", ""consumerAccount"": ""consumer-account"", ""consumerBic"": ""consumer-bic"" }
+        }";
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.DefaultBaseApiEndPoint}payments/{paymentId}", jsonResponse);
+        var paymentClient = new PaymentClient("abcde", mockHttp.ToHttpClient());
+
+        // When: We send the request
+        var result = await paymentClient.GetPaymentAsync(paymentId);
+
+        // Then
+        result.Success.ShouldBeTrue();
+        var payment = result.Data.ShouldBeOfType<DefaultPaymentResponse>();
+        payment.Details!.ConsumerName.ShouldBe("consumer-name");
+        payment.Details.ConsumerAccount.ShouldBe("consumer-account");
+        payment.Details.ConsumerBic.ShouldBe("consumer-bic");
+        mockHttp.VerifyNoOutstandingExpectation();
+    }
+
+    [Fact]
+    public async Task GetPaymentAsync_ForBankTransferPaymentWithoutTransferReference_TransferReferenceIsNull() {
+        // Given: We retrieve a bank transfer payment where the transfer reference is null
+        const string paymentId = "tr_WDqYK6vllg";
+        const string jsonResponse = @"{
+            ""resource"": ""payment"",
+            ""id"": ""tr_WDqYK6vllg"",
+            ""mode"": ""test"",
+            ""createdAt"": ""2018-03-20T13:13:37+00:00"",
+            ""amount"": { ""currency"": ""EUR"", ""value"": ""100.00"" },
+            ""method"": ""banktransfer"",
+            ""details"": {
+                ""bankName"": ""bank-name"",
+                ""bankAccount"": ""bank-account"",
+                ""bankBic"": ""bank-bic"",
+                ""transferReference"": null
+            }
+        }";
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Get, $"{BaseMollieClient.DefaultBaseApiEndPoint}payments/{paymentId}", jsonResponse);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        var paymentClient = new PaymentClient("abcde", httpClient);
+
+        // When: We send the request
+        var result = await paymentClient.GetPaymentAsync(paymentId);
+
+        // Then
+        result.Success.ShouldBeTrue();
+        var bankTransferPayment = result.Data.ShouldBeOfType<BankTransferPaymentResponse>();
+        bankTransferPayment.Details!.TransferReference.ShouldBeNull();
+        mockHttp.VerifyNoOutstandingExpectation();
+    }
+
     [Theory]
     [InlineData("")]
     [InlineData(" ")]

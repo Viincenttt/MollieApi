@@ -7,7 +7,7 @@ public record PointOfSalePaymentResponse : PaymentResponse {
     public required PointOfSalePaymentResponseDetails? Details { get; set; }
 }
 
-public record PointOfSalePaymentResponseDetails {
+public record PointOfSalePaymentResponseDetails : PaymentResponseDetails {
     /// <summary>
     /// The identifier referring to the terminal this payment was created for. For example, term_utGtYu756h.
     /// </summary>

@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using Mollie.Api.JsonConverters;
 
@@ -59,6 +60,37 @@ namespace Mollie.Api.Models.Payment.Request {
         /// be offered, but only cards from the allowed country are accepted.
         /// </summary>
         public string? RestrictPaymentMethodsToCountry { get; set; }
+
+        /// <summary>
+        /// Only relevant for iDEAL, KBC/CBC, gift card, and voucher payments. Can be updated while no issuer has been
+        /// chosen yet.
+        /// </summary>
+        public string? Issuer { get; set; }
+
+        /// <summary>
+        /// The date by which the payment should be completed in YYYY-MM-DD format. Only relevant for bank transfer payments.
+        /// </summary>
+#if NET8_0_OR_GREATER
+        public DateOnly? DueDate { get; set; }
+#else
+        [JsonConverter(typeof(DateJsonConverter))]
+        public DateTime? DueDate { get; set; }
+#endif
+
+        /// <summary>
+        /// The customer's billing address details.
+        /// </summary>
+        public PaymentAddressDetails? BillingAddress { get; set; }
+
+        /// <summary>
+        /// The customer's shipping address details.
+        /// </summary>
+        public PaymentAddressDetails? ShippingAddress { get; set; }
+
+        /// <summary>
+        /// The email address the payment instructions should be sent to. Only relevant for bank transfer payments.
+        /// </summary>
+        public string? BillingEmail { get; set; }
 
         /// <summary>
         ///	Oauth only - Optional – Set this to true to make this payment a test payment.

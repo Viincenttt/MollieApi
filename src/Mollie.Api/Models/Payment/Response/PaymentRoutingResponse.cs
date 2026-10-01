@@ -19,6 +19,16 @@ namespace Mollie.Api.Models.Payment.Response
         public required string Id { get; set; }
 
         /// <summary>
+        /// The mode used to create this route. Mode determines whether a route is real or a test route.
+        /// </summary>
+        public required Mode Mode { get; set; }
+
+        /// <summary>
+        /// The date and time when the route was created, in ISO 8601 format.
+        /// </summary>
+        public required DateTimeOffset CreatedAt { get; set; }
+
+        /// <summary>
         /// If more than one routing object is given, the routing objects must indicate what portion of the total payment amount is being routed.
         /// </summary>
         public required Amount Amount { get; set; }
@@ -38,5 +48,11 @@ namespace Mollie.Api.Models.Payment.Response
         [JsonConverter(typeof(DateJsonConverter))]
         public DateTime? ReleaseDate { get; set; }
 #endif
+
+        /// <summary>
+        /// An object with several URL objects relevant to the route.
+        /// </summary>
+        [JsonPropertyName("_links")]
+        public required PaymentRoutingResponseLinks Links { get; set; }
     }
 }

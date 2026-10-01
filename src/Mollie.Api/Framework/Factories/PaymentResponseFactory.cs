@@ -15,6 +15,8 @@ namespace Mollie.Api.Framework.Factories {
                     return Activator.CreateInstance<BankTransferPaymentResponse>();
                 case PaymentMethod.CreditCard:
                     return Activator.CreateInstance<CreditCardPaymentResponse>();
+                case PaymentMethod.ApplePay:
+                    return Activator.CreateInstance<ApplePayPaymentResponse>();
                 case PaymentMethod.Ideal:
                     return Activator.CreateInstance<IdealPaymentResponse>();
                 case PaymentMethod.Giropay:
@@ -41,8 +43,14 @@ namespace Mollie.Api.Framework.Factories {
                     return Activator.CreateInstance<IngHomePayPaymentResponse>();
                 case PaymentMethod.PointOfSale:
                     return Activator.CreateInstance<PointOfSalePaymentResponse>();
+                case PaymentMethod.Voucher:
+                    return Activator.CreateInstance<VoucherPaymentResponse>();
+                case PaymentMethod.Bizum:
+                    return Activator.CreateInstance<BizumPaymentResponse>();
+                case PaymentMethod.Multibanco:
+                    return Activator.CreateInstance<MultibancoPaymentResponse>();
                 default:
-                    return Activator.CreateInstance<PaymentResponse>();
+                    return Activator.CreateInstance<DefaultPaymentResponse>();
             }
         }
     }

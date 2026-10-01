@@ -74,4 +74,10 @@ public record PaymentLine {
     /// A link pointing to the product page in your web shop of the product sold.
     /// </summary>
     public string? ProductUrl { get; set; }
+
+    /// <summary>
+    /// The details of subsequent recurring billing cycles. These parameters are used in the Mollie Checkout to inform
+    /// the shopper of the details for recurring products in the payments.
+    /// </summary>
+    public PaymentLineRecurringDetails? Recurring { get; set; }
 }

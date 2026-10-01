@@ -19,8 +19,8 @@ namespace Mollie.Api.Models.Payment.Request.PaymentSpecificParameters {
         public string? SessionId { get; set; }
 
         /// <summary>
-        /// Indicate if you�re about to deliver digital goods, like for example a license. Setting this parameter can
-        /// have consequences for your Seller Protection by PayPal. Please see PayPal�s help article about Seller
+        /// Indicate if you’re about to deliver digital goods, like for example a license. Setting this parameter can
+        /// have consequences for your Seller Protection by PayPal. Please see PayPal’s help article about Seller
         /// Protection for more information.
         /// </summary>
         public bool? DigitalGoods { get; set; }
