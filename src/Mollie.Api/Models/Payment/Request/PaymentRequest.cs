@@ -189,8 +189,39 @@ namespace Mollie.Api.Models.Payment.Request {
         /// </summary>
         public string? CaptureDelay { get; set; }
 
+        /// <summary>
+        /// Billie only - Billie is a business-to-business (B2B) payment method. It requires extra information to identify
+        /// the organization that is completing the payment. It is recommended to include these parameters up front for a
+        /// seamless flow. Otherwise, Billie will ask the customer to complete the missing fields during checkout.
+        /// </summary>
+        public PaymentCompanyDetails? Company { get; set; }
+
+        /// <summary>
+        /// iDEAL in3 only - The customer's date of birth. If not provided via the API, iDEAL in3 will ask the customer to
+        /// provide it during the payment process.
+        /// </summary>
+#if NET8_0_OR_GREATER
+        public DateOnly? ConsumerDateOfBirth { get; set; }
+#else
+        [JsonConverter(typeof(DateJsonConverter))]
+        public DateTime? ConsumerDateOfBirth { get; set; }
+#endif
+
+        /// <summary>
+        /// Klarna only - For some industries, additional purchase information can be sent to Klarna to increase the
+        /// authorization rate. You can submit your extra data in this field if you have agreed upon this with Klarna.
+        /// This field should be a JSON object containing any of the allowed keys and sub-objects described in the
+        /// Klarna developer documentation.
+        /// </summary>
+        [JsonConverter(typeof(RawJsonConverter))]
+        public string? ExtraMerchantData { get; set; }
+
         public void SetMetadata(object metadataObj, JsonSerializerOptions? jsonSerializerOptions = null) {
             Metadata = JsonSerializer.Serialize(metadataObj, jsonSerializerOptions);
+        }
+
+        public void SetExtraMerchantData(object extraMerchantDataObj, JsonSerializerOptions? jsonSerializerOptions = null) {
+            ExtraMerchantData = JsonSerializer.Serialize(extraMerchantDataObj, jsonSerializerOptions);
         }
 
         public override string ToString() {

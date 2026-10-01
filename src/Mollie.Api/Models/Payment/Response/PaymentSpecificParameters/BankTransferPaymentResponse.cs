@@ -36,7 +36,7 @@ namespace Mollie.Api.Models.Payment.Response.PaymentSpecificParameters {
         /// The reference the consumer should use when wiring the amount. Note you should not apply any formatting here; show
         /// it to the consumer as-is.
         /// </summary>
-        public required string TransferReference { get; set; }
+        public string? TransferReference { get; set; }
 
         /// <summary>
         /// Only available if the payment has been completed � The consumer's name.

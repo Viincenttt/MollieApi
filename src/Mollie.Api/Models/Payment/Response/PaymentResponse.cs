@@ -245,6 +245,12 @@ namespace Mollie.Api.Models.Payment.Response {
         public string? CaptureDelay { get; set; }
 
         /// <summary>
+        /// The country the payment methods were restricted to, if the payment was created with the
+        /// restrictPaymentMethodsToCountry parameter. An ISO 3166-1 alpha-2 country code, for example NL.
+        /// </summary>
+        public string? RestrictPaymentMethodsToCountry { get; set; }
+
+        /// <summary>
         /// Indicates the datetime on which the merchant has to have captured the payment, before we can no longer guarantee a
         /// successful capture, in ISO 8601 format. This parameter is omitted if the payment is not authorized (yet).
         /// </summary>

@@ -23,31 +23,32 @@ namespace Mollie.Tests.Unit.Framework.Factories {
         [InlineData(PaymentMethod.PayPal, typeof(PayPalPaymentResponse))]
         [InlineData(PaymentMethod.PaySafeCard, typeof(PaySafeCardPaymentResponse))]
         [InlineData(PaymentMethod.Sofort, typeof(SofortPaymentResponse))]
-        [InlineData(PaymentMethod.Refund, typeof(PaymentResponse))]
-        [InlineData(PaymentMethod.KlarnaPayLater, typeof(PaymentResponse))]
-        [InlineData(PaymentMethod.KlarnaSliceIt, typeof(PaymentResponse))]
-        [InlineData(PaymentMethod.KlarnaOne, typeof(PaymentResponse))]
-        [InlineData(PaymentMethod.Przelewy24, typeof(PaymentResponse))]
-        [InlineData(PaymentMethod.ApplePay, typeof(PaymentResponse))]
-        [InlineData(PaymentMethod.MealVoucher, typeof(PaymentResponse))]
-        [InlineData(PaymentMethod.In3, typeof(PaymentResponse))]
+        [InlineData(PaymentMethod.Refund, typeof(GenericPaymentResponse))]
+        [InlineData(PaymentMethod.KlarnaPayLater, typeof(GenericPaymentResponse))]
+        [InlineData(PaymentMethod.KlarnaSliceIt, typeof(GenericPaymentResponse))]
+        [InlineData(PaymentMethod.KlarnaOne, typeof(GenericPaymentResponse))]
+        [InlineData(PaymentMethod.Przelewy24, typeof(GenericPaymentResponse))]
+        [InlineData(PaymentMethod.ApplePay, typeof(GenericPaymentResponse))]
+        [InlineData(PaymentMethod.MealVoucher, typeof(GenericPaymentResponse))]
+        [InlineData(PaymentMethod.In3, typeof(GenericPaymentResponse))]
         [InlineData(PaymentMethod.PointOfSale, typeof(PointOfSalePaymentResponse))]
-        [InlineData(PaymentMethod.Billie, typeof(PaymentResponse))]
-        [InlineData(PaymentMethod.Trustly, typeof(PaymentResponse))]
-        [InlineData(PaymentMethod.Twint, typeof(PaymentResponse))]
-        [InlineData(PaymentMethod.Satispay, typeof(PaymentResponse))]
-        [InlineData(PaymentMethod.Riverty, typeof(PaymentResponse))]
-        [InlineData(PaymentMethod.Blik, typeof(PaymentResponse))]
-        [InlineData(PaymentMethod.BancomatPay, typeof(PaymentResponse))]
-        [InlineData(PaymentMethod.BacsDirectDebit, typeof(PaymentResponse))]
-        [InlineData(PaymentMethod.Alma, typeof(PaymentResponse))]
-        [InlineData(PaymentMethod.GooglePay, typeof(PaymentResponse))]
-        [InlineData(PaymentMethod.Voucher, typeof(PaymentResponse))]
-        [InlineData(PaymentMethod.MbWay, typeof(PaymentResponse))]
-        [InlineData(PaymentMethod.Multibanco, typeof(PaymentResponse))]
-        [InlineData(PaymentMethod.Swish, typeof(PaymentResponse))]
-        [InlineData(PaymentMethod.KlarnaPayNow, typeof(PaymentResponse))]
-        [InlineData("UnknownPaymentMethod", typeof(PaymentResponse))]
+        [InlineData(PaymentMethod.Billie, typeof(GenericPaymentResponse))]
+        [InlineData(PaymentMethod.Trustly, typeof(GenericPaymentResponse))]
+        [InlineData(PaymentMethod.Twint, typeof(GenericPaymentResponse))]
+        [InlineData(PaymentMethod.Satispay, typeof(GenericPaymentResponse))]
+        [InlineData(PaymentMethod.Riverty, typeof(GenericPaymentResponse))]
+        [InlineData(PaymentMethod.Blik, typeof(GenericPaymentResponse))]
+        [InlineData(PaymentMethod.BancomatPay, typeof(GenericPaymentResponse))]
+        [InlineData(PaymentMethod.BacsDirectDebit, typeof(GenericPaymentResponse))]
+        [InlineData(PaymentMethod.Alma, typeof(GenericPaymentResponse))]
+        [InlineData(PaymentMethod.GooglePay, typeof(GenericPaymentResponse))]
+        [InlineData(PaymentMethod.Voucher, typeof(VoucherPaymentResponse))]
+        [InlineData(PaymentMethod.MbWay, typeof(GenericPaymentResponse))]
+        [InlineData(PaymentMethod.Multibanco, typeof(MultibancoPaymentResponse))]
+        [InlineData(PaymentMethod.Bizum, typeof(BizumPaymentResponse))]
+        [InlineData(PaymentMethod.Swish, typeof(GenericPaymentResponse))]
+        [InlineData(PaymentMethod.KlarnaPayNow, typeof(GenericPaymentResponse))]
+        [InlineData("UnknownPaymentMethod", typeof(GenericPaymentResponse))]
         public void Create_CreatesTypeBasedOnPaymentMethod(string paymentMethod, Type expectedType) {
             // Given
             var sut = new PaymentResponseFactory();
@@ -57,6 +58,20 @@ namespace Mollie.Tests.Unit.Framework.Factories {
 
             // Then
             result.ShouldBeOfType(expectedType);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        public void Create_WithoutPaymentMethod_CreatesBasePaymentResponse(string? paymentMethod) {
+            // Given
+            var sut = new PaymentResponseFactory();
+
+            // When
+            var result = sut.Create(paymentMethod);
+
+            // Then
+            result.ShouldBeOfType<PaymentResponse>();
         }
     }
 }
