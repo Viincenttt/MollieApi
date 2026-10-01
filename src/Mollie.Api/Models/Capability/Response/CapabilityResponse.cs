@@ -23,15 +23,10 @@ public record CapabilityResponse {
     /// The reason the capability is in this status. A list of possible values can be found in the
     /// Mollie.Api.Models.Capability.CapabilityStatusReason class.
     /// </summary>
-    public required string StatusReason { get; set; }
+    public string? StatusReason { get; set; }
 
     /// <summary>
     /// The requirements that need to be fulfilled before the capability can be enabled.
     /// </summary>
     public required IEnumerable<CapabilityRequirement> Requirements { get; set; }
-
-    /// <summary>
-    /// Related links
-    /// </summary>
-    public required CapabilityResponseLinks Links { get; set; }
 }
