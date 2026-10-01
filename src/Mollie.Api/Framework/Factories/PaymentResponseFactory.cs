@@ -15,6 +15,8 @@ namespace Mollie.Api.Framework.Factories {
                     return Activator.CreateInstance<BankTransferPaymentResponse>();
                 case PaymentMethod.CreditCard:
                     return Activator.CreateInstance<CreditCardPaymentResponse>();
+                case PaymentMethod.ApplePay:
+                    return Activator.CreateInstance<ApplePayPaymentResponse>();
                 case PaymentMethod.Ideal:
                     return Activator.CreateInstance<IdealPaymentResponse>();
                 case PaymentMethod.Giropay:
