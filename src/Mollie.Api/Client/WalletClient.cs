@@ -21,6 +21,10 @@ namespace Mollie.Api.Client {
 
         public async Task<MollieResult<ApplePayPaymentSessionResponse>> RequestApplePayPaymentSessionAsync(
             ApplePayPaymentSessionRequest request, CancellationToken cancellationToken = default) {
+            if (!string.IsNullOrWhiteSpace(request.ProfileId)) {
+                ValidateApiKeyIsOauthAccesstoken();
+            }
+
             return await PostAsync<ApplePayPaymentSessionResponse>(
                 "wallets/applepay/sessions", request, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);

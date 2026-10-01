@@ -11,5 +11,10 @@
         /// The domain of your web shop, that is visible in the browser’s location bar. For example pay.myshop.com.
         /// </summary>
         public required string Domain { get; set; }
+
+        /// <summary>
+        /// Oauth only - The website profile's unique identifier, for example pfl_3RkSN1zuPE.
+        /// </summary>
+        public string? ProfileId { get; set; }
     }
 }
