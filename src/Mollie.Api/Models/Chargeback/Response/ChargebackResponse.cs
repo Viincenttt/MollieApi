@@ -16,7 +16,7 @@ namespace Mollie.Api.Models.Chargeback.Response {
         /// <summary>
         /// Whether this entity was created in live mode or in test mode.
         /// </summary>
-        public Mode? Mode { get; set; }
+        public required Mode Mode { get; set; }
 
         /// <summary>
         /// The amount charged back.
