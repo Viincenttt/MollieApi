@@ -2,6 +2,7 @@
 
 namespace Mollie.Api.Models.ClientLink.Response {
     public record ClientLinkResponseLinks {
+        public UrlLink? Self { get; set; }
         public required UrlLink ClientLink { get; set; }
         public required UrlLink Documentation { get; set; }
     }

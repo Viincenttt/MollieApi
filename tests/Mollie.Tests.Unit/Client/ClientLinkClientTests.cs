@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Shouldly;
@@ -22,6 +23,9 @@ public class ClientLinkClientTests : BaseClientTests
         string clientLinkResponseJson = CreateClientLinkResponseJson(clientLinkId, clientLinkUrl);
         var mockHttp = new MockHttpMessageHandler();
         mockHttp.When( HttpMethod.Post, $"{BaseMollieClient.DefaultBaseApiEndPoint}client-links")
+            .WithPartialContent("\"legalEntity\":\"nl-bv\"")
+            .WithPartialContent("\"registrationOffice\":\"aachen\"")
+            .WithPartialContent("\"incorporationDate\":\"2024-12-24\"")
             .Respond("application/json", clientLinkResponseJson);
         HttpClient httpClient = mockHttp.ToHttpClient();
         ClientLinkClient clientLinkClient = new ClientLinkClient("clientId", "access_1234", httpClient);
@@ -32,7 +36,10 @@ public class ClientLinkClientTests : BaseClientTests
                 FamilyName = "family-name"
             },
             Address = new AddressObject(),
-            Name = "name"
+            Name = "name",
+            LegalEntity = "nl-bv",
+            RegistrationOffice = "aachen",
+            IncorporationDate = new DateOnly(2024, 12, 24)
         };
 
         // When: We send the request
@@ -43,6 +50,8 @@ public class ClientLinkClientTests : BaseClientTests
         result.Success.ShouldBeTrue();
         response.Id.ShouldBe(clientLinkId);
         response.Links.ClientLink.Href.ShouldBe(clientLinkUrl);
+        response.Links.Self.ShouldNotBeNull();
+        response.Links.Self.Href.ShouldBe($"https://api.mollie.com/v2/client-links/{clientLinkId}");
         mockHttp.VerifyNoOutstandingRequest();
     }
 
@@ -85,6 +94,10 @@ public class ClientLinkClientTests : BaseClientTests
     ""id"": ""{id}"",
     ""resource"": ""client-link"",
     ""_links"": {{
+        ""self"": {{
+            ""href"": ""https://api.mollie.com/v2/client-links/{id}"",
+            ""type"": ""application/hal+json""
+        }},
         ""clientLink"": {{
             ""href"": ""{clientLinkUrl}"",
             ""type"": ""text/html""
