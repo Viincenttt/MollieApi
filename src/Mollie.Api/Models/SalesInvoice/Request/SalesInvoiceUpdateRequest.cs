@@ -52,17 +52,17 @@ public record SalesInvoiceUpdateRequest : ITestModeRequest {
     public IEnumerable<SalesInvoiceLine>? Lines { get; set; }
 
     /// <summary>
-    /// The webhook URL where we will send invoice status updates to. The webhookUrl is optional, but without a webhook
-    /// you will miss out on important status changes to your invoice. The webhookUrl must be reachable from Mollie's
-    /// point of view, so you cannot use localhost. If you want to use webhook during development on localhost, you
-    /// must use a tool like ngrok to have the webhooks delivered to your local machine.
-    /// </summary>
-    public string? WebhookUrl { get; set; }
-
-    /// <summary>
     /// The discount to be applied to the entire invoice, possibly on top of the line item discounts.
     /// </summary>
-    public Amount? Discount { get; set; }
+    public SalesInvoiceDiscount? Discount { get; set; }
+
+    /// <summary>
+    /// This indicates whether the invoice is an e-invoice. The default value is false and can't be changed after the
+    /// invoice has been issued. When emailDetails is provided, an additional email is sent to the recipient. E-invoicing
+    /// is only available for merchants based in Belgium, Germany, and the Netherlands, and only when the recipient is
+    /// also located in one of these countries.
+    /// </summary>
+    public bool? IsEInvoice { get; set; }
 
     /// <summary>
     /// Most API credentials are specifically created for either live mode or test mode. For organization-level

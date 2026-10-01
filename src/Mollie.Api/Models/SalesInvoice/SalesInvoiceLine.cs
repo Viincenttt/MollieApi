@@ -29,5 +29,5 @@ public record SalesInvoiceLine {
     /// <summary>
     /// The discount to be applied to the line item.
     /// </summary>
-    public Amount? Discount { get; set; }
+    public SalesInvoiceDiscount? Discount { get; set; }
 }

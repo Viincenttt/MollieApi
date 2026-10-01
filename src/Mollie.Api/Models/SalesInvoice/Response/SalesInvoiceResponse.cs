@@ -45,6 +45,12 @@ public record SalesInvoiceResponse : IEntity {
     public required string Status { get; set; }
 
     /// <summary>
+    /// The e-invoice submission status for the invoice, if it was configured to be an e-invoice. See the
+    /// Mollie.Api.Models.SalesInvoice.SalesInvoiceEInvoiceStatus class for a full list of known values.
+    /// </summary>
+    public string? EInvoiceStatus { get; set; }
+
+    /// <summary>
     /// The VAT scheme to create the invoice for. You must be enrolled with One Stop Shop enabled to use it. See the
     /// Mollie.Api.Models.VatScheme class for a full list of known values.
     /// </summary>
@@ -117,17 +123,9 @@ public record SalesInvoiceResponse : IEntity {
     public required IEnumerable<SalesInvoiceLine>? Lines { get; set; }
 
     /// <summary>
-    /// The webhook URL where we will send invoice status updates to. The webhookUrl is optional, but without a webhook
-    /// you will miss out on important status changes to your invoice. The webhookUrl must be reachable from Mollie's
-    /// point of view, so you cannot use localhost. If you want to use webhook during development on localhost, you
-    /// must use a tool like ngrok to have the webhooks delivered to your local machine.
-    /// </summary>
-    public string? WebhookUrl { get; set; }
-
-    /// <summary>
     /// The discount to be applied to the entire invoice, possibly on top of the line item discounts.
     /// </summary>
-    public Amount? Discount { get; set; }
+    public SalesInvoiceDiscount? Discount { get; set; }
 
     /// <summary>
     /// This indicates whether the invoice is an e-invoice. The default value is false and can't be changed after the
@@ -153,6 +151,11 @@ public record SalesInvoiceResponse : IEntity {
     public required Amount TotalAmount { get; set; }
 
     /// <summary>
+    /// The total VAT amount.
+    /// </summary>
+    public Amount? TotalVatAmount { get; set; }
+
+    /// <summary>
     /// The discounted subtotal amount without VAT.
     /// </summary>
     public required Amount DiscountedSubtotalAmount { get; set; }
@@ -166,6 +169,11 @@ public record SalesInvoiceResponse : IEntity {
     /// If issued, the date when the sales invoice was issued.
     /// </summary>
     public DateTimeOffset? IssuedAt { get; set; }
+
+    /// <summary>
+    /// If paid, the date when the sales invoice was paid.
+    /// </summary>
+    public DateTimeOffset? PaidAt { get; set; }
 
     /// <summary>
     /// If issued, the date when the sales invoice payment is due.

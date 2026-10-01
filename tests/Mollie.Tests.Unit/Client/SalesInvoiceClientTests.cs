@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client;
@@ -36,10 +37,15 @@ public class SalesInvoiceClientTests : BaseClientTests {
                     VatRate = 21.00m,
                     UnitPrice = new Amount("EUR", 89.00m)
                 }
-            ]
+            ],
+            Discount = new SalesInvoiceDiscount {
+                Type = SalesInvoiceDiscountType.Percentage,
+                Value = 10m
+            }
         };
         string expectedUrl = $"{BaseMollieClient.DefaultBaseApiEndPoint}sales-invoices";
-        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Post, expectedUrl, DefaultSalesInvoiceClientResponse);
+        const string expectedPartialContent = "\"discount\":{\"type\":\"percentage\",\"value\":\"10\"}";
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Post, expectedUrl, DefaultSalesInvoiceClientResponse, expectedPartialContent);
         HttpClient httpClient = mockHttp.ToHttpClient();
         var salesInvoiceClient = new SalesInvoiceClient("api-key", httpClient);
 
@@ -59,7 +65,9 @@ public class SalesInvoiceClientTests : BaseClientTests {
         orderLine.VatRate.ShouldBe(21.00m);
         orderLine.UnitPrice.Value.ShouldBe(89.00m);
         orderLine.UnitPrice.Currency.ShouldBe(Currency.EUR);
-        orderLine.Discount.ShouldBeNull();
+        orderLine.Discount.ShouldNotBeNull();
+        orderLine.Discount.Type.ShouldBe(SalesInvoiceDiscountType.Amount);
+        orderLine.Discount.Value.ShouldBe(10.00m);
         result.Data.AmountDue.Value.ShouldBe(107.69m);
         result.Data.AmountDue.Currency.ShouldBe(Currency.EUR);
         result.Data.DiscountedSubtotalAmount.Value.ShouldBe(89.00m);
@@ -91,11 +99,25 @@ public class SalesInvoiceClientTests : BaseClientTests {
         orderLine.VatRate.ShouldBe(21.00m);
         orderLine.UnitPrice.Value.ShouldBe(89.00m);
         orderLine.UnitPrice.Currency.ShouldBe(Currency.EUR);
-        orderLine.Discount.ShouldBeNull();
+        orderLine.Discount.ShouldNotBeNull();
+        orderLine.Discount.Type.ShouldBe(SalesInvoiceDiscountType.Amount);
+        orderLine.Discount.Value.ShouldBe(10.00m);
         result.Data.AmountDue.Value.ShouldBe(107.69m);
         result.Data.AmountDue.Currency.ShouldBe(Currency.EUR);
         result.Data.DiscountedSubtotalAmount.Value.ShouldBe(89.00m);
         result.Data.DiscountedSubtotalAmount.Currency.ShouldBe(Currency.EUR);
+        result.Data.Discount.ShouldNotBeNull();
+        result.Data.Discount.Type.ShouldBe(SalesInvoiceDiscountType.Percentage);
+        result.Data.Discount.Value.ShouldBe(10m);
+        result.Data.EInvoiceStatus.ShouldBe(SalesInvoiceEInvoiceStatus.Issued);
+        result.Data.TotalVatAmount.ShouldNotBeNull();
+        result.Data.TotalVatAmount.Value.ShouldBe(18.69m);
+        result.Data.TotalVatAmount.Currency.ShouldBe(Currency.EUR);
+        result.Data.PaidAt.ShouldBe(new DateTimeOffset(2024, 10, 4, 12, 0, 0, TimeSpan.Zero));
+        result.Data.Links.Next.ShouldNotBeNull();
+        result.Data.Links.Next.Href.ShouldBe("https://api.mollie.com/v2/sales-invoices/invoice_next");
+        result.Data.Links.Previous.ShouldNotBeNull();
+        result.Data.Links.Previous.Href.ShouldBe("https://api.mollie.com/v2/sales-invoices/invoice_previous");
     }
 
     [Fact]
@@ -103,10 +125,12 @@ public class SalesInvoiceClientTests : BaseClientTests {
         // Given: A sales invoice ID and update request
         const string salesInvoiceId = "invoice_4Y0eZitmBnQ6IDoMqZQKh";
         var updateRequest = new SalesInvoiceUpdateRequest {
-            Memo = "Updated memo"
+            Memo = "Updated memo",
+            IsEInvoice = true
         };
         string expectedUrl = $"{BaseMollieClient.DefaultBaseApiEndPoint}sales-invoices/{salesInvoiceId}";
-        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Patch, expectedUrl, DefaultSalesInvoiceClientResponse);
+        const string expectedPartialContent = "\"isEInvoice\":true";
+        var mockHttp = CreateMockHttpMessageHandler(HttpMethod.Patch, expectedUrl, DefaultSalesInvoiceClientResponse, expectedPartialContent);
         HttpClient httpClient = mockHttp.ToHttpClient();
         var salesInvoiceClient = new SalesInvoiceClient("api-key", httpClient);
 
@@ -140,6 +164,7 @@ public class SalesInvoiceClientTests : BaseClientTests {
   ""invoiceNumber"": null,
   ""currency"": ""EUR"",
   ""status"": ""draft"",
+  ""eInvoiceStatus"": ""issued"",
   ""vatScheme"": ""standard"",
   ""paymentTerm"": ""30 days"",
   ""recipientIdentifier"": ""123532354"",
@@ -167,10 +192,16 @@ public class SalesInvoiceClientTests : BaseClientTests {
         ""value"": ""89.00"",
         ""currency"": ""EUR""
       },
-      ""discount"": null
+      ""discount"": {
+        ""type"": ""amount"",
+        ""value"": ""10.00""
+      }
     }
   ],
-  ""discount"": null,
+  ""discount"": {
+    ""type"": ""percentage"",
+    ""value"": ""10""
+  },
   ""amountDue"": {
     ""value"": ""107.69"",
     ""currency"": ""EUR""
@@ -193,6 +224,7 @@ public class SalesInvoiceClientTests : BaseClientTests {
   },
   ""createdAt"": ""2024-10-03T10:47:38.457381+00:00"",
   ""issuedAt"": null,
+  ""paidAt"": ""2024-10-04T12:00:00+00:00"",
   ""dueAt"": null,
   ""memo"": null,
   ""metadata"": [],
@@ -212,6 +244,14 @@ public class SalesInvoiceClientTests : BaseClientTests {
     ""documentation"": {
       ""href"": ""..."",
       ""type"": ""text/html""
+    },
+    ""next"": {
+      ""href"": ""https://api.mollie.com/v2/sales-invoices/invoice_next"",
+      ""type"": ""application/hal+json""
+    },
+    ""previous"": {
+      ""href"": ""https://api.mollie.com/v2/sales-invoices/invoice_previous"",
+      ""type"": ""application/hal+json""
     }
   }
 }";
