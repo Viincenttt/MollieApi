@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Shouldly;
 using Mollie.Api.Client;
 using Mollie.Api.Models.Mandate.Request;
+using Mollie.Api.Models.Mandate.Response;
 using Mollie.Api.Models.Payment;
 using RichardSzalay.MockHttp;
 using Xunit;
@@ -29,7 +30,9 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
-            result.ShouldNotBeNull();
+            result.Success.ShouldBeTrue();
+            result.Data.Scopes.ShouldNotBeNull();
+            result.Data.Scopes.ShouldBe([MandateScope.CustomerPresent, MandateScope.CustomerNotPresent]);
         }
 
         [Theory]
@@ -169,6 +172,7 @@ namespace Mollie.Tests.Unit.Client {
         ""consumerAccount"": ""NL55INGB0000000000"",
         ""consumerBic"": ""INGBNL2A""
     },
+    ""scopes"": [""customer-present"", ""customer-not-present""],
     ""mandateReference"": ""YOUR-COMPANY-MD1380"",
     ""signatureDate"": ""2018-05-07"",
     ""createdAt"": ""2018-05-07T10:49:08+00:00""

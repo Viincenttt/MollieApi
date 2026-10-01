@@ -12,8 +12,13 @@
         public required string ConsumerEmail { get; set; }
 
         /// <summary>
-        /// Required for `paypal` mandates - The billing agreement ID given by PayPal.
+        /// The billing agreement ID given by PayPal. Either this field or PayPalVaultId must be provided, but not both.
         /// </summary>
-        public required string PaypalBillingAgreementId { get; set; }
+        public string? PaypalBillingAgreementId { get; set; }
+
+        /// <summary>
+        /// The vault ID given by PayPal. Either this field or PaypalBillingAgreementId must be provided, but not both.
+        /// </summary>
+        public string? PayPalVaultId { get; set; }
     }
 }
