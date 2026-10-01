@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.Mandate.Response {
@@ -28,6 +29,12 @@ namespace Mollie.Api.Models.Mandate.Response {
         /// Payment method of the mandate - See the Mollie.Api.Models.Payment.PaymentMethod class for a full list of known values.
         /// </summary>
         public required string Method { get; set; }
+
+        /// <summary>
+        /// The eligible use cases for the mandate - See the Mollie.Api.Models.Mandate.Response.MandateScope class for a full
+        /// list of known values.
+        /// </summary>
+        public IEnumerable<string>? Scopes { get; set; }
 
         /// <summary>
         /// The mandate’s custom reference, if this was provided when creating the mandate.
