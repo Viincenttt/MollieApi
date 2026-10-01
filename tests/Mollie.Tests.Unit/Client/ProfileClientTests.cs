@@ -371,6 +371,61 @@ public class ProfileClientTests : BaseClientTests
         exception.Message.ShouldBe($"Required URL argument 'issuer' is null or empty");
     }
 
+    [Fact]
+    public async Task EnableVoucherIssuerAsync_WithContractId_ResponseIsDeserializedInExpectedFormat()
+    {
+        // Arrange
+        const string profileId = "pfl_v9hTwCvYqw";
+        const string issuer = "appetiz";
+        var request = new EnableVoucherIssuerRequest {
+            ContractId = "abc123"
+        };
+        var mockHttp = new MockHttpMessageHandler();
+        mockHttp.Expect(HttpMethod.Post, $"{BaseMollieClient.DefaultBaseApiEndPoint}profiles/{profileId}/methods/voucher/issuers/{issuer}")
+            .WithPartialContent("\"contractId\":\"abc123\"")
+            .Respond("application/json", defaultEnableVoucherIssuerResponse);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        using var profileClient = new ProfileClient("abcde", httpClient);
+
+        // Act
+        var result = await profileClient.EnableVoucherIssuerAsync(profileId, issuer, request);
+
+        // Assert
+        mockHttp.VerifyNoOutstandingExpectation();
+        result.Success.ShouldBeTrue();
+        result.Data.Resource.ShouldBe("issuer");
+        result.Data.Id.ShouldBe(issuer);
+        result.Data.Name.ShouldBe("Appetiz");
+        result.Data.Image.Size1x.ShouldBe("https://www.mollie.com/external/icons/voucher-issuers/appetiz.png");
+        result.Data.Image.Size2x.ShouldBe("https://www.mollie.com/external/icons/voucher-issuers/appetiz%402x.png");
+        result.Data.Image.Svg.ShouldBe("https://www.mollie.com/external/icons/voucher-issuers/appetiz.svg");
+        result.Data.Status.ShouldBe("pending-issuer");
+        result.Data.Contractor.ShouldNotBeNull();
+        result.Data.Contractor.Id.ShouldBe("Conecs");
+        result.Data.Contractor.Name.ShouldBe("Conecs");
+        result.Data.Contractor.ContractId.ShouldBe("abc123");
+        result.Data.Links.Self.Href.ShouldBe("https://api.mollie.com/v2/issuers/appetiz");
+    }
+
+    [Fact]
+    public async Task DisableVoucherIssuerAsync_ForCurrentProfile_SendsRequest()
+    {
+        // Arrange
+        const string issuer = "appetiz";
+        var mockHttp = new MockHttpMessageHandler();
+        mockHttp.Expect(HttpMethod.Delete, $"{BaseMollieClient.DefaultBaseApiEndPoint}profiles/me/methods/voucher/issuers/{issuer}")
+            .Respond(HttpStatusCode.NoContent);
+        HttpClient httpClient = mockHttp.ToHttpClient();
+        using var profileClient = new ProfileClient("abcde", httpClient);
+
+        // Act
+        var result = await profileClient.DisableVoucherIssuerAsync(issuer);
+
+        // Assert
+        result.Success.ShouldBeTrue();
+        mockHttp.VerifyNoOutstandingExpectation();
+    }
+
     private void AssertDefaultProfileResponse(ProfileResponse result)
     {
         result.Resource.ShouldBe("profile");
@@ -396,6 +451,33 @@ public class ProfileClientTests : BaseClientTests
          },
          ""documentation"": {
              ""href"": ""https://docs.mollie.com/reference/v2/profiles-api/enable-giftcard-issuer"",
+             ""type"": ""text/html""
+         }
+     }
+ }";
+
+    private const string defaultEnableVoucherIssuerResponse = @"{
+     ""resource"": ""issuer"",
+     ""id"": ""appetiz"",
+     ""name"": ""Appetiz"",
+     ""image"": {
+         ""size1x"": ""https://www.mollie.com/external/icons/voucher-issuers/appetiz.png"",
+         ""size2x"": ""https://www.mollie.com/external/icons/voucher-issuers/appetiz%402x.png"",
+         ""svg"": ""https://www.mollie.com/external/icons/voucher-issuers/appetiz.svg""
+     },
+     ""status"": ""pending-issuer"",
+     ""contractor"": {
+         ""id"": ""Conecs"",
+         ""name"": ""Conecs"",
+         ""contractId"": ""abc123""
+     },
+     ""_links"": {
+         ""self"": {
+             ""href"": ""https://api.mollie.com/v2/issuers/appetiz"",
+             ""type"": ""application/hal+json""
+         },
+         ""documentation"": {
+             ""href"": ""https://docs.mollie.com/reference/enable-method-issuer"",
              ""type"": ""text/html""
          }
      }
