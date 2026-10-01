@@ -79,6 +79,11 @@ namespace Mollie.Api.Models.Session.Request {
         public string? Metadata { get; set; }
 
         /// <summary>
+        /// The customer details that are required to complete the session. Note: this field is in private beta.
+        /// </summary>
+        public List<string>? RequiredCustomerDetails { get; set; }
+
+        /// <summary>
         ///	Oauth only - Optional – Set this to true to make this session a test session.
         /// </summary>
         public bool? Testmode { get; set; }
