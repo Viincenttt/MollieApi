@@ -100,24 +100,25 @@ namespace Mollie.Api.Models.Session.Response {
         public string? Metadata { get; set; }
 
         /// <summary>
-        /// The customer details that are required to complete the session. Note: this field is in private beta.
+        /// The customer details that should be collected during checkout. Note: this field is in private beta.
+        /// See the Mollie.Api.Models.Session.SessionRequiredCustomerDetail class for a full list of known values.
         /// </summary>
         public List<string>? RequiredCustomerDetails { get; set; }
 
         /// <summary>
         /// The session's date and time of creation, in ISO 8601 format.
         /// </summary>
-        public required DateTime CreatedAt { get; set; }
+        public required DateTimeOffset CreatedAt { get; set; }
 
         /// <summary>
         /// The date and time the session expired, in ISO 8601 format. Only set if the session has expired.
         /// </summary>
-        public DateTime? ExpiredAt { get; set; }
+        public DateTimeOffset? ExpiredAt { get; set; }
 
         /// <summary>
         /// The date and time the session was completed, in ISO 8601 format. Only set if the session has been completed.
         /// </summary>
-        public DateTime? CompletedAt { get; set; }
+        public DateTimeOffset? CompletedAt { get; set; }
 
         /// <summary>
         /// An object with several URL objects relevant to the session. Every URL object will contain an href and a type field.

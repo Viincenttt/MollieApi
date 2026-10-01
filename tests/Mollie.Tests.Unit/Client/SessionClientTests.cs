@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client;
 using Mollie.Api.Models;
+using Mollie.Api.Models.Session;
 using Mollie.Api.Models.Session.Request;
 using RichardSzalay.MockHttp;
 using Shouldly;
@@ -28,8 +29,8 @@ namespace Mollie.Tests.Unit.Client {
     ""profileId"": ""pfl_QkEhN94Ba"",
     ""customerId"": null,
     ""sequenceType"": ""oneoff"",
-    ""requiredCustomerDetails"": [""billingAddress"", ""shippingAddress""],
-    ""createdAt"": ""2026-10-01T09:00:00+00:00"",
+    ""requiredCustomerDetails"": [""billing-address"", ""shipping-address""],
+    ""createdAt"": ""2026-10-01T10:13:00+09:00"",
     ""expiredAt"": ""2026-10-01T10:00:00+00:00"",
     ""completedAt"": ""2026-10-01T09:30:00+00:00"",
     ""_links"": {
@@ -57,10 +58,11 @@ namespace Mollie.Tests.Unit.Client {
             result.Success.ShouldBeTrue();
             result.Data.Id.ShouldBe(DefaultSessionId);
             result.Data.CustomerId.ShouldBeNull();
-            result.Data.RequiredCustomerDetails.ShouldBe(["billingAddress", "shippingAddress"]);
-            result.Data.CreatedAt.ToUniversalTime().ShouldBe(new DateTime(2026, 10, 1, 9, 0, 0, DateTimeKind.Utc));
-            result.Data.ExpiredAt?.ToUniversalTime().ShouldBe(new DateTime(2026, 10, 1, 10, 0, 0, DateTimeKind.Utc));
-            result.Data.CompletedAt?.ToUniversalTime().ShouldBe(new DateTime(2026, 10, 1, 9, 30, 0, DateTimeKind.Utc));
+            result.Data.RequiredCustomerDetails.ShouldBe([SessionRequiredCustomerDetail.BillingAddress, SessionRequiredCustomerDetail.ShippingAddress]);
+            result.Data.CreatedAt.ShouldBe(new DateTimeOffset(2026, 10, 1, 10, 13, 0, TimeSpan.FromHours(9)));
+            result.Data.CreatedAt.Offset.ShouldBe(TimeSpan.FromHours(9));
+            result.Data.ExpiredAt.ShouldBe(new DateTimeOffset(2026, 10, 1, 10, 0, 0, TimeSpan.Zero));
+            result.Data.CompletedAt.ShouldBe(new DateTimeOffset(2026, 10, 1, 9, 30, 0, TimeSpan.Zero));
         }
 
         [Fact]
@@ -70,9 +72,9 @@ namespace Mollie.Tests.Unit.Client {
                 Amount = new Amount(Currency.EUR, 10m),
                 Description = "Description",
                 RedirectUrl = DefaultRedirectUrl,
-                RequiredCustomerDetails = ["billingAddress", "shippingAddress"]
+                RequiredCustomerDetails = [SessionRequiredCustomerDetail.BillingAddress, SessionRequiredCustomerDetail.ShippingAddress]
             };
-            const string expectedPartialContent = @"""requiredCustomerDetails"":[""billingAddress"",""shippingAddress""]";
+            const string expectedPartialContent = @"""requiredCustomerDetails"":[""billing-address"",""shipping-address""]";
             var mockHttp = CreateMockHttpMessageHandler(
                 HttpMethod.Post,
                 $"{BaseMollieClient.DefaultBaseApiEndPoint}sessions",
