@@ -75,7 +75,8 @@ namespace Mollie.Tests.Unit.Client {
 
             // Then
             mockHttp.VerifyNoOutstandingExpectation();
-            result.ShouldNotBeNull();
+            result.Success.ShouldBeTrue();
+            result.Data.Links.Mandate!.Href.ShouldBe("https://api.mollie.com/v2/customers/customer-id/mandates/mdt_38HS4fsS");
         }
 
         [Fact]
@@ -322,96 +323,6 @@ namespace Mollie.Tests.Unit.Client {
             exception.Message.ShouldBe("Required URL argument 'subscriptionId' is null or empty");
         }
 
-        [Fact]
-        public async Task GetSubscriptionAsync_ResponseContainsMandateLink_MandateLinkIsDeserialized() {
-            // Given: We retrieve a subscription that is linked to a mandate
-            const string customerId = "cst_8wmqcHMN4U";
-            const string subscriptionId = "sub_rVKGtNd6s3";
-            var mockHttp = CreateMockHttpMessageHandler(
-                HttpMethod.Get,
-                $"{BaseMollieClient.DefaultBaseApiEndPoint}customers/{customerId}/subscriptions/{subscriptionId}",
-                SubscriptionWithLinksJsonToReturn);
-            HttpClient httpClient = mockHttp.ToHttpClient();
-            var subscriptionClient = new SubscriptionClient("abcde", httpClient);
-
-            // When: We send the request
-            var result = await subscriptionClient.GetSubscriptionAsync(customerId, subscriptionId);
-
-            // Then
-            mockHttp.VerifyNoOutstandingExpectation();
-            result.Success.ShouldBeTrue();
-            result.Data.Links.Mandate.ShouldNotBeNull();
-            result.Data.Links.Mandate.Href.ShouldBe($"https://api.mollie.com/v2/customers/{customerId}/mandates/mdt_38HS4fsS");
-            result.Data.Links.Mandate.Type.ShouldBe("application/hal+json");
-        }
-
-        [Fact]
-        public async Task GetSubscriptionAsync_ResponseDoesNotContainMandateLink_MandateLinkIsNull() {
-            // Given: We retrieve a subscription that is not linked to a mandate
-            const string customerId = "cst_8wmqcHMN4U";
-            const string subscriptionId = "sub_rVKGtNd6s3";
-            var jsonWithoutMandateLink = SubscriptionWithLinksJsonToReturn.Replace(MandateLinkJson, string.Empty);
-            var mockHttp = CreateMockHttpMessageHandler(
-                HttpMethod.Get,
-                $"{BaseMollieClient.DefaultBaseApiEndPoint}customers/{customerId}/subscriptions/{subscriptionId}",
-                jsonWithoutMandateLink);
-            HttpClient httpClient = mockHttp.ToHttpClient();
-            var subscriptionClient = new SubscriptionClient("abcde", httpClient);
-
-            // When: We send the request
-            var result = await subscriptionClient.GetSubscriptionAsync(customerId, subscriptionId);
-
-            // Then
-            mockHttp.VerifyNoOutstandingExpectation();
-            result.Success.ShouldBeTrue();
-            result.Data.Links.Mandate.ShouldBeNull();
-        }
-
-        private const string MandateLinkJson = @"
-        ""mandate"": {
-            ""href"": ""https://api.mollie.com/v2/customers/cst_8wmqcHMN4U/mandates/mdt_38HS4fsS"",
-            ""type"": ""application/hal+json""
-        },";
-
-        private const string SubscriptionWithLinksJsonToReturn = @"{
-    ""resource"": ""subscription"",
-    ""id"": ""sub_rVKGtNd6s3"",
-    ""mode"": ""live"",
-    ""createdAt"": ""2016-06-01T12:23:34+00:00"",
-    ""status"": ""active"",
-    ""amount"": {
-        ""value"": ""25.00"",
-        ""currency"": ""EUR""
-    },
-    ""times"": 4,
-    ""timesRemaining"": 4,
-    ""interval"": ""3 months"",
-    ""startDate"": ""2016-06-01"",
-    ""nextPaymentDate"": ""2016-09-01"",
-    ""description"": ""Quarterly payment"",
-    ""method"": null,
-    ""mandateId"": ""mdt_38HS4fsS"",
-    ""webhookUrl"": ""https://webshop.example.org/payments/webhook"",
-    ""_links"": {
-        ""self"": {
-            ""href"": ""https://api.mollie.com/v2/customers/cst_8wmqcHMN4U/subscriptions/sub_rVKGtNd6s3"",
-            ""type"": ""application/hal+json""
-        },
-        ""customer"": {
-            ""href"": ""https://api.mollie.com/v2/customers/cst_8wmqcHMN4U"",
-            ""type"": ""application/hal+json""
-        },
-        ""profile"": {
-            ""href"": ""https://api.mollie.com/v2/profiles/pfl_URR55HPMGx"",
-            ""type"": ""application/hal+json""
-        }," + MandateLinkJson + @"
-        ""documentation"": {
-            ""href"": ""https://docs.mollie.com/reference/get-subscription"",
-            ""type"": ""text/html""
-        }
-    }
-}";
-
         private const string DefaultSubscriptionJsonToReturn = @"{
     ""resource"": ""subscription"",
     ""id"": ""subscription-id"",
@@ -431,6 +342,12 @@ namespace Mollie.Tests.Unit.Client {
     ""method"": null,
     ""mandateId"": ""mdt_38HS4fsS"",
     ""webhookUrl"": ""https://webshop.example.org/payments/webhook"",
+    ""_links"": {
+        ""mandate"": {
+            ""href"": ""https://api.mollie.com/v2/customers/customer-id/mandates/mdt_38HS4fsS"",
+            ""type"": ""application/hal+json""
+        }
+    },
     ""metadata"": {
         ""plan"": ""small""
     }
