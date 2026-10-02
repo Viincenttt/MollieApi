@@ -72,6 +72,7 @@ internal class WebhookEventEntityJsonConverter : JsonConverter<object> {
 
             switch (resource) {
                 case "balance": return typeof(BalanceResponse);
+                case "balance-transaction":
                 case "balance_transaction": return typeof(BalanceTransactionResponse);
                 case "capture": return typeof(CaptureResponse);
                 case "chargeback": return typeof(ChargebackResponse);

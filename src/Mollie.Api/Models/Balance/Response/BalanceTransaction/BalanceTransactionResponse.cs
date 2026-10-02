@@ -3,7 +3,7 @@
 namespace Mollie.Api.Models.Balance.Response.BalanceTransaction {
     public class BalanceTransactionResponse : IEntity {
         /// <summary>
-        /// Indicates the response contains a balance transaction object. Will always contain balance_transaction
+        /// Indicates the response contains a balance transaction object. Will always contain balance-transaction
         /// for this endpoint.
         /// </summary>
         public required string Resource { get; set; }

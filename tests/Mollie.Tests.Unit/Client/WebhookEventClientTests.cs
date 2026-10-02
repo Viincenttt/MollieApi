@@ -277,7 +277,7 @@ public class WebhookEventClientTests : BaseClientTests {
 
     private string CreatePaymentBalanceTransactionJsonResponse(string balanceTransactionId) {
         return $@"{{
-      ""resource"": ""balance_transaction"",
+      ""resource"": ""balance-transaction"",
       ""id"": ""{balanceTransactionId}"",
       ""type"": ""payment"",
       ""resultAmount"": {{
