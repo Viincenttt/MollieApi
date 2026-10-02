@@ -56,15 +56,17 @@ namespace Mollie.Api.Client {
             _apiEndpoint = options.ApiBaseUrl;
         }
 
-        protected BaseMollieClient(HttpClient? httpClient = null, string apiEndpoint = DefaultBaseApiEndPoint) {
+        protected BaseMollieClient(HttpClient? httpClient = null, string apiEndpoint = DefaultBaseApiEndPoint)
+            : this(new MollieClientOptions { ApiKey = string.Empty }, httpClient, apiEndpoint) {
+        }
+
+        protected BaseMollieClient(MollieClientOptions options, HttpClient? httpClient, string apiEndpoint) {
             _apiEndpoint = apiEndpoint;
             _jsonConverterService = new JsonConverterService();
             _createdHttpClient = httpClient == null;
             _httpClient = httpClient ?? new HttpClient();
             _mollieSecretManager = new DefaultMollieSecretManager(string.Empty);
-            _options = new() {
-                ApiKey = string.Empty
-            };
+            _options = options;
         }
 
         public IDisposable WithIdempotencyKey(string value) {

@@ -63,6 +63,8 @@ public class ConnectClientTests : BaseClientTests
         // Arrange
         var mockHttp = new MockHttpMessageHandler();
         mockHttp.Expect(HttpMethod.Post, "https://api.mollie.com/oauth2/tokens")
+            .With(request => request.Headers.Contains("Idempotency-Key")
+                && request.Headers.UserAgent.ToString().StartsWith("Mollie.Api.NET"))
             .Respond("application/json", defaultGetTokenResponse);
         HttpClient httpClient = mockHttp.ToHttpClient();
         ConnectClient connectClient = new ConnectClient(ClientId, ClientSecret, httpClient);
