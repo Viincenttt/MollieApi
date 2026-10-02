@@ -15,8 +15,6 @@ namespace Mollie.Api.Models.Connect.Request {
         public const string CustomersRead = "customers.read";
         public const string CustomersWrite = "customers.write";
         public const string EventsRead = "events.read";
-        public const string ExternalAccountsRead = "external-accounts.read";
-        public const string ExternalAccountsWrite = "external-accounts.write";
         public const string InvoicesRead = "invoices.read";
         public const string MandatesRead = "mandates.read";
         public const string MandatesWrite = "mandates.write";
@@ -32,8 +30,6 @@ namespace Mollie.Api.Models.Connect.Request {
         public const string PaymentsWrite = "payments.write";
         public const string PayoutsRead = "payouts.read";
         public const string PayoutsWrite = "payouts.write";
-        public const string PersonsRead = "persons.read";
-        public const string PersonsWrite = "persons.write";
         public const string ProfilesRead = "profiles.read";
         public const string ProfilesWrite = "profiles.write";
         public const string RefundsRead = "refunds.read";
