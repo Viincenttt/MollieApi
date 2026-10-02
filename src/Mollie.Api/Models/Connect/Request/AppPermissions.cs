@@ -1,10 +1,20 @@
 namespace Mollie.Api.Models.Connect.Request {
     public static class AppPermissions {
         public const string BalancesRead = "balances.read";
+        public const string BalanceReportsRead = "balance-reports.read";
         public const string BalancesTransfersRead = "balance-transfers.read";
         public const string BalancesTransfersWrite = "balance-transfers.write";
+        public const string BusinessAccountDraftTransfersRead = "business-account-draft-transfers.read";
+        public const string BusinessAccountDraftTransfersWrite = "business-account-draft-transfers.write";
+        public const string BusinessAccountPayeeVerificationsWrite = "business-account-payee-verifications.write";
+        public const string BusinessAccountTransfersRead = "business-account-transfers.read";
+        public const string BusinessAccountTransfersWrite = "business-account-transfers.write";
+        public const string BusinessAccountsRead = "business-accounts.read";
+        public const string ClientsRead = "clients.read";
+        public const string ClientsWrite = "clients.write";
         public const string CustomersRead = "customers.read";
         public const string CustomersWrite = "customers.write";
+        public const string EventsRead = "events.read";
         public const string ExternalAccountsRead = "external-accounts.read";
         public const string ExternalAccountsWrite = "external-accounts.write";
         public const string InvoicesRead = "invoices.read";
@@ -28,6 +38,10 @@ namespace Mollie.Api.Models.Connect.Request {
         public const string ProfilesWrite = "profiles.write";
         public const string RefundsRead = "refunds.read";
         public const string RefundsWrite = "refunds.write";
+        public const string SalesInvoicesRead = "sales-invoices.read";
+        public const string SalesInvoicesWrite = "sales-invoices.write";
+        public const string SessionsRead = "sessions.read";
+        public const string SessionsWrite = "sessions.write";
         public const string SettlementsRead = "settlements.read";
         public const string ShipmentsRead = "shipments.read";
         public const string ShipmentsWrite = "shipments.write";
@@ -35,6 +49,8 @@ namespace Mollie.Api.Models.Connect.Request {
         public const string SubscriptionsWrite = "subscriptions.write";
         public const string TerminalsRead = "terminals.read";
         public const string TerminalsWrite = "terminals.write";
+        public const string UnmatchedCreditTransfersRead = "unmatched-credit-transfers.read";
+        public const string UnmatchedCreditTransfersWrite = "unmatched-credit-transfers.write";
         public const string WebhooksRead = "webhooks.read";
         public const string WebhooksWrite = "webhooks.write";
     }
