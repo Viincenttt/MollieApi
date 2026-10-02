@@ -27,6 +27,66 @@ public static class WebhookEventTypes {
     public const string SalesInvoicePaid = "sales-invoice.paid";
 
     /// <summary>
+    /// A payment has been authorized.
+    /// </summary>
+    public const string PaymentAuthorized = "payment.authorized";
+
+    /// <summary>
+    /// A payment has been canceled.
+    /// </summary>
+    public const string PaymentCanceled = "payment.canceled";
+
+    /// <summary>
+    /// A payment has expired.
+    /// </summary>
+    public const string PaymentExpired = "payment.expired";
+
+    /// <summary>
+    /// A payment has failed.
+    /// </summary>
+    public const string PaymentFailed = "payment.failed";
+
+    /// <summary>
+    /// A payment has been paid.
+    /// </summary>
+    public const string PaymentPaid = "payment.paid";
+
+    /// <summary>
+    /// A payment is pending.
+    /// </summary>
+    public const string PaymentPending = "payment.pending";
+
+    /// <summary>
+    /// A payout has been canceled.
+    /// </summary>
+    public const string PayoutCanceled = "payout.canceled";
+
+    /// <summary>
+    /// A payout has been completed.
+    /// </summary>
+    public const string PayoutCompleted = "payout.completed";
+
+    /// <summary>
+    /// A payout has failed.
+    /// </summary>
+    public const string PayoutFailed = "payout.failed";
+
+    /// <summary>
+    /// A payout has been initiated.
+    /// </summary>
+    public const string PayoutInitiated = "payout.initiated";
+
+    /// <summary>
+    /// A payout is being processed at the bank.
+    /// </summary>
+    public const string PayoutProcessingAtBank = "payout.processing-at-bank";
+
+    /// <summary>
+    /// A balance transaction has been created.
+    /// </summary>
+    public const string BalanceTransactionCreated = "balance-transaction.created";
+
+    /// <summary>
     /// All event types
     /// </summary>
     public const string All = "*";
