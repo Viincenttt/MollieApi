@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Mollie.Api.Models;
 using Mollie.Api.Models.Balance.Response;
+using Mollie.Api.Models.Balance.Response.BalanceTransaction;
 using Mollie.Api.Models.Capture.Response;
 using Mollie.Api.Models.Chargeback.Response;
 using Mollie.Api.Models.Customer.Response;
@@ -12,6 +13,7 @@ using Mollie.Api.Models.Mandate.Response;
 using Mollie.Api.Models.Order.Response;
 using Mollie.Api.Models.Payment.Response;
 using Mollie.Api.Models.PaymentLink.Response;
+using Mollie.Api.Models.Payout.Response;
 using Mollie.Api.Models.Refund.Response;
 using Mollie.Api.Models.SalesInvoice.Response;
 using Mollie.Api.Models.Settlement.Response;
@@ -70,6 +72,7 @@ internal class WebhookEventEntityJsonConverter : JsonConverter<object> {
 
             switch (resource) {
                 case "balance": return typeof(BalanceResponse);
+                case "balance_transaction": return typeof(BalanceTransactionResponse);
                 case "capture": return typeof(CaptureResponse);
                 case "chargeback": return typeof(ChargebackResponse);
                 case "customer": return typeof(CustomerResponse);
@@ -84,6 +87,7 @@ internal class WebhookEventEntityJsonConverter : JsonConverter<object> {
                 case "terminal": return typeof(TerminalResponse);
                 case "payment": return typeof(PaymentResponse);
                 case "payment-link": return typeof(PaymentLinkResponse);
+                case "payout": return typeof(PayoutResponse);
                 case "sales-invoice": return typeof(SalesInvoiceResponse);
                 default:
                     throw new JsonException(

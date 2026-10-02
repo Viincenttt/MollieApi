@@ -3,7 +3,10 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Mollie.Api.Client;
 using Mollie.Api.Models;
+using Mollie.Api.Models.Balance.Response.BalanceTransaction.Specific;
 using Mollie.Api.Models.PaymentLink.Response;
+using Mollie.Api.Models.Payout.Response;
+using Mollie.Api.Models.Webhook;
 using RichardSzalay.MockHttp;
 using Shouldly;
 using Xunit;
@@ -128,6 +131,56 @@ public class WebhookEventClientTests : BaseClientTests {
         response.Links.Self.Href.ShouldBe($"https://api.mollie.com/v2/events/{webhookEventId}");
     }
 
+    [Fact]
+    public async Task GetWebhookEventAsync_WithPayoutEntity_EntityIsDeserializedAsPayout() {
+        // Given
+        const string webhookEventId = "webhook-event-id";
+        const string payoutId = "payout_j8NvRAM2WNZtsykpLEX8J";
+        string entityJson = CreatePayoutJsonResponse(payoutId);
+        string jsonToReturnInMockResponse = CreateWebhookEventJsonResponse(webhookEventId, WebhookEventTypes.PayoutCompleted, payoutId, entityJson);
+        var mockHttp = CreateMockHttpMessageHandler(
+            HttpMethod.Get,
+            $"{BaseMollieClient.DefaultBaseApiEndPoint}events/{webhookEventId}",
+            jsonToReturnInMockResponse);
+        var webhookClient = new WebhookEventClient("abcde", mockHttp.ToHttpClient());
+
+        // When
+        var result = await webhookClient.GetWebhookEventAsync(webhookEventId);
+
+        // Then
+        mockHttp.VerifyNoOutstandingExpectation();
+        result.Success.ShouldBeTrue();
+        result.Data.Type.ShouldBe(WebhookEventTypes.PayoutCompleted);
+        var payout = result.Data.Entity.ShouldBeOfType<PayoutResponse>();
+        payout.Id.ShouldBe(payoutId);
+        payout.Status.ShouldBe(PayoutStatus.Completed);
+    }
+
+    [Fact]
+    public async Task GetWebhookEventAsync_WithBalanceTransactionEntity_EntityIsDeserializedAsBalanceTransaction() {
+        // Given
+        const string webhookEventId = "webhook-event-id";
+        const string balanceTransactionId = "baltr_QM24QwzUWR4ev4Xfgyt29d";
+        string entityJson = CreatePaymentBalanceTransactionJsonResponse(balanceTransactionId);
+        string jsonToReturnInMockResponse = CreateWebhookEventJsonResponse(webhookEventId, WebhookEventTypes.BalanceTransactionCreated, balanceTransactionId, entityJson);
+        var mockHttp = CreateMockHttpMessageHandler(
+            HttpMethod.Get,
+            $"{BaseMollieClient.DefaultBaseApiEndPoint}events/{webhookEventId}",
+            jsonToReturnInMockResponse);
+        var webhookClient = new WebhookEventClient("abcde", mockHttp.ToHttpClient());
+
+        // When
+        var result = await webhookClient.GetWebhookEventAsync(webhookEventId);
+
+        // Then
+        mockHttp.VerifyNoOutstandingExpectation();
+        result.Success.ShouldBeTrue();
+        result.Data.Type.ShouldBe(WebhookEventTypes.BalanceTransactionCreated);
+        var balanceTransaction = result.Data.Entity.ShouldBeOfType<PaymentBalanceTransactionResponse>();
+        balanceTransaction.Id.ShouldBe(balanceTransactionId);
+        balanceTransaction.Context.PaymentId.ShouldBe("tr_7UhSN1zuXS");
+    }
+
     private string CreateWebhookEventJsonResponse(string webhookEventId, string type, string entityId, string entityJson) {
         return $@"{{
   ""resource"": ""event"",
@@ -189,6 +242,59 @@ public class WebhookEventClientTests : BaseClientTests {
           ""href"": ""https://docs.mollie.com/reference/v2/payment-links-api/get-payment-link"",
           ""type"": ""text/html""
         }}
+      }}
+    }}";
+    }
+
+    private string CreatePayoutJsonResponse(string payoutId) {
+        return $@"{{
+      ""resource"": ""payout"",
+      ""id"": ""{payoutId}"",
+      ""balanceId"": ""bal_gVMhHKqSSRYJyPsuoPNFH"",
+      ""amount"": {{
+        ""currency"": ""EUR"",
+        ""value"": ""100.00""
+      }},
+      ""status"": ""completed"",
+      ""statusReason"": {{
+        ""code"": ""completed"",
+        ""message"": ""The payout has been completed.""
+      }},
+      ""createdAt"": ""2024-03-20T09:13:37.0Z"",
+      ""mode"": ""live"",
+      ""_links"": {{
+        ""self"": {{
+          ""href"": ""https://api.mollie.com/v2/payouts/{payoutId}"",
+          ""type"": ""application/hal+json""
+        }},
+        ""documentation"": {{
+          ""href"": ""https://docs.mollie.com/reference/get-payout"",
+          ""type"": ""text/html""
+        }}
+      }}
+    }}";
+    }
+
+    private string CreatePaymentBalanceTransactionJsonResponse(string balanceTransactionId) {
+        return $@"{{
+      ""resource"": ""balance_transaction"",
+      ""id"": ""{balanceTransactionId}"",
+      ""type"": ""payment"",
+      ""resultAmount"": {{
+        ""currency"": ""EUR"",
+        ""value"": ""9.71""
+      }},
+      ""initialAmount"": {{
+        ""currency"": ""EUR"",
+        ""value"": ""10.00""
+      }},
+      ""deductions"": {{
+        ""currency"": ""EUR"",
+        ""value"": ""-0.29""
+      }},
+      ""createdAt"": ""2024-03-20T09:13:37.0Z"",
+      ""context"": {{
+        ""paymentId"": ""tr_7UhSN1zuXS""
       }}
     }}";
     }

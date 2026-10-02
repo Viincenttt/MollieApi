@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Mollie.Api.Models.Payout.Response;
 
-public record PayoutResponse {
+public record PayoutResponse : IEntity {
     /// <summary>
     /// Indicates the response contains a payout object. Will always contain the string payout for this endpoint.
     /// </summary>
