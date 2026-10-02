@@ -19,7 +19,6 @@ namespace Mollie.Api.Client {
         public const string DefaultTokenEndpoint = "https://api.mollie.com/oauth2/";
 
         private readonly string _authorizeEndPoint;
-        private readonly string _tokenEndPoint;
 
         private readonly string _clientId;
         private readonly string _clientSecret;
@@ -37,12 +36,11 @@ namespace Mollie.Api.Client {
             _clientSecret = clientSecret!;
             _clientId = clientId!;
             _authorizeEndPoint = DefaultAuthorizeEndpoint;
-            _tokenEndPoint = DefaultTokenEndpoint;
         }
 
         [ActivatorUtilitiesConstructor]
         public ConnectClient(MollieClientOptions options, HttpClient? httpClient = null)
-            : base(httpClient, options.ConnectTokenEndPoint) {
+            : base(options, httpClient, options.ConnectTokenEndPoint) {
             if (string.IsNullOrWhiteSpace(options.ClientId)) {
                 throw new ArgumentNullException(nameof(options.ClientId));
             }
@@ -54,7 +52,6 @@ namespace Mollie.Api.Client {
             _clientSecret = options.ClientSecret!;
             _clientId = options.ClientId!;
             _authorizeEndPoint = options.ConnectOAuthAuthorizeEndPoint;
-            _tokenEndPoint = options.ConnectTokenEndPoint;
         }
 
         public string GetAuthorizationUrl(
@@ -95,10 +92,9 @@ namespace Mollie.Api.Client {
 
         protected override HttpRequestMessage CreateHttpRequest(
             HttpMethod method, string relativeUri, HttpContent? content = null) {
-            var httpRequest = new HttpRequestMessage(method, new Uri(new Uri(_tokenEndPoint), relativeUri));
-            httpRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            // Reuse the default request (User-Agent and Idempotency-Key headers), but authenticate with the client credentials
+            var httpRequest = base.CreateHttpRequest(method, relativeUri, content);
             httpRequest.Headers.Authorization = new AuthenticationHeaderValue("Basic", Base64Encode($"{_clientId}:{_clientSecret}"));
-            httpRequest.Content = content;
 
             return httpRequest;
         }

@@ -20,6 +20,8 @@ namespace Mollie.Api.Models.Connect.Request {
         public const string PaymentLinksWrite = "payment-links.write";
         public const string PaymentsRead = "payments.read";
         public const string PaymentsWrite = "payments.write";
+        public const string PayoutsRead = "payouts.read";
+        public const string PayoutsWrite = "payouts.write";
         public const string PersonsRead = "persons.read";
         public const string PersonsWrite = "persons.write";
         public const string ProfilesRead = "profiles.read";
@@ -33,5 +35,7 @@ namespace Mollie.Api.Models.Connect.Request {
         public const string SubscriptionsWrite = "subscriptions.write";
         public const string TerminalsRead = "terminals.read";
         public const string TerminalsWrite = "terminals.write";
+        public const string WebhooksRead = "webhooks.read";
+        public const string WebhooksWrite = "webhooks.write";
     }
 }

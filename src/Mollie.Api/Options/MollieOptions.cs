@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Text;
 using Mollie.Api.Client;
 using Mollie.Api.Framework.Authentication.Abstract;
 using Polly;
@@ -74,5 +75,26 @@ namespace Mollie.Api.Options {
             CustomMollieSecretManager = typeof(T);
             return this;
         }
+
+        /// <summary>
+        /// Prints the options without the values of <see cref="ApiKey"/> and <see cref="ClientSecret"/>, so the
+        /// secrets don't end up in logs when the options are logged
+        /// </summary>
+        protected virtual bool PrintMembers(StringBuilder builder) {
+            builder.Append($"{nameof(ApiKey)} = {MaskSecret(ApiKey)}, ");
+            builder.Append($"{nameof(ClientId)} = {ClientId}, ");
+            builder.Append($"{nameof(ClientSecret)} = {MaskSecret(ClientSecret)}, ");
+            builder.Append($"{nameof(ApiBaseUrl)} = {ApiBaseUrl}, ");
+            builder.Append($"{nameof(ConnectOAuthAuthorizeEndPoint)} = {ConnectOAuthAuthorizeEndPoint}, ");
+            builder.Append($"{nameof(ConnectTokenEndPoint)} = {ConnectTokenEndPoint}, ");
+            builder.Append($"{nameof(RetryPolicy)} = {RetryPolicy}, ");
+            builder.Append($"{nameof(CustomUserAgent)} = {CustomUserAgent}, ");
+            builder.Append($"{nameof(Testmode)} = {Testmode}, ");
+            builder.Append($"{nameof(ProfileId)} = {ProfileId}, ");
+            builder.Append($"{nameof(CustomMollieSecretManager)} = {CustomMollieSecretManager}");
+            return true;
+        }
+
+        private static string MaskSecret(string? secret) => string.IsNullOrEmpty(secret) ? string.Empty : "***";
     }
 }
