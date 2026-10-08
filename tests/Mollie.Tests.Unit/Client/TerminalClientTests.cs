@@ -331,16 +331,15 @@ public class TerminalClientTests : BaseClientTests {
     public async Task GetUnreferencedRefundListAsync_QueryParameterOptions_CorrectParametersAreAdded(
         string? from, int? limit, string expectedQueryString) {
         // Given
-        const string terminalId = "term_7MgL4wea46qkRcoTZjWEH";
         var mockHttp = CreateMockHttpMessageHandler(
             HttpMethod.Get,
-            $"{BaseMollieClient.DefaultBaseApiEndPoint}terminals/{terminalId}/unreferenced-refunds{expectedQueryString}",
-            CreateUnreferencedRefundListJsonResponse(terminalId));
+            $"{BaseMollieClient.DefaultBaseApiEndPoint}terminals/unreferenced-refunds{expectedQueryString}",
+            CreateUnreferencedRefundListJsonResponse());
         HttpClient httpClient = mockHttp.ToHttpClient();
         var terminalClient = new TerminalClient("test_api_key", httpClient);
 
         // When
-        await terminalClient.GetUnreferencedRefundListAsync(terminalId, from, limit);
+        await terminalClient.GetUnreferencedRefundListAsync(from, limit);
 
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
@@ -349,16 +348,15 @@ public class TerminalClientTests : BaseClientTests {
     [Fact]
     public async Task GetUnreferencedRefundListAsync_WithProfileIdAndOauthToken_ProfileIdIsAddedToQueryString() {
         // Given
-        const string terminalId = "term_7MgL4wea46qkRcoTZjWEH";
         var mockHttp = CreateMockHttpMessageHandler(
             HttpMethod.Get,
-            $"{BaseMollieClient.DefaultBaseApiEndPoint}terminals/{terminalId}/unreferenced-refunds?profileId=pfl_QkEhN94Ba",
-            CreateUnreferencedRefundListJsonResponse(terminalId));
+            $"{BaseMollieClient.DefaultBaseApiEndPoint}terminals/unreferenced-refunds?profileId=pfl_QkEhN94Ba",
+            CreateUnreferencedRefundListJsonResponse());
         HttpClient httpClient = mockHttp.ToHttpClient();
         var terminalClient = new TerminalClient("access_token", httpClient);
 
         // When
-        await terminalClient.GetUnreferencedRefundListAsync(terminalId, profileId: "pfl_QkEhN94Ba");
+        await terminalClient.GetUnreferencedRefundListAsync(profileId: "pfl_QkEhN94Ba");
 
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
@@ -371,7 +369,7 @@ public class TerminalClientTests : BaseClientTests {
 
         // When
         var exception = await Assert.ThrowsAsync<InvalidOperationException>(
-            () => terminalClient.GetUnreferencedRefundListAsync("term_7MgL4wea46qkRcoTZjWEH", profileId: "pfl_QkEhN94Ba"));
+            () => terminalClient.GetUnreferencedRefundListAsync(profileId: "pfl_QkEhN94Ba"));
 
         // Then
         exception.Message.ShouldBe("The provided token isn't an oauth token. Are you trying to use oauth specific parameters such as ProfileId or TestMode using an API key?");
@@ -380,11 +378,10 @@ public class TerminalClientTests : BaseClientTests {
     [Fact]
     public async Task GetUnreferencedRefundListAsync_TestmodeIsEnabledInOptions_TestmodeIsNotAddedToQueryString() {
         // Given
-        const string terminalId = "term_7MgL4wea46qkRcoTZjWEH";
         var mockHttp = new MockHttpMessageHandler();
-        mockHttp.Expect(HttpMethod.Get, $"{BaseMollieClient.DefaultBaseApiEndPoint}terminals/{terminalId}/unreferenced-refunds")
+        mockHttp.Expect(HttpMethod.Get, $"{BaseMollieClient.DefaultBaseApiEndPoint}terminals/unreferenced-refunds")
             .With(request => request.RequestUri!.Query == string.Empty)
-            .Respond("application/json", CreateUnreferencedRefundListJsonResponse(terminalId));
+            .Respond("application/json", CreateUnreferencedRefundListJsonResponse());
         HttpClient httpClient = mockHttp.ToHttpClient();
         var mollieClientOptions = new MollieClientOptions {
             ApiKey = "access_token",
@@ -394,7 +391,7 @@ public class TerminalClientTests : BaseClientTests {
         var terminalClient = new TerminalClient(mollieClientOptions, secretManager, httpClient);
 
         // When
-        await terminalClient.GetUnreferencedRefundListAsync(terminalId);
+        await terminalClient.GetUnreferencedRefundListAsync();
 
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
@@ -403,55 +400,35 @@ public class TerminalClientTests : BaseClientTests {
     [Fact]
     public async Task GetUnreferencedRefundListAsync_ResponseIsDeserializedInExpectedFormat() {
         // Given
-        const string terminalId = "term_7MgL4wea46qkRcoTZjWEH";
         var mockHttp = CreateMockHttpMessageHandler(
             HttpMethod.Get,
-            $"{BaseMollieClient.DefaultBaseApiEndPoint}terminals/{terminalId}/unreferenced-refunds",
-            CreateUnreferencedRefundListJsonResponse(terminalId));
+            $"{BaseMollieClient.DefaultBaseApiEndPoint}terminals/unreferenced-refunds",
+            CreateUnreferencedRefundListJsonResponse());
         HttpClient httpClient = mockHttp.ToHttpClient();
         var terminalClient = new TerminalClient("test_api_key", httpClient);
 
         // When
-        ListResponse<UnreferencedRefundResponse> response = await terminalClient.GetUnreferencedRefundListAsync(terminalId);
+        ListResponse<UnreferencedRefundResponse> response = await terminalClient.GetUnreferencedRefundListAsync();
 
         // Then
         mockHttp.VerifyNoOutstandingExpectation();
         response.Count.ShouldBe(1);
         response.Items.Count.ShouldBe(response.Count);
-        AssertUnreferencedRefundResponse(response.Items[0], terminalId, "unref_vytxeTZskVKR7C7WgdSP3d");
-        response.Links.Self.Href.ShouldBe($"https://api.mollie.com/v2/terminals/{terminalId}/unreferenced-refunds?limit=5");
+        AssertUnreferencedRefundResponse(response.Items[0], "term_7MgL4wea46qkRcoTZjWEH", "unref_vytxeTZskVKR7C7WgdSP3d");
+        response.Links.Self.Href.ShouldBe("https://api.mollie.com/v2/terminals/unreferenced-refunds?limit=5");
         response.Links.Previous.ShouldBeNull();
         response.Links.Next.ShouldNotBeNull();
-        response.Links.Next.Href.ShouldBe($"https://api.mollie.com/v2/terminals/{terminalId}/unreferenced-refunds?from=unref_4xNmEv8WWkrp7mjvPmq3cx&limit=5");
-    }
-
-    [Theory]
-    [InlineData("")]
-    [InlineData(" ")]
-    [InlineData(null)]
-    public async Task GetUnreferencedRefundListAsync_NoTerminalIdIsGiven_ArgumentExceptionIsThrown(string? terminalId) {
-        // Given
-        var terminalClient = new TerminalClient("test_api_key", new MockHttpMessageHandler().ToHttpClient());
-
-        // When
-#pragma warning disable CS8604 // Possible null reference argument.
-        var exception = await Assert.ThrowsAsync<ArgumentException>(
-            () => terminalClient.GetUnreferencedRefundListAsync(terminalId));
-#pragma warning restore CS8604 // Possible null reference argument.
-
-        // Then
-        exception.Message.ShouldBe("Required URL argument 'terminalId' is null or empty");
+        response.Links.Next.Href.ShouldBe("https://api.mollie.com/v2/terminals/unreferenced-refunds?from=unref_4xNmEv8WWkrp7mjvPmq3cx&limit=5");
     }
 
     [Fact]
     public async Task GetUnreferencedRefundListAsync_WithUrlObjectLink_ResponseIsDeserializedInExpectedFormat() {
         // Given
-        const string terminalId = "term_7MgL4wea46qkRcoTZjWEH";
-        string url = $"{BaseMollieClient.DefaultBaseApiEndPoint}terminals/{terminalId}/unreferenced-refunds?from=unref_4xNmEv8WWkrp7mjvPmq3cx&limit=5";
+        string url = $"{BaseMollieClient.DefaultBaseApiEndPoint}terminals/unreferenced-refunds?from=unref_4xNmEv8WWkrp7mjvPmq3cx&limit=5";
         var mockHttp = CreateMockHttpMessageHandler(
             HttpMethod.Get,
             url,
-            CreateUnreferencedRefundListJsonResponse(terminalId));
+            CreateUnreferencedRefundListJsonResponse());
         HttpClient httpClient = mockHttp.ToHttpClient();
         var terminalClient = new TerminalClient("test_api_key", httpClient);
         var urlObject = new UrlObjectLink<ListResponse<UnreferencedRefundResponse>> {
@@ -484,8 +461,8 @@ public class TerminalClientTests : BaseClientTests {
         response.Links.Documentation.Href.ShouldBe("https://docs.mollie.com/reference/create-unreferenced-refund");
     }
 
-    private string CreateUnreferencedRefundListJsonResponse(string terminalId) {
-        string unreferencedRefundJson = CreateUnreferencedRefundJsonResponse(terminalId, "unref_vytxeTZskVKR7C7WgdSP3d");
+    private string CreateUnreferencedRefundListJsonResponse() {
+        string unreferencedRefundJson = CreateUnreferencedRefundJsonResponse("term_7MgL4wea46qkRcoTZjWEH", "unref_vytxeTZskVKR7C7WgdSP3d");
 
         return @$"{{
     ""count"": 1,
@@ -496,12 +473,12 @@ public class TerminalClientTests : BaseClientTests {
     }},
     ""_links"": {{
         ""self"": {{
-            ""href"": ""https://api.mollie.com/v2/terminals/{terminalId}/unreferenced-refunds?limit=5"",
+            ""href"": ""https://api.mollie.com/v2/terminals/unreferenced-refunds?limit=5"",
             ""type"": ""application/hal+json""
         }},
         ""previous"": null,
         ""next"": {{
-            ""href"": ""https://api.mollie.com/v2/terminals/{terminalId}/unreferenced-refunds?from=unref_4xNmEv8WWkrp7mjvPmq3cx&limit=5"",
+            ""href"": ""https://api.mollie.com/v2/terminals/unreferenced-refunds?from=unref_4xNmEv8WWkrp7mjvPmq3cx&limit=5"",
             ""type"": ""application/hal+json""
         }},
         ""documentation"": {{

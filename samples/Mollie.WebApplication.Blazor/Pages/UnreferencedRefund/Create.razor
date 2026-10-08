@@ -1,6 +1,8 @@
-﻿@page "/terminal/{terminalId}/unreferenced-refund/create"
+﻿@page "/unreferenced-refund/create"
 @using Mollie.WebApplication.Blazor.Models.UnreferencedRefund
 @using Mollie.Api.Client
+@using Mollie.Api.Models.List.Response
+@using Mollie.Api.Models.Terminal.Response
 @using Mollie.Api.Models.UnreferencedRefund.Request
 
 @inject ITerminalClient TerminalClient
@@ -20,6 +22,21 @@
 <EditForm Model="_model" OnValidSubmit="@OnSave" class="col-md-6">
     <DataAnnotationsValidator />
     <ValidationSummary />
+
+    <div class="form-group">
+        <label for="terminal">Terminal</label>
+        <InputSelect
+            id="terminal"
+            class="form-control"
+            @bind-Value="_model.TerminalId">
+            <option value="">Select a terminal</option>
+            @if (_terminals != null) {
+                @foreach (TerminalResponse terminal in _terminals.Items) {
+                    <option value="@terminal.Id">@terminal.Id - @terminal.Description</option>
+                }
+            }
+        </InputSelect>
+    </div>
 
     <div class="form-group">
         <label for="amount">Amount</label>
@@ -67,26 +84,35 @@
     private MollieApiException? _apiException;
 
     [Parameter]
-    public required string TerminalId { get; set; }
+    [SupplyParameterFromQuery]
+    public string? TerminalId { get; set; }
+
+    private ListResponse<TerminalResponse>? _terminals;
 
     private CreateUnreferencedRefundModel _model = new() {
+        TerminalId = string.Empty,
         Amount = 0.01m,
         Currency = "EUR",
         Description = "An unreferenced refund from the example application",
         Metadata = null
     };
 
+    protected override async Task OnInitializedAsync() {
+        _model.TerminalId = TerminalId ?? string.Empty;
+        _terminals = await TerminalClient.GetTerminalListAsync();
+    }
+
     private async Task OnSave() {
         try {
             _apiException = null;
 
-            await TerminalClient.CreateUnreferencedRefundAsync(TerminalId, new UnreferencedRefundRequest {
+            await TerminalClient.CreateUnreferencedRefundAsync(_model.TerminalId, new UnreferencedRefundRequest {
                 Amount = new Amount(_model.Currency, _model.Amount),
                 Description = _model.Description,
                 Metadata = string.IsNullOrWhiteSpace(_model.Metadata) ? null : _model.Metadata
             });
 
-            NavigationManager.NavigateTo($"/terminal/{TerminalId}/unreferenced-refund/overview");
+            NavigationManager.NavigateTo("/unreferenced-refund/overview");
         }
         catch (MollieApiException e) {
             _apiException = e;

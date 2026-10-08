@@ -6,6 +6,9 @@ namespace Mollie.WebApplication.Blazor.Models.UnreferencedRefund;
 
 public class CreateUnreferencedRefundModel {
     [Required]
+    public required string TerminalId { get; set; }
+
+    [Required]
     [Range(0.01, 1000, ErrorMessage = "Please enter an amount between 0.01 and 1000")]
     [DecimalPlaces(2)]
     public required decimal Amount { get; set; }

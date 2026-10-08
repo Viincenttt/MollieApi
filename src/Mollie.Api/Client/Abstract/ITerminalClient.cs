@@ -44,15 +44,14 @@ namespace Mollie.Api.Client.Abstract
         Task<UnreferencedRefundResponse> GetUnreferencedRefundAsync(UrlObjectLink<UnreferencedRefundResponse> url, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Retrieve all unreferenced refunds of a terminal, ordered from newest to oldest.
+        /// Retrieve all unreferenced refunds, across all terminals, ordered from newest to oldest.
         /// </summary>
-        /// <param name="terminalId">The terminal ID, for example term_7MgL4wea46qkRcoTZjWEH.</param>
         /// <param name="from">Used for pagination. Offset the result set to the unreferenced refund with this ID. The unreferenced refund with this ID is included in the result set as well.</param>
         /// <param name="limit">The number of unreferenced refunds to return (with a maximum of 250).</param>
         /// <param name="profileId">Oauth only - The profile ID the unreferenced refunds belong to.</param>
         /// <param name="cancellationToken">Token to cancel the request.</param>
         /// <returns>A list of unreferenced refunds.</returns>
-        Task<ListResponse<UnreferencedRefundResponse>> GetUnreferencedRefundListAsync(string terminalId, string? from = null, int? limit = null, string? profileId = null, CancellationToken cancellationToken = default);
+        Task<ListResponse<UnreferencedRefundResponse>> GetUnreferencedRefundListAsync(string? from = null, int? limit = null, string? profileId = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieve a list of unreferenced refunds using a URL object, for example the next or previous link of a list response.

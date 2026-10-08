@@ -1,4 +1,4 @@
-﻿@page "/terminal/{terminalId}/unreferenced-refund/overview"
+﻿@page "/unreferenced-refund/overview"
 @using Mollie.Api.Client
 @using Mollie.Api.Models.List.Response
 @using Mollie.Api.Models.UnreferencedRefund.Response
@@ -16,7 +16,7 @@
 }
 else {
     <div class="clearfix">
-        <a href="/terminal/@TerminalId/unreferenced-refund/create" class="btn btn-primary float-right">Create new unreferenced refund</a>
+        <a href="/unreferenced-refund/create" class="btn btn-primary float-right">Create new unreferenced refund</a>
     </div>
 
     <table class="table table-striped">
@@ -25,6 +25,7 @@ else {
             <th scope="col">#</th>
             <th scope="col">Date created</th>
             <th scope="col">Status</th>
+            <th scope="col">Terminal</th>
             <th scope="col">Amount</th>
             <th scope="col">Description</th>
             <th scope="col">Metadata</th>
@@ -36,6 +37,7 @@ else {
                 <td>@unreferencedRefund.Id</td>
                 <td>@unreferencedRefund.CreatedAt</td>
                 <td>@unreferencedRefund.Status</td>
+                <td>@unreferencedRefund.TerminalId</td>
                 <td>@unreferencedRefund.Amount.ToString()</td>
                 <td>@unreferencedRefund.Description</td>
                 <td>@unreferencedRefund.Metadata</td>
@@ -54,9 +56,6 @@ else {
     private MollieApiException? _apiException;
 
     [Parameter]
-    public required string TerminalId { get; set; }
-
-    [Parameter]
     [SupplyParameterFromQuery]
     public string? Url { get; set; }
 
@@ -71,7 +70,7 @@ else {
             _apiException = null;
 
             if (string.IsNullOrEmpty(Url)) {
-                _unreferencedRefunds = await TerminalClient.GetUnreferencedRefundListAsync(TerminalId);
+                _unreferencedRefunds = await TerminalClient.GetUnreferencedRefundListAsync();
             }
             else {
                 _unreferencedRefunds = await TerminalClient.GetUnreferencedRefundListAsync(new UrlObjectLink<ListResponse<UnreferencedRefundResponse>>() {

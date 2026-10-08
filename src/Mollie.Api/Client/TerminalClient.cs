@@ -78,8 +78,7 @@ namespace Mollie.Api.Client {
         }
 
         public async Task<ListResponse<UnreferencedRefundResponse>> GetUnreferencedRefundListAsync(
-            string terminalId, string? from = null, int? limit = null, string? profileId = null, CancellationToken cancellationToken = default) {
-            ValidateRequiredUrlParameter(nameof(terminalId), terminalId);
+            string? from = null, int? limit = null, string? profileId = null, CancellationToken cancellationToken = default) {
             if (!string.IsNullOrWhiteSpace(profileId)) {
                 ValidateApiKeyIsOauthAccesstoken();
             }
@@ -88,7 +87,7 @@ namespace Mollie.Api.Client {
             // The unreferenced refunds API does not support test mode, so a globally configured testmode is never sent
             queryParameters.Remove("testmode");
             return await GetListAsync<ListResponse<UnreferencedRefundResponse>>(
-                $"terminals/{terminalId}/unreferenced-refunds", from, limit, queryParameters, cancellationToken: cancellationToken)
+                "terminals/unreferenced-refunds", from, limit, queryParameters, cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
         }
 
