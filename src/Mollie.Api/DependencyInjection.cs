@@ -3,6 +3,7 @@ using System.Net.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Mollie.Api.Client;
 using Mollie.Api.Client.Abstract;
+using Mollie.Api.Framework;
 using Mollie.Api.Framework.Authentication;
 using Mollie.Api.Framework.Authentication.Abstract;
 using Mollie.Api.Options;
@@ -83,8 +84,10 @@ namespace Mollie.Api {
 
             IHttpClientBuilder clientBuilder = services.AddHttpClient<TInterface, TImplementation>();
             if (retryPolicy != null) {
-                const string resilienceHandlerName = "Mollie";
-                clientBuilder.AddResilienceHandler(resilienceHandlerName, (builder, context) => retryPolicy(builder));
+                var pipelineBuilder = new ResiliencePipelineBuilder<HttpResponseMessage>();
+                retryPolicy(pipelineBuilder);
+                ResiliencePipeline<HttpResponseMessage> pipeline = pipelineBuilder.Build();
+                clientBuilder.AddHttpMessageHandler(() => new ResiliencePipelineHandler(pipeline));
             }
         }
     }

@@ -14,7 +14,10 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Http.Resilience" Version="10.8.0" />
+    <!-- Deliberately not Microsoft.Extensions.Http.Resilience: it does not support .NET Framework and emits a build
+         warning in every net4x project that consumes it. The resilience pipeline is run by our own DelegatingHandler. -->
+    <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.1" />
+    <PackageReference Include="Polly.Core" Version="8.4.2" />
     <PackageReference Include="PolySharp" Version="1.15.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
