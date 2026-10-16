@@ -43,7 +43,7 @@ namespace Mollie.Api.Options {
         /// Requests are not retried unless this property is set. Assign
         /// <see cref="Mollie.Api.Framework.MollieHttpRetryPolicies.TransientHttpErrorRetryPolicy"/> to retry transient
         /// errors, or configure your own retry behaviour for failed requests, e.g.
-        /// <c>options.RetryPolicy = builder => builder.AddRetry(new HttpRetryStrategyOptions());</c>
+        /// <c>options.RetryPolicy = builder => builder.AddRetry(new RetryStrategyOptions&lt;HttpResponseMessage&gt;());</c>
         /// </summary>
         public Action<ResiliencePipelineBuilder<HttpResponseMessage>>? RetryPolicy { get; set; }
 

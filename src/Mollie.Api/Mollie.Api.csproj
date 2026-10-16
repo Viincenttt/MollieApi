@@ -14,23 +14,15 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <!-- Deliberately not Microsoft.Extensions.Http.Resilience: it does not support .NET Framework and emits a build
+         warning in every net4x project that consumes it. The resilience pipeline is run by our own DelegatingHandler. -->
+    <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.1" />
+    <PackageReference Include="Polly.Core" Version="8.4.2" />
     <PackageReference Include="PolySharp" Version="1.15.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="System.Text.Json" Version="8.0.6" />
-  </ItemGroup>
-
-  <!-- Microsoft.Extensions.Http.Resilience does not support .NET Framework and emits a build warning in every
-       net4x project that consumes it. On netstandard2.0 we therefore only depend on Polly.Core and
-       Microsoft.Extensions.Http and run the resilience pipeline with our own DelegatingHandler. -->
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.1" />
-    <PackageReference Include="Polly.Core" Version="8.4.2" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' != 'netstandard2.0'">
-    <PackageReference Include="Microsoft.Extensions.Http.Resilience" Version="10.8.0" />
   </ItemGroup>
 
   <ItemGroup>

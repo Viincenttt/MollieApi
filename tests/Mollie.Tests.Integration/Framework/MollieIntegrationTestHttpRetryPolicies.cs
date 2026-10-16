@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Http.Resilience;
 using Polly;
+using Polly.Retry;
 
 namespace Mollie.Tests.Integration.Framework;
 
@@ -10,7 +10,7 @@ public static class MollieIntegrationTestHttpRetryPolicies {
 
     public static Action<ResiliencePipelineBuilder<HttpResponseMessage>> TooManyRequestRetryPolicy() {
         return builder => {
-            builder.AddRetry(new HttpRetryStrategyOptions {
+            builder.AddRetry(new RetryStrategyOptions<HttpResponseMessage> {
                 MaxRetryAttempts = 3,
                 UseJitter = false,
                 BackoffType = DelayBackoffType.Constant,

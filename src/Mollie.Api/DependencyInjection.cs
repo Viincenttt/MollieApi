@@ -84,15 +84,10 @@ namespace Mollie.Api {
 
             IHttpClientBuilder clientBuilder = services.AddHttpClient<TInterface, TImplementation>();
             if (retryPolicy != null) {
-#if NET8_0_OR_GREATER
-                const string resilienceHandlerName = "Mollie";
-                clientBuilder.AddResilienceHandler(resilienceHandlerName, (builder, context) => retryPolicy(builder));
-#else
                 var pipelineBuilder = new ResiliencePipelineBuilder<HttpResponseMessage>();
                 retryPolicy(pipelineBuilder);
                 ResiliencePipeline<HttpResponseMessage> pipeline = pipelineBuilder.Build();
                 clientBuilder.AddHttpMessageHandler(() => new ResiliencePipelineHandler(pipeline));
-#endif
             }
         }
     }

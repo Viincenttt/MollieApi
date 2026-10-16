@@ -1,4 +1,3 @@
-#if !NET8_0_OR_GREATER
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -6,7 +5,7 @@ using Polly;
 
 namespace Mollie.Api.Framework {
     /// <summary>
-    /// Executes outgoing requests through a Polly resilience pipeline. Used on netstandard2.0 instead of
+    /// Executes outgoing requests through a Polly resilience pipeline. Used instead of
     /// Microsoft.Extensions.Http.Resilience, which does not support .NET Framework.
     /// </summary>
     internal sealed class ResiliencePipelineHandler : DelegatingHandler {
@@ -23,4 +22,3 @@ namespace Mollie.Api.Framework {
         }
     }
 }
-#endif
