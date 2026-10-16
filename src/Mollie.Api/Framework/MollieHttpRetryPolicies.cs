@@ -1,8 +1,13 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http;
+#if NET8_0_OR_GREATER
 using Microsoft.Extensions.Http.Resilience;
+#endif
 using Polly;
+#if !NET8_0_OR_GREATER
+using Polly.Retry;
+#endif
 
 namespace Mollie.Api.Framework {
     public static class MollieHttpRetryPolicies {
@@ -12,7 +17,12 @@ namespace Mollie.Api.Framework {
         /// </summary>
         public static Action<ResiliencePipelineBuilder<HttpResponseMessage>> TransientHttpErrorRetryPolicy(int numberOfRetries = 3) {
             return builder => {
+#if NET8_0_OR_GREATER
                 builder.AddRetry(new HttpRetryStrategyOptions {
+#else
+                builder.AddRetry(new RetryStrategyOptions<HttpResponseMessage> {
+                    UseJitter = true,
+#endif
                     MaxRetryAttempts = numberOfRetries,
                     BackoffType = DelayBackoffType.Exponential,
                     Delay = TimeSpan.FromSeconds(1),
