@@ -21,8 +21,8 @@ public record SalesInvoiceRequest : ITestModeRequest, IProfileRequest {
     public string? ProfileId { get; set; }
 
     /// <summary>
-    /// The status for the invoice to end up in. See the Mollie.Api.Models.SalesInvoice.SalesInvoiceStatus class for
-    /// a full list of known values.
+    /// The status for the invoice to end up in: draft, issued or paid. See the
+    /// Mollie.Api.Models.SalesInvoice.SalesInvoiceStatus class for a full list of known values.
     /// </summary>
     public required string Status { get; set; }
 

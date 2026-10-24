@@ -4,8 +4,10 @@ namespace Mollie.Api.Models.SalesInvoice.Request;
 
 public record SalesInvoiceUpdateRequest : ITestModeRequest {
     /// <summary>
-    /// The status for the invoice to end up in. Dependent parameters: paymentDetails for paid, emailDetails for issued
-    /// and paid. See the Mollie.Api.Models.SalesInvoice.SalesInvoiceStatus class for a full list of known values.
+    /// The status for the invoice to end up in: draft, issued, paid, cancelled or payment-reversed. To cancel a paid
+    /// invoice, first set it to payment-reversed and then to cancelled. Dependent parameters: paymentDetails for paid,
+    /// emailDetails for issued and paid. See the Mollie.Api.Models.SalesInvoice.SalesInvoiceStatus class for a full
+    /// list of known values.
     /// </summary>
     public string? Status { get; set; }
 
