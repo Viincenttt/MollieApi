@@ -39,8 +39,8 @@ public record SalesInvoiceResponse : IEntity {
     public string? Currency { get; set; }
 
     /// <summary>
-    /// The status for the invoice to end up in. See the Mollie.Api.Models.SalesInvoice.SalesInvoiceStatus class for
-    /// a full list of known values.
+    /// The current status of the invoice. See the Mollie.Api.Models.SalesInvoice.SalesInvoiceStatus class for a full
+    /// list of known values.
     /// </summary>
     public required string Status { get; set; }
 
