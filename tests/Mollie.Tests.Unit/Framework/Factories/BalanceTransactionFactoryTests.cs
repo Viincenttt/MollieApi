@@ -36,6 +36,7 @@ namespace Mollie.Tests.Unit.Framework.Factories {
         [InlineData(BalanceTransactionContextType.PaymentCommission, typeof(PaymentBalanceTransactionResponse))]
         [InlineData(BalanceTransactionContextType.ReimbursementFee, typeof(PaymentBalanceTransactionResponse))]
         [InlineData(BalanceTransactionContextType.FailedPaymentFee, typeof(PaymentBalanceTransactionResponse))]
+        [InlineData(BalanceTransactionContextType.BankChargedFailureFee, typeof(BalanceTransactionResponse))]
         [InlineData(BalanceTransactionContextType.PaymentFee, typeof(PaymentBalanceTransactionResponse))]
         [InlineData(BalanceTransactionContextType.ManagedFee, typeof(ManagedFeeBalanceTransactionResponse))]
         [InlineData(BalanceTransactionContextType.ReturnedManagedFee, typeof(ManagedFeeBalanceTransactionResponse))]

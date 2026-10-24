@@ -28,6 +28,7 @@
         public const string PaymentCommission = "payment-commission";
         public const string ReimbursementFee = "reimbursement-fee";
         public const string FailedPaymentFee = "failed-payment-fee";
+        public const string BankChargedFailureFee = "bank-charged-failure-fee";
         public const string PaymentFee = "payment-fee";
         public const string ManagedFee = "managed-fee";
         public const string ReturnedManagedFee = "returned-managed-fee";
